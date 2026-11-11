@@ -42,7 +42,6 @@ test("release.yml calls verify, build, publish-per-channel, and smoke stages", a
     "build-binaries": "./.github/workflows/release-build-binaries.yml",
     "publish-tags": "./.github/workflows/release-publish-tags.yml",
     "publish-container": "./.github/workflows/release-publish-container.yml",
-    "publish-homebrew": "./.github/workflows/release-publish-homebrew.yml",
     "publish-binaries": "./.github/workflows/release-publish-binaries.yml",
     sbom: "./.github/workflows/release-sbom.yml",
     smoke: "./.github/workflows/release-smoke.yml",
@@ -61,7 +60,6 @@ test("release.yml calls verify, build, publish-per-channel, and smoke stages", a
     "build-binaries",
     "publish-tags",
     "publish-container",
-    "publish-homebrew",
     "publish-binaries",
     "smoke",
   ]) {
@@ -75,7 +73,6 @@ test("release.yml calls verify, build, publish-per-channel, and smoke stages", a
   assert.match(orchestrator.jobs["build-action"]!.if ?? "", /inputs\.dry_run/);
   assert.match(orchestrator.jobs.smoke!.if ?? "", /inputs\.dry_run/);
   assert.match(orchestrator.jobs["publish-container"]!.if ?? "", /inputs\.dry_run/);
-  assert.match(orchestrator.jobs["publish-homebrew"]!.if ?? "", /inputs\.dry_run/);
   assert.match(orchestrator.jobs["build-binaries"]!.if ?? "", /inputs\.dry_run/);
   assert.match(orchestrator.jobs["publish-binaries"]!.if ?? "", /inputs\.dry_run/);
   assert.match(orchestrator.jobs["publish-tags"]!.if ?? "", /inputs\.dry_run/);
@@ -90,7 +87,6 @@ test("a dry run passes dry_run into every stage and publishes nothing from those
     "release-build-binaries.yml",
     "release-publish-tags.yml",
     "release-publish-container.yml",
-    "release-publish-homebrew.yml",
     "release-publish-binaries.yml",
     "release-smoke.yml",
   ];
@@ -109,10 +105,6 @@ test("a dry run passes dry_run into every stage and publishes nothing from those
   const container = await readFile(join(workflowsDir, "release-publish-container.yml"), "utf8");
   assert.match(container, /!inputs\.dry_run/);
   assert.match(container, /push: true/);
-
-  const homebrew = await readFile(join(workflowsDir, "release-publish-homebrew.yml"), "utf8");
-  assert.match(homebrew, /!inputs\.dry_run/);
-  assert.match(homebrew, /git push origin HEAD:main/);
 
   const binaries = await readFile(join(workflowsDir, "release-publish-binaries.yml"), "utf8");
   assert.match(binaries, /!inputs\.dry_run/);

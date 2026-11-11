@@ -187,7 +187,7 @@ a green queue. Affected, full, and record corpus runs live in one file (`corpus.
 - Action bundle on `release/<tag>` (not on `main`).
 - Standalone binaries, signatures, attestations.
 - Quickstart smoke against the published package.
-- Container and Homebrew channels the release docs list.
+- Container channel the release docs list.
 
 **Stages.** `release.yml` is a thin orchestrator that calls reusable stage workflows (verify, build,
 publish per channel including npm via the `npm-publish` job, smoke). A version tag runs the full chain in
@@ -567,7 +567,7 @@ fixtures locally with `npm run corpus:warm` and check the tracked repositories w
 **Symptom.** A `release.yml` run on a `v*` tag fails in one of its stages; `publish.yml` never runs
 on its own (`workflow_call` from `release.yml` only; it runs package smoke and the MCP Registry after the `npm-publish` job).
 
-**Cause.** Verify, build, per-channel publish (npm, binaries, container, Homebrew, data bundle), or
+**Cause.** Verify, build, per-channel publish (npm, binaries, container, data bundle), or
 smoke failed. Stages receive the audited `release_sha` (since #2340), so a mid-chain failure cannot
 silently publish a newer commit.
 

@@ -10,7 +10,7 @@ Where Offing is published, and where it is not. Install steps for working channe
 | --- | --- | --- |
 | npm | Published (`@velella/offing@0.1.0`) | [npmjs.com/package/@velella/offing](https://www.npmjs.com/package/@velella/offing) |
 | Docker | Published (`ghcr.io/velella-sh/offing`) | [Package](https://github.com/velella-sh/offing/pkgs/container/offing) · [Install](INSTALL.md#run-the-quickstart-with-docker) |
-| Homebrew | Published (`arminazimi/tap/offing`; bumped from the release workflow) | [Tap](https://github.com/arminazimi/homebrew-tap) · `brew install arminazimi/tap/offing` |
+| Homebrew | Not yet; planned as a homebrew-core submission once the project meets its notability bar ([Roadmap](ROADMAP.md#after-v1--future)) | — |
 | MCP Registry | Listed (`io.github.velella-sh/offing`) | [registry.modelcontextprotocol.io](https://registry.modelcontextprotocol.io/v0/servers?search=offing) · [MCP](MCP.md#where-the-server-is-listed) |
 | Skills | Listed (`velella-sh/offing@offing`) | [skills.sh](https://skills.sh/velella-sh/offing/offing) · [Agent Skill](AGENT_SKILLS.md) |
 | Claude | Available from the repository marketplace | [Claude plugin](CLAUDE_PLUGIN.md) · `claude plugin install offing --marketplace velella-sh/offing` |

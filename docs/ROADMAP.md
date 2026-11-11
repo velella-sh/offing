@@ -37,7 +37,7 @@ Ideas for after v1 are tracked as epics in the _After v1 — Future_ milestone a
 | Independent ground-truth corpus | 20 repositories, self-defined | 300 repositories, ground truth not authored by Offing |
 | Precision per stable detector | 1.0 against own rules | ≥ 0.95 against independent ground truth |
 | Data freshness | tied to package releases | ≤ 7 days through a signed data channel |
-| Distribution | npm, skills.sh | + MCP Registry, GitHub Marketplace, GitLab Catalog, Docker, Homebrew, pre-commit, MegaLinter, VS Code, Claude, Codex |
+| Distribution | npm, skills.sh | + MCP Registry, GitHub Marketplace, GitLab Catalog, Docker, pre-commit, MegaLinter, VS Code, Claude, Codex |
 | External contributors with merged PRs | 0 | 15+ |
 
 ## Phases
@@ -232,7 +232,7 @@ _2026-12-16 → 2027-01-15 · 85 tasks · [milestone](https://github.com/velella
 **When this phase is complete, Offing has:**
 
 - Rust, Java and Kotlin, .NET, Kubernetes API, and serverless runtime (AWS Lambda, Azure Functions, Google Cloud) detection
-- Polished one-step GitHub Action published in GitHub Marketplace; container image on GHCR; Homebrew tap; README badge
+- Polished one-step GitHub Action published in GitHub Marketplace; container image on GHCR; README badge
 - Expiring, machine-readable suppression reasons
 - Detector maturity levels and a generated coverage matrix; 100-repository corpus with regression thresholds
 - Public reference page for every lifecycle rule, with JSON-LD and a sitemap
@@ -243,7 +243,7 @@ _2026-12-16 → 2027-01-15 · 85 tasks · [milestone](https://github.com/velella
 - **[Shared detector contract, conformance suite, and maturity levels](https://github.com/velella-sh/offing/issues/39)** — Apply one quality bar to every built-in and external detector, and expose detector maturity. _(11 tasks)_
 - **[One-step GitHub Action and Marketplace](https://github.com/velella-sh/offing/issues/37)** — One Offing step after checkout with safe defaults, published in GitHub Marketplace. _(6 tasks)_
 - **[Expiring, machine-readable suppression reasons](https://github.com/velella-sh/offing/issues/40)** — Prevent baselines from becoming permanent invisible debt. _(5 tasks)_
-- **[More installation channels](https://github.com/velella-sh/offing/issues/76)** — Install Offing where people already work: container image, Homebrew, and a README badge. _(3 tasks)_
+- **[More installation channels](https://github.com/velella-sh/offing/issues/76)** — Install Offing where people already work: container image and a README badge. _(3 tasks)_
 - **[Canonical lifecycle reference pages](https://github.com/velella-sh/offing/issues/60)** — Make Offing evidence useful as a public reference before anyone installs the CLI. _(4 tasks)_
 - **[Rust lifecycle detection](https://github.com/velella-sh/offing/issues/46)** — Detect evidence-backed Rust lifecycle risks at exact locations and produce migration packets, built from small independent tasks. _(12 tasks)_
 - **[Java and Kotlin (JVM) lifecycle detection](https://github.com/velella-sh/offing/issues/49)** — Detect evidence-backed Java and Kotlin (JVM) lifecycle risks at exact locations and produce migration packets, built from small independent tasks. _(13 tasks)_
@@ -636,6 +636,7 @@ _after v1, unscheduled · 0 tasks · [milestone](https://github.com/velella-sh/o
 - **[Rule-a-thon contribution event](https://github.com/velella-sh/offing/issues/1228)** — A two-week event where contributors add rules and fixtures. _(0 tasks)_
 - **[Talks, podcasts, and meetups](https://github.com/velella-sh/offing/issues/1229)** — Present Offing to real audiences. _(0 tasks)_
 - **[Standards and upstream presence](https://github.com/velella-sh/offing/issues/1230)** — Credibility through work with established projects. _(0 tasks)_
+- **Homebrew in homebrew-core** — `brew install offing` with no tap. Start when the project meets homebrew-core's notability bar for a self-submitted formula (about 75 stars, 30 forks, 30 watchers and a repository older than 30 days; check the current Acceptable Formulae page first) and has a stable release. The formula installs the npm tarball, so it needs a `brew test` and an `audit --new --strict` pass. There is no tap and no deploy key before then. _(0 tasks)_
 - **[Multilingual reach](https://github.com/velella-sh/offing/issues/1231)** — Reach large non-English developer communities, with native-speaker review. _(0 tasks)_
 
 ## Not in this roadmap

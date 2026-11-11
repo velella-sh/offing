@@ -1,6 +1,6 @@
 ---
 title: Install
-description: One page for every Offing install channel — npm, Action, MCP, plugins, Docker, and Homebrew.
+description: One page for every Offing install channel — npm, Action, MCP, plugins, and Docker.
 ---
 
 # Install
@@ -106,14 +106,6 @@ docker run --rm --network none --read-only -v "$PWD:/workspace:ro" \
 On Apple Silicon, pass `--platform linux/amd64` because the image is published for that architecture.
 
 **Verify.** `docker run --rm ghcr.io/velella-sh/offing:latest --version` prints the image's CLI version. A scan of a mounted repo returns the same finding schema as npm.
-
-## Homebrew
-
-```bash
-brew install arminazimi/tap/offing
-```
-
-**Verify.** `offing --version` prints the formula version, and `offing demo` reports the demo findings.
 
 ## Standalone binaries
 
