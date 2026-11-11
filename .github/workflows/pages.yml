@@ -48,9 +48,8 @@ jobs:
         # Mizzen builds the site and Lateen is its theme; both are pinned so a build never changes under us.
         run: |
           mkdir "$RUNNER_TEMP/site-tools"
-          cd "$RUNNER_TEMP/site-tools"
-          npm init -y >/dev/null
-          npm install --no-audit --no-fund --save-exact @velella/mizzen@0.1.0 @velella/lateen@0.1.0
+          cp .github/site-tools/package.json .github/site-tools/package-lock.json "$RUNNER_TEMP/site-tools/"
+          npm ci --prefix "$RUNNER_TEMP/site-tools" --no-audit --no-fund
       - name: Check the documentation site
         # Errors fail the job; the warnings are links to repository files outside docs/, which GitHub resolves.
         run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" check docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen"'
