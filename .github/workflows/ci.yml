@@ -503,7 +503,7 @@ jobs:
           npm init -y >/dev/null
           npm install --no-audit --no-fund --save-exact @velella/mizzen@0.1.0 @velella/lateen@0.1.0
       - name: Build the documentation site
-        run: $RUNNER_TEMP/site-tools/node_modules/.bin/mizzen build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out "$RUNNER_TEMP/site"
+        run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out "$RUNNER_TEMP/site"'
 
   # The merge queue ignores `paths`, so `changes.site` decides whether the site jobs run. On a pull
   # request each workflow runs on its own `paths` filter instead; on main, pages.yml verifies the

@@ -53,10 +53,10 @@ jobs:
           npm install --no-audit --no-fund --save-exact @velella/mizzen@0.1.0 @velella/lateen@0.1.0
       - name: Check the documentation site
         # Errors fail the job; the warnings are links to repository files outside docs/, which GitHub resolves.
-        run: $RUNNER_TEMP/site-tools/node_modules/.bin/mizzen check docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen"
+        run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" check docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen"'
       - name: Build the documentation site
         # Keep the deployed base path (/offing, set in docs/mizzen.yml) so internal links match production.
-        run: $RUNNER_TEMP/site-tools/node_modules/.bin/mizzen build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out docs/_site
+        run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out docs/_site'
       - name: Upload the GitHub Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:

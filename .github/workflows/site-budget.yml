@@ -42,7 +42,7 @@ jobs:
           npm install --no-audit --no-fund --save-exact @velella/mizzen@0.1.0 @velella/lateen@0.1.0
       - name: Build the documentation site
         # Mounted under the site's base path (/offing) so the absolute links resolve on the static server.
-        run: $RUNNER_TEMP/site-tools/node_modules/.bin/mizzen build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out _serve/offing
+        run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out _serve/offing'
       - uses: $/.github/actions/setup
         with:
           install: false
