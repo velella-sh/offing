@@ -32,9 +32,7 @@ _offing_color() {
     -e "s/^(Replacement: )(.*)$/${e}[2m\1${e}[0m${e}[92m\2${e}[0m/" \
     -e "s/^(Status|Data|Event|Affected versions|Deadline|Sources?|ID|Rule|Location|Repository|Findings|Confidence|Detected):/${e}[2m&${e}[0m/" \
     -e "s/^(\+\+\+|---) .*/${e}[1m&${e}[0m/" \
-    -e "s/^\+[^+].*/${e}[92m&${e}[0m/" \
-    -e "s/^-[^-].*/${e}[91m&${e}[0m/" \
-    -e "s/^@@.*/${e}[96m&${e}[0m/" \
+    -e "/^--- /,\${ s/^\+[^+].*/${e}[92m&${e}[0m/; s/^-[^-].*/${e}[91m&${e}[0m/; s/^@@.*/${e}[96m&${e}[0m/; }" \
     -e "s/^(20[0-9]{2}-[0-9]{2}) +\|(#+)/${e}[2m\1${e}[0m ${e}[2m|${e}[0m${e}[1;93m\2${e}[0m/" \
     -e "s#(https?://[^ ]+)#${e}[4;94m\1${e}[0m#g" \
     -e "s#( |^|\()(\.?[A-Za-z0-9_./-]+:[0-9]+)#\1${e}[96m\2${e}[0m#g"
