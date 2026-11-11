@@ -1,0 +1,154 @@
+
+# PostgreSQL 14 reaches the end of its support on 2026-11-12
+
+**Scheduled end of life** as of 2026-11-12. Replacement: PostgreSQL 16 or later. Source: [PostgreSQL versioning policy](https://www.postgresql.org/support/versioning/).
+
+Check a version:
+
+```bash
+offing check pkg:generic/postgresql
+```
+
+The PostgreSQL Global Development Group lists 14 as supported until its final release on November 12, 2026, after which it receives no further bug or security fixes. A database image tag or managed engine_version on this line will then run unsupported software.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Scheduled end of life |
+| Severity | low |
+| Ecosystem | `database` |
+| Component | `pkg:generic/postgresql` |
+| Affected versions | `vers:semver/>=14.0.0\|<15.0.0` |
+| Date from the source | 2026-11-12 |
+| Replacement | PostgreSQL 16 or later |
+| Evidence last seen | 2026-10-24 |
+| Reviewed | 2026-10-24 by arminazimi |
+| Review due | 2027-01-22 (90 days after the last review) |
+| Rule ID | `database.postgresql.end-of-life-14` |
+
+## Sources
+
+- [PostgreSQL versioning policy](https://www.postgresql.org/support/versioning/) (accessed 2026-10-24)
+
+## Migration
+
+**Constraints**
+
+- A PostgreSQL data directory written by one major version cannot be started by another. Changing the image tag of a service that has a volume will fail or, worse, start with an empty database.
+- Upgrade with pg_upgrade or a dump and restore (pg_dumpall, then psql), and move to a supported major in one planned change instead of one major at a time unless the tool you use requires it.
+- For managed databases, engine_version changes do not apply major upgrades unless allow_major_version_upgrade is set; plan the maintenance window before applying.
+
+**Steps**
+
+1. **Back up the data first.** Take a verified backup or snapshot of every PostgreSQL instance in the reported files before changing any version. A major version change is not reversible by changing the version back.
+2. **Upgrade the database cluster.** Run the upgrade with pg_upgrade or restore a dump into a new instance on the target major version. On a managed database, upgrade through a snapshot restore or a reviewed engine_version change with allow_major_version_upgrade.
+3. **Raise the declared version.** Change the image tag in Compose files, or engine_version in Terraform, to the release in the replacement. Do this in every file and environment that runs this database, not only the reported line.
+4. **Check clients and tooling.** Update drivers, ORMs, CI service containers, and local setup documentation that assume the old PostgreSQL version.
+
+**Verification**
+
+- `docker compose config`: Confirm the Compose file is valid and shows the intended PostgreSQL image tag after the change.
+- `terraform validate`: Check that the Terraform configuration is valid with the new engine_version.
+- `terraform plan`: Review the plan and confirm the engine_version change is the only database change, and that it is intended.
+
+## Detected by
+
+The `database` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Other versions of this product
+
+- [PostgreSQL 10 is no longer a supported major version](database.postgresql.end-of-life-10.html)
+- [PostgreSQL 11 is no longer a supported major version](database.postgresql.end-of-life-11.html)
+- [PostgreSQL 12 is no longer a supported major version](database.postgresql.end-of-life-12.html)
+- [PostgreSQL 13 is no longer a supported major version](database.postgresql.end-of-life-13.html)
+
+### Same ecosystem
+
+- [Aurora MySQL version 1 is past end of standard support](database.aws-aurora-mysql.end-of-support-5.6.html)
+- [Aurora MySQL version 2 is past end of standard support](database.aws-aurora-mysql.end-of-support-5.7.html)
+- [Aurora PostgreSQL 11 is past end of standard support](database.aws-aurora-postgresql.end-of-support-11.html)
+- [Aurora PostgreSQL 12 is past end of standard support](database.aws-aurora-postgresql.end-of-support-12.html)
+- [Aurora PostgreSQL 13 is past end of standard support](database.aws-aurora-postgresql.end-of-support-13.html)
+- [Aurora PostgreSQL 14 reaches end of standard support on 2027-02-28](database.aws-aurora-postgresql.scheduled-end-of-support-14.html)
+- [ElastiCache for Redis OSS 4 is past end of standard support](database.aws-elasticache-redis.end-of-support-4.html)
+- [ElastiCache for Redis OSS 5 is past end of standard support](database.aws-elasticache-redis.end-of-support-5.html)
+
+
+## Data
+
+This page is generated from [`registry/database.json`](https://github.com/velella-sh/offing/blob/main/registry/database.json), rule `database.postgresql.end-of-life-14`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/database.postgresql.end-of-life-14.html",
+      "url": "https://velella.sh/offing/rules/database.postgresql.end-of-life-14.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/database.postgresql.end-of-life-14.html",
+      "headline": "PostgreSQL 14 reaches the end of its support on 2026-11-12 — dates, impact, migration",
+      "description": "The PostgreSQL Global Development Group lists 14 as supported until its final release on November 12, 2026, after which it receives no further bug or security fixes.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-24",
+      "keywords": [
+        "scheduled-end-of-life",
+        "database",
+        "low"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "PostgreSQL 14 reaches the end of its support on 2026-11-12",
+        "identifier": "pkg:generic/postgresql"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "PostgreSQL versioning policy",
+          "url": "https://www.postgresql.org/support/versioning/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/database.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/database.postgresql.end-of-life-14.html#faq",
+      "url": "https://velella.sh/offing/rules/database.postgresql.end-of-life-14.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/postgresql?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Scheduled end of life as of 2026-11-12. Affected versions: vers:semver/>=14.0.0|\u003c15.0.0. Source: PostgreSQL versioning policy (https://www.postgresql.org/support/versioning/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/postgresql?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PostgreSQL 16 or later"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/postgresql?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/postgresql."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

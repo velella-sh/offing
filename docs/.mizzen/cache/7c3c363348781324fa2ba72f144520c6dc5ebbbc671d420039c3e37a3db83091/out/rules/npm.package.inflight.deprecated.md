@@ -1,0 +1,147 @@
+
+# inflight is deprecated
+
+**Deprecated.** The source gives no day. Replacement: lru-cache. Source: [inflight package deprecation notice](https://www.npmjs.com/package/inflight).
+
+Check a version:
+
+```bash
+offing check pkg:npm/inflight
+```
+
+npm states that inflight is unsupported, leaks memory, and recommends lru-cache for keyed request coalescing.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `npm` |
+| Component | `pkg:npm/inflight` |
+| Affected versions | `vers:npm/*` |
+| Date from the source | The source gives no day |
+| Replacement | lru-cache |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi, drafted by the `npm-deprecated` importer |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `npm.package.inflight.deprecated` |
+
+## Sources
+
+- [inflight package deprecation notice](https://www.npmjs.com/package/inflight) (accessed 2026-10-16)
+- [inflight registry metadata](https://registry.npmjs.org/inflight/latest) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve request coalescing, callback delivery, cache-key identity, and cleanup on success and failure.
+
+**Steps**
+
+1. **Replace inflight.** Implement keyed coalescing with lru-cache or another maintained primitive and remove inflight.
+2. **Verify concurrent behavior.** Test duplicate concurrent requests, failures, retries, and cleanup after completion.
+
+**Verification**
+
+- `npm run test --if-present`: Run concurrency, memory-lifecycle, and repository tests.
+
+## Detected by
+
+The `npm` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [abab is deprecated](npm.package.abab.deprecated.html)
+- [@angular/core v18 and older are no longer supported](npm.package.angular.core.v18-and-older.end-of-support.html)
+- [@angular/core v19 is no longer supported](npm.package.angular.core.v19.end-of-support.html)
+- [@angular/core v20 reaches end of life on 2026-11-28](npm.package.angular.core.v20.scheduled-end-of-life.html)
+- [@angular/core v21 reaches end of life on 2027-06-30](npm.package.angular.core.v21.scheduled-end-of-life.html)
+- [@angular/core v22 reaches end of life on 2028-06-30](npm.package.angular.core.v22.scheduled-end-of-life.html)
+- [are-we-there-yet is no longer supported](npm.package.are-we-there-yet.eol.html)
+- [babel-eslint is deprecated](npm.package.babel-eslint.deprecated.html)
+
+
+## Data
+
+This page is generated from [`registry/npm.json`](https://github.com/velella-sh/offing/blob/main/registry/npm.json), rule `npm.package.inflight.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/npm.package.inflight.deprecated.html",
+      "url": "https://velella.sh/offing/rules/npm.package.inflight.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/npm.package.inflight.deprecated.html",
+      "headline": "inflight is deprecated — dates, impact, migration",
+      "description": "npm states that inflight is unsupported, leaks memory, and recommends lru-cache for keyed request coalescing.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "deprecated",
+        "npm",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "inflight is deprecated",
+        "identifier": "pkg:npm/inflight"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "inflight package deprecation notice",
+          "url": "https://www.npmjs.com/package/inflight"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "inflight registry metadata",
+          "url": "https://registry.npmjs.org/inflight/latest"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/npm.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/npm.package.inflight.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/npm.package.inflight.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:npm/inflight?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:npm/*. Source: inflight package deprecation notice (https://www.npmjs.com/package/inflight)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:npm/inflight?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "lru-cache"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:npm/inflight?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:npm/inflight."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Reference quality</title><meta name="description" content="The measurable targets Offing holds its own code, data, and documentation to, the check that enforces each one, and the allowlist that carries existing debt to an end date."/><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/QUALITY/index.md"}},{"id":"section-rules","label":"Rules","hint":"Go to section","run":{"kind":"section","id":"rules"}},{"id":"section-targets-at-a-glance","label":"Targets at a glance","hint":"Go to section","run":{"kind":"section","id":"targets-at-a-glance"}},{"id":"section-1-file-size","label":"1. File size","hint":"Go to section","run":{"kind":"section","id":"1-file-size"}},{"id":"section-2-function-size","label":"2. Function size","hint":"Go to section","run":{"kind":"section","id":"2-function-size"}},{"id":"section-3-complexity","label":"3. Complexity","hint":"Go to section","run":{"kind":"section","id":"3-complexity"}},{"id":"section-4-type-safety","label":"4. Type safety","hint":"Go to section","run":{"kind":"section","id":"4-type-safety"}},{"id":"section-5-boundaries","label":"5. Boundaries","hint":"Go to section","run":{"kind":"section","id":"5-boundaries"}},{"id":"section-6-coverage","label":"6. Coverage","hint":"Go to section","run":{"kind":"section","id":"6-coverage"}},{"id":"section-7-mutation-score","label":"7. Mutation score","hint":"Go to section","run":{"kind":"section","id":"7-mutation-score"}},{"id":"section-8-docs","label":"8. Docs","hint":"Go to section","run":{"kind":"section","id":"8-docs"}},{"id":"section-9-security","label":"9. Security","hint":"Go to section","run":{"kind":"section","id":"9-security"}},{"id":"section-allowlist","label":"Allowlist","hint":"Go to section","run":{"kind":"section","id":"allowlist"}},{"id":"section-remaining-debt","label":"Remaining debt","hint":"Go to section","run":{"kind":"section","id":"remaining-debt"}},{"id":"section-monthly-report","label":"Monthly report","hint":"Go to section","run":{"kind":"section","id":"monthly-report"}},{"id":"section-follow-up-work","label":"Follow-up work","hint":"Go to section","run":{"kind":"section","id":"follow-up-work"}},{"id":"section-peer-comparison","label":"Peer comparison","hint":"Go to section","run":{"kind":"section","id":"peer-comparison"}},{"id":"section-what-this-page-does-not-claim","label":"What this page does not claim","hint":"Go to section","run":{"kind":"section","id":"what-this-page-does-not-claim"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="16"><span class="reading-time-minutes">16 minutes read</span></p><div class="doc-body"><h1 id="reference-quality" data-src="docs/QUALITY.md:6:1-6:19">Reference quality</h1>
+<p data-src="docs/QUALITY.md:8:1-11:31">Offing is meant to be a reference implementation: evidence-backed findings, deterministic output, and a
+local-first trust model. "Reference quality" only means something if a failing check can enforce it. This page
+defines it as nine criteria. Each has a target, the check that enforces it, the current number, and the
+an allowlist that is now empty.</p>
+<p data-src="docs/QUALITY.md:13:1-14:42">This page describes <strong>this repository</strong>. It says nothing about the quality of repositories Offing scans,
+and it adds no network access to any scan.</p>
+<p data-src="docs/QUALITY.md:16:1-17:13">The criteria are recorded in <a href="decisions/0023-measurable-quality-criteria.md">decision 0023</a>, which is
+<strong>accepted</strong>.</p>
+<p data-src="docs/QUALITY.md:19:1-20:34">Measurement snapshot: <strong>2026-11-08</strong>, Node.js 22 or newer, TypeScript 5.9. Numbers are a snapshot; the command
+beside each one is what to re-run.</p>
+<h2 id="rules" data-src="docs/QUALITY.md:22:1-22:8">Rules</h2>
+<ol data-src="docs/QUALITY.md:24:1-32:17">
+<li><strong>Every criterion is enforced by a failing check.</strong> The check runs in <code>npm run check</code>, the same gate CI runs,
+or in a named CI job that a pull request cannot merge without. "Measured but not enforced" is not allowed.</li>
+<li><strong>Zero new debt.</strong> A change may not add a file, function, or count that is worse than its target. There is
+no soft threshold for new code: it fails.</li>
+<li><strong>There is no debt.</strong> The allowlist, <a href="../benchmarks/quality-allowlist.json"><code>benchmarks/quality-allowlist.json</code></a>,
+is empty in every section, and <code>npm run check:quality</code> fails on any entry. A change that cannot meet a target
+gets fixed code, never an allowlist entry, a higher ceiling, or a later date.</li>
+<li><strong>Each criterion names its check.</strong> Where a rule cannot be checked mechanically, this page says so and it stays
+a review rule.</li>
+</ol>
+<p data-src="docs/QUALITY.md:34:1-35:25">Agents read this page before changing anything it covers. <a href="../AGENTS.md#quality-bar">AGENTS.md</a> carries the short
+version for every change.</p>
+<h2 id="targets-at-a-glance" data-src="docs/QUALITY.md:37:1-37:22">Targets at a glance</h2>
+<p data-src="docs/QUALITY.md:39:1-39:112">Before is <code>origin/main</code> measured by the same checker; after is this pull request. "Enforced by" names the check.</p>
+<table data-src="docs/QUALITY.md:41:1-52:194">
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Target</th>
+<th>Enforced by</th>
+<th>Before (main)</th>
+<th>After</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>File size</td>
+<td>Median ≤300 lines; no file over 800 without an entry; none over 1,000 without an entry</td>
+<td><code>npm run check:quality</code></td>
+<td>median 89; 0 files over 800</td>
+<td>same; no allowlist entries</td>
+<td>Enforced</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Function size</td>
+<td>No function over 50 lines without an entry</td>
+<td><code>npm run check:quality</code></td>
+<td>35 functions over 50 (all allowlisted); max 122</td>
+<td>0 over 50; max 50</td>
+<td>Enforced</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Complexity</td>
+<td>Cyclomatic complexity ≤15 per function; no function over 15 without an entry</td>
+<td><code>npm run check:quality</code></td>
+<td>0 functions over 15; max 15</td>
+<td>same; no allowlist entries</td>
+<td>Enforced</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Type safety</td>
+<td>Zero explicit <code>any</code> and zero <code>@ts-ignore</code> / <code>@ts-expect-error</code>; <code>as unknown as</code> and non-null assertions may not grow; <code>noImplicitOverride</code>, <code>noUnusedLocals</code>, <code>noUnusedParameters</code> on</td>
+<td><code>npm run check:quality</code>, <code>npm run build</code></td>
+<td>0 <code>any</code>, 0 <code>@ts-ignore</code>, 0 <code>as unknown as</code>, 0 non-null</td>
+<td>same; three flags on</td>
+<td>Enforced</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Boundaries</td>
+<td>Import and trust rules in <a href="../AGENTS.md#architecture-boundaries">AGENTS.md</a> hold; see the list below</td>
+<td><code>npm run check:quality</code></td>
+<td>0 violations</td>
+<td>same; no allowlist entries</td>
+<td>Partly enforced</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Coverage</td>
+<td>Lines ≥93, branches ≥87, functions ≥93; no total falls below main</td>
+<td>CI floors on pull requests and pushes; baseline check against main</td>
+<td>94.75 / 87.04 / 94.60 (2026-11-01)</td>
+<td>94.69 / 87.10 / 94.65 (2026-11-02)</td>
+<td>Enforced on pull requests</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Mutation score</td>
+<td>Each file's score may not fall; overall break at 60, high at 80, on the mutated core</td>
+<td>nightly <code>mutation.yml</code> report job (not in <code>npm run check</code>); <code>ci.yml</code> guards the baseline on pull requests</td>
+<td>59.68% overall (2026-11-04, before reporters)</td>
+<td>82.42% overall (2026-11-07); break at 60</td>
+<td>Enforced nightly</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Docs</td>
+<td>Generated indexes, pages, LLM index, data API, and site build agree; links and accessibility clean</td>
+<td><code>npm run check</code>, the <code>check:*</code> steps in <code>ci.yml</code></td>
+<td>generated checks pass; site links report-only</td>
+<td>generated checks now all gate CI; links report-only</td>
+<td>Partly enforced</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Security</td>
+<td>No high or critical advisory; no moderate or low advisory without an allowlist entry; runtime audit clean; Scorecard ≥6.0</td>
+<td><code>npm audit</code> steps in <code>ci.yml</code>; <code>scorecard-floor.yml</code> (weekly)</td>
+<td><code>audit</code> allowlist section empty; Scorecard 4.8</td>
+<td>same</td>
+<td>Enforced; Scorecard alert fails until ≥6.0</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Remaining debt</td>
+<td>The allowlist is empty and the checker rejects any entry</td>
+<td><code>npm run check:quality</code> (<code>--report</code> prints the totals)</td>
+<td>35 functions over 50</td>
+<td>0 in every section</td>
+<td>Enforced</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-file-size" data-src="docs/QUALITY.md:54:1-54:15">1. File size</h2>
+<p data-src="docs/QUALITY.md:56:1-58:88"><strong>Target.</strong> The median hand-written file is <strong>300 lines or fewer</strong>. A file over <strong>800 lines</strong> fails unless it has
+a file over <strong>1,000 lines</strong> fails too. Hand-written means <code>src/**/*.ts</code>
+minus <code>src/usage/vendor/</code> and generated <code>*.generated.ts</code> files. Line counts are <code>wc -l</code>.</p>
+<p data-src="docs/QUALITY.md:60:1-60:103"><strong>Enforced by.</strong> <code>npm run check:quality</code> (<code>tools/check-quality.ts</code>), which runs inside <code>npm run check</code>.</p>
+<p data-src="docs/QUALITY.md:62:1-62:140"><strong>Current.</strong> 491 hand-written files, median 89 lines, 71 over 300, none over 800 (the largest is 738). The allowlist has no file-size entry.</p>
+<p data-src="docs/QUALITY.md:64:1-66:83"><strong>Why these numbers.</strong> Google's code-review guidance calls 100 lines a reasonable change and 1,000 lines usually
+too large; that guidance is about the size of a change, not one file. ESLint's <code>max-lines</code> rule defaults to 300.
+The median target uses that default; 800 is the warning line and 1,000 the ceiling.</p>
+<h2 id="2-function-size" data-src="docs/QUALITY.md:68:1-68:19">2. Function size</h2>
+<p data-src="docs/QUALITY.md:70:1-71:42"><strong>Target.</strong> A function is <strong>50 lines or fewer</strong>, counted from the line it starts on through its closing brace,
+inclusive. A function over 50 lines fails.</p>
+<p data-src="docs/QUALITY.md:73:1-74:15"><strong>Enforced by.</strong> <code>npm run check:quality</code>, with the TypeScript compiler API, in the same pass that measures file size
+and complexity.</p>
+<p data-src="docs/QUALITY.md:76:1-76:138"><strong>Current.</strong> 5,432 functions, none over 50 lines; the longest is exactly 50. The last 35 were split in #2283 without a change in behavior.</p>
+<p data-src="docs/QUALITY.md:78:1-79:75"><strong>Why this number.</strong> ESLint's <code>max-lines-per-function</code> rule defaults to 50. A function that needs more than that
+usually does several jobs; splitting it keeps each one testable on its own.</p>
+<h2 id="3-complexity" data-src="docs/QUALITY.md:81:1-81:16">3. Complexity</h2>
+<p data-src="docs/QUALITY.md:83:1-84:114"><strong>Target.</strong> Cyclomatic complexity per function is <strong>15 or less</strong>. Complexity counts one plus each <code>if</code>, loop,
+<code>case</code>, <code>catch</code>, <code>?:</code>, <code>&#x26;&#x26;</code>, <code>||</code>, and <code>??</code>. Nested functions are measured on their own. A function over 15 fails.</p>
+<p data-src="docs/QUALITY.md:86:1-87:33"><strong>Enforced by.</strong> <code>npm run check:quality</code>, with the TypeScript compiler API. No linter is added; the parser is the
+one already in <code>devDependencies</code>.</p>
+<p data-src="docs/QUALITY.md:89:1-89:94"><strong>Current.</strong> No function is over 15; the highest is 15. The allowlist has no complexity entry.</p>
+<p data-src="docs/QUALITY.md:91:1-92:48"><strong>Why these numbers.</strong> ESLint's <code>complexity</code> rule defaults to 20. The target is stricter, at 15, with 20 kept as the
+number a reviewer may point to in the follow-up.</p>
+<h2 id="4-type-safety" data-src="docs/QUALITY.md:94:1-94:17">4. Type safety</h2>
+<p data-src="docs/QUALITY.md:96:1-96:11"><strong>Target.</strong></p>
+<ul data-src="docs/QUALITY.md:98:1-103:67">
+<li>Zero explicit <code>any</code> and zero <code>@ts-ignore</code> / <code>@ts-expect-error</code> in hand-written <code>src/</code>. These fail with no
+allowlist: a new one is never acceptable.</li>
+<li><code>as unknown as</code> is not allowed. No file has one and none may be added.</li>
+<li>Non-null assertions (<code>x!</code>) are not allowed. No file has one and none may be added.</li>
+<li><code>strict</code>, <code>noUncheckedIndexedAccess</code>, <code>exactOptionalPropertyTypes</code>, <code>noImplicitOverride</code>, <code>noUnusedLocals</code>, and
+<code>noUnusedParameters</code> are on in <a href="../tsconfig.json">tsconfig.json</a>.</li>
+</ul>
+<p data-src="docs/QUALITY.md:105:1-105:114"><strong>Enforced by.</strong> <code>npm run build</code> (the compiler, with every flag above) and <code>npm run check:quality</code> for the counts.</p>
+<p data-src="docs/QUALITY.md:107:1-107:132"><strong>Current.</strong> 0 explicit <code>any</code>, 0 <code>@ts-ignore</code>, 0 <code>as unknown as</code>, 0 non-null assertions. The three unused and override flags are on.</p>
+<p data-src="docs/QUALITY.md:109:1-111:91"><strong>Why these flags.</strong> The <code>sindresorhus/tsconfig</code> strictest preset sets <code>noUncheckedIndexedAccess</code>,
+<code>exactOptionalPropertyTypes</code>, <code>noImplicitOverride</code>, and the unused checks. Offing had the first two already.
+<code>skipLibCheck</code> stays on: it skips type checking inside dependencies, not Offing's own code.</p>
+<h2 id="5-boundaries" data-src="docs/QUALITY.md:113:1-113:16">5. Boundaries</h2>
+<p data-src="docs/QUALITY.md:115:1-115:72"><strong>Target.</strong> These rules hold. A violation fails <code>npm run check:quality</code>.</p>
+<table data-src="docs/QUALITY.md:117:1-123:150">
+<thead>
+<tr>
+<th>Rule</th>
+<th>Statement</th>
+<th>Enforced by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engine-no-detectors</code></td>
+<td><code>src/engine/</code> and <code>src/domain.ts</code> do not import <code>src/detectors/**</code>.</td>
+<td>mechanical</td>
+</tr>
+<tr>
+<td><code>no-network</code></td>
+<td><code>src/detectors/**</code>, <code>src/engine/</code>, and <code>src/domain.ts</code> import none of <code>node:net</code>, <code>node:http</code>, <code>node:https</code>, <code>node:dgram</code>, <code>node:tls</code>, <code>node:child_process</code> (or the bare names), and call no <code>fetch(</code>.</td>
+<td>mechanical, direct imports and calls only</td>
+</tr>
+<tr>
+<td><code>adapters-no-detectors</code></td>
+<td><code>src/cli.ts</code>, <code>src/mcp.ts</code>, and <code>src/github-action.ts</code> do not import <code>src/detectors/**</code>.</td>
+<td>mechanical; the rule "owns no detector logic" is review</td>
+</tr>
+<tr>
+<td>Source usage holds no detector rules</td>
+<td><code>src/source-usage.ts</code> holds traversal and matching only.</td>
+<td><strong>review</strong></td>
+</tr>
+<tr>
+<td>Scans stay offline</td>
+<td>no path reads the network, including through a helper module.</td>
+<td>mechanical for direct imports; transitive reach is <strong>review</strong></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/QUALITY.md:125:1-125:123">The rules come from <a href="ARCHITECTURE.md#trust-boundaries">Architecture</a> and <a href="../AGENTS.md#architecture-boundaries">AGENTS.md</a>.</p>
+<p data-src="docs/QUALITY.md:127:1-127:81"><strong>Current.</strong> No boundary violations. The <code>boundaries</code> allowlist section is empty.</p>
+<p data-src="docs/QUALITY.md:129:1-131:65"><strong>Not mechanically checkable today.</strong> Rule 4 (what <code>src/source-usage.ts</code> owns) and the "owns logic" half of the
+adapter rule are review rules. Transitive network reach needs a module-graph walk, which is a dependency-cruiser
+or architecture-test follow-up; no such dependency is added here.</p>
+<h2 id="6-coverage" data-src="docs/QUALITY.md:133:1-133:14">6. Coverage</h2>
+<p data-src="docs/QUALITY.md:135:1-136:55"><strong>Target.</strong> <code>npm run test:coverage</code> meets the floors in <code>package.json</code> (<code>coverageFloors</code>): <strong>93% lines, 87%
+branches, 93% functions</strong>. A pull request also may not:</p>
+<ul data-src="docs/QUALITY.md:138:1-139:194">
+<li>lower a changed source file's line coverage by more than <strong>1 percentage point</strong> (<code>coverage-diff</code>, existing);</li>
+<li>lower any overall total below <strong>main's report</strong>, beyond run-to-run noise (<strong>0.05</strong> points, <code>coverage-thresholds --baseline</code>). A real drop in one file is caught by the per-file check (1 point).</li>
+</ul>
+<p data-src="docs/QUALITY.md:141:1-144:12">A file whose only change is the formatter's output is skipped: formatting the base revision with the current
+<code>biome.json</code> reproduces the file, and re-wrapped lines move V8's line counters without changing what the tests
+exercise. When every changed <code>src/</code> file is formatting-only, both comparisons are skipped and the absolute floors
+still apply.</p>
+<p data-src="docs/QUALITY.md:146:1-147:28"><strong>Enforced by.</strong> <code>ci.yml</code>, on the Linux Node 24 job that runs the suite once with coverage
+(<code>OFFING_CHECK_COVERAGE=1</code>):</p>
+<ul data-src="docs/QUALITY.md:149:1-152:104">
+<li><em>Enforce coverage floors</em> runs on <strong>every</strong> event, pull requests included, and reads the lcov the same run wrote.
+Before this change it ran on pushes to <code>main</code> only.</li>
+<li><em>Coverage diff for changed src files</em> runs on pull requests that change <code>src/</code>. It now also runs the baseline
+check against the main artifact. The check is skipped when no successful main run has an artifact yet.</li>
+</ul>
+<p data-src="docs/QUALITY.md:154:1-154:28">No second test run is added.</p>
+<p data-src="docs/QUALITY.md:156:1-158:37"><strong>Current.</strong> 94.69% lines, 87.10% branches, 94.65% functions (2026-11-02, one local run of
+<code>OFFING_CHECK_COVERAGE=1 npm run check</code>). The branch floor has about 0.10 points of headroom, so a branch-heavy
+change without tests fails the floor.</p>
+<h2 id="7-mutation-score" data-src="docs/QUALITY.md:160:1-160:20">7. Mutation score</h2>
+<p data-src="docs/QUALITY.md:162:1-167:67"><strong>Target.</strong> On the mutated core (<code>src/engine/</code>, <code>src/baseline.ts</code>, <code>src/diff.ts</code>, <code>src/vers/**/*.ts</code>) and the reporters
+(<code>src/reporters.ts</code>, <code>src/reporters/**/*.ts</code>), each
+file's score may not fall below the value in
+<a href="../benchmarks/mutation-baseline.json"><code>benchmarks/mutation-baseline.json</code></a>, and the overall score stays at <strong>60% or
+more</strong> (<code>break</code>), with <strong>80%</strong> the high-water mark. Every reporter file's baseline is at least 80%, and
+<code>tests/mutation-baseline.test.ts</code> fails if one is missing or lower.</p>
+<p data-src="docs/QUALITY.md:169:1-177:74"><strong>Enforced by.</strong> The <code>report</code> job in <code>mutation.yml</code> merges the shard reports and runs <code>tools/mutation-baseline.js</code>
+(<code>npm run check:mutation</code>). A file whose score fell below its baseline fails the job with the file and the
+difference. A new file without a baseline entry must meet the 60% target, and a baseline entry whose file produces
+no mutants is stale and fails until it is removed. Pull requests cannot lower the ratchet: <code>ci.yml</code> runs the tool
+with <code>--against origin/main</code> and fails when a score falls or a live file's entry is removed. A maintainer records an
+improvement with <code>node dist/tools/mutation-baseline.js --update</code> from a complete report; it refuses to lower a
+score. The overall <code>thresholds.break</code> is 60. A shard covers only one slice of the scope, so the nightly shard jobs
+run with <code>stryker.shard.config.mjs</code>, which disables the break, and the <code>report</code> job applies the break to the merged
+report with <code>--break</code>. A full mutation run is not part of <code>npm run check</code>.</p>
+<p data-src="docs/QUALITY.md:179:1-185:48"><strong>On pull requests.</strong> <code>mutation-pr.yml</code> runs Stryker on the lines a pull request changes, not on whole files:
+<code>tools/mutation-changed.ts select</code> turns <code>git diff</code> against the base into <code>file:start-end</code> entries for the files
+inside the mutation scope, and <code>check</code> fails the job when the score of those lines is under <code>thresholds.break</code>,
+listing every surviving mutant with its file, line, and mutator in the log and the job summary. A pull request that
+touches no mutated file skips the run. The run has a 20-minute limit; when it is hit, the job warns and passes,
+because an unfinished run judges nothing. Older debt in an untouched part of a file does not block the pull
+request: the nightly per-file ratchet owns that.</p>
+<p data-src="docs/QUALITY.md:187:1-196:96"><strong>Current.</strong> Measured 2026-11-07 from a complete <code>workflow_dispatch</code> run on <code>main</code> (<code>b01aea5b</code>): overall <strong>82.42%</strong>
+(2649 killed or timed out, 565 survived or uncovered, 25 files). Per file, lowest first: <code>reporters/json.ts</code> 37.50%,
+<code>reporters/registry.ts</code> 48.10%, <code>diff.ts</code> 48.70%, <code>vers/semver.ts</code> 68.57%, <code>baseline.ts</code> 72.13%,
+<code>vers/gem.ts</code> 72.41%, <code>engine/discover.ts</code> 77.64%, <code>vers/nuget.ts</code> 82.73%, <code>engine/detect.ts</code> 82.81%,
+<code>vers/maven.ts</code> 83.51%, <code>engine/index.ts</code> 84.54%, <code>reporters/html.ts</code> 87.03%, <code>vers/pep440.ts</code> 87.37%,
+<code>reporters/markdown.ts</code> 91.25%, <code>reporters/text.ts</code> 95.72%. The reporters were re-measured after #2551 split the
+reporter contract. The per-file ratchet currently fails on <code>reporters/json.ts</code>, <code>reporters/registry.ts</code>,
+<code>reporters/html.ts</code>, <code>reporters/markdown.ts</code>, <code>reporters/text.ts</code>, <code>diff.ts</code>, <code>baseline.ts</code>, and <code>vers/nuget.ts</code>;
+that is existing debt from #2551 (reporters) and the test-quality epic (#1992) (diff, baseline, nuget), not a
+break-threshold failure. The overall score is above the break, so the break check itself passes.</p>
+<p data-src="docs/QUALITY.md:198:1-200:50"><strong>When the break was set.</strong> #2282 ran a complete mutation job on 2026-11-07 and set <code>thresholds.break</code> to 60 from a
+measured <strong>82.42%</strong> overall. The 2026-11-04 score of 59.68% was below 60 because the mutation scope did not include
+the reporters yet, not because the target changed.</p>
+<p data-src="docs/QUALITY.md:202:1-203:56"><strong>Why these numbers.</strong> They are Stryker's own defaults for <code>high</code> and <code>low</code>. Google's testing blog defines the
+mutation score as the ratio of mutants the tests detect.</p>
+<h2 id="8-docs" data-src="docs/QUALITY.md:205:1-205:10">8. Docs</h2>
+<p data-src="docs/QUALITY.md:207:1-207:11"><strong>Target.</strong></p>
+<ul data-src="docs/QUALITY.md:209:1-216:19">
+<li>The generated command registry is current, and every command module appears in the CLI help.</li>
+<li><code>docs/llms-full.txt</code> is buildable from the pages linked from <code>docs/llms.txt</code> (generated at site build; not committed).</li>
+<li><code>docs/sitemap.xml</code> and <code>docs/rules/index.md</code> are generated at site build (not committed).</li>
+<li><code>docs/dashboard/data.json</code> is buildable from the corpus thresholds (generated at site build; not committed).</li>
+<li>Committed reference pages, answer pages, and Open Graph images match <code>registry/*.json</code>. The data API is buildable and schema-valid from <code>registry/*.json</code> (generated at site build; not committed).</li>
+<li>The README coverage table names files each detector reads and commands that exist.</li>
+<li>The documentation site builds with <strong>zero broken internal links</strong> and no accessibility errors at the level
+Seaworthy checks.</li>
+</ul>
+<p data-src="docs/QUALITY.md:218:1-218:16"><strong>Enforced by.</strong></p>
+<ul data-src="docs/QUALITY.md:220:1-227:64">
+<li><code>npm run check</code>: the command registry (<code>generate-commands-index.mjs --check</code>) and the docs tests.</li>
+<li><code>ci.yml</code>, Linux Node 24: <code>check:reference</code>, <code>check:og-images</code>, <code>check:answer-pages</code>, <code>check:llms</code>,
+<code>check:data-api</code>, and <code>check:dashboard</code>. Reference, Open Graph, and answer checks fail on drift from
+their source; <code>check:llms</code>, <code>check:data-api</code>, and <code>check:dashboard</code> fail when the sources would not
+produce a well-formed build-time file.</li>
+<li>Links and accessibility: <strong>report-only</strong>. <code>ci.yml</code> runs Seaworthy with <code>--fail-on none</code>, and <code>docs-doctor.yml</code>
+sets <code>level: none</code>. This change does not turn them into gates, because it did not run the Seaworthy findings to
+a clean state locally. The condition is in the next paragraph.</li>
+</ul>
+<p data-src="docs/QUALITY.md:229:1-231:78"><strong>Condition to make links and accessibility gate.</strong> A local run of the site build and Seaworthy with zero
+findings, or with each finding named in an allowlist with an owner and expiry. Then <code>--fail-on none</code> becomes
+<code>--fail-on error</code> and <code>docs-doctor.yml</code> raises its level, in one pull request.</p>
+<p data-src="docs/QUALITY.md:233:1-234:59"><strong>Not done.</strong> A test that every CLI command and flag appears in a documentation page. The existing docs tests check
+selected pages only. This is a follow-up issue, not a gate.</p>
+<p data-src="docs/QUALITY.md:236:1-238:50"><strong>Why this shape.</strong> Google's documentation guide asks for documentation in the same change as the code. Diátaxis
+separates tutorials, how-to guides, reference, and explanation. OpenSSF Best Practices requires basic and
+reference documentation of the external interface.</p>
+<h2 id="9-security" data-src="docs/QUALITY.md:240:1-240:14">9. Security</h2>
+<p data-src="docs/QUALITY.md:242:1-242:11"><strong>Target.</strong></p>
+<ul data-src="docs/QUALITY.md:244:1-249:117">
+<li><strong>Runtime dependencies:</strong> zero known advisories (<code>npm audit --omit=dev</code>), at any severity.</li>
+<li><strong>Whole lockfile:</strong> zero <strong>high or critical</strong> advisories, ever. The <code>audit</code> allowlist section is empty.</li>
+<li><strong>Scorecard:</strong> overall <strong>6.0 or more</strong> by v0.8.0 and <strong>7.0</strong> by v1.0, with every check at least 5 except the
+exceptions already explained in <a href="../SECURITY.md#openssf-scorecard">SECURITY.md</a>.</li>
+<li><strong>Static analysis:</strong> no open high or critical CodeQL alerts.</li>
+<li><strong>Workflows:</strong> third-party actions pinned to a full commit SHA; <code>actionlint</code> and <code>zizmor</code> pass on workflow changes.</li>
+</ul>
+<p data-src="docs/QUALITY.md:251:1-251:16"><strong>Enforced by.</strong></p>
+<ul data-src="docs/QUALITY.md:253:1-261:44">
+<li><code>ci.yml</code>, <em>Audit dependencies</em>, on the Linux Node 24 job. It runs <code>npm audit --omit=dev --audit-level=low</code>, which
+fails on any runtime advisory. It then runs <code>npm audit --json</code> and passes the result to
+<code>npm run check:quality --audit</code>, which fails on any high or critical advisory and on any medium or low advisory
+not allowlisted by id. An allowlisted advisory that is no longer reported is stale and fails.</li>
+<li><code>scorecard-floor.yml</code>, weekly, schedule and dispatch only. It reads the public Scorecard score and fails below
+<strong>6.0</strong>. Scorecard is scored outside this repository, so it cannot gate a pull request; the failed run is the alert.
+<strong>It fails now</strong>: the published score is 4.8. It passes once the score reaches 6.0.</li>
+<li>CodeQL and Scorecard (<code>scorecard.yml</code>) run weekly and publish to code scanning. <code>workflow-lint.yml</code> runs
+actionlint and zizmor on pushes to <code>main</code>.</li>
+</ul>
+<p data-src="docs/QUALITY.md:263:1-263:12"><strong>Current.</strong></p>
+<ul data-src="docs/QUALITY.md:265:1-271:44">
+<li>Runtime audit: <strong>0</strong>.</li>
+<li>Root lockfile, from the open Dependabot alerts (npm's audit endpoint was unreachable from the sandbox that wrote
+this change, so these are the same advisories from GitHub's database): <strong>5 medium</strong> (<code>fast-uri</code> ×2, <code>qs</code> ×2,
+<code>minimatch</code>) and <strong>2 low</strong> (<code>fast-uri</code> ×2). No high or critical. All are development dependencies.</li>
+<li>The Dependabot alerts in <code>examples/</code> and <code>extensions/vscode/</code> include high-severity advisories. They are outside
+the root <code>npm audit</code> scope, so this check does not see them. They are a follow-up for the owners of those trees.</li>
+<li>Scorecard: <strong>4.8</strong> (published 2026-10-31).</li>
+</ul>
+<p data-src="docs/QUALITY.md:273:1-275:59"><strong>Not done.</strong> Raising the Scorecard score; the checks behind 4.8 (Pinned-Dependencies in <code>release.yml</code> and the
+container images, Signed-Releases, Dangerous-Workflow in <code>release.yml</code>, Code-Review, CII-Best-Practices) need their
+own changes. <code>workflow-lint.yml</code> still runs on pushes only.</p>
+<h2 id="allowlist" data-src="docs/QUALITY.md:277:1-277:12">Allowlist</h2>
+<p data-src="docs/QUALITY.md:279:1-282:100"><a href="../benchmarks/quality-allowlist.json"><code>benchmarks/quality-allowlist.json</code></a> is <strong>empty in every section</strong>
+(<code>fileSize</code>, <code>functionLength</code>, <code>complexity</code>, <code>asUnknownAs</code>, <code>nonNull</code>, <code>boundaries</code>, <code>audit</code>). <code>npm run check:quality</code>
+reports each entry it finds as a failure, so no debt can be added again, and the comparison with the base ref in
+<code>ci.yml</code> still rejects a new entry or a raised ceiling. The schema is <code>offing.quality-allowlist.v2</code>.</p>
+<h2 id="remaining-debt" data-src="docs/QUALITY.md:284:1-284:17">Remaining debt</h2>
+<p data-src="docs/QUALITY.md:286:1-288:80">There is none. <code>npm run check:quality -- --report</code> prints one line per section (files over 800 lines, functions over
+50 lines, functions over 15, <code>as unknown as</code>, non-null assertions, boundary violations, advisories), and every line
+reads 0. It reads only the repository and the allowlist, with no network access.</p>
+<h2 id="monthly-report" data-src="docs/QUALITY.md:290:1-290:17">Monthly report</h2>
+<p data-src="docs/QUALITY.md:292:1-297:66">Each target above appears in the monthly progress report with its current value and the change against the previous
+month. <code>npm run metrics:quality</code> writes <code>metrics/quality/&#x3C;YYYY-MM-DD>.json</code> from the allowlist and any local
+<code>lcov.info</code>, <code>artifacts/mutation-report.json</code>, and Scorecard row already stored under <code>metrics/adoption/</code> — no
+network access. <code>npm run report:monthly -- --out docs/reports/monthly-YYYY-MM.md</code> reads the newest snapshot of the
+month and the newest of the previous month, and prints a dash when either side is missing rather than treating a gap
+as zero. Published reports live under <a href="reports/"><code>docs/reports/</code></a>.</p>
+<h2 id="follow-up-work" data-src="docs/QUALITY.md:299:1-299:17">Follow-up work</h2>
+<p data-src="docs/QUALITY.md:301:1-301:93">The code-debt items are done: the allowlist is empty. What remains needs its own owner issue.</p>
+<ol data-src="docs/QUALITY.md:303:1-308:66">
+<li>Add a dependency-cruiser configuration or an architecture test for the transitive network rule and rules 4 and 5.</li>
+<li>Triage the high advisories in <code>examples/</code> and <code>extensions/vscode/</code>.</li>
+<li>Add a docs test that every CLI command and flag is documented.</li>
+<li>Clean the Seaworthy and docs-doctor findings, then make them gate (see the condition in <a href="#8-docs">Docs</a>).</li>
+<li><del>Set <code>thresholds.break</code> when the first complete mutation score exists</del> Done: break at 60 since 2026-11-07 (#2282).</li>
+<li>Raise the Scorecard score to 6.0 (see <a href="#9-security">Security</a>).</li>
+</ol>
+<h2 id="peer-comparison" data-src="docs/QUALITY.md:310:1-310:18">Peer comparison</h2>
+<p data-src="docs/QUALITY.md:312:1-312:93">Each target is compared with a published practice or tool default. The links are the sources.</p>
+<table data-src="docs/QUALITY.md:314:1-324:325">
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Peer practice</th>
+<th>Offing target</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File size</td>
+<td>100 lines is a reasonable change; 1,000 lines is usually too large. ESLint's <code>max-lines</code> default is 300 per file.</td>
+<td>Median 300, ceiling 1,000, warning at 800</td>
+<td><a href="https://google.github.io/eng-practices/review/developer/small-cls.html" rel="external">Google eng-practices: small CLs</a>, <a href="https://eslint.org/docs/latest/rules/max-lines" rel="external">ESLint <code>max-lines</code></a></td>
+</tr>
+<tr>
+<td>Function size</td>
+<td>ESLint's <code>max-lines-per-function</code> rule defaults to 50.</td>
+<td>50 per function</td>
+<td><a href="https://eslint.org/docs/latest/rules/max-lines-per-function" rel="external">ESLint <code>max-lines-per-function</code></a></td>
+</tr>
+<tr>
+<td>Complexity</td>
+<td>ESLint's <code>complexity</code> rule defaults to 20 per function.</td>
+<td>15 per function, 20 as the reviewer's ceiling</td>
+<td><a href="https://eslint.org/docs/latest/rules/complexity" rel="external">ESLint <code>complexity</code></a></td>
+</tr>
+<tr>
+<td>Type safety</td>
+<td>The strictest <code>sindresorhus/tsconfig</code> preset sets <code>noUncheckedIndexedAccess</code>, <code>exactOptionalPropertyTypes</code>, <code>noImplicitOverride</code>, and the unused checks.</td>
+<td>All of those, plus zero <code>any</code> and zero <code>@ts-ignore</code></td>
+<td><a href="https://github.com/sindresorhus/tsconfig" rel="external"><code>sindresorhus/tsconfig</code></a></td>
+</tr>
+<tr>
+<td>Boundaries</td>
+<td>Kubernetes enforces package import rules with <code>import-boss</code> and <code>.import-restrictions</code> files.</td>
+<td>Rules above, checked by the compiler API</td>
+<td><a href="https://pkg.go.dev/k8s.io/gengo/examples/import-boss" rel="external"><code>k8s.io/gengo/examples/import-boss</code></a></td>
+</tr>
+<tr>
+<td>Coverage</td>
+<td>OpenSSF Best Practices asks for 80% statement coverage at silver and 80% branch coverage at gold.</td>
+<td>93% lines, 87% branches, 93% functions</td>
+<td><a href="https://www.bestpractices.dev/criteria" rel="external">OpenSSF Best Practices criteria</a></td>
+</tr>
+<tr>
+<td>Mutation score</td>
+<td>Stryker defaults to <code>high: 80</code>, <code>low: 60</code>, <code>break: null</code>.</td>
+<td>Break at 60, high at 80</td>
+<td><a href="https://stryker-mutator.io/docs/stryker-js/configuration/" rel="external">Stryker configuration</a>, <a href="https://testing.googleblog.com/2021/04/mutation-testing.html" rel="external">Google Testing Blog: mutation testing</a></td>
+</tr>
+<tr>
+<td>Docs</td>
+<td>Change documentation in the same change as the code; divide docs into tutorials, how-to, reference, and explanation.</td>
+<td>Generated pages current, site links and accessibility clean</td>
+<td><a href="https://google.github.io/styleguide/docguide/best_practices.html" rel="external">Google documentation best practices</a>, <a href="https://diataxis.fr/" rel="external">Diátaxis</a>, <a href="https://www.bestpractices.dev/criteria" rel="external">OpenSSF criteria</a></td>
+</tr>
+<tr>
+<td>Security</td>
+<td>OpenSSF Scorecard scores 18 repository checks from 0 to 10, including Code-Review, Pinned-Dependencies, Vulnerabilities, and Dangerous-Workflow.</td>
+<td>Scorecard ≥6.0 at v0.8.0, ≥7.0 at v1.0; high and critical advisories never allowed</td>
+<td><a href="https://github.com/ossf/scorecard/blob/main/docs/checks.md" rel="external">Scorecard checks</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-this-page-does-not-claim" data-src="docs/QUALITY.md:326:1-326:32">What this page does not claim</h2>
+<ul data-src="docs/QUALITY.md:328:1-332:53">
+<li>A number is a snapshot. Re-run the command to check today.</li>
+<li>Changing a target is a decision, not a documentation edit: update this page and
+<a href="decisions/0023-measurable-quality-criteria.md">decision 0023</a> together.</li>
+<li>Maintainer acceptance of decision 0023 is pending. Until it is accepted, these targets are a proposal under
+review, not a standard contributors can be held to.</li>
+</ul></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/QUALITY.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/QUALITY.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/QUALITY.md:5. Current text: &quot;Reference quality&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Reference%20quality&amp;body=Page%3A%20%2Foffing%2FQUALITY%2F%0ASource%3A%20docs%2FQUALITY.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/QUALITY/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/QUALITY/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/QUALITY/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/QUALITY/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FQUALITY%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FQUALITY%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FQUALITY%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#rules">Rules</a></li><li><a href="#targets-at-a-glance">Targets at a glance</a></li><li><a href="#1-file-size">1. File size</a></li><li><a href="#2-function-size">2. Function size</a></li><li><a href="#3-complexity">3. Complexity</a></li><li><a href="#4-type-safety">4. Type safety</a></li><li><a href="#5-boundaries">5. Boundaries</a></li><li><a href="#6-coverage">6. Coverage</a></li><li><a href="#7-mutation-score">7. Mutation score</a></li><li><a href="#8-docs">8. Docs</a></li><li><a href="#9-security">9. Security</a></li><li><a href="#allowlist">Allowlist</a></li><li><a href="#remaining-debt">Remaining debt</a></li><li><a href="#monthly-report">Monthly report</a></li><li><a href="#follow-up-work">Follow-up work</a></li><li><a href="#peer-comparison">Peer comparison</a></li><li><a href="#what-this-page-does-not-claim">What this page does not claim</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#rules">Rules</a></li><li><a href="#targets-at-a-glance">Targets at a glance</a></li><li><a href="#1-file-size">1. File size</a></li><li><a href="#2-function-size">2. Function size</a></li><li><a href="#3-complexity">3. Complexity</a></li><li><a href="#4-type-safety">4. Type safety</a></li><li><a href="#5-boundaries">5. Boundaries</a></li><li><a href="#6-coverage">6. Coverage</a></li><li><a href="#7-mutation-score">7. Mutation score</a></li><li><a href="#8-docs">8. Docs</a></li><li><a href="#9-security">9. Security</a></li><li><a href="#allowlist">Allowlist</a></li><li><a href="#remaining-debt">Remaining debt</a></li><li><a href="#monthly-report">Monthly report</a></li><li><a href="#follow-up-work">Follow-up work</a></li><li><a href="#peer-comparison">Peer comparison</a></li><li><a href="#what-this-page-does-not-claim">What this page does not claim</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

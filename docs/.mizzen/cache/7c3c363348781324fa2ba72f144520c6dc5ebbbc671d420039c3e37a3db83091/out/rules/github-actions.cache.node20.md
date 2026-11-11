@@ -1,0 +1,147 @@
+
+# Unsupported actions/cache runtime
+
+**End of support** as of 2026-09-23. Replacement: actions/cache@v5 or later. Source: [Node 20 is no longer available in GitHub Actions](https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/).
+
+Check a version:
+
+```bash
+offing check pkg:github/actions/cache
+```
+
+This release uses a retired JavaScript runtime or cache service. Version 5 moved the action to Node.js 24.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of support |
+| Severity | high |
+| Ecosystem | `github-actions` |
+| Component | `pkg:github/actions/cache` |
+| Affected versions | `vers:semver/<5.0.0` |
+| Date from the source | 2026-09-23 |
+| Replacement | actions/cache@v5 or later |
+| Evidence last seen | 2026-10-13 |
+| Reviewed | 2026-10-14 by arminazimi |
+| Review due | 2027-10-14 (365 days after the last review) |
+| Rule ID | `github-actions.cache.node20` |
+
+## Sources
+
+- [Node 20 is no longer available in GitHub Actions](https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/) (accessed 2026-10-16)
+- [actions/cache runtime and service guidance](https://github.com/actions/cache#whats-new) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve cache keys, restore-key ordering, paths, and cache-hit dependent control flow.
+
+**Steps**
+
+1. **Upgrade the cache action.** Change the uses reference to actions/cache@v5 or a later supported major.
+2. **Review cache behavior.** Verify cache paths, keys, restore keys, and cache-hit output consumers against the target release.
+
+**Verification**
+
+- `git diff --check`: Validate the edited workflow diff.
+
+## Detected by
+
+The `github-actions` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [Unsupported softprops/action-gh-release runtime](github-actions.action-gh-release.node20.html)
+- [Unsupported docker/bake-action runtime](github-actions.bake-action.node20.html)
+- [Unsupported docker/build-push-action runtime](github-actions.build-push-action.node20.html)
+- [Unsupported actions/checkout runtime](github-actions.checkout.node20.html)
+- [Unsupported actions/configure-pages runtime](github-actions.configure-pages.node20.html)
+- [Unsupported actions/create-github-app-token runtime](github-actions.create-github-app-token.node20.html)
+- [Unsupported actions/deploy-pages runtime](github-actions.deploy-pages.node20.html)
+- [Retired actions/download-artifact release](github-actions.download-artifact.retired.html)
+
+
+## Data
+
+This page is generated from [`registry/github-actions.json`](https://github.com/velella-sh/offing/blob/main/registry/github-actions.json), rule `github-actions.cache.node20`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/github-actions.cache.node20.html",
+      "url": "https://velella.sh/offing/rules/github-actions.cache.node20.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/github-actions.cache.node20.html",
+      "headline": "Unsupported actions/cache runtime — dates, impact, migration",
+      "description": "This release uses a retired JavaScript runtime or cache service. Version 5 moved the action to Node.js 24.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-14",
+      "keywords": [
+        "end-of-support",
+        "github-actions",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "Unsupported actions/cache runtime",
+        "identifier": "pkg:github/actions/cache"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Node 20 is no longer available in GitHub Actions",
+          "url": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "actions/cache runtime and service guidance",
+          "url": "https://github.com/actions/cache#whats-new"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/github-actions.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/github-actions.cache.node20.html#faq",
+      "url": "https://velella.sh/offing/rules/github-actions.cache.node20.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:github/actions/cache?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of support as of 2026-09-23. Affected versions: vers:semver/\u003c5.0.0. Source: Node 20 is no longer available in GitHub Actions (https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:github/actions/cache?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "actions/cache@v5 or later"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:github/actions/cache?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:github/actions/cache."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

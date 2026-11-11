@@ -1,0 +1,140 @@
+
+# superlinked is deprecated for new projects
+
+**Deprecated.** The source gives no day. Replacement: SIE and sie-sdk. Source: [superlinked legacy framework notice](https://pypi.org/project/superlinked/).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/superlinked
+```
+
+Superlinked marks its legacy Python framework deprecated for new projects and directs new development to SIE and sie-sdk.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/superlinked` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Replacement | SIE and sie-sdk |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `python.package.superlinked.deprecated` |
+
+## Sources
+
+- [superlinked legacy framework notice](https://pypi.org/project/superlinked/) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- SIE is not a drop-in replacement; preserve schemas, indexing, storage, vector search, query weighting, model behavior, and deployment requirements explicitly.
+
+**Steps**
+
+1. **Redesign on SIE where appropriate.** Map legacy framework responsibilities to SIE Server and sie-sdk, redesign incompatible application layers, migrate data and queries, then remove superlinked only after parity is proven.
+
+**Verification**
+
+- `python -m pytest`: Run indexing, retrieval, ranking, storage, deployment, and project tests when defined.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.superlinked.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.superlinked.deprecated.html",
+      "url": "https://velella.sh/offing/rules/python.package.superlinked.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.superlinked.deprecated.html",
+      "headline": "superlinked is deprecated for new projects — dates, impact, migration",
+      "description": "Superlinked marks its legacy Python framework deprecated for new projects and directs new development to SIE and sie-sdk.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "deprecated",
+        "python",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "superlinked is deprecated for new projects",
+        "identifier": "pkg:pypi/superlinked"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "superlinked legacy framework notice",
+          "url": "https://pypi.org/project/superlinked/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.superlinked.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.superlinked.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/superlinked?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:pypi/*. Source: superlinked legacy framework notice (https://pypi.org/project/superlinked/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:pypi/superlinked?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SIE and sie-sdk"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/superlinked?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/superlinked."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

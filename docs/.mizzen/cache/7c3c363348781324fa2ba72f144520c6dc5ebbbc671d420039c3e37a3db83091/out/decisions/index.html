@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Decision records</title><meta name="description" content="Index of the architecture, data, contract, and policy decisions behind Offing."/><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/decisions/index.md"}},{"id":"section-detectors","label":"Detectors","hint":"Go to section","run":{"kind":"section","id":"detectors"}},{"id":"section-data-and-contracts","label":"Data and contracts","hint":"Go to section","run":{"kind":"section","id":"data-and-contracts"}},{"id":"section-adoption","label":"Adoption","hint":"Go to section","run":{"kind":"section","id":"adoption"}},{"id":"section-quality","label":"Quality","hint":"Go to section","run":{"kind":"section","id":"quality"}},{"id":"section-operations","label":"Operations","hint":"Go to section","run":{"kind":"section","id":"operations"}},{"id":"section-policy","label":"Policy","hint":"Go to section","run":{"kind":"section","id":"policy"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><nav class="breadcrumb" aria-label="Breadcrumb"><a href="/offing/DEMO/">Start here</a><svg class="breadcrumb-sep" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 6 6 6-6 6"></path></svg><span aria-current="page">Decision records</span></nav><p class="reading-time" data-minutes="7"><span class="reading-time-minutes">7 minutes read</span></p><div class="doc-body"><h1 id="decision-records" data-src="docs/decisions/index.md:6:1-6:18">Decision records</h1>
+<p data-src="docs/decisions/index.md:8:1-10:95">These records explain the choices behind Offing's architecture, data format, contracts, and
+policy. Each one is accepted unless a later record supersedes it, or unless its status says
+otherwise. Records are numbered in the order they were written; this page groups them by theme.</p>
+<h2 id="detectors" data-src="docs/decisions/index.md:12:1-12:12">Detectors</h2>
+<table data-src="docs/decisions/index.md:14:1-24:237">
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="0002-go-ecosystem-support.md">0002</a></td>
+<td>Add Go as a first-class detector ecosystem</td>
+<td>Add evidence-backed Go runtime, toolchain, and direct-module lifecycle detection through the existing detector SDK, without requiring the Go toolchain or network access at scan time.</td>
+</tr>
+<tr>
+<td><a href="0007-container-detector.md">0007</a></td>
+<td>Detect end-of-life container base images from Dockerfiles and Compose files</td>
+<td>Add a <code>container</code> detector that reports base-image references whose release line has a vendor-published end of life.</td>
+</tr>
+<tr>
+<td><a href="0008-kubernetes-detector.md">0008</a></td>
+<td>Detect removed and deprecated Kubernetes APIs in manifests, Helm charts, and kustomizations</td>
+<td>Add a <code>kubernetes</code> detector that reports <code>apiVersion</code>/<code>kind</code> pairs the Kubernetes project has documented as deprecated or no longer served.</td>
+</tr>
+<tr>
+<td><a href="0009-java-detector.md">0009</a></td>
+<td>Detect end-of-support JDK releases and relocated Maven dependencies in JVM projects</td>
+<td>Add a <code>java</code> detector for pinned or targeted JDKs and Maven coordinates that a vendor or maintainer has documented as out of support or moved.</td>
+</tr>
+<tr>
+<td><a href="0011-rust-detector.md">0011</a></td>
+<td>Detect unsupported Rust toolchains and abandoned or yanked crates</td>
+<td>Add a <code>rust</code> detector that reads Cargo and toolchain files and reports lifecycle risks an authoritative source states.</td>
+</tr>
+<tr>
+<td><a href="0012-dotnet-detector.md">0012</a></td>
+<td>Detect unsupported .NET targets and deprecated NuGet packages</td>
+<td>Add a <code>dotnet</code> detector for unsupported .NET SDK/runtime lines and deprecated NuGet packages with publisher evidence.</td>
+</tr>
+<tr>
+<td><a href="0013-detector-maturity.md">0013</a></td>
+<td>Detector maturity levels and the evidence to move between them</td>
+<td>Use three levels — <code>experimental</code>, <code>beta</code>, and <code>stable</code> — with fixed evidence floors (fixtures, corpus size, precision, recall) to move between them.</td>
+</tr>
+<tr>
+<td><a href="0014-ci-images-detector.md">0014</a></td>
+<td>Detect retired CI runner images</td>
+<td>Add a <code>ci-images</code> detector that reports only image lifecycle risks the platform's authoritative documentation explicitly states.</td>
+</tr>
+<tr>
+<td><a href="0015-corpus-fetch-strategy.md">0015</a></td>
+<td>Corpus fetch strategy: sparse checkout, concurrency 16</td>
+<td>Default the public-repository corpus to sparse checkout at concurrency 16, with cache invalidation keyed to detector input declarations.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="data-and-contracts" data-src="docs/decisions/index.md:26:1-26:21">Data and contracts</h2>
+<table data-src="docs/decisions/index.md:28:1-43:278">
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="0004-registry-v2.md">0004</a></td>
+<td>Key lifecycle rules by PURL and VERS with provenance</td>
+<td>Move every ecosystem to one <code>offing.registry.v2</code> format keyed by Package URL and VERS, with provenance on each rule.</td>
+</tr>
+<tr>
+<td><a href="0005-lifecycle-importers.md">0005</a></td>
+<td>Draft lifecycle rules with importers; never write the registry</td>
+<td>Let importers draft rules from one authoritative source; a person reviews every draft and changes <code>registry/</code> in a pull request.</td>
+</tr>
+<tr>
+<td><a href="0006-data-bundle.md">0006</a></td>
+<td>Ship lifecycle data as a versioned, content-addressed bundle</td>
+<td>Publish and consume lifecycle data as an <code>offing.data-bundle.v1</code> document separate from the code release.</td>
+</tr>
+<tr>
+<td><a href="0010-scheduled-end-of-life.md">0010</a></td>
+<td>Record announced end-of-life dates that have not happened yet</td>
+<td>Add a <code>scheduled-end-of-life</code> event for announced future ends, reported at low severity and promoted by a reviewed change after the date.</td>
+</tr>
+<tr>
+<td><a href="0016-cli-exit-codes.md">0016</a></td>
+<td>CLI exit codes and error codes</td>
+<td>Map failures to five fixed classes and exit codes: policy 1, usage 2, data 3, parse 4, internal 5.</td>
+</tr>
+<tr>
+<td><a href="0017-openeox-ingestion.md">0017</a></td>
+<td>Do not read OpenEoX documents yet; keep CLE as the interchange target</td>
+<td>Scans never read OpenEoX; do not ingest it until the Core Schema is final, and keep CLE as the standards interchange path.</td>
+</tr>
+<tr>
+<td><a href="0020-data-license.md">0020</a></td>
+<td>License the lifecycle dataset under CC BY 4.0</td>
+<td>License <code>registry/</code> and first-party schemas in the data-only package under CC BY 4.0; keep the rest of the repository Apache-2.0.</td>
+</tr>
+<tr>
+<td><a href="0022-python-method-shape.md">0022</a></td>
+<td>Match Python <code>TestCase</code> method calls with a <code>method</code> shape</td>
+<td>Add a Python-only <code>method</code> symbol shape that matches a call by name on any receiver inside a class that directly subclasses <code>unittest.TestCase</code> or an alias of it.</td>
+</tr>
+<tr>
+<td><a href="0028-mcp-schema-inlining-fails-closed.md">0028</a></td>
+<td>Publish a self-contained MCP output schema</td>
+<td>Inline every cross-file <code>$ref</code> before the MCP server advertises a tool's schema and throw when one cannot resolve; same-document references stay, and sibling keywords win over the inlined target.</td>
+</tr>
+<tr>
+<td><a href="0032-split-mcp-tools-into-one-file-per-tool.md">0032</a></td>
+<td>Split the MCP server into one file per tool</td>
+<td>Give each MCP tool its own file under <code>src/mcp/tools/</code>, list them in a small registry, and prove with a <code>tools/list</code> snapshot that no advertised name, description, input schema, output schema, or annotation changed.</td>
+</tr>
+<tr>
+<td><a href="0033-required-source-access-date.md">0033</a></td>
+<td>Require the retrieval date on every lifecycle source</td>
+<td>Make <code>sources[].accessedAt</code> required in registry v2, backfill every bundled record, and let the importer runner stamp the run date so every finding shows when its source was read.</td>
+</tr>
+<tr>
+<td><a href="0037-recommend-version-from-bundled-data.md">0037</a></td>
+<td>Recommend a release line from bundled data only</td>
+<td>Add <code>recommend_version</code> and <code>offing recommend</code>: the newest unended line whose end date is at least 180 days away, from bundled rules only; <code>no-data</code> is explicit and never says "latest".</td>
+</tr>
+<tr>
+<td><a href="0036-corpus-schema-deno-elixir.md">0036</a></td>
+<td>Add Deno and Elixir to the public validation schema</td>
+<td>Add <code>deno</code> and <code>elixir</code> to the published corpus ecosystem enum when those detectors gain a public corpus. The change is additive.</td>
+</tr>
+<tr>
+<td><a href="0034-detector-limits-in-the-sdk.md">0034</a></td>
+<td>Publish the detector limits in the SDK</td>
+<td>Export <code>DETECTOR_LIMITS</code> and its <code>DetectorLimits</code> type so the file-size, depth, and vendored-directory bounds are part of the typed detector contract and conformance reads them from there.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adoption" data-src="docs/decisions/index.md:45:1-45:11">Adoption</h2>
+<table data-src="docs/decisions/index.md:47:1-51:209">
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="0018-adoption-before-v1.md">0018</a></td>
+<td>Ship v0.8.0 (adoption) and v0.9.0 (visibility) before v1</td>
+<td>Ship adoption then visibility before v1, with usage before attention, and record post-v1 ideas as unscheduled epics.</td>
+</tr>
+<tr>
+<td><a href="0019-privacy-first-adoption-metrics.md">0019</a></td>
+<td>Privacy-first adoption metrics; opt-in telemetry only after v1</td>
+<td>Keep product telemetry off by default forever as the default; any opt-in comes only after a separate post-v1 decision.</td>
+</tr>
+<tr>
+<td><a href="0021-one-release-before-v1.md">0021</a></td>
+<td>Ship adoption and visibility as one release, with one launch</td>
+<td>Merge v0.9.0 into v0.8.0 and replace the three mini-launches with one launch that follows the release.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="quality" data-src="docs/decisions/index.md:53:1-53:10">Quality</h2>
+<table data-src="docs/decisions/index.md:55:1-62:352">
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="0023-measurable-quality-criteria.md">0023</a></td>
+<td>Define reference quality as measurable, enforced criteria</td>
+<td><strong>Proposed.</strong> Define eight quality criteria, each enforced by a failing check; zero new debt; existing debt allowlisted with an owner and an expiry of 2027-01-26.</td>
+</tr>
+<tr>
+<td><a href="0025-linter-and-formatter.md">0025</a></td>
+<td>Choose the linter and formatter</td>
+<td>Lint with ESLint and typescript-eslint (type-aware); format with Biome; do not use Biome for typed lint or Prettier for format.</td>
+</tr>
+<tr>
+<td><a href="0026-public-api-doc-comments.md">0026</a></td>
+<td>Document the public API and enforce it with lint</td>
+<td>Put a behavior-focused doc comment on every public declaration and enforce it with a local ESLint rule; no contract semantics change.</td>
+</tr>
+<tr>
+<td><a href="0027-fixtures-invisible-to-scanners.md">0027</a></td>
+<td>Keep fixtures out of scanners' sight with neutral names</td>
+<td>Commit manifest-shaped fixtures under a <code>.fixture</code> suffix and restore the real name in a temporary directory at test time; reject archives and dismissals; scanner config is a narrow fallback.</td>
+</tr>
+<tr>
+<td><a href="0029-cut-scanner-complexity-by-extracting-the-line-masker.md">0029</a></td>
+<td>Cut scanner complexity by extracting the line masker and replacing branch chains with tables</td>
+<td>Move the per-language literal scanner to <code>src/usage/masking.ts</code>, dispatch readers on tables, and prove parity differentially against a build of <code>main</code>; the SDK export surface is unchanged.</td>
+</tr>
+<tr>
+<td><a href="0030-corpus-selection-and-200-target.md">0030</a></td>
+<td>Select corpus repositories independently of results; target 200 per ecosystem</td>
+<td>Freeze eligibility and stack variety for all 23 buckets before scanning; retain poor results and publish honest shortfalls against 200 reviewed repositories per bucket. Accepted on maintainer merge of the PR for #2116.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="operations" data-src="docs/decisions/index.md:64:1-64:13">Operations</h2>
+<table data-src="docs/decisions/index.md:66:1-68:226">
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="0024-ci-lanes.md">0024</a></td>
+<td>CI lanes: pull request, merge queue, main, nightly, release</td>
+<td><strong>Proposed.</strong> Five CI lanes with wall-clock budgets; one required check (<code>ci-ok</code>); the merge queue is the proof that lands on <code>main</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="policy" data-src="docs/decisions/index.md:70:1-70:9">Policy</h2>
+<table data-src="docs/decisions/index.md:72:1-77:267">
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="0001-typescript-first.md">0001</a></td>
+<td>TypeScript-first, local-first architecture</td>
+<td>Build v0.1 in TypeScript on Node.js 22 or newer, sharing one language across CLI, engine, detectors, Action, and MCP, with no hosted backend.</td>
+</tr>
+<tr>
+<td><a href="0003-shared-plugin-packaging.md">0003</a></td>
+<td>Generate host plugins from shared Offing assets</td>
+<td>Keep Skill, runtime, rules, and migration behavior as canonical shared sources and generate Codex and Claude plugins from them so CI fails on drift.</td>
+</tr>
+<tr>
+<td><a href="0031-layered-architecture-and-allowed-imports.md">0031</a></td>
+<td>Layered architecture and the allowed-imports table</td>
+<td><strong>Proposed.</strong> Seven layers (domain, SDK, core, detectors, services, reporters, adapters) with one allowed-imports table and runtime-access rules; each epic #1990 follow-up adds its rule to the checker.</td>
+</tr>
+<tr>
+<td><a href="0035-one-error-model-with-stable-codes.md">0035</a></td>
+<td>One error model with stable reason codes</td>
+<td>Every failure carries one reason code that fixes its class and exit code; the CLI error document gains <code>error.reason</code> and MCP failures carry the code in <code>_meta.offing</code>.</td>
+</tr>
+</tbody>
+</table></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/decisions/index.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/decisions/index.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/decisions/index.md:5. Current text: &quot;Decision records&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Decision%20records&amp;body=Page%3A%20%2Foffing%2Fdecisions%2F%0ASource%3A%20docs%2Fdecisions%2Findex.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/decisions/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/decisions/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/decisions/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/decisions/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2Fdecisions%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2Fdecisions%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2Fdecisions%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div><nav class="pager" aria-label="Previous and next pages"><a class="pager-link pager-prev" href="/offing/DEPENDENCIES/" rel="prev"><span class="pager-label"><svg class="pager-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11 6l-6 6 6 6M5 12h14"></path></svg>Previous</span><span class="pager-title">Runtime dependencies</span></a><a class="pager-link pager-next" href="/offing/ROADMAP/" rel="next"><span class="pager-label">Next<svg class="pager-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 6l6 6-6 6M19 12H5"></path></svg></span><span class="pager-title">Roadmap</span></a></nav></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#detectors">Detectors</a></li><li><a href="#data-and-contracts">Data and contracts</a></li><li><a href="#adoption">Adoption</a></li><li><a href="#quality">Quality</a></li><li><a href="#operations">Operations</a></li><li><a href="#policy">Policy</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#detectors">Detectors</a></li><li><a href="#data-and-contracts">Data and contracts</a></li><li><a href="#adoption">Adoption</a></li><li><a href="#quality">Quality</a></li><li><a href="#operations">Operations</a></li><li><a href="#policy">Policy</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

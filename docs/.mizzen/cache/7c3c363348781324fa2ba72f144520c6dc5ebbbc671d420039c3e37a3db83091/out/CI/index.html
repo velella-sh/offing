@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Continuous integration</title><meta name="description" content="What Offing runs on pull requests, the merge queue, main, nightly schedules, and release, with the single required check, a time budget for each lane, and a runbook for the failures CI actually shows."/><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/CI/index.md"}},{"id":"section-single-required-check","label":"Single required check","hint":"Go to section","run":{"kind":"section","id":"single-required-check"}},{"id":"section-lanes-at-a-glance","label":"Lanes at a glance","hint":"Go to section","run":{"kind":"section","id":"lanes-at-a-glance"}},{"id":"section-runner-minute-budget-350","label":"Runner-minute budget (350)","hint":"Go to section","run":{"kind":"section","id":"runner-minute-budget-350"}},{"id":"section-pull-request-25-minutes","label":"Pull request (25 minutes)","hint":"Go to section","run":{"kind":"section","id":"pull-request-25-minutes"}},{"id":"section-merge-queue-30-minutes","label":"Merge queue (30 minutes)","hint":"Go to section","run":{"kind":"section","id":"merge-queue-30-minutes"}},{"id":"section-main-15-minutes","label":"Main (15 minutes)","hint":"Go to section","run":{"kind":"section","id":"main-15-minutes"}},{"id":"section-nightly-and-scheduled-60-minutes-per-workflow","label":"Nightly and scheduled (60 minutes per workflow)","hint":"Go to section","run":{"kind":"section","id":"nightly-and-scheduled-60-minutes-per-workflow"}},{"id":"section-release-45-minutes","label":"Release (45 minutes)","hint":"Go to section","run":{"kind":"section","id":"release-45-minutes"}},{"id":"section-failure-runbook","label":"Failure runbook","hint":"Go to section","run":{"kind":"section","id":"failure-runbook"}},{"id":"section-start-at-ci-ok","label":"Start at ci-ok","hint":"Go to section","run":{"kind":"section","id":"start-at-ci-ok"}},{"id":"section-what-actually-fails-measured-2026-11-03","label":"What actually fails (measured 2026-11-03)","hint":"Go to section","run":{"kind":"section","id":"what-actually-fails-measured-2026-11-03"}},{"id":"section-a-test-fails-inside-npm-run-check","label":"A test fails inside npm run check","hint":"Go to section","run":{"kind":"section","id":"a-test-fails-inside-npm-run-check"}},{"id":"section-tests-pass-on-retry-flaky","label":"Tests pass on retry (flaky)","hint":"Go to section","run":{"kind":"section","id":"tests-pass-on-retry-flaky"}},{"id":"section-red-on-windows-only-check-windows-latest-node-24","label":"Red on Windows only (check (windows-latest, node 24))","hint":"Go to section","run":{"kind":"section","id":"red-on-windows-only-check-windows-latest-node-24"}},{"id":"section-coverage-floors-missed-enforce-coverage-floors","label":"Coverage floors missed (Enforce coverage floors)","hint":"Go to section","run":{"kind":"section","id":"coverage-floors-missed-enforce-coverage-floors"}},{"id":"section-coverage-fell-against-main-coverage-diff-for-changed-src-files","label":"Coverage fell against main (Coverage diff for changed src files)","hint":"Go to section","run":{"kind":"section","id":"coverage-fell-against-main-coverage-diff-for-changed-src-files"}},{"id":"section-quality-gate-loosened-guard-the-quality-gate-against-main","label":"Quality gate loosened (Guard the quality gate against main)","hint":"Go to section","run":{"kind":"section","id":"quality-gate-loosened-guard-the-quality-gate-against-main"}},{"id":"section-dependency-advisory-audit-dependencies-runtime-then-the-full-lockfile","label":"Dependency advisory (Audit dependencies (runtime, then the full lockfile))","hint":"Go to section","run":{"kind":"section","id":"dependency-advisory-audit-dependencies-runtime-then-the-full-lockfile"}},{"id":"section-offing-finds-something-new-in-its-own-repository","label":"Offing finds something new in its own repository","hint":"Go to section","run":{"kind":"section","id":"offing-finds-something-new-in-its-own-repository"}},{"id":"section-merge-markers-built-into-main","label":"Merge markers built into main","hint":"Go to section","run":{"kind":"section","id":"merge-markers-built-into-main"}},{"id":"section-generated-docs-out-of-date","label":"Generated docs out of date","hint":"Go to section","run":{"kind":"section","id":"generated-docs-out-of-date"}},{"id":"section-missing-decision-record-decisionsyml","label":"Missing decision record (decisions.yml)","hint":"Go to section","run":{"kind":"section","id":"missing-decision-record-decisionsyml"}},{"id":"section-rule-fixtures-missing-or-contradicting-rules-changed","label":"Rule fixtures missing or contradicting (Rules (changed))","hint":"Go to section","run":{"kind":"section","id":"rule-fixtures-missing-or-contradicting-rules-changed"}},{"id":"section-workflow-lint-runs-after-merge-workflow-lint","label":"Workflow lint runs after merge (Workflow lint)","hint":"Go to section","run":{"kind":"section","id":"workflow-lint-runs-after-merge-workflow-lint"}},{"id":"section-broken-documentation-site-build-pages-build-and-deployment-docs-doctor-docs-job","label":"Broken documentation site build (pages build and deployment, docs doctor, docs job)","hint":"Go to section","run":{"kind":"section","id":"broken-documentation-site-build-pages-build-and-deployment-docs-doctor-docs-job"}},{"id":"section-seaworthy-fails-on-the-built-site-seaworthy-job","label":"Seaworthy fails on the built site (seaworthy job)","hint":"Go to section","run":{"kind":"section","id":"seaworthy-fails-on-the-built-site-seaworthy-job"}},{"id":"section-site-budget-exceeded-site-budget","label":"Site budget exceeded (Site budget)","hint":"Go to section","run":{"kind":"section","id":"site-budget-exceeded-site-budget"}},{"id":"section-main-is-red","label":"main is red","hint":"Go to section","run":{"kind":"section","id":"main-is-red"}},{"id":"section-nightly-and-scheduled-signal-not-a-gate","label":"Nightly and scheduled signal, not a gate","hint":"Go to section","run":{"kind":"section","id":"nightly-and-scheduled-signal-not-a-gate"}},{"id":"section-release-chain","label":"Release chain","hint":"Go to section","run":{"kind":"section","id":"release-chain"}},{"id":"section-what-this-design-deliberately-leaves-out-of-the-merge-gate","label":"What this design deliberately leaves out of the merge gate","hint":"Go to section","run":{"kind":"section","id":"what-this-design-deliberately-leaves-out-of-the-merge-gate"}},{"id":"section-workflow-inventory","label":"Workflow inventory","hint":"Go to section","run":{"kind":"section","id":"workflow-inventory"}},{"id":"section-last-run-audit-2026-11-03","label":"Last-run audit (2026-11-03)","hint":"Go to section","run":{"kind":"section","id":"last-run-audit-2026-11-03"}},{"id":"section-changing-this-page","label":"Changing this page","hint":"Go to section","run":{"kind":"section","id":"changing-this-page"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="21"><span class="reading-time-minutes">21 minutes read</span></p><div class="doc-body"><h1 id="continuous-integration" data-src="docs/CI.md:6:1-6:24">Continuous integration</h1>
+<p data-src="docs/CI.md:8:1-12:99">This page is the CI design for this repository. It says which lane runs what, how long each lane
+may take, and which status check branch protection requires. The proposal is recorded in
+<a href="decisions/0024-ci-lanes.md">decision 0024</a>. That record is <strong>proposed</strong>: these lanes become the
+standard when the maintainer accepts them. Later tasks in epic <a href="https://github.com/velella-sh/offing/issues/1985" rel="external">#1985</a>
+change workflows to match this page; until then, a workflow may still differ from the target below.</p>
+<p data-src="docs/CI.md:14:1-14:89">Scans in this repository stay offline. No CI lane adds network access to the scan engine.</p>
+<h2 id="single-required-check" data-src="docs/CI.md:16:1-16:24">Single required check</h2>
+<p data-src="docs/CI.md:18:1-18:80">Branch protection and the merge queue require <strong>one</strong> status check: <strong><code>ci-ok</code></strong>.</p>
+<p data-src="docs/CI.md:20:1-24:28"><code>ci-ok</code> is a job in <a href="../.github/workflows/ci.yml"><code>.github/workflows/ci.yml</code></a>. It runs after the
+other jobs in that workflow, fails when any needed job failed or was cancelled, and passes when
+every needed job succeeded or was skipped. Keep individual jobs, the public corpus, Scorecard,
+fuzz, mutation, and package smoke <strong>out</strong> of the required list so the matrix can change without
+editing repository settings.</p>
+<p data-src="docs/CI.md:26:1-27:81">How to turn the check and the merge queue on: <a href="../MAINTAINERS.md#branch-protection-and-the-merge-queue">MAINTAINERS.md</a>.
+Contributor-facing note: <a href="../CONTRIBUTING.md#quality-standards">CONTRIBUTING.md</a>.</p>
+<h2 id="lanes-at-a-glance" data-src="docs/CI.md:29:1-29:20">Lanes at a glance</h2>
+<table data-src="docs/CI.md:31:1-37:135">
+<thead>
+<tr>
+<th>Lane</th>
+<th>Trigger</th>
+<th>Purpose</th>
+<th>Wall-clock budget</th>
+<th>Required to merge?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull request</td>
+<td><code>pull_request</code></td>
+<td>Fast feedback for authors</td>
+<td><strong>25 minutes</strong></td>
+<td>No — informs review; <code>ci-ok</code> on the PR is useful but the queue is the landing proof</td>
+</tr>
+<tr>
+<td>Merge queue</td>
+<td><code>merge_group</code></td>
+<td>Proof that may land on <code>main</code></td>
+<td><strong>30 minutes</strong></td>
+<td>Yes — <code>ci-ok</code> must pass; the run is never cancelled</td>
+</tr>
+<tr>
+<td>Main</td>
+<td><code>push</code> to <code>main</code></td>
+<td>Post-merge side effects only (after the queue is the only path)</td>
+<td><strong>15 minutes</strong></td>
+<td>N/A — already merged</td>
+</tr>
+<tr>
+<td>Nightly</td>
+<td><code>schedule</code> / <code>workflow_dispatch</code></td>
+<td>Expensive, network, or slow signals</td>
+<td><strong>60 minutes</strong> per workflow</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Release</td>
+<td>tag / publish chain</td>
+<td>Verify, build, publish, smoke</td>
+<td><strong>45 minutes</strong> for the chain</td>
+<td>N/A — gated by the release checklist</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/CI.md:39:1-40:58">A job's <code>timeout-minutes</code> must fit its lane. Raising a lane budget, or moving work between lanes,
+updates this page in the same change as the workflow edit.</p>
+<h2 id="runner-minute-budget-350" data-src="docs/CI.md:42:1-42:29">Runner-minute budget (350)</h2>
+<p data-src="docs/CI.md:44:1-48:82">Wall-clock time is not the only cost. A pull request also spends <strong>runner minutes</strong>: for each job,
+its <code>timeout-minutes</code> times the number of jobs its matrix expands to, summed over every workflow
+that can start on <code>pull_request</code>. The budget is <strong>350 runner minutes</strong>: the 325-minute ceiling measured on
+2026-11-04 plus the 25-minute <code>mutation-pr.yml</code> job that mutation-tests the changed lines (#2104). <a href="../.github/workflows/ci.yml"><code>ci.yml</code></a> is the largest part: four <code>check</code> shards at
+20 minutes each, <code>coverage</code>, the Windows cross-OS run, <code>docs</code>, and the small jobs.</p>
+<p data-src="docs/CI.md:50:1-55:54"><code>npm run check</code> runs <a href="../tools/check-workflow-change.ts"><code>tools/check-workflow-change.ts</code></a>, which
+recomputes the ceiling from the workflow files and fails above the budget. It is offline: it reads
+the workflows, git history, and the event payload file Actions already writes. A job without
+<code>timeout-minutes</code> is charged the 25-minute pull-request lane budget, so a new job cannot hide its
+cost. Matrix <code>include</code> entries and dynamic <code>fromJSON</code> dimensions count as one job, so the number is
+a ceiling rather than an estimate of a particular run.</p>
+<p data-src="docs/CI.md:57:1-62:98">When a pull request changes a workflow under <code>.github/workflows/</code>, it must also fill in the
+<strong>Workflow changes</strong> section of the <a href="../.github/pull_request_template.md">pull request template</a>:
+the reason, and the effect on this budget (for example <code>+20 runner minutes</code>, <code>-5</code>, or <code>none</code>). The
+check compares the stated effect with the measured change. A workflow change without the note
+fails, and a note that understates the effect fails too. The note is enforced on <code>pull_request</code>
+runs, where the body exists; the merge queue has no pull-request body and re-runs only the budget.</p>
+<p data-src="docs/CI.md:64:1-66:45">Raising the budget is a design change: update this page and
+<code>PULL_REQUEST_RUNNER_MINUTE_BUDGET</code> in the tool in the same pull request, and say why in the note.
+Do not raise it to make a single change pass.</p>
+<h2 id="pull-request-25-minutes" data-src="docs/CI.md:68:1-68:28">Pull request (25 minutes)</h2>
+<p data-src="docs/CI.md:70:1-70:88"><strong>Goal.</strong> Catch failures early without pretending the pull request is the landing proof.</p>
+<p data-src="docs/CI.md:72:1-72:26"><strong>Always (code changes).</strong></p>
+<ul data-src="docs/CI.md:74:1-92:74">
+<li>Classify docs-only vs code (<a href="../.github/workflows/ci.yml"><code>ci.yml</code></a> <code>changes</code> job).</li>
+<li><code>npm run check</code> on Ubuntu with Node 24 and Node 22.</li>
+<li>Run only the test files a change can reach, from an import map
+(<a href="../tools/run-tests-selection.ts"><code>tools/run-tests-selection.ts</code></a>); the <code>coverage</code> job still measures the
+whole suite on every pull request. Shared paths, configuration, fixtures, the registry, and the
+map's own code run everything.</li>
+<li><code>npm run check</code> on Windows with Node 24 (path and line-ending bugs before merge).</li>
+<li>Quality gate against <code>origin/main</code>, dependency audit, Action cold-start budget, generated docs
+and data checks, coverage floors and per-file coverage diff — on the Linux Node 24 job.</li>
+<li>Dogfood the Action against this repository's baseline on that same job.</li>
+<li>Pack the npm tarball on Linux and on the cross-OS runner and compare the hashes in <code>ci-ok</code>, so a
+build step that depends on the host — a path, a line ending, a file-ordering difference — fails
+before merge (<code>record:reproducible</code>, <a href="../tools/compare-build-hashes.mjs"><code>compare-build-hashes.mjs</code></a>).</li>
+<li>Decision-record presence when <code>schemas/</code>, <code>src/sdk.ts</code>, or <code>src/mcp.ts</code> change
+(<a href="../.github/workflows/decisions.yml"><code>decisions.yml</code></a>).</li>
+<li>Rule fixtures when they change or <code>@velella/ebb</code> moves to another version (<a href="../.github/workflows/rules.yml"><code>rules.yml</code></a>).</li>
+<li>The <a href="#runner-minute-budget-350">runner-minute budget</a> on every <code>npm run check</code>, plus the
+workflow-change note when <code>.github/workflows/</code> changes
+(<a href="../tools/check-workflow-change.ts"><code>tools/check-workflow-change.ts</code></a>).</li>
+</ul>
+<p data-src="docs/CI.md:94:1-97:17"><strong>Docs-only pull requests.</strong> Skip the test matrix. Build and check reference pages, verify
+<code>llms-full.txt</code>, <code>dashboard/data.json</code>, and <code>api/v1</code> are buildable, generate <code>llms-full.txt</code>,
+<code>sitemap.xml</code>, <code>rules/index.md</code>, <code>dashboard/data.json</code>, and <code>api/v1</code> for the Mizzen site, and build
+the site instead.</p>
+<p data-src="docs/CI.md:99:1-99:87"><strong>When site files change</strong> (<code>docs/</code> site sources, theme config, and Lighthouse config).</p>
+<ul data-src="docs/CI.md:101:1-105:16">
+<li>Site budget, docs doctor, and related site checks, through the <code>paths</code> filters on those
+workflows (<code>docs/**</code>, <code>lighthouserc.json</code>, and the workflow file itself).</li>
+<li>Do <strong>not</strong> run Lighthouse or Seaworthy on unrelated code-only pull requests: <code>site-budget.yml</code>
+and <code>docs-doctor.yml</code> do not start, and <code>site-budget</code>/<code>docs-doctor</code> in <code>ci.yml</code> only run on
+<code>merge_group</code>.</li>
+</ul>
+<p data-src="docs/CI.md:107:1-107:46"><strong>Never required on the pull request itself.</strong></p>
+<ul data-src="docs/CI.md:109:1-111:69">
+<li>Full public corpus, mutation testing, Scorecard, scheduled fuzz, importers, source freshness.</li>
+<li>Affected-ecosystem corpus (<a href="../.github/workflows/corpus.yml"><code>corpus.yml</code></a> <code>affected</code> job) may run
+for signal; it stays <strong>non-required</strong> because it needs the network.</li>
+</ul>
+<p data-src="docs/CI.md:113:1-113:80"><strong>Concurrency.</strong> A newer push to the same pull request may cancel the older run.</p>
+<h2 id="merge-queue-30-minutes" data-src="docs/CI.md:115:1-115:27">Merge queue (30 minutes)</h2>
+<p data-src="docs/CI.md:117:1-117:84"><strong>Goal.</strong> Everything a commit on <code>main</code> must have passed, on the exact merge result.</p>
+<p data-src="docs/CI.md:119:1-119:9"><strong>Runs.</strong></p>
+<ul data-src="docs/CI.md:121:1-133:31">
+<li>The full code gate from the pull-request lane, including Windows — and the whole test suite,
+never the affected subset the pull-request lane runs.</li>
+<li>macOS with Node 24 (<code>check-cross-os</code>), because that runner is scarce and belongs on the landing
+proof rather than every pull-request push. Its tarball hash joins the Linux and Windows records,
+so the merge-queue comparison covers all three runners.</li>
+<li>Self-scan: fail on findings outside <code>.offing-baseline.json</code>.</li>
+<li>Performance budget on the fixed fixture.</li>
+<li>Package smoke (npm tarball, Docker image, local Action) when the lane still lists it on
+<code>merge_group</code>.</li>
+<li>Site jobs (Lighthouse, Seaworthy, site budget, docs doctor) <strong>when the queued change touches site
+files</strong>; otherwise those jobs skip and <code>ci-ok</code> still passes. <code>ci.yml</code> calls <code>site-budget.yml</code> and
+<code>docs-doctor.yml</code> from <code>merge_group</code> because the queue ignores <code>paths</code>; <code>changes.site</code> decides.</li>
+<li><code>ci-ok</code> aggregates the above.</li>
+</ul>
+<p data-src="docs/CI.md:135:1-135:10"><strong>Rules.</strong></p>
+<ul data-src="docs/CI.md:137:1-140:66">
+<li>Never cancel a <code>merge_group</code> run for a newer push.</li>
+<li>The merge queue is the only path to <code>main</code> once #2029 is done; until then, treat a green queue
+run as the intended proof even if direct merges still exist.</li>
+<li>Do not put corpus, mutation, or Scorecard into the queue budget.</li>
+</ul>
+<h2 id="main-15-minutes" data-src="docs/CI.md:142:1-142:20">Main (15 minutes)</h2>
+<p data-src="docs/CI.md:144:1-144:94"><strong>Goal.</strong> After the merge queue is the only path, do not re-prove the same gate on every push.</p>
+<p data-src="docs/CI.md:146:1-146:35"><strong>Target (after #2029 and #2030).</strong></p>
+<ul data-src="docs/CI.md:148:1-152:26">
+<li>Badge publish to the <code>badges</code> branch.</li>
+<li>Pages deploy <strong>once per merge batch</strong>, not once per commit (#2031).</li>
+<li>Any remaining release-branch Action bundle build the release chain still starts from <code>main</code>.</li>
+<li>Do not cancel a <code>main</code> run that is the only verification left for a commit. Report cancelled
+share; keep it under 5%.</li>
+</ul>
+<p data-src="docs/CI.md:154:1-155:84"><strong>Until the queue is enforced.</strong> Keep the full <code>ci.yml</code> gate on <code>push</code> to <code>main</code> so history stays
+covered. That transitional cost is accepted; removing it is #2030's job after #2029.</p>
+<h2 id="nightly-and-scheduled-60-minutes-per-workflow" data-src="docs/CI.md:157:1-157:50">Nightly and scheduled (60 minutes per workflow)</h2>
+<p data-src="docs/CI.md:159:1-159:88"><strong>Goal.</strong> Signals that are too slow, too flaky, or too network-heavy for the merge path.</p>
+<table data-src="docs/CI.md:161:1-173:52">
+<thead>
+<tr>
+<th>Work</th>
+<th>Workflow (today)</th>
+<th>Cadence (today)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mutation testing</td>
+<td><code>mutation.yml</code></td>
+<td>Nightly</td>
+</tr>
+<tr>
+<td>Parser fuzz (scheduled)</td>
+<td><code>fuzz.yml</code></td>
+<td>Nightly (+ optional PR path filter)</td>
+</tr>
+<tr>
+<td>Package smoke (scheduled)</td>
+<td><code>package-smoke.yml</code></td>
+<td>Nightly</td>
+</tr>
+<tr>
+<td>CI health / quarantine</td>
+<td><code>ci-health.yml</code></td>
+<td>Nightly + weekly</td>
+</tr>
+<tr>
+<td>Full public corpus</td>
+<td><code>corpus.yml</code> (<code>full</code>)</td>
+<td>Weekly</td>
+</tr>
+<tr>
+<td>Record full corpus</td>
+<td><code>corpus.yml</code> (<code>record</code>)</td>
+<td>Twice monthly</td>
+</tr>
+<tr>
+<td>Scorecard + floor</td>
+<td><code>scorecard.yml</code>, <code>scorecard-floor.yml</code></td>
+<td>Weekly</td>
+</tr>
+<tr>
+<td>CodeQL (scheduled scan)</td>
+<td><code>codeql.yml</code></td>
+<td>Weekly (also runs on every PR and main push)</td>
+</tr>
+<tr>
+<td>Open alerts gate</td>
+<td><code>open-alerts.yml</code></td>
+<td>Push to main + daily</td>
+</tr>
+<tr>
+<td>MCP listings</td>
+<td><code>mcp-listings.yml</code></td>
+<td>Weekly</td>
+</tr>
+<tr>
+<td>Label sync</td>
+<td><code>labels.yml</code></td>
+<td>Weekly + path pushes</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/CI.md:175:1-177:37">The scheduled runs must not be required status checks. A red nightly run opens follow-up work; it does not block
+a green queue. Affected, full, and record corpus runs live in one file (<code>corpus.yml</code>) with a
+<code>mode</code> input for <code>workflow_dispatch</code>.</p>
+<h2 id="release-45-minutes" data-src="docs/CI.md:179:1-179:23">Release (45 minutes)</h2>
+<p data-src="docs/CI.md:181:1-181:100"><strong>Goal.</strong> One chain: verify → build → publish each channel → smoke. A failed stage is safe to rerun.</p>
+<p data-src="docs/CI.md:183:1-183:13"><strong>In scope.</strong></p>
+<ul data-src="docs/CI.md:185:1-190:56">
+<li>Changelog notes and gates in <a href="RELEASING.md">RELEASING.md</a>.</li>
+<li>npm publish with provenance.</li>
+<li>Action bundle on <code>release/&#x3C;tag></code> (not on <code>main</code>).</li>
+<li>Standalone binaries, signatures, attestations.</li>
+<li>Quickstart smoke against the published package.</li>
+<li>Container and Homebrew channels the release docs list.</li>
+</ul>
+<p data-src="docs/CI.md:192:1-196:24"><strong>Stages.</strong> <code>release.yml</code> is a thin orchestrator that calls reusable stage workflows (verify, build,
+publish per channel including npm via the <code>npm-publish</code> job, smoke). A version tag runs the full chain in
+one workflow run so a failed stage is safe to re-run. A manual run with <code>dry_run</code> exercises every
+stage and publishes nothing. Those tasks keep this lane's budget and the rule that <code>main</code> does not
+carry the Action bundle.</p>
+<h2 id="failure-runbook" data-src="docs/CI.md:198:1-198:18">Failure runbook</h2>
+<p data-src="docs/CI.md:200:1-202:32">This section is the runbook for red CI: what each common failure looks like in the logs, why it
+happens, and what to do. It documents <code>main</code> as it is today; if a later task renames a step, update
+both the workflow and this page.</p>
+<h3 id="start-at-ci-ok" data-src="docs/CI.md:204:1-204:20">Start at <code>ci-ok</code></h3>
+<p data-src="docs/CI.md:206:1-207:35"><code>ci-ok</code> is the only required check, and its own log never explains the failure — it only says that a
+needed job failed or was cancelled:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:209:1-211:3"><code><span class="line"><span>::error::A job that ci-ok needs failed or was cancelled.</span></span></code></pre>
+<p data-src="docs/CI.md:213:1-213:25">To find the real failure:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/CI.md:215:1-219:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">gh</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> run</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --workflow</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> ci.yml</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --limit</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> 10</span><span style="--shiki-light:#5F687C;--shiki-dark:#96938E">              # which runs went red</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">gh</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> run</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> view</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> &#x3C;</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">run-i</span><span style="--shiki-light:#2E3440;--shiki-dark:#DCD7BA">d</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">></span><span style="--shiki-light:#5F687C;--shiki-dark:#96938E">                                  # job-by-job results</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">gh</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> run</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> view</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> &#x3C;</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">run-i</span><span style="--shiki-light:#2E3440;--shiki-dark:#DCD7BA">d</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">></span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --log-failed</span><span style="--shiki-light:#5F687C;--shiki-dark:#96938E">                     # only the failed steps' logs</span></span></code></pre>
+<p data-src="docs/CI.md:221:1-224:14"><code>--log-failed</code> is the fastest path: every entry below is keyed to the step name it prints under.
+A <code>cancelled</code> result usually means a newer push cancelled an older pull-request run (allowed by the
+concurrency rule in the Pull request lane); that is not a failure to fix, and re-running the newest
+run is enough.</p>
+<h3 id="what-actually-fails-measured-2026-11-03" data-src="docs/CI.md:226:1-226:45">What actually fails (measured 2026-11-03)</h3>
+<p data-src="docs/CI.md:228:1-229:40">366 workflow runs concluded <code>failure</code> in the 30 days up to the 2026-11-03 audit (earliest failure
+in the window: 2026-10-15). By workflow:</p>
+<table data-src="docs/CI.md:231:1-238:108">
+<thead>
+<tr>
+<th>Workflow</th>
+<th>Failed runs</th>
+<th>Where this runbook covers it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CI</td>
+<td>218</td>
+<td>Entries below</td>
+</tr>
+<tr>
+<td><code>corpus.yml</code> (affected ecosystems)</td>
+<td>51</td>
+<td>Nightly and scheduled signal, not a gate</td>
+</tr>
+<tr>
+<td><code>pages.yml</code> (pages build and deployment)</td>
+<td>42</td>
+<td>Broken documentation site build</td>
+</tr>
+<tr>
+<td><code>rules.yml</code> (Rules (changed))</td>
+<td>14</td>
+<td>Rule fixtures are missing or contradict the rule</td>
+</tr>
+<tr>
+<td><code>workflow-lint.yml</code></td>
+<td>13</td>
+<td>Workflow lint runs after merge</td>
+</tr>
+<tr>
+<td>Everything else (17 workflows, 28 runs)</td>
+<td>28</td>
+<td>Source freshness, site budget, mutation, package smoke, …</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/CI.md:240:1-240:91">Re-derive the tally with (paging through the API because <code>gh run list</code> caps a single call):</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/CI.md:242:1-245:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">gh</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> api</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> "</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">repos/velella-sh/offing/actions/runs?per_page=100&#x26;status=failure&#x26;created=>2026-10-04</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">"</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> \</span></span>
+<span class="line"><span style="--shiki-light:#86597D;--shiki-dark:#FFA066">  --paginate</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --jq</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> '</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">.workflow_runs[] | [.name, .created_at] | @tsv</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">'</span></span></code></pre>
+<p data-src="docs/CI.md:247:1-248:70">Inside the CI workflow, 27 sampled failed runs in that window had these failing steps (a run counts
+once per failed step; <code>ci-ok</code> is the aggregate and appears in all 27):</p>
+<table data-src="docs/CI.md:250:1-259:54">
+<thead>
+<tr>
+<th>Failing step</th>
+<th>Sampled runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>check</code> job → <code>npm run check</code></td>
+<td>16</td>
+</tr>
+<tr>
+<td><code>self-scan</code> job → <code>Scan this repository with the code under test</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td><code>coverage</code> job → <code>Coverage diff for changed src files</code></td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>check</code> job → <code>Dogfood Offing action</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>coverage</code> job → <code>Enforce coverage floors</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>check</code> job → <code>Guard the quality gate against main</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>check</code> job → <code>Audit dependencies (runtime, then the full lockfile)</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>seaworthy</code> job → <code>Run arminazimi/seaworthy@…</code></td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/CI.md:261:1-262:41">The sample covers the most recent failed CI runs at audit time, not all 218 — treat the percentages
+as direction, not a service-level figure.</p>
+<h3 id="a-test-fails-inside-npm-run-check" data-src="docs/CI.md:264:1-264:39">A test fails inside <code>npm run check</code></h3>
+<p data-src="docs/CI.md:266:1-266:100"><strong>Symptom.</strong> The <code>npm run check</code> step ends with a line naming the failed pipeline step, for example:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:268:1-270:3"><code><span class="line"><span>test: node tools/run-tests.mjs exited 1</span></span></code></pre>
+<p data-src="docs/CI.md:272:1-274:75">Above it, the failing test file and assertion. The Linux <code>check</code> job runs as two time-balanced
+shards per Node version (<code>check (ubuntu-latest, node 24, shard 0)</code> and so on); a shard number only
+says which runner found the failure — the same files run unsharded locally.</p>
+<p data-src="docs/CI.md:276:1-277:11"><strong>Cause.</strong> A genuine assertion failure in the suite, or a build/type error that makes the suite
+unrunnable.</p>
+<p data-src="docs/CI.md:279:1-282:74"><strong>Fix.</strong> Reproduce locally — the same pipeline runs with <code>npm run check</code>, and one file alone runs
+with <code>npm run test -- dist/tests/&#x3C;name>.test.js</code> (the <code>test</code> script builds first). Fix the code or
+the test, not the threshold: <code>npm run check</code> runs everything the gate runs, and skipping,
+quarantining, or loosening is not a fix an author may make to get a merge.</p>
+<h3 id="tests-pass-on-retry-flaky" data-src="docs/CI.md:284:1-284:31">Tests pass on retry (flaky)</h3>
+<p data-src="docs/CI.md:286:1-286:58"><strong>Symptom.</strong> The run is green, but the step summary lists:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:288:1-290:3"><code><span class="line"><span>Failed once, then passed on a single retry:</span></span></code></pre>
+<p data-src="docs/CI.md:292:1-293:85"><strong>Cause.</strong> <a href="../tools/run-tests.mjs"><code>tools/run-tests.mjs</code></a> re-runs a failed test file once in CI and
+reports single-retry passes as flaky. Flakiness is real signal, not noise to swallow.</p>
+<p data-src="docs/CI.md:295:1-300:90"><strong>Fix.</strong> Open an issue naming the file, reproduce with the same command under load, and fix the
+test. The weekly <code>ci-health</code> run lists what has been flaky this week
+(<code>node tools/run-tests.mjs --list-weekly-flaky</code>). Only an open issue buys a test a quarantine
+entry in <a href="../tests/quarantine.json"><code>tests/quarantine.json</code></a>; quarantined files are skipped on
+<code>pull_request</code>/<code>merge_group</code> and still run nightly via <code>node tools/run-tests.mjs --quarantine-only</code>.
+Details: <a href="TESTING.md#quarantine-and-flaky-tests">TESTING.md — Quarantine and flaky tests</a>.</p>
+<h3 id="red-on-windows-only-check-windows-latest-node-24" data-src="docs/CI.md:302:1-302:59">Red on Windows only (<code>check (windows-latest, node 24)</code>)</h3>
+<p data-src="docs/CI.md:304:1-305:30"><strong>Symptom.</strong> Linux <code>check</code> jobs are green; the <code>check-cross-os</code> job's Windows matrix entry fails
+the same <code>npm run check</code> step.</p>
+<p data-src="docs/CI.md:307:1-308:17"><strong>Cause.</strong> Path separators, line endings, or case-sensitive filesystem assumptions that Linux and
+macOS do not see.</p>
+<p data-src="docs/CI.md:310:1-312:99"><strong>Fix.</strong> Run the failing test on Windows (a local Windows box or a throwaway branch). Watch out for
+<code>core.autocrlf</code> locally: CI forces <code>git config --global core.autocrlf false</code> because tests apply
+patches in temporary repositories, and a local <code>true</code> can hide or manufacture exactly this failure.</p>
+<h3 id="coverage-floors-missed-enforce-coverage-floors" data-src="docs/CI.md:314:1-314:54">Coverage floors missed (<code>Enforce coverage floors</code>)</h3>
+<p data-src="docs/CI.md:316:1-316:39"><strong>Symptom.</strong> The <code>coverage</code> job prints:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:318:1-321:3"><code><span class="line"><span>Coverage floors failed.</span></span>
+<span class="line"><span>lines: 92.4% (floor 93) FAIL</span></span></code></pre>
+<p data-src="docs/CI.md:323:1-325:45">The step prints one <code>metric: percent (floor N) ok|FAIL</code> row for every metric it checks. Floors live
+in <code>package.json</code> under <code>coverageFloors</code> (today 93 lines / 87 branches / 93 functions) and pull
+requests must meet the same floors as <code>main</code>.</p>
+<p data-src="docs/CI.md:327:1-329:53"><strong>Cause.</strong> New or changed <code>src/</code> code the suite does not exercise. Coverage is collected once, in
+the unsharded <code>coverage</code> job (<code>OFFING_CHECK_COVERAGE=1</code>), so the report you are judged by is the
+one from <code>node tools/run-tests.mjs</code> with coverage on.</p>
+<p data-src="docs/CI.md:331:1-333:25"><strong>Fix.</strong> Add tests for the uncovered paths; reproduce with <code>npm run test:coverage</code>. Lowering a floor
+in <code>package.json</code> is not an author-side fix — floors are a repo-wide decision for maintainers, in a
+separate reviewed change.</p>
+<h3 id="coverage-fell-against-main-coverage-diff-for-changed-src-files" data-src="docs/CI.md:335:1-335:72">Coverage fell against <code>main</code> (<code>Coverage diff for changed src files</code>)</h3>
+<p data-src="docs/CI.md:337:1-338:57"><strong>Symptom.</strong> Either the changed files' per-file report (written by <code>dist/tools/coverage-diff.js</code>
+into the step summary), or a total dropping below main's:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:340:1-342:3"><code><span class="line"><span>branches is 86.9%, below main's 87.4%.</span></span></code></pre>
+<p data-src="docs/CI.md:344:1-344:38">Or, when the report itself is missing:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:346:1-348:3"><code><span class="line"><span>::error::The coverage run did not write lcov.info; the per-file coverage diff cannot run.</span></span></code></pre>
+<p data-src="docs/CI.md:350:1-352:87"><strong>Cause.</strong> The diff compares this run's <code>lcov.info</code> with the artifact from the latest successful
+<code>main</code> run and flags per-file regressions and totals below main's report (with a small rounding
+tolerance). The <code>::error::</code> line means the coverage run produced no <code>lcov.info</code> at all.</p>
+<p data-src="docs/CI.md:354:1-355:96"><strong>Fix.</strong> Cover the files you changed. If a genuinely dead path was removed and that moved a
+percentage, explain the numbers in the PR description and let review decide; do not edit floors.</p>
+<h3 id="quality-gate-loosened-guard-the-quality-gate-against-main" data-src="docs/CI.md:357:1-357:65">Quality gate loosened (<code>Guard the quality gate against main</code>)</h3>
+<p data-src="docs/CI.md:359:1-360:9"><strong>Symptom.</strong> The step (<code>node dist/tools/check-quality.js --against origin/main</code>) prints findings in
+the form:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:362:1-366:3"><code><span class="line"><span>gate: TARGETS.&#x3C;limit>: limit loosened from &#x3C;old> to &#x3C;new>; the quality gate may only tighten against the base ref</span></span>
+<span class="line"><span>gate: fileSize: src/&#x3C;file>.ts: lines raised from &#x3C;old> to &#x3C;new>; the allowlist may only shrink against the base ref</span></span>
+<span class="line"><span>gate: &#x3C;section>: &#x3C;key>: new allowlist entry; remove it or fix the debt instead of raising the gate</span></span></code></pre>
+<p data-src="docs/CI.md:368:1-369:6">followed by <code>quality gate: allowlist and TARGETS hold against origin/main</code> only when everything
+holds.</p>
+<p data-src="docs/CI.md:371:1-374:34"><strong>Cause.</strong> The PR edits <code>benchmarks/quality-allowlist.json</code> or the checker's <code>TARGETS</code> table (in
+<code>tools/check-quality.ts</code>, which <code>--against</code> reads from both refs) in any way that relaxes a limit
+against <code>origin/main</code> — a raised ceiling, a later expiry, a new entry, or a loosened numeric
+target. The gate may only tighten.</p>
+<p data-src="docs/CI.md:376:1-378:25"><strong>Fix.</strong> Restore the committed values and fix the underlying debt. Allowlist changes that loosen
+limits are maintainer decisions and belong in their own change, not bundled into a feature PR. See
+<a href="QUALITY.md">QUALITY.md</a>.</p>
+<h3 id="dependency-advisory-audit-dependencies-runtime-then-the-full-lockfile" data-src="docs/CI.md:380:1-380:80">Dependency advisory (<code>Audit dependencies (runtime, then the full lockfile)</code>)</h3>
+<p data-src="docs/CI.md:382:1-382:91"><strong>Symptom.</strong> Either <code>npm audit --omit=dev --audit-level=low</code> fails, or the checker reports:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:384:1-386:3"><code><span class="line"><span>moderate advisory 1234 is not allowlisted; update the dependency or add an entry with an owner and expiry</span></span></code></pre>
+<p data-src="docs/CI.md:388:1-390:43"><strong>Cause.</strong> The runtime dependency tree must have <strong>no</strong> advisory at any level. The full lockfile may
+carry only the specific advisories listed in <code>benchmarks/quality-allowlist.json</code>; high and critical
+advisories always fail, allowlisted or not.</p>
+<p data-src="docs/CI.md:392:1-394:86"><strong>Fix.</strong> <code>npm audit</code> locally, bump or replace the dependency (<code>npm install &#x3C;pkg>@&#x3C;version></code>; let npm
+touch <code>package-lock.json</code>, never hand-edit it). A dev-only moderate/low advisory that cannot be
+fixed yet needs an allowlist entry with an owner and expiry, added through its own PR.</p>
+<h3 id="offing-finds-something-new-in-its-own-repository" data-src="docs/CI.md:396:1-396:52">Offing finds something new in its own repository</h3>
+<p data-src="docs/CI.md:398:1-399:84"><strong>Symptom.</strong> Two steps can fail this way: <code>Scan this repository with the code under test</code> (the
+<code>self-scan</code> job, on merge queue and <code>main</code>) prints one <code>::error::</code> line per finding:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:401:1-403:3"><code><span class="line"><span>::error::&#x3C;rule-id> &#x3C;finding-id>: new finding not covered by .offing-baseline.json</span></span></code></pre>
+<p data-src="docs/CI.md:405:1-406:71">and <code>Dogfood Offing action</code> (the <code>check</code> job, Linux shard 0) fails when the action under test
+scans the checkout and finds high-or-worse issues outside the baseline.</p>
+<p data-src="docs/CI.md:408:1-410:23"><strong>Cause.</strong> The change introduced a lifecycle-risk finding in this repository's own files that
+<code>.offing-baseline.json</code> does not cover — usually a dependency EOL bump or a risky pattern added
+to source or workflows.</p>
+<p data-src="docs/CI.md:412:1-414:31"><strong>Fix.</strong> Remove or fix the offending usage; that almost always means the change itself. Adding a
+baseline entry is a deliberate, separately reviewed change to <code>.offing-baseline.json</code>, not a way
+to silence a merge you dislike.</p>
+<h3 id="merge-markers-built-into-main" data-src="docs/CI.md:416:1-416:35">Merge markers built into <code>main</code></h3>
+<p data-src="docs/CI.md:418:1-418:68"><strong>Symptom.</strong> <code>npm run check</code> fails during the build with lines like:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:420:1-422:3"><code><span class="line"><span>error TS1185: Merge conflict marker encountered.</span></span></code></pre>
+<p data-src="docs/CI.md:424:1-425:71"><strong>Cause.</strong> A conflict was resolved by keeping both sides and committed. The suite proves this cannot
+survive even one job; if it reached <code>main</code>, bisect to the merge commit.</p>
+<p data-src="docs/CI.md:427:1-428:22"><strong>Fix.</strong> Resolve properly, rebuild (<code>npm run build</code>), push. On <code>main</code>, this is a revert-and-remerge,
+not a follow-up patch.</p>
+<h3 id="generated-docs-out-of-date" data-src="docs/CI.md:430:1-430:30">Generated docs out of date</h3>
+<p data-src="docs/CI.md:432:1-433:63"><strong>Symptom.</strong> One of the <code>Check … against the registry</code> steps (reference pages, Open Graph images,
+answer pages) or the buildability checks fails with lines like:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:435:1-439:3"><code><span class="line"><span>stale: docs/rules/&#x3C;rule-id>.md</span></span>
+<span class="line"><span>&#x3C;file>: generated content differs</span></span>
+<span class="line"><span>missing generated file</span></span></code></pre>
+<p data-src="docs/CI.md:441:1-441:86"><strong>Cause.</strong> A registry change landed without regenerating the committed docs it drives.</p>
+<p data-src="docs/CI.md:443:1-447:26"><strong>Fix.</strong> Regenerate with the matching script from <code>package.json</code> — <code>npm run build:reference</code>,
+<code>npm run build:og-images</code>, <code>npm run build:answer-pages</code> — and commit the tracked outputs. Never
+hand-edit generated files, and never commit the ones <code>.gitignore</code> owns (<code>docs/llms-full.txt</code>,
+<code>docs/sitemap.xml</code>, <code>docs/rules/index.md</code>, <code>docs/dashboard/data.json</code>, <code>docs/api/v1/</code>; they are
+built at site-build time).</p>
+<h3 id="missing-decision-record-decisionsyml" data-src="docs/CI.md:449:1-449:45">Missing decision record (<code>decisions.yml</code>)</h3>
+<p data-src="docs/CI.md:451:1-451:41"><strong>Symptom.</strong> The Decisions check reports:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:453:1-455:3"><code><span class="line"><span>Public contract changed without a decision record:</span></span></code></pre>
+<p data-src="docs/CI.md:457:1-457:30">followed by the changed paths.</p>
+<p data-src="docs/CI.md:459:1-460:52"><strong>Cause.</strong> The PR touches <code>schemas/</code>, <code>src/sdk.ts</code>, or <code>src/mcp.ts</code> — public contract surfaces —
+without adding a new record under <code>docs/decisions/</code>.</p>
+<p data-src="docs/CI.md:462:1-464:83"><strong>Fix.</strong> Write the decision record in this PR (see the existing numbering; one file per decision,
+status included). If you believe the change is not a contract change, say so on the PR and get the
+path filter adjusted through maintainers — do not rename files to dodge the filter.</p>
+<h3 id="rule-fixtures-missing-or-contradicting-rules-changed" data-src="docs/CI.md:466:1-466:62">Rule fixtures missing or contradicting (<code>Rules (changed)</code>)</h3>
+<p data-src="docs/CI.md:468:1-468:91"><strong>Symptom.</strong> The <code>rules.yml</code> job's <code>Test the affected rule fixtures</code> step prints, per rule:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:470:1-473:3"><code><span class="line"><span>Failed &#x3C;rule-id> (@velella/ebb/registry/&#x3C;file>.json)</span></span>
+<span class="line"><span>  match: expected at least one finding for "&#x3C;rule-id>"; got none.</span></span></code></pre>
+<p data-src="docs/CI.md:475:1-475:2">or</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:477:1-479:3"><code><span class="line"><span>  clean: expected no findings for "&#x3C;rule-id>"; got 3.</span></span></code></pre>
+<p data-src="docs/CI.md:481:1-481:2">or</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:483:1-485:3"><code><span class="line"><span>  match: missing fixture: tests/fixtures/&#x3C;rule-id>/match is not a directory. Create both tests/fixtures/&#x3C;rule-id>/match and clean; see docs/RULES.md.</span></span></code></pre>
+<p data-src="docs/CI.md:487:1-490:20"><strong>Cause.</strong> A rule's <code>tests/fixtures/&#x3C;rule-id>/match</code> must report it and <code>.../clean</code> must not. The job runs
+the rules whose fixtures changed, and every rule with fixtures when the diff moves <code>@velella/ebb</code> to another
+version. A detector change that stops reporting a rule, or a new Ebb version whose rule no longer matches its
+fixture, fails here.</p>
+<p data-src="docs/CI.md:492:1-494:23"><strong>Fix.</strong> Correct the detector or the fixture directories; see <a href="RULES.md">RULES.md</a> for the fixture contract.
+When the rule itself is wrong, fix it in <a href="https://github.com/velella-sh/ebb" rel="external">Ebb</a>. New fixtures are scaffolded
+with <code>offing new-rule</code>.</p>
+<h3 id="workflow-lint-runs-after-merge-workflow-lint" data-src="docs/CI.md:496:1-496:52">Workflow lint runs after merge (<code>Workflow lint</code>)</h3>
+<p data-src="docs/CI.md:498:1-500:49"><strong>Symptom.</strong> A <code>push</code>-triggered <code>Workflow lint</code> run on <code>main</code> is red — actionlint findings from
+<code>Lint the workflows with actionlint</code>, or zizmor exiting 14 on
+<code>Audit the workflows and the Action with zizmor</code>.</p>
+<p data-src="docs/CI.md:502:1-503:54"><strong>Cause.</strong> <code>workflow-lint.yml</code> triggers on pushes to <code>main</code> and manually, <strong>not</strong> on pull requests,
+so a bad workflow edit first shows up after it landed.</p>
+<p data-src="docs/CI.md:505:1-508:10"><strong>Fix.</strong> Repair in a follow-up PR. Suppress a deliberate, explained pattern inline with
+<code># zizmor: ignore[rule] -- reason</code>. Because this workflow is not part of <code>ci-ok</code>, its red does not
+block merges — but repeated red here means lint should move into the PR lane, which would update
+this page.</p>
+<h3 id="broken-documentation-site-build-pages-build-and-deployment-docs-doctor-docs-job" data-src="docs/CI.md:510:1-510:91">Broken documentation site build (<code>pages build and deployment</code>, <code>docs doctor</code>, docs job)</h3>
+<p data-src="docs/CI.md:512:1-513:72"><strong>Symptom.</strong> The <code>Build the documentation site</code> step fails with a Mizzen error from
+<code>mizzen build</code>. Second-most-failing workflow in the 30-day window above.</p>
+<p data-src="docs/CI.md:515:1-518:98"><strong>Cause.</strong> Bad front matter, a redirect that collides with a page, or a docs source the site build cannot process. The
+docs-only path of <code>ci.yml</code> builds the same site, so this usually also fails pre-merge — unless the
+breaking change reached <code>main</code> through another path. A red <code>docs doctor</code> run means the same thing:
+the doctor's own findings are report-only (<code>level: none</code>), so only the site build can turn it red.</p>
+<p data-src="docs/CI.md:520:1-521:59"><strong>Fix.</strong> Reproduce with <code>npx @velella/mizzen check docs</code> (plus <code>--theme @velella/lateen</code>) and fix the docs source.
+Mizzen config and theme changes belong in site-focused PRs.</p>
+<h3 id="seaworthy-fails-on-the-built-site-seaworthy-job" data-src="docs/CI.md:523:1-523:55">Seaworthy fails on the built site (<code>seaworthy</code> job)</h3>
+<p data-src="docs/CI.md:525:1-526:7"><strong>Symptom.</strong> The <code>Run arminazimi/seaworthy@…</code> step in <code>pages.yml</code> fails on the deployed-site
+checks.</p>
+<p data-src="docs/CI.md:528:1-528:94"><strong>Cause.</strong> A site change broke navigation, links, or the crawl expectations Seaworthy encodes.</p>
+<p data-src="docs/CI.md:530:1-532:43"><strong>Fix.</strong> Reproduce against the built site locally if possible; otherwise the <code>pages.yml</code> run's
+artifact (<code>docs-site</code>) is the thing to inspect. Seaworthy is not part of <code>ci-ok</code>, so this is a
+follow-up-work signal, not a merge blocker.</p>
+<h3 id="site-budget-exceeded-site-budget" data-src="docs/CI.md:534:1-534:40">Site budget exceeded (<code>Site budget</code>)</h3>
+<p data-src="docs/CI.md:536:1-537:35"><strong>Symptom.</strong> <code>Measure the pages against the budgets</code> (<code>@lhci/cli autorun --config=lighthouserc.json</code>)
+reports assertion failures such as:</p>
+<pre class="code" tabindex="0" data-lang="text" data-src="docs/CI.md:539:1-541:3"><code><span class="line"><span>largest-contentful-paint failure for maxNumericValue assertion.</span></span></code></pre>
+<p data-src="docs/CI.md:543:1-543:85">with budgets: LCP 2500 ms, total page weight 163840 bytes, document size 40960 bytes.</p>
+<p data-src="docs/CI.md:545:1-546:7"><strong>Cause.</strong> A docs page grew past its Lighthouse budget — heavy inline content, new scripts, or
+images.</p>
+<p data-src="docs/CI.md:548:1-550:80"><strong>Fix.</strong> Slim the page (split content, drop weight). Editing <code>lighthouserc.json</code> to move a budget is
+a maintainer decision like any other gate loosening. In the merge queue the <code>site-budget</code> job is
+part of <code>ci-ok</code>, so the queue will not land a site change that exceeds a budget.</p>
+<h3 id="main-is-red" data-src="docs/CI.md:552:1-552:17"><code>main</code> is red</h3>
+<p data-src="docs/CI.md:554:1-555:20"><strong>Symptom.</strong> An issue titled <strong>"main is red: CI is failing"</strong> with label <code>area: devops</code> exists and
+accumulates updates.</p>
+<p data-src="docs/CI.md:557:1-558:79"><strong>Cause.</strong> <code>ci-health.yml</code> watches every failed CI push run on <code>main</code> (via <code>workflow_run</code>) and
+maintains exactly one such issue. It closes itself once <code>main</code>'s CI goes green.</p>
+<p data-src="docs/CI.md:560:1-562:90"><strong>Fix.</strong> Triage from the issue's body: it lists the failing runs and steps. Treat a red <code>main</code> as
+top priority — every later merge queue inherits the doubt. Do not open a second red-main issue by
+hand, and do not re-run the failing <code>main</code> commit hoping for green; fix forward or revert.</p>
+<h3 id="nightly-and-scheduled-signal-not-a-gate" data-src="docs/CI.md:564:1-564:44">Nightly and scheduled signal, not a gate</h3>
+<p data-src="docs/CI.md:566:1-575:32">Red <code>corpus.yml</code> (affected, full, or record), <code>mutation.yml</code>,
+<code>scorecard.yml</code>, scheduled CodeQL, or MCP-listing runs <strong>never block a green queue</strong> — see the Nightly lane
+and <a href="#what-this-design-deliberately-leaves-out-of-the-merge-gate">What this design deliberately leaves out</a>.
+The affected-corpus job was the second-heaviest failure source in the 30-day window above; it needs
+the network, so its red is signal rather than a merge blocker, and what it means (upstream flakiness
+vs a detector regression) has to be read from the job log, not assumed. A red nightly run opens
+follow-up work (an issue) rather than blocking a merge; a <em>repeatedly</em> red nightly source is itself
+a bug worth filing. Full-corpus validation lives in <a href="VALIDATION.md">VALIDATION.md</a>; warm the corpus
+fixtures locally with <code>npm run corpus:warm</code> and check the tracked repositories with
+<code>npm run validate:public-repos</code>.</p>
+<h3 id="release-chain" data-src="docs/CI.md:577:1-577:17">Release chain</h3>
+<p data-src="docs/CI.md:579:1-580:125"><strong>Symptom.</strong> A <code>release.yml</code> run on a <code>v*</code> tag fails in one of its stages; <code>publish.yml</code> never runs
+on its own (<code>workflow_call</code> from <code>release.yml</code> only; it runs package smoke and the MCP Registry after the <code>npm-publish</code> job).</p>
+<p data-src="docs/CI.md:582:1-584:32"><strong>Cause.</strong> Verify, build, per-channel publish (npm, binaries, container, Homebrew, data bundle), or
+smoke failed. Stages receive the audited <code>release_sha</code> (since #2340), so a mid-chain failure cannot
+silently publish a newer commit.</p>
+<p data-src="docs/CI.md:586:1-589:92"><strong>Fix.</strong> The chain is designed so a failed stage is safe to re-run: <code>gh run rerun &#x3C;run-id> --failed</code>
+resumes from the failed stage. Read <a href="RELEASING.md">RELEASING.md</a> before retrying anything that
+publishes; a manual <code>dry_run</code> run exercises every stage and publishes nothing. Whether a specific
+published channel completed is not measurable from the runbook — check the run's stage logs.</p>
+<h2 id="what-this-design-deliberately-leaves-out-of-the-merge-gate" data-src="docs/CI.md:591:1-591:61">What this design deliberately leaves out of the merge gate</h2>
+<ul data-src="docs/CI.md:593:1-596:33">
+<li>Network corpus validation.</li>
+<li>Mutation score (gated separately per <a href="QUALITY.md">QUALITY.md</a> once measured).</li>
+<li>OpenSSF Scorecard floor (scheduled alert until the score meets the quality target).</li>
+<li>Marketplace-only publish steps.</li>
+</ul>
+<h2 id="workflow-inventory" data-src="docs/CI.md:598:1-598:21">Workflow inventory</h2>
+<p data-src="docs/CI.md:600:1-603:73">Every file under <a href="../.github/workflows/"><code>.github/workflows/</code></a> belongs to a lane above and has a
+stated purpose. <strong>Owner</strong> for all of them is <a href="https://github.com/arminazimi" rel="external">@arminazimi</a>
+(<a href="../.github/CODEOWNERS"><code>.github/CODEOWNERS</code></a> <code>/.github/workflows/</code>). Count after #2025: <strong>33</strong>
+files (<code>corpus-pr.yml</code> and <code>corpus-record.yml</code> folded into <code>corpus.yml</code>).</p>
+<p data-src="docs/CI.md:605:1-608:39">A last-run audit on 2026-11-03 found no unused workflows to delete. Empty run history is expected
+for <code>offing-reusable.yml</code> (only <code>workflow_call</code>, runs in caller repositories) and for
+<code>scorecard-floor.yml</code> (added 2026-11-02; first cron is Saturday). Do not delete a workflow here
+just because a later task will fold it.</p>
+<table data-src="docs/CI.md:610:1-634:142">
+<thead>
+<tr>
+<th>File</th>
+<th>Lane</th>
+<th>Trigger</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ci.yml</code></td>
+<td>Pull request / merge queue / main</td>
+<td><code>pull_request</code>, <code>push</code> to <code>main</code>, <code>merge_group</code></td>
+<td>Main gate: classify docs vs code, <code>npm run check</code> matrix, quality, self-scan path, and the required <code>ci-ok</code> aggregator</td>
+</tr>
+<tr>
+<td><code>decisions.yml</code></td>
+<td>Pull request</td>
+<td><code>pull_request</code> on contract paths</td>
+<td>Fail when a public-contract change lacks a decision record</td>
+</tr>
+<tr>
+<td><code>rules.yml</code></td>
+<td>Pull request / main</td>
+<td><code>pull_request</code> / <code>push</code> on fixture paths and <code>package-lock.json</code></td>
+<td>Fixture-test the rules the diff can affect</td>
+</tr>
+<tr>
+<td><code>docs-doctor.yml</code></td>
+<td>Pull request / merge queue</td>
+<td><code>pull_request</code> on docs site paths; <code>workflow_call</code> from <code>ci.yml</code>; <code>workflow_dispatch</code></td>
+<td><code>mizzen check</code> on the documentation site (errors fail; warnings are reported)</td>
+</tr>
+<tr>
+<td><code>site-budget.yml</code></td>
+<td>Pull request / merge queue</td>
+<td><code>pull_request</code> on site paths; <code>workflow_call</code> from <code>ci.yml</code>; <code>workflow_dispatch</code></td>
+<td>Fail when the docs site exceeds size or LCP budgets</td>
+</tr>
+<tr>
+<td><code>fuzz.yml</code></td>
+<td>Pull request / nightly</td>
+<td><code>pull_request</code> on parser paths; nightly schedule; <code>workflow_dispatch</code></td>
+<td>Deeper parser fuzz than the tight budget inside <code>npm run check</code></td>
+</tr>
+<tr>
+<td><code>workflow-lint.yml</code></td>
+<td>Main</td>
+<td><code>push</code> to <code>main</code> on workflow paths; <code>workflow_dispatch</code></td>
+<td>actionlint + zizmor on workflow YAML and <code>action.yml</code></td>
+</tr>
+<tr>
+<td><code>pages.yml</code></td>
+<td>Main</td>
+<td><code>push</code> to <code>main</code>; <code>workflow_dispatch</code></td>
+<td>Build the docs site, Seaworthy + Lighthouse, deploy to GitHub Pages</td>
+</tr>
+<tr>
+<td><code>labels.yml</code></td>
+<td>Main / nightly</td>
+<td><code>pull_request</code> / <code>push</code> on label paths; weekly schedule; <code>workflow_dispatch</code></td>
+<td>Sync <code>.github/labels.yml</code> and check good-first-issue briefs</td>
+</tr>
+<tr>
+<td><code>release.yml</code></td>
+<td>Main / release</td>
+<td><code>push</code> to <code>main</code>; version <code>v*</code> tags; <code>workflow_dispatch</code></td>
+<td>One release chain: Action bundle on <code>release/&#x3C;tag></code>, npm via the <code>npm-publish</code> job, binaries, provenance, channels, smoke</td>
+</tr>
+<tr>
+<td><code>package-smoke.yml</code></td>
+<td>Merge queue / nightly</td>
+<td><code>merge_group</code>; nightly schedule; <code>workflow_dispatch</code></td>
+<td>Prove npm tarball, Docker image, and local Action scan the same fixture</td>
+</tr>
+<tr>
+<td><code>ci-health.yml</code></td>
+<td>Nightly</td>
+<td><code>workflow_run</code> of CI on <code>main</code>; schedules; <code>workflow_dispatch</code></td>
+<td>Open/close devops issues on main failures, measure CI duration, quarantine flaky tests</td>
+</tr>
+<tr>
+<td><code>mutation.yml</code></td>
+<td>Nightly</td>
+<td>Nightly schedule; <code>workflow_dispatch</code></td>
+<td>Mutation testing matrix (too slow for the merge gate)</td>
+</tr>
+<tr>
+<td><code>corpus.yml</code></td>
+<td>Pull request / main / nightly</td>
+<td><code>pull_request</code> / <code>push</code> on detector paths; weekly + twice-monthly schedules; <code>workflow_dispatch</code> with <code>mode</code> (<code>affected</code> / <code>full</code> / <code>record</code>)</td>
+<td>Affected-ecosystem signal; full public corpus validate in eight shards plus a merge job; recorded full-run PR</td>
+</tr>
+<tr>
+<td><code>scorecard.yml</code></td>
+<td>Nightly</td>
+<td>Weekly schedule; <code>branch_protection_rule</code>; <code>workflow_dispatch</code></td>
+<td>OpenSSF Scorecard publish + SARIF upload</td>
+</tr>
+<tr>
+<td><code>scorecard-floor.yml</code></td>
+<td>Nightly</td>
+<td>Weekly schedule (after Scorecard); <code>workflow_dispatch</code></td>
+<td>Alert when the published Scorecard score is below the QUALITY.md floor</td>
+</tr>
+<tr>
+<td><code>codeql.yml</code></td>
+<td>Pull request / main / nightly</td>
+<td>Every <code>pull_request</code>; <code>push</code> to <code>main</code>; weekly schedule; <code>workflow_dispatch</code></td>
+<td>CodeQL analysis of every proposed change and <code>main</code></td>
+</tr>
+<tr>
+<td><code>open-alerts.yml</code></td>
+<td>Push to main</td>
+<td>Push to <code>main</code>; daily schedule; <code>workflow_dispatch</code></td>
+<td>Fail on any open code-scanning or Dependabot alert on <code>main</code> that <code>tools/open-alerts-baseline.json</code> does not accept</td>
+</tr>
+<tr>
+<td><code>mcp-listings.yml</code></td>
+<td>Nightly</td>
+<td>Weekly schedule; <code>workflow_dispatch</code></td>
+<td>Compare tracked MCP directory listings to <code>server.json</code></td>
+</tr>
+<tr>
+<td><code>publish.yml</code></td>
+<td>Release</td>
+<td><code>workflow_call</code> from <code>release.yml</code></td>
+<td>package smoke and MCP Registry (the npm publish itself is in <code>release.yml</code>)</td>
+</tr>
+<tr>
+<td><code>gitlab-sync.yml</code></td>
+<td>Release</td>
+<td><code>v*</code> tags; <code>workflow_dispatch</code></td>
+<td>Push the release commit and tags to the GitLab CI/CD Catalog project</td>
+</tr>
+<tr>
+<td><code>offing-reusable.yml</code></td>
+<td>Product (caller)</td>
+<td><code>workflow_call</code> only</td>
+<td>Reusable per-repository Offing scan for other repositories to <code>uses:</code></td>
+</tr>
+<tr>
+<td><code>org-scan.yml</code></td>
+<td>Product (caller)</td>
+<td><code>workflow_call</code>; <code>workflow_dispatch</code></td>
+<td>Organization-wide scan, rollup, and optional Slack/Teams digest</td>
+</tr>
+</tbody>
+</table>
+<h3 id="last-run-audit-2026-11-03" data-src="docs/CI.md:636:1-636:31">Last-run audit (2026-11-03)</h3>
+<p data-src="docs/CI.md:638:1-639:119">Checked with <code>gh run list --workflow &#x3C;file> --limit 1</code> against <code>velella-sh/offing</code>. Since then <code>sources.yml</code>,
+<code>importers.yml</code>, and <code>data-release.yml</code> have moved to <a href="https://github.com/velella-sh/ebb" rel="external">Ebb</a> with the lifecycle data.</p>
+<table data-src="docs/CI.md:641:1-646:145">
+<thead>
+<tr>
+<th>Outcome</th>
+<th>Workflows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ran successfully within about a week</td>
+<td><code>ci.yml</code>, <code>ci-health.yml</code>, <code>codeql.yml</code>, <code>corpus.yml</code>, <code>decisions.yml</code>, <code>docs-doctor.yml</code>, <code>fuzz.yml</code>, <code>gitlab-sync.yml</code>, <code>labels.yml</code>, <code>mcp-listings.yml</code>, <code>package-smoke.yml</code>, <code>pages.yml</code>, <code>publish.yml</code>, <code>release.yml</code>, <code>rules.yml</code>, <code>scorecard.yml</code>, <code>site-budget.yml</code>, <code>workflow-lint.yml</code></td>
+</tr>
+<tr>
+<td>Ran (failed — still active signal, not unused)</td>
+<td><code>mutation.yml</code> (nightly), <code>sources.yml</code> (nightly), <code>org-scan.yml</code> (manual/product path)</td>
+</tr>
+<tr>
+<td>Older success, still on its trigger</td>
+<td><code>data-release.yml</code> (last <code>data-v*</code> / release-related push 2026-10-21), <code>importers.yml</code> (last schedule 2026-10-27)</td>
+</tr>
+<tr>
+<td>No runs in this repository (expected)</td>
+<td><code>offing-reusable.yml</code> (<code>workflow_call</code> only), <code>scorecard-floor.yml</code> (first Saturday cron not yet due)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="changing-this-page" data-src="docs/CI.md:648:1-648:21">Changing this page</h2>
+<ul data-src="docs/CI.md:650:1-658:35">
+<li><strong>Accepted design.</strong> After decision 0024 is accepted, workflow pull requests that move work
+between lanes or raise a budget update this page in the same change.</li>
+<li><strong>Inventory.</strong> When you add, rename, delete, or change the purpose of a workflow file, update the
+<a href="#workflow-inventory">Workflow inventory</a> table in the same pull request.</li>
+<li><strong>Workflow changes.</strong> A pull request that edits <code>.github/workflows/</code> fills in the
+<a href="../.github/pull_request_template.md">pull request template</a> section and keeps the
+<a href="#runner-minute-budget-350">runner-minute ceiling</a> at or below the budget.</li>
+<li><strong>Shared setup.</strong> Checkout-independent Node install and cache move into one composite action in
+#2026; lanes above stay the same.</li>
+</ul></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/CI.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/CI.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/CI.md:5. Current text: &quot;Continuous integration&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Continuous%20integration&amp;body=Page%3A%20%2Foffing%2FCI%2F%0ASource%3A%20docs%2FCI.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/CI/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/CI/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/CI/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/CI/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FCI%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FCI%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FCI%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#single-required-check">Single required check</a></li><li><a href="#lanes-at-a-glance">Lanes at a glance</a></li><li><a href="#runner-minute-budget-350">Runner-minute budget (350)</a></li><li><a href="#pull-request-25-minutes">Pull request (25 minutes)</a></li><li><a href="#merge-queue-30-minutes">Merge queue (30 minutes)</a></li><li><a href="#main-15-minutes">Main (15 minutes)</a></li><li><a href="#nightly-and-scheduled-60-minutes-per-workflow">Nightly and scheduled (60 minutes per workflow)</a></li><li><a href="#release-45-minutes">Release (45 minutes)</a></li><li><a href="#failure-runbook">Failure runbook</a><ul><li><a href="#start-at-ci-ok">Start at ci-ok</a></li><li><a href="#what-actually-fails-measured-2026-11-03">What actually fails (measured 2026-11-03)</a></li><li><a href="#a-test-fails-inside-npm-run-check">A test fails inside npm run check</a></li><li><a href="#tests-pass-on-retry-flaky">Tests pass on retry (flaky)</a></li><li><a href="#red-on-windows-only-check-windows-latest-node-24">Red on Windows only (check (windows-latest, node 24))</a></li><li><a href="#coverage-floors-missed-enforce-coverage-floors">Coverage floors missed (Enforce coverage floors)</a></li><li><a href="#coverage-fell-against-main-coverage-diff-for-changed-src-files">Coverage fell against main (Coverage diff for changed src files)</a></li><li><a href="#quality-gate-loosened-guard-the-quality-gate-against-main">Quality gate loosened (Guard the quality gate against main)</a></li><li><a href="#dependency-advisory-audit-dependencies-runtime-then-the-full-lockfile">Dependency advisory (Audit dependencies (runtime, then the full lockfile))</a></li><li><a href="#offing-finds-something-new-in-its-own-repository">Offing finds something new in its own repository</a></li><li><a href="#merge-markers-built-into-main">Merge markers built into main</a></li><li><a href="#generated-docs-out-of-date">Generated docs out of date</a></li><li><a href="#missing-decision-record-decisionsyml">Missing decision record (decisions.yml)</a></li><li><a href="#rule-fixtures-missing-or-contradicting-rules-changed">Rule fixtures missing or contradicting (Rules (changed))</a></li><li><a href="#workflow-lint-runs-after-merge-workflow-lint">Workflow lint runs after merge (Workflow lint)</a></li><li><a href="#broken-documentation-site-build-pages-build-and-deployment-docs-doctor-docs-job">Broken documentation site build (pages build and deployment, docs doctor, docs job)</a></li><li><a href="#seaworthy-fails-on-the-built-site-seaworthy-job">Seaworthy fails on the built site (seaworthy job)</a></li><li><a href="#site-budget-exceeded-site-budget">Site budget exceeded (Site budget)</a></li><li><a href="#main-is-red">main is red</a></li><li><a href="#nightly-and-scheduled-signal-not-a-gate">Nightly and scheduled signal, not a gate</a></li><li><a href="#release-chain">Release chain</a></li></ul></li><li><a href="#what-this-design-deliberately-leaves-out-of-the-merge-gate">What this design deliberately leaves out of the merge gate</a></li><li><a href="#workflow-inventory">Workflow inventory</a><ul><li><a href="#last-run-audit-2026-11-03">Last-run audit (2026-11-03)</a></li></ul></li><li><a href="#changing-this-page">Changing this page</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#single-required-check">Single required check</a></li><li><a href="#lanes-at-a-glance">Lanes at a glance</a></li><li><a href="#runner-minute-budget-350">Runner-minute budget (350)</a></li><li><a href="#pull-request-25-minutes">Pull request (25 minutes)</a></li><li><a href="#merge-queue-30-minutes">Merge queue (30 minutes)</a></li><li><a href="#main-15-minutes">Main (15 minutes)</a></li><li><a href="#nightly-and-scheduled-60-minutes-per-workflow">Nightly and scheduled (60 minutes per workflow)</a></li><li><a href="#release-45-minutes">Release (45 minutes)</a></li><li><a href="#failure-runbook">Failure runbook</a></li><li><a href="#start-at-ci-ok">Start at ci-ok</a></li><li><a href="#what-actually-fails-measured-2026-11-03">What actually fails (measured 2026-11-03)</a></li><li><a href="#a-test-fails-inside-npm-run-check">A test fails inside npm run check</a></li><li><a href="#tests-pass-on-retry-flaky">Tests pass on retry (flaky)</a></li><li><a href="#red-on-windows-only-check-windows-latest-node-24">Red on Windows only (check (windows-latest, node 24))</a></li><li><a href="#coverage-floors-missed-enforce-coverage-floors">Coverage floors missed (Enforce coverage floors)</a></li><li><a href="#coverage-fell-against-main-coverage-diff-for-changed-src-files">Coverage fell against main (Coverage diff for changed src files)</a></li><li><a href="#quality-gate-loosened-guard-the-quality-gate-against-main">Quality gate loosened (Guard the quality gate against main)</a></li><li><a href="#dependency-advisory-audit-dependencies-runtime-then-the-full-lockfile">Dependency advisory (Audit dependencies (runtime, then the full lockfile))</a></li><li><a href="#offing-finds-something-new-in-its-own-repository">Offing finds something new in its own repository</a></li><li><a href="#merge-markers-built-into-main">Merge markers built into main</a></li><li><a href="#generated-docs-out-of-date">Generated docs out of date</a></li><li><a href="#missing-decision-record-decisionsyml">Missing decision record (decisions.yml)</a></li><li><a href="#rule-fixtures-missing-or-contradicting-rules-changed">Rule fixtures missing or contradicting (Rules (changed))</a></li><li><a href="#workflow-lint-runs-after-merge-workflow-lint">Workflow lint runs after merge (Workflow lint)</a></li><li><a href="#broken-documentation-site-build-pages-build-and-deployment-docs-doctor-docs-job">Broken documentation site build (pages build and deployment, docs doctor, docs job)</a></li><li><a href="#seaworthy-fails-on-the-built-site-seaworthy-job">Seaworthy fails on the built site (seaworthy job)</a></li><li><a href="#site-budget-exceeded-site-budget">Site budget exceeded (Site budget)</a></li><li><a href="#main-is-red">main is red</a></li><li><a href="#nightly-and-scheduled-signal-not-a-gate">Nightly and scheduled signal, not a gate</a></li><li><a href="#release-chain">Release chain</a></li><li><a href="#what-this-design-deliberately-leaves-out-of-the-merge-gate">What this design deliberately leaves out of the merge gate</a></li><li><a href="#workflow-inventory">Workflow inventory</a></li><li><a href="#last-run-audit-2026-11-03">Last-run audit (2026-11-03)</a></li><li><a href="#changing-this-page">Changing this page</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

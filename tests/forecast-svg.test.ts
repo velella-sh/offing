@@ -51,7 +51,7 @@ test("identical forecasts render byte-identical, single, self-contained SVG", ()
   assert.match(output, /^<svg [^>]*role="img"/);
   assert.equal(output.match(/<svg/g)?.length, 1);
   assert.match(output, /prefers-color-scheme:dark/);
-  assert.match(output, /--high:#B84A3E/);
+  assert.match(output, /--high:#9A3F5E/);
   assert.doesNotMatch(output, /<script|href=|url\(|<image|onload=/i);
 });
 
@@ -107,7 +107,7 @@ test("without animate the SVG keeps the bytes it had before animation existed", 
   const output = renderForecastSvg(forecast);
   assert.equal(
     createHash("sha256").update(output).digest("hex"),
-    "f28ac4561219645394b21a5dc3031f2573724fcc1b80ad6b3ee36cce76cbc8ed",
+    "db00ccf4a58757e40ad1d64a925c58e8b69c0e31661a9e1433302f6ed7d3acb8",
   );
   assert.equal(output, renderForecastSvg(forecast, { animate: false }));
   assert.doesNotMatch(output, /@keyframes|forecast-bar|forecast-today|prefers-reduced-motion/);

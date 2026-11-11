@@ -70,8 +70,8 @@ const ANIMATION_STYLES: readonly string[] = [
 ];
 
 const BASE_STYLES: readonly string[] = [
-  ".offing-forecast{--bg:#FFFFFF;--fg:#0C1110;--muted:#5E736B;--line:#DCE5E1;--critical:#B84A3E;--high:#B84A3E;--medium:#C9822F;--low:#B89B3C;--info:#4C7C6D}",
-  "@media (prefers-color-scheme:dark){.offing-forecast{--bg:#0C1110;--fg:#E7EDEA;--muted:#9AB0A7;--line:#23423A;--critical:#E58F83;--high:#E58F83;--medium:#E0A766;--low:#D6C171;--info:#8FB8A8}}",
+  ".offing-forecast{--bg:#FFFFFF;--fg:#1F1F28;--muted:#727169;--line:#E3DDEA;--critical:#9A3F5E;--high:#9A3F5E;--medium:#C9822F;--low:#B89B3C;--info:#727169}",
+  "@media (prefers-color-scheme:dark){.offing-forecast{--bg:#1F1F28;--fg:#DCD7BA;--muted:#C8C093;--line:#3A3450;--critical:#D27E99;--high:#D27E99;--medium:#E0A766;--low:#D6C171;--info:#A8A59B}}",
   ".offing-forecast{font-family:Verdana,Geneva,DejaVu Sans,sans-serif}",
   ".offing-forecast text{fill:var(--fg)}.offing-forecast .forecast-muted{fill:var(--muted)}",
   ".offing-forecast .forecast-background{fill:var(--bg)}",

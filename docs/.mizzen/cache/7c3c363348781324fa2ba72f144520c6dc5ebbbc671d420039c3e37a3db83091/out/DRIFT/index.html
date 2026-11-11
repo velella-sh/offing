@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Runtime drift</title><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/DRIFT/index.md"}},{"id":"section-how-to-read-the-report","label":"How to read the report","hint":"Go to section","run":{"kind":"section","id":"how-to-read-the-report"}},{"id":"section-adding-a-collector","label":"Adding a collector","hint":"Go to section","run":{"kind":"section","id":"adding-a-collector"}},{"id":"section-ruby","label":"Ruby","hint":"Go to section","run":{"kind":"section","id":"ruby"}},{"id":"section-java","label":"Java","hint":"Go to section","run":{"kind":"section","id":"java"}},{"id":"section-net","label":".NET","hint":"Go to section","run":{"kind":"section","id":"net"}},{"id":"section-rust","label":"Rust","hint":"Go to section","run":{"kind":"section","id":"rust"}},{"id":"section-go","label":"Go","hint":"Go to section","run":{"kind":"section","id":"go"}},{"id":"section-python","label":"Python","hint":"Go to section","run":{"kind":"section","id":"python"}},{"id":"section-nodejs","label":"Node.js","hint":"Go to section","run":{"kind":"section","id":"nodejs"}},{"id":"section-terraform","label":"Terraform","hint":"Go to section","run":{"kind":"section","id":"terraform"}},{"id":"section-php","label":"PHP","hint":"Go to section","run":{"kind":"section","id":"php"}},{"id":"section-elixir","label":"Elixir","hint":"Go to section","run":{"kind":"section","id":"elixir"}},{"id":"section-erlangotp","label":"Erlang/OTP","hint":"Go to section","run":{"kind":"section","id":"erlangotp"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><nav class="breadcrumb" aria-label="Breadcrumb"><a href="/offing/DEMO/">Start here</a><svg class="breadcrumb-sep" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 6 6 6-6 6"></path></svg><span aria-current="page">Runtime drift</span></nav><p class="reading-time" data-minutes="18"><span class="reading-time-minutes">18 minutes read</span></p><div class="doc-body"><h1 id="runtime-drift" data-src="docs/DRIFT.md:1:1-1:15">Runtime drift</h1>
+<p data-src="docs/DRIFT.md:3:1-3:322"><code>offing drift</code> finds every place a repository states a runtime version — version files, manifests, container images, and CI configuration — and reports, with exact locations, when the values disagree. A Dockerfile on Node.js 18, CI on 20, and <code>.nvmrc</code> on 22 is one line of output instead of three files to compare by hand.</p>
+<p data-src="docs/DRIFT.md:5:1-5:185">Every command in this page reads repository files only. Drift checks never run a runtime, execute a repository's tools, or use the network. <code>--align</code> prints a patch and never writes it.</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/DRIFT.md:7:1-11:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> drift</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> .</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --check</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> drift</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> .</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --runtime</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> ruby</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> drift</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> .</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --runtime</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> ruby</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --align</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> 3.4</span></span></code></pre>
+<h2 id="how-to-read-the-report" data-src="docs/DRIFT.md:13:1-13:25">How to read the report</h2>
+<p data-src="docs/DRIFT.md:15:1-15:557">Each runtime block lists every value with its <code>path:line</code>, the file or field it came from, the value as written, and the release line it resolves to. A value that cannot be resolved offline is reported too, with the reason. When the <code>pin</code> values select more than one release, the block says <code>DRIFT</code>. A <code>floor</code> is a minimum the project supports; when a floor is above the lowest pinned release that applies to it, the block says <code>FLOOR CONFLICT</code>. A floor that names a directory is checked against the pins that apply to that directory, not against every pin.</p>
+<p data-src="docs/DRIFT.md:17:1-17:302"><code>--check</code> exits <code>1</code> when any runtime drifted or has a floor conflict. <code>--align &#x3C;release></code> requires <code>--runtime</code>, prints a unified diff for the pins it can rewrite, lists refused pins on stderr, and never writes a file. It refuses floors and ranges, and each collector documents the files it can rewrite.</p>
+<h2 id="adding-a-collector" data-src="docs/DRIFT.md:19:1-19:21">Adding a collector</h2>
+<p data-src="docs/DRIFT.md:21:1-21:305">One collector per runtime lives in <code>src/drift/&#x3C;runtime>.ts</code>, reuses the parsers the detectors already have, and is registered once in <code>driftCollectors</code> in <code>src/drift/index.ts</code>. Each section below names the sources it reads, its release granularity, what it refuses to resolve, and which file it can align.</p>
+<h2 id="ruby" data-src="docs/DRIFT.md:23:1-23:7">Ruby</h2>
+<p data-src="docs/DRIFT.md:25:1-25:20">Reads, at any depth:</p>
+<ul data-src="docs/DRIFT.md:27:1-34:126">
+<li><code>.ruby-version</code>, including the rbenv <code>ruby-3.3.1</code> and <code>3.3.1p123</code> forms.</li>
+<li><code>.tool-versions</code> <code>ruby</code> lines, including several fallback versions.</li>
+<li><code>Gemfile</code>: an exact <code>ruby "3.3.0"</code> is a pin; a literal requirement such as <code>ruby ">= 3.1.0"</code> or <code>ruby "~> 3.2"</code> is a floor.</li>
+<li><code>Gemfile.lock</code> <code>RUBY VERSION</code>.</li>
+<li><code>*.gemspec</code>: a literal <code>required_ruby_version</code>, such as <code>">= 3.1.0"</code> or <code>"~> 3.2"</code>, as a floor.</li>
+<li><code>Dockerfile*</code> and <code>Containerfile*</code>: <code>FROM ruby:&#x3C;tag></code> and a literal <code>RUN asdf install ruby &#x3C;version></code>.</li>
+<li><code>.github/workflows/*.yml</code>: the <code>ruby-version</code> input of <code>ruby/setup-ruby</code>.</li>
+<li><code>.gitlab-ci.yml</code> <code>image:</code> values and <code>.circleci/config.yml</code> <code>docker:</code> images for the official <code>ruby</code> and <code>cimg/ruby</code> images.</li>
+</ul>
+<p data-src="docs/DRIFT.md:36:1-36:45">Release granularity is <code>major.minor</code> (<code>3.3</code>).</p>
+<p data-src="docs/DRIFT.md:38:1-38:224">Unresolved values are reported with the reason and excluded from the drift comparison: <code>system</code>, <code>latest</code>, an image without a tag, a moving image tag, a <code>${{ matrix.* }}</code> expression, and a requirement that states no minimum.</p>
+<p data-src="docs/DRIFT.md:40:1-47:168"><code>align &#x3C;release></code> rewrites <code>.ruby-version</code>, a single-value <code>.tool-versions</code> ruby line, an exact <code>Gemfile</code> <code>ruby</code> directive, a <code>ruby/setup-ruby</code> <code>ruby-version</code> input, and the tag of a Dockerfile, GitLab CI, or CircleCI image. It refuses floors, ranges, image digests, and multi-value lines. <code>Gemfile.lock</code> is reported and refused with "regenerate the lockfile": Bundler owns that file.
+<code>offing drift</code> finds every place a repository states a runtime version and reports, per runtime, whether those values agree. A repository that runs Node 18 in its Dockerfile, Node 20 in CI, and Node 22 in <code>.nvmrc</code> has a drift, even when every test passes on the version the developer uses. The command reads repository files only: scans never use the network and never execute repository code.
+offing drift .                    # text report
+offing drift . --json             # <a href="https://github.com/velella-sh/offing/schemas/drift.v1.schema.json" rel="external">https://github.com/velella-sh/offing/schemas/drift.v1.schema.json</a>
+offing drift . --check            # exit 1 when a runtime drifts or has a floor conflict
+offing drift . --runtime java --align 21   # print a patch; never write it
+<code>--json</code> prints an <code>offing.drift.v1</code> document. Every pin carries its repository-relative path, the 1-based line of the value, the source it came from, the value exactly as written, and the release it resolves to offline. A value that cannot be resolved offline keeps its place in the report with an <code>unresolved</code> reason instead of a guessed release.
+<code>--align &#x3C;release></code> prints a unified diff for the pins of one runtime that can be rewritten safely, and lists the refused pins on stderr. Offing never writes the patch.</p>
+<h2 id="java" data-src="docs/DRIFT.md:48:1-48:7">Java</h2>
+<p data-src="docs/DRIFT.md:49:1-49:207">Java releases are compared at the feature-release major: <code>17</code>, <code>21</code>, <code>25</code>. A legacy <code>1.8</code> resolves to <code>8</code>; a vendor prefix (<code>temurin-</code>) or suffix (<code>-tem</code>) is ignored. The vendor never changes support status.</p>
+<table data-src="docs/DRIFT.md:50:1-61:38">
+<thead>
+<tr>
+<th>File</th>
+<th>Fields read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pom.xml</code></td>
+<td><code>maven.compiler.release</code>, <code>maven.compiler.source</code>, <code>maven.compiler.target</code>, and <code>java.version</code> properties; <code>release</code>, <code>source</code>, and <code>target</code> in <code>maven-compiler-plugin</code> configuration, including <code>pluginManagement</code>.</td>
+</tr>
+<tr>
+<td><code>build.gradle</code>, <code>build.gradle.kts</code></td>
+<td><code>java.toolchain.languageVersion</code> (<code>.set(...)</code> or <code>=</code>), <code>jvmToolchain(N)</code>, <code>sourceCompatibility</code>, and <code>targetCompatibility</code>, as literal values only.</td>
+</tr>
+<tr>
+<td><code>.java-version</code></td>
+<td>The first non-comment line.</td>
+</tr>
+<tr>
+<td><code>.sdkmanrc</code></td>
+<td>The <code>java=</code> entry.</td>
+</tr>
+<tr>
+<td><code>.tool-versions</code></td>
+<td>The first version of the <code>java</code> entry.</td>
+</tr>
+<tr>
+<td><code>Dockerfile</code>, <code>*.Dockerfile</code>, <code>Containerfile*</code></td>
+<td><code>FROM</code> images of the <code>eclipse-temurin</code>, <code>openjdk</code>, and <code>amazoncorretto</code> families; <code>maven</code> and <code>gradle</code> tags that name a JDK, such as <code>3.9-eclipse-temurin-17</code> or <code>8.10-jdk21</code>; and <code>sdk install java</code> or <code>asdf install java</code> <code>RUN</code> lines.</td>
+</tr>
+<tr>
+<td><code>.github/workflows/*.yml</code></td>
+<td>The <code>java-version</code> input of <code>actions/setup-java</code>. A <code>${{ matrix.&#x3C;key> }}</code> value is followed to the matrix list in the same job.</td>
+</tr>
+<tr>
+<td><code>.gitlab-ci.yml</code>, <code>.circleci/config.yml</code></td>
+<td><code>image</code> references of the same JDK and build-image families.</td>
+</tr>
+<tr>
+<td>The Maven <code>release</code>, <code>source</code>, <code>target</code>, and <code>java.version</code> properties and the Gradle <code>sourceCompatibility</code> and <code>targetCompatibility</code> settings are floors: they say the oldest JDK the compiled code runs on, not the JDK that builds it, so a build on JDK 21 that compiles for 17 is not drift. Everything else is a <code>pin</code>: the JDK that builds or runs the project. <code>--align</code> rewrites pins only.</td>
+<td></td>
+</tr>
+<tr>
+<td>Reported as unresolved, never guessed:</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul data-src="docs/DRIFT.md:62:1-72:185">
+<li>a Maven property reference such as <code>${java.version}</code>;</li>
+<li>a Gradle expression such as <code>JavaVersion.toVersion(libs.versions.java.get())</code>;</li>
+<li>a matrix or other workflow expression that does not resolve to a literal;</li>
+<li><code>latest</code>, <code>lts</code>, <code>system</code>, or another floating version-file value;</li>
+<li>an image with no tag, a floating tag, or an image reference containing a variable.
+<code>--align</code> rewrites only values it can select a release with:</li>
+<li>Maven compiler properties and <code>maven-compiler-plugin</code> settings whose text is a literal version;</li>
+<li><code>.java-version</code>, <code>.sdkmanrc</code>, and <code>.tool-versions</code> entries with a literal version;</li>
+<li>an image tag that is a plain major, such as <code>eclipse-temurin:17</code>, or the JDK segment of a Maven or Gradle tag, such as <code>3.9-eclipse-temurin-17</code>;</li>
+<li>a single scalar <code>java-version</code> in <code>actions/setup-java</code>.
+It refuses Gradle toolchain and compatibility settings, <code>Dockerfile RUN</code> installs, property references, floating tags, matrix values, and image tags with a digest or a non-major suffix.</li>
+</ul>
+<h1 id="drift" data-src="docs/DRIFT.md:73:1-73:7">Drift</h1>
+<p data-src="docs/DRIFT.md:74:1-76:75"><code>offing drift</code> reads every place a repository states a runtime version and reports, with exact file and line, when those values select different release lines. A repository with Python 3.10 in <code>.python-version</code>, 3.11 in its Dockerfile, and 3.12 in CI has drift: tests pass on one version while production runs another.
+Scans read repository files and nothing else. No drift path uses the network, runs a command, or evaluates repository code, and <code>--align</code> prints patches instead of writing files.
+offing drift [path] [--json] [--check] [--runtime <id>] [--align <release>]</p>
+<ul data-src="docs/DRIFT.md:77:1-82:129">
+<li><code>--check</code> exits <code>1</code> when any runtime has drifted or has a floor conflict.</li>
+<li><code>--json</code> prints the <code>offing.drift.v1</code> document described by <a href="../schemas/drift.v1.schema.json"><code>schemas/drift.v1.schema.json</code></a>.</li>
+<li><code>--runtime &#x3C;id></code> limits the report to one runtime.</li>
+<li><code>--align &#x3C;release></code> requires <code>--runtime</code>, and prints a unified diff that rewrites the pins it understands to <code>release</code>. It lists pins it refuses on stderr.
+Each runtime is reported as its own block. Every pin carries its location, the source it came from, the value as written, and the release line the value selects offline. A value that cannot be resolved carries the reason instead of a guess. A <code>floor</code> is a minimum the project supports, not the version that builds it; a floor above the lowest pin is reported as a floor conflict.
+Release granularity differs by runtime. Each section below states the granularity it reports and the values it leaves unresolved.</li>
+</ul>
+<h2 id="net" data-src="docs/DRIFT.md:83:1-83:7">.NET</h2>
+<p data-src="docs/DRIFT.md:84:1-86:8">.NET pins are reported at <code>major.minor</code> granularity: the SDK <code>8.0.204</code>, the image tag <code>8.0-alpine</code>, and the moniker <code>net8.0</code> all select <code>8.0</code>.
+<code>netcoreapp</code> below 5 resolves to its own name (<code>netcoreapp3.1</code>) and is not compared with <code>netX.Y</code> releases. <code>netstandard*</code> is a compatibility contract that many runtimes satisfy, so it is reported as unresolved and never counted as drift, as are .NET Framework monikers such as <code>net48</code>.
+<strong>Pins</strong></p>
+<table data-src="docs/DRIFT.md:87:1-111:107">
+<thead>
+<tr>
+<th>Source</th>
+<th>Field</th>
+<th>Align</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>global.json</code></td>
+<td><code>sdk.version</code>, wherever the file appears</td>
+<td>yes, keeping <code>rollForward</code></td>
+</tr>
+<tr>
+<td><code>*.csproj</code>, <code>*.fsproj</code>, <code>*.vbproj</code></td>
+<td>a single <code>TargetFramework</code> in a <code>PropertyGroup</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>Directory.Build.props</code></td>
+<td>a single <code>TargetFramework</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>Dockerfile</code>, <code>*.Dockerfile</code>, <code>Containerfile</code></td>
+<td><code>FROM mcr.microsoft.com/dotnet/{sdk,aspnet,runtime,runtime-deps}:&#x3C;tag></code>, including legacy <code>dotnet/core/*</code> images and <code>--platform</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>GitHub Actions</td>
+<td><code>actions/setup-dotnet</code> <code>dotnet-version</code>, one pin per line of a multi-line value</td>
+<td>single value only</td>
+</tr>
+<tr>
+<td><code>.gitlab-ci.yml</code></td>
+<td><code>image</code> and service values that name a Microsoft .NET image</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>.circleci/config.yml</code></td>
+<td>job and executor <code>docker</code>/<code>machine</code> image values that name a Microsoft .NET image</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>azure-pipelines.yml</code></td>
+<td><code>container</code> and <code>resources.containers[].image</code> values that name a Microsoft .NET image</td>
+<td>no</td>
+</tr>
+<tr>
+<td>A Microsoft .NET image is <code>mcr.microsoft.com/dotnet/sdk</code>, <code>aspnet</code>, <code>runtime</code>, or <code>runtime-deps</code>, or the legacy <code>dotnet/core/*</code> equivalents. Image tags keep their suffix: <code>8.0-alpine</code> selects <code>8.0</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Multi-targeting</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&#x3C;TargetFrameworks></code> with several entries is intentional multi-targeting. Each entry is reported as a pin with source <code>TargetFrameworks</code>, the entries share one group, and they are not counted against each other. A source outside the list still counts: <code>TargetFrameworks</code> of <code>net6.0;net8.0</code> agrees with a Dockerfile that selects <code>8.0</code>, but drifts when the Dockerfile selects <code>9.0</code>. <code>--align</code> refuses the multi-targeting form.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Unresolved</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>A .NET Framework moniker, an MSBuild property reference such as <code>$(Tfm)</code>, a version with no minor (<code>8</code>, <code>latest</code>), a dynamic image reference, an expression, an image with no tag, and any value Offing does not read are reported as pins with a one-sentence reason and no release. A value is never guessed from a newer version existing.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Align</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>--align</code> rewrites <code>global.json</code> <code>sdk.version</code> (keeping <code>rollForward</code>), a single <code>TargetFramework</code>, <code>FROM</code> tags that preserve the image suffix, and a single-value <code>setup-dotnet</code> <code>dotnet-version</code>. It refuses <code>TargetFrameworks</code>, MSBuild property references, .NET Framework monikers, CI image references, and any line whose form it does not recognize.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>offing drift</code> reports every place a repository states a runtime version: Dockerfiles, CI configuration, version files, manifests, and toolchain files. Each value is listed with its exact file, line, source, and the release line it resolves to offline. When the values disagree, the runtime is marked <code>DRIFT</code>; when a minimum the project requires is above the version that builds it, the value is listed as a floor conflict.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>offing drift .              # what the repository states, by runtime</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>offing drift . --check      # exit 1 when any runtime disagrees</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>offing drift . --runtime rust --align 1.82   # print a patch; nothing is written</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>offing drift . --runtime go --align 1.22   # print a patch; nothing is written</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Drift reads repository files only. It never uses the network, never executes repository code or tools, and never writes a file. <code>--align</code> prints a unified diff for review; apply it yourself, for example with <code>git apply</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>A value is a <strong>pin</strong> when it selects the version that builds or runs the project, and a <strong>floor</strong> when it states a minimum the project supports. Floors are compared with the lowest pinned release: a floor above it is a conflict, because the environment the pin selects cannot satisfy the project.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Values that cannot be resolved offline are still reported, with the reason. Offing never guesses a release.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="rust" data-src="docs/DRIFT.md:112:1-112:7">Rust</h2>
+<p data-src="docs/DRIFT.md:113:1-127:421">Release granularity is <code>1.minor</code>: the toolchain channel <code>1.79.0</code>, the image tag <code>1.79.0-slim-bookworm</code>, and the <code>.tool-versions</code> entry <code>1.79.0</code> all resolve to <code>1.79</code>. A <code>rust-toolchain</code> channel selects the toolchain that builds the project, so it is a pin; <code>rust-version</code> in <code>Cargo.toml</code> states the minimum the project supports, so it is a floor.
+| Source | Field | Kind |
+| <code>rust-toolchain.toml</code>, <code>rust-toolchain</code> | <code>channel</code> (or the one-line legacy form) | pin |
+| <code>.tool-versions</code> | <code>rust</code> entry | pin |
+| <code>Dockerfile*</code>, <code>Containerfile*</code>, <code>*.Dockerfile</code> | <code>FROM rust:&#x3C;tag></code> | pin |
+| <code>.github/workflows/*.yml</code> | <code>dtolnay/rust-toolchain@&#x3C;ref></code> | pin |
+| <code>.github/workflows/*.yml</code> | <code>dtolnay/rust-toolchain</code> <code>toolchain:</code> input | pin |
+| <code>.github/workflows/*.yml</code> | <code>actions-rs/toolchain</code> <code>toolchain:</code> input | pin |
+| <code>.github/workflows/*.yml</code> | job <code>container:</code> and <code>services.&#x3C;name>.image</code> rust image | pin |
+| <code>.gitlab-ci.yml</code> | <code>image:</code> or <code>services:</code> rust image | pin |
+| <code>.circleci/config.yml</code> | Docker executor rust image | pin |
+| <code>azure-pipelines.yml</code> | job <code>container:</code> rust image | pin |
+| <code>Cargo.toml</code> | <code>package.rust-version</code> and <code>workspace.package.rust-version</code> | floor |
+The Rust collector reuses the existing <code>rust-toolchain</code> and <code>Cargo.toml</code> parsers and reads Dockerfile <code>FROM</code> lines with the container parser. It reports these values as unresolved, without a release: <code>stable</code>, <code>beta</code>, <code>nightly</code>, and dated nightlies, a floating image tag such as <code>rust:latest</code>, an image with no tag, a tag that is not <code>1.minor</code>, an expression that is not a literal version, and a <code>.tool-versions</code> entry that names a <code>ref:</code> or <code>path:</code>.
+<code>--align</code> rewrites <code>channel = "1.x"</code> lines and the one-line <code>rust-toolchain</code>, the <code>rust</code> entry of <code>.tool-versions</code>, <code>rust:&#x3C;version>[-variant]</code> tags in Dockerfiles and CI configuration, <code>dtolnay/rust-toolchain@&#x3C;ref></code>, and the <code>toolchain:</code> input of <code>dtolnay/rust-toolchain</code> and <code>actions-rs/toolchain</code>. It keeps the target or image variant suffix. It refuses floors, named channels, expressions, and images pinned by digest.</p>
+<h2 id="go" data-src="docs/DRIFT.md:128:1-128:5">Go</h2>
+<p data-src="docs/DRIFT.md:129:1-143:312">Release granularity is <code>1.minor</code>: <code>go1.22.4</code> and the image tag <code>1.22.4-alpine</code> both resolve to <code>1.22</code>. A <code>go</code> directive is a minimum since Go 1.21 (<a href="https://go.dev/doc/toolchain" rel="external">Go toolchains</a>, <a href="https://go.dev/ref/mod#go-mod-file-go" rel="external">go directive</a>), so it is a floor; a <code>toolchain</code> line selects the toolchain that builds the module, so it is a pin.
+| <code>go.mod</code> | <code>toolchain go1.x.y</code> | pin |
+| <code>go.work</code> | <code>toolchain go1.x.y</code> | pin |
+| <code>go.mod</code> | <code>go 1.x[.y]</code> | floor |
+| <code>go.work</code> | <code>go 1.x[.y]</code> | floor |
+| <code>.go-version</code> | first non-comment line | pin |
+| <code>.tool-versions</code> | <code>golang</code> entry | pin |
+| <code>Dockerfile*</code>, <code>Containerfile*</code> | <code>FROM golang:&#x3C;tag></code> | pin |
+| <code>.github/workflows/*.yml</code> | <code>actions/setup-go</code> <code>go-version</code> | pin |
+| <code>.github/workflows/*.yml</code> | <code>actions/setup-go</code> <code>go-version-file</code> | pin, pointing at the named file |
+| <code>.gitlab-ci.yml</code> | <code>image:</code> or <code>services:</code> golang image | pin |
+| <code>.circleci/config.yml</code> | Docker executor golang image | pin |
+| <code>azure-pipelines.yml</code> | job <code>container:</code> golang image | pin |
+The Go collector reuses the existing <code>go.mod</code> and <code>go.work</code> parsers and reads Dockerfile <code>FROM</code> lines with the container parser. It reports these values as unresolved, without a release: a floating image tag such as <code>golang:latest</code>, an image with no tag, a tag that is not <code>major.minor</code>, a <code>stable</code> or <code>oldstable</code> <code>go-version</code>, an expression that is not a <code>matrix</code> reference, a matrix entry that is not a plain version, and a <code>.go-version</code> or <code>.tool-versions</code> value that is not a Go version.
+<code>--align</code> rewrites <code>toolchain go1.x.y</code> lines, <code>.go-version</code>, the <code>golang</code> entry of <code>.tool-versions</code>, <code>FROM golang:&#x3C;version>[-variant]</code> (keeping the variant suffix), and a single-value <code>actions/setup-go</code> <code>go-version</code>. It refuses floors, matrix and expression values, <code>go-version-file</code> pointers, and floating tags.</p>
+<h2 id="python" data-src="docs/DRIFT.md:144:1-144:9">Python</h2>
+<p data-src="docs/DRIFT.md:145:1-165:332">Python pins are reported at <code>major.minor</code> granularity: <code>3.11.4</code>, <code>3.11</code>, and <code>python-3.11</code> all select <code>3.11</code>. Version files and manifests are read at any depth, so a monorepo reports each service.
+| <code>.python-version</code> | every line | yes |
+| <code>.tool-versions</code> | the <code>python</code> line, one pin per version | yes |
+| <code>runtime.txt</code> | <code>python-&#x3C;version></code> | yes |
+| <code>Pipfile</code> | <code>[requires]</code> <code>python_version</code> and <code>python_full_version</code> | yes |
+| <code>Dockerfile</code>, <code>*.Dockerfile</code>, <code>Containerfile</code> | <code>FROM python:&#x3C;version>[-variant]</code>, including <code>--platform</code> and all stages | yes |
+| GitHub Actions | <code>actions/setup-python</code> <code>python-version</code>, following a <code>${{ matrix.&#x3C;key> }}</code> reference to its literal list; matrix values keep one pin each | single value only |
+| <code>.gitlab-ci.yml</code> | <code>image</code> and <code>service</code> values that name a Python image | no |
+| <code>.circleci/config.yml</code> | job and executor <code>docker</code>/<code>machine</code> <code>image</code> values that name a Python image | no |
+| <code>azure-pipelines.yml</code> | <code>container</code> and <code>resources.containers[].image</code> values that name a Python image | no |
+| <code>environment.yml</code>, <code>environment.yaml</code> | literal <code>python=...</code> entries under <code>dependencies</code>; a lower bound is a floor | no |
+A Python image is <code>python</code>, <code>cimg/python</code>, or <code>circleci/python</code> on Docker Hub. A multi-version <code>.python-version</code> or <code>.tool-versions</code> line reports one pin per version.
+<strong>Floors</strong>
+| Source | Field |
+| <code>pyproject.toml</code> | <code>[project]</code> <code>requires-python</code> |
+| <code>pyproject.toml</code> | <code>[tool.poetry.dependencies]</code> <code>python</code> |
+| <code>setup.cfg</code> | <code>[options]</code> <code>python_requires</code>, including continuation lines |
+| <code>setup.py</code> | a literal <code>python_requires="..."</code> string; the file is read, never executed |
+A floor resolves from its first lower bound, so <code>>=3.10,&#x3C;3.13</code>, <code>^3.10</code>, and <code>~=3.10.2</code> all report <code>3.10</code>.
+<code>3</code>, <code>3.x</code>, a wildcard with no minor version, <code>latest</code>, a tag or image with no version, a dynamic image reference, an expression, a constraint with no lower bound, and any value Offing does not read are reported as pins with a one-sentence reason and no release. A value is never guessed from a newer version existing.
+<code>--align</code> rewrites <code>.python-version</code>, <code>.tool-versions</code>, <code>runtime.txt</code>, <code>Pipfile</code>, <code>FROM python:&#x3C;version>[-variant]</code> (keeping the variant suffix and the rest of the instruction), and a single-value <code>setup-python</code> <code>python-version</code>. It refuses floors, matrix entries, CI image references, and any line whose form it does not recognize.</p>
+<h2 id="nodejs" data-src="docs/DRIFT.md:167:1-167:10">Node.js</h2>
+<p data-src="docs/DRIFT.md:169:1-169:112">Node.js pins are reported at the major release: <code>18.19.0</code>, <code>v18</code>, and the image tag <code>18-alpine</code> all select <code>18</code>.</p>
+<table data-src="docs/DRIFT.md:171:1-183:72">
+<thead>
+<tr>
+<th>Source</th>
+<th>Field</th>
+<th>Kind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.nvmrc</code></td>
+<td>the version line</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.node-version</code></td>
+<td>the version line</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.tool-versions</code></td>
+<td>the <code>nodejs</code> entry, one pin per version</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>package.json</code></td>
+<td><code>volta.node</code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>package.json</code></td>
+<td><code>engines.node</code></td>
+<td>floor</td>
+</tr>
+<tr>
+<td><code>Dockerfile</code>, <code>*.Dockerfile</code>, <code>Containerfile*</code></td>
+<td><code>FROM node:&#x3C;tag></code>, including every stage</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>devcontainer.json</code></td>
+<td>the <code>image</code> tag and the <code>ghcr.io/devcontainers/features/node</code> feature <code>version</code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.github/workflows/*.yml</code></td>
+<td><code>actions/setup-node</code> <code>node-version</code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.gitlab-ci.yml</code></td>
+<td><code>image</code> and <code>services</code> values of the official <code>node</code>, <code>cimg/node</code>, and <code>circleci/node</code> images</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.circleci/config.yml</code></td>
+<td>Docker executor values of those images</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>azure-pipelines.yml</code></td>
+<td>job <code>container</code> values of those images</td>
+<td>pin</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/DRIFT.md:185:1-185:267">A Dev Container image is read for the <code>node</code>, <code>cimg/node</code>, and <code>circleci/node</code> Docker Hub images and for the <code>devcontainers/javascript-node</code> and <code>devcontainers/typescript-node</code> images, whose tags carry the Node.js major after the image major, such as <code>1-18-bookworm</code>.</p>
+<p data-src="docs/DRIFT.md:187:1-187:17"><strong>LTS codenames</strong></p>
+<p data-src="docs/DRIFT.md:189:1-189:347"><code>lts/&#x3C;codename></code> resolves through the Node.js release schedule (<a href="https://github.com/nodejs/Release#release-schedule" rel="external">nodejs/Release</a>): <code>argon</code> 4, <code>boron</code> 6, <code>carbon</code> 8, <code>dubnium</code> 10, <code>erbium</code> 12, <code>fermium</code> 14, <code>gallium</code> 16, <code>hydrogen</code> 18, <code>iron</code> 20, <code>jod</code> 22, and <code>krypton</code> 24. The Docker tag form <code>lts-&#x3C;codename>[-variant]</code> resolves the same way.</p>
+<p data-src="docs/DRIFT.md:191:1-191:17"><strong>Matrix builds</strong></p>
+<p data-src="docs/DRIFT.md:193:1-193:334">A <code>setup-node</code> matrix with several versions is intentional. Each value is reported as a pin with source <code>setup-node matrix</code>, the values share one group, and they are not counted against each other. A drift is reported only when a non-matrix pin disagrees with another non-matrix pin, or when a non-matrix pin falls outside the matrix.</p>
+<p data-src="docs/DRIFT.md:195:1-195:14"><strong>Unresolved</strong></p>
+<p data-src="docs/DRIFT.md:197:1-197:301"><code>lts/*</code>, <code>latest</code>, <code>current</code>, <code>node</code>, an LTS codename Offing does not know, an image tag that names no Node.js release, a dynamic image reference, an expression, a matrix entry that is not a plain version, and a floor with no lower bound are reported as pins with a one-sentence reason and no release.</p>
+<p data-src="docs/DRIFT.md:199:1-199:368"><code>--align</code> rewrites <code>.nvmrc</code>, <code>.node-version</code>, <code>.tool-versions</code>, <code>package.json</code> <code>volta.node</code>, <code>FROM node:&#x3C;major>[-variant]</code> (keeping the variant suffix and the rest of the instruction), and a single-value <code>actions/setup-node</code> <code>node-version</code>. It refuses floors, <code>setup-node</code> matrices, Dev Container and CI image references, and any line whose form it does not recognize.</p>
+<h2 id="terraform" data-src="docs/DRIFT.md:201:1-201:12">Terraform</h2>
+<p data-src="docs/DRIFT.md:203:1-203:176">Terraform pins are reported at <code>major.minor</code> granularity: the <code>.terraform-version</code> value <code>1.17.0</code>, the image tag <code>1.17</code>, and <code>required_version = ">= 1.17.0"</code> all select <code>1.17</code>.</p>
+<table data-src="docs/DRIFT.md:205:1-215:119">
+<thead>
+<tr>
+<th>Source</th>
+<th>Field</th>
+<th>Kind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.terraform-version</code>, at any depth</td>
+<td>the version line, one pin per file</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.tool-versions</code></td>
+<td>the first version of the <code>terraform</code> entry</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>Dockerfile</code>, <code>*.Dockerfile</code>, <code>Containerfile*</code></td>
+<td><code>FROM hashicorp/terraform:&#x3C;tag></code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.github/workflows/*.yml</code></td>
+<td><code>hashicorp/setup-terraform</code> <code>terraform_version</code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.github/workflows/*.yml</code></td>
+<td>job <code>container:</code> and <code>services.&#x3C;name>.image</code> <code>hashicorp/terraform</code> images</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.gitlab-ci.yml</code></td>
+<td><code>image:</code> or <code>services:</code> <code>hashicorp/terraform</code> images</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.circleci/config.yml</code></td>
+<td>Docker executor <code>hashicorp/terraform</code> images</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>azure-pipelines.yml</code></td>
+<td>job <code>container:</code> <code>hashicorp/terraform</code> images</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>*.tf</code>, in every module</td>
+<td><code>required_version</code></td>
+<td>pin when exact (<code>"1.17.0"</code>, <code>"= 1.17.0"</code>, <code>"~> 1.17.0"</code>), else floor</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/DRIFT.md:217:1-217:224">The collector reuses the existing <code>.terraform-version</code> and <code>.tool-versions</code> parsers and reads <code>required_version</code> with the HCL parser. Provider versions in <code>required_providers</code> are not Terraform CLI versions and are not read.</p>
+<p data-src="docs/DRIFT.md:219:1-219:15"><strong>Directories</strong></p>
+<p data-src="docs/DRIFT.md:221:1-221:612">Version files and <code>required_version</code> apply to the directory they live in, because modules in different directories can legitimately differ. A floor is checked only against the pins that apply to its directory: the nearest <code>.terraform-version</code> or <code>.tool-versions</code> at or above it, or the repository-wide pins (Dockerfiles, CI images, <code>setup-terraform</code>) when its directory declares none. A floor of <code>>= 1.17.0</code> beside a module <code>.terraform-version</code> of <code>1.17.0</code> agrees, even when the rest of the repository pins <code>1.16</code>. Pins are still compared across the repository, so modules on different release lines are a drift.</p>
+<p data-src="docs/DRIFT.md:223:1-223:14"><strong>Unresolved</strong></p>
+<p data-src="docs/DRIFT.md:225:1-225:299"><code>latest</code>, <code>min-required</code>, <code>system</code>, a partial version such as <code>1.9</code>, a prerelease, a <code>.tool-versions</code> entry that names a <code>ref:</code> or <code>path:</code>, an image with no tag, a floating image tag, a workflow expression, and a constraint with no lower bound are reported with a one-sentence reason and no release.</p>
+<p data-src="docs/DRIFT.md:227:1-227:9"><strong>Align</strong></p>
+<p data-src="docs/DRIFT.md:229:1-229:432"><code>--align &#x3C;release></code> rewrites <code>.terraform-version</code>, a single-value <code>.tool-versions</code> <code>terraform</code> entry, <code>FROM hashicorp/terraform:&#x3C;version></code> tags, a single-value <code>setup-terraform</code> <code>terraform_version</code>, and an exact <code>required_version</code> (keeping the <code>=</code> form when written). Where a full version is required, a release line such as <code>1.18</code> is written as <code>1.18.0</code>. It refuses floors, ranges, CI image references, and images pinned by digest.</p>
+<h2 id="php" data-src="docs/DRIFT.md:231:1-231:6">PHP</h2>
+<p data-src="docs/DRIFT.md:233:1-233:114">PHP pins are reported at <code>major.minor</code> granularity: <code>8.3.12</code>, <code>8.3</code>, and the image tag <code>8.3-fpm</code> all select <code>8.3</code>.</p>
+<table data-src="docs/DRIFT.md:235:1-245:97">
+<thead>
+<tr>
+<th>Source</th>
+<th>Field</th>
+<th>Kind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>composer.json</code></td>
+<td><code>config.platform.php</code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>composer.json</code></td>
+<td><code>require.php</code></td>
+<td>floor</td>
+</tr>
+<tr>
+<td><code>composer.lock</code></td>
+<td><code>platform.php</code>, when present</td>
+<td>floor</td>
+</tr>
+<tr>
+<td><code>.php-version</code></td>
+<td>the single version, including the phpenv <code>php-8.3.12</code> form</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.tool-versions</code></td>
+<td>the <code>php</code> entry, one pin per version</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>Dockerfile</code>, <code>*.Dockerfile</code>, <code>Containerfile*</code></td>
+<td><code>FROM php:&#x3C;tag></code> and a literal <code>RUN asdf install php &#x3C;version></code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.github/workflows/*.yml</code></td>
+<td>the <code>php-version</code> input of <code>shivammathur/setup-php</code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.gitlab-ci.yml</code></td>
+<td><code>image:</code> values that name the official <code>php</code> image</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.circleci/config.yml</code></td>
+<td>Docker executor values that name the <code>php</code> or <code>cimg/php</code> image</td>
+<td>pin</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/DRIFT.md:247:1-247:126">A PHP image is the Docker Hub <code>php</code> image, or <code>cimg/php</code> in CI. Image tags keep their variant suffix: <code>8.3-fpm</code> selects <code>8.3</code>.</p>
+<p data-src="docs/DRIFT.md:249:1-249:195">A <code>setup-php</code> matrix with several versions is intentional. Each value is reported as a pin with source <code>setup-php matrix</code>, the values share one group, and they are not counted against each other.</p>
+<p data-src="docs/DRIFT.md:251:1-251:10"><strong>Floors</strong></p>
+<p data-src="docs/DRIFT.md:253:1-253:359"><code>require.php</code> and <code>composer.lock</code> <code>platform.php</code> state what the project installs against, not the PHP that builds it, so they are floors. A floor resolves from its first lower bound: <code>^8.2</code>, <code>>=8.1</code>, and <code>8.1.*</code> all resolve to their major.minor. A floor above the lowest pinned release is a floor conflict, because that environment cannot install the project.</p>
+<p data-src="docs/DRIFT.md:255:1-255:14"><strong>Unresolved</strong></p>
+<p data-src="docs/DRIFT.md:257:1-257:297"><code>latest</code>, <code>system</code>, a version with no minor (<code>8</code>), a moving image tag, an image with no tag, an expression that is not a <code>matrix</code> reference, and a constraint with no lower bound are reported as pins with a one-sentence reason and no release. A value is never guessed from a newer version existing.</p>
+<p data-src="docs/DRIFT.md:259:1-259:9"><strong>Align</strong></p>
+<p data-src="docs/DRIFT.md:261:1-261:539"><code>--align &#x3C;release></code> rewrites <code>.php-version</code> (keeping the <code>php-</code> prefix), a single-value <code>.tool-versions</code> <code>php</code> line, <code>composer.json</code> <code>config.platform.php</code>, <code>FROM php:&#x3C;version>[-variant]</code> tags, GitLab CI and CircleCI image tags, and a single-value <code>setup-php</code> <code>php-version</code>. It refuses floors, <code>composer.json</code> <code>require.php</code>, <code>composer.lock</code>, <code>setup-php</code> matrix values, multi-value <code>.tool-versions</code> lines, and image references pinned by digest. <code>composer.lock</code> is reported and refused with "regenerate the lockfile": Composer owns that file.</p>
+<h2 id="elixir" data-src="docs/DRIFT.md:263:1-263:9">Elixir</h2>
+<p data-src="docs/DRIFT.md:265:1-265:132">Elixir pins are reported at <code>major.minor</code> granularity: <code>1.16.2</code>, <code>1.16</code>, and the image tag <code>1.16.2-otp-26-alpine</code> all select <code>1.16</code>.</p>
+<table data-src="docs/DRIFT.md:267:1-275:94">
+<thead>
+<tr>
+<th>Source</th>
+<th>Field</th>
+<th>Kind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.elixir-version</code></td>
+<td>the single version, including the asdf <code>1.16.2-otp-26</code> form</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.tool-versions</code></td>
+<td>the <code>elixir</code> entry, one pin per version, the <code>-otp-NN</code> suffix kept as written</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>mix.exs</code></td>
+<td>the project <code>elixir:</code> constraint, quoted literals only</td>
+<td>floor</td>
+</tr>
+<tr>
+<td><code>Dockerfile</code>, <code>*.Dockerfile</code>, <code>Containerfile*</code></td>
+<td><code>FROM elixir:&#x3C;tag></code> and <code>FROM hexpm/elixir:&#x3C;elixir>-erlang-&#x3C;otp>-&#x3C;os></code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.github/workflows/*.yml</code></td>
+<td>the <code>elixir-version</code> input of <code>erlef/setup-beam</code></td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.gitlab-ci.yml</code></td>
+<td><code>image:</code> values that name the official <code>elixir</code> or <code>hexpm/elixir</code> image</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.circleci/config.yml</code></td>
+<td>Docker executor values that name <code>elixir</code> or <code>hexpm/elixir</code></td>
+<td>pin</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/DRIFT.md:277:1-277:313">An Elixir image is the Docker Hub <code>elixir</code> image or the <code>hexpm/elixir</code> build image; other registries and other repositories are not read. Image tags keep their suffixes: <code>1.16.2-otp-26-alpine</code> selects <code>1.16</code>, and <code>hexpm/elixir:1.17.3-erlang-27.1.1-alpine-3.20</code> selects <code>1.17</code> from the version its tag names first.</p>
+<p data-src="docs/DRIFT.md:279:1-279:367">The collector reuses the Elixir detector's runtime parser and <code>mix.exs</code> parser, so the same version grammar decides what is a pin here as in <code>offing scan</code>. A <code>setup-beam</code> matrix with several Elixir versions is intentional. Each value is reported as a pin with source <code>setup-beam elixir matrix</code>, the values share one group, and they are not counted against each other.</p>
+<p data-src="docs/DRIFT.md:281:1-281:10"><strong>Floors</strong></p>
+<p data-src="docs/DRIFT.md:283:1-283:407"><code>mix.exs</code> <code>elixir:</code> states the oldest Elixir the project supports, not the one that builds it, so it is a floor. Only a quoted literal constraint is read: <code>~> 1.15</code> and <code>>= 1.15.7</code> resolve to their first lower bound, <code>1.15</code>. <code>Mix</code> is never run and <code>mix.exs</code> is never evaluated. A floor above the lowest pinned Elixir is a floor conflict, because that project cannot build on the runtime its own pins select.</p>
+<p data-src="docs/DRIFT.md:285:1-285:14"><strong>Unresolved</strong></p>
+<p data-src="docs/DRIFT.md:287:1-287:384"><code>latest</code>, <code>main</code>, a version with no minor (<code>1</code>), an image with no tag, a moving image tag such as <code>elixir:latest</code>, a <code>hexpm/elixir</code> tag that is not <code>&#x3C;elixir>-erlang-&#x3C;otp>[-&#x3C;os>]</code>, an expression that is not a <code>matrix</code> reference, and a constraint with no lower bound are reported as pins with a one-sentence reason and no release. A value is never guessed from a newer version existing.</p>
+<p data-src="docs/DRIFT.md:289:1-289:9"><strong>Align</strong></p>
+<p data-src="docs/DRIFT.md:291:1-291:543"><code>--align &#x3C;release></code> rewrites <code>.elixir-version</code> (keeping its <code>-otp-NN</code> suffix), a single-value <code>.tool-versions</code> <code>elixir</code> line, a single-value <code>setup-beam</code> <code>elixir-version</code> (its quote style kept), and <code>elixir:&#x3C;version>[-otp-&#x3C;otp>][-variant]</code> tags in Dockerfiles, GitLab CI and CircleCI (the OTP part and the variant are preserved). It refuses the <code>mix.exs</code> floor, every <code>hexpm/elixir</code> tag — choosing its OS part is a decision, not a rewrite — <code>setup-beam</code> matrix values, multi-value <code>.tool-versions</code> lines, and image references pinned by digest.</p>
+<h2 id="erlangotp" data-src="docs/DRIFT.md:293:1-293:13">Erlang/OTP</h2>
+<p data-src="docs/DRIFT.md:295:1-295:126">Erlang/OTP pins are reported at the OTP major: <code>26.2.5</code>, <code>OTP-26.2.5</code>, and the <code>-otp-26.2.5</code> of an Elixir pin all select <code>26</code>.</p>
+<table data-src="docs/DRIFT.md:297:1-302:116">
+<thead>
+<tr>
+<th>Source</th>
+<th>Field</th>
+<th>Kind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.tool-versions</code></td>
+<td>the <code>erlang</code> entry, one pin per version</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.elixir-version</code>, <code>.tool-versions</code></td>
+<td>the <code>-otp-NN</code> suffix of an Elixir version that names one</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>Dockerfile</code>, <code>*.Dockerfile</code>, <code>Containerfile*</code>, <code>.gitlab-ci.yml</code>, <code>.circleci/config.yml</code></td>
+<td>the <code>erlang-&#x3C;otp></code> part of a <code>hexpm/elixir</code> tag, and the <code>-otp-&#x3C;otp></code> part of an <code>elixir</code> tag</td>
+<td>pin</td>
+</tr>
+<tr>
+<td><code>.github/workflows/*.yml</code></td>
+<td>the <code>otp-version</code> input of <code>erlef/setup-beam</code>, including its <code>OTP-26.2.5</code> form</td>
+<td>pin</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/DRIFT.md:304:1-304:429">OTP is versioned with Elixir, so one line states both: <code>FROM hexpm/elixir:1.17.3-erlang-27.1.1-alpine-3.20</code> is an Elixir <code>1.17</code> pin for the Elixir collector and an OTP <code>27</code> pin for this one, at the same path and line. The Docker Hub <code>erlang</code> image is not a source of drift here, because the issue that scoped this collector lists only the sources above; a repository that runs Erlang on its own gets no pin from <code>FROM erlang:27</code>.</p>
+<p data-src="docs/DRIFT.md:306:1-306:70">There is no Erlang floor source: <code>mix.exs</code> constrains Elixir, not OTP.</p>
+<p data-src="docs/DRIFT.md:308:1-308:181">A <code>setup-beam</code> matrix with several OTP versions is intentional: the values are reported with source <code>setup-beam otp matrix</code>, share one group, and are not counted against each other.</p>
+<p data-src="docs/DRIFT.md:310:1-310:14"><strong>Unresolved</strong></p>
+<p data-src="docs/DRIFT.md:312:1-312:358"><code>main</code>, <code>master</code>, and <code>latest</code>, an <code>otp-version</code> that is not a version (<code>edge</code>), an expression that is not a <code>matrix</code> reference, an <code>.tool-versions</code> <code>erlang</code> token that is not an OTP release, and a workflow that does not parse as YAML are reported with a reason or skipped; nothing is guessed. An Elixir version with no <code>-otp-</code> part simply yields no OTP pin.</p>
+<p data-src="docs/DRIFT.md:314:1-314:9"><strong>Align</strong></p>
+<p data-src="docs/DRIFT.md:316:1-316:475"><code>--align &#x3C;release></code> rewrites a single-value <code>.tool-versions</code> <code>erlang</code> line, the <code>-otp-NN</code> suffix of <code>.elixir-version</code> and of a <code>.tool-versions</code> <code>elixir</code> line, a single-value <code>setup-beam</code> <code>otp-version</code> (written as the bare major, with the line's quotes kept), and the <code>-otp-&#x3C;otp></code> part of <code>elixir:&#x3C;version>-otp-&#x3C;otp>[-variant]</code> tags in Dockerfiles, GitLab CI and CircleCI. It refuses every <code>hexpm/elixir</code> tag, <code>setup-beam</code> matrix values, and image references pinned by digest.</p></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/DRIFT.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/DRIFT.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/DRIFT.md:1. Current text: &quot;Runtime drift&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Runtime%20drift&amp;body=Page%3A%20%2Foffing%2FDRIFT%2F%0ASource%3A%20docs%2FDRIFT.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/DRIFT/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/DRIFT/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/DRIFT/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/DRIFT/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FDRIFT%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FDRIFT%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FDRIFT%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div><nav class="pager" aria-label="Previous and next pages"><a class="pager-link pager-prev" href="/offing/CLI/" rel="prev"><span class="pager-label"><svg class="pager-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11 6l-6 6 6 6M5 12h14"></path></svg>Previous</span><span class="pager-title">CLI reference</span></a><a class="pager-link pager-next" href="/offing/VALIDATION/" rel="next"><span class="pager-label">Next<svg class="pager-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 6l6 6-6 6M19 12H5"></path></svg></span><span class="pager-title">v0.1 validation results</span></a></nav></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#how-to-read-the-report">How to read the report</a></li><li><a href="#adding-a-collector">Adding a collector</a></li><li><a href="#ruby">Ruby</a></li><li><a href="#java">Java</a></li><li><a href="#net">.NET</a></li><li><a href="#rust">Rust</a></li><li><a href="#go">Go</a></li><li><a href="#python">Python</a></li><li><a href="#nodejs">Node.js</a></li><li><a href="#terraform">Terraform</a></li><li><a href="#php">PHP</a></li><li><a href="#elixir">Elixir</a></li><li><a href="#erlangotp">Erlang/OTP</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#how-to-read-the-report">How to read the report</a></li><li><a href="#adding-a-collector">Adding a collector</a></li><li><a href="#ruby">Ruby</a></li><li><a href="#java">Java</a></li><li><a href="#net">.NET</a></li><li><a href="#rust">Rust</a></li><li><a href="#go">Go</a></li><li><a href="#python">Python</a></li><li><a href="#nodejs">Node.js</a></li><li><a href="#terraform">Terraform</a></li><li><a href="#php">PHP</a></li><li><a href="#elixir">Elixir</a></li><li><a href="#erlangotp">Erlang/OTP</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

@@ -1,0 +1,4 @@
+export const RESET_MS=2000;function say(button,text,label,env){button.textContent=text;env.schedule(()=>{button.textContent=label;},RESET_MS);}
+export function copy(button,label,env){const clipboard=env.clipboard;if(clipboard===undefined)return Promise.resolve();return clipboard.writeText(button.dataset.prompt??"").then(()=>say(button,button.dataset.copied??label,label,env),()=>say(button,button.dataset.copyFailed??label,label,env),);}
+export function activate(button,env){if(env.clipboard===undefined)return;const label=button.textContent??"";button.hidden=false;button.addEventListener("click",()=>{void copy(button,label,env);});}
+const globals=globalThis;if(globals.document){const button=globals.document.querySelector("[data-page-footer-copy]");if(button){activate(button,{clipboard:globals.navigator?.clipboard,schedule:(callback,ms)=>globals.setTimeout(callback,ms),});}}

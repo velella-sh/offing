@@ -1,68 +1,24 @@
-# Offing brand assets
+# Offing brand files
 
-This directory contains Offing's production `Version Notches` identity,
-brand guidance, reusable templates, and canonical exports.
+Decisions behind these files: `../DECISIONS.md`, section "برند". Family rules: `../../DECISIONS.md`, brand stage 5.
 
-The versioned positioning, audience, voice, naming, tagline, and typography rules
-are defined in [`BRAND_BRIEF.md`](BRAND_BRIEF.md). Practical logo, color,
-accessibility, layout, template, and export rules are in
-[`BRAND_GUIDE.md`](BRAND_GUIDE.md).
+| File | Use |
+|---|---|
+| `favicon.svg` | Browser tab icon. Drawn on a 16 px grid; follows light/dark through `prefers-color-scheme`. |
+| `favicon.ico` | Fallback: 16, 32 and 48 px in one file. 16 and 32 are drawn on their own pixel grids. |
+| `favicon-16.png`, `favicon-32.png` | The same small sizes as PNG. |
+| `apple-touch-icon.png` | 180×180, full-bleed square (iOS rounds the corners). |
+| `icon-192.png`, `icon-512.png` | Web app manifest icons. |
+| `mark-night.svg`, `mark-day.svg` | Mark on its tile. PNG at 1024 px next to them. |
+| `glyph-night.svg`, `glyph-day.svg` | Mark without tile, transparent background. |
+| `social-preview.png` | GitHub social preview (repo Settings → Social preview). 1280×640, text as paths. |
+| `social-preview.svg` | Master of the above. |
 
-## Mark construction
+## Rebuild
 
-- Canvas: `256 × 256`
-- Center: `(128, 128)`
-- Ring radii: `96`, `70`, and `44`
-- Stroke width: `18`
-- Notches: one stroke-width square at 12, 3, and 6 o'clock
+Requires Node and Google Chrome (macOS path in `render.sh`).
 
-The three rings represent major, minor, and patch lifecycle layers. Their small,
-separate notches distinguish the mark from an open `C` and create a precise,
-recognizable lifecycle signal without an additional symbol.
-
-## Palette
-
-| Token | Value | Use |
-| --- | --- | --- |
-| Carbon | `#0C1110` | Dark canvas and monochrome mark |
-| Deep Mineral | `#17211E` | Deep supporting surface |
-| Forest Slate | `#23423A` | Outer brand ring |
-| Mineral Green | `#4C7C6D` | Middle brand ring and accent |
-| Mist Green | `#9AC7B6` | Inner brand ring and light accent |
-| Frost | `#F3F6F4` | Light canvas and dark-mode text |
-| Verified Green | `#2F7D5B` | Functional success states only |
-
-## Files
-
-- `assets/offing-mark-dark.svg` — color mark for dark surfaces
-- `assets/offing-mark-light.svg` — color mark for light surfaces
-- `assets/offing-mark-mono.svg` — single-color dark mark
-- `assets/offing-mark-mono-light.svg` — single-color light mark
-- Matching `512 × 512` transparent PNG exports for each mark variant
-- `offing-logo-sheet.svg` — review sheet with lockups and small-size checks
-- `templates/` — editable social, avatar, banner, and marketplace sources
-- `exports/` — canonical PNG renders of every template preset
-- `tokens.json` and `tokens.css` — machine-readable design tokens
-- `export-presets.json` — canonical source, output, size, and background mappings
-
-The wordmark on the review sheet is still live type so typography can be selected
-and edited. It follows the approved Inter typography and uses IBM Plex Mono for
-the tagline. Before the final release, convert the approved wordmark to outlines.
-
-## Preliminary similarity review
-
-The original open-concentric-ring concept was intentionally not adopted unchanged:
-broken concentric rings are common in technology and identity systems. The selected
-mark adds a fixed three-notch pattern at 12, 3, and 6 o'clock and uses a
-documented major/minor/patch construction grid.
-
-This is a preliminary obvious-confusion review, not legal trademark clearance.
-Before a v1 brand launch, repeat image-similarity searches on the final outlined
-lockup and obtain jurisdiction-specific trademark advice if registration is planned.
-
-## Asset rights
-
-Offing source code remains under Apache License 2.0. The Offing name, logo,
-wordmark, templates, and other brand assets are proprietary and are not licensed
-under Apache 2.0. Limited permission for unmodified, truthful references to the
-official project is described in [`LICENSE.md`](LICENSE.md).
+```bash
+node tools/build.mjs . <node_modules with geist@1.9.2 and opentype.js@1.3.4>
+bash tools/render.sh "$PWD" /tmp/offing-render
+```

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Review rubric for agent pull requests</title><meta name="description" content="What to check beyond CI when reviewing a pull request from a coding agent, and what must block a merge."/><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/REVIEW/index.md"}},{"id":"section-how-to-use","label":"How to use","hint":"Go to section","run":{"kind":"section","id":"how-to-use"}},{"id":"section-beyond-ci","label":"Beyond CI","hint":"Go to section","run":{"kind":"section","id":"beyond-ci"}},{"id":"section-1-scope","label":"1. Scope","hint":"Go to section","run":{"kind":"section","id":"1-scope"}},{"id":"section-2-correct-layer","label":"2. Correct layer","hint":"Go to section","run":{"kind":"section","id":"2-correct-layer"}},{"id":"section-3-real-tests","label":"3. Real tests","hint":"Go to section","run":{"kind":"section","id":"3-real-tests"}},{"id":"section-4-honest-docs","label":"4. Honest docs","hint":"Go to section","run":{"kind":"section","id":"4-honest-docs"}},{"id":"section-what-must-block-a-merge","label":"What must block a merge","hint":"Go to section","run":{"kind":"section","id":"what-must-block-a-merge"}},{"id":"section-adjusting-the-rubric","label":"Adjusting the rubric","hint":"Go to section","run":{"kind":"section","id":"adjusting-the-rubric"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="6"><span class="reading-time-minutes">6 minutes read</span></p><div class="doc-body"><h1 id="review-rubric-for-agent-pull-requests" data-src="docs/REVIEW.md:6:1-6:39">Review rubric for agent pull requests</h1>
+<p data-src="docs/REVIEW.md:8:1-8:345">Use this page when reviewing a pull request that a coding agent opened, or when an agent self-checks before it asks for review. CI (<code>ci-ok</code>, driven by <code>npm run check</code> and the jobs behind it) already enforces build, tests, coverage floors, quality targets, generated-file drift, and the self-scan. This rubric covers what those checks cannot see.</p>
+<p data-src="docs/REVIEW.md:10:1-10:228">The measurable quality bar is <a href="QUALITY.md">QUALITY.md</a>. Test kinds and anti-patterns are in <a href="TESTING.md">TESTING.md</a>. Contribution timing and the first-review SLA are in <a href="../CONTRIBUTING.md#review-expectations">CONTRIBUTING.md</a>.</p>
+<h2 id="how-to-use" data-src="docs/REVIEW.md:12:1-12:13">How to use</h2>
+<ol data-src="docs/REVIEW.md:14:1-17:49">
+<li>Confirm <code>ci-ok</code> is green (or that <code>npm run check</code> passed locally on the same commit). A red gate is not a review; wait or send it back.</li>
+<li>Read the linked issue's <strong>Agent brief</strong>: files, steps, "Do not" list, and Done when.</li>
+<li>Walk the four checks below on the diff. Record a request for changes when a <strong>block</strong> item fails; leave nits as non-blocking comments.</li>
+<li>Approve only when every <strong>block</strong> item passes.</li>
+</ol>
+<p data-src="docs/REVIEW.md:19:1-19:121">Agents opening a pull request run the same four checks on their own diff and fix block failures before requesting review.</p>
+<h2 id="beyond-ci" data-src="docs/REVIEW.md:21:1-21:12">Beyond CI</h2>
+<h3 id="1-scope" data-src="docs/REVIEW.md:23:1-23:12">1. Scope</h3>
+<p data-src="docs/REVIEW.md:25:1-25:52">Does the change match the issue, and only the issue?</p>
+<table data-src="docs/REVIEW.md:27:1-32:131">
+<thead>
+<tr>
+<th>Check</th>
+<th>Pass when</th>
+<th>Block when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One issue</td>
+<td>The pull request body has <code>Closes #&#x3C;n></code> for one task issue, and the diff matches that brief</td>
+<td>A second issue's work is bundled in, or the body closes an epic</td>
+</tr>
+<tr>
+<td>Listed files</td>
+<td>Touches are inside the brief's <strong>Files</strong> list (plus tests, changelog fragments, and regenerations the brief's steps require)</td>
+<td>Unrelated refactors, drive-by formatting, or files the brief forbids</td>
+</tr>
+<tr>
+<td>"Do not" list</td>
+<td>Every bullet under <strong>Do not</strong> in the brief still holds</td>
+<td>Network on a scan path, executing repository or fixture code, hand-edited generated output, or an unsourced dependency add</td>
+</tr>
+<tr>
+<td>Follow-ups</td>
+<td>Extra work is named as a new issue, not shipped in this diff</td>
+<td>Scope grew "while we were here" without a new issue</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-correct-layer" data-src="docs/REVIEW.md:34:1-34:20">2. Correct layer</h3>
+<p data-src="docs/REVIEW.md:36:1-36:141">Does each change sit in the layer that owns it? See <a href="../AGENTS.md#architecture-boundaries">AGENTS.md</a> and <a href="ARCHITECTURE.md">ARCHITECTURE.md</a>.</p>
+<table data-src="docs/REVIEW.md:38:1-43:239">
+<thead>
+<tr>
+<th>Check</th>
+<th>Pass when</th>
+<th>Block when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layer ownership</td>
+<td>Engine, SDK, detectors, registry, source-usage, and adapters stay inside their "Owns" / "Must not" rows</td>
+<td>A detector makes a network call; an adapter owns rule or migration logic; the engine imports a built-in detector or grows ecosystem-specific branches</td>
+</tr>
+<tr>
+<td>Public contracts</td>
+<td>Additive change only, or a numbered decision under <code>docs/decisions/</code> in the same pull request</td>
+<td>A breaking change to <code>schemas/</code>, <code>src/sdk.ts</code>, MCP tool shapes, or <code>--json</code> output without a decision record</td>
+</tr>
+<tr>
+<td>Trust rules</td>
+<td>Repository contents are parsed, never evaluated; scans stay offline</td>
+<td>New code executes scanned input, or a scan path gains network access</td>
+</tr>
+<tr>
+<td>Shared / generated paths</td>
+<td>Assembled registries are regenerated from per-item sources; generated trees are rebuilt with the commands in AGENTS.md</td>
+<td>Hand-edited <code>plugins/</code>, <code>docs/rules/</code>, assembled thresholds, or other generated outputs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-real-tests" data-src="docs/REVIEW.md:45:1-45:17">3. Real tests</h3>
+<p data-src="docs/REVIEW.md:47:1-47:104">Do the tests prove the behavior the issue asked for? Use <a href="TESTING.md">TESTING.md</a> as the detailed guide.</p>
+<table data-src="docs/REVIEW.md:49:1-54:233">
+<thead>
+<tr>
+<th>Check</th>
+<th>Pass when</th>
+<th>Block when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Observable behavior</td>
+<td>A new or changed behavior has a test that fails without the change and asserts a finding, exit code, JSON field, or rendered output</td>
+<td>No test for a behavior change, or the test only asserts that a private helper was called</td>
+</tr>
+<tr>
+<td>Kind and placement</td>
+<td>The smallest suitable kind from TESTING.md carries the proof</td>
+<td>An end-to-end spawn is used where a unit or detector test would see the bug</td>
+</tr>
+<tr>
+<td>Determinism</td>
+<td>Assertions avoid clocks, absolute temp paths, and unordered maps; paths are cross-platform</td>
+<td>Snapshots of nondeterministic fields, shared <code>/tmp</code> paths, or real sleeps waiting on the system under test</td>
+</tr>
+<tr>
+<td>Trust in tests</td>
+<td>Fixtures are parsed, not executed; no network on the test path except where a command is explicitly about the network</td>
+<td>The test runs fixture code, hits a registry, or weakens a floor/threshold to land the change</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/REVIEW.md:56:1-56:114">Docs-only and pure chore changes that cannot affect runtime behavior need no new test; say so in the pull request.</p>
+<h3 id="4-honest-docs" data-src="docs/REVIEW.md:58:1-58:18">4. Honest docs</h3>
+<p data-src="docs/REVIEW.md:60:1-60:54">Do the words match what the code and data actually do?</p>
+<table data-src="docs/REVIEW.md:62:1-67:205">
+<thead>
+<tr>
+<th>Check</th>
+<th>Pass when</th>
+<th>Block when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Same-change docs</td>
+<td>User-visible behavior, flags, and contracts are documented in the same pull request</td>
+<td>Docs promise a flag, tool, or guarantee the diff does not implement</td>
+</tr>
+<tr>
+<td>No overclaim</td>
+<td>Lifecycle claims cite an authoritative, versioned source; status is never inferred from popularity or "a newer version exists"</td>
+<td>A rule, README line, or migration step invents a status or replacement</td>
+</tr>
+<tr>
+<td>Generated docs</td>
+<td>Reference, answer, OG, and plugin pages were regenerated from source when the source changed</td>
+<td>Generated pages were edited by hand or left stale</td>
+</tr>
+<tr>
+<td>Changelog</td>
+<td>A <code>changes/</code> fragment exists for user-visible behavior; docs/test/ci/chore changes correctly omit one</td>
+<td>A user-visible change ships without a fragment, or <code>CHANGELOG.md</code> was edited directly</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-must-block-a-merge" data-src="docs/REVIEW.md:69:1-69:26">What must block a merge</h2>
+<p data-src="docs/REVIEW.md:71:1-71:146">Any of the following is enough to request changes. Do not approve until it is fixed or the issue brief is updated and the pull request matches it.</p>
+<ol data-src="docs/REVIEW.md:73:1-79:181">
+<li><strong><code>ci-ok</code> is red</strong>, or <code>npm run check</code> fails on the commit under review.</li>
+<li><strong>Scope breach</strong>: work outside the issue brief, a second issue bundled in, or a "Do not" violation.</li>
+<li><strong>Layer or trust breach</strong>: wrong layer ownership, scan/network/exec trust rule broken, or a public-contract break without a decision record.</li>
+<li><strong>Missing or fake proof</strong>: behavior changed with no failing-first test, or tests that only exercise mocks/internals while the product path stays unasserted.</li>
+<li><strong>Dishonest or stale docs</strong>: overclaimed lifecycle status, undocumented user-visible change, hand-edited generated files, or a missing changelog fragment for user-visible behavior.</li>
+<li><strong>New debt against <a href="QUALITY.md">QUALITY.md</a></strong>: allowlist raised or extended to make the change pass, new <code>any</code> / <code>@ts-ignore</code>, or a file/function over the ceilings without an existing allowlist entry that this change is not allowed to add.</li>
+<li><strong>Unsafe dependency</strong>: a new runtime dependency or GitHub Action that Offing would report as end-of-life, deprecated, or retired, or one added with no reason in the pull request.</li>
+</ol>
+<p data-src="docs/REVIEW.md:81:1-81:162">Nits (wording, optional renames, style that already matches surrounding code) must not block a merge. Ask for them in a follow-up issue when they are worth doing.</p>
+<h2 id="adjusting-the-rubric" data-src="docs/REVIEW.md:83:1-83:23">Adjusting the rubric</h2>
+<p data-src="docs/REVIEW.md:85:1-85:345">This rubric is a living checklist. After it has been applied to <strong>ten</strong> agent pull requests, update this page from what those reviews showed: drop checks CI now covers, sharpen checks that caught real defects, and add checks that reviewers had to invent ad hoc. Record the pass in the table below so the adjustment is evidence-backed, not vibes.</p>
+<table data-src="docs/REVIEW.md:87:1-98:12">
+<thead>
+<tr>
+<th>#</th>
+<th>Pull request</th>
+<th>What the rubric caught or missed</th>
+<th>Rubric change (if any)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/REVIEW.md:100:1-100:141">When row 10 is filled, open a follow-up pull request that edits this page from the notes and clears or replaces the table for the next round.</p></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/REVIEW.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/REVIEW.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/REVIEW.md:5. Current text: &quot;Review rubric for agent pull requests&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Review%20rubric%20for%20agent%20pull%20requests&amp;body=Page%3A%20%2Foffing%2FREVIEW%2F%0ASource%3A%20docs%2FREVIEW.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/REVIEW/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/REVIEW/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/REVIEW/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/REVIEW/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FREVIEW%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FREVIEW%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FREVIEW%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#how-to-use">How to use</a></li><li><a href="#beyond-ci">Beyond CI</a><ul><li><a href="#1-scope">1. Scope</a></li><li><a href="#2-correct-layer">2. Correct layer</a></li><li><a href="#3-real-tests">3. Real tests</a></li><li><a href="#4-honest-docs">4. Honest docs</a></li></ul></li><li><a href="#what-must-block-a-merge">What must block a merge</a></li><li><a href="#adjusting-the-rubric">Adjusting the rubric</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#how-to-use">How to use</a></li><li><a href="#beyond-ci">Beyond CI</a></li><li><a href="#1-scope">1. Scope</a></li><li><a href="#2-correct-layer">2. Correct layer</a></li><li><a href="#3-real-tests">3. Real tests</a></li><li><a href="#4-honest-docs">4. Honest docs</a></li><li><a href="#what-must-block-a-merge">What must block a merge</a></li><li><a href="#adjusting-the-rubric">Adjusting the rubric</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

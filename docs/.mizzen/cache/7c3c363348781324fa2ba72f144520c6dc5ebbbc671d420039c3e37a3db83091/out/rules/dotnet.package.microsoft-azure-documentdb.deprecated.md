@@ -1,0 +1,147 @@
+
+# Microsoft.Azure.DocumentDB is deprecated on NuGet
+
+**Deprecated** as of 2023-03-31. Replacement: Microsoft.Azure.Cosmos. Source: [Microsoft.Azure.DocumentDB on NuGet (deprecation metadata)](https://www.nuget.org/packages/Microsoft.Azure.DocumentDB).
+
+Check a version:
+
+```bash
+offing check pkg:nuget/Microsoft.Azure.DocumentDB
+```
+
+NuGet marks all 36 listed versions of Microsoft.Azure.DocumentDB as deprecated (reason: Legacy). The publisher's message: "Please note, this package is obsolete as of 3/31/2023 and is no longer maintained or monitored. Microsoft encourages you to upgrade to the replacement package, Microsoft.Azure.Cosmos, to continue receiving updates. Refer to our deprecation policy (https://aka.ms/azsdk/support-policies) for more details."
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `dotnet` |
+| Component | `pkg:nuget/Microsoft.Azure.DocumentDB` |
+| Affected versions | `vers:nuget/*` |
+| Date from the source | 2023-03-31 |
+| Replacement | Microsoft.Azure.Cosmos |
+| Evidence last seen | 2026-10-19 |
+| Reviewed | 2026-10-19 by arminazimi, drafted by the `dotnet-2` importer |
+| Review due | 2027-01-17 (90 days after the last review) |
+| Rule ID | `dotnet.package.microsoft-azure-documentdb.deprecated` |
+
+## Sources
+
+- [Microsoft.Azure.DocumentDB on NuGet (deprecation metadata)](https://www.nuget.org/packages/Microsoft.Azure.DocumentDB) (accessed 2026-10-19)
+- [NuGet package deprecation](https://learn.microsoft.com/nuget/nuget-org/deprecate-packages) (accessed 2026-10-19)
+
+## Migration
+
+**Constraints**
+
+- Keep the account, database, and container names and the stored documents the same; only the client library changes.
+- The Cosmos DB v3 SDK names collections "containers" and replaces DocumentClient with CosmosClient; check queries and partition key handling after the move.
+
+**Steps**
+
+1. **Move to Microsoft.Azure.Cosmos.** Replace Microsoft.Azure.DocumentDB with Microsoft.Azure.Cosmos and update DocumentClient code to CosmosClient, Database, and Container.
+
+**Verification**
+
+- `dotnet build && dotnet test`: Build and test after the client library change.
+
+## Detected by
+
+The `dotnet` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [Microsoft.Azure.ServiceBus is deprecated on NuGet](dotnet.package.microsoft-azure-servicebus.deprecated.html)
+- [Microsoft.Azure.Storage.Blob is deprecated on NuGet](dotnet.package.microsoft-azure-storage-blob.deprecated.html)
+- [WindowsAzure.Storage is deprecated on NuGet](dotnet.package.windowsazure-storage.deprecated.html)
+- [.NET Core 1.0 is no longer supported](dotnet.runtime.end-of-support-1.0.html)
+- [.NET Core 1.1 is no longer supported](dotnet.runtime.end-of-support-1.1.html)
+- [.NET Core 2.0 is no longer supported](dotnet.runtime.end-of-support-2.0.html)
+- [.NET Core 2.1 is no longer supported](dotnet.runtime.end-of-support-2.1.html)
+- [.NET Core 2.2 is no longer supported](dotnet.runtime.end-of-support-2.2.html)
+
+
+## Data
+
+This page is generated from [`registry/dotnet.json`](https://github.com/velella-sh/offing/blob/main/registry/dotnet.json), rule `dotnet.package.microsoft-azure-documentdb.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/dotnet.package.microsoft-azure-documentdb.deprecated.html",
+      "url": "https://velella.sh/offing/rules/dotnet.package.microsoft-azure-documentdb.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/dotnet.package.microsoft-azure-documentdb.deprecated.html",
+      "headline": "Microsoft.Azure.DocumentDB is deprecated on NuGet — dates, impact, migration",
+      "description": "NuGet marks all 36 listed versions of Microsoft.Azure.DocumentDB as deprecated (reason: Legacy).",
+      "inLanguage": "en",
+      "dateModified": "2026-10-19",
+      "keywords": [
+        "deprecated",
+        "dotnet",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "Microsoft.Azure.DocumentDB is deprecated on NuGet",
+        "identifier": "pkg:nuget/Microsoft.Azure.DocumentDB"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Microsoft.Azure.DocumentDB on NuGet (deprecation metadata)",
+          "url": "https://www.nuget.org/packages/Microsoft.Azure.DocumentDB"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "NuGet package deprecation",
+          "url": "https://learn.microsoft.com/nuget/nuget-org/deprecate-packages"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/dotnet.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/dotnet.package.microsoft-azure-documentdb.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/dotnet.package.microsoft-azure-documentdb.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:nuget/Microsoft.Azure.DocumentDB?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated as of 2023-03-31. Affected versions: vers:nuget/*. Source: Microsoft.Azure.DocumentDB on NuGet (deprecation metadata) (https://www.nuget.org/packages/Microsoft.Azure.DocumentDB)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:nuget/Microsoft.Azure.DocumentDB?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Microsoft.Azure.Cosmos"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:nuget/Microsoft.Azure.DocumentDB?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:nuget/Microsoft.Azure.DocumentDB."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

@@ -1,0 +1,160 @@
+
+# Azure Database for MySQL 5.7 is past standard support
+
+**End of support** as of 2026-09-30. Replacement: MySQL 8.0 or later. Source: [Azure Database for MySQL version support policy](https://learn.microsoft.com/en-us/azure/mysql/concepts-version-policy).
+
+Check a version:
+
+```bash
+offing check pkg:generic/azure-database-mysql
+```
+
+The Azure Database for MySQL version support policy lists 2026-09-30 as the standard support end date for MySQL 5.7. Azure moves the server to paid Extended Support on 2026-10-01; the MySQL community retired 5.7 on 2023-10-31. The mysql.com lifecycle page refuses automated requests (HTTP 403), so the community date is taken from the endoflife.date record for MySQL.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of support |
+| Severity | high |
+| Ecosystem | `database` |
+| Component | `pkg:generic/azure-database-mysql` |
+| Affected versions | `vers:semver/>=5.7.0\|<5.8.0` |
+| Date from the source | 2026-09-30 |
+| Replacement | MySQL 8.0 or later |
+| Evidence last seen | 2026-11-07 |
+| Reviewed | 2026-11-07 by arminazimi |
+| Review due | 2027-02-05 (90 days after the last review) |
+| Rule ID | `database.azure-mysql.standard-support-ended-5.7` |
+
+## Sources
+
+- [Azure Database for MySQL version support policy](https://learn.microsoft.com/en-us/azure/mysql/concepts-version-policy) (accessed 2026-11-07)
+- [MySQL supported platforms and lifecycle](https://www.mysql.com/support/supportedplatforms/database.html) (accessed 2026-11-07)
+- [endoflife.date: MySQL](https://endoflife.date/mysql) (accessed 2026-11-07)
+
+## Migration
+
+**Constraints**
+
+- The version argument on azurerm_mysql_flexible_server and azurerm_mysql_server names the major version; changing it alone does not upgrade an existing server or its data.
+- Upgrade through Azure's managed operation or restore into a new server on the replacement version. A failed upgrade is not reversed by changing version back.
+- Azure Extended Support keeps MySQL 5.7 running after the standard support end date, but it is time-boxed and may be charged.
+
+**Steps**
+
+1. **Back up the server.** Take a verified backup or point-in-time restore point of every Azure Database for MySQL server reported, before changing its version.
+2. **Upgrade the server to a supported version.** Upgrade the server to MySQL 8.0 or later through Azure's managed upgrade, or restore the backup into a new flexible server on the replacement version and move the application connection string.
+3. **Raise the declared version.** Change version in every azurerm_mysql_flexible_server and azurerm_mysql_server block that runs this database, not only the reported line.
+4. **Check clients and authentication.** Update MySQL drivers, ORMs, and users that rely on mysql_native_password; MySQL 8.4 uses caching_sha2_password by default.
+
+**Verification**
+
+- `terraform validate`: Check that the Terraform configuration is valid with the new version argument.
+- `terraform plan`: Review the plan and confirm the version change is intended and is the only server change.
+- `az mysql flexible-server list --query "[].{name:name, version:version}"`: Confirm each reported flexible server now reports a supported MySQL version.
+- `docker compose config`: Confirm any local Compose service that mirrors this database is valid and uses a MySQL image tag that matches the replacement.
+
+## Detected by
+
+The `database` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [Aurora MySQL version 1 is past end of standard support](database.aws-aurora-mysql.end-of-support-5.6.html)
+- [Aurora MySQL version 2 is past end of standard support](database.aws-aurora-mysql.end-of-support-5.7.html)
+- [Aurora PostgreSQL 11 is past end of standard support](database.aws-aurora-postgresql.end-of-support-11.html)
+- [Aurora PostgreSQL 12 is past end of standard support](database.aws-aurora-postgresql.end-of-support-12.html)
+- [Aurora PostgreSQL 13 is past end of standard support](database.aws-aurora-postgresql.end-of-support-13.html)
+- [Aurora PostgreSQL 14 reaches end of standard support on 2027-02-28](database.aws-aurora-postgresql.scheduled-end-of-support-14.html)
+- [ElastiCache for Redis OSS 4 is past end of standard support](database.aws-elasticache-redis.end-of-support-4.html)
+- [ElastiCache for Redis OSS 5 is past end of standard support](database.aws-elasticache-redis.end-of-support-5.html)
+
+
+## Data
+
+This page is generated from [`registry/database.json`](https://github.com/velella-sh/offing/blob/main/registry/database.json), rule `database.azure-mysql.standard-support-ended-5.7`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/database.azure-mysql.standard-support-ended-5.7.html",
+      "url": "https://velella.sh/offing/rules/database.azure-mysql.standard-support-ended-5.7.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/database.azure-mysql.standard-support-ended-5.7.html",
+      "headline": "Azure Database for MySQL 5.7 is past standard support — dates, impact, migration",
+      "description": "The Azure Database for MySQL version support policy lists 2026-09-30 as the standard support end date for MySQL 5.7.",
+      "inLanguage": "en",
+      "dateModified": "2026-11-07",
+      "keywords": [
+        "end-of-support",
+        "database",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "Azure Database for MySQL 5.7 is past standard support",
+        "identifier": "pkg:generic/azure-database-mysql"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Azure Database for MySQL version support policy",
+          "url": "https://learn.microsoft.com/en-us/azure/mysql/concepts-version-policy"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "MySQL supported platforms and lifecycle",
+          "url": "https://www.mysql.com/support/supportedplatforms/database.html"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "endoflife.date: MySQL",
+          "url": "https://endoflife.date/mysql"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/database.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/database.azure-mysql.standard-support-ended-5.7.html#faq",
+      "url": "https://velella.sh/offing/rules/database.azure-mysql.standard-support-ended-5.7.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/azure-database-mysql?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of support as of 2026-09-30. Affected versions: vers:semver/>=5.7.0|\u003c5.8.0. Source: Azure Database for MySQL version support policy (https://learn.microsoft.com/en-us/azure/mysql/concepts-version-policy)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/azure-database-mysql?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "MySQL 8.0 or later"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/azure-database-mysql?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/azure-database-mysql."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

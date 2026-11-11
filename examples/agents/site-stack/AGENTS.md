@@ -1,6 +1,6 @@
-# Slipway site stack (Offing + Seaworthy)
+# Slipway site stack (Offing)
 
-You are editing a Jekyll site that builds for GitHub Pages, often with the Slipway theme. Follow this loop so lifecycle checks and site verification stay separate.
+You are editing a Jekyll site that builds for GitHub Pages, often with the Slipway theme. Follow this loop so dependency lifecycle is checked before it lands.
 
 ## Before adding a dependency
 
@@ -33,16 +33,3 @@ npx @velella/offing scan . --fail-on high
 ```
 
 Fix or escalate any `high` or `critical` finding you introduced. Respect `.offing.json` ignore paths (`_site/`, `vendor/`, and similar generated output).
-
-## After the site builds
-
-When `_site/` exists from a local or CI build, verify it with Seaworthy:
-
-```bash
-# Pending Seaworthy's first npm release — not installable yet.
-seaworthy verify ./_site
-```
-
-Seaworthy is pre-alpha and not on npm today. Document the intent; do not treat a missing CLI as a task failure until the project publishes an install path.
-
-Trust Offing for **dependency lifecycle**. Trust Seaworthy (once released) for **built-site** link and readability checks. Do not substitute one for the other.

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Code style</title><meta name="description" content="The naming and module layout conventions Offing follows, the check that enforces each one, and the few rules kept for review."/><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/CODE_STYLE/index.md"}},{"id":"section-files-and-directories","label":"Files and directories","hint":"Go to section","run":{"kind":"section","id":"files-and-directories"}},{"id":"section-naming","label":"Naming","hint":"Go to section","run":{"kind":"section","id":"naming"}},{"id":"section-imports-and-exports","label":"Imports and exports","hint":"Go to section","run":{"kind":"section","id":"imports-and-exports"}},{"id":"section-documentation","label":"Documentation","hint":"Go to section","run":{"kind":"section","id":"documentation"}},{"id":"section-module-boundaries","label":"Module boundaries","hint":"Go to section","run":{"kind":"section","id":"module-boundaries"}},{"id":"section-when-a-convention-does-not-fit","label":"When a convention does not fit","hint":"Go to section","run":{"kind":"section","id":"when-a-convention-does-not-fit"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="4"><span class="reading-time-minutes">4 minutes read</span></p><div class="doc-body"><h1 id="code-style" data-src="docs/CODE_STYLE.md:6:1-6:12">Code style</h1>
+<p data-src="docs/CODE_STYLE.md:8:1-10:106">This page records the naming and module layout conventions the code already follows. Each convention is either
+enforced by <code>npm run check</code> (a lint rule in <a href="../eslint.config.js"><code>eslint.config.js</code></a> or the quality checker in
+<a href="../tools/check-quality.ts"><code>tools/check-quality.ts</code></a>) or marked <strong>review</strong> for the pull request reviewer.</p>
+<p data-src="docs/CODE_STYLE.md:12:1-13:106">Formatting is not listed here. Biome decides whitespace, quotes, line width, and import layout in
+<a href="../biome.json"><code>biome.json</code></a>; the tool choice is <a href="decisions/0025-linter-and-formatter.md">Decision 0025</a>.</p>
+<p data-src="docs/CODE_STYLE.md:15:1-16:79"><code>npm run lint</code> reads <code>src/**/*.ts</code> and <code>tools/**/*.ts</code>. Tests, benchmarks, and examples follow the same conventions
+by <strong>review</strong>; the lint patterns widen when a rule can land without a baseline.</p>
+<h2 id="files-and-directories" data-src="docs/CODE_STYLE.md:18:1-18:24">Files and directories</h2>
+<table data-src="docs/CODE_STYLE.md:20:1-28:205">
+<thead>
+<tr>
+<th>Convention</th>
+<th>Name</th>
+<th>Enforcement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source and tool files are lowercase kebab-case: words separated by one hyphen. <code>source-usage.ts</code>, <code>check-quality.ts</code>.</td>
+<td><code>local/kebab-case-filename</code></td>
+<td>lint config</td>
+</tr>
+<tr>
+<td>A capability module is named after the capability ID it implements: lowercase segments separated by dots. Only <code>src/capabilities/capabilities/</code> and <code>src/capabilities/surfaces/</code> use dotted names. <code>deprecation.list.ts</code>, <code>ci.github-actions.ts</code>.</td>
+<td><code>local/kebab-case-filename</code> exception</td>
+<td>lint config</td>
+</tr>
+<tr>
+<td>Generated files keep their generated name and are regenerated, never renamed by hand. <code>index.generated.ts</code>.</td>
+<td>generation check</td>
+<td><code>npm run check</code></td>
+</tr>
+<tr>
+<td>A subsystem that owns several modules is a directory under <code>src/</code>: <code>src/detectors/&#x3C;ecosystem>/</code>, <code>src/fix/codemods/</code>, <code>src/vers/</code>. A single-purpose module stays a file at the level where it is used.</td>
+<td>—</td>
+<td>review</td>
+</tr>
+<tr>
+<td>A subsystem directory groups files that do the same job. When it publishes a combined surface, that surface is <code>index.ts</code> (<code>src/detectors/index.ts</code>, <code>src/fix/index.ts</code>); otherwise callers import the exact module they need.</td>
+<td>—</td>
+<td>review</td>
+</tr>
+<tr>
+<td>One responsibility per module: the file name states what the module does (one detector, fixer, command, or reporter), and supporting helpers stay in the module or in a sibling parser file.</td>
+<td>—</td>
+<td>review</td>
+</tr>
+<tr>
+<td>Tests live under <code>tests/</code>, named <code>&#x3C;area>.test.ts</code> after the module or behavior they cover. Fixtures live beside the test (<code>tests/fixtures/</code>) and are data, never executable repository code.</td>
+<td>—</td>
+<td>review</td>
+</tr>
+</tbody>
+</table>
+<h2 id="naming" data-src="docs/CODE_STYLE.md:30:1-30:9">Naming</h2>
+<table data-src="docs/CODE_STYLE.md:32:1-39:113">
+<thead>
+<tr>
+<th>Kind</th>
+<th>Convention</th>
+<th>Enforcement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Types, interfaces, classes, type parameters</td>
+<td>PascalCase. <code>ScanResult</code>, <code>HostAdapter</code>, <code>T</code>.</td>
+<td><code>@typescript-eslint/naming-convention</code> (<code>typeLike</code>)</td>
+</tr>
+<tr>
+<td>Functions, methods, parameters, local variables</td>
+<td>camelCase. A leading underscore is allowed only for an intentionally unused parameter or local.</td>
+<td><code>@typescript-eslint/naming-convention</code></td>
+</tr>
+<tr>
+<td>Module-level constant holding a fixed value</td>
+<td>UPPER_CASE. <code>ALLOWLIST_PATH</code>, <code>CHECK_TIMING_MARKER</code>.</td>
+<td>partly: the rule allows camelCase or UPPER_CASE for variables; choosing between them is <strong>review</strong></td>
+</tr>
+<tr>
+<td>Exported singleton objects, schemas, arrays, and factories</td>
+<td>camelCase, because the value is a thing or a function, not a literal constant. <code>builtInDetectors</code>, <code>capabilityManifestSchema</code>.</td>
+<td><code>@typescript-eslint/naming-convention</code>; the distinction from a fixed constant is <strong>review</strong></td>
+</tr>
+<tr>
+<td>Names taken from an external document</td>
+<td>Keep the document's spelling. MCP tool inputs (<code>finding_id</code>), GitHub API responses (<code>tag_name</code>), and SPDX and CycloneDX fields are not renamed at the boundary.</td>
+<td>not checked for type properties, object literal properties, and destructured names; otherwise <strong>review</strong></td>
+</tr>
+<tr>
+<td>Imported bindings</td>
+<td>Keep the exported name. Rename only to avoid a collision or a reserved word.</td>
+<td><strong>review</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="imports-and-exports" data-src="docs/CODE_STYLE.md:41:1-41:22">Imports and exports</h2>
+<table data-src="docs/CODE_STYLE.md:43:1-49:244">
+<thead>
+<tr>
+<th>Convention</th>
+<th>Enforcement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Node.js built-in modules use the <code>node:</code> prefix: <code>node:fs</code>, <code>node:path</code>, <code>node:test</code>.</td>
+<td><code>local/node-protocol-imports</code></td>
+</tr>
+<tr>
+<td>Relative imports name the compiled file and end in <code>.js</code>: <code>./domain.js</code>.</td>
+<td>TypeScript build (<code>NodeNext</code>)</td>
+</tr>
+<tr>
+<td>Modules use named exports. Capability modules under <code>src/capabilities/</code> are the only default exports, because the capability registry imports them by ID.</td>
+<td><code>no-restricted-syntax</code></td>
+</tr>
+<tr>
+<td>A type-only import uses <code>import type</code> when every binding is a type, and an inline <code>type</code> specifier when a statement mixes values and types.</td>
+<td><strong>review</strong></td>
+</tr>
+<tr>
+<td>The package surface is exactly the entry points in <code>package.json</code> (<code>src/index.ts</code>, <code>src/sdk.ts</code>, <code>src/conformance/index.ts</code>, <code>src/mcp.ts</code>). Do not add an entry point without a decision record.</td>
+<td><strong>review</strong>; <code>exports</code> changes need a decision</td>
+</tr>
+</tbody>
+</table>
+<h2 id="documentation" data-src="docs/CODE_STYLE.md:51:1-51:16">Documentation</h2>
+<table data-src="docs/CODE_STYLE.md:53:1-55:280">
+<thead>
+<tr>
+<th>Convention</th>
+<th>Enforcement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Every symbol exported from the package entry points has a doc comment on its declaration. It states what the symbol does or represents; it does not repeat the name. The comment stays on the declaration even when the entry point re-exports the symbol.</td>
+<td><code>local/public-api-docs</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/CODE_STYLE.md:57:1-58:79">The rule reads the entry points from <code>package.json</code> <code>exports</code>, follows direct exports and re-exports, and checks the
+declarations they reach. It does not require a doc comment on internal exports.</p>
+<h2 id="module-boundaries" data-src="docs/CODE_STYLE.md:60:1-60:20">Module boundaries</h2>
+<p data-src="docs/CODE_STYLE.md:62:1-65:47">The layer, trust, and network rules are in <a href="ARCHITECTURE.md#trust-boundaries">Architecture</a> and
+<a href="../AGENTS.md#architecture-boundaries">AGENTS.md</a>. <code>npm run check:quality</code> enforces the mechanical half: the engine
+does not import built-in detectors, detectors never import the network, and adapters do not import detectors. The
+"owns one job" half of each rule is <strong>review</strong>.</p>
+<h2 id="when-a-convention-does-not-fit" data-src="docs/CODE_STYLE.md:67:1-67:33">When a convention does not fit</h2>
+<p data-src="docs/CODE_STYLE.md:69:1-69:71">A one-off exception is a scoped comment naming the rule and the reason:</p>
+<pre class="code" tabindex="0" data-lang="ts" data-src="docs/CODE_STYLE.md:71:1-73:3"><code><span class="line"><span style="--shiki-light:#5F687C;--shiki-dark:#96938E">// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- parsing an untrusted response body</span></span></code></pre>
+<p data-src="docs/CODE_STYLE.md:75:1-76:96">Do not widen a convention in this page to make one file pass, and do not add a blanket disable. An exception that
+recurs belongs in the rule, the checker, or a follow-up issue, not in an unrelated pull request.</p></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/CODE_STYLE.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/CODE_STYLE.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/CODE_STYLE.md:5. Current text: &quot;Code style&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Code%20style&amp;body=Page%3A%20%2Foffing%2FCODE_STYLE%2F%0ASource%3A%20docs%2FCODE_STYLE.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/CODE_STYLE/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/CODE_STYLE/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/CODE_STYLE/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/CODE_STYLE/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FCODE_STYLE%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FCODE_STYLE%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FCODE_STYLE%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#files-and-directories">Files and directories</a></li><li><a href="#naming">Naming</a></li><li><a href="#imports-and-exports">Imports and exports</a></li><li><a href="#documentation">Documentation</a></li><li><a href="#module-boundaries">Module boundaries</a></li><li><a href="#when-a-convention-does-not-fit">When a convention does not fit</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#files-and-directories">Files and directories</a></li><li><a href="#naming">Naming</a></li><li><a href="#imports-and-exports">Imports and exports</a></li><li><a href="#documentation">Documentation</a></li><li><a href="#module-boundaries">Module boundaries</a></li><li><a href="#when-a-convention-does-not-fit">When a convention does not fit</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

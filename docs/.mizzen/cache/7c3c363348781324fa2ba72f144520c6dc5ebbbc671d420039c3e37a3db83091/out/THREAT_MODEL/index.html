@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Threat model</title><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/THREAT_MODEL/index.md"}},{"id":"section-scope-and-assumptions","label":"Scope and assumptions","hint":"Go to section","run":{"kind":"section","id":"scope-and-assumptions"}},{"id":"section-trust-boundaries","label":"Trust boundaries","hint":"Go to section","run":{"kind":"section","id":"trust-boundaries"}},{"id":"section-untrusted-repositories","label":"Untrusted repositories","hint":"Go to section","run":{"kind":"section","id":"untrusted-repositories"}},{"id":"section-data-bundles","label":"Data bundles","hint":"Go to section","run":{"kind":"section","id":"data-bundles"}},{"id":"section-release-verification","label":"Release verification","hint":"Go to section","run":{"kind":"section","id":"release-verification"}},{"id":"section-mcp-server","label":"MCP server","hint":"Go to section","run":{"kind":"section","id":"mcp-server"}},{"id":"section-hooks-and-guardrails","label":"Hooks and guardrails","hint":"Go to section","run":{"kind":"section","id":"hooks-and-guardrails"}},{"id":"section-network-reach","label":"Network reach","hint":"Go to section","run":{"kind":"section","id":"network-reach"}},{"id":"section-reviewing-this-model","label":"Reviewing this model","hint":"Go to section","run":{"kind":"section","id":"reviewing-this-model"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="11"><span class="reading-time-minutes">11 minutes read</span></p><div class="doc-body"><h1 id="threat-model" data-src="docs/THREAT_MODEL.md:5:1-5:14">Threat model</h1>
+<p data-src="docs/THREAT_MODEL.md:7:1-7:400">Offing reads code it did not write, loads data it did not build at the same time as the code, and gives answers to tools that can edit and install. This page records what v1 trusts, the threats each surface faces, what mitigates them, and what remains. <a href="PRIVACY.md">Privacy</a> lists the exact capabilities of every command; <a href="DATA.md">Lifecycle data</a> explains bundle signatures. This page connects them.</p>
+<h2 id="scope-and-assumptions" data-src="docs/THREAT_MODEL.md:9:1-9:24">Scope and assumptions</h2>
+<p data-src="docs/THREAT_MODEL.md:11:1-11:143">In scope: the CLI scan path, the GitHub Action and GitLab component, lifecycle data bundles, the local MCP server, and the Git and agent hooks.</p>
+<p data-src="docs/THREAT_MODEL.md:13:1-13:376">Out of scope: compromise of the operating system or the user's account, vulnerabilities in npm packages Offing depends on (listed with their reasons in <a href="DEPENDENCIES.md">Runtime dependencies</a>), the correctness of the Sigstore and GitHub infrastructure, and what an AI host does with the answers it receives. Report Offing vulnerabilities through <a href="../SECURITY.md">SECURITY.md</a>.</p>
+<p data-src="docs/THREAT_MODEL.md:15:1-15:12">Assumptions:</p>
+<ul data-src="docs/THREAT_MODEL.md:17:1-21:126">
+<li><strong>Repository contents are untrusted.</strong> A repository may be hostile and may be written to make a scan look clean.</li>
+<li><strong>The machine and the user are trusted.</strong> The person running Offing can already read the files it reads and run the commands it runs.</li>
+<li><strong>The agent is semi-trusted.</strong> A coding agent using the MCP server can be manipulated by content it reads, including repository text that Offing returns.</li>
+<li><strong>Verified data is authentic, not necessarily correct.</strong> A signature proves which workflow published a rule, not that the claim is true.</li>
+<li><strong>Hooks are guardrails, not boundaries.</strong> Everything they add can be bypassed by the user and by commands they do not parse.</li>
+</ul>
+<h2 id="trust-boundaries" data-src="docs/THREAT_MODEL.md:23:1-23:19">Trust boundaries</h2>
+<table data-src="docs/THREAT_MODEL.md:25:1-31:126">
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+<th>What crosses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Repository</td>
+<td>Detectors and source analysis</td>
+<td>File contents, parsed as data only</td>
+</tr>
+<tr>
+<td>Signed release</td>
+<td>Registry and scan engine</td>
+<td>Declarative rules, after verification</td>
+</tr>
+<tr>
+<td>Scan engine</td>
+<td>CLI output and MCP host</td>
+<td>Findings, file paths, short source excerpts</td>
+</tr>
+<tr>
+<td>Hook</td>
+<td>Package manager, Git, agent</td>
+<td>A denial, or the user's command after a passing check</td>
+</tr>
+<tr>
+<td>Offing</td>
+<td>Network</td>
+<td>Only <code>data update</code>, a first <code>npx</code> fetch, a configured PR comment, and the package manager's own traffic</td>
+</tr>
+</tbody>
+</table>
+<h2 id="untrusted-repositories" data-src="docs/THREAT_MODEL.md:33:1-33:25">Untrusted repositories</h2>
+<p data-src="docs/THREAT_MODEL.md:35:1-35:260">This surface covers <code>scan</code>, <code>explain</code>, <code>context</code>, <code>diff</code>, the GitHub Action, and the GitLab component. Detectors parse manifests, lockfiles, workflows, and source text; they never evaluate it, and the scan path never starts a child process or uses the network.</p>
+<table data-src="docs/THREAT_MODEL.md:37:1-44:457">
+<thead>
+<tr>
+<th>STRIDE</th>
+<th>Threat</th>
+<th>Mitigation</th>
+<th>Residual risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spoofing</td>
+<td>A repository supplies a status file or a modified baseline that hides its own findings from a reader or an agent.</td>
+<td>Findings always name the rule, the file, and the exact line; <code>OFFING_STATUS.md</code> is described as a snapshot; a baseline's suppressions are counted and reported; neither can change a rule.</td>
+<td>A committed status file can be stale or forged for a human reader, and a pull request can edit the CI baseline. Reviewers must review baseline changes and re-scan.</td>
+</tr>
+<tr>
+<td>Tampering</td>
+<td>Malformed, duplicate, or contradictory input makes a parser miss a declaration, crash the scan, or report a wrong location.</td>
+<td>Strict parsers; malformed input yields no declaration instead of a guess; unreadable directories are skipped; scans are deterministic.</td>
+<td>Detection is declaration-based. A repository can declare one runtime and use another, and an unsupported syntax can hide a usage until a detector learns it.</td>
+</tr>
+<tr>
+<td>Repudiation</td>
+<td>There is no record of what a scan saw.</td>
+<td>Not a logging product; CI keeps the JSON report, and an opt-in local usage log records <code>check</code> calls.</td>
+<td>A local scan leaves no audit trail by default.</td>
+</tr>
+<tr>
+<td>Information disclosure</td>
+<td>Findings embed file paths and source excerpts that appear in logs, pull request comments, or an agent's context.</td>
+<td>Reads stay local; the Action posts a comment only when asked; no Offing service receives results.</td>
+<td>Whatever reads the output, including a hosted agent, receives the excerpts and applies its own policy.</td>
+</tr>
+<tr>
+<td>Denial of service</td>
+<td>A huge file, deeply nested JSON, a symlink cycle, or a pathological source file stalls the scan.</td>
+<td>Per-file read caps of about 1 MB, JSON nesting capped at 64, symlinks not followed, unreadable paths skipped, bounded alias and depth budgets in source parsers.</td>
+<td>A very large tree still costs time and memory; there is no global wall-clock budget, and CI jobs have their own timeouts.</td>
+</tr>
+<tr>
+<td>Elevation of privilege</td>
+<td>Repository content achieves execution, or text in a file instructs the agent that reads the findings.</td>
+<td>Parsers never evaluate; no <code>eval</code>, no child process, no network in the scan path; the MCP prompt and migration packet name repository files as untrusted.</td>
+<td>Prompt injection is not preventable by the scanner: a comment, a file name, or a manifest string can try to steer the host. The host's permission model is the boundary.</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/THREAT_MODEL.md:46:1-46:199"><code>diff</code> is the one scan-path command that runs processes: it calls the local <code>git</code> and <code>tar</code> to materialize a revision in a temporary directory. They operate on Git objects, not on repository scripts.</p>
+<h2 id="data-bundles" data-src="docs/THREAT_MODEL.md:48:1-48:15">Data bundles</h2>
+<p data-src="docs/THREAT_MODEL.md:50:1-50:142">Lifecycle rules travel as one JSON bundle. The release workflow signs it with Sigstore keyless signing; Offing verifies it offline before use.</p>
+<table data-src="docs/THREAT_MODEL.md:52:1-59:315">
+<thead>
+<tr>
+<th>STRIDE</th>
+<th>Threat</th>
+<th>Mitigation</th>
+<th>Residual risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spoofing</td>
+<td>A forged bundle claims to carry Offing's rules.</td>
+<td>The signature must verify against the exact bytes; the signer must be the release workflow at a <code>data-v…</code> tag or <code>main</code>; chain, validity, and transparency-log inclusion are checked against a trusted root shipped in the package.</td>
+<td>The trusted root ages. If Sigstore rotates keys and the installed release is too old, new bundles stop verifying and Offing falls back to bundled data.</td>
+</tr>
+<tr>
+<td>Tampering</td>
+<td>A file in a valid bundle is altered, removed, or added.</td>
+<td>Every file has a SHA-256 and byte count, the manifest has a content digest, extra and missing files are refused, registry content is validated again, and the format version and minimum Offing version must match.</td>
+<td>A compromise of the release workflow or of a maintainer who can push a data tag would sign whatever was built. Rule review before <code>main</code> is the control there.</td>
+</tr>
+<tr>
+<td>Repudiation</td>
+<td>A bundle's publisher is disputed.</td>
+<td>The signing identity is recorded in the public transparency log and can be checked with <code>cosign</code>.</td>
+<td>Verification is recorded only in local status output.</td>
+</tr>
+<tr>
+<td>Information disclosure</td>
+<td>Updating data reveals what the user is doing.</td>
+<td><code>data update</code> requests the public release list, the bundle, and its signature; it sends no repository data and no identifier.</td>
+<td>The mirror and the network observe the download, as with any file fetch.</td>
+</tr>
+<tr>
+<td>Denial of service</td>
+<td>An oversized or hostile download exhausts memory or hangs.</td>
+<td>20 MB bundle, 1 MB signature, and 4 MB listing caps; 30-second request timeouts; a mirror can be configured but the same signature check still applies; failure falls back to bundled data.</td>
+<td>Repeated failed updates can be retried without limit by the user or a script.</td>
+</tr>
+<tr>
+<td>Elevation of privilege</td>
+<td>A bundle carries executable behavior.</td>
+<td>Bundles and registries are declarative JSON, validated before use; no rule field is executed.</td>
+<td>A correctly signed but wrong rule affects findings until the next data release. Bundles have no revocation list, and a pinned old bundle stays pinned.</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/THREAT_MODEL.md:61:1-61:238">The local calendar tool's <code>--bundle FILE</code> option reads a bundle the user names on the command line. It validates the registry schema but does not verify a signature, because the file is the user's own input, like any other path they pass.</p>
+<h2 id="release-verification" data-src="docs/THREAT_MODEL.md:63:1-63:23">Release verification</h2>
+<p data-src="docs/THREAT_MODEL.md:65:1-65:558"><code>offing verify</code> reads the release manifest shipped in the package and hashes every file the manifest lists; a changed, shortened, or missing file fails. When a Sigstore bundle for the manifest is present, it verifies offline against the trusted root bundled with the package. The command never uses the network, so it does not verify the npm registry signature or the npm provenance attestation: those are served by the registry, not shipped in the tarball. The report names <code>npm audit signatures</code> and <code>gh attestation verify</code> as the commands that check them.</p>
+<p data-src="docs/THREAT_MODEL.md:67:1-67:351">The residual risk is the unsigned case. A manifest with no signature detects an accidental or partial change, but an attacker who can rewrite every file can also rewrite the manifest and its digests. Authenticity rests on npm's registry signature and provenance attestation, which need the network, or on a future release that ships a signed manifest.</p>
+<h2 id="mcp-server" data-src="docs/THREAT_MODEL.md:69:1-69:13">MCP server</h2>
+<p data-src="docs/THREAT_MODEL.md:71:1-71:155">The server speaks MCP over stdio, is started by the host, and is one process per session. It advertises <code>tools</code>, <code>resources</code>, <code>prompts</code>, and <code>completions</code>.</p>
+<table data-src="docs/THREAT_MODEL.md:73:1-80:383">
+<thead>
+<tr>
+<th>STRIDE</th>
+<th>Threat</th>
+<th>Mitigation</th>
+<th>Residual risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spoofing</td>
+<td>A host starts a different server, or an unrelated local process claims to be Offing.</td>
+<td>There is no listener, port, account, or credential to impersonate; the host launches the process it configured, and the plugins pin an exact published version.</td>
+<td>A host that resolves an unpinned <code>npx</code> package trusts the registry and cache it resolves from.</td>
+</tr>
+<tr>
+<td>Tampering</td>
+<td>A tool changes the repository while "analyzing" it.</td>
+<td>Every tool is read-only, has no output, fix, or overwrite option, advertises <code>readOnlyHint: true</code>, and runs no command; session findings stay in memory; a test calls every tool and fails if the repository tree changes.</td>
+<td>The host still has its own write tools. Offing cannot stop an agent from editing after a scan.</td>
+</tr>
+<tr>
+<td>Repudiation</td>
+<td>Nobody can tell which packages an agent was warned about.</td>
+<td>An opt-in usage log appends package, result, severity, and rule IDs to a local file.</td>
+<td>Nothing is recorded by default, and the log can be edited or deleted by anyone who can read the file.</td>
+</tr>
+<tr>
+<td>Information disclosure</td>
+<td>Tool results carry repository paths and excerpts into a hosted model.</td>
+<td>No Offing-operated service receives results; the host's policy applies; <code>check_dependency</code> reads no repository.</td>
+<td>A prompt-injected agent can point <code>scan_repository</code> at any path the user can read — not only the project — and surface what it finds. The host's authorization prompt is the boundary.</td>
+</tr>
+<tr>
+<td>Denial of service</td>
+<td>An agent requests scans of very large or repeated trees.</td>
+<td>Per-file size caps and deterministic work per file.</td>
+<td>The server has no per-request time budget; the host must cancel or time out a call.</td>
+</tr>
+<tr>
+<td>Elevation of privilege</td>
+<td>A tool executes a suggested migration command.</td>
+<td><code>verify_migration</code> returns the project commands it suggests; no tool spawns a shell; the <code>migrate-finding</code> prompt states that repository files are untrusted and that commands run only under the host's authorization.</td>
+<td>The prompt is guidance. A host that auto-approves commands is outside Offing's control.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hooks-and-guardrails" data-src="docs/THREAT_MODEL.md:82:1-82:23">Hooks and guardrails</h2>
+<p data-src="docs/THREAT_MODEL.md:84:1-84:113">Four mechanisms try to catch a bad dependency at the moment it is added. Each is documented in <a href="HOOKS.md">Hooks</a>.</p>
+<table data-src="docs/THREAT_MODEL.md:86:1-91:151">
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>What it does</th>
+<th>Bypass and residual risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Git pre-push hook (<code>init --hooks</code>)</td>
+<td>Runs <code>scan . --fail-on &#x3C;severity></code> before a push and blocks at or above the gate. Offline, local rules only.</td>
+<td><code>git push --no-verify</code>, <code>OFFING_SKIP=1</code>, and deleting the hook. If Offing is missing or the scan errors, the push proceeds. It protects only pushes made from this clone.</td>
+</tr>
+<tr>
+<td>Claude Code <code>PreToolUse</code> hook</td>
+<td>Splits a top-level Bash command and checks package arguments of <code>npm</code>, <code>pnpm</code>, <code>yarn</code>, <code>pip</code>, and <code>uv</code> installs.</td>
+<td>It inspects only the top-level command: <code>bash -c</code>, shell functions, aliases, scripts, <code>npm install</code> with no arguments, and lockfile installs are not checked. A 60-second host timeout and per-package budget fail open. The first <code>npx</code> run may download the pinned package.</td>
+</tr>
+<tr>
+<td><code>guard</code> CLI</td>
+<td>Checks the npm packages named to <code>offing guard npm install …</code>, then runs exactly that command if none is refused.</td>
+<td><code>--force</code> overrides; arguments the parser does not understand, package scripts, and npm's own resolution and lifecycle scripts are outside the check. It checks lifecycle status, not malware.</td>
+</tr>
+<tr>
+<td>Cursor rules and Copilot instructions</td>
+<td>Tell the agent to call <code>check_dependency</code> before adding a package.</td>
+<td>Advisory only; nothing blocks an edit.</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/THREAT_MODEL.md:93:1-93:264">Common to all four: they read the same local rules, send nothing, and can be removed by the user. None is a security boundary against a determined person or a misbehaving agent, and none inspects transitive dependencies or the contents of the packages it approves.</p>
+<h2 id="network-reach" data-src="docs/THREAT_MODEL.md:95:1-95:16">Network reach</h2>
+<p data-src="docs/THREAT_MODEL.md:97:1-97:140">Scans use no network. The complete list of network activity in the published package is in <a href="PRIVACY.md#command-and-surface-access">Privacy</a>:</p>
+<ul data-src="docs/THREAT_MODEL.md:99:1-102:55">
+<li><code>data update</code>: the public release list, a signed bundle, and its signature.</li>
+<li>A first <code>npx</code> or package install of Offing itself, by the user, the plugin, or a hook.</li>
+<li>The GitHub Action's optional pull request comment, through the GitHub API.</li>
+<li>Whatever package manager a user runs through <code>guard</code>.</li>
+</ul>
+<p data-src="docs/THREAT_MODEL.md:104:1-104:101">Maintainer scripts under <code>tools/</code> are not part of the published CLI and are excluded from this model.</p>
+<h2 id="reviewing-this-model" data-src="docs/THREAT_MODEL.md:106:1-106:23">Reviewing this model</h2>
+<p data-src="docs/THREAT_MODEL.md:108:1-108:317">Update this page in the same pull request as any change to a trust boundary: a new tool that writes, a new network call, a new file format the scanner parses, a new hook, or a change to signature verification. A threat with no mitigation in the table is a bug or an accepted risk that should name its follow-up issue.</p></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/THREAT_MODEL.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/THREAT_MODEL.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/THREAT_MODEL.md:4. Current text: &quot;Threat model&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Threat%20model&amp;body=Page%3A%20%2Foffing%2FTHREAT_MODEL%2F%0ASource%3A%20docs%2FTHREAT_MODEL.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/THREAT_MODEL/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/THREAT_MODEL/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/THREAT_MODEL/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/THREAT_MODEL/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FTHREAT_MODEL%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FTHREAT_MODEL%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FTHREAT_MODEL%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#scope-and-assumptions">Scope and assumptions</a></li><li><a href="#trust-boundaries">Trust boundaries</a></li><li><a href="#untrusted-repositories">Untrusted repositories</a></li><li><a href="#data-bundles">Data bundles</a></li><li><a href="#release-verification">Release verification</a></li><li><a href="#mcp-server">MCP server</a></li><li><a href="#hooks-and-guardrails">Hooks and guardrails</a></li><li><a href="#network-reach">Network reach</a></li><li><a href="#reviewing-this-model">Reviewing this model</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#scope-and-assumptions">Scope and assumptions</a></li><li><a href="#trust-boundaries">Trust boundaries</a></li><li><a href="#untrusted-repositories">Untrusted repositories</a></li><li><a href="#data-bundles">Data bundles</a></li><li><a href="#release-verification">Release verification</a></li><li><a href="#mcp-server">MCP server</a></li><li><a href="#hooks-and-guardrails">Hooks and guardrails</a></li><li><a href="#network-reach">Network reach</a></li><li><a href="#reviewing-this-model">Reviewing this model</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

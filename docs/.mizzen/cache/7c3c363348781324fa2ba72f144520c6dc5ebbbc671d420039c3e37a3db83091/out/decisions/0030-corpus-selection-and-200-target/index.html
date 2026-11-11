@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>0030 — Select corpus repositories independently of results; target 200 per ecosystem</title><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/decisions/0030-corpus-selection-and-200-target/index.md"}},{"id":"section-problem","label":"Problem","hint":"Go to section","run":{"kind":"section","id":"problem"}},{"id":"section-decision","label":"Decision","hint":"Go to section","run":{"kind":"section","id":"decision"}},{"id":"section-1-freeze-eligibility-before-scanning","label":"1. Freeze eligibility before scanning","hint":"Go to section","run":{"kind":"section","id":"1-freeze-eligibility-before-scanning"}},{"id":"section-2-cover-all-23-ecosystem-buckets","label":"2. Cover all 23 ecosystem buckets","hint":"Go to section","run":{"kind":"section","id":"2-cover-all-23-ecosystem-buckets"}},{"id":"section-3-interpret-200-as-reviewed-projects-per-bucket","label":"3. Interpret 200 as reviewed projects per bucket","hint":"Go to section","run":{"kind":"section","id":"3-interpret-200-as-reviewed-projects-per-bucket"}},{"id":"section-4-publish-an-honest-shortfall","label":"4. Publish an honest shortfall","hint":"Go to section","run":{"kind":"section","id":"4-publish-an-honest-shortfall"}},{"id":"section-consequences","label":"Consequences","hint":"Go to section","run":{"kind":"section","id":"consequences"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="7"><span class="reading-time-minutes">7 minutes read</span></p><div class="doc-body"><h1 id="0030--select-corpus-repositories-independently-of-results-target-200-per-ecosystem" data-src="docs/decisions/0030-corpus-selection-and-200-target.md:1:1-1:86">0030 — Select corpus repositories independently of results; target 200 per ecosystem</h1>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:3:1-3:81">Status: proposed; accepted when the maintainer merges the pull request for #2116.</p>
+<h2 id="problem" data-src="docs/decisions/0030-corpus-selection-and-200-target.md:5:1-5:10">Problem</h2>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:7:1-9:105">The corpus-tooling epic (#1993) targets 200 repositories per ecosystem, but earlier batches used different
+activity windows, size limits, and version-specific searches. Without a common rule, growth can favor familiar
+stacks or repositories Offing already handles well. A small ecosystem may not have 200 eligible projects.</p>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:11:1-13:59">This record defines selection policy for future growth. It does not relabel historical batches described in
+<a href="../validation/corpus.md">Validation corpus</a>, implement discovery or labeling, or change detector maturity
+requirements in <a href="0013-detector-maturity.md">decision 0013</a>.</p>
+<h2 id="decision" data-src="docs/decisions/0030-corpus-selection-and-200-target.md:15:1-15:11">Decision</h2>
+<h3 id="1-freeze-eligibility-before-scanning" data-src="docs/decisions/0030-corpus-selection-and-200-target.md:17:1-17:41">1. Freeze eligibility before scanning</h3>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:19:1-21:83">For each batch, commit the discovery date (UTC), queries, filters, ordered candidate list, selected repositories,
+skip reasons, and default-branch commit SHAs before running Offing on the selections. Preserve the search
+snapshot because live rankings change. Apply these rules equally to all ecosystems:</p>
+<table data-src="docs/decisions/0030-corpus-selection-and-200-target.md:23:1-29:249">
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Rule for new blind selections</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public and independent</td>
+<td>Public, not archived, not a fork or mirror. Count one upstream project once; renamed repositories and duplicate pins are not new projects. No minimum stars, downloads, or organization membership.</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>The default branch has a commit within the 24 calendar months ending on the recorded discovery date. Check the commit date, not issue activity or the repository's general update timestamp. Freeze this cutoff for the batch.</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>GitHub's reported repository size is at most 50,000 KB, following earlier corpus batches. Record the value at discovery; sparse checkout does not exempt an oversized repository.</td>
+</tr>
+<tr>
+<td>License</td>
+<td>A license file at the selected commit grants use under an identified OSI-approved open-source license. Record its path and SPDX identifier; for multiple licenses, identify the one covering the inspected files. Missing, ambiguous, or incompatible coverage is a recorded skip pending human review, never assumed permission.</td>
+</tr>
+<tr>
+<td>Ecosystem evidence</td>
+<td>The pinned tree contains at least one input form the ecosystem's detector documents reading. Inspect files as text only. A matching language tag alone is insufficient; no particular dependency version or finding is required.</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:31:1-34:22">Fetches belong to the separate corpus tooling. Scans remain offline; never install, build, execute repository
+code, run its scripts or tools, or evaluate its configuration to decide eligibility or labels. Store metadata,
+paths, line numbers, and minimal evidence quotations, not vendored repository contents; retain license notices
+when quoting evidence.</p>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:36:1-39:94">Existing pins remain reproducible historical regression evidence even if the project later becomes inactive,
+archived, or too large. Do not silently repin or retroactively call an old selection blind. Historical migration
+examples that do not meet the new blind-selection rules may be retained as explicitly targeted evidence, with
+their original selection rationale, and reported separately from eligible progress toward 200.</p>
+<h3 id="2-cover-all-23-ecosystem-buckets" data-src="docs/decisions/0030-corpus-selection-and-200-target.md:41:1-41:37">2. Cover all 23 ecosystem buckets</h3>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:43:1-45:94">Use the existing corpus bucket names, including <code>node</code> for npm/Node.js and <code>node-actions</code> for GitHub Actions.
+The following table is the scope, including the three buckets with no entries at the time of this decision.
+The examples guide diversity; the detector documentation owns the exact supported input forms.</p>
+<table data-src="docs/decisions/0030-corpus-selection-and-200-target.md:47:1-71:72">
+<thead>
+<tr>
+<th>Bucket</th>
+<th>Stack or input variety to seek</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>android</code></td>
+<td>Java and Kotlin; Groovy and Kotlin Gradle builds</td>
+</tr>
+<tr>
+<td><code>ci-images</code></td>
+<td>Azure Pipelines and GitHub Actions runner declarations</td>
+</tr>
+<tr>
+<td><code>container</code></td>
+<td>Dockerfiles and Compose; single-stage and multi-stage images</td>
+</tr>
+<tr>
+<td><code>cpp</code></td>
+<td>C and C++; CMake and supported dependency manifests</td>
+</tr>
+<tr>
+<td><code>dart</code></td>
+<td>Dart packages and Flutter applications</td>
+</tr>
+<tr>
+<td><code>database</code></td>
+<td>Compose and Terraform; different database engines and cloud providers</td>
+</tr>
+<tr>
+<td><code>deno</code></td>
+<td>Deno and Bun; runtime configuration and version files</td>
+</tr>
+<tr>
+<td><code>dotnet</code></td>
+<td>C#, F#, and Visual Basic projects; project and SDK declarations</td>
+</tr>
+<tr>
+<td><code>elixir</code></td>
+<td>Elixir and Erlang/OTP; Mix manifests, locks, and tool versions</td>
+</tr>
+<tr>
+<td><code>go</code></td>
+<td>Libraries and services; modules and toolchain declarations</td>
+</tr>
+<tr>
+<td><code>java</code></td>
+<td>Java and Kotlin; Maven, Gradle, and JDK version files</td>
+</tr>
+<tr>
+<td><code>kubernetes</code></td>
+<td>Plain manifests, Helm charts, and kustomizations</td>
+</tr>
+<tr>
+<td><code>node</code></td>
+<td>JavaScript and TypeScript; applications and libraries; different package managers</td>
+</tr>
+<tr>
+<td><code>node-actions</code></td>
+<td>Different host languages; reusable and ordinary workflows</td>
+</tr>
+<tr>
+<td><code>php</code></td>
+<td>Framework applications and Composer libraries; runtime and package declarations</td>
+</tr>
+<tr>
+<td><code>python</code></td>
+<td>Applications and libraries; requirements, project manifests, and runtime files</td>
+</tr>
+<tr>
+<td><code>ruby</code></td>
+<td>Applications and gems; runtime pins and dependency declarations</td>
+</tr>
+<tr>
+<td><code>rust</code></td>
+<td>Applications, libraries, and workspaces; Cargo and toolchain declarations</td>
+</tr>
+<tr>
+<td><code>scala</code></td>
+<td>Scala and sbt; build and version declarations</td>
+</tr>
+<tr>
+<td><code>serverless</code></td>
+<td>Serverless Framework, SAM, and supported Terraform cloud functions</td>
+</tr>
+<tr>
+<td><code>shell</code></td>
+<td>PowerShell scripts, modules, and CI containers</td>
+</tr>
+<tr>
+<td><code>swift</code></td>
+<td>Swift packages and Xcode applications; project and toolchain declarations</td>
+</tr>
+<tr>
+<td><code>terraform</code></td>
+<td>Modules and deployments; different supported providers</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:73:1-77:109">For each bucket, declare strata before selection using supported input forms or stack families from the table,
+plus small (at most 5,000 KB) and medium (5,001–50,000 KB) repositories. Walk nonempty strata round-robin in a
+recorded order; within each, sort by lowercase <code>owner/name</code>. Deduplicate overlapping strata. Search for input
+filenames or ecosystem structure, not deprecated versions or known findings. Record application/library and
+maintainer diversity where applicable; publish empty strata and search limits rather than inventing coverage.</p>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:79:1-82:91">Never choose the next repository by its score or stop a batch because enough positive or zero-finding examples
+have appeared. Version-specific searches and known migrations are targeted supplements, labeled <code>targeted</code> and
+reported separately; they cannot replace the blind sample. Existing blind labels retain their historical
+meaning under decision 0013, even when their older selection rules differ from this record.</p>
+<h3 id="3-interpret-200-as-reviewed-projects-per-bucket" data-src="docs/decisions/0030-corpus-selection-and-200-target.md:84:1-84:52">3. Interpret 200 as reviewed projects per bucket</h3>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:86:1-90:95">The growth target is <strong>200 distinct eligible upstream repositories in each of the 23 buckets</strong>: 4,600 bucket
+memberships, not 200 overall, 200 findings, or 200 successful scans. A project belongs to one primary bucket
+chosen from its input evidence before scanning; multiple commits, monorepo packages, or incidental findings
+from other detectors do not increase the count. All detectors still scan the selected tree, and every judged
+finding is labeled. Report cross-ecosystem detector evidence separately from bucket membership.</p>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:92:1-98:93">Count an entry toward 200 only after its pin, eligibility, selection provenance, and ground truth have been
+reviewed, including a review supporting an empty expected list. Retained historical entries count only where
+their recorded evidence establishes eligibility at their selection date; missing evidence is not grandfathered
+into the new total. Publish blind and targeted counts alongside the total, and keep at least two thirds of the
+counted repositories blind, matching the stable selection floor in decision 0013. Reaching 200 alone grants
+neither stable maturity nor a claim of representative accuracy; the other maturity and independent-validation
+requirements remain in force, and held-out repositories stay separate from this growth count.</p>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:100:1-105:87"><strong>Poor precision, poor recall, unexpected findings, zero findings, parser failures, and slow scans are never
+reasons to remove or replace a selected repository.</strong> Keep failures visible and fix Offing or track the gap.
+A pending review or failed scan is reported explicitly, not converted into a clean result. Correct wrong labels
+only with independent evidence and a reviewed history of the correction. Removal requires an objective reason
+such as a duplicate upstream, lost access, or a confirmed licensing problem, recorded in review with the old
+pin and reason retained; its replacement follows the same precommitted selection order.</p>
+<h3 id="4-publish-an-honest-shortfall" data-src="docs/decisions/0030-corpus-selection-and-200-target.md:107:1-107:34">4. Publish an honest shortfall</h3>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:109:1-112:87">If the recorded searches and strata cannot supply 200 eligible, reviewed repositories, publish the actual
+count as <code>N/200</code>, the blind/targeted split, pending reviews and fetch failures, empty strata, discovery date,
+queries and search limits, and skip reasons. A capped search is evidence of a limited search, not proof that
+the ecosystem has no more repositories. State which limitation prevents further growth.</p>
+<p data-src="docs/decisions/0030-corpus-selection-and-200-target.md:114:1-118:92">Do not pad the count with forks, duplicate commits, fixtures, generated toy projects, other ecosystems, or
+unreviewed labels; do not relax activity, size, licensing, or blind-selection rules just to hit 200. A maintainer
+may accept a documented shortfall for the release while the target remains unmet. Any different target or
+eligibility exception needs a separate reviewed decision before new selection, with its effect on comparability
+explained. Schedule a follow-up discovery batch when the candidate pool or tooling improves.</p>
+<h2 id="consequences" data-src="docs/decisions/0030-corpus-selection-and-200-target.md:120:1-120:15">Consequences</h2>
+<ul data-src="docs/decisions/0030-corpus-selection-and-200-target.md:122:1-128:104">
+<li>Growth is reproducible from saved selection records and pins; new selection and labeling tooling follows this
+policy in the remaining tasks of #1993. This record adds no runtime behavior, network path, or dependency.</li>
+<li>Blind selection remains distinct from independent ground truth. A regression corpus labeled after seeing
+Offing's output cannot establish generalization; preserve the separate held-out process in
+<a href="../validation/corpus.md#the-held-out-set">Validation corpus</a>.</li>
+<li>Maintainer merge of the pull request for #2116 records acceptance of this policy. Automated checks establish
+repository health; they do not supply maintainer acceptance or prove that the corpus already meets it.</li>
+</ul></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/decisions/0030-corpus-selection-and-200-target.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/decisions/0030-corpus-selection-and-200-target.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/decisions/0030-corpus-selection-and-200-target.md:1. Current text: &quot;0030 — Select corpus repositories independently of results; target 200 per ecosystem&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%200030%20%E2%80%94%20Select%20corpus%20repositories%20independently%20of%20results%3B%20target%20200%20per%20ecosystem&amp;body=Page%3A%20%2Foffing%2Fdecisions%2F0030-corpus-selection-and-200-target%2F%0ASource%3A%20docs%2Fdecisions%2F0030-corpus-selection-and-200-target.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/decisions/0030-corpus-selection-and-200-target/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/decisions/0030-corpus-selection-and-200-target/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/decisions/0030-corpus-selection-and-200-target/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/decisions/0030-corpus-selection-and-200-target/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2Fdecisions%2F0030-corpus-selection-and-200-target%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2Fdecisions%2F0030-corpus-selection-and-200-target%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2Fdecisions%2F0030-corpus-selection-and-200-target%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#problem">Problem</a></li><li><a href="#decision">Decision</a><ul><li><a href="#1-freeze-eligibility-before-scanning">1. Freeze eligibility before scanning</a></li><li><a href="#2-cover-all-23-ecosystem-buckets">2. Cover all 23 ecosystem buckets</a></li><li><a href="#3-interpret-200-as-reviewed-projects-per-bucket">3. Interpret 200 as reviewed projects per bucket</a></li><li><a href="#4-publish-an-honest-shortfall">4. Publish an honest shortfall</a></li></ul></li><li><a href="#consequences">Consequences</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#problem">Problem</a></li><li><a href="#decision">Decision</a></li><li><a href="#1-freeze-eligibility-before-scanning">1. Freeze eligibility before scanning</a></li><li><a href="#2-cover-all-23-ecosystem-buckets">2. Cover all 23 ecosystem buckets</a></li><li><a href="#3-interpret-200-as-reviewed-projects-per-bucket">3. Interpret 200 as reviewed projects per bucket</a></li><li><a href="#4-publish-an-honest-shortfall">4. Publish an honest shortfall</a></li><li><a href="#consequences">Consequences</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

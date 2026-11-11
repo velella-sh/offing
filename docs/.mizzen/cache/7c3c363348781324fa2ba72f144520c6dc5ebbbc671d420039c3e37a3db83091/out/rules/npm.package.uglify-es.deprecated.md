@@ -1,0 +1,147 @@
+
+# uglify-es is deprecated
+
+**Deprecated.** The source gives no day. Replacement: uglify-js (3.13 or later) or terser. Source: [uglify-es on npm](https://www.npmjs.com/package/uglify-es).
+
+Check a version:
+
+```bash
+offing check pkg:npm/uglify-es
+```
+
+npm marks uglify-es as deprecated: "support for ECMAScript is superseded by `uglify-js` as of v3.13.0"
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `npm` |
+| Component | `pkg:npm/uglify-es` |
+| Affected versions | `vers:npm/*` |
+| Date from the source | The source gives no day |
+| Replacement | uglify-js (3.13 or later) or terser |
+| Evidence last seen | 2026-10-17 |
+| Reviewed | 2026-10-17 by arminazimi, drafted by the `npm-deprecated` importer |
+| Review due | 2027-10-17 (365 days after the last review) |
+| Rule ID | `npm.package.uglify-es.deprecated` |
+
+## Sources
+
+- [uglify-es on npm](https://www.npmjs.com/package/uglify-es) (accessed 2026-10-17)
+- [uglify-es registry metadata](https://registry.npmjs.org/uglify-es/latest) (accessed 2026-10-17)
+
+## Migration
+
+**Constraints**
+
+- Keep the same minification options, source maps, and output syntax level.
+
+**Steps**
+
+1. **Replace uglify-es.** Replace uglify-es with uglify-js 3.13 or later (or terser) in dependencies, build scripts, and bundler configuration.
+2. **Compare minified output.** Build and compare bundle size, source maps, and behavior of the minified output.
+
+**Verification**
+
+- `npm run build --if-present`: Build with the new minifier and compare the output.
+
+## Detected by
+
+The `npm` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [abab is deprecated](npm.package.abab.deprecated.html)
+- [@angular/core v18 and older are no longer supported](npm.package.angular.core.v18-and-older.end-of-support.html)
+- [@angular/core v19 is no longer supported](npm.package.angular.core.v19.end-of-support.html)
+- [@angular/core v20 reaches end of life on 2026-11-28](npm.package.angular.core.v20.scheduled-end-of-life.html)
+- [@angular/core v21 reaches end of life on 2027-06-30](npm.package.angular.core.v21.scheduled-end-of-life.html)
+- [@angular/core v22 reaches end of life on 2028-06-30](npm.package.angular.core.v22.scheduled-end-of-life.html)
+- [are-we-there-yet is no longer supported](npm.package.are-we-there-yet.eol.html)
+- [babel-eslint is deprecated](npm.package.babel-eslint.deprecated.html)
+
+
+## Data
+
+This page is generated from [`registry/npm.json`](https://github.com/velella-sh/offing/blob/main/registry/npm.json), rule `npm.package.uglify-es.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/npm.package.uglify-es.deprecated.html",
+      "url": "https://velella.sh/offing/rules/npm.package.uglify-es.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/npm.package.uglify-es.deprecated.html",
+      "headline": "uglify-es is deprecated — dates, impact, migration",
+      "description": "npm marks uglify-es as deprecated: \"support for ECMAScript is superseded by `uglify-js` as of v3.13.0\"",
+      "inLanguage": "en",
+      "dateModified": "2026-10-17",
+      "keywords": [
+        "deprecated",
+        "npm",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "uglify-es is deprecated",
+        "identifier": "pkg:npm/uglify-es"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "uglify-es on npm",
+          "url": "https://www.npmjs.com/package/uglify-es"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "uglify-es registry metadata",
+          "url": "https://registry.npmjs.org/uglify-es/latest"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/npm.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/npm.package.uglify-es.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/npm.package.uglify-es.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:npm/uglify-es?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:npm/*. Source: uglify-es on npm (https://www.npmjs.com/package/uglify-es)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:npm/uglify-es?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "uglify-js (3.13 or later) or terser"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:npm/uglify-es?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:npm/uglify-es."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

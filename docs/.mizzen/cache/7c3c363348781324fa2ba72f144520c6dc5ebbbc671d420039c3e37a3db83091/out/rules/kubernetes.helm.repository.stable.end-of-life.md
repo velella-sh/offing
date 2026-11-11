@@ -1,0 +1,149 @@
+
+# Helm stable chart repository is end of life
+
+**End of life** as of 2020-11-13. Replacement: The chart's new maintained repository (see Helm's stable-repo-charts-new-locations list), or adopt the chart yourself. Source: [Helm Chart Repository Deprecation Update (2020-10-30)](https://helm.sh/blog/charts-repo-deprecation/).
+
+Check a version:
+
+```bash
+offing check pkg:generic/helm-repository/stable
+```
+
+The Helm project retired the stable chart repository: on 2020-11-13 CI was disabled and no further pull requests were accepted, and downloads were redirected to a read-only archive that receives no bug fixes or security patches. The Helm Chart Repository Deprecation Update states those dates and recommended actions.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of life |
+| Severity | high |
+| Ecosystem | `kubernetes` |
+| Component | `pkg:generic/helm-repository/stable` |
+| Affected versions | `vers:semver/*` |
+| Date from the source | 2020-11-13 |
+| Replacement | The chart's new maintained repository (see Helm's stable-repo-charts-new-locations list), or adopt the chart yourself |
+| Evidence last seen | 2026-10-26 |
+| Reviewed | 2026-10-26 by arminazimi |
+| Review due | 2027-10-26 (365 days after the last review) |
+| Rule ID | `kubernetes.helm.repository.stable.end-of-life` |
+
+## Sources
+
+- [Helm Chart Repository Deprecation Update (2020-10-30)](https://helm.sh/blog/charts-repo-deprecation/) (accessed 2026-10-26)
+- [Helm community: stable repository charts — new locations](https://github.com/helm/community/blob/main/stable-repo-charts-new-locations.md) (accessed 2026-10-26)
+
+## Migration
+
+**Constraints**
+
+- Replace only Chart.yaml dependencies whose repository is the retired stable URL (https://charts.helm.sh/stable or https://kubernetes-charts.storage.googleapis.com).
+- Look up the chart name in Helm's stable-repo-charts-new-locations list for the maintainer's new repository; if none exists, consider adopting the chart rather than pinning the archive.
+
+**Steps**
+
+1. **Point the dependency at a maintained repository.** Change the reported dependency's repository URL to the chart's new location from the relocation list (or another maintainer-published repository), and set version to a release published there.
+2. **Align other Chart.yaml dependencies.** Update every other Chart.yaml dependency that still names the retired stable repository URL.
+
+**Verification**
+
+- `helm dependency update <chart-path>`: Fetch the dependency from the new repository and refresh Chart.lock.
+- `helm template <chart-path> | kubeconform -strict -`: Render the chart and validate the output against Kubernetes schemas.
+
+## Detected by
+
+The [`kubernetes`](../detectors/kubernetes.md) detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [MutatingWebhookConfiguration admissionregistration.k8s.io/v1beta1 is no longer served](kubernetes.admissionregistration-k8s-io.mutatingwebhookconfiguration.v1beta1.removed.html)
+- [ValidatingWebhookConfiguration admissionregistration.k8s.io/v1beta1 is no longer served](kubernetes.admissionregistration-k8s-io.validatingwebhookconfiguration.v1beta1.removed.html)
+- [EKS 1.30 and earlier clusters are past end of extended support](kubernetes.amazon-eks.1-30-and-older.html)
+- [EKS 1.31 cluster is past end of standard support](kubernetes.amazon-eks.1-31.html)
+- [EKS 1.32 cluster is past end of standard support](kubernetes.amazon-eks.1-32.html)
+- [EKS 1.33 cluster is past end of standard support](kubernetes.amazon-eks.1-33.html)
+- [EKS 1.34 cluster is scheduled to leave standard support](kubernetes.amazon-eks.1-34.html)
+- [EKS 1.35 cluster is scheduled to leave standard support](kubernetes.amazon-eks.1-35.html)
+
+
+## Data
+
+This page is generated from [`registry/kubernetes.json`](https://github.com/velella-sh/offing/blob/main/registry/kubernetes.json), rule `kubernetes.helm.repository.stable.end-of-life`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/kubernetes.helm.repository.stable.end-of-life.html",
+      "url": "https://velella.sh/offing/rules/kubernetes.helm.repository.stable.end-of-life.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/kubernetes.helm.repository.stable.end-of-life.html",
+      "headline": "Helm stable chart repository is end of life — dates, impact, migration",
+      "description": "The Helm project retired the stable chart repository: on 2020-11-13 CI was disabled and no further pull requests were accepted, and downloads were redirected to a read-only archive that receives no…",
+      "inLanguage": "en",
+      "dateModified": "2026-10-26",
+      "keywords": [
+        "end-of-life",
+        "kubernetes",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "Helm stable chart repository is end of life",
+        "identifier": "pkg:generic/helm-repository/stable"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Helm Chart Repository Deprecation Update (2020-10-30)",
+          "url": "https://helm.sh/blog/charts-repo-deprecation/"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Helm community: stable repository charts — new locations",
+          "url": "https://github.com/helm/community/blob/main/stable-repo-charts-new-locations.md"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/kubernetes.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/kubernetes.helm.repository.stable.end-of-life.html#faq",
+      "url": "https://velella.sh/offing/rules/kubernetes.helm.repository.stable.end-of-life.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/helm-repository/stable?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of life as of 2020-11-13. Affected versions: vers:semver/*. Source: Helm Chart Repository Deprecation Update (2020-10-30) (https://helm.sh/blog/charts-repo-deprecation/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/helm-repository/stable?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The chart's new maintained repository (see Helm's stable-repo-charts-new-locations list), or adopt the chart yourself"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/helm-repository/stable?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/helm-repository/stable."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

@@ -422,11 +422,11 @@ test("the job summary shows the baseline counts and the suppressions that are ex
 
 test("badge endpoints count remaining findings, warn about stale data, and honor expiry failures", () => {
   for (const [severity, color] of [
-    ["critical", "#B84A3E"],
-    ["high", "#B84A3E"],
+    ["critical", "#9A3F5E"],
+    ["high", "#9A3F5E"],
     ["medium", "#C9822F"],
     ["low", "#B89B3C"],
-    ["info", "#4C7C6D"],
+    ["info", "#727169"],
   ] as const) {
     const findings = [
       finding("a:p:1", "info", "Info", "secret.json"),
@@ -437,22 +437,22 @@ test("badge endpoints count remaining findings, warn about stale data, and honor
       label: "offing",
       message: `2 ${severity}`,
       color,
-      labelColor: "#23423A",
+      labelColor: "#1F1F28",
     });
   }
   assert.deepEqual(JSON.parse(renderBadge({ findings: [] })), {
     schemaVersion: 1,
     label: "offing",
     message: "clean",
-    color: "#2F7D5B",
-    labelColor: "#23423A",
+    color: "#6A5590",
+    labelColor: "#1F1F28",
   });
   assert.deepEqual(JSON.parse(renderBadge({ findings: [], data: { ...data, stale: true } })), {
     schemaVersion: 1,
     label: "offing",
     message: "stale",
-    color: "#4C7C6D",
-    labelColor: "#23423A",
+    color: "#727169",
+    labelColor: "#1F1F28",
   });
   assert.equal(
     JSON.parse(
@@ -464,8 +464,8 @@ test("badge endpoints count remaining findings, warn about stale data, and honor
     schemaVersion: 1,
     label: "offing",
     message: "1 low · expired",
-    color: "#8E3B34",
-    labelColor: "#23423A",
+    color: "#6E2B44",
+    labelColor: "#1F1F28",
   });
   assert.equal(JSON.parse(renderBadge({ findings: [] }, true)).message, "expired");
 });
@@ -474,9 +474,9 @@ test("the SVG badge carries the same message and color, with a fixed-width layou
   const svg = renderBadgeSvg({ findings: [finding("r:p:1", "high", "High", "package.json")] });
   assert.match(svg, /^<svg [^>]*role="img" aria-label="offing: 1 high"/);
   assert.match(svg, /<title>offing: 1 high<\/title>/);
-  assert.match(svg, /fill="#B84A3E"/);
+  assert.match(svg, /fill="#9A3F5E"/);
   assert.match(svg, /textLength="52"[^>]*>offing<\/text>/);
-  assert.match(renderBadgeSvg({ findings: [] }), /fill="#2F7D5B"[^>]*\/>/);
+  assert.match(renderBadgeSvg({ findings: [] }), /fill="#6A5590"[^>]*\/>/);
   assert.equal(
     renderBadgeSvg({ findings: [] }).includes("package.json"),
     false,

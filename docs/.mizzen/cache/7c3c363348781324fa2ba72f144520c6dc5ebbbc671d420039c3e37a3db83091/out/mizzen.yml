@@ -1,0 +1,187 @@
+# Documentation site for Offing, built by Mizzen with the Lateen theme (see .github/workflows/pages.yml).
+title: Offing
+description: Local-first deprecation intelligence for software repositories.
+lang: en
+url: https://velella.sh
+base: /offing
+include:
+  - .well-known
+exclude:
+  - dashboard/README.md
+repository:
+  url: https://github.com/velella-sh/offing
+  branch: main
+  dir: docs
+defaults:
+  - path: ""
+    values:
+      image: /assets/og/default.svg
+  - path: fa
+    values:
+      lang: fa
+      dir: rtl
+  - path: i18n/fa
+    values:
+      lang: fa
+      dir: rtl
+theme:
+  name: "@velella/lateen"
+  options:
+    logo:
+      light: /assets/brand/offing-mark-adaptive.svg
+      dark: /assets/brand/offing-mark-adaptive.svg
+    footer:
+      copyright: "© Velella"
+      license: "MIT license"
+      links:
+        - title: GitHub
+          url: https://github.com/velella-sh/offing
+        - title: Mizzen
+          url: https://velella.sh/mizzen/
+        - title: Lateen
+          url: https://velella.sh/lateen/
+# Offing publishes its own llms.txt, llms-full.txt and sitemap.xml (docs/llms.txt is curated by hand; the others are
+# generated before the build), so Mizzen's own copies stay off.
+outputs:
+  llms: false
+  llms-full: false
+  sitemap: false
+# Every hand-written page used to be served as <name>.html. These keep those addresses working; the set is frozen
+# at the last published site (tests/fixtures/site-urls.baseline.json), so a new page never needs a line here.
+redirects:
+  /ADOPTION.html: /ADOPTION/
+  /AGENTS_SETUP.html: /AGENTS_SETUP/
+  /AGENT_SKILLS.html: /AGENT_SKILLS/
+  /ARCHITECTURE.html: /ARCHITECTURE/
+  /BENCHMARKS.html: /BENCHMARKS/
+  /CAPABILITIES.html: /CAPABILITIES/
+  /CHANGELOG.html: /CHANGELOG/
+  /CLAUDE_PLUGIN.html: /CLAUDE_PLUGIN/
+  /CLI.html: /CLI/
+  /CODEMODS.html: /CODEMODS/
+  /CODEX_PLUGIN.html: /CODEX_PLUGIN/
+  /CODEX_SUBMISSION.html: /CODEX_SUBMISSION/
+  /COMPATIBILITY.html: /COMPATIBILITY/
+  /CONTRIBUTE.html: /CONTRIBUTE/
+  /DATA.html: /DATA/
+  /DEMO.html: /DEMO/
+  /DETECTORS.html: /DETECTORS/
+  /DISTRIBUTION.html: /DISTRIBUTION/
+  /DISTRIBUTION_BRAND.html: /DISTRIBUTION_BRAND/
+  /DRIFT.html: /DRIFT/
+  /EOL_CALENDAR.html: /EOL_CALENDAR/
+  /GITHUB_ACTION.html: /GITHUB_ACTION/
+  /GITLAB.html: /GITLAB/
+  /GITLAB_CATALOG.html: /GITLAB_CATALOG/
+  /HOOKS.html: /HOOKS/
+  /IMPORTERS.html: /IMPORTERS/
+  /INSTALL.html: /INSTALL/
+  /INVENTORY.html: /INVENTORY/
+  /MAINTAINERS.html: /MAINTAINERS/
+  /MCP.html: /MCP/
+  /MCP_LISTINGS.html: /MCP_LISTINGS/
+  /MIGRATION_PACKETS.html: /MIGRATION_PACKETS/
+  /NEXT.html: /NEXT/
+  /ORG_ROLLOUT.html: /ORG_ROLLOUT/
+  /PLAN.html: /PLAN/
+  /PLUGIN_EVALS.html: /PLUGIN_EVALS/
+  /PLUGIN_PACKAGING.html: /PLUGIN_PACKAGING/
+  /PORTALS.html: /PORTALS/
+  /PRIVACY.html: /PRIVACY/
+  /PRODUCT.html: /PRODUCT/
+  /QUICKSTART.html: /QUICKSTART/
+  /RECEIPTS.html: /RECEIPTS/
+  /RELEASE_NOTES_0.1.0.html: /RELEASE_NOTES_0.1.0/
+  /RELEASING.html: /RELEASING/
+  /ROADMAP.html: /ROADMAP/
+  /RULES.html: /RULES/
+  /SECURITY_TRIAGE.html: /SECURITY_TRIAGE/
+  /SHARE_REPORT.html: /SHARE_REPORT/
+  /SHOWCASE.html: /SHOWCASE/
+  /SITE_STACK.html: /SITE_STACK/
+  /STANDARDS.html: /STANDARDS/
+  /SUPPORT.html: /SUPPORT/
+  /TERMS.html: /TERMS/
+  /THREAT_MODEL.html: /THREAT_MODEL/
+  /UPGRADE_CHECK.html: /UPGRADE_CHECK/
+  /VALIDATION.html: /VALIDATION/
+  /blog/2026-10-29-what-went-end-of-life.html: /blog/2026-10-29-what-went-end-of-life/
+  /blog/2026-10-30-alpine-3-21-is-your-repo-affected.html: /blog/2026-10-30-alpine-3-21-is-your-repo-affected/
+  /blog/2026-10-30-azure-pipelines-macos-14-is-your-repo-affected.html: /blog/2026-10-30-azure-pipelines-macos-14-is-your-repo-affected/
+  /blog/2026-10-30-rails-8-0-is-your-repo-affected.html: /blog/2026-10-30-rails-8-0-is-your-repo-affected/
+  /blog/2026-11-01-angular-20-is-your-repo-affected.html: /blog/2026-11-01-angular-20-is-your-repo-affected/
+  /blog/2026-11-01-dotnet-8-and-9-is-your-repo-affected.html: /blog/2026-11-01-dotnet-8-and-9-is-your-repo-affected/
+  /blog/2026-11-01-postgresql-14-is-your-repo-affected.html: /blog/2026-11-01-postgresql-14-is-your-repo-affected/
+  /compare/dependabot.html: /compare/dependabot/
+  /compare/endoflife-date.html: /compare/endoflife-date/
+  /compare/renovate.html: /compare/renovate/
+  /compatibility/android.html: /compatibility/android/
+  /compatibility/ci-runner-images.html: /compatibility/ci-runner-images/
+  /compatibility/cpp.html: /compatibility/cpp/
+  /compatibility/php.html: /compatibility/php/
+  /compatibility/ruby.html: /compatibility/ruby/
+  /dashboard/README.html: /dashboard/
+  /decisions/0001-typescript-first.html: /decisions/0001-typescript-first/
+  /decisions/0002-go-ecosystem-support.html: /decisions/0002-go-ecosystem-support/
+  /decisions/0003-shared-plugin-packaging.html: /decisions/0003-shared-plugin-packaging/
+  /decisions/0004-registry-v2.html: /decisions/0004-registry-v2/
+  /decisions/0005-lifecycle-importers.html: /decisions/0005-lifecycle-importers/
+  /decisions/0006-data-bundle.html: /decisions/0006-data-bundle/
+  /decisions/0007-container-detector.html: /decisions/0007-container-detector/
+  /decisions/0008-kubernetes-detector.html: /decisions/0008-kubernetes-detector/
+  /decisions/0009-java-detector.html: /decisions/0009-java-detector/
+  /decisions/0010-scheduled-end-of-life.html: /decisions/0010-scheduled-end-of-life/
+  /decisions/0011-rust-detector.html: /decisions/0011-rust-detector/
+  /decisions/0012-dotnet-detector.html: /decisions/0012-dotnet-detector/
+  /decisions/0013-detector-maturity.html: /decisions/0013-detector-maturity/
+  /decisions/0014-ci-images-detector.html: /decisions/0014-ci-images-detector/
+  /decisions/0015-corpus-fetch-strategy.html: /decisions/0015-corpus-fetch-strategy/
+  /decisions/0016-cli-exit-codes.html: /decisions/0016-cli-exit-codes/
+  /decisions/0017-openeox-ingestion.html: /decisions/0017-openeox-ingestion/
+  /decisions/0018-adoption-before-v1.html: /decisions/0018-adoption-before-v1/
+  /decisions/0019-privacy-first-adoption-metrics.html: /decisions/0019-privacy-first-adoption-metrics/
+  /decisions/0020-data-license.html: /decisions/0020-data-license/
+  /decisions/0021-one-release-before-v1.html: /decisions/0021-one-release-before-v1/
+  /detectors/authoring-contracts.html: /detectors/authoring-contracts/
+  /detectors/authoring-layouts.html: /detectors/authoring-layouts/
+  /detectors/container.html: /detectors/container/
+  /detectors/dart.html: /detectors/dart/
+  /detectors/database.html: /detectors/database/
+  /detectors/deno.html: /detectors/deno/
+  /detectors/dotnet.html: /detectors/dotnet/
+  /detectors/elixir.html: /detectors/elixir/
+  /detectors/go.html: /detectors/go/
+  /detectors/java.html: /detectors/java/
+  /detectors/kubernetes.html: /detectors/kubernetes/
+  /detectors/rust.html: /detectors/rust/
+  /detectors/scala.html: /detectors/scala/
+  /detectors/serverless.html: /detectors/serverless/
+  /detectors/shell.html: /detectors/shell/
+  /detectors/swift.html: /detectors/swift/
+  /detectors/terraform.html: /detectors/terraform/
+  /differential-report.html: /differential-report/
+  /fa/QUICKSTART.html: /fa/QUICKSTART/
+  /generated-files.html: /generated-files/
+  /guides/agent-dependency-guard.html: /guides/agent-dependency-guard/
+  /i18n/fa/QUICKSTART.html: /i18n/fa/QUICKSTART/
+  /i18n/fa/README.html: /i18n/fa/
+  /launch/README.html: /launch/
+  /launch/newsletters.html: /launch/newsletters/
+  /launch/reddit-devops.html: /launch/reddit-devops/
+  /launch/screenshots.html: /launch/screenshots/
+  /launch/show-hn.html: /launch/show-hn/
+  /launch/social.html: /launch/social/
+  /playbooks/agent.html: /playbooks/agent/
+  /playbooks/cli.html: /playbooks/cli/
+  /playbooks/github.html: /playbooks/github/
+  /playbooks/gitlab.html: /playbooks/gitlab/
+  /rfcs/0000-template.html: /rfcs/0000-template/
+  /rfcs/README.html: /rfcs/
+  /roadmap-archive/2026-launch.html: /roadmap-archive/2026-launch/
+  /starters/nextjs.html: /starters/nextjs/
+  /starters/with-update-bots.html: /starters/with-update-bots/
+  /state-of-eol.html: /state-of-eol/
+  /validation/corpus.html: /validation/corpus/
+  /validation/differential-testing.html: /validation/differential-testing/
+  /validation/ecosystems.html: /validation/ecosystems/
+  /validation/running-the-corpus.html: /validation/running-the-corpus/

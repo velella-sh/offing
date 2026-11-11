@@ -2,19 +2,23 @@
 title: Offing
 ---
 
-# Offing
-
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/velella-sh/offing/main/brand/exports/banner-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/velella-sh/offing/main/brand/exports/banner-light.png">
-    <img alt="Offing — Know what breaks next." src="https://raw.githubusercontent.com/velella-sh/offing/main/brand/exports/banner-light.png" width="100%">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-night.svg">
+    <img src="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-day.svg" width="96" height="96" alt="Offing">
   </picture>
 </p>
 
-[![CI](https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=0C1110&color=2F7D5B&style=flat)](https://github.com/velella-sh/offing/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvelella-sh%2Foffing%2Fbadges%2Fcoverage.json&labelColor=0C1110&style=flat)](https://github.com/velella-sh/offing/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/offing.svg?logo=npm&logoColor=white&labelColor=0C1110&color=2F7D5B&style=flat)](https://www.npmjs.com/package/@velella/offing)
+<h1 align="center">Offing</h1>
+
+<p align="center">
+  <strong>See what's in the offing. Fix it before it lands.</strong><br>
+  Local-first end-of-life and deprecation scanner for your repository.
+</p>
+
+[![CI](https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat)](https://github.com/velella-sh/offing/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvelella-sh%2Foffing%2Fbadges%2Fcoverage.json&labelColor=1F1F28&style=flat)](https://github.com/velella-sh/offing/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/offing.svg?logo=npm&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat)](https://www.npmjs.com/package/@velella/offing)
 [![Offing](https://raw.githubusercontent.com/velella-sh/offing/badges/offing-badge.svg)](https://github.com/velella-sh/offing/actions/workflows/ci.yml)
 [![skills.sh](https://skills.sh/b/velella-sh/offing)](https://skills.sh/velella-sh/offing/offing)
 
@@ -235,7 +239,7 @@ detectorهای خارجی می‌توانند از رابط نسخه‌بندی�
 
 CLI محصول است. detectorها آن را گسترش می‌دهند، GitHub Actions آن را خودکار می‌کنند و سرور MCP محلی آن را به ایجنت‌ها ارائه می‌دهد. بک‌اند میزبانی‌شده عمداً بیرون از نقشهٔ راه است؛ دادهٔ چرخهٔ عمر در عوض از طریق یک کانال دادهٔ امضاشده و قابل تأیید آفلاین به‌روز می‌شود.
 
-[نقشهٔ راه](../../../docs/ROADMAP.md)، [معماری](../../../docs/ARCHITECTURE.md)، [راهنمای برند](../../../brand/BRAND_GUIDE.md) و [راهنمای مشارکت](../../../CONTRIBUTING.md) را ببینید.
+[نقشهٔ راه](../../../docs/ROADMAP.md)، [معماری](../../../docs/ARCHITECTURE.md)، [راهنمای برند](../../../brand/README.md) و [راهنمای مشارکت](../../../CONTRIBUTING.md) را ببینید.
 
 ## جامعه
 

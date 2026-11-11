@@ -42,7 +42,7 @@ export function annotationFor(finding: Finding): GitHubAnnotation {
 /** Shields.io endpoint schema v1; contains aggregate counts only, after baseline comparison. */
 export function renderBadge(result: Pick<ScanResult, "findings" | "data">, expiredFailure = false): string {
   const { message, color } = badgeState(result, expiredFailure);
-  return JSON.stringify({ schemaVersion: 1, label: "offing", message, color, labelColor: "#23423A" });
+  return JSON.stringify({ schemaVersion: 1, label: "offing", message, color, labelColor: "#1F1F28" });
 }
 
 /**

@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "offing.coverage-descriptions.v1",
+  "rows": [
+    {
+      "ecosystems": ["ci-images"],
+      "name": "CI runner images",
+      "coverage": "`pool.vmImage` in `azure-pipelines.yml` is matched against reviewed Azure hosted-image rules. GitLab `image` and `services` values are unclassified. CircleCI orbs, dynamic values, and floating aliases are unclassified; other CircleCI images are not judged. See [CI runner images](#ci-runner-images-detector)."
+    },
+    {
+      "ecosystems": ["container"],
+      "name": "Container base images",
+      "coverage": "`FROM` lines in Dockerfiles and Containerfiles and `services.*.image` in Compose files, for Docker Hub official images with a vendor lifecycle. See [Container base images](detectors/container.md)."
+    },
+    {
+      "ecosystems": ["dotnet"],
+      "name": ".NET",
+      "coverage": "`global.json`, project files, `Directory.Build.props`, `Directory.Packages.props`, and `packages.lock.json`, for .NET release lines past end of support and deprecated NuGet packages. See [.NET](detectors/dotnet.md)."
+    },
+    {
+      "ecosystems": ["go"],
+      "name": "Go",
+      "coverage": "`go` and `toolchain` directives in `go.mod` and `go.work`, and direct `require` entries, for Go release lines past end of support. See [Go](detectors/go.md)."
+    },
+    {
+      "ecosystems": ["java"],
+      "name": "Java and Kotlin (JVM)",
+      "coverage": "JDK declarations in `pom.xml`, Gradle build scripts, `.java-version`, `.sdkmanrc`, and `.tool-versions`, and direct Maven dependencies, for non-LTS JDK releases past end of support and moved artifacts. See [Java and Kotlin](detectors/java.md)."
+    },
+    {
+      "ecosystems": ["kubernetes"],
+      "name": "Kubernetes APIs",
+      "coverage": "The literal `apiVersion` and `kind` in YAML manifests, Helm chart templates, and kustomization patches, for API versions the Kubernetes project says are no longer served, and `Chart.yaml` dependencies that still point at the retired Helm stable or incubator repositories. See [Kubernetes APIs](detectors/kubernetes.md)."
+    },
+    {
+      "ecosystems": ["github-actions"],
+      "name": "GitHub Actions",
+      "coverage": "Selected first-party Action lifecycle rules and exact workflow locations."
+    },
+    {
+      "ecosystems": ["nodejs", "npm"],
+      "name": "Node.js and npm",
+      "coverage": "Runtime declarations, direct dependencies, lockfiles, and supported source usages."
+    },
+    {
+      "ecosystems": ["php"],
+      "name": "PHP",
+      "coverage": "Pinned runtime declarations in `.php-version`, `.tool-versions`, `composer.json`, and `composer.lock`, for PHP release lines past end of support and abandoned Composer packages. See [PHP](#php-detector)."
+    },
+    {
+      "ecosystems": ["python"],
+      "name": "Python",
+      "coverage": "Runtime declarations, direct dependencies, common lockfiles, and supported source usages."
+    },
+    {
+      "ecosystems": ["ruby"],
+      "name": "Ruby",
+      "coverage": "Pinned runtime declarations in `.ruby-version`, `.tool-versions`, the Gemfile `ruby` directive, and Gemfile.lock `RUBY VERSION`, plus direct gems, for Ruby release lines past end of support and yanked gems. Gem rules can list source usages in Ruby files."
+    },
+    {
+      "ecosystems": ["rust"],
+      "name": "Rust",
+      "coverage": "The pinned toolchain in `rust-toolchain(.toml)` and direct dependencies in `Cargo.toml` and `Cargo.lock`, for toolchains older than the newest stable release and unmaintained crates. See [Rust](detectors/rust.md)."
+    },
+    {
+      "ecosystems": ["swift"],
+      "name": "Swift",
+      "coverage": "`.swift-version` and `.xcode-version` pins, the `swift-tools-version` line and literal `from:` / `exact:` dependencies in `Package.swift`, and resolved pin versions in `Package.resolved`, for Xcode releases App Store Connect no longer accepts and Swift toolchain lines with a lifecycle rule. The iOS deployment target (`IPHONEOS_DEPLOYMENT_TARGET`) of an application target in an `.xcodeproj` `project.pbxproj`, for iOS releases App Store Connect no longer accepts. Libraries and `platforms:` minimums in `Package.swift` are not read for it. See [Swift](detectors/swift.md)."
+    },
+    {
+      "ecosystems": ["android"],
+      "name": "Android",
+      "coverage": "Literal `compileSdk`, `minSdk`, `targetSdk`, and `buildToolsVersion` in `build.gradle` and `build.gradle.kts`, Android Gradle Plugin and Kotlin Android plugin versions in `settings.gradle(.kts)`, `agp` and `kotlin` keys in `libs.versions.toml`, and string-notation Maven dependencies, matched to reviewed rules. Bundled rules cover Google Play Billing Library majors 5 through 9. SDK and plugin declarations produce a finding only when a rule names them. See [Android](#android-detector)."
+    },
+    {
+      "ecosystems": ["cpp"],
+      "name": "C and C++",
+      "coverage": "`cmake_minimum_required`, C and C++ language standards, and compiler version checks in `CMakeLists.txt`; direct requirements in `conanfile.txt` and `conanfile.py`; and direct dependencies and `builtin-baseline` in `vcpkg.json`. Bundled rules cover CMake policy versions older than 3.5 (removed) and from 3.5 up to 3.10 (deprecated). See [C and C++](#c-and-c-detector)."
+    },
+    {
+      "ecosystems": ["dart"],
+      "name": "Dart and Flutter",
+      "coverage": "Resolved packages and SDK constraints in `pubspec.lock`, direct dependencies and `environment` constraints in `pubspec.yaml`, and the Flutter version pinned in `.fvmrc` and `.fvm/fvm_config.json`, for Dart SDK releases past end of support and discontinued pub packages. See [Dart and Flutter](detectors/dart.md)."
+    },
+    {
+      "ecosystems": ["deno", "bun"],
+      "name": "Deno and Bun",
+      "coverage": "Exact runtime pins in `deno.json`, `deno.jsonc`, `bunfig.toml`, `.bun-version`, and `.tool-versions`, for Deno and Bun release lines past end of life. Version ranges, floating aliases, and environment variables are not matched. See [Deno and Bun](detectors/deno.md)."
+    },
+    {
+      "ecosystems": ["database"],
+      "name": "Database runtimes",
+      "coverage": "Image tags of `postgres`, `mysql`, `mariadb`, `redis`, and `mongo` services in Compose files, and literal engine versions on AWS (`engine` and `engine_version`), Azure (`version`), and Google Cloud SQL (`database_version`) managed database resources in `*.tf`, for major and minor lines past end of life or standard support. Bundled rules cover PostgreSQL 11 through 13 and MySQL 5.7 and 8.0, Azure Database for PostgreSQL 11 through 13 and MySQL 5.7, and Cloud SQL for PostgreSQL 9.6 through 13 and MySQL 5.6 and 5.7. Variables in Terraform version attributes are listed as unclassified. See [Database runtimes](detectors/database.md)."
+    },
+    {
+      "ecosystems": ["elixir"],
+      "name": "Elixir and Mix",
+      "coverage": "Pinned Elixir and Erlang/OTP versions in `.tool-versions`, the project `elixir:` constraint and direct Hex deps in `mix.exs`, and resolved Hex packages in `mix.lock`, for Elixir and OTP release lines past end of support and retired Hex packages. See [Elixir and Mix](detectors/elixir.md)."
+    },
+    {
+      "ecosystems": ["scala"],
+      "name": "Scala and sbt",
+      "coverage": "Pinned Scala versions in `.scala-version` and literal `scalaVersion` settings in `build.sbt`, and `sbt.version` in `project/build.properties`, for Scala 2.11, frozen Scala 3.0–3.2 lines, and sbt 0.13. See [Scala and sbt](detectors/scala.md)."
+    },
+    {
+      "ecosystems": ["shell"],
+      "name": "Shell and PowerShell",
+      "coverage": "Literal `#Requires -Version` directives in `*.ps1` and `*.psm1`, `PowerShellVersion` in `*.psd1` manifests, and pinned `mcr.microsoft.com/powershell` image tags in `.github/workflows` files, for PowerShell releases past end of support. Bundled rules cover PowerShell 6.x and 7.0 through 7.3. Shell names such as `shell: pwsh` and Bash images carry no version and are not matched. See [Shell and PowerShell](detectors/shell.md)."
+    },
+    {
+      "ecosystems": ["terraform"],
+      "name": "Terraform",
+      "coverage": "`required_version` and `required_providers` constraints in `*.tf`, locked provider versions in `.terraform.lock.hcl`, the Terraform CLI version pinned in `.terraform-version` and `.tool-versions`, and managed Kubernetes control-plane versions in `*.tf` for Amazon EKS, Google Kubernetes Engine, and Azure Kubernetes Service, for Terraform CLI and Kubernetes release lines past end of support. Bundled rules cover CLI lines 1.10 through 1.14 and EKS, GKE, and AKS versions 1.33 and earlier; provider rules are not bundled yet. See [Terraform](detectors/terraform.md)."
+    },
+    {
+      "ecosystems": ["serverless"],
+      "name": "Serverless runtimes",
+      "coverage": "`Runtime` on AWS SAM and CloudFormation functions and `Globals`, `provider.runtime` and per-function `runtime` in `serverless.yml`, and Terraform `runtime` on `aws_lambda_function` plus Google Cloud Functions runtimes and Azure function-app `application_stack` version pins. Bundled rules cover selected AWS Lambda and Google Cloud Functions identifiers that the vendors list as end-of-life. See [Serverless runtimes](detectors/serverless.md)."
+    }
+  ],
+  "unsupported": {
+    "name": "Other language and platform ecosystems",
+    "coverage": "Report the limitation; do not infer lifecycle status without a detector."
+  }
+}

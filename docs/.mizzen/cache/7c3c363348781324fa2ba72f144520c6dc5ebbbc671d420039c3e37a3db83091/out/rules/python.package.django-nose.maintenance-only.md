@@ -1,0 +1,144 @@
+
+# django-nose is maintenance-only
+
+**Deprecated.** The source gives no day. Replacement: pytest-django or Django unittest. Source: [django-nose project notice](https://pypi.org/project/django-nose/).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/django-nose
+```
+
+The package states that it is in maintenance mode and recommends pytest or Django unittest for new projects.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | high |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/django-nose` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Replacement | pytest-django or Django unittest |
+| Evidence last seen | 2026-11-07 |
+| Reviewed | 2026-11-07 by arminazimi |
+| Review due | 2027-11-07 (365 days after the last review) |
+| Rule ID | `python.package.django-nose.maintenance-only` |
+
+## Sources
+
+- [django-nose project notice](https://pypi.org/project/django-nose/) (accessed 2026-11-07)
+
+## Migration
+
+**Constraints**
+
+- Preserve Django settings selection, database setup, fixture loading, test labels, and any django-nose plugin behavior.
+
+**Steps**
+
+1. **Choose the Django test runner.** Select pytest-django or Django's built-in test runner and document the chosen invocation.
+2. **Migrate runner configuration.** Replace TEST_RUNNER, imports, plugins, and django-nose-specific options at every reported usage.
+3. **Replace the dependency.** Remove django-nose and add only the target runner and plugins required by the suite.
+
+**Verification**
+
+- `python manage.py test`: Run Django's configured test suite.
+- `python -m pytest`: Run the suite through pytest-django when selected.
+- `python -m pip check`: Check installed dependency compatibility.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.django-nose.maintenance-only`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.django-nose.maintenance-only.html",
+      "url": "https://velella.sh/offing/rules/python.package.django-nose.maintenance-only.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.django-nose.maintenance-only.html",
+      "headline": "django-nose is maintenance-only — dates, impact, migration",
+      "description": "The package states that it is in maintenance mode and recommends pytest or Django unittest for new projects.",
+      "inLanguage": "en",
+      "dateModified": "2026-11-07",
+      "keywords": [
+        "deprecated",
+        "python",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "django-nose is maintenance-only",
+        "identifier": "pkg:pypi/django-nose"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "django-nose project notice",
+          "url": "https://pypi.org/project/django-nose/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.django-nose.maintenance-only.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.django-nose.maintenance-only.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/django-nose?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:pypi/*. Source: django-nose project notice (https://pypi.org/project/django-nose/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:pypi/django-nose?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "pytest-django or Django unittest"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/django-nose?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/django-nose."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

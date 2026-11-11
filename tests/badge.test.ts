@@ -32,7 +32,7 @@ test("every badge state keeps its message text at WCAG AA contrast", () => {
     const ratio = contrastRatio(background, readableTextColor(background));
     assert.ok(ratio >= 4.5, `${sample.name}: ${ratio.toFixed(2)}:1 is below WCAG AA`);
   }
-  assert.ok(contrastRatio("#0C1110", "#FFFFFF") >= 4.5, "the label area keeps white text readable");
+  assert.ok(contrastRatio("#1F1F28", "#FFFFFF") >= 4.5, "the label area keeps white text readable");
 });
 
 test("every style renders a deterministic, self-contained SVG for every state", () => {

@@ -1,0 +1,158 @@
+
+# PHP 7.2 is end-of-life
+
+**End of life** as of 2020-11-30. Replacement: PHP 8.4 or later. Source: [PHP release branches](https://www.php.net/releases/branches.php).
+
+Check a version:
+
+```bash
+offing check pkg:generic/php
+```
+
+The PHP release branches list marks PHP 7.2 as end of life: active support ended on 2019-11-30 and security support ended on 2020-11-30.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of life |
+| Severity | high |
+| Ecosystem | `php` |
+| Component | `pkg:generic/php` |
+| Affected versions | `vers:semver/>=7.2.0\|<7.3.0` |
+| Date from the source | 2020-11-30 |
+| Replacement | PHP 8.4 or later |
+| Evidence last seen | 2026-10-20 |
+| Reviewed | 2026-10-20 by arminazimi |
+| Review due | 2027-01-18 (90 days after the last review) |
+| Rule ID | `php.runtime.eol-7.2` |
+
+## Sources
+
+- [PHP release branches](https://www.php.net/releases/branches.php) (accessed 2026-10-20)
+- [PHP supported versions](https://www.php.net/supported-versions.php) (accessed 2026-10-20)
+
+## Migration
+
+**Constraints**
+
+- Keep .php-version, .tool-versions, composer.json require.php and config.platform.php, composer.lock platform.php, CI matrices, and container images on one supported PHP release line.
+- Confirm Composer packages and extensions build on the target PHP and reinstall dependencies after changing the runtime.
+
+**Steps**
+
+1. **Raise the PHP version.** Change the reported declaration from PHP 7.2 to a supported release (see the replacement), using the project's existing version manager.
+2. **Align other PHP version surfaces.** Update CI setup-php versions, Dockerfile `php:` images, composer.json require.php and config.platform.php, and composer.lock platform.php so they agree.
+
+**Verification**
+
+- `php --version`: Confirm the active runtime is the intended release.
+- `composer validate && composer install`: Validate and reinstall dependencies on the new PHP.
+- `composer validate && vendor/bin/phpunit`: Validate the Composer project and run the PHPUnit suite on the new PHP.
+
+## Detected by
+
+The `php` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Other versions of this product
+
+- [PHP 7.0 is end-of-life](php.runtime.eol-7.0.html)
+- [PHP 7.1 is end-of-life](php.runtime.eol-7.1.html)
+- [PHP 7.3 is end-of-life](php.runtime.eol-7.3.html)
+- [PHP 7.4 is end-of-life](php.runtime.eol-7.4.html)
+- [PHP 8.0 is end-of-life](php.runtime.eol-8.0.html)
+- [PHP 8.1 is end-of-life](php.runtime.eol-8.1.html)
+
+### Same ecosystem
+
+- [doctrine/cache is abandoned](php.package.doctrine.cache.abandoned.html)
+- [fzaninotto/faker is abandoned](php.package.fzaninotto.faker.abandoned.html)
+- [Laravel 10 is no longer supported](php.package.laravel.framework-10.end-of-support.html)
+- [Laravel 11 is no longer supported](php.package.laravel.framework-11.end-of-support.html)
+- [sensiolabs/security-checker is abandoned](php.package.sensiolabs.security-checker.abandoned.html)
+- [swiftmailer/swiftmailer is abandoned](php.package.swiftmailer.swiftmailer.abandoned.html)
+- [zendframework/zend-stdlib is abandoned](php.package.zendframework.zend-stdlib.abandoned.html)
+
+
+## Data
+
+This page is generated from [`registry/php.json`](https://github.com/velella-sh/offing/blob/main/registry/php.json), rule `php.runtime.eol-7.2`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/php.runtime.eol-7.2.html",
+      "url": "https://velella.sh/offing/rules/php.runtime.eol-7.2.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/php.runtime.eol-7.2.html",
+      "headline": "PHP 7.2 is end-of-life — dates, impact, migration",
+      "description": "The PHP release branches list marks PHP 7.2 as end of life: active support ended on 2019-11-30 and security support ended on 2020-11-30.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-20",
+      "keywords": [
+        "end-of-life",
+        "php",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "PHP 7.2 is end-of-life",
+        "identifier": "pkg:generic/php"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "PHP release branches",
+          "url": "https://www.php.net/releases/branches.php"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "PHP supported versions",
+          "url": "https://www.php.net/supported-versions.php"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/php.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/php.runtime.eol-7.2.html#faq",
+      "url": "https://velella.sh/offing/rules/php.runtime.eol-7.2.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/php?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of life as of 2020-11-30. Affected versions: vers:semver/>=7.2.0|\u003c7.3.0. Source: PHP release branches (https://www.php.net/releases/branches.php)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/php?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PHP 8.4 or later"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/php?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/php."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Codemods</title><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/CODEMODS/index.md"}},{"id":"section-dockerfile-legacy-syntax","label":"Dockerfile legacy syntax","hint":"Go to section","run":{"kind":"section","id":"dockerfile-legacy-syntax"}},{"id":"section-node-renames","label":"node-renames","hint":"Go to section","run":{"kind":"section","id":"node-renames"}},{"id":"section-terraform-legacy-syntax","label":"Terraform legacy syntax","hint":"Go to section","run":{"kind":"section","id":"terraform-legacy-syntax"}},{"id":"section-what-is-detected","label":"What is detected","hint":"Go to section","run":{"kind":"section","id":"what-is-detected"}},{"id":"section-what-is-rewritten","label":"What is rewritten","hint":"Go to section","run":{"kind":"section","id":"what-is-rewritten"}},{"id":"section-python-imp","label":"python-imp","hint":"Go to section","run":{"kind":"section","id":"python-imp"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="5"><span class="reading-time-minutes">5 minutes read</span></p><div class="doc-body"><h1 id="codemods" data-src="docs/CODEMODS.md:1:1-1:10">Codemods</h1>
+<p data-src="docs/CODEMODS.md:3:1-3:331"><code>offing fix</code> plans deterministic repairs for findings whose change is mechanical, and prints them as unified diffs that <code>git apply</code> accepts. It never writes a file or runs a command. A codemod applies only while the text it rewrites still matches the finding, and every finding it declines is reported as a refusal with the reason.</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/CODEMODS.md:5:1-8:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> fix</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --dry-run</span><span style="--shiki-light:#5F687C;--shiki-dark:#96938E">            # print the patches</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> fix</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --branch</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> &#x3C;</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">nam</span><span style="--shiki-light:#2E3440;--shiki-dark:#DCD7BA">e</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">></span><span style="--shiki-light:#5F687C;--shiki-dark:#96938E">      # apply them on a local branch and re-scan</span></span></code></pre>
+<h2 id="dockerfile-legacy-syntax" data-src="docs/CODEMODS.md:10:1-10:27">Dockerfile legacy syntax</h2>
+<p data-src="docs/CODEMODS.md:12:1-12:131">Rules <code>container.dockerfile.maintainer</code> and <code>container.dockerfile.legacy-env-format</code> are repaired by the <code>dockerfile-legacy</code> fixer.</p>
+<table data-src="docs/CODEMODS.md:14:1-17:55">
+<thead>
+<tr>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAINTAINER Offing Team &#x3C;team@example.com></code></td>
+<td><code>LABEL org.opencontainers.image.authors="Offing Team &#x3C;team@example.com>"</code></td>
+</tr>
+<tr>
+<td><code>ENV APP_HOME /opt/app</code></td>
+<td><code>ENV APP_HOME="/opt/app"</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/CODEMODS.md:19:1-19:334">The fixer leaves an instruction alone and reports why when the value contains a double quote or a backslash, when the instruction continues on another line, when the value contains a heredoc, and when the instruction sits inside an <code>ONBUILD</code> trigger. An <code>ENV key=value</code> assignment is already in the supported form and is not reported.</p>
+<p data-src="docs/CODEMODS.md:21:1-21:379">A worked example lives in <a href="../examples/codemods/dockerfile-legacy"><code>examples/codemods/dockerfile-legacy</code></a>. Its before and after files are committed as <code>before.image.fixture</code> and <code>after.image.fixture</code> (decision 0027), so a scanner never reads them as a <code>Dockerfile</code>. The command below copies the directory to a temporary one, restores the real names there, and prints the patches:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/CODEMODS.md:23:1-26:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">npm</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> run</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> build</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">node</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> dist/tools/examples.js</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> codemods/dockerfile-legacy</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> fix</span></span></code></pre>
+<p data-src="docs/CODEMODS.md:28:1-28:436"><code>offing fix</code> repairs some deprecations exactly, at the lines a scan reports, and prints unified diffs that <code>git apply</code> accepts. Nothing is written unless you pass <code>--branch</code>, and no codemod uses the network or runs the scanned repository's code. A codemod rewrites a finding only when the replacement behaves identically for every input the matched shape accepts; anything else is left unchanged and listed as a refusal in <code>fix --json</code>.</p>
+<h2 id="node-renames" data-src="docs/CODEMODS.md:29:1-29:15">node-renames</h2>
+<p data-src="docs/CODEMODS.md:30:1-30:196">Rewrites the Node.js deprecations that are pure renames: the old name calls the same implementation. Only the member name changes; the receiver expression and the arguments are kept byte-for-byte.</p>
+<table data-src="docs/CODEMODS.md:31:1-41:41">
+<thead>
+<tr>
+<th>Rule</th>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodejs.symbol.os.tmpdir</code></td>
+<td><code>os.tmpDir()</code></td>
+<td><code>os.tmpdir()</code></td>
+</tr>
+<tr>
+<td><code>nodejs.symbol.path.makelong</code></td>
+<td><code>path._makeLong(p)</code></td>
+<td><code>path.toNamespacedPath(p)</code></td>
+</tr>
+<tr>
+<td><code>nodejs.symbol.async-hooks.currentid</code></td>
+<td><code>async_hooks.currentId()</code></td>
+<td><code>async_hooks.executionAsyncId()</code></td>
+</tr>
+<tr>
+<td><code>nodejs.symbol.async-hooks.triggerid</code></td>
+<td><code>async_hooks.triggerId()</code></td>
+<td><code>async_hooks.triggerAsyncId()</code></td>
+</tr>
+<tr>
+<td><code>nodejs.symbol.crypto.hash</code></td>
+<td><code>crypto.Hash(algorithm)</code> called without <code>new</code></td>
+<td><code>crypto.createHash(algorithm)</code></td>
+</tr>
+<tr>
+<td><code>nodejs.symbol.crypto.hmac</code></td>
+<td><code>crypto.Hmac(algorithm, key)</code> called without <code>new</code></td>
+<td><code>crypto.createHmac(algorithm, key)</code></td>
+</tr>
+<tr>
+<td>Each equivalence is read from the Node.js source: <a href="https://github.com/nodejs/node/blob/v13.14.0/lib/os.js#L298" rel="external"><code>tmpDir</code> is <code>deprecate(tmpdir, …)</code></a>, <a href="https://github.com/nodejs/node/blob/v22.23.0/lib/path.js#L1725-L1726" rel="external"><code>_makeLong</code> is assigned <code>toNamespacedPath</code> on both platforms</a>, <a href="https://github.com/nodejs/node/blob/v8.1.4/lib/async_hooks.js#L183-L193" rel="external"><code>currentId</code> and <code>triggerId</code> are renamed to the same functions</a>, and <a href="https://github.com/nodejs/node/blob/v22.23.0/lib/internal/crypto/hash.js#L88-L163" rel="external"><code>Hash</code>/<code>Hmac</code> called without <code>new</code> construct the same object <code>createHash</code>/<code>createHmac</code> return</a>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Two candidates are not covered because they are not exact aliases. <code>os.getNetworkInterfaces()</code> returns the native flat array while <code>os.networkInterfaces()</code> builds the keyed object, and <code>module.createRequire()</code> validates its argument and decodes non-absolute strings as file URLs while <code>module.createRequireFromPath()</code> accepts any path.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Refused, with the reason in <code>fix --json</code>:</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul data-src="docs/CODEMODS.md:42:1-50:217">
+<li>a call through a local binding, such as a destructured or aliased import (<code>const { tmpDir } = require("os"); tmpDir()</code>);</li>
+<li>an optional call (<code>os.tmpDir?.()</code> or <code>os?.tmpDir()</code>);</li>
+<li>a computed member access (<code>os["tmpDir"]()</code>);</li>
+<li>a constructor call such as <code>new crypto.Hash(...)</code>, which is not the call form the rename covers;
+<code>offing fix</code> prints deterministic patches for findings whose repair is purely syntactic. It never writes a file, never runs a command, and never uses the network; the output is a unified diff that <code>git apply</code> accepts.
+offing scan .
+offing fix . | git apply --check
+offing fix . | git apply
+A fixer rewrites only the exact form its rule names. A finding it cannot repair without guessing is left in place and reported as a refusal with the reason, so a patch never hides a change the tool did not understand.</li>
+</ul>
+<h2 id="terraform-legacy-syntax" data-src="docs/CODEMODS.md:51:1-51:26">Terraform legacy syntax</h2>
+<p data-src="docs/CODEMODS.md:52:1-60:14">Two Terraform language forms have a one-to-one rewrite:
+| Finding | Rewrite |
+| <code>terraform.syntax.interpolation-only</code> | <code>"${var.name}"</code> becomes <code>var.name</code> |
+| <code>terraform.function.list-map</code> | <code>list(a, b)</code> becomes <code>tolist([a, b])</code>; <code>map(k, v)</code> becomes <code>tomap({ k = v })</code> |
+Interpolation-only strings were deprecated in Terraform v0.12.14. Terraform still accepts them, but recommends the bare expression. The <code>list()</code> and <code>map()</code> functions were removed in Terraform v0.15, so a configuration that still calls them fails to validate on 0.15 and later.
+offing scan . --only terraform
+offing fix . | git apply
+terraform init -backend=false &#x26;&#x26; terraform validate
+terraform plan</p>
+<h3 id="what-is-detected" data-src="docs/CODEMODS.md:61:1-61:20">What is detected</h3>
+<ul data-src="docs/CODEMODS.md:62:1-64:315">
+<li>A quoted string whose entire value is one <code>${ ... }</code> interpolation, in a value, object key, or block label.</li>
+<li>A value call to <code>list()</code> or <code>map()</code>, including one inside an interpolation expression.
+A string with any literal text around the interpolation, such as <code>"prefix-${var.name}"</code>, is not interpolation-only and is not reported. Neither are heredocs, comments, plain string contents, <code>%{ ... }</code> directives, escaped strings, or the <code>list(string)</code> and <code>map(object({...}))</code> type constraints, which remain valid.</li>
+</ul>
+<h3 id="what-is-rewritten" data-src="docs/CODEMODS.md:65:1-65:21">What is rewritten</h3>
+<ul data-src="docs/CODEMODS.md:66:1-70:165">
+<li>An interpolation-only string in a value position loses its quotes. A string used as an object key or a block label is refused: removing its quotes would change the key syntax or produce invalid HCL.</li>
+<li>A <code>list()</code> or <code>map()</code> call is rewritten only when every argument is on one line and the argument count is valid. <code>list()</code> needs at least one argument, <code>map()</code> needs an even number of key/value arguments, and each key must be an identifier or a quoted string.</li>
+<li>A call whose arguments span lines, an empty <code>list()</code>, an odd <code>map()</code> argument count, or an expression map key is refused with the reason rather than guessed.</li>
+<li>Files under <code>.terraform/</code>, files whose header says another tool generates them, and files without a trailing newline are refused. Finding a file already in its rewritten form leaves nothing for a second pass.
+The <code>examples/codemods/terraform-legacy</code> directory contains a before and after pair. The detector and codemod use bounded, pure parsing only; Terraform is never run.</li>
+</ul>
+<h2 id="python-imp" data-src="docs/CODEMODS.md:71:1-71:13">python-imp</h2>
+<p data-src="docs/CODEMODS.md:72:1-72:198">Rewrites the <code>imp</code> calls that have exact <code>importlib</code>, <code>types</code>, or <code>sys</code> equivalents, so the code runs on Python 3.12, where <code>imp</code> was <a href="https://docs.python.org/3/whatsnew/3.12.html#removed" rel="external">removed</a>.</p>
+<table data-src="docs/CODEMODS.md:73:1-82:329">
+<thead>
+<tr>
+<th>Rule</th>
+<th>Before</th>
+<th>After</th>
+<th>Import added</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>python.symbol.imp.reload</code></td>
+<td><code>imp.reload(m)</code></td>
+<td><code>importlib.reload(m)</code></td>
+<td><code>import importlib</code></td>
+</tr>
+<tr>
+<td><code>python.symbol.imp.new-module</code></td>
+<td><code>imp.new_module(n)</code></td>
+<td><code>types.ModuleType(n)</code></td>
+<td><code>import types</code></td>
+</tr>
+<tr>
+<td><code>python.symbol.imp.get-magic</code></td>
+<td><code>imp.get_magic()</code></td>
+<td><code>importlib.util.MAGIC_NUMBER</code></td>
+<td><code>import importlib.util</code></td>
+</tr>
+<tr>
+<td><code>python.symbol.imp.get-tag</code></td>
+<td><code>imp.get_tag()</code></td>
+<td><code>sys.implementation.cache_tag</code></td>
+<td><code>import sys</code></td>
+</tr>
+<tr>
+<td><code>python.symbol.imp.cache-from-source</code></td>
+<td><code>imp.cache_from_source(p)</code></td>
+<td><code>importlib.util.cache_from_source(p)</code></td>
+<td><code>import importlib.util</code></td>
+</tr>
+<tr>
+<td><code>python.symbol.imp.source-from-cache</code></td>
+<td><code>imp.source_from_cache(p)</code></td>
+<td><code>importlib.util.source_from_cache(p)</code></td>
+<td><code>import importlib.util</code></td>
+</tr>
+<tr>
+<td>Each equivalence is documented by the standard library: <a href="https://docs.python.org/3/library/importlib.html#importlib.reload" rel="external"><code>importlib.reload</code></a>, <a href="https://docs.python.org/3/library/types.html#types.ModuleType" rel="external"><code>types.ModuleType</code></a>, <a href="https://docs.python.org/3/library/importlib.html#importlib.util.MAGIC_NUMBER" rel="external"><code>importlib.util.MAGIC_NUMBER</code></a>, <a href="https://docs.python.org/3/library/sys.html#sys.implementation" rel="external"><code>sys.implementation.cache_tag</code></a>, <a href="https://docs.python.org/3/library/importlib.html#importlib.util.cache_from_source" rel="external"><code>importlib.util.cache_from_source</code></a>, and <a href="https://docs.python.org/3/library/importlib.html#importlib.util.source_from_cache" rel="external"><code>importlib.util.source_from_cache</code></a>.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Each needed import is added on the line after <code>import imp</code> when it is not already present. When every <code>imp.</code> use in the file was rewritten, the <code>import imp</code> line is replaced by the added imports, because <code>import imp</code> itself fails on Python 3.12. When any use remains, <code>import imp</code> stays and the new imports are inserted after it.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<pre class="code" tabindex="0" data-lang="python" data-src="docs/CODEMODS.md:83:1-260:1"><code><span class="line"><span>import imp</span></span>
+<span class="line"><span>module = imp.reload(existing)</span></span>
+<span class="line"><span>magic = imp.get_magic()</span></span>
+<span class="line"><span>becomes</span></span>
+<span class="line"><span>```python</span></span>
+<span class="line"><span>import importlib</span></span>
+<span class="line"><span>import importlib.util</span></span>
+<span class="line"><span>module = importlib.reload(existing)</span></span>
+<span class="line"><span>magic = importlib.util.MAGIC_NUMBER</span></span>
+<span class="line"><span>- `imp.find_module`, `imp.load_module`, `imp.load_source`, and `imp.get_suffixes`, which have no exact equivalent;</span></span>
+<span class="line"><span>- a keyword argument the replacement does not accept, such as `imp.reload(m, file=...)`;</span></span>
+<span class="line"><span>- a second positional argument to `imp.cache_from_source`, where it means `debug_override` in `imp` but `optimization` in `importlib.util`;</span></span>
+<span class="line"><span>- any argument to `imp.get_magic` or `imp.get_tag`, whose replacement is a constant;</span></span>
+<span class="line"><span>- a splat argument, whose names are not visible in the source text;</span></span>
+<span class="line"><span>- a call written through a rebinding, such as `reload = imp.reload; reload(m)`;</span></span>
+<span class="line"><span>- `from imp import ...`, `import imp as ...`, an `import imp` statement that also imports other modules, more than one `import imp`, or one that shares its line with other code;</span></span>
+<span class="line"><span>- a file that cannot be read, has syntax errors, or does not end with a newline.</span></span>
+<span class="line"><span>## node-buffer</span></span>
+<span class="line"><span>Rewrites the deprecated Node.js `Buffer` constructor (`nodejs.symbol.buffer.constructor`, DEP0005) and `SlowBuffer` (`nodejs.symbol.slowbuffer`, DEP0030) when the argument's kind is visible in the source text.</span></span>
+<span class="line"><span>|---|---|</span></span>
+<span class="line"><span>| `new Buffer(&#x3C;number literal>)` / `Buffer(&#x3C;number literal>)` | `Buffer.alloc(&#x3C;number>)` |</span></span>
+<span class="line"><span>| `new Buffer(&#x3C;string or template literal>[, &#x3C;string literal encoding>])` | `Buffer.from(&#x3C;string>[, &#x3C;encoding>])` |</span></span>
+<span class="line"><span>| `new Buffer(&#x3C;array literal>)` | `Buffer.from(&#x3C;array>)` |</span></span>
+<span class="line"><span>| `new SlowBuffer(&#x3C;number literal>)` | `Buffer.allocUnsafeSlow(&#x3C;number>)` |</span></span>
+<span class="line"><span>`Buffer.alloc` zero-fills the new buffer. The `Buffer` constructor has zero-filled its numeric form since Node.js 8, so the rewrite keeps the old behavior; Node.js documents the deprecation as [DEP0005](https://nodejs.org/api/deprecations.html#dep0005-buffer-constructor-deprecation).</span></span>
+<span class="line"><span>- an identifier, call, member expression, binary expression, spread, or any other argument whose kind is not a number, string, template without substitutions, or array literal;</span></span>
+<span class="line"><span>- `new Buffer(buffer, offset, length)` and any argument count the table does not list;</span></span>
+<span class="line"><span>- an argument wrapped in a TypeScript type assertion (`as`, `satisfies`, `&#x3C;T>x`, `!`);</span></span>
+<span class="line"><span>- a template literal with substitutions;</span></span>
+<span class="line"><span>- a `SlowBuffer` call without `new`, or a member-expression form such as `buffer.SlowBuffer(...)`;</span></span>
+<span class="line"><span>- a file that cannot be read, does not end with a newline, or does not parse.</span></span>
+<span class="line"><span>## node-util-is</span></span>
+<span class="line"><span>Rewrites the removed Node.js `util.is*` type checks (DEP0044 to DEP0058) to the native expressions Node.js names for them. Only a call with exactly one argument is rewritten; the argument text is kept byte-for-byte.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>| Rule | Before | After |</span></span>
+<span class="line"><span>|---|---|---|</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isarray` | `util.isArray(x)` | `Array.isArray(x)` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isboolean` | `util.isBoolean(x)` | `typeof x === "boolean"` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isbuffer` | `util.isBuffer(x)` | `Buffer.isBuffer(x)` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isdate` | `util.isDate(x)` | `util.types.isDate(x)` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isregexp` | `util.isRegExp(x)` | `util.types.isRegExp(x)` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isfunction` | `util.isFunction(x)` | `typeof x === "function"` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isnull` | `util.isNull(x)` | `x === null` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isundefined` | `util.isUndefined(x)` | `x === undefined` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isnullorundefined` | `util.isNullOrUndefined(x)` | `x == null` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isnumber` | `util.isNumber(x)` | `typeof x === "number"` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isstring` | `util.isString(x)` | `typeof x === "string"` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.issymbol` | `util.isSymbol(x)` | `typeof x === "symbol"` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isobject` | `util.isObject(x)` | `x !== null &#x26;&#x26; typeof x === "object"` |</span></span>
+<span class="line"><span>| `nodejs.symbol.util.isprimitive` | `util.isPrimitive(x)` | `x === null \|\| (typeof x !== "object" &#x26;&#x26; typeof x !== "function")` |</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Each replacement is the function body Node.js already runs: [`util.js`](https://github.com/nodejs/node/blob/v22.23.0/lib/util.js#L120-L212) implements the checks with those expressions, and the [export table](https://github.com/nodejs/node/blob/v22.23.0/lib/util.js#L634-L689) deprecates each name with the same recommendation. `x == null` is the short form of `x === null || x === undefined` and matches nothing else, because loose equality against `null` never coerces an object. `isDate` and `isRegExp` call `util.types` because the deprecated functions were those checks and `instanceof` fails for values from another realm, which `util.isDate` and `util.isRegExp` accepted.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The call may read `util` through `const util = require("util")`, `require("node:util")`, `import util from "util"`, `import * as util from "node:util"`, or a destructured `const { isArray } = require("util")` / `import { isArray } from "util"`. A destructured call is rewritten in place and its import binding is left alone. When `isDate` or `isRegExp` is called through a destructured binding and no namespace binding exists, the call is refused rather than adding an import.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>A replacement that is a binary or logical expression is wrapped in parentheses unless its parent is an expression statement, an `if` or `while` condition, a call argument, a return value, or an initializer, so `!util.isNull(a)` becomes `!(a === null)`.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Refused, with the reason in `fix --json`:</span></span>
+<span class="line"><span>- `util.isError(x)`, which needs `Object.prototype.toString(e) === "[object Error]" || e instanceof Error` and has no exact native equivalent on every supported Node version;</span></span>
+<span class="line"><span>- `util.isObject(x)` or `util.isPrimitive(x)` when `x` is not an identifier or a member chain without calls, because the replacement reads `x` twice;</span></span>
+<span class="line"><span>- a call with no argument, more than one argument, or a spread argument;</span></span>
+<span class="line"><span>- an optional call (`util.isArray?.(x)` or `util?.isArray(x)`);</span></span>
+<span class="line"><span>- a call through a binding the file reassigns, such as `let check = util.isArray; check = other; check(x)`;</span></span>
+<span class="line"><span>- a call that contains another `util.is*` call, whose replacement would overlap;</span></span>
+<span class="line"><span>- a file that cannot be read, does not end with a newline, or does not parse.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The `examples/codemods/node-util-is` directory contains an input file to run `offing fix` against.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## python-utcnow</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Rewrites the two `datetime` methods [deprecated in Python 3.12](https://docs.python.org/3/whatsnew/3.12.html#deprecated) — `datetime.utcnow()` (`python.symbol.datetime.utcnow`) and `datetime.utcfromtimestamp(t)` (`python.symbol.datetime.utcfromtimestamp`) — into forms that return the exact same naive value without the deprecated call.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>| Import shape | `utcnow()` becomes | `utcfromtimestamp(t)` becomes |</span></span>
+<span class="line"><span>|---|---|---|</span></span>
+<span class="line"><span>| `from datetime import datetime` | `datetime.now(timezone.utc).replace(tzinfo=None)` | `datetime.fromtimestamp(t, timezone.utc).replace(tzinfo=None)` |</span></span>
+<span class="line"><span>| `import datetime` | `datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)` | `datetime.datetime.fromtimestamp(t, datetime.timezone.utc).replace(tzinfo=None)` |</span></span>
+<span class="line"><span>| `import datetime as dt` | `dt.datetime.now(dt.timezone.utc).replace(tzinfo=None)` | `dt.datetime.fromtimestamp(t, dt.timezone.utc).replace(tzinfo=None)` |</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The naive result is preserved on purpose. The [deprecation note](https://docs.python.org/3/whatsnew/3.12.html#deprecated) and the [`datetime` documentation](https://docs.python.org/3/library/datetime.html#datetime.datetime.utcnow) point to `datetime.now(datetime.UTC)`, whose result is timezone-aware; switching a naive datetime to an aware one changes every comparison, serialization, and arithmetic it takes part in. `.replace(tzinfo=None)` strips the awareness the rewrite itself adds, so the value is byte-for-byte what the deprecated call returned. `timezone.utc` is used instead of `datetime.UTC` because it exists on every supported Python 3, while `datetime.UTC` needs 3.11 or newer.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>For the `from datetime import datetime` shape, `timezone` is added to that same import statement when it is not already imported. The rewrite follows the file's import shape per call, so a file that imports the class by name and the module under an alias gets each call rewritten in its own shape.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Refused, with the reason in `fix --json`:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- `from datetime import *`, where the codemod cannot tell where the names come from;</span></span>
+<span class="line"><span>- a call through an alias, such as `from datetime import datetime as d` or a rebinding `utcnow = datetime.utcnow`;</span></span>
+<span class="line"><span>- a file that binds `datetime` both as the module and as the class imported by name, where a call written `datetime.` could read either binding;</span></span>
+<span class="line"><span>- a `timezone` name already bound to something other than `datetime.timezone`, which the rewrite would shadow or read wrongly;</span></span>
+<span class="line"><span>- a `from datetime import datetime` statement that is parenthesized or spans several lines, when `timezone` would have to be added to it;</span></span>
+<span class="line"><span>- a `utcnow` call with arguments, and a `utcfromtimestamp` call with none, with a keyword argument, or with a splat;</span></span>
+<span class="line"><span>- a file that cannot be read, has syntax errors, or does not end with a newline.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The `examples/codemods/python-utcnow` directory contains an input file to run `offing fix` against.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## python-renames</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Rewrites the Python 3.12 removals that are one-to-one renames: two symbols with a current replacement, and the deprecated `unittest.TestCase` aliases that call a current assertion. Only the removed name changes; the receiver, arguments, and every other byte are kept.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>| Rule | Before | After |</span></span>
+<span class="line"><span>|---|---|---|</span></span>
+<span class="line"><span>| `python.symbol.configparser.safeconfigparser` | `configparser.SafeConfigParser()` | `configparser.ConfigParser()` |</span></span>
+<span class="line"><span>| `python.symbol.io.openwrapper` | `io.OpenWrapper(path)` | `io.open(path)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.assertEquals(a, b)` | `self.assertEqual(a, b)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.assertNotEquals(a, b)` | `self.assertNotEqual(a, b)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.assert_(flag)` | `self.assertTrue(flag)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.failUnless(flag)` | `self.assertTrue(flag)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.failIf(flag)` | `self.assertFalse(flag)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.failUnlessEqual(a, b)` | `self.assertEqual(a, b)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.failIfEqual(a, b)` | `self.assertNotEqual(a, b)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.assertAlmostEquals(a, b)` | `self.assertAlmostEqual(a, b)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.assertNotAlmostEquals(a, b)` | `self.assertNotAlmostEqual(a, b)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.failUnlessAlmostEqual(a, b)` | `self.assertAlmostEqual(a, b)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.failIfAlmostEqual(a, b)` | `self.assertNotAlmostEqual(a, b)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.failUnlessRaises(E, f)` | `self.assertRaises(E, f)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.assertRegexpMatches(s, p)` | `self.assertRegex(s, p)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.assertNotRegexpMatches(s, p)` | `self.assertNotRegex(s, p)` |</span></span>
+<span class="line"><span>| `python.symbol.unittest.removed-aliases` | `self.assertRaisesRegexp(E, p, f)` | `self.assertRaisesRegex(E, p, f)` |</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The replacement table is the one in [What's New in Python 3.12](https://docs.python.org/3/whatsnew/3.12.html#removed). `SafeConfigParser` has been an alias of `ConfigParser` since Python 3.2, and `io.OpenWrapper` has been an alias of the built-in `open`. The unittest aliases each called the current assertion directly, so the test result is unchanged.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>A `from configparser import SafeConfigParser` or `from io import OpenWrapper` name is renamed in the import statement and at each use, so the binding still exists. A module read through `import configparser as cp` is qualified, so only the member name changes. The unittest aliases use the `method` usage shape: a call on any receiver inside a class that subclasses `unittest.TestCase` or `TestCase` (including an imported alias of it). The receiver is not checked, so `helper.assertEquals(...)` inside a test class is renamed too.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Refused, with the reason in `fix --json`:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- `assertDictContainsSubset(...)`, which Python 3.12 removed without a replacement; rewrite the assertion by hand;</span></span>
+<span class="line"><span>- an alias call that is not inside a `unittest.TestCase` subclass;</span></span>
+<span class="line"><span>- a removed name used through an aliased import, such as `from configparser import SafeConfigParser as Renamed`, where renaming the call alone would leave the binding pointing at the removed name;</span></span>
+<span class="line"><span>- a file that cannot be read, has syntax errors, or does not end with a newline.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The `examples/codemods/python-renames` directory contains an input file to run `offing fix` against.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## kubernetes-ingress-v1</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Rewrites a v1beta1 Ingress — `extensions/v1beta1` (`kubernetes.extensions.ingress.v1beta1.removed`) and `networking.k8s.io/v1beta1` (`kubernetes.networking-k8s-io.ingress.v1beta1.removed`) — to `networking.k8s.io/v1`, with the field changes the [Deprecated API Migration Guide](https://kubernetes.io/docs/reference/using-api/deprecation-guide/#ingress-v122) gives for Ingress.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>| Before | After |</span></span>
+<span class="line"><span>|---|---|</span></span>
+<span class="line"><span>| `apiVersion: extensions/v1beta1` | `apiVersion: networking.k8s.io/v1` |</span></span>
+<span class="line"><span>| `spec.backend:` | `spec.defaultBackend:` |</span></span>
+<span class="line"><span>| `serviceName: web` and `servicePort: 8080` | `service:` with `name: web` and `port:` with `number: 8080` |</span></span>
+<span class="line"><span>| `serviceName: web` and `servicePort: http` | `service:` with `name: web` and `port:` with `name: http` |</span></span>
+<span class="line"><span>| a path with no `pathType` | `pathType: ImplementationSpecific`, the value the guide gives for a v1beta1 path that matched the implementation's default |</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The manifest is edited on the lines the fields are written on and never re-serialized, so the indentation is the file's own, a `# comment` written after a rewritten value moves with that value, and the comments, blank lines, and key order of every untouched field stay where they were. `src/fix/kubernetes.ts` has no Ingress entry and declines these findings, so the two Kubernetes fixers never both rewrite one Ingress, and a `networking.k8s.io/v1` Ingress is not a finding, so a second pass has nothing to do.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Refused, with the reason in `fix --json`:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- a document that contains double curly braces, which mark a Helm template Offing does not render;</span></span>
+<span class="line"><span>- an anchor or an alias anywhere in the Ingress document;</span></span>
+<span class="line"><span>- a backend, `spec`, `rules`, `http`, or `paths` written in flow style, and a document indented with a tab;</span></span>
+<span class="line"><span>- a backend that points at `resource:`, which has no v1 equivalent;</span></span>
+<span class="line"><span>- a backend that is not exactly `serviceName` and `servicePort` on two adjacent lines at the same indent;</span></span>
+<span class="line"><span>- a `servicePort` that is quoted, outside the range of a port number, or neither a port number nor a port name;</span></span>
+<span class="line"><span>- a path with a field other than `path`, `backend`, and `pathType`, or with no backend;</span></span>
+<span class="line"><span>- a manifest that is not valid YAML, does not end with a newline, is larger than Offing reads, or has more documents than Offing rewrites.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The `examples/codemods/k8s-ingress-v1` directory contains a before and after pair.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## GitHub Actions workflow commands</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The `workflow-commands` fixer migrates deprecated stdout commands in workflow `run:` steps and composite `action.yml` / `action.yaml` steps:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>| Command | Environment file |</span></span>
+<span class="line"><span>| --- | --- |</span></span>
+<span class="line"><span>| `::set-output name=N::V` | `echo "N=V" >> "$GITHUB_OUTPUT"` |</span></span>
+<span class="line"><span>| `::save-state name=N::V` | `echo "N=V" >> "$GITHUB_STATE"` |</span></span>
+<span class="line"><span>| `::set-env name=N::V` | `echo "N=V" >> "$GITHUB_ENV"` |</span></span>
+<span class="line"><span>| `::add-path::P` | `echo "P" >> "$GITHUB_PATH"` |</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Only standalone single-line `echo` statements are rewritten. Double quotes, single quotes, and unquoted literal arguments are accepted; single quotes stay single quotes so literal dollar signs keep their meaning. YAML comments and surrounding formatting are preserved.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The effective shell must be exactly `bash` or `sh`. Step `shell:` overrides job `defaults.run.shell`, which overrides workflow defaults. An Ubuntu or macOS hosted runner without a shell setting uses bash; Windows, matrix, and self-hosted runners need an explicit supported shell. PowerShell, cmd, and custom shell templates remain manual.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Refusals explain unsafe values or syntax: `%0A`, `%0D`, `%25` (case-insensitive), literal newlines, embedded quotes or backslashes, command substitution, GitHub expressions, echo options, extra shell commands or redirections, paths that could become echo options, heredocs, continuations, and folded or multiline YAML scalars. Multiline values need environment-file delimiter syntax and must be migrated manually. Simple shell variable expansion in double quotes is preserved; check that the runtime value is a single line before using the patch. No workflow or repository code is executed by detection or patch planning.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>See the [before and after example](../examples/codemods/workflow-commands/). The rules cite GitHub's [set-output/save-state deprecation](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/) and [set-env/add-path removal](https://github.blog/changelog/2020-11-09-github-actions-removing-set-env-and-add-path-commands-on-november-16/).</span></span></code></pre></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/CODEMODS.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/CODEMODS.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/CODEMODS.md:1. Current text: &quot;Codemods&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Codemods&amp;body=Page%3A%20%2Foffing%2FCODEMODS%2F%0ASource%3A%20docs%2FCODEMODS.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/CODEMODS/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/CODEMODS/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/CODEMODS/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/CODEMODS/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FCODEMODS%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FCODEMODS%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FCODEMODS%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#dockerfile-legacy-syntax">Dockerfile legacy syntax</a></li><li><a href="#node-renames">node-renames</a></li><li><a href="#terraform-legacy-syntax">Terraform legacy syntax</a><ul><li><a href="#what-is-detected">What is detected</a></li><li><a href="#what-is-rewritten">What is rewritten</a></li></ul></li><li><a href="#python-imp">python-imp</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#dockerfile-legacy-syntax">Dockerfile legacy syntax</a></li><li><a href="#node-renames">node-renames</a></li><li><a href="#terraform-legacy-syntax">Terraform legacy syntax</a></li><li><a href="#what-is-detected">What is detected</a></li><li><a href="#what-is-rewritten">What is rewritten</a></li><li><a href="#python-imp">python-imp</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

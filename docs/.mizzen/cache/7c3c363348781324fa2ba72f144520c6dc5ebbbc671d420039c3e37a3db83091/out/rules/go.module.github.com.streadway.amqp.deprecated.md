@@ -1,0 +1,149 @@
+
+# github.com/streadway/amqp is deprecated
+
+**Deprecated.** The source gives no day. Replacement: github.com/rabbitmq/amqp091-go. Source: [github.com/streadway/amqp v1.1.0 go.mod](https://proxy.golang.org/github.com/streadway/amqp/@v/v1.1.0.mod).
+
+Check a version:
+
+```bash
+offing check pkg:golang/github.com/streadway/amqp
+```
+
+The latest github.com/streadway/amqp module declares: "Consider using the github.com/rabbitmq/amqp091-go package instead."
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `go` |
+| Component | `pkg:golang/github.com/streadway/amqp` |
+| Affected versions | `vers:golang/*` |
+| Date from the source | The source gives no day |
+| Replacement | github.com/rabbitmq/amqp091-go |
+| Evidence last seen | 2026-10-20 |
+| Reviewed | 2026-10-20 by arminazimi |
+| Review due | 2027-04-18 (180 days after the last review) |
+| Rule ID | `go.module.github.com.streadway.amqp.deprecated` |
+
+## Sources
+
+- [github.com/streadway/amqp v1.1.0 go.mod](https://proxy.golang.org/github.com/streadway/amqp/@v/v1.1.0.mod) (accessed 2026-10-20)
+- [Go module deprecation reference](https://go.dev/ref/mod#go-mod-file-module-deprecation) (accessed 2026-10-20)
+
+## Migration
+
+**Constraints**
+
+- Keep go.mod and go.sum consistent: after the change no package should still require github.com/streadway/amqp, directly or through a replace directive.
+- Check github.com/rabbitmq/amqp091-go for API differences before switching; it may not be a drop-in replacement for every github.com/streadway/amqp call.
+
+**Steps**
+
+1. **Replace the deprecated module.** Replace the github.com/streadway/amqp requirement with github.com/rabbitmq/amqp091-go (`go get github.com/rabbitmq/amqp091-go@latest`), then run `go mod tidy`.
+2. **Migrate imports and calls.** Update imports and calls of github.com/streadway/amqp in the reported files to github.com/rabbitmq/amqp091-go.
+
+**Verification**
+
+- `go build ./... && go test ./...`: Build and test every package without the deprecated module.
+- `go mod tidy && git diff --exit-code go.mod go.sum`: Confirm go.mod and go.sum are tidy after the replacement.
+
+## Detected by
+
+The [`go`](../detectors/go.md) detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [cloud.google.com/go/pubsub is deprecated](go.module.cloud.google.com.go.pubsub.deprecated.html)
+- [github.com/cncf/udpa/go is deprecated](go.module.github.com.cncf.udpa.go.deprecated.html)
+- [github.com/discord/lilliput is deprecated](go.module.github.com.discord.lilliput.deprecated.html)
+- [github.com/golang/protobuf is deprecated](go.module.github.com.golang.protobuf.deprecated.html)
+- [go.opentelemetry.io/otel/exporters/zipkin is deprecated](go.module.go.opentelemetry.io.otel.exporters.zipkin.deprecated.html)
+- [Go 1.20 and older are no longer supported](go.runtime.end-of-support-1.20-and-older.html)
+- [Go 1.21 is no longer supported](go.runtime.end-of-support-1.21.html)
+- [Go 1.22 is no longer supported](go.runtime.end-of-support-1.22.html)
+
+
+## Data
+
+This page is generated from [`registry/go.json`](https://github.com/velella-sh/offing/blob/main/registry/go.json), rule `go.module.github.com.streadway.amqp.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/go.module.github.com.streadway.amqp.deprecated.html",
+      "url": "https://velella.sh/offing/rules/go.module.github.com.streadway.amqp.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/go.module.github.com.streadway.amqp.deprecated.html",
+      "headline": "github.com/streadway/amqp is deprecated — dates, impact, migration",
+      "description": "The latest github.com/streadway/amqp module declares: \"Consider using the github.com/rabbitmq/amqp091-go package instead.\"",
+      "inLanguage": "en",
+      "dateModified": "2026-10-20",
+      "keywords": [
+        "deprecated",
+        "go",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "github.com/streadway/amqp is deprecated",
+        "identifier": "pkg:golang/github.com/streadway/amqp"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "github.com/streadway/amqp v1.1.0 go.mod",
+          "url": "https://proxy.golang.org/github.com/streadway/amqp/@v/v1.1.0.mod"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Go module deprecation reference",
+          "url": "https://go.dev/ref/mod#go-mod-file-module-deprecation"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/go.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/go.module.github.com.streadway.amqp.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/go.module.github.com.streadway.amqp.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:golang/github.com/streadway/amqp?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:golang/*. Source: github.com/streadway/amqp v1.1.0 go.mod (https://proxy.golang.org/github.com/streadway/amqp/@v/v1.1.0.mod)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:golang/github.com/streadway/amqp?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "github.com/rabbitmq/amqp091-go"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:golang/github.com/streadway/amqp?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:golang/github.com/streadway/amqp."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

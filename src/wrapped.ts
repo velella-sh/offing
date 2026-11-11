@@ -321,18 +321,18 @@ export function renderWrappedSvg(result: WrappedResult, repository = "this repos
     `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="wrapped-title wrapped-desc" font-family="${FONT_SANS}">`,
     `<title id="wrapped-title">Offing wrapped ${result.year} for ${escapeXml(repository)}</title>`,
     `<desc id="wrapped-desc">${escapeXml(description)}</desc>`,
-    '<rect width="1200" height="630" fill="#0C1110"/>',
-    '<rect width="16" height="630" fill="#3DDC97"/>',
-    '<rect x="64" y="64" width="1072" height="502" rx="24" fill="#17211E" stroke="#23423A"/>',
-    `<text x="96" y="140" fill="#F3F6F4" font-size="42" font-weight="700">${escapeXml(repository)}</text>`,
-    `<text x="96" y="196" fill="#3DDC97" font-size="28" font-weight="600">${result.year} wrapped</text>`,
-    '<text x="96" y="248" fill="#9AC7B6" font-size="18" font-weight="500">offing</text>',
-    '<line x1="96" y1="280" x2="1104" y2="280" stroke="#23423A"/>',
+    '<rect width="1200" height="630" fill="#1F1F28"/>',
+    '<rect width="16" height="630" fill="#A592CC"/>',
+    '<rect x="64" y="64" width="1072" height="502" rx="24" fill="#2A2438" stroke="#3A3450"/>',
+    `<text x="96" y="140" fill="#DCD7BA" font-size="42" font-weight="700">${escapeXml(repository)}</text>`,
+    `<text x="96" y="196" fill="#A592CC" font-size="28" font-weight="600">${result.year} wrapped</text>`,
+    '<text x="96" y="248" fill="#A592CC" font-size="18" font-weight="500">offing</text>',
+    '<line x1="96" y1="280" x2="1104" y2="280" stroke="#3A3450"/>',
     ...rows.flatMap(([label, value], index) => {
       const y = 330 + index * rowHeight;
       return [
-        `<text x="96" y="${y}" fill="#9AC7B6" font-size="16" font-weight="500">${escapeXml(label)}</text>`,
-        `<text x="96" y="${y + 28}" fill="#F3F6F4" font-size="22" font-weight="600">${escapeXml(value)}</text>`,
+        `<text x="96" y="${y}" fill="#A592CC" font-size="16" font-weight="500">${escapeXml(label)}</text>`,
+        `<text x="96" y="${y + 28}" fill="#DCD7BA" font-size="22" font-weight="600">${escapeXml(value)}</text>`,
       ];
     }),
     "</svg>",

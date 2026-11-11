@@ -39,12 +39,12 @@ test("the default OG image follows the brand social-preview template", async () 
   const image = renderDefaultOgImage();
   assert.match(image, /width="1280"/);
   assert.match(image, /height="640"/);
-  assert.match(image, /#0C1110/);
+  assert.match(image, /#1F1F28/);
   assert.match(image, /OFFING/);
-  assert.match(image, /Know what breaks next\./);
+  assert.match(image, /See what's in the offing\./);
   assert.match(image, /npx @velella\/offing scan \./);
   assert.equal([...image.matchAll(/https?:\/\//g)].length, 1); // xmlns only
-  assert.ok(template.includes("social-preview") || template.includes("OFFING"));
+  assert.ok(template.includes("<svg"));
 });
 
 test("a rule OG image names status, title, ecosystem, and deadline", () => {
@@ -72,7 +72,7 @@ test("long titles wrap and truncate without overflowing the card", () => {
       title: "The very long Google Play Billing Library version five is past its deprecation deadline for everyone",
     }),
   );
-  assert.equal([...image.matchAll(/<text x="552" y="\d+" fill="#F3F6F4" font-size="36"/g)].length <= 3, true);
+  assert.equal([...image.matchAll(/<text x="552" y="\d+" fill="#DCD7BA" font-size="36"/g)].length <= 3, true);
 });
 
 test("buildOgFiles emits a default image and one image per rule", async () => {

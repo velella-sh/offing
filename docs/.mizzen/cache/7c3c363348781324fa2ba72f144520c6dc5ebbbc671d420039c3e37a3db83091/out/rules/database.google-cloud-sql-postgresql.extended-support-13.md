@@ -1,0 +1,158 @@
+
+# Cloud SQL for PostgreSQL 13 is in extended support
+
+**End of support** as of 2026-02-01. Replacement: PostgreSQL 14 or later. Source: [Cloud SQL for PostgreSQL database versions and version policies](https://cloud.google.com/sql/docs/postgres/db-versions).
+
+Check a version:
+
+```bash
+offing check pkg:generic/google-cloud-sql-postgresql
+```
+
+The Cloud SQL for PostgreSQL version policy lists PostgreSQL 13 with extended support starting 2026-02-01 and deprecation on 2029-02-01. The PostgreSQL community no longer supports 13, and Cloud SQL charges for extended support.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of support |
+| Severity | high |
+| Ecosystem | `database` |
+| Component | `pkg:generic/google-cloud-sql-postgresql` |
+| Affected versions | `vers:semver/>=13.0.0\|<14.0.0` |
+| Date from the source | 2026-02-01 |
+| Replacement | PostgreSQL 14 or later |
+| Evidence last seen | 2026-10-26 |
+| Reviewed | 2026-10-26 by arminazimi |
+| Review due | 2027-01-24 (90 days after the last review) |
+| Rule ID | `database.google-cloud-sql-postgresql.extended-support-13` |
+
+## Sources
+
+- [Cloud SQL for PostgreSQL database versions and version policies](https://cloud.google.com/sql/docs/postgres/db-versions) (accessed 2026-10-26)
+- [PostgreSQL versioning policy](https://www.postgresql.org/support/versioning/) (accessed 2026-10-26)
+
+## Migration
+
+**Constraints**
+
+- Cloud SQL moves an instance to extended support when the PostgreSQL community reaches end of life. Extended support is time-boxed to three years and is charged.
+- Changing database_version can upgrade the instance in place or recreate it, depending on the target. Read the plan before applying and take a backup first.
+- A major version upgrade cannot be reversed by changing database_version back; restore the backup instead.
+
+**Steps**
+
+1. **Back up the instance.** Take an on-demand backup of every Cloud SQL for PostgreSQL 13 instance reported, before changing its major version.
+2. **Upgrade the instance.** Upgrade the instance to PostgreSQL 14 or later with Cloud SQL's in-place major version upgrade, or restore the backup into a new instance on the replacement major and move the application connection string.
+3. **Raise the declared version.** Change database_version in every google_sql_database_instance and google_sql_source_representation_instance block that runs this database, using the POSTGRES_ prefix for the replacement major.
+4. **Check clients and extensions.** Update PostgreSQL drivers, ORMs, extensions, and any maintenance or backup automation that names PostgreSQL 13.
+
+**Verification**
+
+- `terraform validate`: Check that the Terraform configuration is valid with the new database_version.
+- `terraform plan`: Review the plan and confirm the database_version change is intended and is the only instance change.
+- `gcloud sql instances list --format="table(name,databaseVersion)"`: Confirm each reported instance now reports a supported PostgreSQL database version.
+- `docker compose config`: Confirm any local Compose service that mirrors this database is valid and uses a PostgreSQL image tag that matches the replacement.
+
+## Detected by
+
+The `database` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Other versions of this product
+
+- [Cloud SQL for PostgreSQL 9.6 through 12 are in extended support](database.google-cloud-sql-postgresql.extended-support-9.6-to-12.html)
+
+### Same ecosystem
+
+- [Aurora MySQL version 1 is past end of standard support](database.aws-aurora-mysql.end-of-support-5.6.html)
+- [Aurora MySQL version 2 is past end of standard support](database.aws-aurora-mysql.end-of-support-5.7.html)
+- [Aurora PostgreSQL 11 is past end of standard support](database.aws-aurora-postgresql.end-of-support-11.html)
+- [Aurora PostgreSQL 12 is past end of standard support](database.aws-aurora-postgresql.end-of-support-12.html)
+- [Aurora PostgreSQL 13 is past end of standard support](database.aws-aurora-postgresql.end-of-support-13.html)
+- [Aurora PostgreSQL 14 reaches end of standard support on 2027-02-28](database.aws-aurora-postgresql.scheduled-end-of-support-14.html)
+- [ElastiCache for Redis OSS 4 is past end of standard support](database.aws-elasticache-redis.end-of-support-4.html)
+- [ElastiCache for Redis OSS 5 is past end of standard support](database.aws-elasticache-redis.end-of-support-5.html)
+
+
+## Data
+
+This page is generated from [`registry/database.json`](https://github.com/velella-sh/offing/blob/main/registry/database.json), rule `database.google-cloud-sql-postgresql.extended-support-13`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/database.google-cloud-sql-postgresql.extended-support-13.html",
+      "url": "https://velella.sh/offing/rules/database.google-cloud-sql-postgresql.extended-support-13.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/database.google-cloud-sql-postgresql.extended-support-13.html",
+      "headline": "Cloud SQL for PostgreSQL 13 is in extended support — dates, impact, migration",
+      "description": "The Cloud SQL for PostgreSQL version policy lists PostgreSQL 13 with extended support starting 2026-02-01 and deprecation on 2029-02-01.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-26",
+      "keywords": [
+        "end-of-support",
+        "database",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "Cloud SQL for PostgreSQL 13 is in extended support",
+        "identifier": "pkg:generic/google-cloud-sql-postgresql"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Cloud SQL for PostgreSQL database versions and version policies",
+          "url": "https://cloud.google.com/sql/docs/postgres/db-versions"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "PostgreSQL versioning policy",
+          "url": "https://www.postgresql.org/support/versioning/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/database.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/database.google-cloud-sql-postgresql.extended-support-13.html#faq",
+      "url": "https://velella.sh/offing/rules/database.google-cloud-sql-postgresql.extended-support-13.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/google-cloud-sql-postgresql?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of support as of 2026-02-01. Affected versions: vers:semver/>=13.0.0|\u003c14.0.0. Source: Cloud SQL for PostgreSQL database versions and version policies (https://cloud.google.com/sql/docs/postgres/db-versions)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/google-cloud-sql-postgresql?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PostgreSQL 14 or later"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/google-cloud-sql-postgresql?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/google-cloud-sql-postgresql."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

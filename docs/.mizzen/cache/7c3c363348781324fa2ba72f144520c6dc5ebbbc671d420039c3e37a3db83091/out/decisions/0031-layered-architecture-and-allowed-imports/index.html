@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>0031 — Layered architecture and the allowed-imports table</title><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/decisions/0031-layered-architecture-and-allowed-imports/index.md"}},{"id":"section-problem","label":"Problem","hint":"Go to section","run":{"kind":"section","id":"problem"}},{"id":"section-decision","label":"Decision","hint":"Go to section","run":{"kind":"section","id":"decision"}},{"id":"section-layers","label":"Layers","hint":"Go to section","run":{"kind":"section","id":"layers"}},{"id":"section-allowed-imports","label":"Allowed imports","hint":"Go to section","run":{"kind":"section","id":"allowed-imports"}},{"id":"section-runtime-access-rules","label":"Runtime access rules","hint":"Go to section","run":{"kind":"section","id":"runtime-access-rules"}},{"id":"section-how-the-checker-adopts-this","label":"How the checker adopts this","hint":"Go to section","run":{"kind":"section","id":"how-the-checker-adopts-this"}},{"id":"section-alternatives-considered","label":"Alternatives considered","hint":"Go to section","run":{"kind":"section","id":"alternatives-considered"}},{"id":"section-consequences","label":"Consequences","hint":"Go to section","run":{"kind":"section","id":"consequences"}},{"id":"section-review","label":"Review","hint":"Go to section","run":{"kind":"section","id":"review"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="5"><span class="reading-time-minutes">5 minutes read</span></p><div class="doc-body"><h1 id="0031--layered-architecture-and-the-allowed-imports-table" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:1:1-1:59">0031 — Layered architecture and the allowed-imports table</h1>
+<p data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:3:1-3:81">Status: proposed; accepted when the maintainer merges the pull request for #2087.</p>
+<h2 id="problem" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:5:1-5:10">Problem</h2>
+<p data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:7:1-13:71"><code>src/</code> holds about 400 TypeScript files. <a href="../../AGENTS.md">AGENTS.md</a> names six layers, and
+<code>tools/check-architecture.ts</code> enforces five narrow rules between them. Most of the tree sits outside any named
+layer: many top-level modules (<code>config.ts</code>, <code>baseline.ts</code>, <code>plan.ts</code>, <code>fix/</code>, <code>sbom/</code>, and others) have no
+declared place, so nothing stops a new module from reaching across a boundary. Four import cycles are
+baselined, and <code>src/engine.ts</code> and <code>src/source-usage.ts</code> import <code>node:fs</code> directly. The follow-up issues of
+epic #1990 (cycles #2090, pure core #2091, detector contract #2092, adapters #2093, errors #2094, reporters
+#2114, fitness tests #2115) each need one agreed target to move toward.</p>
+<p data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:15:1-15:72">This record fixes that target. It moves no code and changes no behavior.</p>
+<h2 id="decision" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:17:1-17:11">Decision</h2>
+<p data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:19:1-21:62">Offing is one package with seven layers. A module belongs to exactly one layer. A layer may import only the
+layers listed for it below, plus the <code>node:</code> built-ins and packages listed for it. Imports between modules of
+the same layer are allowed unless a later record narrows them.</p>
+<h3 id="layers" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:23:1-23:10">Layers</h3>
+<table data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:25:1-33:233">
+<thead>
+<tr>
+<th>Layer</th>
+<th>Lives in</th>
+<th>Owns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Domain</td>
+<td><code>src/domain.ts</code>, <code>src/errors.ts</code>, <code>src/purl.ts</code>, <code>src/vers/</code>, <code>src/paths.ts</code></td>
+<td>Types, output contracts, pure helpers with no I/O</td>
+</tr>
+<tr>
+<td>2. Detector SDK</td>
+<td><code>src/sdk.ts</code></td>
+<td>The public seam: API version, stable ID, one <code>scan</code> operation</td>
+</tr>
+<tr>
+<td>3. Core</td>
+<td><code>src/engine.ts</code>, <code>src/source-usage.ts</code>, <code>src/source-files.ts</code>, <code>src/usage/</code>, <code>src/registry.ts</code>, <code>src/scan-cache.ts</code>, <code>src/detector-inputs.ts</code>, <code>src/file-system.ts</code></td>
+<td>Detector attribution, sorting, repository traversal, usage matching, rule loading</td>
+</tr>
+<tr>
+<td>4. Detectors</td>
+<td><code>src/detectors/</code></td>
+<td>Reading manifests and lockfiles for one ecosystem</td>
+</tr>
+<tr>
+<td>5. Services</td>
+<td>analysis built on a scan result: <code>src/plan*.ts</code>, <code>src/migration-*.ts</code>, <code>src/fix/</code>, <code>src/sbom/</code>, <code>src/drift/</code>, <code>src/export/</code>, <code>src/inventory/</code>, <code>src/baseline.ts</code>, <code>src/diff.ts</code>, <code>src/forecast*.ts</code>, <code>src/receipt*.ts</code>, <code>src/agent-tools.ts</code>, and similar</td>
+<td>Migration context, plans, baselines, exports. No argument parsing, no host protocol</td>
+</tr>
+<tr>
+<td>6. Reporters</td>
+<td><code>src/reporters.ts</code>, <code>src/reporters/</code>, <code>src/mermaid.ts</code></td>
+<td>Turning results into text, JSON, SARIF, HTML, and other formats</td>
+</tr>
+<tr>
+<td>7. Adapters</td>
+<td><code>src/cli.ts</code>, <code>src/cli-main.ts</code>, <code>src/commands/</code>, <code>src/mcp*.ts</code>, <code>src/lsp.ts</code>, <code>src/action*.ts</code>, <code>src/github-action.ts</code>, <code>src/tui.ts</code>, <code>skills/</code>, <code>plugins/</code></td>
+<td>Translating one host interface to services and reporters</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:35:1-35:102">Registry data (<code>registry/*.json</code>) is data, not a layer. It holds no logic, and only the core loads it.</p>
+<h3 id="allowed-imports" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:37:1-37:19">Allowed imports</h3>
+<p data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:39:1-39:77">Read a row as "the layer in the first column may import the layers marked ✓".</p>
+<table data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:41:1-49:77">
+<thead>
+<tr>
+<th>Importer \ Imported</th>
+<th>Domain</th>
+<th>SDK</th>
+<th>Core</th>
+<th>Detectors</th>
+<th>Services</th>
+<th>Reporters</th>
+<th>Adapters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Domain</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2. Detector SDK</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3. Core</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>4. Detectors</td>
+<td>✓</td>
+<td>✓</td>
+<td><code>source-usage</code> and <code>usage/</code> only</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5. Services</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>6. Reporters</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓ (types and helpers only)</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>7. Adapters</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓ (through <code>scan-builtins.ts</code> only)</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:51:1-51:19">Notes on the table:</p>
+<ul data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:53:1-62:28">
+<li><strong>Core never imports detectors.</strong> Built-in detectors reach the engine only through <code>src/scan-builtins.ts</code>,
+which an adapter or service calls. This is the existing <code>engine-no-detectors</code> rule.</li>
+<li><strong>Detectors may use the shared usage matcher</strong> (<code>source-usage.ts</code>, <code>usage/</code>) because it is the shared pass
+they declare patterns for. They may not import services, reporters, or adapters.</li>
+<li><strong>Reporters sit below adapters and render services' output.</strong> A reporter does not run a scan.</li>
+<li><strong>Nothing imports an adapter except another adapter.</strong> An adapter file that other layers need to import is
+a sign that logic belongs in a service.</li>
+<li><strong>The SDK depends only on the domain layer</strong>, except that it re-exports <code>analyzeSourceUsage</code> from
+<code>source-usage.ts</code> today. #2092 removes that exception by exposing detectors' usage access through the
+detector contract instead.</li>
+</ul>
+<h3 id="runtime-access-rules" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:64:1-64:24">Runtime access rules</h3>
+<table data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:66:1-71:141">
+<thead>
+<tr>
+<th>Rule</th>
+<th>Applies to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No <code>node:fs</code>, <code>node:fs/promises</code>, <code>node:child_process</code>, <code>node:http</code>, <code>node:https</code>, <code>node:net</code>, <code>node:tls</code>, <code>node:dgram</code>, <code>node:dns</code>, or global <code>fetch</code></td>
+<td>Domain, SDK, and core. Since #2091 they reach files through the <code>ScanFileSystem</code> interface (<code>src/file-system.ts</code>); <code>src/node-file-system.ts</code> and <code>src/bundled-assets.ts</code> are the Node implementations, outside the core</td>
+</tr>
+<tr>
+<td>No network modules or <code>fetch</code></td>
+<td>Detectors and reporters. This is the scan-offline guarantee.</td>
+</tr>
+<tr>
+<td>Network use is allowed only in the named update and publishing modules that exist today (<code>data-update.ts</code>, <code>pr-comment.ts</code>, <code>action-fix-pr.ts</code>, <code>action-tracking-issue.ts</code>, <code>commands/data.ts</code>)</td>
+<td>Services and adapters; never reachable from a scan</td>
+</tr>
+<tr>
+<td>No <code>eval</code>, <code>new Function</code>, <code>vm</code>, or dynamic <code>import()</code> of repository paths</td>
+<td>Every layer. Repository contents are parsed, never executed.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-the-checker-adopts-this" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:73:1-73:31">How the checker adopts this</h3>
+<p data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:75:1-76:95">The decision does not change the checker. Each follow-up lands its own rule in <code>tools/check-architecture.ts</code>
+with the code move that makes it true, so the check never fails on code that has not moved yet:</p>
+<ol data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:78:1-83:75">
+<li>#2090 empties <code>tools/architecture-baseline.json</code>, so a new cycle fails with no exception list.</li>
+<li>#2091 adds the no-<code>node:fs</code>/no-network rule for domain, SDK, and core.</li>
+<li>#2092 gives detectors one typed contract and removes the SDK's import of <code>source-usage.ts</code>.</li>
+<li>#2093 moves logic out of adapters and adds "nothing imports an adapter except an adapter".</li>
+<li>#2114 gives reporters one interface and adds the reporters row.</li>
+<li>#2115 turns this table into fitness tests with a clear message per rule.</li>
+</ol>
+<h2 id="alternatives-considered" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:85:1-85:26">Alternatives considered</h2>
+<ul data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:87:1-93:80">
+<li><strong>Separate workspace packages per layer.</strong> Rejected for now, for the reason already in
+<a href="../ARCHITECTURE.md">ARCHITECTURE.md</a>: interface and implementation share one release lifecycle, and a
+package boundary would add publishing work without adding a check that an import rule does not already give.</li>
+<li><strong>Keep only the five existing rules.</strong> Rejected: most modules have no declared layer, so the checker cannot
+say whether a new import is wrong.</li>
+<li><strong>Forbid same-layer imports.</strong> Rejected as too strict for services, where <code>plan.ts</code> legitimately builds on
+<code>plan-build.ts</code> and <code>plan-waves.ts</code>. Cycles are forbidden separately by #2090.</li>
+</ul>
+<h2 id="consequences" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:95:1-95:15">Consequences</h2>
+<ul data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:97:1-102:27">
+<li>Every module has one layer, and a reviewer can answer "may this import that?" from one table.</li>
+<li>The AGENTS.md table stays the short summary and links here for the full rules.</li>
+<li>Layers 5 and 7 are described by file patterns because the modules are still flat in <code>src/</code>. Moving them into
+directories is optional and not required by this decision.</li>
+<li>Until the follow-ups land, the checker enforces less than this record states. The record is the target;
+the checker is the floor.</li>
+</ul>
+<h2 id="review" data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:104:1-104:9">Review</h2>
+<p data-src="docs/decisions/0031-layered-architecture-and-allowed-imports.md:106:1-106:101">Revisit after #2115 lands, when every row has a test, or when a module cannot be placed in one layer.</p></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/decisions/0031-layered-architecture-and-allowed-imports.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/decisions/0031-layered-architecture-and-allowed-imports.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/decisions/0031-layered-architecture-and-allowed-imports.md:1. Current text: &quot;0031 — Layered architecture and the allowed-imports table&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%200031%20%E2%80%94%20Layered%20architecture%20and%20the%20allowed-imports%20table&amp;body=Page%3A%20%2Foffing%2Fdecisions%2F0031-layered-architecture-and-allowed-imports%2F%0ASource%3A%20docs%2Fdecisions%2F0031-layered-architecture-and-allowed-imports.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/decisions/0031-layered-architecture-and-allowed-imports/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/decisions/0031-layered-architecture-and-allowed-imports/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/decisions/0031-layered-architecture-and-allowed-imports/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/decisions/0031-layered-architecture-and-allowed-imports/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2Fdecisions%2F0031-layered-architecture-and-allowed-imports%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2Fdecisions%2F0031-layered-architecture-and-allowed-imports%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2Fdecisions%2F0031-layered-architecture-and-allowed-imports%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#problem">Problem</a></li><li><a href="#decision">Decision</a><ul><li><a href="#layers">Layers</a></li><li><a href="#allowed-imports">Allowed imports</a></li><li><a href="#runtime-access-rules">Runtime access rules</a></li><li><a href="#how-the-checker-adopts-this">How the checker adopts this</a></li></ul></li><li><a href="#alternatives-considered">Alternatives considered</a></li><li><a href="#consequences">Consequences</a></li><li><a href="#review">Review</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#problem">Problem</a></li><li><a href="#decision">Decision</a></li><li><a href="#layers">Layers</a></li><li><a href="#allowed-imports">Allowed imports</a></li><li><a href="#runtime-access-rules">Runtime access rules</a></li><li><a href="#how-the-checker-adopts-this">How the checker adopts this</a></li><li><a href="#alternatives-considered">Alternatives considered</a></li><li><a href="#consequences">Consequences</a></li><li><a href="#review">Review</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

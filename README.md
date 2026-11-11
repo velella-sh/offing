@@ -1,23 +1,26 @@
-# Offing
-
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/velella-sh/offing/main/brand/exports/banner-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/velella-sh/offing/main/brand/exports/banner-light.png">
-    <img alt="Offing — Know what breaks next." src="https://raw.githubusercontent.com/velella-sh/offing/main/brand/exports/banner-light.png" width="100%">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-night.svg">
+    <img src="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-day.svg" width="96" height="96" alt="Offing">
   </picture>
 </p>
 
+<h1 align="center">Offing</h1>
+
 <p align="center">
-  <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=0C1110&color=2F7D5B&style=flat"></a>
-  <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Coverage" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvelella-sh%2Foffing%2Fbadges%2Fcoverage.json&labelColor=0C1110&style=flat"></a>
-  <a href="https://www.npmjs.com/package/@velella/offing"><img alt="npm" src="https://img.shields.io/npm/v/offing.svg?logo=npm&logoColor=white&labelColor=0C1110&color=2F7D5B&style=flat"></a>
+  <strong>See what's in the offing. Fix it before it lands.</strong><br>
+  Local-first end-of-life and deprecation scanner for your repository.
+</p>
+
+<p align="center">
+  <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
+  <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Coverage" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvelella-sh%2Foffing%2Fbadges%2Fcoverage.json&labelColor=1F1F28&style=flat"></a>
+  <a href="https://www.npmjs.com/package/@velella/offing"><img alt="npm" src="https://img.shields.io/npm/v/offing.svg?logo=npm&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Offing" src="https://raw.githubusercontent.com/velella-sh/offing/badges/offing-badge.svg"></a>
-  <a href="https://securityscorecards.dev/viewer/?uri=github.com/velella-sh/offing"><img alt="OpenSSF Scorecard" src="https://img.shields.io/ossf-scorecard/github.com/velella-sh/offing?label=openssf%20scorecard&labelColor=0C1110&color=2F7D5B&style=flat"></a>
-  <a href="https://www.bestpractices.dev/projects/16161"><img alt="OpenSSF Best Practices" src="https://img.shields.io/cii/level/16161?label=openssf%20best%20practices&labelColor=0C1110&color=2F7D5B&style=flat"></a>
-  <a href="https://github.com/arminazimi/slipway"><img alt="Slipway" src="https://img.shields.io/badge/docs%20checked%20by-slipway-2F7D5B?labelColor=0C1110&style=flat"></a>
-  <a href="https://github.com/arminazimi/seaworthy"><img alt="Seaworthy" src="https://img.shields.io/badge/verified%20by-seaworthy-2F7D5B?labelColor=0C1110&style=flat"></a>
-  <a href="https://github.com/velella-sh/offing/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/codeql.yml?branch=main&label=CodeQL&logo=github&logoColor=white&labelColor=0C1110&color=2F7D5B&style=flat"></a>
+  <a href="https://securityscorecards.dev/viewer/?uri=github.com/velella-sh/offing"><img alt="OpenSSF Scorecard" src="https://img.shields.io/ossf-scorecard/github.com/velella-sh/offing?label=openssf%20scorecard&labelColor=1F1F28&color=6A5590&style=flat"></a>
+  <a href="https://www.bestpractices.dev/projects/16161"><img alt="OpenSSF Best Practices" src="https://img.shields.io/cii/level/16161?label=openssf%20best%20practices&labelColor=1F1F28&color=6A5590&style=flat"></a>
+  <a href="https://github.com/arminazimi/slipway"><img alt="Slipway" src="https://img.shields.io/badge/docs%20checked%20by-slipway-6A5590?labelColor=1F1F28&style=flat"></a>
+  <a href="https://github.com/velella-sh/offing/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/codeql.yml?branch=main&label=CodeQL&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://skills.sh/velella-sh/offing/offing"><img alt="skills.sh" src="https://skills.sh/b/velella-sh/offing"></a>
 </p>
 
@@ -275,7 +278,7 @@ See the [detector authoring guide](docs/DETECTORS.md) and the [minimal detector 
 
 The CLI is the product. Detectors extend it, GitHub Actions automate it, and the local MCP server exposes it to agents. A hosted backend is intentionally outside the roadmap; lifecycle data updates through a signed, offline-verifiable data channel instead.
 
-See [the roadmap](docs/ROADMAP.md), [architecture](docs/ARCHITECTURE.md), [brand guide](brand/BRAND_GUIDE.md), [contribution guide](CONTRIBUTING.md), and [security policy](SECURITY.md).
+See [the roadmap](docs/ROADMAP.md), [architecture](docs/ARCHITECTURE.md), [brand files](brand/README.md), [contribution guide](CONTRIBUTING.md), and [security policy](SECURITY.md).
 
 ## Community
 

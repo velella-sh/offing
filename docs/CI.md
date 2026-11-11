@@ -100,7 +100,7 @@ the site instead.
 
 - Site budget, docs doctor, and related site checks, through the `paths` filters on those
   workflows (`docs/**`, `lighthouserc.json`, and the workflow file itself).
-- Do **not** run Lighthouse or Seaworthy on unrelated code-only pull requests: `site-budget.yml`
+- Do **not** run Lighthouse on unrelated code-only pull requests: `site-budget.yml`
   and `docs-doctor.yml` do not start, and `site-budget`/`docs-doctor` in `ci.yml` only run on
   `merge_group`.
 
@@ -127,7 +127,7 @@ the site instead.
 - Performance budget on the fixed fixture.
 - Package smoke (npm tarball, Docker image, local Action) when the lane still lists it on
   `merge_group`.
-- Site jobs (Lighthouse, Seaworthy, site budget, docs doctor) **when the queued change touches site
+- Site jobs (Lighthouse, site budget, docs doctor) **when the queued change touches site
   files**; otherwise those jobs skip and `ci-ok` still passes. `ci.yml` calls `site-budget.yml` and
   `docs-doctor.yml` from `merge_group` because the queue ignores `paths`; `changes.site` decides.
 - `ci-ok` aggregates the above.
@@ -256,7 +256,6 @@ once per failed step; `ci-ok` is the aggregate and appears in all 27):
 | `coverage` job → `Enforce coverage floors` | 1 |
 | `check` job → `Guard the quality gate against main` | 1 |
 | `check` job → `Audit dependencies (runtime, then the full lockfile)` | 1 |
-| `seaworthy` job → `Run arminazimi/seaworthy@…` | 1 |
 
 The sample covers the most recent failed CI runs at audit time, not all 218 — treat the percentages
 as direction, not a service-level figure.
@@ -520,17 +519,6 @@ the doctor's own findings are report-only (`level: none`), so only the site buil
 **Fix.** Reproduce with `npx @velella/mizzen check docs` (plus `--theme @velella/lateen`) and fix the docs source.
 Mizzen config and theme changes belong in site-focused PRs.
 
-### Seaworthy fails on the built site (`seaworthy` job)
-
-**Symptom.** The `Run arminazimi/seaworthy@…` step in `pages.yml` fails on the deployed-site
-checks.
-
-**Cause.** A site change broke navigation, links, or the crawl expectations Seaworthy encodes.
-
-**Fix.** Reproduce against the built site locally if possible; otherwise the `pages.yml` run's
-artifact (`docs-site`) is the thing to inspect. Seaworthy is not part of `ci-ok`, so this is a
-follow-up-work signal, not a merge blocker.
-
 ### Site budget exceeded (`Site budget`)
 
 **Symptom.** `Measure the pages against the budgets` (`@lhci/cli autorun --config=lighthouserc.json`)
@@ -616,7 +604,7 @@ just because a later task will fold it.
 | `site-budget.yml` | Pull request / merge queue | `pull_request` on site paths; `workflow_call` from `ci.yml`; `workflow_dispatch` | Fail when the docs site exceeds size or LCP budgets |
 | `fuzz.yml` | Pull request / nightly | `pull_request` on parser paths; nightly schedule; `workflow_dispatch` | Deeper parser fuzz than the tight budget inside `npm run check` |
 | `workflow-lint.yml` | Main | `push` to `main` on workflow paths; `workflow_dispatch` | actionlint + zizmor on workflow YAML and `action.yml` |
-| `pages.yml` | Main | `push` to `main`; `workflow_dispatch` | Build the docs site, Seaworthy + Lighthouse, deploy to GitHub Pages |
+| `pages.yml` | Main | `push` to `main`; `workflow_dispatch` | Build the docs site, Lighthouse, deploy to GitHub Pages |
 | `labels.yml` | Main / nightly | `pull_request` / `push` on label paths; weekly schedule; `workflow_dispatch` | Sync `.github/labels.yml` and check good-first-issue briefs |
 | `release.yml` | Main / release | `push` to `main`; version `v*` tags; `workflow_dispatch` | One release chain: Action bundle on `release/<tag>`, npm via the `npm-publish` job, binaries, provenance, channels, smoke |
 | `package-smoke.yml` | Merge queue / nightly | `merge_group`; nightly schedule; `workflow_dispatch` | Prove npm tarball, Docker image, and local Action scan the same fixture |

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "ebb.rule.v1",
+  "id": "python.package.pathlib.archived",
+  "ecosystem": "python",
+  "purl": "pkg:pypi/pathlib",
+  "affectedVersions": "vers:pypi/*",
+  "event": "end-of-life",
+  "severity": "medium",
+  "title": "pathlib is archived on PyPI",
+  "summary": "PyPI marks pathlib as archived: the project does not expect to be updated in the future.",
+  "sources": [
+    {
+      "title": "pathlib on PyPI",
+      "url": "https://pypi.org/project/pathlib/",
+      "accessedAt": "2026-10-20"
+    },
+    {
+      "title": "pathlib project status (PyPI Simple API)",
+      "url": "https://pypi.org/simple/pathlib/",
+      "accessedAt": "2026-10-20"
+    },
+    {
+      "title": "Project status markers (PEP 792)",
+      "url": "https://packaging.python.org/specifications/project-status-markers/",
+      "accessedAt": "2026-10-20"
+    }
+  ],
+  "provenance": {
+    "observedAt": "2026-10-20",
+    "reviewedAt": "2026-10-20",
+    "reviewer": "arminazimi"
+  },
+  "migration": {
+    "constraints": [
+      "Preserve behavior while removing pathlib; PyPI says the project does not expect to be updated, so it will not receive fixes or support for newer Python releases."
+    ],
+    "steps": [
+      {
+        "id": "replace-pathlib",
+        "title": "Replace pathlib",
+        "instructions": "Remove pathlib from requirements, pyproject.toml, and lock files and replace it with a maintained alternative (often the standard library or the project that superseded it), then update the imports.",
+        "targets": "all"
+      }
+    ],
+    "verification": [
+      {
+        "command": "python -m pip check",
+        "purpose": "Confirm the installed distributions have no broken requirements."
+      },
+      {
+        "command": "python -m pytest",
+        "purpose": "Run the test suite without the archived distribution."
+      }
+    ]
+  }
+}

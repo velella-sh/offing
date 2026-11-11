@@ -6,16 +6,16 @@ title: Distribution brand checklist
 
 Use this checklist whenever Offing is added to or updated on a public surface.
 The approved source of truth is the
-[brand guide](https://github.com/velella-sh/offing/blob/main/brand/BRAND_GUIDE.md);
+[brand files](https://github.com/velella-sh/offing/blob/main/brand/README.md);
 do not redesign the identity for an individual channel.
 
 ## Universal checks
 
 - [ ] Use `Offing` as the display name and `offing` only where a
       package or machine identifier is required.
-- [ ] Use the tagline exactly as `Know what breaks next.`
-- [ ] Use the descriptor exactly as `Local-first deprecation intelligence for
-      software repositories.` when category clarity is required.
+- [ ] Use the tagline exactly as `See what's in the offing. Fix it before it lands.`
+- [ ] Use the descriptor exactly as `Local-first end-of-life and deprecation
+      scanner for your repository.` when category clarity is required.
 - [ ] Use `Evidence-backed migration context for humans and coding agents.` only
       as the approved supporting message.
 - [ ] Select an approved dark, light, or monochrome asset; never redraw the mark.
@@ -29,18 +29,18 @@ do not redesign the identity for an individual channel.
 
 ## Repository and GitHub
 
-- [x] README uses the adaptive dark/light banner and approved descriptor.
+- [x] README uses the adaptive dark/light mark and approved descriptor.
 - [x] Repository description uses the approved descriptor.
 - [x] Homepage points to the public Offing documentation.
 - [x] Repository topics describe the product rather than inventing brand variants.
-- [ ] Upload `brand/exports/social-preview-dark.png` as the repository social
+- [ ] Upload `brand/social-preview.png` as the repository social
       preview and inspect a shared link on both light and dark clients.
 - [x] Issue templates use `Offing` and evidence-backed language consistently.
 
 ## Documentation
 
 - [x] Site title and description match approved naming.
-- [x] Header uses the adaptive `Version Notches` mark.
+- [x] Header uses the adaptive half-sun mark.
 - [x] Home page uses the approved tagline, descriptor, and supporting language.
 - [x] Light and dark palettes use approved accessible pairs.
 - [x] Brand guidance and asset terms are discoverable from public documentation.
@@ -59,7 +59,7 @@ do not redesign the identity for an individual channel.
 - [x] Action name contains `Offing` and identifies lifecycle intelligence.
 - [x] Action description is local-first, evidence-backed, and function-specific.
 - [x] Marketplace icon/color use the closest supported neutral treatment.
-- [x] Marketplace logo and feature-card sources exist in `brand/`.
+- [x] Marketplace logo sources exist in `brand/` (`mark-night.svg`, `mark-day.svg`).
 - [ ] Preview marketplace metadata and images before creating or updating a
       listing.
 
@@ -89,7 +89,7 @@ current npm package, Action tag, and generated plugin pins are `0.7.1`.
 
 ## Releases
 
-- [ ] Use the approved banner or social-preview template for launch posts.
+- [ ] Use the approved mark or social preview for launch posts.
 - [ ] Keep release notes factual; lead with lifecycle coverage and evidence.
 - [ ] Confirm changelog, package metadata, Action metadata, and documentation agree.
 - [ ] Verify every referenced asset exists in the tagged commit.
@@ -98,9 +98,8 @@ current npm package, Action tag, and generated plugin pins are `0.7.1`.
 
 ## Asset audit
 
-The canonical editable assets live in `brand/assets/` and `brand/templates/`.
-Canonical raster exports live in `brand/exports/`. The documentation copy at
-`docs/assets/brand/offing-mark-adaptive.svg` is the only intentional duplicate;
-it exists because the GitHub Pages source is scoped to `docs/`. No legacy logo or
-pre-brand social asset remains in the repository.
-
+The canonical assets live in `brand/` (see its README for the file list and how to
+rebuild them). The documentation copies under `docs/assets/brand/` (adaptive mark,
+favicons) are the only intentional duplicates; they exist because the GitHub Pages
+source is scoped to `docs/`. The README mark lives in `.github/assets/`. No legacy
+logo or pre-brand social asset remains in the repository.

@@ -1,0 +1,144 @@
+
+# enum is archived on PyPI
+
+**End of life.** The source gives no day. Source: [enum on PyPI](https://pypi.org/project/enum/).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/enum
+```
+
+PyPI marks enum as archived: the project does not expect to be updated in the future.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of life |
+| Severity | medium |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/enum` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Evidence last seen | 2026-10-20 |
+| Reviewed | 2026-10-20 by arminazimi |
+| Review due | 2027-10-20 (365 days after the last review) |
+| Rule ID | `python.package.enum.archived` |
+
+## Sources
+
+- [enum on PyPI](https://pypi.org/project/enum/) (accessed 2026-10-20)
+- [enum project status (PyPI Simple API)](https://pypi.org/simple/enum/) (accessed 2026-10-20)
+- [Project status markers (PEP 792)](https://packaging.python.org/specifications/project-status-markers/) (accessed 2026-10-20)
+
+## Migration
+
+**Constraints**
+
+- Preserve behavior while removing enum; PyPI says the project does not expect to be updated, so it will not receive fixes or support for newer Python releases.
+
+**Steps**
+
+1. **Replace enum.** Remove enum from requirements, pyproject.toml, and lock files and replace it with a maintained alternative (often the standard library or the project that superseded it), then update the imports.
+
+**Verification**
+
+- `python -m pip check`: Confirm the installed distributions have no broken requirements.
+- `python -m pytest`: Run the test suite without the archived distribution.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.enum.archived`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.enum.archived.html",
+      "url": "https://velella.sh/offing/rules/python.package.enum.archived.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.enum.archived.html",
+      "headline": "enum is archived on PyPI — dates, impact, migration",
+      "description": "PyPI marks enum as archived: the project does not expect to be updated in the future.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-20",
+      "keywords": [
+        "end-of-life",
+        "python",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "enum is archived on PyPI",
+        "identifier": "pkg:pypi/enum"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "enum on PyPI",
+          "url": "https://pypi.org/project/enum/"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "enum project status (PyPI Simple API)",
+          "url": "https://pypi.org/simple/enum/"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Project status markers (PEP 792)",
+          "url": "https://packaging.python.org/specifications/project-status-markers/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.enum.archived.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.enum.archived.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/enum?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of life. The source gives no day. Affected versions: vers:pypi/*. Source: enum on PyPI (https://pypi.org/project/enum/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/enum?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/enum."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

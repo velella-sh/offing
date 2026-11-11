@@ -1,0 +1,122 @@
+
+# pycrypto has unfixed OSV advisories
+
+**Deprecated.** The source gives no day. Source: [GHSA-6528-wvf6-f6qg](https://osv.dev/vulnerability/GHSA-6528-wvf6-f6qg).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/pycrypto
+```
+
+OSV lists GHSA-6528-wvf6-f6qg, GHSA-cq27-v7xp-c356, PYSEC-2018-97 against pycrypto with no fixed version in the affected ranges.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | high |
+| Ecosystem | `osv` |
+| Component | `pkg:pypi/pycrypto` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Evidence last seen | 2026-10-27 |
+| Reviewed | 2026-10-27 by arminazimi, drafted by the `osv` importer |
+| Review due | 2027-10-27 (365 days after the last review) |
+| Rule ID | `osv.pypi.pycrypto` |
+
+## Sources
+
+- [GHSA-6528-wvf6-f6qg](https://osv.dev/vulnerability/GHSA-6528-wvf6-f6qg) (accessed 2026-10-27)
+- [GHSA-cq27-v7xp-c356](https://osv.dev/vulnerability/GHSA-cq27-v7xp-c356) (accessed 2026-10-27)
+- [PYSEC-2018-97](https://osv.dev/vulnerability/PYSEC-2018-97) (accessed 2026-10-27)
+
+## Detected by
+
+No built-in detector reads `osv` declarations yet; the rule is data in the [lifecycle registry](https://github.com/velella-sh/offing/blob/main/registry/osv.json).
+
+## Related
+
+### Same ecosystem
+
+- [request has unfixed OSV advisories](osv.npm.request.html)
+
+
+## Data
+
+This page is generated from [`registry/osv.json`](https://github.com/velella-sh/offing/blob/main/registry/osv.json), rule `osv.pypi.pycrypto`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/osv.pypi.pycrypto.html",
+      "url": "https://velella.sh/offing/rules/osv.pypi.pycrypto.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/osv.pypi.pycrypto.html",
+      "headline": "pycrypto has unfixed OSV advisories — dates, impact, migration",
+      "description": "OSV lists GHSA-6528-wvf6-f6qg, GHSA-cq27-v7xp-c356, PYSEC-2018-97 against pycrypto with no fixed version in the affected ranges.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-27",
+      "keywords": [
+        "deprecated",
+        "osv",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "pycrypto has unfixed OSV advisories",
+        "identifier": "pkg:pypi/pycrypto"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "GHSA-6528-wvf6-f6qg",
+          "url": "https://osv.dev/vulnerability/GHSA-6528-wvf6-f6qg"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "GHSA-cq27-v7xp-c356",
+          "url": "https://osv.dev/vulnerability/GHSA-cq27-v7xp-c356"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "PYSEC-2018-97",
+          "url": "https://osv.dev/vulnerability/PYSEC-2018-97"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/osv.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/osv.pypi.pycrypto.html#faq",
+      "url": "https://velella.sh/offing/rules/osv.pypi.pycrypto.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/pycrypto?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:pypi/*. Source: GHSA-6528-wvf6-f6qg (https://osv.dev/vulnerability/GHSA-6528-wvf6-f6qg)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/pycrypto?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/pycrypto."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

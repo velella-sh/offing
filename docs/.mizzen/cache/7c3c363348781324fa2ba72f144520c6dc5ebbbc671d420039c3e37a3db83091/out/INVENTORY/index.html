@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Inventory</title><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/INVENTORY/index.md"}},{"id":"section-privacy","label":"Privacy","hint":"Go to section","run":{"kind":"section","id":"privacy"}},{"id":"section-kubernetes-workloads","label":"Kubernetes workloads","hint":"Go to section","run":{"kind":"section","id":"kubernetes-workloads"}},{"id":"section-what-it-reads","label":"What it reads","hint":"Go to section","run":{"kind":"section","id":"what-it-reads"}},{"id":"section-rules-matched","label":"Rules matched","hint":"Go to section","run":{"kind":"section","id":"rules-matched"}},{"id":"section-limit-the-api-servers-preferred-version","label":"Limit: the API server's preferred version","hint":"Go to section","run":{"kind":"section","id":"limit-the-api-servers-preferred-version"}},{"id":"section-what-it-does-not-judge","label":"What it does not judge","hint":"Go to section","run":{"kind":"section","id":"what-it-does-not-judge"}},{"id":"section-kubernetes-cluster","label":"Kubernetes cluster","hint":"Go to section","run":{"kind":"section","id":"kubernetes-cluster"}},{"id":"section-provider-suffixes","label":"Provider suffixes","hint":"Go to section","run":{"kind":"section","id":"provider-suffixes"}},{"id":"section-rules-matched-1","label":"Rules matched","hint":"Go to section","run":{"kind":"section","id":"rules-matched-1"}},{"id":"section-what-is-not-judged","label":"What is not judged","hint":"Go to section","run":{"kind":"section","id":"what-is-not-judged"}},{"id":"section-host-operating-systems","label":"Host operating systems","hint":"Go to section","run":{"kind":"section","id":"host-operating-systems"}},{"id":"section-export","label":"Export","hint":"Go to section","run":{"kind":"section","id":"export"}},{"id":"section-fields-read","label":"Fields read","hint":"Go to section","run":{"kind":"section","id":"fields-read"}},{"id":"section-rules-matched-2","label":"Rules matched","hint":"Go to section","run":{"kind":"section","id":"rules-matched-2"}},{"id":"section-what-is-not-judged-1","label":"What is not judged","hint":"Go to section","run":{"kind":"section","id":"what-is-not-judged-1"}},{"id":"section-fixtures","label":"Fixtures","hint":"Go to section","run":{"kind":"section","id":"fixtures"}},{"id":"section-docker-containers-and-images","label":"Docker containers and images","hint":"Go to section","run":{"kind":"section","id":"docker-containers-and-images"}},{"id":"section-what-is-read","label":"What is read","hint":"Go to section","run":{"kind":"section","id":"what-is-read"}},{"id":"section-rules-matched-3","label":"Rules matched","hint":"Go to section","run":{"kind":"section","id":"rules-matched-3"}},{"id":"section-image-ids","label":"Image ids","hint":"Go to section","run":{"kind":"section","id":"image-ids"}},{"id":"section-what-is-not-judged-2","label":"What is not judged","hint":"Go to section","run":{"kind":"section","id":"what-is-not-judged-2"}},{"id":"section-report-shape","label":"Report shape","hint":"Go to section","run":{"kind":"section","id":"report-shape"}},{"id":"section-importers","label":"Importers","hint":"Go to section","run":{"kind":"section","id":"importers"}},{"id":"section-aws-rds-aurora-and-elasticache","label":"AWS RDS, Aurora, and ElastiCache","hint":"Go to section","run":{"kind":"section","id":"aws-rds-aurora-and-elasticache"}},{"id":"section-produce-the-export","label":"Produce the export","hint":"Go to section","run":{"kind":"section","id":"produce-the-export"}},{"id":"section-fields-read-1","label":"Fields read","hint":"Go to section","run":{"kind":"section","id":"fields-read-1"}},{"id":"section-engines-and-purls","label":"Engines and PURLs","hint":"Go to section","run":{"kind":"section","id":"engines-and-purls"}},{"id":"section-rules-matched-4","label":"Rules matched","hint":"Go to section","run":{"kind":"section","id":"rules-matched-4"}},{"id":"section-what-is-not-judged-3","label":"What is not judged","hint":"Go to section","run":{"kind":"section","id":"what-is-not-judged-3"}},{"id":"section-export-files","label":"Export files","hint":"Go to section","run":{"kind":"section","id":"export-files"}},{"id":"section-aws-lambda","label":"AWS Lambda","hint":"Go to section","run":{"kind":"section","id":"aws-lambda"}},{"id":"section-aws-eks-clusters-and-node-groups","label":"AWS EKS clusters and node groups","hint":"Go to section","run":{"kind":"section","id":"aws-eks-clusters-and-node-groups"}},{"id":"section-google-cloud","label":"Google Cloud","hint":"Go to section","run":{"kind":"section","id":"google-cloud"}},{"id":"section-azure","label":"Azure","hint":"Go to section","run":{"kind":"section","id":"azure"}},{"id":"section-terraform-state","label":"Terraform state","hint":"Go to section","run":{"kind":"section","id":"terraform-state"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="25"><span class="reading-time-minutes">25 minutes read</span></p><div class="doc-body"><h1 id="inventory" data-src="docs/INVENTORY.md:1:1-1:11">Inventory</h1>
+<p data-src="docs/INVENTORY.md:3:1-3:338"><code>offing inventory</code> reads the JSON or text exports that cloud and cluster tools already produce and reports what they say is deployed: end-of-life runtimes, images, engines, cluster versions, and operating systems. Each result carries the importer, the file, and the exact place in the file the claim rests on, as an RFC 6901 JSON Pointer.</p>
+<p data-src="docs/INVENTORY.md:5:1-5:142">Offing never calls a cloud or cluster API. You run the export command on a machine with credentials, then give the file to <code>offing inventory</code>:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:7:1-10:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">kubectl</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> get</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> deploy,sts,ds,cronjob,job,pod</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -A</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -o</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> workloads.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> workloads.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:12:1-12:395">Every importer reads one export file and produces items. The output is deterministic: results sort by file and pointer. An affected item means a lifecycle rule applies to the version the export names; <code>no-data</code> means Offing has no rule for that PURL, never that the thing is safe. A file no importer recognizes is listed, the run exits <code>2</code>, and the files that were recognized are still reported.</p>
+<h2 id="privacy" data-src="docs/INVENTORY.md:14:1-14:10">Privacy</h2>
+<p data-src="docs/INVENTORY.md:16:1-16:638"><code>inventory</code> reads only the files named on the command line. It makes no network request, runs no command, and reads no other file. It never executes code or tools from the scanned export. Output names only the resource's own short name: <code>resource</code> is never an account id, ARN, subscription id, project number, IP address, tag, or environment variable, and the one exception is a Kubernetes node's own name, which the cluster importer reports because the node is the resource (a node named by its IP address is skipped). <code>--redact</code> replaces each resource name with the first 12 hex characters of its SHA-256, in text and JSON output alike.</p>
+<h2 id="kubernetes-workloads" data-src="docs/INVENTORY.md:18:1-18:23">Kubernetes workloads</h2>
+<h3 id="what-it-reads" data-src="docs/INVENTORY.md:20:1-20:17">What it reads</h3>
+<p data-src="docs/INVENTORY.md:22:1-22:36">Export a cluster's workload objects:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:24:1-27:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">kubectl</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> get</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> deploy,sts,ds,cronjob,job,pod</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -A</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -o</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> workloads.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> workloads.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:29:1-29:186">The importer recognizes a Kubernetes <code>List</code> whose items each have <code>apiVersion</code>, <code>kind</code>, and <code>metadata</code>. A list of <code>Node</code> objects is left to the cluster importer. For every item it reads:</p>
+<ul data-src="docs/INVENTORY.md:31:1-33:225">
+<li><code>apiVersion</code> and <code>kind</code>, mapped to the Kubernetes lifecycle rules.</li>
+<li><code>metadata.namespace</code> and <code>metadata.name</code>, which form <code>resource</code> as <code>&#x3C;namespace>/&#x3C;kind>/&#x3C;name></code>. Cluster-scoped objects have no namespace and use <code>cluster</code> instead.</li>
+<li>For <code>Pod</code>, <code>Deployment</code>, <code>StatefulSet</code>, <code>DaemonSet</code>, <code>ReplicaSet</code>, <code>Job</code>, and <code>CronJob</code>, every <code>containers[].image</code> and <code>initContainers[].image</code> in the pod template. For a <code>CronJob</code> that is <code>spec.jobTemplate.spec.template</code>.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:35:1-35:269">Images are parsed with the same parser as the container detector. Identical image references are reported once per namespace and workload, at the first pointer where they appear. A label, annotation, environment variable, pod status, and <code>spec.nodeName</code> are never read.</p>
+<h3 id="rules-matched" data-src="docs/INVENTORY.md:37:1-37:17">Rules matched</h3>
+<table data-src="docs/INVENTORY.md:39:1-42:150">
+<thead>
+<tr>
+<th>Item</th>
+<th>PURL</th>
+<th>Registry</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Container image</td>
+<td><code>pkg:docker/&#x3C;repository></code>, for example <code>pkg:docker/library/node</code></td>
+<td><code>registry/container.json</code></td>
+</tr>
+<tr>
+<td>API version</td>
+<td><code>pkg:generic/kubernetes/&#x3C;group>/&#x3C;Kind></code>, for example <code>pkg:generic/kubernetes/networking.k8s.io/Ingress</code></td>
+<td><code>registry/kubernetes.json</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:44:1-44:247">A Docker Hub image is written without the registry: <code>docker.io/library/node</code> is <code>pkg:docker/library/node</code>. Images from other registries are skipped, not reported, because no rule covers them yet and a private registry host can carry an account id.</p>
+<p data-src="docs/INVENTORY.md:46:1-46:473">An image tag is used as the version only when it is a plain release number: <code>node:18.19.0</code> is <code>18.19.0</code>, and <code>node:18</code> is <code>18.0.0</code>. Floating tags such as <code>latest</code>, <code>22-alpine</code>, or a digest with no tag name no version, so the item is reported as <code>version-dependent</code>, not guessed. An API version is translated to the rule's semver form by the same rule as the Kubernetes detector (decision 0008): <code>v1</code> is <code>1.0.0</code>, <code>v1beta1</code> is <code>1.0.0-beta.1</code>, and <code>v2beta2</code> is <code>2.0.0-beta.2</code>.</p>
+<h3 id="limit-the-api-servers-preferred-version" data-src="docs/INVENTORY.md:48:1-48:45">Limit: the API server's preferred version</h3>
+<p data-src="docs/INVENTORY.md:50:1-50:494"><code>kubectl get -o json</code> reports each object at a version the API server chooses to serve, not necessarily the version it was stored or applied at. An object created through a removed API can therefore appear at its replacement: an <code>Ingress</code> applied as <code>networking.k8s.io/v1beta1</code> is reported by a modern server as <code>networking.k8s.io/v1</code>. This importer can only judge the version the export names; it cannot infer an older stored version. Use a manifest scan to judge what the repository declares.</p>
+<h3 id="what-it-does-not-judge" data-src="docs/INVENTORY.md:52:1-52:26">What it does not judge</h3>
+<ul data-src="docs/INVENTORY.md:54:1-57:50">
+<li>Images from registries other than Docker Hub, including private registries and IP-address hosts: no rule covers them yet, so they are skipped rather than reported and no host, address, or account id reaches the output.</li>
+<li>Floating tags and digest-only references, whose release line the file does not name.</li>
+<li>The core API group (<code>apiVersion: v1</code>, such as <code>Pod</code>), which has no removed kinds in the Kubernetes migration guide.</li>
+<li>Objects and fields beyond the ones listed above.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:59:1-59:277">The fixtures under <code>tests/fixtures/inventory/k8s-workloads/</code> reproduce the documented output shape of <code>kubectl get … -o json</code> (kubectl 1.31), with every identifier replaced by a placeholder. They were assembled from the command's output shape, not captured from a live cluster.</p>
+<h2 id="kubernetes-cluster" data-src="docs/INVENTORY.md:61:1-61:21">Kubernetes cluster</h2>
+<p data-src="docs/INVENTORY.md:63:1-63:65">Export the cluster's version and its nodes, then pass both files:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:65:1-69:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">kubectl</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> version</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -o</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> k8s-cluster.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">kubectl</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> get</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> nodes</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -o</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> k8s-nodes.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> k8s-cluster.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> k8s-nodes.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:71:1-71:296">The importer recognizes the version export, the object that carries <code>serverVersion.gitVersion</code>, and the node export, a Kubernetes <code>List</code> whose items are all <code>Node</code> objects with <code>status.nodeInfo</code>. From the version export it reads the control-plane version; from the node export it reads, per node:</p>
+<ul data-src="docs/INVENTORY.md:73:1-76:43">
+<li><code>status.nodeInfo.kubeletVersion</code></li>
+<li><code>status.nodeInfo.osImage</code></li>
+<li><code>status.nodeInfo.containerRuntimeVersion</code></li>
+<li><code>metadata.name</code>, which becomes <code>resource</code></li>
+</ul>
+<h3 id="provider-suffixes" data-src="docs/INVENTORY.md:78:1-78:21">Provider suffixes</h3>
+<p data-src="docs/INVENTORY.md:80:1-80:593"><code>gitVersion</code> and <code>kubeletVersion</code> carry a provider suffix on managed services: <code>v1.28.3-eks-2fbdaf5</code>, <code>v1.30.5-gke.1445001</code>, <code>v1.31.5+k3s1</code>. Everything from the first <code>-</code> or <code>+</code> is stripped and the upstream release is judged, so each of those is <code>1.28.3</code>, <code>1.30.5</code>, and <code>1.31.5</code>. Managed providers (EKS, GKE, AKS) retire minors on their own calendars, which end earlier than upstream's, so a managed cluster should be judged by its provider's schedule too: the provider view is covered by the EKS, Google Cloud, and Azure tasks, and GKE already has its own rules in <code>registry/kubernetes.json</code>.</p>
+<h3 id="rules-matched-1" data-src="docs/INVENTORY.md:82:1-82:17">Rules matched</h3>
+<table data-src="docs/INVENTORY.md:84:1-88:133">
+<thead>
+<tr>
+<th>Item</th>
+<th>PURL</th>
+<th>Registry</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Control plane, kubelet</td>
+<td><code>pkg:generic/kubernetes</code></td>
+<td><code>registry/kubernetes.json</code></td>
+</tr>
+<tr>
+<td>Node OS image</td>
+<td><code>pkg:generic/&#x3C;distribution></code>, for example <code>pkg:generic/ubuntu</code></td>
+<td><code>registry/container.json</code></td>
+</tr>
+<tr>
+<td>Container runtime</td>
+<td><code>pkg:generic/containerd</code>, <code>pkg:generic/docker</code>, <code>pkg:generic/cri-o</code>, <code>pkg:generic/cri-dockerd</code></td>
+<td>no rules yet</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:90:1-90:649"><code>registry/kubernetes.json</code> holds upstream minor-release rules sourced to the <a href="https://kubernetes.io/releases/" rel="external">Kubernetes release history</a> page. They are the reviewed adoption of the <code>kubernetes-2</code> lifecycle importer's drafts: each of the five newest ended minors has an <code>end-of-life</code> rule at high severity, a minor whose announced end of life has not passed is <code>scheduled-end-of-life</code> at low severity (decision 0010), and a reviewed <code>1.28-and-older</code> rule covers the lines the importer no longer drafts. A weekly importer run keeps these fresh; a managed cluster should still be judged by its provider's schedule, which ends earlier than upstream's.</p>
+<p data-src="docs/INVENTORY.md:92:1-92:652">An <code>osImage</code> maps to the distribution's PURL when it names one the registry knows: <code>Ubuntu 22.04.5 LTS</code> to <code>pkg:generic/ubuntu</code> at <code>22.04.5</code>, <code>SUSE Linux Enterprise Server 15 SP6</code> to <code>pkg:generic/sles</code> at <code>15.6</code>, <code>Amazon Linux 2</code> to <code>pkg:generic/amzn</code> at <code>2</code>. These are the same PURLs and rules the os-release importer checks, so a node image and a host's <code>/etc/os-release</code> are judged by one set of dates. A distribution without rules — Bottlerocket, Container-Optimized OS, Flatcar, Rocky Linux, AlmaLinux — is still reported, at its own PURL, as <code>no-data</code>: not safe, just unruled. An image that names none of the known distributions produces no item.</p>
+<p data-src="docs/INVENTORY.md:94:1-94:274"><code>containerRuntimeVersion</code> maps to the runtime's PURL: <code>containerd://1.6.32</code> to <code>pkg:generic/containerd</code> at <code>1.6.32</code>. No runtime rule set exists yet, so these report <code>no-data</code>. A version that is not a plain release number (<code>containerd://1.6.x</code>) is reported without a version.</p>
+<h3 id="what-is-not-judged" data-src="docs/INVENTORY.md:96:1-96:22">What is not judged</h3>
+<ul data-src="docs/INVENTORY.md:98:1-102:101">
+<li>Node capacity, conditions, taints, labels, and addresses: never read or reported.</li>
+<li>A node whose <code>metadata.name</code> is an IP address is skipped entirely, because <code>resource</code> names a resource, never an address.</li>
+<li>The images running on the nodes and the objects' API versions: the workloads importer covers those.</li>
+<li>Whether the control plane and the kubelets are within the version-skew policy: skew compatibility is a different question from end of life.</li>
+<li>Anything the export does not state. No command is run, no API is called, and no other file is read.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:104:1-104:309">The fixtures under <code>tests/fixtures/inventory/k8s-cluster/</code> reproduce the documented output shape of <code>kubectl version -o json</code> and <code>kubectl get nodes -o json</code> (kubectl 1.31), with every identifier replaced by a placeholder. They were assembled from the command's output shape, not captured from a live cluster.</p>
+<h2 id="host-operating-systems" data-src="docs/INVENTORY.md:106:1-106:25">Host operating systems</h2>
+<p data-src="docs/INVENTORY.md:108:1-108:180">The <code>os-release</code> importer reads an <code>/etc/os-release</code> file from one host, or a bundle collected from several hosts, and reports the distribution release against its lifecycle rules.</p>
+<h3 id="export" data-src="docs/INVENTORY.md:110:1-110:10">Export</h3>
+<p data-src="docs/INVENTORY.md:112:1-112:9">One host:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:114:1-117:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">ssh</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> web-1</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> '</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">cat /etc/os-release</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">'</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> web-1.os-release</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> web-1.os-release</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:119:1-119:113">Several hosts, in one file. Each block starts with <code>### host: &#x3C;name></code>; that name becomes the result's <code>resource</code>:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:121:1-127:3"><code><span class="line"><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">while</span><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8"> read</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -r</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> host</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">;</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> do</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">  printf</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> '</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">### host: %s\n</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">'</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> "</span><span style="--shiki-light:#886021;--shiki-dark:#E6C384">$host</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">"</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">  ssh</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> "</span><span style="--shiki-light:#886021;--shiki-dark:#E6C384">$host</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">"</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> '</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">cat /etc/os-release</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">'</span></span>
+<span class="line"><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">done</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> &#x3C;</span><span style="--shiki-light:#2E3440;--shiki-dark:#DCD7BA"> hosts.txt </span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">></span><span style="--shiki-light:#2E3440;--shiki-dark:#DCD7BA"> os-release.bundle</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> os-release.bundle</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:129:1-129:66">Offing runs neither loop; you run it, and Offing reads the result.</p>
+<h3 id="fields-read" data-src="docs/INVENTORY.md:131:1-131:15">Fields read</h3>
+<table data-src="docs/INVENTORY.md:133:1-137:154">
+<thead>
+<tr>
+<th>Field</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID</code></td>
+<td>Names the distribution, and so the <code>pkg:generic/&#x3C;distro></code> rule set.</td>
+</tr>
+<tr>
+<td><code>VERSION_ID</code></td>
+<td>The release line the rules judge. The result's <code>pointer</code> is the <code>line:&#x3C;n></code> of this line in the file.</td>
+</tr>
+<tr>
+<td><code>ID_LIKE</code></td>
+<td>Read as the declared family. It is never used to apply a parent distribution's dates, because a derivative keeps its own release schedule.</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:139:1-139:329">A block without both <code>ID</code> and a numeric <code>VERSION_ID</code> is skipped: a codename or a rolling tag such as <code>testing</code> does not name a release line the rules can judge. A single file with no host header uses its file name as the resource. Quoted values, such as <code>VERSION_ID="20.04"</code> and <code>ID='ubuntu'</code>, are read the same as unquoted ones.</p>
+<h3 id="rules-matched-2" data-src="docs/INVENTORY.md:141:1-141:17">Rules matched</h3>
+<table data-src="docs/INVENTORY.md:143:1-151:95">
+<thead>
+<tr>
+<th>Distribution (<code>ID</code>)</th>
+<th>PURL</th>
+<th>Release lines reported</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ubuntu</code></td>
+<td><code>pkg:generic/ubuntu</code></td>
+<td>before 22.04</td>
+<td><code>container.host-ubuntu.eol-22.04-and-older</code></td>
+</tr>
+<tr>
+<td><code>debian</code></td>
+<td><code>pkg:generic/debian</code></td>
+<td>before 12</td>
+<td><code>container.host-debian.eol-11-and-older</code></td>
+</tr>
+<tr>
+<td><code>rhel</code></td>
+<td><code>pkg:generic/rhel</code></td>
+<td>7 and older</td>
+<td><code>container.host-rhel.eol-7-and-older</code></td>
+</tr>
+<tr>
+<td><code>centos</code></td>
+<td><code>pkg:generic/centos</code></td>
+<td>8 and older</td>
+<td><code>container.host-centos.eol-8-and-older</code></td>
+</tr>
+<tr>
+<td><code>amzn</code></td>
+<td><code>pkg:generic/amzn</code></td>
+<td>2 and the 2018.03 AMI</td>
+<td><code>container.host-amazon-linux.eol-2-and-older</code></td>
+</tr>
+<tr>
+<td><code>alpine</code></td>
+<td><code>pkg:generic/alpine</code></td>
+<td>before 3.21</td>
+<td><code>container.host-alpine.eol-3.20-and-older</code></td>
+</tr>
+<tr>
+<td><code>sles</code></td>
+<td><code>pkg:generic/sles</code></td>
+<td>15 SP6 and older</td>
+<td><code>container.host-sles.eol-15-sp6-and-older</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:153:1-153:307">Every rule cites the distribution's own lifecycle page, not an aggregator. The rules live in <code>registry/container.json</code> next to the image rules, but use <code>pkg:generic/&#x3C;distro></code> PURLs and distribution sources: an image rule describes what a Docker tag ships, which is not the same question as what a host runs.</p>
+<h3 id="what-is-not-judged-1" data-src="docs/INVENTORY.md:155:1-155:22">What is not judged</h3>
+<ul data-src="docs/INVENTORY.md:157:1-160:115">
+<li>A file without <code>VERSION_ID</code> is skipped: a codename alone does not identify the release line for every distribution.</li>
+<li>A derivative reported under its own <code>ID</code> is checked only if that <code>ID</code> has a rule. <code>ID_LIKE</code> does not borrow the parent's dates. It is reported as <code>no-data</code>, not as safe.</li>
+<li>Paid add-on support is not treated as standard support. RHEL 7 Extended Life Cycle Support and SUSE Long Term Service Pack Support extend security fixes for a fee; the rules report that general support ended and name the add-on in the summary.</li>
+<li>A host with no readable <code>/etc/os-release</code> is not reported. Offing does not guess a distribution from other files.</li>
+</ul>
+<h3 id="fixtures" data-src="docs/INVENTORY.md:162:1-162:12">Fixtures</h3>
+<p data-src="docs/INVENTORY.md:164:1-164:256">The fixtures under <code>tests/fixtures/inventory/os-release/</code> are the output of <code>cat /etc/os-release</code> on each distribution, with every identifier replaced by a placeholder. There is no CLI version to record: <code>cat</code> is part of the coreutils of each distribution.</p>
+<h2 id="docker-containers-and-images" data-src="docs/INVENTORY.md:166:1-166:31">Docker containers and images</h2>
+<p data-src="docs/INVENTORY.md:168:1-168:66">Produce the exports with the Docker CLI. Both forms are supported:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:170:1-176:3"><code><span class="line"><span style="--shiki-light:#5F687C;--shiki-dark:#96938E"># running and stopped containers, including labels and state</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">docker</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inspect</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> $(</span><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">docker</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> ps</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -aq</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">)</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> docker-inspect.json</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#5F687C;--shiki-dark:#96938E"># a Compose project: a JSON array, or one JSON object per line</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">docker</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> compose</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> ps</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --format</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> docker-compose-ps.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:178:1-178:368">The fixtures under <a href="../tests/fixtures/inventory/docker/"><code>tests/fixtures/inventory/docker/</code></a> follow the output of Docker CLI 29.6.2 (<code>docker inspect</code>) and Docker Compose v2 (<code>docker compose ps --format json</code>), with ids, names, and image tags replaced. The example <a href="../examples/inventory/docker-inspect.json"><code>examples/inventory/docker-inspect.json</code></a> is the same shape.</p>
+<h3 id="what-is-read" data-src="docs/INVENTORY.md:180:1-180:16">What is read</h3>
+<table data-src="docs/INVENTORY.md:182:1-187:71">
+<thead>
+<tr>
+<th>Format</th>
+<th>Fields</th>
+<th>Pointer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker inspect</code></td>
+<td><code>Name</code>, <code>Config.Image</code></td>
+<td><code>/i/Name</code>, <code>/i/Config/Image</code></td>
+</tr>
+<tr>
+<td><code>docker inspect</code></td>
+<td><code>Config.Labels["org.opencontainers.image.base.name"]</code></td>
+<td><code>/i/Config/Labels/org.opencontainers.image.base.name</code></td>
+</tr>
+<tr>
+<td><code>docker inspect</code></td>
+<td><code>Config.Labels["org.opencontainers.image.version"]</code></td>
+<td><code>/i/Config/Labels/org.opencontainers.image.version</code></td>
+</tr>
+<tr>
+<td><code>docker compose ps</code></td>
+<td><code>Service</code>, <code>Image</code></td>
+<td><code>/i/Service</code>, <code>/i/Image</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:189:1-189:241"><code>i</code> is the entry's index in the JSON array, or the zero-based line for line-delimited Compose output. Nothing else is read: <code>Env</code>, <code>Mounts</code>, <code>NetworkSettings</code>, <code>Ports</code>, and <code>Labels</code> beyond the two OCI labels above never appear in the report.</p>
+<p data-src="docs/INVENTORY.md:191:1-191:338"><code>resource</code> is the container name without the leading <code>/</code>, or the Compose service name. The image reference is parsed with the same parser the container detector uses (<a href="../src/detectors/container/parse-image.ts"><code>src/detectors/container/parse-image.ts</code></a>); interpolated values (<code>${IMAGE}</code>) and invalid references are skipped, never guessed.</p>
+<h3 id="rules-matched-3" data-src="docs/INVENTORY.md:193:1-193:17">Rules matched</h3>
+<p data-src="docs/INVENTORY.md:195:1-195:513">Images map to Docker PURLs, <code>pkg:docker/&#x3C;repository></code>, and are checked against <a href="https://github.com/velella-sh/ebb/blob/main/registry/container.json" rel="external"><code>registry/container.json</code></a>. For example, <code>node:18-alpine</code> becomes <code>pkg:docker/library/node</code> at version <code>18-alpine</code>, and <code>redis:6.0</code> becomes <code>pkg:docker/library/redis</code> at <code>6.0</code>. A tag that names a release line is the version; a floating tag such as <code>latest</code> or a digest-only reference has no version, so a range rule reports <code>version-dependent</code> instead of guessing.</p>
+<p data-src="docs/INVENTORY.md:197:1-197:203">Images from a registry other than Docker Hub keep the registry as the PURL namespace, for example <code>pkg:docker/ghcr.io/acme/app</code>. No Docker Hub rule matches those PURLs, so they are reported as <code>no-data</code>.</p>
+<p data-src="docs/INVENTORY.md:199:1-199:249">The two OCI labels add items when present: <code>org.opencontainers.image.base.name</code> is the base image, and <code>org.opencontainers.image.version</code> is the image's own version. Both are checked against the same rules, with the container name as their resource.</p>
+<h3 id="image-ids" data-src="docs/INVENTORY.md:201:1-201:13">Image ids</h3>
+<p data-src="docs/INVENTORY.md:203:1-203:361">When <code>Config.Image</code> is a bare image id (<code>sha256:…</code>), Offing does not resolve it to an image. The container is reported with the PURL <code>pkg:docker/image-id</code> and the id as its version, which yields <code>no-data</code>: there is no lifecycle rule for an unresolved id. Run <code>docker inspect --format '<span class="placeholder" data-var=".Config.Image">{{.Config.Image}}</span>' &#x3C;container></code> with a name instead when you need the image.</p>
+<h3 id="what-is-not-judged-2" data-src="docs/INVENTORY.md:205:1-205:22">What is not judged</h3>
+<ul data-src="docs/INVENTORY.md:207:1-210:79">
+<li>The operating system and runtimes <em>inside</em> an image: export or unpack the root filesystem and run <code>offing scan</code> on it.</li>
+<li>Images on registries other than Docker Hub, and Microsoft .NET images on <code>mcr.microsoft.com</code>: no rule is applied.</li>
+<li>Environment variables, mounts, published ports, and network settings: never read or reported.</li>
+<li>Whether a container is running: stopped containers are reported the same way.</li>
+</ul>
+<h2 id="report-shape" data-src="docs/INVENTORY.md:212:1-212:15">Report shape</h2>
+<p data-src="docs/INVENTORY.md:214:1-214:313">The JSON report is <code>offing.inventory.v1</code>, validated by <a href="../schemas/inventory.v1.schema.json"><code>schemas/inventory.v1.schema.json</code></a>. <code>results</code> holds one entry per item and check; <code>unrecognized</code> lists the files no importer recognized. Items are sorted by file and pointer, so the same exports produce the same report.</p>
+<p data-src="docs/INVENTORY.md:216:1-216:331">A Package URL with no rule is reported as <code>no-data</code>; when a PURL has rules but none covers the version, the item is <code>not-affected</code>. Neither status is a statement that the version is safe. A rule for an announced date that has not happened yet is a <code>scheduled-end-of-life</code> finding at low severity, so it does not fail a <code>high</code> gate.</p>
+<h2 id="importers" data-src="docs/INVENTORY.md:218:1-218:12">Importers</h2>
+<table data-src="docs/INVENTORY.md:220:1-224:129">
+<thead>
+<tr>
+<th>Importer</th>
+<th>Reads</th>
+<th>Export command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aws-rds</code></td>
+<td>AWS RDS instances, Aurora clusters, and ElastiCache cache clusters</td>
+<td><code>aws rds describe-db-instances</code>, <code>aws rds describe-db-clusters</code>, <code>aws elasticache describe-cache-clusters</code></td>
+</tr>
+<tr>
+<td><code>k8s-cluster</code></td>
+<td>Kubernetes control-plane and kubelet versions, node OS images, and container runtimes</td>
+<td><code>kubectl version -o json</code>, <code>kubectl get nodes -o json</code></td>
+</tr>
+<tr>
+<td><code>terraform-state</code></td>
+<td>Terraform state from <code>terraform show -json</code> or a raw <code>terraform.tfstate</code> v4 file</td>
+<td><code>terraform show -json</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="aws-rds-aurora-and-elasticache" data-src="docs/INVENTORY.md:226:1-226:35">AWS RDS, Aurora, and ElastiCache</h2>
+<h3 id="produce-the-export" data-src="docs/INVENTORY.md:228:1-228:22">Produce the export</h3>
+<p data-src="docs/INVENTORY.md:230:1-230:73">Use the AWS CLI with JSON output and pass the file to <code>offing inventory</code>:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:232:1-238:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">aws</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> rds</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> describe-db-instances</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --output</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> rds-instances.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">aws</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> rds</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> describe-db-clusters</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --output</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> rds-clusters.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">aws</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> elasticache</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> describe-cache-clusters</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --output</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> cache-clusters.json</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> rds-instances.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> rds-clusters.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> cache-clusters.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:240:1-240:324">The fixtures under <code>tests/fixtures/inventory/aws-rds/</code> are sanitized samples of these three documents: every account id, ARN, endpoint, and subnet id is a placeholder, and only the fields below are kept. They were assembled from the published output shape of <code>aws-cli</code> during review rather than captured from a live account.</p>
+<h3 id="fields-read-1" data-src="docs/INVENTORY.md:242:1-242:15">Fields read</h3>
+<table data-src="docs/INVENTORY.md:244:1-248:95">
+<thead>
+<tr>
+<th>Document</th>
+<th>Array</th>
+<th>Engine field</th>
+<th>Version field</th>
+<th>Resource field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>describe-db-instances</code></td>
+<td><code>DBInstances</code></td>
+<td><code>Engine</code></td>
+<td><code>EngineVersion</code></td>
+<td><code>DBInstanceIdentifier</code></td>
+</tr>
+<tr>
+<td><code>describe-db-clusters</code></td>
+<td><code>DBClusters</code></td>
+<td><code>Engine</code></td>
+<td><code>EngineVersion</code></td>
+<td><code>DBClusterIdentifier</code></td>
+</tr>
+<tr>
+<td><code>describe-cache-clusters</code></td>
+<td><code>CacheClusters</code></td>
+<td><code>Engine</code></td>
+<td><code>EngineVersion</code></td>
+<td><code>CacheClusterId</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:250:1-250:263">Everything else in the document is ignored: ARNs, endpoints, reader endpoints, hosted zone ids, subnet groups, VPC ids, security groups, tags, and parameter groups. An entry without a string <code>Engine</code>, <code>EngineVersion</code>, and resource field is skipped, never guessed.</p>
+<h3 id="engines-and-purls" data-src="docs/INVENTORY.md:252:1-252:21">Engines and PURLs</h3>
+<table data-src="docs/INVENTORY.md:254:1-260:71">
+<thead>
+<tr>
+<th>AWS engine</th>
+<th>Provider PURL</th>
+<th>Upstream PURL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgres</code></td>
+<td><code>pkg:generic/aws-rds/postgres</code></td>
+<td><code>pkg:generic/postgresql</code></td>
+</tr>
+<tr>
+<td><code>mysql</code></td>
+<td><code>pkg:generic/aws-rds/mysql</code></td>
+<td><code>pkg:generic/mysql</code></td>
+</tr>
+<tr>
+<td><code>aurora-postgresql</code></td>
+<td><code>pkg:generic/aws-aurora/postgresql</code></td>
+<td><code>pkg:generic/postgresql</code></td>
+</tr>
+<tr>
+<td><code>aurora-mysql</code>, <code>aurora</code></td>
+<td><code>pkg:generic/aws-aurora/mysql</code></td>
+<td>none (see below)</td>
+</tr>
+<tr>
+<td><code>redis</code></td>
+<td><code>pkg:generic/aws-elasticache/redis</code></td>
+<td><code>pkg:generic/redis</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:262:1-262:303">Each recognized object produces two items when the version is also an upstream version, so the report shows both the provider's schedule and the upstream engine's schedule. AWS standard support and extended support dates differ from upstream end of life, and the rules are kept separate for that reason.</p>
+<p data-src="docs/INVENTORY.md:264:1-264:241">Aurora MySQL is the exception: its <code>EngineVersion</code> embeds the Aurora version, as in <code>8.0.mysql_aurora.3.10.0</code>, which is not an upstream MySQL release. Only the Aurora item is emitted rather than comparing that string to upstream MySQL rules.</p>
+<p data-src="docs/INVENTORY.md:266:1-266:183">Unknown engines are skipped: <code>mariadb</code>, <code>sqlserver-*</code>, <code>oracle-*</code>, <code>db2-*</code>, <code>memcached</code>, and <code>valkey</code> have no reviewed rule in this importer yet, so they produce no item and no claim.</p>
+<h3 id="rules-matched-4" data-src="docs/INVENTORY.md:268:1-268:17">Rules matched</h3>
+<p data-src="docs/INVENTORY.md:270:1-270:516">The rules live in <a href="https://github.com/velella-sh/ebb/blob/main/registry/database.json" rel="external"><code>registry/database.json</code></a> under the provider PURLs, with the AWS release calendar as their source. "End of standard support" is recorded with the registry's <code>end-of-support</code> event; an announced date that is still in the future is recorded as <code>scheduled-end-of-life</code> at low severity until it passes. The summary of each rule says whether RDS Extended Support or ElastiCache Extended Support may keep the version running for a fee.</p>
+<table data-src="docs/INVENTORY.md:272:1-278:77">
+<thead>
+<tr>
+<th>Service</th>
+<th>Versions with a rule (as of 2026-10-30)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RDS for PostgreSQL</td>
+<td>9.6, 10, 11, 12, 13 (ended); 14 (scheduled 2027-02-28)</td>
+</tr>
+<tr>
+<td>RDS for MySQL</td>
+<td>5.7, 8.0 (ended)</td>
+</tr>
+<tr>
+<td>Aurora PostgreSQL</td>
+<td>11, 12, 13 (ended); 14 (scheduled 2027-02-28)</td>
+</tr>
+<tr>
+<td>Aurora MySQL</td>
+<td>1 (5.6), 2 (5.7) (ended)</td>
+</tr>
+<tr>
+<td>ElastiCache Redis OSS</td>
+<td>4, 5 (ended 2026-01-31); 6 (scheduled 2027-01-31)</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:280:1-280:721">A version outside these ranges is not reported as supported. When the provider PURL has rules for other versions, the item is <code>not-affected</code>: the check message says that rules exist and none covers this version. When the PURL has no rules at all, it is <code>no-data</code>. Neither status is a statement that the version is safe. This includes RDS for PostgreSQL 15 and later, RDS for MySQL 8.4 and later, Aurora PostgreSQL 15 and later, Aurora MySQL 3 and 8.4, and Redis OSS 7.x. Their announced end-of-standard-support dates are more than twelve months past the review date, so no rule is recorded yet under decision <a href="decisions/0010-scheduled-end-of-life.md">0010</a>; a later review adds them when the dates come within the window.</p>
+<h3 id="what-is-not-judged-3" data-src="docs/INVENTORY.md:282:1-282:22">What is not judged</h3>
+<p data-src="docs/INVENTORY.md:284:1-284:462">The importer does not judge instance classes, storage, IOPS, parameter groups, patch levels within a supported minor version, certificate authorities, Multi-AZ or read-replica topology, backup retention, encryption, or licensing. It does not judge MariaDB, SQL Server, Oracle, Db2, Memcached, or Valkey. It does not verify that an export is complete or current. It does not read an AWS account, role, or region, and it cannot see an object that the export omits.</p>
+<h2 id="export-files" data-src="docs/INVENTORY.md:286:1-286:15">Export files</h2>
+<p data-src="docs/INVENTORY.md:288:1-288:345">Each section below documents one importer: the exact command that produces the export, the fields Offing reads, the lifecycle rules it matches, and what it does not judge. Fixtures live under <code>tests/fixtures/inventory/</code>, with every identifier replaced by a placeholder; the command and CLI version that produced them are recorded in the section.</p>
+<h2 id="aws-lambda" data-src="docs/INVENTORY.md:290:1-290:13">AWS Lambda</h2>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:292:1-295:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">aws</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> lambda</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list-functions</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --output</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> lambda.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> lambda.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:297:1-297:487"><code>list-functions</code> paginates. With pagination on, the CLI prints one JSON page after another; <code>offing</code> accepts the single page a one-page account prints as well as the array of pages a scripted caller collects. The fixtures under <code>tests/fixtures/inventory/aws-lambda/</code> reproduce the documented output of <code>aws lambda list-functions --output json</code> from AWS CLI v2, with every identifier replaced by a placeholder; they were not captured against a live account, so no CLI version is recorded.</p>
+<p data-src="docs/INVENTORY.md:299:1-299:15"><strong>Fields read</strong></p>
+<table data-src="docs/INVENTORY.md:301:1-305:130">
+<thead>
+<tr>
+<th>Field</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Functions[].FunctionName</code></td>
+<td><code>resource</code> and nothing more.</td>
+</tr>
+<tr>
+<td><code>Functions[].Runtime</code></td>
+<td><code>version</code>, and the runtime identifier in <code>pkg:generic/aws-lambda-runtime/&#x3C;Runtime></code>.</td>
+</tr>
+<tr>
+<td><code>Functions[].PackageType</code></td>
+<td><code>Image</code> means the function runs a container image, which has no managed runtime, so it is skipped.</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:307:1-307:114">Nothing else is copied: not <code>FunctionArn</code>, <code>Role</code>, environment variables, tags, account id, code, or architecture.</p>
+<p data-src="docs/INVENTORY.md:309:1-309:17"><strong>Rules matched</strong></p>
+<p data-src="docs/INVENTORY.md:311:1-311:576"><code>registry/serverless.json</code>, the <code>pkg:generic/aws-lambda-runtime/&#x3C;identifier></code> PURLs. Every runtime the <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html" rel="external">AWS Lambda runtimes page</a> gives a deprecation date for has a rule: a runtime the page lists under Deprecated runtimes is <code>end-of-life</code> at <code>high</code>, and a runtime the page lists as supported with a projected deprecation date is <code>scheduled-end-of-life</code> at <code>low</code> with that date as its deadline. The same rules back the Serverless detector, so one lifecycle fact reaches a declaration and a live function alike.</p>
+<p data-src="docs/INVENTORY.md:313:1-313:14"><strong>Not judged</strong></p>
+<ul data-src="docs/INVENTORY.md:315:1-318:121">
+<li>Container-image functions (<code>PackageType: "Image"</code>): their runtime lives in the image, not in the function's configuration. Rebuild the image from a newer base image instead.</li>
+<li>Runtimes AWS has not dated — today <code>nodejs26.x</code> and <code>python3.15</code>, which the page lists as public preview and not scheduled — are reported as <code>no-data</code>, which is not a statement that they are safe.</li>
+<li>Function versions, aliases, <code>$LATEST</code>, code, layers, architecture, and memory: none of them changes the runtime lifecycle answer.</li>
+<li>Functions that a different export would show: this importer reads only the file you pass, and only the functions in it.</li>
+</ul>
+<h2 id="aws-eks-clusters-and-node-groups" data-src="docs/INVENTORY.md:320:1-320:35">AWS EKS clusters and node groups</h2>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:322:1-326:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">aws</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> eks</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> describe-cluster</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --name</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> prod-payments</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> cluster.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">aws</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> eks</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> describe-nodegroup</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --cluster-name</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> prod-payments</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --nodegroup-name</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> workers</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> nodegroup.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> cluster.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> nodegroup.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:328:1-328:350">Each command prints one document: <code>describe-cluster</code> prints <code>{"cluster": …}</code> and <code>describe-nodegroup</code> prints <code>{"nodegroup": …}</code>. A script that collects several outputs into one JSON array is read as well, so <code>jq -s '.[] | {cluster: .}'</code> over a list of cluster exports works; an array is read only when every element is one of the two document shapes.</p>
+<p data-src="docs/INVENTORY.md:330:1-330:15"><strong>Fields read</strong></p>
+<table data-src="docs/INVENTORY.md:332:1-336:127">
+<thead>
+<tr>
+<th>Export</th>
+<th>Fields</th>
+<th>PURL</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aws eks describe-cluster</code></td>
+<td><code>cluster.name</code>, <code>cluster.version</code></td>
+<td><code>pkg:generic/amazon-eks</code></td>
+<td><code>version</code></td>
+</tr>
+<tr>
+<td><code>aws eks describe-nodegroup</code></td>
+<td><code>nodegroup.clusterName</code>, <code>nodegroup.nodegroupName</code>, <code>nodegroup.version</code></td>
+<td><code>pkg:generic/amazon-eks</code></td>
+<td><code>version</code></td>
+</tr>
+<tr>
+<td><code>aws eks describe-nodegroup</code></td>
+<td><code>nodegroup.amiType</code></td>
+<td><code>pkg:generic/amzn</code></td>
+<td>the Amazon Linux release the AMI type is built on</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:338:1-338:383"><code>resource</code> is the cluster name for a cluster and <code>&#x3C;clusterName>/&#x3C;nodegroupName></code> for a node group; a node group whose export carries no <code>clusterName</code> is named by its own name alone. A pointer marks the exact field the version came from — <code>/cluster/version</code>, <code>/nodegroup/amiType</code> — with <code>/&#x3C;entry></code> in front for an array, so <code>/1/nodegroup/version</code> is the <code>version</code> of the second entry.</p>
+<p data-src="docs/INVENTORY.md:340:1-340:507">A version is read only in the shape EKS itself writes: <code>1.31</code> or <code>1.31.4</code>. A <code>v</code> prefix or an <code>-eks-…</code> build suffix is the kubelet string a node reports, not the cluster's release line, so such a value is skipped rather than guessed; run <code>kubectl get nodes -o json</code> and the Kubernetes cluster importer for those. <code>aws eks list-clusters</code> and <code>aws eks list-nodegroups</code> print names only, and <code>aws eks describe-cluster-versions</code> prints the versions EKS offers rather than the one deployed: none of them is read.</p>
+<p data-src="docs/INVENTORY.md:342:1-342:26"><strong>Amazon Linux AMI types</strong></p>
+<p data-src="docs/INVENTORY.md:344:1-344:115"><code>amiType</code> names the Amazon EKS optimized AMI the nodes run, and each type is built on a known Amazon Linux release:</p>
+<table data-src="docs/INVENTORY.md:346:1-349:157">
+<thead>
+<tr>
+<th><code>amiType</code></th>
+<th>Item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AL2_x86_64</code>, <code>AL2_x86_64_GPU</code>, <code>AL2_ARM_64</code></td>
+<td><code>pkg:generic/amzn</code> at <code>2</code></td>
+</tr>
+<tr>
+<td><code>AL2023_x86_64_STANDARD</code>, <code>AL2023_ARM_64_STANDARD</code>, <code>AL2023_x86_64_NEURON</code>, <code>AL2023_x86_64_NVIDIA</code>, <code>AL2023_ARM_64_NVIDIA</code></td>
+<td><code>pkg:generic/amzn</code> at <code>2023</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:351:1-351:624">The item is judged by the same host-OS rules a server's <code>/etc/os-release</code> is judged by, so an AL2 node group reports the Amazon Linux 2 end of support and an AL2023 node group reports <code>not-affected</code> — which says nothing about the packages inside the AMI. <code>BOTTLEROCKET_*</code>, <code>WINDOWS_*</code>, and <code>CUSTOM</code> produce no Amazon Linux item: no reviewed rule judges them, so the node group's operating system is skipped rather than guessed. <code>releaseVersion</code> (<code>AL2023_x86_64_STANDARD_20260918</code>) is an AMI build string and <code>platformVersion</code> (<code>eks.3227</code>) is the EKS platform, neither of which has a lifecycle of its own, so neither is read.</p>
+<p data-src="docs/INVENTORY.md:353:1-353:17"><strong>Rules matched</strong></p>
+<ul data-src="docs/INVENTORY.md:355:1-356:86">
+<li><code>registry/kubernetes.json</code>: the <code>pkg:generic/amazon-eks</code> minor-version rules, sourced to the <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" rel="external">Amazon EKS version lifecycle page</a>. A version past end of standard support but still inside its 12 months of extended support is <code>end-of-support</code> at <code>medium</code> with that end date as its deadline; <code>1.30</code> and earlier, which the calendar no longer lists, are <code>end-of-life</code> at <code>high</code>; an announced end of standard support that has not passed yet is <code>scheduled-end-of-life</code> at <code>low</code> (<a href="decisions/0010-scheduled-end-of-life.md">decision 0010</a>), which is why <code>1.34</code>, <code>1.35</code>, and <code>1.36</code> carry rules and <code>1.37</code> does not yet — its date, 2027-12-01, is more than twelve months out.</li>
+<li><code>registry/container.json</code>: the <code>pkg:generic/amzn</code> rules for a node group's AMI type.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:358:1-358:304"><code>registry/terraform.json</code> carries the same EKS facts as its own rules for the Terraform detector, which reads <code>cluster_version</code> in <code>*.tf</code>; the Terraform state importer reads <code>registry/kubernetes.json</code>, so a state file's <code>aws_eks_cluster</code> and a live <code>describe-cluster</code> export are judged by the same rules.</p>
+<p data-src="docs/INVENTORY.md:360:1-360:22"><strong>What is not judged</strong></p>
+<ul data-src="docs/INVENTORY.md:362:1-365:139">
+<li>Self-managed nodes, Fargate pods, and any node outside a managed node group: <code>aws eks describe-nodegroup</code> only describes managed node groups. Use <code>kubectl get nodes -o json</code> for what is actually running.</li>
+<li><code>cluster.addons[]</code> versions, <code>accessConfig</code>, <code>encryptionConfig</code>, <code>outpostConfig</code>, and upgrade policies.</li>
+<li><code>endpoint</code>, <code>certificateAuthority.data</code>, <code>arn</code>, <code>roleArn</code>, <code>resourcesVpcConfig</code>, <code>subnets</code>, <code>securityGroupIds</code>, <code>remoteAccess.ec2SshKey</code>, tags, and labels: never read, never emitted.</li>
+<li>An EKS release no rule covers yet — today <code>1.37</code> — which reports <code>no-data</code>. <code>no-data</code> is never a statement that the version is supported.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:367:1-367:12"><strong>Fixtures</strong></p>
+<p data-src="docs/INVENTORY.md:369:1-369:456"><code>tests/fixtures/inventory/aws-eks/</code> holds one sanitized sample per document type, plus <code>rejects/</code> for the shapes listed above, with every account id, ARN, endpoint host, certificate, subnet, VPC and security group id, SSH key name, and tag value replaced by a placeholder. <code>examples/inventory/aws-eks.json</code> is a runnable sample. The shapes follow the documented output of AWS CLI v2 rather than a capture from a live account, so no CLI version is recorded.</p>
+<h2 id="google-cloud" data-src="docs/INVENTORY.md:371:1-371:15">Google Cloud</h2>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:373:1-379:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">gcloud</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> functions</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --format=json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> functions.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">gcloud</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> app</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> versions</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --format=json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> app-engine-versions.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">gcloud</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> container</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> clusters</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --format=json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> gke-clusters.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">gcloud</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> run</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> services</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --format=json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> cloud-run-services.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> functions.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> app-engine-versions.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> gke-clusters.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> cloud-run-services.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:381:1-381:15"><strong>Fields read</strong></p>
+<table data-src="docs/INVENTORY.md:383:1-388:134">
+<thead>
+<tr>
+<th>Export</th>
+<th>Fields</th>
+<th>PURL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gcloud functions list --format=json</code></td>
+<td><code>name</code>, <code>runtime</code> (1st gen) or <code>buildConfig.runtime</code> (2nd gen)</td>
+<td><code>pkg:generic/google-cloud-functions-runtime/&#x3C;runtime></code></td>
+</tr>
+<tr>
+<td><code>gcloud app versions list --format=json</code></td>
+<td><code>name</code>, <code>runtime</code></td>
+<td><code>pkg:generic/google-appengine-runtime/&#x3C;runtime></code></td>
+</tr>
+<tr>
+<td><code>gcloud container clusters list --format=json</code></td>
+<td><code>name</code>, <code>currentMasterVersion</code>, <code>currentNodeVersion</code></td>
+<td><code>pkg:generic/google-gke</code></td>
+</tr>
+<tr>
+<td><code>gcloud run services list --format=json</code></td>
+<td><code>metadata.name</code>, <code>spec.template.spec.containers[].image</code></td>
+<td><code>pkg:docker/library/&#x3C;image></code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:390:1-390:476"><code>name</code> supplies the resource: the last path segment, never the project id or number. A Cloud Functions or App Engine runtime item reports the runtime as part of PURL, so the pointer marks the exact field the runtime was read from. A GKE cluster produces one item for the control-plane version and, when it differs, one for the node version; <code>releaseChannel</code> does not change the verdict, because the rules state both the end of standard support and the end of extended support.</p>
+<p data-src="docs/INVENTORY.md:392:1-392:483">Cloud Run has no managed language runtime. The importer reads only container images and only those that name a public Docker Hub base image (<code>node:20</code>, <code>python:3.12-slim</code>, or <code>library/node:20</code>): an image with a registry host or a namespace (<code>gcr.io/…</code>, <code>us-docker.pkg.dev/…</code>, <code>bitnami/node</code>) is skipped, as is an image with no tag, a digest-only reference, or a tag that does not start with a digit. A short image name maps to <code>pkg:docker/library/&#x3C;name></code> with the tag as the version.</p>
+<p data-src="docs/INVENTORY.md:394:1-394:17"><strong>Rules matched</strong></p>
+<ul data-src="docs/INVENTORY.md:396:1-398:67">
+<li><code>registry/serverless.json</code>: Google Cloud Functions and App Engine runtime rules, sourced to Google's runtime support schedules.</li>
+<li><code>registry/kubernetes.json</code>: GKE minor-version rules, sourced to the GKE release schedule.</li>
+<li><code>registry/container.json</code>: base-image rules for Cloud Run images.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:400:1-400:22"><strong>What is not judged</strong></p>
+<ul data-src="docs/INVENTORY.md:402:1-405:128">
+<li>Runtime <em>generations</em> and stack images (<code>google-22</code>, <code>google-24-full</code>); only the runtime ID is checked.</li>
+<li>Operating-system packages inside a function or container image.</li>
+<li>Image digests, private images, and image names that are not public base images.</li>
+<li>Anything not written literally in the export: a reference, a variable, or a value the export does not include is not resolved.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:407:1-407:12"><strong>Fixtures</strong></p>
+<p data-src="docs/INVENTORY.md:409:1-409:573"><code>tests/fixtures/inventory/gcp/</code> holds one sanitized sample per document type, and <code>examples/inventory/</code> holds two runnable samples. Each follows the JSON the commands above print, reduced to the fields this importer reads, with every project id, number, service account, URL, IP address, and environment value replaced by a placeholder. No <code>gcloud</code> CLI version is recorded because the contributor who added this importer had no Google Cloud project to capture exports from; the shapes follow the documented JSON output of the commands above rather than a recorded response.</p>
+<h2 id="azure" data-src="docs/INVENTORY.md:411:1-411:8">Azure</h2>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:413:1-418:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">az</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> webapp</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -o</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> webapps.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">az</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> functionapp</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -o</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> functionapps.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">az</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> aks</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -o</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> aks-clusters.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> webapps.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> functionapps.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> aks-clusters.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:420:1-420:15"><strong>Fields read</strong></p>
+<table data-src="docs/INVENTORY.md:422:1-426:124">
+<thead>
+<tr>
+<th>Export</th>
+<th>Fields</th>
+<th>PURL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>az webapp list -o json</code></td>
+<td><code>name</code>, <code>kind</code>, <code>siteConfig.linuxFxVersion</code> or <code>siteConfig.windowsFxVersion</code></td>
+<td><code>pkg:generic/azure-app-service/&#x3C;stack></code></td>
+</tr>
+<tr>
+<td><code>az functionapp list -o json</code></td>
+<td>the same, plus <code>siteConfig.FUNCTIONS_EXTENSION_VERSION</code></td>
+<td><code>pkg:generic/azure-app-service/&#x3C;stack></code> and <code>pkg:generic/azure-functions</code></td>
+</tr>
+<tr>
+<td><code>az aks list -o json</code></td>
+<td><code>name</code>, <code>kubernetesVersion</code>, <code>agentPoolProfiles[].orchestratorVersion</code></td>
+<td><code>pkg:generic/azure-aks</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:428:1-428:138"><code>name</code> supplies the resource: the app or cluster name, never the subscription id, the resource group id, a host name, or an ARM <code>id</code> path.</p>
+<p data-src="docs/INVENTORY.md:430:1-430:20"><strong>Stack references</strong></p>
+<p data-src="docs/INVENTORY.md:432:1-432:206"><code>linuxFxVersion</code> and <code>windowsFxVersion</code> name the managed stack and its version in one string. The prefix selects the stack and the part after the first <code>|</code> is read as the version, stopping at the first <code>-</code>:</p>
+<table data-src="docs/INVENTORY.md:434:1-441:61">
+<thead>
+<tr>
+<th>Reference</th>
+<th>Item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NODE|18-lts</code></td>
+<td><code>pkg:generic/azure-app-service/node</code> at <code>18</code></td>
+</tr>
+<tr>
+<td><code>PYTHON|3.8</code></td>
+<td><code>pkg:generic/azure-app-service/python</code> at <code>3.8</code></td>
+</tr>
+<tr>
+<td><code>DOTNETCORE|6.0</code></td>
+<td><code>pkg:generic/azure-app-service/dotnet</code> at <code>6.0</code></td>
+</tr>
+<tr>
+<td><code>DOTNET-ISOLATED|7.0</code></td>
+<td><code>pkg:generic/azure-app-service/dotnet-isolated</code> at <code>7.0</code></td>
+</tr>
+<tr>
+<td><code>JAVA|11-java11</code></td>
+<td><code>pkg:generic/azure-app-service/java</code> at <code>11</code></td>
+</tr>
+<tr>
+<td><code>PHP|8.0</code></td>
+<td><code>pkg:generic/azure-app-service/php</code> at <code>8.0</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:443:1-443:385">A reference with a third part (<code>PYTHON\|3.11\|3.0</code>) gives the same version. <code>DOCKER\|&#x3C;image></code> is a custom container with no managed stack, an empty value, a prefix this importer has no rules for, a reference with more than three parts (<code>JAVA\|8\|TOMCAT\|9.0</code>, where the app-server release is what a rule would need), and an app with no <code>siteConfig</code> are all skipped rather than guessed.</p>
+<p data-src="docs/INVENTORY.md:445:1-445:256"><code>az webapp list</code> and <code>az functionapp list</code> print the <code>SiteResource</code>, whose <code>siteConfig</code> the App Service API omits from a normal read because it can hold secrets. When the export has no <code>siteConfig</code>, read each app's configuration and keep its name and kind:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:447:1-455:3"><code><span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">az</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> webapp</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> list</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -o</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> tsv</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --query</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> '</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">[].{group:resourceGroup,name:name,kind:kind}</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">'</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> \</span></span>
+<span class="line"><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">  |</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> while</span><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8"> read</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -r</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> group</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> name</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> kind</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">;</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> do</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">      az</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> webapp</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> config</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> show</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -g</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> "</span><span style="--shiki-light:#886021;--shiki-dark:#E6C384">$group</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">"</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -n</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> "</span><span style="--shiki-light:#886021;--shiki-dark:#E6C384">$name</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">"</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -o</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> json</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> \</span></span>
+<span class="line"><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">        |</span><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8"> jq</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --arg</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> name</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> "</span><span style="--shiki-light:#886021;--shiki-dark:#E6C384">$name</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">"</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> --arg</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> kind</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> "</span><span style="--shiki-light:#886021;--shiki-dark:#E6C384">$kind</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">"</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> '</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">{name: $name, kind: $kind, siteConfig: .}</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">'</span></span>
+<span class="line"><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">    done</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> \</span></span>
+<span class="line"><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0">  |</span><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8"> jq</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -s</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093"> '</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C">.</span><span style="--shiki-light:#4C566A;--shiki-dark:#C8C093">'</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> webapps.json</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> webapps.json</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:457:1-457:84"><code>az aks list</code> returns the cluster versions directly, so no follow-up call is needed.</p>
+<p data-src="docs/INVENTORY.md:459:1-459:21"><strong>Functions runtime</strong></p>
+<p data-src="docs/INVENTORY.md:461:1-461:500">The Functions runtime version is an app setting in Azure, and app settings are never read: they carry connection strings and keys. An item is therefore produced only for an export that writes the value straight into <code>siteConfig</code>, never for one that carries it as a <code>siteConfig.appSettings</code> entry, and never for a setting named in an app whose <code>kind</code> does not include <code>functionapp</code>. Both spellings of the value are read: <code>~4</code> becomes version <code>4</code> and a pinned build such as <code>2.0.12345</code> keeps its build.</p>
+<p data-src="docs/INVENTORY.md:463:1-463:16"><strong>AKS versions</strong></p>
+<p data-src="docs/INVENTORY.md:465:1-465:277">A cluster produces one item for its control plane (<code>kubernetesVersion</code>) and one for each agent pool version that differs from a version already reported for that cluster (<code>agentPoolProfiles[].orchestratorVersion</code>), so a pool that matches its control plane is not counted twice.</p>
+<p data-src="docs/INVENTORY.md:467:1-467:17"><strong>Rules matched</strong></p>
+<ul data-src="docs/INVENTORY.md:469:1-470:433">
+<li><code>registry/serverless.json</code>: the <code>pkg:generic/azure-app-service/&#x3C;stack></code> and <code>pkg:generic/azure-functions</code> rules, sourced to Azure's <a href="https://learn.microsoft.com/en-us/azure/app-service/language-support-policy" rel="external">language runtime support policy</a> and <a href="https://learn.microsoft.com/en-us/azure/azure-functions/functions-versions" rel="external">Functions runtime version page</a>, each citing the community schedule Azure follows for that runtime.</li>
+<li><code>registry/kubernetes.json</code>: the <code>pkg:generic/azure-aks</code> minor-version rules, sourced to the <a href="https://learn.microsoft.com/en-us/azure/aks/supported-kubernetes-versions" rel="external">AKS supported Kubernetes versions page</a>. A version past its 12-month support window is <code>end-of-support</code> at <code>medium</code>; one past opt-in long-term support is <code>end-of-life</code> at <code>high</code>; an announced window end that has not passed yet is <code>scheduled-end-of-life</code> at <code>low</code>.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:472:1-472:22"><strong>What is not judged</strong></p>
+<ul data-src="docs/INVENTORY.md:474:1-478:197">
+<li><code>agentPoolProfiles[].osSku</code> and <code>windowsVersion</code>, and any node operating system or package inside a node image: the AKS rules judge the Kubernetes version only. Scan a node root filesystem export for its packages.</li>
+<li><code>siteConfig.appSettings</code> and every other app setting, including a <code>FUNCTIONS_WORKER_RUNTIME</code> or a <code>FUNCTIONS_EXTENSION_VERSION</code> that only lives there.</li>
+<li>Host names, IPs, URLs, <code>serverFarmId</code>, SKU, location, tags, <code>resourceGroup</code>, and ARM <code>id</code> paths.</li>
+<li>Custom-container apps, and a Java app server (Tomcat, JBoss) named in a stack reference: no rule is applied to it.</li>
+<li>A stack version with no rule yet — today for example <code>NODE|24</code> or <code>JAVA|11</code> — which reports <code>not-affected</code>. That is not a statement that the version is supported; it says no Azure rule covers it.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:480:1-480:12"><strong>Fixtures</strong></p>
+<p data-src="docs/INVENTORY.md:482:1-482:576"><code>tests/fixtures/inventory/azure/</code> holds one sanitized sample per document type, with every subscription id, resource group id, ARM path, host name, IP address, DNS prefix, SSH key, service principal, and app-setting value replaced by a placeholder. <code>examples/inventory/azure-webapps.json</code> and <code>examples/inventory/aks.json</code> are runnable samples. No Azure CLI version is recorded because the contributor who added this importer had no Azure subscription to capture exports from; the shapes follow the documented JSON output of the commands above rather than a recorded response.</p>
+<h2 id="terraform-state" data-src="docs/INVENTORY.md:484:1-484:18">Terraform state</h2>
+<p data-src="docs/INVENTORY.md:486:1-486:113">The <code>terraform-state</code> importer reads the values Terraform recorded for deployed resources. It accepts two shapes:</p>
+<pre class="code" tabindex="0" data-lang="bash" data-src="docs/INVENTORY.md:488:1-494:3"><code><span class="line"><span style="--shiki-light:#5F687C;--shiki-dark:#96938E"># the state JSON `terraform show -json` prints</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">terraform</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> show</span><span style="--shiki-light:#86597D;--shiki-dark:#FFA066"> -json</span><span style="--shiki-light:#4A6990;--shiki-dark:#9F8FC0"> ></span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> state.json</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#5F687C;--shiki-dark:#96938E"># or the raw state file itself</span></span>
+<span class="line"><span style="--shiki-light:#376F7B;--shiki-dark:#7E9CD8">offing</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> inventory</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> state.json</span><span style="--shiki-light:#566E42;--shiki-dark:#98BB6C"> terraform.tfstate</span></span></code></pre>
+<p data-src="docs/INVENTORY.md:496:1-496:352">The first shape is state JSON: <code>format_version</code> plus <code>values.root_module</code>. The second is the raw state file: <code>version: 4</code> plus <code>resources</code>. Plan JSON (<code>planned_values.root_module</code>) is not read, because it describes a proposed change rather than what is deployed. The importer does not read <code>*.tf</code> source files; the Terraform detector already does that.</p>
+<p data-src="docs/INVENTORY.md:498:1-498:15"><strong>Fields read</strong></p>
+<p data-src="docs/INVENTORY.md:500:1-500:251">Every module under <code>values.root_module</code>, including <code>child_modules</code> at any depth, and every resource instance is walked. In raw state, every entry of <code>resources</code> and every instance of <code>instances</code> is walked. Data sources and deposed objects are skipped.</p>
+<table data-src="docs/INVENTORY.md:502:1-511:131">
+<thead>
+<tr>
+<th>Resource type</th>
+<th>Attribute</th>
+<th>PURL</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aws_lambda_function</code></td>
+<td><code>runtime</code></td>
+<td><code>pkg:generic/aws-lambda-runtime/&#x3C;runtime></code></td>
+<td>the runtime ID</td>
+</tr>
+<tr>
+<td><code>aws_db_instance</code>, <code>aws_rds_cluster</code>, <code>aws_elasticache_cluster</code>, <code>aws_elasticache_replication_group</code></td>
+<td><code>engine</code>, <code>engine_version</code></td>
+<td>the AWS engine table below</td>
+<td><code>engine_version</code></td>
+</tr>
+<tr>
+<td><code>aws_eks_cluster</code></td>
+<td><code>version</code></td>
+<td><code>pkg:generic/amazon-eks</code></td>
+<td><code>version</code></td>
+</tr>
+<tr>
+<td><code>google_container_cluster</code></td>
+<td><code>master_version</code></td>
+<td><code>pkg:generic/google-gke</code></td>
+<td><code>master_version</code></td>
+</tr>
+<tr>
+<td><code>google_cloudfunctions_function</code></td>
+<td><code>runtime</code></td>
+<td><code>pkg:generic/google-cloud-functions-runtime/&#x3C;runtime></code></td>
+<td>none: the runtime is part of the PURL</td>
+</tr>
+<tr>
+<td><code>google_cloudfunctions2_function</code></td>
+<td><code>build_config[0].runtime</code></td>
+<td><code>pkg:generic/google-cloud-functions-runtime/&#x3C;runtime></code></td>
+<td>none: the runtime is part of the PURL</td>
+</tr>
+<tr>
+<td><code>azurerm_kubernetes_cluster</code></td>
+<td><code>kubernetes_version</code></td>
+<td><code>pkg:generic/azure-aks</code></td>
+<td><code>kubernetes_version</code></td>
+</tr>
+<tr>
+<td><code>azurerm_linux_function_app</code></td>
+<td><code>site_config[0].application_stack</code></td>
+<td><code>pkg:generic/azure-app-service/&#x3C;stack></code></td>
+<td>the stack version</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:513:1-513:296">Nothing else in the state is copied. ARNs, resource ids, endpoints, provider configurations, outputs, tags, environment variables, and Terraform or provider versions are never read or reported. A value that is missing, empty, not a string, or not a release-shaped value is skipped, never guessed.</p>
+<p data-src="docs/INVENTORY.md:515:1-515:24"><strong>Resource and pointer</strong></p>
+<p data-src="docs/INVENTORY.md:517:1-517:522"><code>resource</code> is <code>&#x3C;type>.&#x3C;name></code>, with <code>[index]</code> for <code>count</code> and <code>["key"]</code> for <code>for_each</code>, such as <code>aws_lambda_function.worker[0]</code> or <code>aws_lambda_function.api["green"]</code>. A nested resource keeps the same form; the module path is in the JSON Pointer, not in <code>resource</code>. Every pointer resolves to the exact string the item's version came from: <code>/values/root_module/resources/&#x3C;i>/values/&#x3C;attribute></code> for state JSON, or <code>/resources/&#x3C;i>/instances/&#x3C;j>/attributes/&#x3C;attribute></code> for raw state, with <code>child_modules</code> segments in between.</p>
+<p data-src="docs/INVENTORY.md:519:1-519:21"><strong>Engines and PURLs</strong></p>
+<p data-src="docs/INVENTORY.md:521:1-521:136">The engine mapping is the one the AWS RDS importer uses, so a deployed engine and a described engine are checked against the same rules:</p>
+<table data-src="docs/INVENTORY.md:523:1-529:71">
+<thead>
+<tr>
+<th>AWS engine</th>
+<th>Provider PURL</th>
+<th>Upstream PURL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgres</code></td>
+<td><code>pkg:generic/aws-rds/postgres</code></td>
+<td><code>pkg:generic/postgresql</code></td>
+</tr>
+<tr>
+<td><code>mysql</code></td>
+<td><code>pkg:generic/aws-rds/mysql</code></td>
+<td><code>pkg:generic/mysql</code></td>
+</tr>
+<tr>
+<td><code>aurora-postgresql</code></td>
+<td><code>pkg:generic/aws-aurora/postgresql</code></td>
+<td><code>pkg:generic/postgresql</code></td>
+</tr>
+<tr>
+<td><code>aurora-mysql</code>, <code>aurora</code></td>
+<td><code>pkg:generic/aws-aurora/mysql</code></td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>redis</code></td>
+<td><code>pkg:generic/aws-elasticache/redis</code></td>
+<td><code>pkg:generic/redis</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:531:1-531:130">Unknown engines, including <code>mariadb</code>, <code>sqlserver-*</code>, <code>oracle-*</code>, <code>db2-*</code>, <code>memcached</code>, and <code>valkey</code>, produce no item and no claim.</p>
+<p data-src="docs/INVENTORY.md:533:1-533:119">The Linux Function App stack reads the managed version fields of <code>application_stack</code> and maps each one to its own item:</p>
+<table data-src="docs/INVENTORY.md:535:1-542:74">
+<thead>
+<tr>
+<th>Field</th>
+<th>PURL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dotnet_version</code></td>
+<td><code>pkg:generic/azure-app-service/dotnet</code></td>
+</tr>
+<tr>
+<td><code>dotnet_isolated_version</code></td>
+<td><code>pkg:generic/azure-app-service/dotnet-isolated</code></td>
+</tr>
+<tr>
+<td><code>java_version</code></td>
+<td><code>pkg:generic/azure-app-service/java</code></td>
+</tr>
+<tr>
+<td><code>node_version</code></td>
+<td><code>pkg:generic/azure-app-service/node</code></td>
+</tr>
+<tr>
+<td><code>python_version</code></td>
+<td><code>pkg:generic/azure-app-service/python</code></td>
+</tr>
+<tr>
+<td><code>powershell_core_version</code></td>
+<td><code>pkg:generic/azure-app-service/powershell</code></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/INVENTORY.md:544:1-544:214">A leading <code>~</code> in a Node.js version is Azure's release-line notation, so <code>~18</code> is reported at version <code>18</code>. <code>use_custom_runtime</code> and a <code>docker</code> image mean the runtime is not a managed stack, so they produce no item.</p>
+<p data-src="docs/INVENTORY.md:546:1-546:17"><strong>Rules matched</strong></p>
+<ul data-src="docs/INVENTORY.md:548:1-550:122">
+<li><code>registry/database.json</code>: RDS, Aurora, and ElastiCache engine rules, the same rules the AWS RDS importer uses.</li>
+<li><code>registry/kubernetes.json</code>: GKE, AKS, and EKS minor-version rules.</li>
+<li><code>registry/serverless.json</code>: AWS Lambda, Google Cloud Functions, and Azure App Service stack and Functions runtime rules.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:552:1-552:410"><code>pkg:generic/amazon-eks</code> has rules in both <code>registry/kubernetes.json</code>, which this importer reads, and <code>registry/terraform.json</code>, which the Terraform source detector reads, so a cluster recorded in state and a <code>cluster_version</code> written in <code>*.tf</code> are judged by the same calendar. An EKS version no <code>registry/kubernetes.json</code> rule covers reports <code>no-data</code>. <code>no-data</code> is never a statement that the version is safe.</p>
+<p data-src="docs/INVENTORY.md:554:1-554:22"><strong>What is not judged</strong></p>
+<ul data-src="docs/INVENTORY.md:556:1-559:173">
+<li>Terraform plan JSON, <code>*.tf</code> source, module outputs, and provider configurations: this importer reads state values only.</li>
+<li>Deposed instances: only current instances are reported.</li>
+<li>Resource types and attributes beyond the table above, including EKS node groups, RDS proxy endpoints, and functions deployed outside the listed resource types.</li>
+<li>Whether the state is current, whether it matches the configuration, or whether a remote backend is reachable. Offing reads only the file you pass and never runs Terraform.</li>
+</ul>
+<p data-src="docs/INVENTORY.md:561:1-561:12"><strong>Fixtures</strong></p>
+<p data-src="docs/INVENTORY.md:563:1-563:506"><code>tests/fixtures/inventory/terraform-state/</code> holds one sample of each format, including nested modules and <code>count</code> and <code>for_each</code> instances, with every account id, ARN, subscription id, project number, hostname, and environment value replaced by a placeholder. <code>examples/inventory/terraform-state.json</code> is a runnable sample in the <code>terraform show -json</code> shape. They were assembled from the documented state shape of Terraform 1.9 rather than captured from a live state; no Terraform CLI version is recorded.</p></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/INVENTORY.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/INVENTORY.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/INVENTORY.md:1. Current text: &quot;Inventory&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Inventory&amp;body=Page%3A%20%2Foffing%2FINVENTORY%2F%0ASource%3A%20docs%2FINVENTORY.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/INVENTORY/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/INVENTORY/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/INVENTORY/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/INVENTORY/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FINVENTORY%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FINVENTORY%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FINVENTORY%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#privacy">Privacy</a></li><li><a href="#kubernetes-workloads">Kubernetes workloads</a><ul><li><a href="#what-it-reads">What it reads</a></li><li><a href="#rules-matched">Rules matched</a></li><li><a href="#limit-the-api-servers-preferred-version">Limit: the API server's preferred version</a></li><li><a href="#what-it-does-not-judge">What it does not judge</a></li></ul></li><li><a href="#kubernetes-cluster">Kubernetes cluster</a><ul><li><a href="#provider-suffixes">Provider suffixes</a></li><li><a href="#rules-matched-1">Rules matched</a></li><li><a href="#what-is-not-judged">What is not judged</a></li></ul></li><li><a href="#host-operating-systems">Host operating systems</a><ul><li><a href="#export">Export</a></li><li><a href="#fields-read">Fields read</a></li><li><a href="#rules-matched-2">Rules matched</a></li><li><a href="#what-is-not-judged-1">What is not judged</a></li><li><a href="#fixtures">Fixtures</a></li></ul></li><li><a href="#docker-containers-and-images">Docker containers and images</a><ul><li><a href="#what-is-read">What is read</a></li><li><a href="#rules-matched-3">Rules matched</a></li><li><a href="#image-ids">Image ids</a></li><li><a href="#what-is-not-judged-2">What is not judged</a></li></ul></li><li><a href="#report-shape">Report shape</a></li><li><a href="#importers">Importers</a></li><li><a href="#aws-rds-aurora-and-elasticache">AWS RDS, Aurora, and ElastiCache</a><ul><li><a href="#produce-the-export">Produce the export</a></li><li><a href="#fields-read-1">Fields read</a></li><li><a href="#engines-and-purls">Engines and PURLs</a></li><li><a href="#rules-matched-4">Rules matched</a></li><li><a href="#what-is-not-judged-3">What is not judged</a></li></ul></li><li><a href="#export-files">Export files</a></li><li><a href="#aws-lambda">AWS Lambda</a></li><li><a href="#aws-eks-clusters-and-node-groups">AWS EKS clusters and node groups</a></li><li><a href="#google-cloud">Google Cloud</a></li><li><a href="#azure">Azure</a></li><li><a href="#terraform-state">Terraform state</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#privacy">Privacy</a></li><li><a href="#kubernetes-workloads">Kubernetes workloads</a></li><li><a href="#what-it-reads">What it reads</a></li><li><a href="#rules-matched">Rules matched</a></li><li><a href="#limit-the-api-servers-preferred-version">Limit: the API server's preferred version</a></li><li><a href="#what-it-does-not-judge">What it does not judge</a></li><li><a href="#kubernetes-cluster">Kubernetes cluster</a></li><li><a href="#provider-suffixes">Provider suffixes</a></li><li><a href="#rules-matched-1">Rules matched</a></li><li><a href="#what-is-not-judged">What is not judged</a></li><li><a href="#host-operating-systems">Host operating systems</a></li><li><a href="#export">Export</a></li><li><a href="#fields-read">Fields read</a></li><li><a href="#rules-matched-2">Rules matched</a></li><li><a href="#what-is-not-judged-1">What is not judged</a></li><li><a href="#fixtures">Fixtures</a></li><li><a href="#docker-containers-and-images">Docker containers and images</a></li><li><a href="#what-is-read">What is read</a></li><li><a href="#rules-matched-3">Rules matched</a></li><li><a href="#image-ids">Image ids</a></li><li><a href="#what-is-not-judged-2">What is not judged</a></li><li><a href="#report-shape">Report shape</a></li><li><a href="#importers">Importers</a></li><li><a href="#aws-rds-aurora-and-elasticache">AWS RDS, Aurora, and ElastiCache</a></li><li><a href="#produce-the-export">Produce the export</a></li><li><a href="#fields-read-1">Fields read</a></li><li><a href="#engines-and-purls">Engines and PURLs</a></li><li><a href="#rules-matched-4">Rules matched</a></li><li><a href="#what-is-not-judged-3">What is not judged</a></li><li><a href="#export-files">Export files</a></li><li><a href="#aws-lambda">AWS Lambda</a></li><li><a href="#aws-eks-clusters-and-node-groups">AWS EKS clusters and node groups</a></li><li><a href="#google-cloud">Google Cloud</a></li><li><a href="#azure">Azure</a></li><li><a href="#terraform-state">Terraform state</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

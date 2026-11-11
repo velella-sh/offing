@@ -15,7 +15,7 @@ The command regenerates the package and writes `artifacts/offing-codex-plugin-<v
 ## Reviewer walkthrough
 
 1. Install Node.js 22 or newer and extract the ZIP.
-2. Confirm the plugin shows the Offing name, approved Version Notches mark, and Developer Tools category.
+2. Confirm the plugin shows the Offing name, approved Offing mark, and Developer Tools category.
 3. Copy `review-fixtures/demo` into a temporary directory and rename `package.json.fixture` to `package.json` in the copy. Ask Offing to scan that temporary path for end-of-life runtimes, packages, and GitHub Actions. Keep all edits and verification steps below in that copy.
 4. Confirm the result reports the fixture's evidence-backed Node.js, `request`, and `actions/checkout` findings with exact file locations.
 5. Ask for an explanation and migration context for the `request` finding. Confirm that source usages and evidence links appear and no files change.

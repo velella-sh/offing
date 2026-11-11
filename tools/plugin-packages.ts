@@ -153,8 +153,8 @@ export async function expectedPluginFiles(root = process.cwd()): Promise<Map<str
       "Explain the highest-severity Offing finding.",
       "Create migration context for this deprecation.",
     ],
-    brandColor: "#23423A",
-    brandColorDark: "#9AC7B6",
+    brandColor: "#6A5590",
+    brandColorDark: "#A592CC",
     composerIcon: "./assets/offing-mark-light.svg",
     composerIconDark: "./assets/offing-mark-dark.svg",
     logo: "./assets/offing-mark-light.svg",
@@ -272,28 +272,28 @@ export async function expectedPluginFiles(root = process.cwd()): Promise<Map<str
     },
   });
   const [lightMark, darkMark] = await Promise.all([
-    readFile(resolve(root, "brand/assets/offing-mark-light.svg"), "utf8"),
-    readFile(resolve(root, "brand/assets/offing-mark-dark.svg"), "utf8"),
+    readFile(resolve(root, "brand/mark-day.svg"), "utf8"),
+    readFile(resolve(root, "brand/mark-night.svg"), "utf8"),
   ]);
   const codexReadme = `# Offing for Codex\n\nOffing finds, explains, and verifies supported software lifecycle risks in local repositories. The plugin combines the canonical Offing Skill with a read-only local MCP server and requires no Offing account.\n\nRepository analysis runs on the user's computer. Offing does not upload repository contents, execute migration commands, edit files, or open a network listener. The host still controls filesystem access, approvals, and any later edits an agent makes.\n\n## Install\n\nFrom the Offing repository, run:\n\n\`\`\`sh\ncodex plugin add offing@offing-codex\n\`\`\`\n\nNode.js ${packageMetadata.engines.node.replace(">=", "")} or newer is required. See the [Codex installation and management guide](https://velella.sh/offing/CODEX_PLUGIN/) for installation, updates, validation, privacy boundaries, and removal.\n`;
   const reviewWalkthrough = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
   <title id="title">Offing lifecycle scan walkthrough</title>
   <desc id="desc">A branded terminal panel showing evidence-backed findings from the bundled review fixture.</desc>
-  <rect width="1200" height="675" fill="#0C1110"/>
-  <path d="M0 48H1200M48 0V675" stroke="#F3F6F4" stroke-opacity=".04"/>
-  <rect x="64" y="56" width="1072" height="563" rx="24" fill="#17211E" stroke="#F3F6F4" stroke-opacity=".12"/>
-  <circle cx="103" cy="94" r="7" fill="#23423A"/><circle cx="127" cy="94" r="7" fill="#4C7C6D"/><circle cx="151" cy="94" r="7" fill="#9AC7B6"/>
-  <text x="96" y="158" fill="#F3F6F4" font-family="Menlo, monospace" font-size="23" font-weight="700">OFFING SCAN</text>
-  <text x="96" y="196" fill="#9AC7B6" font-family="Menlo, monospace" font-size="17">review-fixtures/demo  ·  4 findings</text>
-  <text x="96" y="252" fill="#F3F6F4" font-family="Menlo, monospace" font-size="18">HIGH    actions/checkout@v4 runtime</text>
-  <text x="96" y="284" fill="#F3F6F4" fill-opacity=".66" font-family="Menlo, monospace" font-size="16">.github/workflows/ci.yml:9  →  actions/checkout@v5+</text>
-  <text x="96" y="340" fill="#F3F6F4" font-family="Menlo, monospace" font-size="18">MEDIUM  Node.js 18 and 20 are end-of-life</text>
-  <text x="96" y="372" fill="#F3F6F4" fill-opacity=".66" font-family="Menlo, monospace" font-size="16">package.json:5  →  Node.js 22 LTS+</text>
-  <text x="96" y="428" fill="#F3F6F4" font-family="Menlo, monospace" font-size="18">HIGH    request 2.88.2 is deprecated</text>
-  <text x="96" y="460" fill="#F3F6F4" fill-opacity=".66" font-family="Menlo, monospace" font-size="16">package.json:8  →  native fetch or maintained HTTP client</text>
-  <text x="96" y="532" fill="#9AC7B6" font-family="Menlo, monospace" font-size="16">LOCAL ANALYSIS  /  READ-ONLY TOOLS  /  EVIDENCE LINKS</text>
-  <g transform="translate(958 454) scale(.55)" fill="none" stroke-width="18">
-    <circle cx="128" cy="128" r="96" stroke="#23423A"/><circle cx="128" cy="128" r="70" stroke="#4C7C6D"/><circle cx="128" cy="128" r="44" stroke="#9AC7B6"/>
+  <rect width="1200" height="675" fill="#1F1F28"/>
+  <path d="M0 48H1200M48 0V675" stroke="#DCD7BA" stroke-opacity=".04"/>
+  <rect x="64" y="56" width="1072" height="563" rx="24" fill="#2A2438" stroke="#DCD7BA" stroke-opacity=".12"/>
+  <circle cx="103" cy="94" r="7" fill="#3A3450"/><circle cx="127" cy="94" r="7" fill="#727169"/><circle cx="151" cy="94" r="7" fill="#A592CC"/>
+  <text x="96" y="158" fill="#DCD7BA" font-family="Menlo, monospace" font-size="23" font-weight="700">OFFING SCAN</text>
+  <text x="96" y="196" fill="#A592CC" font-family="Menlo, monospace" font-size="17">review-fixtures/demo  ·  4 findings</text>
+  <text x="96" y="252" fill="#DCD7BA" font-family="Menlo, monospace" font-size="18">HIGH    actions/checkout@v4 runtime</text>
+  <text x="96" y="284" fill="#DCD7BA" fill-opacity=".66" font-family="Menlo, monospace" font-size="16">.github/workflows/ci.yml:9  →  actions/checkout@v5+</text>
+  <text x="96" y="340" fill="#DCD7BA" font-family="Menlo, monospace" font-size="18">MEDIUM  Node.js 18 and 20 are end-of-life</text>
+  <text x="96" y="372" fill="#DCD7BA" fill-opacity=".66" font-family="Menlo, monospace" font-size="16">package.json:5  →  Node.js 22 LTS+</text>
+  <text x="96" y="428" fill="#DCD7BA" font-family="Menlo, monospace" font-size="18">HIGH    request 2.88.2 is deprecated</text>
+  <text x="96" y="460" fill="#DCD7BA" fill-opacity=".66" font-family="Menlo, monospace" font-size="16">package.json:8  →  native fetch or maintained HTTP client</text>
+  <text x="96" y="532" fill="#A592CC" font-family="Menlo, monospace" font-size="16">LOCAL ANALYSIS  /  READ-ONLY TOOLS  /  EVIDENCE LINKS</text>
+  <g transform="translate(980 440) scale(1.1)" fill="#A592CC">
+    <path d="M30 56A30 30 0 0 1 90 56Z"/><rect x="20" y="62" width="80" height="10" rx="1.5"/><rect x="32" y="78" width="56" height="8" rx="1.5"/><rect x="46" y="92" width="28" height="8" rx="1.5"/>
   </g>
 </svg>\n`;
   const demoFiles = await Promise.all(

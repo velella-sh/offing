@@ -29,7 +29,7 @@ test("the endpoint matches the shields.io schema for every badge state", () => {
     assert.equal(result.label, "offing");
     assert.equal(result.message, message);
     assert.match(result.color as string, /^#[0-9A-F]{6}$/i);
-    assert.equal(result.labelColor, "#23423A");
+    assert.equal(result.labelColor, "#1F1F28");
   }
 });
 

@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "ebb.rule.v1",
+  "id": "database.redis.end-of-life-6.0",
+  "ecosystem": "database",
+  "purl": "pkg:generic/redis",
+  "affectedVersions": "vers:semver/>=6.0.0|<6.1.0",
+  "event": "end-of-life",
+  "severity": "high",
+  "title": "Redis 6.0 is end-of-life",
+  "summary": "Redis 6.0 reached end of life on 2022-05-31 and no longer receives fixes from the vendor.",
+  "deadline": "2022-05-31",
+  "sources": [
+    {
+      "title": "Redis support policy (vendor)",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/install/version-mgmt/",
+      "accessedAt": "2026-11-10"
+    },
+    {
+      "title": "endoflife.date (index; the vendor page above is the evidence)",
+      "url": "https://endoflife.date/redis",
+      "accessedAt": "2026-11-10"
+    },
+    {
+      "title": "Redis 7.0 release notes",
+      "url": "https://raw.githubusercontent.com/redis/redis/7.0/00-RELEASENOTES",
+      "accessedAt": "2026-11-11"
+    }
+  ],
+  "provenance": {
+    "observedAt": "2026-11-10",
+    "reviewedAt": "2026-11-11",
+    "reviewer": "arminazimi"
+  },
+  "migration": {
+    "constraints": [
+      "Redis persists data in RDB snapshots and the AOF log; a dataset written by a newer server cannot be read by an older one, so a backup taken before the upgrade is the only way back.",
+      "Redis 7.0 and later use RDB format version 10, which older versions cannot read, and store the AOF as multiple files in a directory. When the target is 7.0 or later, plan for both changes.",
+      "The Redis documentation reviewed does not publish a supported path for jumping from 6.0 to a distant release. Read the release notes of every major line you cross and rehearse the upgrade on a copy of the data first.",
+      "Changing a Compose image tag restarts the container but does not migrate data: point the new version at the existing volume, or restore the backup into a fresh one.",
+      "Managed Redis services such as ElastiCache and Memorystore name their own engine version and are not matched by this rule; check their support policy separately."
+    ],
+    "steps": [
+      {
+        "id": "back-up-data",
+        "title": "Back up the data first",
+        "instructions": "Take a verified RDB snapshot (BGSAVE) or copy the AOF and its directory for every Redis instance in the reported files before changing any version. Keep the backup until the new version serves traffic without errors.",
+        "targets": "all"
+      },
+      {
+        "id": "upgrade-server",
+        "title": "Upgrade the Redis server",
+        "instructions": "Start a supported Redis version against a copy of the data on a staging instance, or as a replica of the current server, and check the log and INFO for load errors before switching traffic. On Compose, change the image tag and confirm the container starts with the same volume.",
+        "targets": "declaration"
+      },
+      {
+        "id": "raise-declared-version",
+        "title": "Raise the declared version",
+        "instructions": "Change the image tag in every Compose file that runs Redis, including overrides, to a supported release listed on the Redis Open Source version management page. Do this in every environment, not only the reported line.",
+        "targets": "all"
+      },
+      {
+        "id": "align-clients",
+        "title": "Check clients and tooling",
+        "instructions": "Update Redis client libraries, ACL users that depend on changed commands, and CI service containers or local setup documentation that assume the old Redis version.",
+        "targets": "all"
+      }
+    ],
+    "verification": [
+      {
+        "command": "docker compose config",
+        "purpose": "Confirm the Compose file is valid and shows the intended Redis image tag after the change."
+      },
+      {
+        "command": "redis-cli INFO server",
+        "purpose": "Confirm redis_version on the running server reports the target release."
+      },
+      {
+        "command": "terraform plan",
+        "purpose": "Review the plan and confirm no Terraform-managed resource still declares the retired version line, and that any version change is intended."
+      }
+    ]
+  }
+}

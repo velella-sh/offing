@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>(function(){var d=document.documentElement,t="dark";try{var s=localStorage.getItem("lateen-theme");if(s==="light"||s==="dark")t=s;else if(s==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}d.setAttribute("data-theme",t);d.setAttribute("data-js","")})()</script><title>Security triage</title><link type="application/opensearchdescription+xml" title="Offing" rel="search" href="https://velella.sh/offing/opensearch.xml"/><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-400-normal-de174d9fdfca3f7d.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-500-normal-53caff11e4703d5a.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist/geist-sans-latin-700-normal-757a610ff712a5d3.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-400-normal-d3fead78d33b2e0e.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/offing/assets/theme/fonts/geist-mono/geist-mono-latin-700-normal-fd476bdd3cb372ae.woff2"><link rel="stylesheet" href="/offing/assets/theme/base-7fe61a5b354d7fee.css"><link rel="stylesheet" href="/offing/assets/theme/page-c5ad5a99d90b6e56.css"></head><body><a class="skip-link" href="#main">Skip to content</a><a class="skip-link" href="#site-navigation">Skip to navigation</a><header><header class="header"><div class="header-inner"><a class="header-home header-home--split" href="/offing/"><img class="header-logo header-logo-light" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><img class="header-logo header-logo-dark" src="/offing/assets/brand/offing-mark-adaptive.svg" alt width="32" height="32"/><span class="header-title">Offing</span></a><div class="header-tabs" data-slot="section-tabs"></div><div class="header-actions"><button type="button" class="header-search" aria-label="Search" hidden data-search-open="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></button><span class="theme-toggle" data-theme-toggle="true" hidden><button class="theme-toggle-button" type="button" aria-label="Color theme"><svg class="theme-toggle-icon theme-toggle-icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg><svg class="theme-toggle-icon theme-toggle-icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button><span class="theme-toggle-status" role="status"></span></span><a class="header-repo" href="https://github.com/velella-sh/offing" rel="noopener" aria-label="GitHub repository"><svg class="header-repo-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a><button type="button" class="header-menu" aria-label="Menu" aria-expanded="false" hidden data-drawer-open="true"><span aria-hidden="true">☰</span></button></div></div></header><dialog class="search" data-search data-base="/offing" aria-label="Search" hidden><div class="search-panel"><div class="search-form" role="search"><label class="search-label" for="search-input">Search</label><input class="search-input" id="search-input" type="search" name="q" placeholder="Search the docs" autocomplete="off" data-search-input/><button type="button" class="search-close" aria-label="Close search" data-search-close><span aria-hidden="true">×</span></button></div><p class="search-status" role="status" data-search-status></p><div class="search-results" role="listbox" aria-label="Search" data-search-results></div><script type="application/json" data-palette-actions>{"label":"Actions","actions":[{"id":"theme-light","label":"Light","hint":"Switch theme","run":{"kind":"theme","choice":"light"}},{"id":"theme-dark","label":"Dark","hint":"Switch theme","run":{"kind":"theme","choice":"dark"}},{"id":"theme-system","label":"System","hint":"Switch theme","run":{"kind":"theme","choice":"system"}},{"id":"copy-markdown","label":"Copy page as Markdown","hint":"Copy as Markdown","run":{"kind":"copy","url":"/offing/SECURITY_TRIAGE/index.md"}},{"id":"section-baseline","label":"Baseline","hint":"Go to section","run":{"kind":"section","id":"baseline"}},{"id":"section-secret-scanning-push-protection","label":"Secret scanning push protection","hint":"Go to section","run":{"kind":"section","id":"secret-scanning-push-protection"}},{"id":"section-deadlines","label":"Deadlines","hint":"Go to section","run":{"kind":"section","id":"deadlines"}},{"id":"section-dismissal","label":"Dismissal","hint":"Go to section","run":{"kind":"section","id":"dismissal"}},{"id":"section-when-the-maintainer-is-away","label":"When the maintainer is away","hint":"Go to section","run":{"kind":"section","id":"when-the-maintainer-is-away"}},{"id":"section-triage","label":"Triage","hint":"Go to section","run":{"kind":"section","id":"triage"}}]}</script></div></dialog><dialog class="drawer" data-drawer="true" aria-label="Menu"><button type="button" class="drawer-close" aria-label="Close menu" hidden data-drawer-close="true"><span aria-hidden="true">×</span></button><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></dialog></header><div class="layout"><aside class="sidebar" id="site-navigation" aria-label="Site navigation"><nav class="sidebar-nav" aria-label="Site navigation"><ul><li><a href="/offing/DEMO/">Start here</a></li></ul><details class="sidebar-group" data-sidebar-group="Detectors"><summary><h2>Detectors</h2></summary><ul><li><a href="/offing/detectors/">Detector reference</a></li><li><a href="/offing/detectors/container/">Container base images</a></li><li><a href="/offing/detectors/dart/">Dart and Flutter</a></li><li><a href="/offing/detectors/database/">Database runtimes</a></li><li><a href="/offing/detectors/deno/">Deno and Bun</a></li><li><a href="/offing/detectors/dotnet/">.NET</a></li><li><a href="/offing/detectors/elixir/">Elixir and Mix</a></li><li><a href="/offing/detectors/go/">Go</a></li><li><a href="/offing/detectors/java/">Java and Kotlin (JVM)</a></li><li><a href="/offing/detectors/kubernetes/">Kubernetes APIs</a></li><li><a href="/offing/detectors/rust/">Rust</a></li><li><a href="/offing/detectors/scala/">Scala and sbt</a></li><li><a href="/offing/detectors/serverless/">Serverless runtimes</a></li><li><a href="/offing/detectors/shell/">Shell and PowerShell</a></li><li><a href="/offing/detectors/swift/">Swift</a></li><li><a href="/offing/detectors/terraform/">Terraform</a></li></ul></details></nav></aside><main id="main" tabindex="-1"><article class="doc" data-pagefind-body="true"><p class="reading-time" data-minutes="7"><span class="reading-time-minutes">7 minutes read</span></p><div class="doc-body"><h1 id="security-triage" data-src="docs/SECURITY_TRIAGE.md:1:1-1:17">Security triage</h1>
+<p data-src="docs/SECURITY_TRIAGE.md:3:1-3:240">How dependency alerts for this repository are read and handled. The policy for reporting vulnerabilities lives in <a href="../SECURITY.md"><code>SECURITY.md</code></a>. Automated update PRs are configured in <a href="../.github/dependabot.yml"><code>.github/dependabot.yml</code></a>.</p>
+<h2 id="baseline" data-src="docs/SECURITY_TRIAGE.md:5:1-5:11">Baseline</h2>
+<p data-src="docs/SECURITY_TRIAGE.md:7:1-7:80">Recorded on 2026-11-01 from <code>main</code>, for <code>velella-sh/offing</code> (public repository).</p>
+<table data-src="docs/SECURITY_TRIAGE.md:9:1-16:73">
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dependabot alerts</td>
+<td>On. The <code>vulnerability-alerts</code> endpoint answers <code>204 No Content</code>.</td>
+</tr>
+<tr>
+<td>Open alerts</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Dismissed alerts</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Fixed alerts</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Auto-dismissed alerts</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Alerts from fixtures</td>
+<td>0. No open alert points at a fixture manifest.</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/SECURITY_TRIAGE.md:18:1-18:192">The repository has 137 dependency manifests and lockfiles (<code>package.json</code>, lockfiles, <code>go.mod</code>, <code>pom.xml</code>, <code>Gemfile.lock</code>, <code>requirements*.txt</code>, and similar), outside <code>node_modules</code> and <code>dist</code>:</p>
+<table data-src="docs/SECURITY_TRIAGE.md:20:1-26:43">
+<thead>
+<tr>
+<th>Location</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/</code></td>
+<td>115</td>
+</tr>
+<tr>
+<td><code>examples/</code></td>
+<td>13</td>
+</tr>
+<tr>
+<td><code>plugins/*/review-fixtures/</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>Product and tooling</td>
+<td>8</td>
+</tr>
+<tr>
+<td><strong>Fixture and example total</strong></td>
+<td><strong>129</strong></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/SECURITY_TRIAGE.md:28:1-28:217">Fixture manifests are test inputs. They are not installed, shipped, or run as the product's dependencies. An alert that comes only from a fixture is still recorded here, and is triaged as below before it is dismissed.</p>
+<h2 id="secret-scanning-push-protection" data-src="docs/SECURITY_TRIAGE.md:30:1-30:34">Secret scanning push protection</h2>
+<p data-src="docs/SECURITY_TRIAGE.md:32:1-34:96">Secret scanning and secret scanning push protection are enabled for <code>velella-sh/offing</code>, verified through
+the repository API on 2026-11-05 (<code>security_and_analysis.secret_scanning_push_protection.status: enabled</code>).
+The maintainer checks this setting in <strong>Settings → Security → Secret scanning</strong> at each release.</p>
+<p data-src="docs/SECURITY_TRIAGE.md:36:1-36:74">If push protection blocks a recording, screenshot, transcript, or fixture:</p>
+<ol data-src="docs/SECURITY_TRIAGE.md:38:1-48:110">
+<li>Stop the push and read the reported file and commit locations. Do not paste the secret into an issue,
+pull request, or bypass explanation.</li>
+<li>If the value is a real credential, revoke or rotate it with its provider immediately. Remove it from the
+recording and every local commit being pushed; deleting it only in a later commit leaves it in history.</li>
+<li>Replace the recording with a redacted version or record it again with dummy values. Keep credentials in
+environment variables outside the recording, and inspect the replacement and the outgoing diff.</li>
+<li>Retry the push after removing the value from all affected commits. Do not bypass protection to publish
+a recording containing a real credential.</li>
+<li>For a confirmed false positive or an intentionally nonfunctional test value that cannot be replaced,
+ask the maintainer to review the exact detection. Only the maintainer may authorize a bypass, with a
+written reason and a link to the tracking issue. Never use an "I'll fix it later" bypass for a real secret.</li>
+</ol>
+<p data-src="docs/SECURITY_TRIAGE.md:50:1-51:53">Report a credential that already reached GitHub privately through <a href="../SECURITY.md"><code>SECURITY.md</code></a>, and rotate
+it even if the file or commit has since been removed.</p>
+<h2 id="deadlines" data-src="docs/SECURITY_TRIAGE.md:53:1-53:12">Deadlines</h2>
+<p data-src="docs/SECURITY_TRIAGE.md:55:1-55:171">Every alert has a deadline, counted in calendar days from the day it is created. Reading the alert, opening a follow-up issue, or asking for a fix does not stop the clock.</p>
+<table data-src="docs/SECURITY_TRIAGE.md:57:1-62:18">
+<thead>
+<tr>
+<th>Severity</th>
+<th>Deadline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Critical</td>
+<td>7 days</td>
+</tr>
+<tr>
+<td>High</td>
+<td>30 days</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>90 days</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>180 days</td>
+</tr>
+</tbody>
+</table>
+<ul data-src="docs/SECURITY_TRIAGE.md:64:1-68:207">
+<li><strong>The clock starts</strong> when the alert is created (the alert's <code>created_at</code>), not when someone first notices it.</li>
+<li><strong>A severity change restarts the clock.</strong> If the severity is raised or lowered after triage, the deadline is recalculated from the date of the change with the new severity. A dismissed alert that is reopened is treated as new, with its original severity.</li>
+<li><strong>The deadline is met</strong> when the alert is closed: a merged change removes the vulnerable version from every shipped manifest and lockfile, or the alert is dismissed under the rule below. An open follow-up issue is a record, not a resolution.</li>
+<li><strong>An alert past its deadline is overdue, not dismissed.</strong> It stays open and is listed in the tracking issue described under <a href="#when-the-maintainer-is-away">When the maintainer is away</a> until a fix or a valid dismissal closes it.</li>
+<li>A vulnerability reported privately through <code>SECURITY.md</code> keeps the acknowledgement and assessment times stated there. Once it produces a dependency alert, this table applies from the alert's creation date.</li>
+</ul>
+<h2 id="dismissal" data-src="docs/SECURITY_TRIAGE.md:70:1-70:12">Dismissal</h2>
+<p data-src="docs/SECURITY_TRIAGE.md:72:1-72:195">Dismissing an alert is a decision that has to survive being read a year later. An alert is dismissed only by the named person, only for a stated reason, and only when that reason is written down.</p>
+<p data-src="docs/SECURITY_TRIAGE.md:74:1-74:325"><strong>The named person</strong> is the maintainer, <a href="https://github.com/arminazimi" rel="external">@arminazimi</a>, who holds the security role in <a href="../MAINTAINERS.md">MAINTAINERS.md</a> and is the code owner in <a href="../.github/CODEOWNERS"><code>.github/CODEOWNERS</code></a>. A dismissal that does not name a person is not valid, and it is reversed at the next release review.</p>
+<p data-src="docs/SECURITY_TRIAGE.md:76:1-76:46">A dismissal is allowed for these reasons only:</p>
+<table data-src="docs/SECURITY_TRIAGE.md:78:1-82:150">
+<thead>
+<tr>
+<th>Reason</th>
+<th>When it applies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>not_used</code></td>
+<td>The vulnerable package is only in a fixture or example manifest that is never installed, shipped, or run as the product's dependency.</td>
+</tr>
+<tr>
+<td><code>inaccurate</code></td>
+<td>The alert is wrong for this repository: no shipped lockfile resolves the vulnerable version, or the vulnerable code path is not reachable.</td>
+</tr>
+<tr>
+<td><code>tolerable_risk</code></td>
+<td>The maintainer accepts the risk in writing, with the condition under which the decision would change and a date to re-check it.</td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/SECURITY_TRIAGE.md:84:1-84:177"><code>no_bandwidth</code>, or any reason that only means "not yet", is never used. Capacity is not a dismissal reason; an alert that cannot be fixed by its deadline stays open and overdue.</p>
+<p data-src="docs/SECURITY_TRIAGE.md:86:1-86:20">To dismiss an alert:</p>
+<ol data-src="docs/SECURITY_TRIAGE.md:88:1-90:55">
+<li>Write the dismissal comment on the alert first. It states the named person, the reason, the evidence (the manifest path and why the code is not shipped or reachable, or the accepted risk and review date), and a link to the pull request, issue, or release note that records the same reasoning.</li>
+<li>Add a row to the dismissal log below with the same date, alert, package, reason, and person.</li>
+<li>Dismiss the alert with that reason in the GitHub UI.</li>
+</ol>
+<table data-src="docs/SECURITY_TRIAGE.md:92:1-95:235">
+<thead>
+<tr>
+<th>Date</th>
+<th>Alert</th>
+<th>Package</th>
+<th>Reason</th>
+<th>Person</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-11-07</td>
+<td>code-scanning#241</td>
+<td><code>node</code> image in <code>benchmarks/agent-staleness/outputs/seed/hooks/dockerfile-node-app/</code> (PinnedDependencies)</td>
+<td><code>used in tests</code> / fixture seed, not shipped</td>
+<td><a href="https://github.com/arminazimi" rel="external">@arminazimi</a></td>
+</tr>
+<tr>
+<td>2026-11-07</td>
+<td>code-scanning#242</td>
+<td><code>node</code> image in <code>benchmarks/agent-staleness/outputs/seed/plain/dockerfile-node-app/</code> (PinnedDependencies)</td>
+<td><code>used in tests</code> / fixture seed, not shipped</td>
+<td><a href="https://github.com/arminazimi" rel="external">@arminazimi</a></td>
+</tr>
+</tbody>
+</table>
+<p data-src="docs/SECURITY_TRIAGE.md:97:1-97:385"><strong>Every dismissal is reviewed at release.</strong> When the baseline table above is updated for a release, each row in the dismissal log is re-read against the current manifests. A dismissal whose reason no longer holds is reversed: the alert is reopened and treated as new, with its deadline counted from the reopening date. A fixture that has become a shipped dependency is the usual cause.</p>
+<h2 id="when-the-maintainer-is-away" data-src="docs/SECURITY_TRIAGE.md:99:1-99:30">When the maintainer is away</h2>
+<p data-src="docs/SECURITY_TRIAGE.md:101:1-101:313">Offing has a single maintainer, <a href="https://github.com/arminazimi" rel="external">@arminazimi</a> (<a href="../MAINTAINERS.md">MAINTAINERS.md</a>), and this policy does not name a deputy. Responsibility stays with the maintainer when the maintainer is unavailable; it does not pass to a contributor, an agent, or whoever opened the pull request.</p>
+<p data-src="docs/SECURITY_TRIAGE.md:103:1-103:29">While the maintainer is away:</p>
+<ul data-src="docs/SECURITY_TRIAGE.md:105:1-108:221">
+<li><strong>Security reports</strong> still go through the private channel in <a href="../SECURITY.md"><code>SECURITY.md</code></a>, which is unchanged. They wait for the maintainer and are not closed in the meantime. The acknowledgement and assessment times in <code>SECURITY.md</code> apply once the maintainer is available again.</li>
+<li><strong>Overdue alerts stay visible.</strong> The maintainer keeps one pinned issue titled <code>Security triage queue</code> listing every open alert with its severity, deadline, and status. It is updated when an alert is triaged and at each release, so an alert past its deadline is visible in the repository, not only in the alerts tab.</li>
+<li><strong>No alert is dismissed</strong> during that period, and absence is not a reason to dismiss one.</li>
+<li><strong>Dependabot pull requests</strong> keep opening and CI keeps running. A contributor may prepare or review an update pull request, but only the maintainer merges it, because merging a dependency update is what closes an alert.</li>
+</ul>
+<h2 id="triage" data-src="docs/SECURITY_TRIAGE.md:110:1-110:9">Triage</h2>
+<p data-src="docs/SECURITY_TRIAGE.md:112:1-112:19">For each new alert:</p>
+<ol data-src="docs/SECURITY_TRIAGE.md:114:1-118:177">
+<li>Note the alert number, severity, manifest path, package, and deadline from <a href="#deadlines">Deadlines</a> in the pull request or issue that handles it.</li>
+<li>Check whether the affected code is shipped. Product and tooling manifests count as shipped. Fixture and example manifests count as test data.</li>
+<li>If a fix exists, prefer the Dependabot update PR. It runs the same <code>npm run check</code> as any other change.</li>
+<li>If the vulnerable code is only a fixture, and no fix is needed to ship, dismiss the alert under <a href="#dismissal">Dismissal</a> with the reason <code>not_used</code> or <code>inaccurate</code>; never without the written comment and the dismissal log row.</li>
+<li>If the alert cannot be fixed yet, open a follow-up issue that names the alert and the planned date, and keep the alert listed as overdue in the <code>Security triage queue</code> issue.</li>
+</ol>
+<p data-src="docs/SECURITY_TRIAGE.md:120:1-120:127">Update the baseline table in this file when the open count changes at a release, and review the dismissal log at the same time.</p></div><div class="edit-page" data-edit-page="true"><a class="edit-page-link" href="https://github.com/velella-sh/offing/edit/main/docs/SECURITY_TRIAGE.md" rel="noopener">Edit this page</a></div><div class="doc-actions"><div class="page-footer"><p class="page-footer-meta"><a class="page-footer-edit" href="https://github.com/velella-sh/offing/edit/main/docs/SECURITY_TRIAGE.md">Edit this page on GitHub</a></p><button type="button" class="page-footer-copy" hidden data-page-footer-copy="true" data-prompt="Edit docs/SECURITY_TRIAGE.md:1. Current text: &quot;Security triage&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C">Edit with your agent</button><p class="page-footer-feedback">Was this helpful? <a href="https://github.com/velella-sh/offing/issues/new?title=Feedback%3A%20Security%20triage&amp;body=Page%3A%20%2Foffing%2FSECURITY_TRIAGE%2F%0ASource%3A%20docs%2FSECURITY_TRIAGE.md%0A">Give feedback</a></p></div><div class="copy-markdown" data-copy-markdown="true"><button type="button" class="copy-markdown-button" hidden data-copy-markdown-button="true" data-markdown="/offing/SECURITY_TRIAGE/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C" aria-keyshortcuts="m" title="Press M to copy">Copy page as Markdown<kbd class="copy-markdown-key" aria-hidden="true">M</kbd></button><a class="copy-markdown-link" href="/offing/SECURITY_TRIAGE/index.md">View Markdown</a><p class="copy-markdown-status" role="status" data-copy-markdown-status="true"></p></div><details class="page-agent-menu" data-page-agent-menu="true"><summary class="page-agent-menu-summary"><span class="page-agent-menu-summary-text">Use with an agent</span><svg class="page-agent-menu-chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4"></path></svg></summary><div class="page-agent-menu-panel"><button type="button" class="page-agent-menu-copy" hidden data-page-agent-copy="true" data-markdown="/offing/SECURITY_TRIAGE/index.md" data-copied="Copied" data-copy-failed="Press Ctrl+C">Copy page as Markdown</button><a class="page-agent-menu-view" href="/offing/SECURITY_TRIAGE/index.md">View Markdown</a><p class="page-agent-menu-heading">Open in</p><ul class="page-agent-menu-providers"><li><a class="page-agent-menu-provider" href="https://claude.ai/new?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FSECURITY_TRIAGE%2Findex.md" target="_blank" rel="noopener">Claude</a></li><li><a class="page-agent-menu-provider" href="https://chatgpt.com?q=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FSECURITY_TRIAGE%2Findex.md" target="_blank" rel="noopener">ChatGPT</a></li><li><a class="page-agent-menu-provider" href="https://cursor.com/link/prompt?text=Read+https%3A%2F%2Fvelella.sh%2Foffing%2FSECURITY_TRIAGE%2Findex.md" target="_blank" rel="noopener">Cursor</a></li></ul><p class="page-agent-menu-status" role="status" data-page-agent-status="true"></p></div></details></div></article><template data-block-actions="true" data-prompt="Edit {source}. Current text: &quot;{text}&quot;. Change:" data-copied="Copied" data-copy-failed="Press Ctrl+C"><button type="button" class="block-action" hidden data-block-action="true">Edit with your agent</button></template></main><aside class="aside" aria-label="On this page"><aside class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#baseline">Baseline</a></li><li><a href="#secret-scanning-push-protection">Secret scanning push protection</a></li><li><a href="#deadlines">Deadlines</a></li><li><a href="#dismissal">Dismissal</a></li><li><a href="#when-the-maintainer-is-away">When the maintainer is away</a></li><li><a href="#triage">Triage</a></li></ul></aside><details class="toc-fold"><summary>On this page</summary><ul><li><a href="#baseline">Baseline</a></li><li><a href="#secret-scanning-push-protection">Secret scanning push protection</a></li><li><a href="#deadlines">Deadlines</a></li><li><a href="#dismissal">Dismissal</a></li><li><a href="#when-the-maintainer-is-away">When the maintainer is away</a></li><li><a href="#triage">Triage</a></li></ul></details></aside></div><footer><div class="site-footer"><div class="site-footer-inner"><p class="site-footer-copyright">© Velella</p><p class="site-footer-license">MIT license</p><nav class="site-footer-links" aria-label="Footer links"><ul><li><a href="https://github.com/velella-sh/offing" rel="noopener">GitHub</a></li><li><a href="https://velella.sh/mizzen/" rel="noopener">Mizzen</a></li><li><a href="https://velella.sh/lateen/" rel="noopener">Lateen</a></li></ul></nav></div></div></footer><dialog class="shortcuts" data-shortcuts aria-labelledby="shortcuts-title" hidden><div class="shortcuts-panel"><div class="shortcuts-header"><h2 class="shortcuts-title" id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="shortcuts-close" aria-label="Close keyboard shortcuts" data-shortcuts-close><span aria-hidden="true">×</span></button></div><dl class="shortcuts-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">/</kbd><span class="shortcut-separator" aria-hidden="true"> / </span><kbd class="shortcut-key">Ctrl/Cmd+K</kbd></dt><dd class="shortcut-action">Search<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">m</kbd></dt><dd class="shortcut-action">Copy page as Markdown<span class="shortcut-needs-js">Needs JavaScript</span></dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dt><dd class="shortcut-action">Show this dialog<span class="shortcut-needs-js">Needs JavaScript</span></dd></div></dl></div></dialog><script type="module" src="/offing/assets/theme/islands/chrome/announcement/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/block-actions/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/copy-markdown/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/drawer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/feedback/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/footnote-popover/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-agent-menu/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/page-footer/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/search/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/shortcuts/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/sidebar/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/theme-toggle/client.js"></script><script type="module" src="/offing/assets/theme/islands/chrome/toc/client.js"></script></body></html>

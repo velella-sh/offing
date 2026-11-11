@@ -1,0 +1,57 @@
+# GitLab
+
+Offing ships a GitLab CI/CD component, [`templates/offing.yml`](../templates/offing.yml). It is published in the [CI/CD Catalog](https://gitlab.com/explore/catalog/velella-sh/offing). It adds one job that scans the checked-out repository, keeps the JSON report as a job artifact, and fails the pipeline at a severity gate. Its inputs mirror the [GitHub Action](GITHUB_ACTION.md): `path`, `baseline`, `baseline_warn_days`, `on_expired`, `min_support_days`, and `fail_on_severity` have the same meanings and defaults.
+
+## Add the job
+
+On GitLab.com, include the Catalog release. Pin the component to a plain semver Catalog version (no `v` prefix); the component's `version` input then defaults to the matching `offing` npm package:
+
+```yaml
+include:
+  - component: $CI_SERVER_FQDN/velella-sh/offing/offing@0.7.1
+    inputs:
+      fail_on_severity: high
+```
+
+That include was verified from a clean public project: the job pulled `node:24-trixie-slim`, installed `@velella/offing@0.1.0` with `npx`, wrote `offing-report.json` and `gl-code-quality-report.json`, and passed at the default `high` gate with no findings. Set `baseline` only when you already have a baseline file committed (path relative to `path`).
+
+On a self-managed instance, host a copy of the component and replace the project path:
+
+```yaml
+include:
+  - component: $CI_SERVER_FQDN/<group>/<project>/offing@<version>
+    inputs:
+      fail_on_severity: high
+```
+
+## Permissions
+
+The job needs nothing beyond the default pipeline permissions:
+
+- It reads the files GitLab checks out for the job. It uses a shallow clone (`GIT_DEPTH: "1"`).
+- It uses no access token, project or group variable, or secret, and does not call the GitLab API.
+- It writes two files, kept as job artifacts for 14 days even when the gate fails: the JSON report (`offing-report.json` unless you set `report_name`) and a [Code Quality](https://docs.gitlab.com/ci/testing/code_quality/) report (`gl-code-quality-report.json` unless you set `code_quality_report_name`), which GitLab shows as findings in merge requests. The same report is available locally with `offing scan --format codequality`.
+- It never edits the repository, opens a merge request, or runs a migration command.
+
+## Network behavior
+
+Scans make no network requests: the detectors read repository files and the lifecycle data bundled in the package. The job still needs the network twice, before the scan starts:
+
+| When | What | Where it goes |
+| --- | --- | --- |
+| The runner starts the job | Pulls the `image` input (default `node:24-trixie-slim`) | Your runner's container registry |
+| The job runs `npx` | Downloads `offing@<version>` and its dependencies | The npm registry your runner is configured for |
+
+Neither request carries repository contents. Repository contents and findings stay on the runner; the report leaves it only as a GitLab job artifact.
+
+## Self-managed GitLab
+
+- **Hosting the component.** Put the component in a project on your instance, mirroring `templates/offing.yml`, and reference it with `$CI_SERVER_FQDN` as above. Components and `$[[ inputs.* ]]` interpolation need a GitLab version that supports CI/CD components; check your instance's release notes.
+- **No access to Docker Hub.** Mirror a Node.js 22 or newer image into your own registry and pass it as `image`.
+- **No access to the public npm registry.** Point npm at your internal registry or proxy, for example with an `NPM_CONFIG_REGISTRY` CI/CD variable, and make sure it serves `offing` at the pinned version.
+- **Air-gapped runners.** Bake the package into the image and set `version` to match. The job's `npx --yes` call then finds it locally, and the scan itself already needs no network.
+- **Lifecycle data.** The job does not run `offing data update`, so it never fetches newer rules from GitHub. To change the rules a pipeline uses, change the `version` input. See [Lifecycle data](DATA.md).
+
+## Gate and baseline
+
+The job exits with the gate's status after writing the report, so the report is available when the job fails. Accept existing findings with a baseline committed to the repository, and set `baseline` to its path relative to `path`; the format, expiry warnings, and `on_expired` behavior are the same as in the [GitHub Action](GITHUB_ACTION.md). See also [Privacy](PRIVACY.md).

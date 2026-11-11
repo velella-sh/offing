@@ -1,0 +1,70 @@
+# Offing
+
+> Offing is local-first deprecation intelligence for software repositories. It finds end-of-life and deprecated runtimes, packages, and GitHub Actions at exact file locations, backs every claim with an authoritative source, and produces migration context for humans and coding agents. It runs on your machine through a CLI, a local MCP server, a GitHub Action, and Agent Skills; scans never use the network and need no account.
+
+Before adding a dependency, check it: call the `check_dependency` MCP tool or run `npx @velella/offing check <purl>`. A `no-data` answer means Offing has no rule for the package, not that it is safe. The full text of every page below is in [llms-full.txt](https://velella.sh/offing/llms-full.txt).
+
+Three commands cover most agent use: `npx @velella/offing check pkg:npm/left-pad@1.0.0` before adding a dependency, which prints a status (`affected` or `no-data`) with its source; `npx @velella/offing scan` in a repository, which prints each lifecycle risk with its file, line, and source; and `npx --yes @velella/offing mcp`, which starts the local MCP server over stdio for an agent host.
+
+## Use Offing
+
+- [Quickstart](https://velella.sh/offing/QUICKSTART/): five copy-paste steps from the first local scan to a baseline gate in CI.
+- [90-second demo](https://velella.sh/offing/DEMO/): scan, explain, build migration context, and verify on a small repository.
+- [Local MCP server](https://velella.sh/offing/MCP/): the tools, resources, prompt, and output schemas an agent can use, including `check_dependency`.
+- [Runtime drift](https://velella.sh/offing/DRIFT/): `offing drift` reports every runtime version a repository states, whether those versions agree, and the patch that aligns them.
+- [Inventory](https://velella.sh/offing/INVENTORY/): `offing inventory` reads the JSON or text exports that cloud and cluster tools already produce and reports end-of-life runtimes, engines, cluster versions, images, and operating systems, each with the exact pointer the claim rests on; it never calls a cloud API.
+- [MCP discovery](https://velella.sh/offing/.well-known/mcp.json): stdio server metadata, npm package, and tool list for agents that probe `/.well-known/mcp.json`.
+- [Agent card](https://velella.sh/offing/.well-known/agent.json): A2A agent card describing Offing's local MCP skills for agents that probe `/.well-known/agent.json`.
+- [Playbook: agent-driven migrations](https://velella.sh/offing/playbooks/agent/): let a coding agent migrate one finding while Offing supplies the facts and the proof.
+- [Playbook: manual CLI checks](https://velella.sh/offing/playbooks/cli/): scan, read, decide, accept, and keep findings from returning, by hand with the CLI.
+- [GitHub Action](https://velella.sh/offing/GITHUB_ACTION/): run Offing in pull requests, gate on severity, upload SARIF to code scanning.
+- [Playbook: GitHub Actions](https://velella.sh/offing/playbooks/github/): add the Action, read what it reports, accept findings on purpose, and keep the gate honest.
+- [Organization rollout](https://velella.sh/offing/ORG_ROLLOUT/): scan every repository in an organization with one reusable workflow, accept findings with a baseline, and post a weekly digest.
+- [GitLab](https://velella.sh/offing/GITLAB/): the CI/CD component, the permissions it needs, its network behavior, and self-managed constraints.
+- [Playbook: GitLab pipelines](https://velella.sh/offing/playbooks/gitlab/): add the component, gate merges on severity, accept known findings, and run it self-managed.
+- [Hooks](https://velella.sh/offing/HOOKS/): a Git pre-push hook that scans before every push, a Claude Code PreToolUse hook that blocks deprecated package installs, a Cursor rule, and a Copilot instructions file that make the agent check a dependency with Offing before adding it.
+- [Capability manifest](https://velella.sh/offing/CAPABILITIES/): how a tool or agent discovers what Offing can do, programmatically.
+- [Migration packets](https://velella.sh/offing/MIGRATION_PACKETS/): the structured context Offing builds for one finding.
+- [Migration plans](https://velella.sh/offing/PLAN/): waves of independent migration tasks, and a print-only dispatch example for parallel agent sessions.
+- [Upgrade check](https://velella.sh/offing/UPGRADE_CHECK/): answer from files already in the repository whether a project can move to a target runtime, with each blocker, warning, and exact evidence.
+- [Verification receipts](https://velella.sh/offing/RECEIPTS/): how to read and reproduce a before/after receipt for a change.
+- [Share a lifecycle report](https://velella.sh/offing/SHARE_REPORT/): produce the forecast timeline and the HTML report, what they contain, and what is safe to send.
+- [Showcase](https://velella.sh/offing/SHOWCASE/): embed the animated lifecycle forecast in a README and refresh it on a schedule.
+- [Environment doctor and compatibility](https://velella.sh/offing/COMPATIBILITY/): supported ecosystems, hosts, and maturity.
+- [PHP detector](https://velella.sh/offing/compatibility/php/): the PHP declarations Offing reads, what it reports, and its false-positive boundaries.
+- [Ruby detector](https://velella.sh/offing/compatibility/ruby/): the Ruby declarations Offing reads, what it reports, and its false-positive boundaries.
+- [Android detector](https://velella.sh/offing/compatibility/android/): the Android Gradle declarations Offing reads, what it reports, and its false-positive boundaries.
+- [C and C++](https://velella.sh/offing/detectors/cpp.html): the CMake, Conan, and vcpkg declarations Offing reads, what it reports, and its limits.
+- [CI runner images detector](https://velella.sh/offing/compatibility/ci-runner-images/): the hosted Azure, GitLab, and CircleCI image declarations Offing reads and its limits.
+- [Offing compared with other tools](https://velella.sh/offing/compare/index.html): what Offing answers versus Renovate, Dependabot, and endoflife.date, and where each is stronger.
+- [Agent Skill](https://velella.sh/offing/AGENT_SKILLS/): the portable skill for coding agents and how its triggering is evaluated.
+- [Offing, Slipway, and Seaworthy](https://velella.sh/offing/SITE_STACK/): the agent loop for a Slipway-shaped site — check dependencies with Offing, verify `_site/` with Seaworthy when it ships.
+
+## Evidence, data, and trust
+
+- [Lifecycle rules](https://velella.sh/offing/RULES/): the rule format, the evidence policy, and how to write a rule.
+- [Lifecycle data](https://velella.sh/offing/DATA/): signed data updates, pinning, offline guarantees, and the trust model.
+- [Validation](https://velella.sh/offing/VALIDATION/): the public corpus, precision thresholds, and measured results.
+- [Validation corpus](https://velella.sh/offing/validation/corpus/): how the public corpus grew, how repositories were selected blind, and the held-out set.
+- [Ecosystem corpora](https://velella.sh/offing/validation/ecosystems/): the pinned repository sets and blind selection rules for each ecosystem.
+- [Running the corpus](https://velella.sh/offing/validation/running-the-corpus/): fetching, caching, filtering, recording, and reading a validation run.
+- [Differential testing](https://velella.sh/offing/validation/differential-testing/): how Offing's findings compare with Renovate, xeol, and Pluto.
+- [State of EOL](https://velella.sh/offing/state-of-eol/): corpus findings aggregated by product and release line.
+- [Privacy](https://velella.sh/offing/PRIVACY/): what stays on your machine and the one command that uses the network.
+- [Threat model](https://velella.sh/offing/THREAT_MODEL/): trust boundaries, STRIDE threats, mitigations, and residual risks for untrusted repositories, data bundles, the MCP server, and hooks.
+- [Runtime dependencies](https://velella.sh/offing/DEPENDENCIES.html): the eight packages Offing installs, the reason each one stays, and the checks a new runtime dependency must pass.
+
+## Extend Offing
+
+- [Start contributing](https://velella.sh/offing/CONTRIBUTE/): how to pick a sized issue, follow its agent brief, and open one pull request.
+- [Detector authoring](https://velella.sh/offing/DETECTORS/): the detector SDK and how to start a new detector from a generated skeleton.
+- [Detector layouts](https://velella.sh/offing/detectors/authoring-layouts/): the file layout each built-in detector follows, from parser to registry to detector.
+- [Detector contracts](https://velella.sh/offing/detectors/authoring-contracts/): the files a detector declares it reads, registry validation, and source-usage contracts.
+- [Lifecycle importers](https://velella.sh/offing/IMPORTERS/): drafting rules from authoritative sources for review.
+
+## Optional
+
+- [Claude plugin](https://velella.sh/offing/CLAUDE_PLUGIN/): install Offing, its Skill, and the dependency guard in Claude Code.
+- [Codex plugin](https://velella.sh/offing/CODEX_PLUGIN/): install Offing and the dependency guard in Codex.
+- [Changelog](https://velella.sh/offing/CHANGELOG/): every Offing release, with a stable link per version.
+- [Releasing](https://velella.sh/offing/RELEASING/): how maintainers publish packages and signed data.

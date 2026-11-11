@@ -1,0 +1,140 @@
+
+# BatchNotebook is deprecated
+
+**Deprecated.** The source gives no day. Replacement: runipy. Source: [BatchNotebook deprecation notice](https://pypi.org/project/BatchNotebook/).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/batchnotebook
+```
+
+The maintainer says not to use BatchNotebook, marks it deprecated, and recommends runipy.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/batchnotebook` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Replacement | runipy |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `python.package.batchnotebook.deprecated` |
+
+## Sources
+
+- [BatchNotebook deprecation notice](https://pypi.org/project/BatchNotebook/) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve notebook input and output paths, cell execution order, timeouts, errors, kernel selection, and rendered report artifacts.
+
+**Steps**
+
+1. **Replace BatchNotebook.** Move notebook execution to runipy as recommended by the maintainer, or to the maintained notebook execution facility selected by the project, then remove BatchNotebook.
+
+**Verification**
+
+- `python -m pytest`: Run notebook execution, timeout, failure, output, and project tests when defined.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.batchnotebook.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.batchnotebook.deprecated.html",
+      "url": "https://velella.sh/offing/rules/python.package.batchnotebook.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.batchnotebook.deprecated.html",
+      "headline": "BatchNotebook is deprecated — dates, impact, migration",
+      "description": "The maintainer says not to use BatchNotebook, marks it deprecated, and recommends runipy.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "deprecated",
+        "python",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "BatchNotebook is deprecated",
+        "identifier": "pkg:pypi/batchnotebook"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "BatchNotebook deprecation notice",
+          "url": "https://pypi.org/project/BatchNotebook/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.batchnotebook.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.batchnotebook.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/batchnotebook?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:pypi/*. Source: BatchNotebook deprecation notice (https://pypi.org/project/BatchNotebook/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:pypi/batchnotebook?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "runipy"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/batchnotebook?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/batchnotebook."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

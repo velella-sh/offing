@@ -1,18 +1,17 @@
 ---
-title: Offing, Slipway, and Seaworthy
+title: Offing and Slipway
 ---
 
-# Offing, Slipway, and Seaworthy
+# Offing and Slipway
 
-Three tools share the work on a [Slipway](https://github.com/arminazimi/slipway)-shaped Jekyll site for GitHub Pages. Each one owns a different question. Use them in order so an agent (or a human) does not mix lifecycle evidence with site verification.
+Two tools share the work on a [Slipway](https://github.com/arminazimi/slipway)-shaped Jekyll site for GitHub Pages. Each one owns a different question. Use them in order so an agent (or a human) does not mix lifecycle evidence with site layout concerns.
 
 | Tool | Owns | Maturity |
 | --- | --- | --- |
 | **Offing** | Whether a gem, npm package, GitHub Action, or runtime line is deprecated or end-of-life, with evidence | Shipped (`offing` on npm) |
 | **Slipway** | The Jekyll theme, layout, and Pages-oriented site stack | In planning and dogfooding; use only what its repository documents |
-| **Seaworthy** | Whether the **built** site is healthy (links, agent-readable structure) | Pre-alpha; **not on npm yet** — commands below are for when its first release ships |
 
-Offing and Seaworthy both run locally against files on disk. Neither sends your repository to a cloud service during a check or verify.
+Offing runs locally against files on disk. It does not send your repository to a cloud service during a check or scan.
 
 ## The agent loop
 
@@ -46,26 +45,14 @@ Change Markdown, `_config.yml`, layouts, and workflows as the task requires. Sli
 
 Copy the Offing CI starter when the site has no lifecycle gate yet: [examples/starters/slipway/](../examples/starters/slipway/).
 
-### 3. After the site builds
-
-When `_site/` exists from `bundle exec jekyll build` (or your CI build step), verify the output with Seaworthy:
-
-```bash
-# Pending Seaworthy's first npm release — not installable yet.
-seaworthy verify ./_site
-```
-
-Until Seaworthy publishes, treat this step as documentation-only. Do not fail a task because the command is unavailable.
-
 ## Which output to trust for what
 
-| Question | Trust | Do not use |
-| --- | --- | --- |
-| Is this gem, package, or Action deprecated or end-of-life? | Offing `check` (or repository `scan`) — lifecycle rules with sources | Seaworthy |
-| Are links broken or pages hard for agents to read on the built site? | Seaworthy `verify` (once released) | Offing |
-| What is already declared in this repo? | Offing `scan` on the tree — findings at exact paths | A single `check` for everything |
+| Question | Trust |
+| --- | --- |
+| Is this gem, package, or Action deprecated or end-of-life? | Offing `check` (or repository `scan`) — lifecycle rules with sources |
+| What is already declared in this repo? | Offing `scan` on the tree — findings at exact paths |
 
-Offing answers **lifecycle** questions with reviewed rules. Seaworthy answers **site quality** questions on static HTML. A clean Offing scan does not mean the site links work; a passing Seaworthy run does not mean a new gem is safe to add.
+Offing answers **lifecycle** questions with reviewed rules. A clean Offing scan does not mean the site's links work or that a new gem is safe in other ways.
 
 ## Wire this into your agent
 

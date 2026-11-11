@@ -1,0 +1,136 @@
+
+# tempdir is no longer maintained
+
+**Deprecated.** The source gives no day. Replacement: tempfile. Source: [RustSec advisory RUSTSEC-2018-0017](https://rustsec.org/advisories/RUSTSEC-2018-0017.html).
+
+Check a version:
+
+```bash
+offing check pkg:cargo/tempdir
+```
+
+The tempdir crate has been deprecated and its functionality merged into tempfile.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `rust` |
+| Component | `pkg:cargo/tempdir` |
+| Affected versions | `vers:cargo/*` |
+| Date from the source | The source gives no day |
+| Replacement | tempfile |
+| Evidence last seen | 2026-10-17 |
+| Reviewed | 2026-10-17 by arminazimi |
+| Review due | 2026-12-01 (45 days after the last review) |
+| Rule ID | `rust.crate.tempdir.unmaintained` |
+
+## Sources
+
+- [RustSec advisory RUSTSEC-2018-0017](https://rustsec.org/advisories/RUSTSEC-2018-0017.html) (accessed 2026-10-17)
+
+## Migration
+
+**Constraints**
+
+- Keep temporary directories cleaned up on drop, as before.
+
+**Steps**
+
+1. **Replace tempdir with tempfile.** Replace the tempdir dependency with tempfile and change `TempDir::new(prefix)` calls to `tempfile::tempdir()` or `tempfile::Builder`.
+
+**Verification**
+
+- `cargo build --all-targets && cargo test`: Build and run the tests that create temporary directories.
+
+## Detected by
+
+The `rust` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [ansi_term is no longer maintained](rust.crate.ansi-term.unmaintained.html)
+- [atty is no longer maintained](rust.crate.atty.unmaintained.html)
+- [failure is no longer maintained](rust.crate.failure.unmaintained.html)
+- [Rust 1.98 and older are no longer supported](rust.toolchain.end-of-support-1.98-and-older.html)
+
+
+## Data
+
+This page is generated from [`registry/rust.json`](https://github.com/velella-sh/offing/blob/main/registry/rust.json), rule `rust.crate.tempdir.unmaintained`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/rust.crate.tempdir.unmaintained.html",
+      "url": "https://velella.sh/offing/rules/rust.crate.tempdir.unmaintained.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/rust.crate.tempdir.unmaintained.html",
+      "headline": "tempdir is no longer maintained — dates, impact, migration",
+      "description": "The tempdir crate has been deprecated and its functionality merged into tempfile.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-17",
+      "keywords": [
+        "deprecated",
+        "rust",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "tempdir is no longer maintained",
+        "identifier": "pkg:cargo/tempdir"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "RustSec advisory RUSTSEC-2018-0017",
+          "url": "https://rustsec.org/advisories/RUSTSEC-2018-0017.html"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/rust.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/rust.crate.tempdir.unmaintained.html#faq",
+      "url": "https://velella.sh/offing/rules/rust.crate.tempdir.unmaintained.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:cargo/tempdir?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:cargo/*. Source: RustSec advisory RUSTSEC-2018-0017 (https://rustsec.org/advisories/RUSTSEC-2018-0017.html)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:cargo/tempdir?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "tempfile"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:cargo/tempdir?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:cargo/tempdir."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

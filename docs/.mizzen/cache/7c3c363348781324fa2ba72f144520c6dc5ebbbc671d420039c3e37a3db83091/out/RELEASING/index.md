@@ -1,0 +1,242 @@
+# Releasing Offing
+
+Any maintainer can cut a release by following this page. A release publishes four things that must agree on one version: the npm package `offing`, the GitHub Action (`velella-sh/offing@vX.Y.Z`), the generated Claude and Codex plugin packages, and the bundled lifecycle registries inside the package. Publishing needs maintainer accounts, so releases are `lane: maintainer` work.
+
+## Before you start
+
+- You are on an up-to-date `main` with a clean working tree, and CI on `main` is green.
+- You can publish to the `offing` package on npm and push tags to the repository.
+- Choose the version. Patch for fixes and rule data, minor for new detectors, commands, or output fields, and a major version only for a breaking change to an output schema or the detector SDK.
+
+## Gates
+
+Every gate must pass on the commit you will tag. None of them is optional.
+
+| Gate | Command | What it proves |
+|---|---|---|
+| Full check | `npm run check` | Build, the Action bundle compiles, all tests including coverage floors in CI, plugin packages are in sync, plugin evals. This is what CI and `npm publish` (through `prepack`) run. |
+| Coverage floors | `npm run test:coverage` | Lines, branches, and functions stay above the floors in `package.json`. |
+| Public corpus | `npm run validate:public-repos` | Exact findings on every pinned public repository, and each detector's precision above its floor in `benchmarks/thresholds.json`. Needs network. |
+| Package contents | `npm pack --dry-run` | Only `dist/src`, `examples`, `schemas`, and `skills` ship. The rules come from the `@velella/ebb` dependency. |
+| Reproducible package | `npm run check:reproducible` | Two clean builds of the same commit pack to byte-identical npm tarballs. CI records the tarball hash on Linux, Windows, and macOS and fails `ci-ok` when the runners disagree; the release workflow runs the local check and fails on a mismatch. |
+
+The last weekly run of the corpus workflow should also be green. If either is red, fix or explain it before tagging.
+
+## Action bundles on release tags
+
+The GitHub Action runs `dist/action/index.js`, one compiled bundle. `main` does not carry it: every merge rewrote the one minified line, so any two pull requests conflicted on it. Release tags still need the file, so the release chain builds it where it is needed:
+
+- A push to `main` that changes the version in `package.json` runs the *Release* workflow's `action-bundle` job. It builds `dist/action`, commits it on the branch `release/vX.Y.Z` (one commit on top of the release commit), and prints the tagging commands below.
+- The release tag points at that branch tip, not at a commit on `main`. The tag is created once and never moves, so `uses: velella-sh/offing@vX.Y.Z` keeps working for everyone who pinned it.
+- The Release chain's `npm-publish` job ([`release.yml`](../.github/workflows/release.yml), guard in [`check-release-tip.sh`](../.github/scripts/check-release-tip.sh)) refuses a tag that is not exactly that branch tip, or whose parent is not on `main`, or that changes anything besides `dist/action/`. `prepack` then rebuilds the bundle on the tagged commit and fails when the committed copy differs, so a stale or hand-edited bundle cannot be published.
+- The npm tarball is unaffected: `package.json`'s `files` list does not include `dist/action`, so the tarball is byte-identical to one packed from the release commit on `main`.
+
+The tradeoff is that a release tag no longer points into `main` history, and its commit is not on `main`. The alternative, moving the tag onto a rebuilt commit after publishing, was rejected: the tag would move under users who already pinned it, the publish workflow would re-trigger, and every other release job (binaries, container, quickstart, major tag) selects the release by `git tag --points-at` on the commit it checked out.
+
+## Verifying a published release
+
+The package is reproducible: rebuilding the tagged commit packs the same tarball, byte for byte, so anyone can check that a published version was built from its source. On any machine with Node.js 22 or newer:
+
+```bash
+git clone --branch vX.Y.Z --depth 1 https://github.com/velella-sh/offing
+cd offing
+npm ci && npm run check:reproducible
+```
+
+The clone is the release branch tip: `git log -1` shows the commit that adds `dist/action/`, whose parent is the release commit on `main`. The printed SHA-256 must match the tarball npm serves for the version, which you can download and hash separately with `npm pack offing@X.Y.Z` in an empty directory and `shasum -a 256 offing-X.Y.Z.tgz`. npm normalizes the tar metadata (uid, gid, and mtimes) when packing, so the bytes depend on the shipped file contents only; a mismatch means the build is nondeterministic, and the check keeps both tarballs for diffing.
+
+Two builds on one machine share every host-dependent step, so CI also compares builds made elsewhere: the Linux, Windows, and macOS jobs pack the same commit with `npm run record:reproducible -- <file>` and `ci-ok` runs [`compare-build-hashes.mjs`](../tools/compare-build-hashes.mjs) on the records. A path, line ending, or file-ordering difference that only one host has fails the pull request or merge-queue run.
+
+An installed package carries `dist/src/release-manifest.json`, generated from the packed file list at publish time. `offing verify` checks every listed file offline and fails on a changed one; see [CLI](CLI.md#verify). It reports the npm registry signature and provenance attestation as unchecked because those live on the registry: `npm audit signatures` verifies them when the network is available.
+
+### SLSA provenance
+
+Every release channel publishes signed build provenance, and the release chain runs
+[`slsa-verifier`](https://github.com/slsa-framework/slsa-verifier) against each channel before the run
+succeeds. A release that loses or mismatches its provenance fails instead of shipping.
+
+| Channel | Builder | SLSA Build level |
+|---|---|---|
+| Standalone binaries | [`generator_generic_slsa3.yml`](https://github.com/slsa-framework/slsa-github-generator/blob/main/.github/workflows/generator_generic_slsa3.yml) in an isolated job | 3 |
+| Container image | [`generator_container_slsa3.yml`](https://github.com/slsa-framework/slsa-github-generator/blob/main/.github/workflows/generator_container_slsa3.yml) in an isolated job | 3 |
+| npm package | npm trusted publishing on a GitHub-hosted runner | 2 |
+
+npm's attestation is signed and verifiable, but the build and the publish run in the same
+tenant-controlled job, which is Build L2. Reaching Build L3 for npm needs the retired Node.js SLSA
+builder and a long-lived npm token, which would replace trusted publishing; that trade is not made
+here. The `verify-provenance` stage of the npm publish fails the release when the attestation is
+missing or does not match the published tarball.
+
+Verify the binaries and the container image with `slsa-verifier` (v2.7.1 or newer):
+
+```bash
+# Standalone binaries and their multiple.intoto.jsonl provenance
+mkdir release
+gh release download vX.Y.Z --pattern 'multiple.intoto.jsonl' --pattern 'offing-*' --dir release
+find release -name '*.sigstore.json' -delete
+slsa-verifier verify-artifact release/offing-* \
+  --provenance-path release/multiple.intoto.jsonl \
+  --source-uri github.com/velella-sh/offing \
+  --source-tag vX.Y.Z \
+  --builder-id https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@refs/tags/v2.1.0
+
+# Container image: the provenance is stored next to the image in ghcr.io
+image=ghcr.io/velella-sh/offing
+digest="$(docker buildx imagetools inspect "$image:X.Y.Z" | sed -n 's/^Digest: *//p')"
+slsa-verifier verify-image "$image@$digest" \
+  --source-uri github.com/velella-sh/offing \
+  --source-tag vX.Y.Z \
+  --builder-id https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v2.1.0
+```
+
+Verify the npm package against the attestation the registry serves. npm's provenance records the
+workflow ref, but `verify-npm-package` does not support `--source-tag`; it checks the repository with
+`--source-uri` and prints the source commit for comparison with `git rev-parse vX.Y.Z`:
+
+```bash
+version=X.Y.Z
+curl -Sso "offing-$version.tgz" "$(npm view "offing@$version" dist.tarball)"
+curl -Sso attestations.json "$(npm view "offing@$version" --json | jq -r '.dist.attestations.url')"
+SLSA_VERIFIER_EXPERIMENTAL=1 slsa-verifier verify-npm-package "offing-$version.tgz" \
+  --attestations-path attestations.json \
+  --builder-id https://github.com/actions/runner/github-hosted \
+  --package-name @velella/offing \
+  --package-version "$version" \
+  --source-uri github.com/velella-sh/offing
+```
+
+## One-time npm setup
+
+Trusted publishing needs the package to name its publisher. On npmjs.com, open the `offing` package, then Settings, then Trusted Publisher, choose GitHub Actions, and enter organization or user `arminazimi`, repository `offing`, and workflow filename `release.yml` (leave the environment empty). npm matches the workflow that runs `npm publish`, which is `release.yml` itself. If an older trusted-publisher entry still names `publish.yml`, add `release.yml` as a second entry (a package may have more than one), publish once successfully, then delete the `publish.yml` entry. Once a release has published this way, set the package's publishing access to "Require two-factor authentication and disallow tokens" so that only this workflow can publish. To rehearse the path before a real release, set `package.json` to a pre-release version such as `X.Y.Z-rc.1` through a pull request and tag its release branch.
+
+## Steps
+
+1. **Update the changelog.** Draft the entries from conventional commits with `npm run release:notes` (or run the *Release notes* workflow, which uploads the same text). Pull requests add their entries as fragments in `changes/`; the command below moves those fragments into the section, followed by the commit-derived bullets:
+
+   ```bash
+   node dist/tools/changelog.js --write X.Y.Z --date YYYY-MM-DD
+   ```
+
+   Only `feat`, `fix`, and breaking commits become entries; `docs`, `test`, `ci`, and `chore` commits are left out. The command moves the hand-written `Unreleased` bullets and the `changes/` fragments into a new `## X.Y.Z - YYYY-MM-DD` section, appends the generated bullets, deletes the fragments, and leaves an empty `## Unreleased` above. Read the section, remove duplicates, and make each bullet a clear imperative sentence.
+2. **Bump the version.** Run `npm version X.Y.Z --no-git-tag-version`, set the same version in `src/version.ts` and `server.json`, then regenerate everything derived from it:
+
+   ```bash
+   npm run build:plugins
+   ```
+
+   This updates the plugin manifests and `.mcp.json` pins under `plugins/` and `.claude-plugin/marketplace.json`, and the plugin packages. Never edit those generated files by hand. The Action bundle is not committed here: the Release workflow builds it onto the release branch after this pull request merges (see [Action bundles on release tags](#action-bundles-on-release-tags)).
+3. **Update the version in the docs and examples.** The README and `docs/GITHUB_ACTION.md` show `velella-sh/offing@vX.Y.Z`; update them to the new tag. The host setups under `examples/agents/` pin `offing@X.Y.Z` (and the Gemini extension its `version`); a test fails until they match `package.json`. `server.json` (the MCP Registry description) carries the version twice; bump it with `package.json`, and a test fails until they agree.
+4. **Run the gates** above on the result, then commit as `chore: release X.Y.Z` through a pull request. Merge it once CI is green.
+5. **Tag the release branch.** Merging the release pull request starts the *Release* workflow's `action-bundle` job, which commits the compiled bundle on `release/vX.Y.Z` and prints the commands below in its job summary. When it has finished, tag that branch tip:
+
+   ```bash
+   git fetch origin release/vX.Y.Z
+   git tag -a vX.Y.Z -m "vX.Y.Z" FETCH_HEAD
+   git push origin vX.Y.Z
+   ```
+
+   Tagging the merge commit on `main` does not work any more: that tree has no bundle, and the Release chain's npm stage refuses the tag with a message that says so. If the job failed, re-run it from the Actions tab; it does nothing when the branch already exists.
+
+6. **Publish to npm.** Pushing the tag in step 5 starts the *Release* workflow's one chain: the `npm-publish` job (in `release.yml` itself, so OpenSSF Scorecard sees the publish step) publishes with npm trusted publishing (no stored token, provenance attestation), then the same run continues through binaries and the signed SBOM, container, Homebrew, major tag, and smoke. It refuses a tag that does not match the version in `package.json`, a tag that is not the `release/vX.Y.Z` branch tip, or a release branch commit that changes anything besides `dist/action/`, and `prepack` runs `npm run check` again, so a broken tree or a stale bundle cannot be published. A pre-release tag such as `vX.Y.Z-rc.1` is published under the `next` tag, so `latest` does not move. After publishing, a job installs the published version on a fresh machine and runs `--help`, `capabilities`, and a scan of `tests/fixtures/smoke` (`.github/scripts/smoke.mjs`); a package that installs but does not work fails the run. A `verify-provenance` job then checks the npm attestation with `slsa-verifier`, so a missing or mismatched attestation fails the release. A `verify-provenance` job then checks the npm attestation with `slsa-verifier`, so a missing or mismatched attestation fails the release. If a later stage fails, re-run only the failed jobs of that Release run — successful stages (including npm publish) are left alone. Watch the run in the Actions tab, then confirm with `npm view offing version` and run `npx @velella/offing@X.Y.Z --help` in an empty directory. To publish by hand instead (for example if the workflow is unavailable), run `npm publish` from the tagged commit; it will have no provenance.
+7. **Publish to the MCP Registry.** The registry lists the server for MCP clients and tools that look for one. It holds only the metadata in `server.json`, which points at the npm package, so publish it **after** step 6, when `npm view offing version` shows the new version (the registry checks the package on npm, so it must exist there first). This is automated: the same Release run's `publish-npm` stage runs, after `npm-publish`, the `registry` job of [`publish.yml`](../.github/workflows/publish.yml) after its npm smoke job. It refuses a tag that does not match `server.json`, skips pre-release tags, then publishes `server.json` through the `mcp-publisher` tool with a GitHub OIDC login — no stored secret, since the job's OIDC identity names this repository. The binary it downloads is pinned to release 1.8.6 and checked against the release's SHA-256; the pin is only moved after a maintainer reviews the new release first.
+
+   A published registry version cannot be changed, so check that `server.json` carries the version you just released first — the workflow refuses otherwise. Then confirm it is the latest:
+
+   ```bash
+   curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=offing"
+   ```
+
+   The response lists `io.github.velella-sh/offing` with the new `version`. The name is owned by the `arminazimi` GitHub account, and `package.json`'s `mcpName` ties the npm package to it.
+
+   Other MCP directories need no step per release (recorded with their status in [MCP.md](MCP.md#where-the-server-is-listed)). Versions sync from the official Registry automatically in the directories that ingest it — the GitHub MCP Registry and the VS Code / Copilot gallery once its onboarding lands, and PulseMCP when its submissions reopen. The Docker MCP Catalog pins a commit in `servers/offing/server.yaml` of `docker/mcp-registry`, but only follow that entry when a release contains something a catalog user should see (a new tool, a new detector ecosystem); the npm package is what the pinned commit builds, so old tags keep working.
+
+   **Manual fallback.** Keep this until the automation has succeeded on a real release from start to finish. If the `registry` job fails or is unavailable, run it by hand from the tagged commit after `npm view offing version` shows the new version:
+
+   ```bash
+   mcp-publisher login github   # approve the device code in a browser as the arminazimi account
+   mcp-publisher publish
+   ```
+8. **Check the GitHub release body.** After the binaries create the release, the Release workflow writes the matching section of `CHANGELOG.md` at the tag, an install line, binary verification instructions, and a tagged changelog link. No copy-and-paste is needed. A pre-release without its own section gets a short pre-release note. Edit by hand only to add a release-specific note: reruns preserve every non-placeholder body. To preview notes, run *Release notes body* with `release_tag` and leave `dry_run` on. To explicitly replace an existing body, turn `dry_run` off and set `force` to true; with `force` false a hand-written body is preserved.
+9. **Move the major tag** only if the project publishes one (for example `v1`), as a force-updated lightweight tag pointing at the new release. Do not move it for a pre-1.0 version. The same Release run does this after npm publish succeeds, for stable tags from `v1.0.0` on: the decision is in `.github/scripts/major-tag.mjs` (unit-tested), the tag only moves forward, and a pre-release or `0.x` tag changes nothing. To see what it would do for a tag without pushing anything, run the `Release` workflow by hand with `release_tag` set (a manual run with `release_tag` is always a dry run for the tag). To exercise every release stage without publishing, run it with `dry_run` on.
+10. **Homebrew.** The same Release run bumps [`arminazimi/homebrew-tap`](https://github.com/arminazimi/homebrew-tap) after npm publish succeeds: it waits for the npm tarball, pins its URL and SHA-256 in `Formula/offing.rb` (via `.github/scripts/bump-homebrew-formula.mjs`), and pushes to the tap's `main`. Pre-release tags leave the formula alone. This needs the repository secret `HOMEBREW_TAP_DEPLOY_KEY` — the private half of a **write** deploy key on `arminazimi/homebrew-tap`. Without the secret the Homebrew job fails; npm and the other channels are already published and are not rolled back. To recover, set the secret and re-run the failed job of that Release run, or edit the formula by hand as the tap README describes.
+11. **Package the plugins.** For Codex, `npm run package:codex-plugin` writes `artifacts/offing-codex-plugin-<version>.zip`; follow [Codex submission](CODEX_SUBMISSION.md) to submit it. The Claude plugin is served from the repository marketplace, so the merged change in step 4 is its release; see [Claude plugin](CLAUDE_PLUGIN.md).
+12. **Announce** only after the npm package, tag, and release are live.
+
+## Standalone binaries
+
+Each stable or pre-release tag also produces binaries that need no Node.js, for Linux (x64, arm64), macOS (x64, arm64), and Windows (x64). The `build-binaries` and `publish-binaries` stages in [`release.yml`](../.github/workflows/release.yml) run in the same Release chain after the npm stage succeeds, so they build the commit that passed every gate. Nothing needs to be done by hand.
+
+- **What they are.** [`build-sea.mjs`](../.github/scripts/build-sea.mjs) stages exactly the files `npm pack` would publish, installs the production dependencies from `package-lock.json`, and embeds them in a Node.js [single executable application](https://nodejs.org/api/single-executable-applications.html) (built with `node --build-sea`, so the build runner uses Node.js 26). On first run, [`sea-boot.cjs`](../.github/scripts/sea-boot.cjs) unpacks the embedded package into the user's cache directory (`~/.cache/offing`, `~/Library/Caches/offing`, or `%LOCALAPPDATA%\offing`; `OFFING_SEA_CACHE` overrides it) and runs the same CLI as the npm package. Scans still use no network.
+- **Gate.** Every binary runs `--help`, `capabilities`, and a scan of `tests/fixtures/smoke` (`.github/scripts/smoke.mjs`) before it is uploaded; on Linux and macOS this runs with `PATH=/usr/bin:/bin`, so a binary that secretly needs Node.js fails the release.
+- **What is attached.** The release gets `offing-<version>-<os>-<arch>` files (`.exe` on Windows), `SHA256SUMS`, a keyless Sigstore (cosign) `.sigstore.json` bundle for each of those files, and an SLSA `multiple.intoto.jsonl` provenance file. The same stage runs `slsa-verifier` against the uploaded bytes and fails the run if the provenance does not match; the public command is in [SLSA provenance](#slsa-provenance). Each binary also carries a GitHub build provenance attestation: `gh attestation verify offing-<version>-<os>-<arch> --repo velella-sh/offing`, or compare `sha256sum -c SHA256SUMS`. To check a Sigstore signature by hand:
+
+  ```bash
+  cosign verify-blob \
+    --bundle offing-<version>-<os>-<arch>.sigstore.json \
+    --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+    --certificate-identity-regexp '^https://github\.com/velella-sh/offing/\.github/workflows/release-publish-binaries\.yml@refs/tags/v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$' \
+    offing-<version>-<os>-<arch>
+  ```
+
+  Binaries from releases up to and including v0.7.2 were signed with older identities: the monolithic `https://github.com/velella-sh/offing/.github/workflows/release.yml@refs/heads/main`, and (after the stage split, while post-publish still ran via `workflow_run` on the default branch) `https://github.com/velella-sh/offing/.github/workflows/release-publish-binaries.yml@refs/heads/main`. Verify those with `--certificate-identity-regexp '^https://github\.com/velella-sh/offing/\.github/workflows/release\.yml@refs/heads/main$'` or `'^https://github\.com/velella-sh/offing/\.github/workflows/release-publish-binaries\.yml@refs/heads/main$'` respectively. v0.7.0, v0.6.1, and v0.6.0 were cut before signing existed and carry signatures added later by the backfill described below.
+
+  If no release exists for the tag yet, the job creates one; the following notes stage replaces its placeholder automatically as described in step 8.
+- **macOS.** The binaries are signed ad hoc, not notarized. Downloaded with `curl` or `gh release download` they run as they are; a browser download is quarantined, and `xattr -d com.apple.quarantine <file>` clears it.
+- **If a binary job fails.** The npm package is already published and is not affected. Fix the cause, then re-run the failed jobs of that same `Release` workflow run; `gh release upload --clobber` replaces files that were already attached.
+- **Trying it before a release.** From a built checkout with Node.js 25.5 or newer, `node .github/scripts/build-sea.mjs offing-test`, then `node .github/scripts/smoke.mjs tests/fixtures/smoke -- ./offing-test` (on macOS run `codesign --force --sign - offing-test` first). Use an official Node.js build; some distributions (Homebrew's, for one) are built without single-executable support.
+
+### SBOM
+
+Every release attaches `sbom.cdx.json`: a CycloneDX 1.5 software bill of materials for the npm package. The `sbom` stage in [`release.yml`](../.github/workflows/release.yml) generates it from the production dependency tree the package installs (`npm ls --omit=dev --all --json`), so development tooling is not listed. Before anything is signed, the same stage validates the document against the bundled CycloneDX 1.5 JSON schema and checks that it names this release, lists every runtime dependency, and matches the installed tree. It then signs the document keylessly with cosign and attaches it with its `.sigstore.json` bundle. Verify it with:
+
+```bash
+cosign verify-blob \
+  --bundle sbom.cdx.json.sigstore.json \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-identity-regexp '^https://github\.com/velella-sh/offing/\.github/workflows/release-sbom\.yml@refs/tags/v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$' \
+  sbom.cdx.json
+```
+
+A manual run with `dry_run` on generates and validates the SBOM and attaches nothing.
+
+### VEX statements
+
+Every release also attaches `vex.cdx.json`: a CycloneDX 1.5 VEX file that says which known dependency vulnerabilities do not affect Offing, with a reason for each. The statements are reviewed files in [`security/vex/`](../security/vex/README.md), one per advisory and package, each with a CycloneDX justification and a plain-words reason. The same stage that builds the SBOM turns them into the VEX file (`.github/scripts/release-vex.mjs`), keeps only the statements whose package is a component of that release's SBOM, links each to its component, validates the result against the CycloneDX 1.5 schema, and signs it with the same keyless identity as the SBOM. With no statements the file is valid and lists no vulnerabilities. Verify it like the SBOM, with `vex.cdx.json` and `vex.cdx.json.sigstore.json`. Add a statement when a dependency advisory does not affect Offing; fix the dependency when it does.
+
+### Signing a release that predates the signing stage
+
+Use this only for a release cut before the signing stage landed; a normal release signs itself. Run *Release backfill signatures* from Actions, enter the tags (for example `v0.7.0 v0.6.1`), and turn *dry run* off. The workflow downloads the assets already attached to those releases, signs those exact bytes with keyless Sigstore (cosign), verifies every signature, and uploads a `.sigstore.json` bundle next to each asset. It never rebuilds or replaces an asset.
+
+A backfilled signature proves that the release workflow vouched for the published bytes when the repair ran. It is **not** build provenance: there is no SLSA `multiple.intoto.jsonl`, and Scorecard scores that release 8 rather than 10. Say so in the release notes; do not present a backfilled release as built-and-signed. Prefer the next normal release whenever one is due.
+
+Verify a backfilled asset with the identity of the workflow at the ref it ran from. The v0.7.0, v0.6.1, and v0.6.0 backfill on 2026-11-06 ran from the pull-request branch that introduced the workflow:
+
+```bash
+cosign verify-blob \
+  --bundle offing-<version>-<os>-<arch>.sigstore.json \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-identity-regexp '^https://github\.com/velella-sh/offing/\.github/workflows/release-backfill-signatures\.yml@refs/heads/ci/2289-signed-releases$' \
+  offing-<version>-<os>-<arch>
+```
+
+Later backfills run from `main`; use the same command with `@refs/heads/main`.
+
+## Rule data
+
+Lifecycle rules come from [Ebb](https://github.com/velella-sh/ebb) through the `@velella/ebb` dependency, so every package release carries the
+rules of the Ebb version it locks. Between releases, rules reach users through Ebb's signed data releases, which
+`offing data update` downloads and verifies. Ebb publishes them; its [release guide](https://github.com/velella-sh/ebb/blob/main/docs/DATA.md#publishing-a-bundle)
+describes how. A new Ebb version reaches this repository as a dependency update, and the rules workflow runs every
+rule fixture against it.
+
+## Rolling back
+
+Decide by what has already been published, and prefer fixing forward.
+
+- **Nothing published yet** (the pull request or tag only): close the pull request, or delete the tag with `git push origin :refs/tags/vX.Y.Z` and `git tag -d vX.Y.Z`.
+- **Bad npm release**: do not rely on `npm unpublish`, which is restricted for packages that have users. Publish a fixed patch release, then mark the bad one with `npm deprecate offing@X.Y.Z "Use X.Y.Z+1: <reason>"`.
+- **Bad Action tag**: users pin the tag, so ship a fixed patch tag and point the README at it. If you must move a tag that was published only minutes ago, say so in the release notes.
+- **Bad plugin package**: revert the generated files through a pull request and release a patch version; withdraw a pending Codex submission through its portal.
+- **Bad rule**: revert or correct the rule in `registry/` and release a patch. If the rule is actively harmful (it reports something that is not deprecated), release first and discuss afterwards.
+
+After any rollback, add a line to `CHANGELOG.md` explaining what happened and which version replaces the bad one.
