@@ -28,6 +28,10 @@ Offing finds **end-of-life and deprecated** runtimes, packages, and GitHub Actio
 npx @velella/offing scan .
 ```
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/scan.gif" alt="Terminal recording: npx @velella/offing scan . lists the outdated runtime, package and GitHub Action in the demo project with file, line, severity and replacement">
+</p>
+
 ```text
 Offing: 1 finding
 github-actions.checkout.node20:.github/workflows/ci.yml:9 .github/workflows/ci.yml:9 high actions/checkout@v5 or later
@@ -51,6 +55,23 @@ Requirements: Node.js 22 or newer. Read this in: **English** · [فارسی](doc
 - **Fresh data, still offline.** Scans never touch the network. `data update` refreshes lifecycle rules from signed bundles when you ask, and refuses anything it cannot verify.
 - **Works where you work.** CLI, local MCP server, GitHub Action with SARIF for code scanning, and an Agent Skill. Setup for Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot and Kilo Code is one command: `setup`.
 - **Private by design.** No account needed, and no repository upload.
+
+## See it run
+
+<table>
+<tr>
+<td width="50%"><b>Check a dependency before you add it</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/check.gif" alt="Terminal recording: offing check pkg:npm/request@2.88.2 reports it as deprecated with the replacement and source"></td>
+<td width="50%"><b>Evidence behind one finding</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/explain.gif" alt="Terminal recording: offing explain shows the rule, location, replacement, deadline and sources for one finding"></td>
+</tr>
+<tr>
+<td width="50%"><b>Adopt on day one with a baseline</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/baseline.gif" alt="Terminal recording: offing baseline records accepted findings and scan --baseline then reports zero new ones"></td>
+<td width="50%"><b>Preview a fix as a diff</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/fix.gif" alt="Terminal recording: offing fix --dry-run prints the proposed diff without writing files"></td>
+</tr>
+<tr>
+<td width="50%"><b>See what is ending next</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/forecast.gif" alt="Terminal recording: offing forecast --timeline shows a twelve-month timeline of lifecycle events"></td>
+<td width="50%"><b>Teach your coding agents</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/setup.gif" alt="Terminal recording: offing setup --dry-run previews the instructions added for Claude Code"></td>
+</tr>
+</table>
 
 ## What it covers
 

@@ -88,3 +88,9 @@ node --test dist/tests/examples-gallery.test.js
 ```
 
 The test scans every example twice and compares the result to `expected.json` as a whole, so a rule or detector change that alters an example fails CI until the example and its expected output are reviewed together.
+
+## Recordings
+
+The recordings in the README are generated from `demos/*.tape` by the Demos workflow. This one looks up a runtime without scanning anything:
+
+![Terminal recording: offing lookup node 18 reports Node.js 18 as end-of-life with the replacement and source](assets/demos/lookup.gif)
