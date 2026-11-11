@@ -38,7 +38,7 @@ test("every page it links exists, is named once, and is a page of this site", as
   assert.ok(pages.length >= 12);
   assert.equal(new Set(pages.map((page) => page.file)).size, pages.length, "no page is listed twice");
   for (const page of pages) {
-    assert.ok(page.url.startsWith(SITE) && page.url.endsWith(".html"), page.url);
+    assert.ok(page.url.startsWith(SITE) && (page.url.endsWith("/") || page.url.endsWith(".html")), page.url);
     await access(resolve("docs", page.file));
   }
   assert.ok(index.includes(`${SITE}llms-full.txt`), "the index points at the full file");
@@ -50,7 +50,7 @@ test("llms-full.txt is buildable from the linked pages (CI fails when it is not)
   await execute(process.execPath, [resolve("dist/tools/build-llms-full.js"), "--check"]);
 });
 
-test("the full file has every linked page, in order, without Jekyll front matter", async () => {
+test("the full file has every linked page, in order, without front matter", async () => {
   const full = await renderLlmsFull();
   assert.match(full, /^# Offing: full documentation\n\n> /);
   const sources = [...full.matchAll(/^Source: (\S+)$/gm)].map((match) => match[1]);

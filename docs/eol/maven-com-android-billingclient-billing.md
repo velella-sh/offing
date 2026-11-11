@@ -1,6 +1,7 @@
 ---
 title: "Is Google Play Billing end of life? — versions, dates, sources"
 description: "Google Play Billing has a scheduled end of life. Google Play Billing Library 9 reaches its new-app and update deadline on 2028-08-31."
+permalink: "/eol/maven-com-android-billingclient-billing.html"
 canonical_url: "https://velella.sh/offing/eol/maven-com-android-billingclient-billing.html"
 ---
 

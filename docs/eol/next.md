@@ -1,6 +1,7 @@
 ---
 title: "Is Next.js end of life? — versions, dates, sources"
 description: "Next.js has releases that are out of support. Next.js 15 is out of support as of 2026-10-21. This page lists 4 reviewed lifecycle rules for pkg:npm/next, with the status, date, and source for each."
+permalink: "/eol/next.html"
 canonical_url: "https://velella.sh/offing/eol/next.html"
 ---
 

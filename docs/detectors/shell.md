@@ -1,4 +1,3 @@
-{% raw %}
 # Shell and PowerShell
 
 The `shell` detector reports PowerShell releases that are past end of support, as declared by the minimum version a script, module manifest, or CI container asks for. It is **supported**: it is scored on the [public corpus](../VALIDATION.md) and held to the corpus precision and recall floors. Its lifecycle rules are in `registry/shell.json` and ship in the [data bundle](../DATA.md).
@@ -50,4 +49,3 @@ Each finding carries its rule's sources, replacement, migration steps, and verif
 ## Validation
 
 The corpus holds 43 pinned shell ecosystem repositories: 29 with reviewed shell findings and nine with none. Across every ecosystem the corpus expects 102 `shell` findings. Of the 43 shell entries, 39 were selected blind (91%). Every expected finding was checked by reading its line at the pinned commit against Microsoft's [PowerShell support lifecycle](https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle), not against Offing's output. Method and selection rules are in [Validation](../VALIDATION.md). Precision on this corpus does not establish coverage of the unsupported forms above.
-{% endraw %}

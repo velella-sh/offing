@@ -33,29 +33,30 @@ jobs:
         # Not committed: the page keeps a placeholder so corpus changes never conflict on its counts.
         run: node dist/tools/coverage-matrix.js --site
       - name: Build docs/llms-full.txt for the site
-        # Not committed: generate here so Jekyll copies it into _site at the public URL.
+        # Not committed: generate here so Mizzen copies it into _site at the public URL.
         run: node dist/tools/build-llms-full.js
       - name: Build docs/sitemap.xml and docs/rules/index.md for the site
         # Not committed: generate here so Search Console keeps /sitemap.xml without PR churn.
         run: node dist/tools/build-reference-pages.js --site
       - name: Build docs/dashboard/data.json for the site
-        # Not committed: generate here so Jekyll copies it into _site at the public URL.
+        # Not committed: generate here so Mizzen copies it into _site at the public URL.
         run: node dist/tools/build-dashboard-data.js --today run-date
       - name: Build docs/api/v1 for the site
-        # Not committed: generate here so Jekyll copies it into _site at the public URL.
+        # Not committed: generate here so Mizzen copies it into _site at the public URL.
         run: node dist/tools/build-data-api.js
-      - uses: ruby/setup-ruby@7f797815d8adceb1c412e7abefdd1ab4abc47a5f # v1.335.0
-        with:
-          ruby-version: "3.3"
-          bundler-cache: true
-          working-directory: docs
+      - name: Install the site tools
+        # Mizzen builds the site and Lateen is its theme; both are pinned so a build never changes under us.
+        run: |
+          mkdir "$RUNNER_TEMP/site-tools"
+          cd "$RUNNER_TEMP/site-tools"
+          npm init -y >/dev/null
+          npm install --no-audit --no-fund --save-exact @velella/mizzen@0.1.0 @velella/lateen@0.1.0
+      - name: Check the documentation site
+        # Errors fail the job; the warnings are links to repository files outside docs/, which GitHub resolves.
+        run: $RUNNER_TEMP/site-tools/node_modules/.bin/mizzen check docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen"
       - name: Build the documentation site
-        working-directory: docs
-        env:
-          JEKYLL_ENV: production
-          PAGES_REPO_NWO: ${{ github.repository }}
-        # Keep the deployed base path (/offing) so internal links match production.
-        run: bundle exec jekyll build
+        # Keep the deployed base path (/offing, set in docs/mizzen.yml) so internal links match production.
+        run: $RUNNER_TEMP/site-tools/node_modules/.bin/mizzen build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out docs/_site
       - name: Upload the GitHub Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:

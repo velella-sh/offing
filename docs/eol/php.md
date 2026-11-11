@@ -1,6 +1,7 @@
 ---
 title: "Is PHP end of life? — versions, dates, sources"
 description: "Some PHP releases are end of life. PHP 8.1 is end-of-life as of 2025-12-31. This page lists 7 reviewed lifecycle rules for pkg:generic/php, with the status, date, and source for each."
+permalink: "/eol/php.html"
 canonical_url: "https://velella.sh/offing/eol/php.html"
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "Is Node.js Docker image end of life? — versions, dates, sources"
 description: "Some Node.js Docker image releases are end of life. Node.js image release lines 21 and older are end-of-life as of 2026-04-30."
+permalink: "/eol/docker-node.html"
 canonical_url: "https://velella.sh/offing/eol/docker-node.html"
 ---
 

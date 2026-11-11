@@ -1,6 +1,7 @@
 ---
 title: "Is Azure Kubernetes Service end of life? — versions, dates, sources"
 description: "Some Azure Kubernetes Service releases are end of life. AKS 1.30 is past long-term support as of 2026-07-31."
+permalink: "/eol/azure-kubernetes-service.html"
 canonical_url: "https://velella.sh/offing/eol/azure-kubernetes-service.html"
 ---
 

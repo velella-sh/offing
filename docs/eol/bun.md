@@ -1,6 +1,7 @@
 ---
 title: "Is Bun end of life? — versions, dates, sources"
 description: "Some Bun releases are end of life. Bun 1.0.x is end-of-life as of 2024-04-01. This page lists 2 reviewed lifecycle rules for pkg:generic/bun, with the status, date, and source for each."
+permalink: "/eol/bun.html"
 canonical_url: "https://velella.sh/offing/eol/bun.html"
 ---
 

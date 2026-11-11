@@ -1,6 +1,7 @@
 ---
 title: "Is Redis end of life? — versions, dates, sources"
 description: "Some Redis releases are end of life. Redis 7.0 is end-of-life as of 2024-07-29. This page lists 3 reviewed lifecycle rules for pkg:generic/redis, with the status, date, and source for each."
+permalink: "/eol/redis.html"
 canonical_url: "https://velella.sh/offing/eol/redis.html"
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "Is MySQL Docker image end of life? — versions, dates, sources"
 description: "Some MySQL Docker image releases are end of life. MySQL image release lines 8.0 and older are past end-of-life as of 2026-04-21."
+permalink: "/eol/docker-mysql.html"
 canonical_url: "https://velella.sh/offing/eol/docker-mysql.html"
 ---
 

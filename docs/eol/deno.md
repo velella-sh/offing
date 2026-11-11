@@ -1,6 +1,7 @@
 ---
 title: "Is Deno end of life? — versions, dates, sources"
 description: "Some Deno releases are end of life. Deno 1.x is end-of-life as of 2024-10-09. This page lists 2 reviewed lifecycle rules for pkg:generic/deno, with the status, date, and source for each."
+permalink: "/eol/deno.html"
 canonical_url: "https://velella.sh/offing/eol/deno.html"
 ---
 

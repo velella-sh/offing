@@ -12,4 +12,4 @@ From the Offing repository, run:
 codex plugin add offing@offing-codex
 ```
 
-Node.js 22 or newer is required. See the [Codex installation and management guide](https://velella.sh/offing/CODEX_PLUGIN.html) for installation, updates, validation, privacy boundaries, and removal.
+Node.js 22 or newer is required. See the [Codex installation and management guide](https://velella.sh/offing/CODEX_PLUGIN/) for installation, updates, validation, privacy boundaries, and removal.

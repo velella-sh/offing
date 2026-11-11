@@ -1,6 +1,7 @@
 ---
 title: "Is React Native end of life? — versions, dates, sources"
 description: "React Native has releases that are out of support. React Native 0.77 through 0.84 are unsupported. The source gives no day."
+permalink: "/eol/react-native.html"
 canonical_url: "https://velella.sh/offing/eol/react-native.html"
 ---
 

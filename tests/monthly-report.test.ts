@@ -375,7 +375,7 @@ function sampleReportData(): MonthlyReportData {
         { label: "Docs page views", value: 250, previous: 100 },
       ],
       landingPages: [
-        { page: "https://velella.sh/offing/RULES.html", clicks: 42, impressions: 530 },
+        { page: "https://velella.sh/offing/RULES/", clicks: 42, impressions: 530 },
         { page: "https://velella.sh/offing/eol/", clicks: 18, impressions: 410 },
       ],
     },
@@ -498,7 +498,7 @@ test("generateMonthlyReport creates a complete markdown document with all sectio
   assert.match(report, /^### Top landing pages$/m);
   assert.match(report, /Entered by the maintainer from Search Console's Performance report for 2026-10/);
   assert.match(report, /\| Landing page \| Clicks \| Impressions \|/);
-  assert.match(report, /\| https:\/\/velella\.sh\/offing\/RULES\.html \| 42 \| 530 \|/);
+  assert.match(report, /\| https:\/\/velella\.sh\/offing\/RULES\/ \| 42 \| 530 \|/);
   assert.match(report, /\| https:\/\/velella\.sh\/offing\/eol\/ \| 18 \| 410 \|/);
   assert.match(report, /\[docs\/ADOPTION\.md\]\(docs\/ADOPTION\.md\)/);
   assert.match(report, /\[`metrics\/adoption\/2026-10-28\.json`\]\(metrics\/adoption\/2026-10-28\.json\)/);
@@ -593,7 +593,7 @@ test("collectAdoptionMetrics reads current and previous month snapshots", async 
           status: "ok",
           value: 2,
           pages: [
-            { page: "https://velella.sh/offing/RULES.html", clicks: 42, impressions: 530 },
+            { page: "https://velella.sh/offing/RULES/", clicks: 42, impressions: 530 },
             { page: "https://velella.sh/offing/", clicks: 18, impressions: 410 },
           ],
           source: "https://search.google.com/search-console/performance/search-analytics",
@@ -623,7 +623,7 @@ test("collectAdoptionMetrics reads current and previous month snapshots", async 
     assert.equal(metrics.channels.find((c) => c.label === "npm weekly downloads")?.previous, 100);
     assert.equal(metrics.channels.find((c) => c.label === "skills.sh installs")?.previous, 5);
     assert.deepEqual(metrics.landingPages, [
-      { page: "https://velella.sh/offing/RULES.html", clicks: 42, impressions: 530 },
+      { page: "https://velella.sh/offing/RULES/", clicks: 42, impressions: 530 },
       { page: "https://velella.sh/offing/", clicks: 18, impressions: 410 },
     ]);
   } finally {

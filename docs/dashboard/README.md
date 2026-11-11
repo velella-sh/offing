@@ -1,10 +1,3 @@
----
-title: Accuracy dashboard
-permalink: /dashboard/README.html
-redirect_to: /dashboard/
-sitemap: false
----
-
 # Accuracy dashboard
 
 The published site serves this path as a redirect to [`/dashboard/`](https://velella.sh/offing/dashboard/). The notes below stay here for people browsing the repository.

@@ -1,6 +1,7 @@
 ---
 title: "Is Traefik end of life? — versions, dates, sources"
 description: "Some Traefik releases are end of life. Traefik image release lines 3.6 and older are end-of-life as of 2026-08-16."
+permalink: "/eol/docker-traefik.html"
 canonical_url: "https://velella.sh/offing/eol/docker-traefik.html"
 ---
 

@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { after, test } from "node:test";
 import { promisify } from "node:util";
+import { parse } from "yaml";
 
 import { loadRegistries, renderSitemap } from "../tools/build-reference-pages.js";
 import { renderLlmsFull } from "../tools/build-llms-full.js";
@@ -75,10 +76,13 @@ function sitemap(urls: readonly string[]): string {
 
 test("docs paths map to the public URLs GitHub Pages serves", () => {
   assert.equal(urlForDocsPath("index.md"), `${SITE_URL}/`);
-  assert.equal(urlForDocsPath("MCP.md"), `${SITE_URL}/MCP.html`);
+  assert.equal(urlForDocsPath("MCP.md"), `${SITE_URL}/MCP/`);
+  assert.equal(urlForDocsPath("decisions/0001-x.md"), `${SITE_URL}/decisions/0001-x/`);
+  assert.equal(urlForDocsPath("i18n/fa/README.md"), `${SITE_URL}/i18n/fa/`);
+  assert.equal(urlForDocsPath("MCP.md", "/old/place.html"), `${SITE_URL}/old/place.html`);
   assert.equal(urlForDocsPath("rules/index.md"), `${SITE_URL}/rules/`);
   assert.equal(
-    urlForDocsPath("rules/npm.package.request.deprecated.md"),
+    urlForDocsPath("rules/npm.package.request.deprecated.md", "/rules/npm.package.request.deprecated.html"),
     `${SITE_URL}/rules/npm.package.request.deprecated.html`,
   );
   assert.equal(urlForDocsPath("dashboard/index.html"), `${SITE_URL}/dashboard/`);
@@ -89,8 +93,14 @@ test("docs paths map to the public URLs GitHub Pages serves", () => {
 
 test("a public URL resolves back to the docs file that publishes it", () => {
   assert.deepEqual(docsPathsForUrl(`${SITE_URL}/`), ["index.md", "index.html"]);
-  assert.deepEqual(docsPathsForUrl(`${SITE_URL}/rules/`), ["rules/index.md", "rules/index.html"]);
-  assert.deepEqual(docsPathsForUrl(`${SITE_URL}/MCP.html`), ["MCP.md", "MCP.html"]);
+  assert.deepEqual(docsPathsForUrl(`${SITE_URL}/rules/`), [
+    "rules/index.md",
+    "rules/README.md",
+    "rules/index.html",
+    "rules.md",
+  ]);
+  assert.deepEqual(docsPathsForUrl(`${SITE_URL}/MCP/`), ["MCP/index.md", "MCP/README.md", "MCP/index.html", "MCP.md"]);
+  assert.deepEqual(docsPathsForUrl(`${SITE_URL}/rules/x.html`), ["rules/x.md", "rules/x.html"]);
   assert.deepEqual(docsPathsForUrl(`${SITE_URL}/llms.txt`), ["llms.txt"]);
   assert.deepEqual(docsPathsForUrl("https://example.com/elsewhere"), []);
 });
@@ -112,7 +122,7 @@ test("the inventory covers the sitemap and every docs page, and every URL exists
   assert.deepEqual(await missingFromSite(urls), []);
   assert.ok(urls.includes(`${SITE_URL}/`));
   assert.ok(urls.includes(`${SITE_URL}/llms.txt`));
-  assert.ok(urls.includes(`${SITE_URL}/MCP.html`));
+  assert.ok(urls.includes(`${SITE_URL}/MCP/`));
   assert.ok(urls.includes(`${SITE_URL}/sitemap.xml`));
   assert.equal(new Set(urls).size, urls.length);
   assert.deepEqual(
@@ -170,7 +180,7 @@ test("adding a docs page needs no baseline edit", async () => {
 
   await writeFile(join(root, "docs", "new-page.md"), "# New\n");
   const current = await collectSiteUrls(root);
-  assert.ok(current.includes(`${SITE_URL}/new-page.html`));
+  assert.ok(current.includes(`${SITE_URL}/new-page/`));
 
   const check = await runTool(root, ["--check"]);
   assert.equal(check.code, 0, check.stderr);
@@ -191,8 +201,8 @@ test("removing a baseline URL without a redirect fails, and a redirect fixes it"
   await writeFile(join(root, "docs", "sitemap.xml"), sitemap([`${SITE_URL}/`]));
 
   const baseline = await collectSiteUrls(root);
-  assert.ok(baseline.includes(`${SITE_URL}/old.html`));
-  assert.ok(baseline.includes(`${SITE_URL}/gone.html`));
+  assert.ok(baseline.includes(`${SITE_URL}/old/`));
+  assert.ok(baseline.includes(`${SITE_URL}/gone/`));
   const baselineText = await writeBaseline(root, baseline);
 
   await rm(join(root, "docs", "old.md"));
@@ -200,30 +210,24 @@ test("removing a baseline URL without a redirect fails, and a redirect fixes it"
 
   const lost = await runTool(root, ["--check"]);
   assert.equal(lost.code, 1);
-  assert.match(lost.stderr, /URL disappeared without a redirect: .*\/old\.html/);
-  assert.match(lost.stderr, /URL disappeared without a redirect: .*\/gone\.html/);
-  assert.match(lost.stderr, /redirect_from or a stub in docs\/redirects\//);
+  assert.match(lost.stderr, /URL disappeared without a redirect: .*\/old\//);
+  assert.match(lost.stderr, /URL disappeared without a redirect: .*\/gone\//);
+  assert.match(lost.stderr, /"redirects" map in docs\/mizzen\.yml/);
   assert.match(lost.stderr, /--update-baseline/);
 
   const refused = await runTool(root, ["--update-baseline"]);
   assert.equal(refused.code, 1);
-  assert.match(refused.stderr, /refusing to drop .*\/old\.html without a redirect/);
+  assert.match(refused.stderr, /refusing to drop .*\/old\/ without a redirect/);
   assert.equal(await readFile(join(root, BASELINE_PATH), "utf8"), baselineText);
 
-  // A stub in docs/redirects/ covers one URL; redirect_from on a surviving page covers the other.
-  await mkdir(join(root, "docs", "redirects"), { recursive: true });
-  await writeFile(
-    join(root, "docs", "redirects", "old.md"),
-    "---\npermalink: /old.html\nredirect_to: /\nsitemap: false\n---\n",
-  );
-  await writeFile(join(root, "docs", "index.md"), "---\nredirect_from:\n  - /gone.html\n---\n# Home\n");
+  // The `redirects` map of docs/mizzen.yml covers a retired address.
+  await writeFile(join(root, "docs", "mizzen.yml"), "title: Test\nredirects:\n  /old/: /\n  /gone/: /\n");
 
   const redirected = await redirectedUrls(root);
-  assert.ok(redirected.includes(`${SITE_URL}/old.html`));
-  assert.ok(redirected.includes(`${SITE_URL}/gone.html`));
-  // Redirect stubs are not new pages, and a page with its own permalink is not a redirect.
+  assert.deepEqual(redirected, [`${SITE_URL}/gone/`, `${SITE_URL}/old/`]);
+  // A redirect is not a new page.
   const current = await collectSiteUrls(root);
-  assert.ok(!current.includes(`${SITE_URL}/old.html`));
+  assert.ok(!current.includes(`${SITE_URL}/old/`));
   assert.ok(!redirected.includes(`${SITE_URL}/`));
 
   const fixed = await runTool(root, ["--check"]);
@@ -252,33 +256,23 @@ test("--check fails when a sitemap URL has no file under docs/", async () => {
   assert.equal((await runTool(root, ["--check"])).code, 0);
 });
 
-test("README inventory URLs that jekyll-readme-index drops keep a redirect", async () => {
-  // jekyll-readme-index publishes these READMEs as the directory index (or
-  // leaves a sibling index.html in place), so …/README.html would 404 without
-  // jekyll-redirect-from. Use redirect_to stubs — redirect_from on the README
-  // itself loops when readme-index rewrites the permalink to the directory.
-  const redirects: ReadonlyArray<{ path: string; permalink: string; to: string }> = [
-    { path: "docs/dashboard/README.md", permalink: "/dashboard/README.html", to: "/dashboard/" },
-    { path: "docs/redirects/rfcs-readme.md", permalink: "/rfcs/README.html", to: "/rfcs/" },
-    { path: "docs/redirects/i18n-fa-readme.md", permalink: "/i18n/fa/README.html", to: "/i18n/fa/" },
-  ];
-  for (const entry of redirects) {
-    const text = await readFile(resolve(entry.path), "utf8");
-    const frontMatter = text.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? "";
-    assert.ok(frontMatter, `${entry.path} needs YAML front matter for the redirect`);
-    assert.match(frontMatter, new RegExp(`^redirect_to:\\s*${entry.to.replaceAll("/", "\\/")}\\s*$`, "m"), entry.path);
-    assert.match(
-      frontMatter,
-      new RegExp(`^permalink:\\s*${entry.permalink.replaceAll("/", "\\/").replaceAll(".", "\\.")}\\s*$`, "m"),
-      entry.path,
-    );
+test("addresses the site served before Mizzen keep a redirect to a page that exists", async () => {
+  const redirected = await redirectedUrls();
+  for (const retired of [
+    `${SITE_URL}/MCP.html`,
+    `${SITE_URL}/dashboard/README.html`,
+    `${SITE_URL}/rfcs/README.html`,
+    `${SITE_URL}/i18n/fa/README.html`,
+  ]) {
+    assert.ok(redirected.includes(retired), `${retired} needs a redirect in docs/mizzen.yml`);
   }
 
-  const redirected = await redirectedUrls();
-  for (const entry of redirects) assert.ok(redirected.includes(`${SITE_URL}${entry.permalink}`), entry.path);
-
-  const config = await readFile(resolve("docs/_config.yml"), "utf8");
-  assert.match(config, /^\s*-\s*jekyll-redirect-from\s*$/m);
+  const config = parse(await readFile(resolve("docs/mizzen.yml"), "utf8")) as { redirects: Record<string, string> };
+  const urls = await collectSiteUrls();
+  for (const [from, to] of Object.entries(config.redirects)) {
+    assert.ok(!urls.includes(`${SITE_URL}${from}`), `${from} is redirected but is also a page`);
+    assert.ok(urls.includes(`${SITE_URL}${to}`), `${from} redirects to ${to}, which is not a published page`);
+  }
 });
 
 test("the machine files stay static and served at their old root URLs", async () => {
@@ -297,7 +291,7 @@ test("the machine files stay static and served at their old root URLs", async ()
     assert.doesNotMatch(
       text,
       /^---\r?\n/,
-      `docs/${file} must stay a static file: front matter would make Jekyll render it through a layout instead of serving it as is`,
+      `docs/${file} must stay a static file: front matter would make Mizzen render it through a layout instead of serving it as is`,
     );
     if (buildTime.has(file)) assert.ok(text.length > 0, `${file} must be buildable`);
   }

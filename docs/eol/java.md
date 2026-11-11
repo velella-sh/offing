@@ -1,6 +1,7 @@
 ---
 title: "Is Java end of life? — versions, dates, sources"
 description: "Java has releases that are out of support. Java 12 to 16 are no longer supported. The source gives no day."
+permalink: "/eol/java.html"
 canonical_url: "https://velella.sh/offing/eol/java.html"
 ---
 

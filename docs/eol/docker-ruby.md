@@ -1,6 +1,7 @@
 ---
 title: "Is Ruby Docker image end of life? — versions, dates, sources"
 description: "Some Ruby Docker image releases are end of life. Ruby image release lines 3.2 and older are end-of-life as of 2026-04-01."
+permalink: "/eol/docker-ruby.html"
 canonical_url: "https://velella.sh/offing/eol/docker-ruby.html"
 ---
 

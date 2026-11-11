@@ -1,6 +1,7 @@
 ---
 title: "Is Node.js end of life? — versions, dates, sources"
 description: "Some Node.js releases are end of life. Node.js 25 is end-of-life as of 2026-06-01. This page lists 80 reviewed lifecycle rules for pkg:generic/nodejs, with the status, date, and source for each."
+permalink: "/eol/nodejs.html"
 canonical_url: "https://velella.sh/offing/eol/nodejs.html"
 ---
 

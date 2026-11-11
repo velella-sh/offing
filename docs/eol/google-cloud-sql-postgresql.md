@@ -1,6 +1,7 @@
 ---
 title: "Is Cloud SQL for PostgreSQL end of life? — versions, dates, sources"
 description: "Cloud SQL for PostgreSQL has releases that are out of support. Cloud SQL for PostgreSQL 13 is in extended support as of 2026-02-01."
+permalink: "/eol/google-cloud-sql-postgresql.html"
 canonical_url: "https://velella.sh/offing/eol/google-cloud-sql-postgresql.html"
 ---
 

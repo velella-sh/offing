@@ -1,6 +1,7 @@
 ---
 title: "Is PostgreSQL Docker image end of life? — versions, dates, sources"
 description: "Some PostgreSQL Docker image releases are end of life. PostgreSQL image major versions 13 and older are end-of-life as of 2025-11-13."
+permalink: "/eol/docker-postgres.html"
 canonical_url: "https://velella.sh/offing/eol/docker-postgres.html"
 ---
 

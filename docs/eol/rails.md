@@ -1,6 +1,7 @@
 ---
 title: "Is Rails end of life? — versions, dates, sources"
 description: "Some Rails releases are end of life. Rails 7.2 is end-of-life as of 2026-08-09. This page lists 2 reviewed lifecycle rules for pkg:gem/rails, with the status, date, and source for each."
+permalink: "/eol/rails.html"
 canonical_url: "https://velella.sh/offing/eol/rails.html"
 ---
 

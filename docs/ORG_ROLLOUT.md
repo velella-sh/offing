@@ -1,4 +1,3 @@
-{% raw %}
 # Organization rollout
 
 This guide takes one person from an unconfigured organization to a weekly lifecycle report for every repository in it. It is written to be followed in order:
@@ -498,4 +497,3 @@ Artifacts are retained for 14 days. Download or roll up a run's reports before t
 | `offing baseline`, `offing rollup` | Your machine or CI | None. Local files only. |
 
 Only `contents: read` is needed for the scans. Add `actions: read` for the digest. The dedicated token is used only by the list job; it is never passed to a scan. Offing does not send repository contents to an Offing service, and the report can contain repository-relative paths, matched excerpts, dependency versions, and lifecycle evidence, so apply normal artifact access controls.
-{% endraw %}

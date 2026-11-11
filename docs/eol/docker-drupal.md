@@ -1,6 +1,7 @@
 ---
 title: "Is Drupal end of life? — versions, dates, sources"
 description: "Some Drupal releases are end of life. Drupal image release lines 10.5 and older are end-of-life as of 2026-07-01."
+permalink: "/eol/docker-drupal.html"
 canonical_url: "https://velella.sh/offing/eol/docker-drupal.html"
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "Is Vue end of life? — versions, dates, sources"
 description: "Some Vue releases are end of life. Vue 2 is end-of-life as of 2023-12-31. This page lists 1 reviewed lifecycle rule for pkg:npm/vue, with the status, date, and source for each."
+permalink: "/eol/vue.html"
 canonical_url: "https://velella.sh/offing/eol/vue.html"
 ---
 

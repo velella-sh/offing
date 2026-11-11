@@ -1,6 +1,7 @@
 ---
 title: "Is Erlang end of life? — versions, dates, sources"
 description: "Some Erlang releases are end of life. Erlang/OTP 26 no longer receives security updates as of 2026-05-13."
+permalink: "/eol/erlang.html"
 canonical_url: "https://velella.sh/offing/eol/erlang.html"
 ---
 

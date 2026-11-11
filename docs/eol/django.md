@@ -1,6 +1,7 @@
 ---
 title: "Is Django end of life? — versions, dates, sources"
 description: "Some Django releases are end of life. Django 4.2 LTS is end-of-life as of 2026-04-07. This page lists 20 reviewed lifecycle rules for pkg:pypi/django, with the status, date, and source for each."
+permalink: "/eol/django.html"
 canonical_url: "https://velella.sh/offing/eol/django.html"
 ---
 

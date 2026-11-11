@@ -1,6 +1,7 @@
 ---
 title: "Is Ubuntu end of life? — versions, dates, sources"
 description: "Some Ubuntu releases are end of life. Ubuntu image release lines 20.04 and older are past standard support end-of-life as of 2025-05-31."
+permalink: "/eol/docker-ubuntu.html"
 canonical_url: "https://velella.sh/offing/eol/docker-ubuntu.html"
 ---
 

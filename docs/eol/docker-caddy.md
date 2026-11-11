@@ -1,6 +1,7 @@
 ---
 title: "Is Caddy end of life? — versions, dates, sources"
 description: "Some Caddy releases are end of life. Caddy image release lines 1 and older are end-of-life as of 2020-07-01."
+permalink: "/eol/docker-caddy.html"
 canonical_url: "https://velella.sh/offing/eol/docker-caddy.html"
 ---
 

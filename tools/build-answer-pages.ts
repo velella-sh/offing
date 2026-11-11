@@ -405,6 +405,7 @@ export function renderAnswerPage(product: AnswerProduct): string {
     "---",
     `title: ${yaml(pageTitle(product))}`,
     `description: ${yaml(shorten(plainAnswer(product)))}`,
+    `permalink: ${yaml(`/eol/${product.slug}.html`)}`,
     `canonical_url: ${yaml(answerUrl(product.slug))}`,
     "---",
     "",

@@ -68,10 +68,10 @@ Trust rules that apply to every change:
 |---|---|
 | `plugins/claude/`, `plugins/codex/`, `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json` | `npm run build:plugins` (source: `skills/`) |
 | `dist/action/index.js` | `npm run build:action` (not committed on `main`; the Release workflow builds it onto the `release/<tag>` branch that release tags point at) |
-| `docs/llms-full.txt` | `npm run build:llms` (source: the pages linked from `docs/llms.txt`; gitignored — the Pages workflow builds it before Jekyll; no pull request commits it) |
-| `docs/sitemap.xml`, `docs/rules/index.md` | `npm run build:reference` / `node dist/tools/build-reference-pages.js --site` (source: `registry/*.json`; gitignored — Pages builds them before Jekyll; Search Console URL unchanged) |
-| `docs/dashboard/data.json` | `npm run build:dashboard` (source: `benchmarks/thresholds.json` and `benchmarks/public-repositories/`; gitignored — the Pages workflow builds it before Jekyll; no pull request commits it) |
-| `docs/api/v1/` | `npm run build:data-api` (source: `registry/*.json`; gitignored — the Pages workflow builds it before Jekyll; no pull request commits it) |
+| `docs/llms-full.txt` | `npm run build:llms` (source: the pages linked from `docs/llms.txt`; gitignored — the Pages workflow builds it before Mizzen; no pull request commits it) |
+| `docs/sitemap.xml`, `docs/rules/index.md` | `npm run build:reference` / `node dist/tools/build-reference-pages.js --site` (source: `registry/*.json`; gitignored — Pages builds them before Mizzen; Search Console URL unchanged) |
+| `docs/dashboard/data.json` | `npm run build:dashboard` (source: `benchmarks/thresholds.json` and `benchmarks/public-repositories/`; gitignored — the Pages workflow builds it before Mizzen; no pull request commits it) |
+| `docs/api/v1/` | `npm run build:data-api` (source: `registry/*.json`; gitignored — the Pages workflow builds it before Mizzen; no pull request commits it) |
 | `docs/rules/` (per-rule pages) | `npm run build:reference` (source: `registry/*.json`) |
 | `docs/assets/og/` | `npm run build:og-images` (source: `registry/*.json`, brand social-preview template) |
 | `docs/eol/` | `npm run build:answer-pages` (source: `registry/*.json`) |

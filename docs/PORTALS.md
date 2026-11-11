@@ -1,4 +1,3 @@
-{% raw %}
 # Developer portals
 
 Platform teams that already run Backstage, Grafana, Port, or Cortex can show Offing lifecycle risk next to the rest of their service catalog. Every path starts from the same offline export; only the step that publishes or pushes the catalog talks to the network. Scans themselves never leave the machine.
@@ -202,4 +201,3 @@ node integrations/cortex/map.mjs integrations/cortex/sample-data/portal-export.j
 | Port / Cortex push | CI calls the Port or Cortex API with the mapped payload |
 
 Offing does not send repository contents to an Offing service. The export carries repository-relative paths, severity counts, optional deadlines, and report links — apply the same access controls you use for scan report artifacts.
-{% endraw %}

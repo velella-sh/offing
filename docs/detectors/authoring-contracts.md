@@ -2,7 +2,6 @@
 title: Detector contracts
 ---
 
-{% raw %}
 # Detector contracts
 
 The contracts around a detector: the files it declares it reads, the registry envelope it validates, and the source-usage helper it can call. The authoring guide starts at [Detector authoring](../DETECTORS.md).
@@ -115,4 +114,3 @@ const analyses = await analyzeSourceUsage(root, contracts);
 
 Import and call matchers resolve common aliases in JavaScript, TypeScript, and Python. Go supports import and call matchers by import path. Java and Kotlin support import matchers only (`language: "java"` for `.java` files and `"kotlin"` for `.kt` files): `module` is a package or class name, an import of it or of anything below it matches (`import static` and wildcard imports included), and calls through the imported names are not mapped. Ruby supports import and call matchers (`language: "ruby"` for `.rb`, `.rake`, and `.ru` files): `module` is a require path, a literal `require`, `load`, `gem`, or `autoload` of that path (or a path under it) is an import, and a call target is a qualified call such as `JSON.parse(` (parentheses required). An assignment `Parser = JSON` makes `Parser.parse(` the same call. A dynamic `require`/`load`/`gem`/`autoload` argument is reported as unclassified instead of being guessed; `require_relative` is not. Configuration-key matchers support Python settings plus JSON, YAML, TOML, and INI-style files, and can optionally require a value fragment. Results include exact locations, excerpts, and a deterministic `none`, `low`, `medium`, or `high` migration-impact estimate. Keep matchers narrow: a lifecycle finding may safely have zero source usages, but an ambiguous match should not be reported as evidence.
 
-{% endraw %}

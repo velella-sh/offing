@@ -1,6 +1,7 @@
 ---
 title: "Is iOS end of life? — versions, dates, sources"
 description: "iOS has releases that are out of support. iOS and iPadOS app targets below iOS 13 are not accepted for App Store uploads as of 2026-09-09."
+permalink: "/eol/ios.html"
 canonical_url: "https://velella.sh/offing/eol/ios.html"
 ---
 

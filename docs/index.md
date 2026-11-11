@@ -100,7 +100,7 @@ Found 5 lifecycle risks. The most urgent:
   "url": "https://velella.sh/offing/",
   "downloadUrl": "https://www.npmjs.com/package/@velella/offing",
   "installUrl": "https://www.npmjs.com/package/@velella/offing",
-  "softwareHelp": "https://velella.sh/offing/QUICKSTART.html",
+  "softwareHelp": "https://velella.sh/offing/QUICKSTART/",
   "license": "https://github.com/velella-sh/offing/blob/main/LICENSE",
   "sameAs": [
     "https://github.com/velella-sh/offing",

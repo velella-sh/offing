@@ -1,6 +1,7 @@
 ---
 title: "Is ClickHouse end of life? — versions, dates, sources"
 description: "Some ClickHouse releases are end of life. ClickHouse image release lines 26.2 and older are end-of-life. The source gives no day."
+permalink: "/eol/docker-clickhouse.html"
 canonical_url: "https://velella.sh/offing/eol/docker-clickhouse.html"
 ---
 

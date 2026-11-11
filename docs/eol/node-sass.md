@@ -1,6 +1,7 @@
 ---
 title: "Is Node Sass end of life? — versions, dates, sources"
 description: "Some Node Sass releases are end of life. Node Sass is end-of-life as of 2024-07-24. This page lists 2 reviewed lifecycle rules for pkg:npm/node-sass, with the status, date, and source for each."
+permalink: "/eol/node-sass.html"
 canonical_url: "https://velella.sh/offing/eol/node-sass.html"
 ---
 

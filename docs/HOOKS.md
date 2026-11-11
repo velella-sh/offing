@@ -12,11 +12,15 @@ Offing ships a Git pre-push hook that scans before you push, edit hooks for seve
 
 A hook must never break the agent's session. An unknown host, a malformed payload, an event that is not a file write or edit, a scan error, and a scan that takes longer than ten seconds all exit `0` with no output. `offing init --hooks-for <host>` writes the host's configuration so the host calls the command after an edit; each host has its own page, listed below.
 
-Each host has its own page under [`docs/hooks/`](https://github.com/velella-sh/offing/tree/main/docs/hooks), so a new host adds a page and edits nothing here:
+Each host has its own page under [`docs/hooks/`](https://github.com/velella-sh/offing/tree/main/docs/hooks), so a new host adds a page and one line here:
 
-{% assign host_pages = site.pages | where_exp: "page", "page.path contains 'hooks/'" | sort: "path" %}
-{% for page in host_pages %}- [{{ page.title }}]({{ page.url | relative_url }})
-{% endfor %}
+- [Claude Code edit hook](hooks/claude-code.md)
+- [Cline edit hook](hooks/cline.md)
+- [Codex CLI edit hook](hooks/codex.md)
+- [GitHub Copilot edit hook](hooks/copilot.md)
+- [Cursor edit hook](hooks/cursor.md)
+- [Devin Local edit hook](hooks/devin.md)
+- [Gemini CLI edit hook](hooks/gemini.md)
 
 ## Git pre-push
 
