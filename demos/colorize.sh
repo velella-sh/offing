@@ -4,7 +4,8 @@
 # applied only when stdout is a terminal, so redirects and pipes stay plain.
 _offing_color() {
   local e=$'\033'
-  sed -E \
+  # Wrap long lines at a word boundary so the terminal never splits a word.
+  fold -s -w 100 | sed -E \
     -e "s/^(Offing[^:]*)/${e}[1;38;5;183m\1${e}[0m/" \
     -e "s/^(HIGH|CRITICAL)( |$)/${e}[1;31m\1${e}[0m\2/" \
     -e "s/^(MEDIUM)( |$)/${e}[1;33m\1${e}[0m\2/" \
