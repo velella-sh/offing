@@ -53,7 +53,7 @@ jobs:
         working-directory: ${{ runner.temp }}
         env:
           VERSION: ${{ steps.release.outputs.version }}
-        run: npx --yes "offing@$VERSION" scan "$GITHUB_WORKSPACE" --json > "$RUNNER_TEMP/published.json"
+        run: npx --yes "@velella/offing@$VERSION" scan "$GITHUB_WORKSPACE" --json > "$RUNNER_TEMP/published.json"
       - name: Compare the summaries
         run: node .github/scripts/release-smoke.mjs "$RUNNER_TEMP/built.json" "$RUNNER_TEMP/published.json"
 
@@ -115,6 +115,6 @@ jobs:
             node "$GITHUB_WORKSPACE/.github/scripts/smoke.mjs" "$dir" -- node "$cli"
             node "$GITHUB_WORKSPACE/.github/scripts/quickstart-smoke.mjs" --local "$cli"
           else
-            node "$GITHUB_WORKSPACE/.github/scripts/smoke.mjs" "$dir" -- npx --yes "offing@$VERSION"
+            node "$GITHUB_WORKSPACE/.github/scripts/smoke.mjs" "$dir" -- npx --yes "@velella/offing@$VERSION"
             node "$GITHUB_WORKSPACE/.github/scripts/quickstart-smoke.mjs" --published "$VERSION"
           fi
