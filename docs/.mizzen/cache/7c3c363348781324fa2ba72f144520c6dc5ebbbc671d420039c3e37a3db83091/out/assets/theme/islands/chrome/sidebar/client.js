@@ -1,7 +1,0 @@
-export const STORAGE_KEY="lateen-sidebar";const GROUP_SELECTOR="details[data-sidebar-group]";export function read(storage){const state=new Map();try{const saved=JSON.parse(storage?.getItem(STORAGE_KEY)??"null");if(typeof saved!=="object"||saved===null||Array.isArray(saved))return state;for(const[key,value]of Object.entries(saved)){if(typeof value==="boolean")state.set(key,value);}}catch{}
-return state;}
-export function save(storage,state){try{storage?.setItem(STORAGE_KEY,JSON.stringify(Object.fromEntries(state)));}catch{}}
-export function restore(groups,state){for(const group of groups){const key=group.getAttribute("data-sidebar-group");if(key===null)continue;if(group.getAttribute("data-current")==="true")group.open=true;else{const saved=state.get(key);if(saved!==undefined)group.open=saved;}}}
-export function activate(env){const groups=[...env.root.querySelectorAll(GROUP_SELECTOR)];const state=read(env.storage);restore(groups,state);for(const group of groups){group.addEventListener("toggle",()=>{const key=group.getAttribute("data-sidebar-group");if(key===null)return;state.set(key,group.open);save(env.storage,state);});}}
-function liveStorage(){try{return localStorage;}catch{return undefined;}}
-if(typeof document!=="undefined"){activate({storage:liveStorage(),root:document});}
