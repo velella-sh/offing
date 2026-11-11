@@ -15,9 +15,9 @@ Require bash
 Set Shell "bash"
 Set FontFamily "JetBrains Mono"
 Set FontSize 17
-Set LineHeight 1.35
+Set LineHeight 1.1
 Set Width 1400
-Set Height 520
+Set Height 570
 Set Padding 28
 Set Margin 56
 Set MarginFill "demos/frame.png"
