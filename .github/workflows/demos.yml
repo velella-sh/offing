@@ -2,16 +2,16 @@ name: Demos
 
 # Demo recordings are generated, never hand-recorded: the tapes in demos/
 # render through the pinned VHS recorder below against the offline CLI build,
-# and this job fails when the committed recordings under docs/assets/demos/
-# drift from a fresh render. Regenerate locally from the repository root after
+# and this job fails when a tape has no committed recording under
+# docs/assets/demos/. GIF output is not byte-stable, so a fresh render is not
+# diffed against the committed file. Regenerate locally from the repository root after
 # `npm ci && npm run build` (VHS needs the ttyd and ffmpeg binaries listed
 # below and a Chromium-based browser; VHS downloads one if none is on PATH):
 #
 #   for tape in demos/*.tape; do vhs "$tape" || exit 1; done
 #
-# Until the first recordings are committed, the renders only land in the
-# demo-recordings artifact; a maintainer reviews them and commits them, and
-# from then on the drift check gates every change to the tapes.
+# Renders land in the demo-recordings artifact; a maintainer reviews them and
+# commits the GIFs.
 
 on:
   pull_request:
@@ -83,17 +83,19 @@ jobs:
         with:
           name: demo-recordings
           path: docs/assets/demos/
-      - name: Fail when the committed recordings drift
+      - name: Fail when a tape has no committed recording
         run: |
-          if [ -z "$(git ls-files -- 'docs/assets/demos/*.gif')" ]; then
-            echo "No committed recordings yet: this render is the first, and it ships in the demo-recordings artifact."
-            echo "Review it, commit the GIFs under docs/assets/demos/, and later renders are drift-gated."
-            exit 0
-          fi
-          status=$(git status --porcelain -- docs/assets/demos)
-          if [ -n "$status" ]; then
-            echo "::error::docs/assets/demos drifted from demos/*.tape. Re-render from the repository root (see the workflow header) and commit the regenerated recordings."
-            echo "$status"
-            exit 1
-          fi
-          echo "Committed recordings match the tapes."
+          # GIF encoding is not byte-stable (frame timing varies between runs),
+          # so the gate checks coverage, not bytes: every tape must have its
+          # recording committed. Review a fresh render in the demo-recordings
+          # artifact and commit it when a tape changes.
+          missing=0
+          for tape in demos/*.tape; do
+            out=$(sed -n 's/^Output //p' "$tape" | head -n 1)
+            if [ -z "$out" ] || [ -z "$(git ls-files -- "$out")" ]; then
+              echo "::error::$tape has no committed recording ($out). Render it and commit the GIF."
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ]
+          echo "Every tape has a committed recording."
