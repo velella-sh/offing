@@ -1,15 +1,11 @@
-# Offing demo tape: scan the demo project, show the forecast timeline, then
-# write the HTML report and print where it lives.
+# Offing demo tape: What reaches end of life next, by month.
 #
-# Determinism and offline: every command reads only `examples/demo` and bundled
-# registry data — no network, no API key. `forecast --as-of` pins the clock the
-# timeline counts from, `--format compact` carries no clock or absolute paths,
-# `--no-cache` keeps the scan from writing into the example, and the prompt is
-# pinned below. The HTML report embeds a generation time, so the tape never
-# renders its contents; it prints only the fixed path it wrote to. `Output`
-# paths resolve against the current directory, so render from the repository
-# root; see demos/scan.tape for the regeneration loop and the CI drift gate in
-# .github/workflows/demos.yml. The recording stays under 30 seconds.
+# Rendered by CI (.github/workflows/demos.yml) from the repository root after
+# `npm run build`; never recorded by hand. demos/colorize.sh prepares a clean
+# copy of examples/demo in /tmp/offing-demo, sets the prompt, and colors the
+# output. Regenerate every recording with:
+#
+#   for tape in demos/*.tape; do vhs "$tape" || exit 1; done
 
 Output docs/assets/demos/forecast.gif
 
@@ -17,30 +13,26 @@ Require node
 Require bash
 
 Set Shell "bash"
-Set Width 1280
-Set Height 620
-Set FontSize 16
-Set Padding 24
-Set Theme "Catppuccin Mocha"
-Set TypingSpeed 15ms
+Set FontFamily "JetBrains Mono"
+Set FontSize 17
+Set LineHeight 1.35
+Set Width 1180
+Set Height 520
+Set Padding 28
+Set Margin 56
+Set MarginFill "demos/frame.png"
+Set BorderRadius 14
+Set WindowBar Colorful
+Set Theme {"name":"Kanagawa","black":"#16161d","red":"#c34043","green":"#76946a","yellow":"#c0a36e","blue":"#7e9cd8","magenta":"#957fb8","cyan":"#6a9589","white":"#c8c093","brightBlack":"#727169","brightRed":"#e82424","brightGreen":"#98bb6c","brightYellow":"#e6c384","brightBlue":"#7fb4ca","brightMagenta":"#938aa9","brightCyan":"#7aa89f","brightWhite":"#dcd7ba","background":"#1f1f28","foreground":"#dcd7ba","selection":"#2d4f67","cursor":"#c8c093"}
+Set TypingSpeed 40ms
 Set CursorBlink false
 
-# Pin the prompt so the recording never shows the build machine's PS1.
 Hide
-Type "export PS1='offing $ '" Enter
+Type "source demos/colorize.sh" Enter
+Type "offing_demo_setup" Enter
 Type "clear" Enter
 Show
 
-Type "node dist/src/cli.js scan examples/demo --no-cache --format compact" Enter
-Wait@30s /offing .*$/
-Sleep 2
-
-Type "node dist/src/cli.js forecast examples/demo --timeline --as-of 2026-11-06" Enter
-Wait@30s /offing .*$/
+Type "npx @velella/offing forecast . --timeline --as-of 2026-11-06" Enter
+Wait@30s /❯ *$/
 Sleep 4
-
-Type "node dist/src/cli.js scan examples/demo --no-cache --format html > /tmp/offing-report.html" Enter
-Wait@30s /offing .*$/
-Type "echo file:///tmp/offing-report.html" Enter
-Wait@30s /offing .*$/
-Sleep 3

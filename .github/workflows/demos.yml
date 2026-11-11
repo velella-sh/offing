@@ -65,7 +65,7 @@ jobs:
             "https://github.com/tsl0922/ttyd/releases/download/${TTYD_VERSION}/ttyd.x86_64"
           echo "${TTYD_SHA256}  $RUNNER_TEMP/ttyd" | sha256sum --check -
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ffmpeg
+          sudo apt-get install -y --no-install-recommends ffmpeg fonts-jetbrains-mono
           sudo install -m 0755 "$RUNNER_TEMP/vhs" "$RUNNER_TEMP/ttyd" /usr/local/bin/
           vhs --version
           ttyd --version
