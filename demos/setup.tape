@@ -17,7 +17,7 @@ Set FontFamily "JetBrains Mono"
 Set FontSize 17
 Set LineHeight 1.1
 Set Width 1400
-Set Height 960
+Set Height 1040
 Set Padding 28
 Set Margin 56
 Set MarginFill "demos/frame.png"

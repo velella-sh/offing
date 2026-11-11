@@ -22,22 +22,22 @@ _offing_color() {
   fold -s -w 104 | sed -E \
     -e 's/ \((today|[0-9]+ days? ago)\)$//' \
     -e "s/^(Offing[^:]*)/${e}[1;38;5;183m\1${e}[0m/" \
-    -e "s/^(HIGH|CRITICAL)( |$)/${e}[1;31m\1${e}[0m\2/" \
-    -e "s/^(MEDIUM)( |$)/${e}[1;33m\1${e}[0m\2/" \
-    -e "s/^(LOW)( |$)/${e}[1;34m\1${e}[0m\2/" \
-    -e "s/^( +)(HIGH|CRITICAL) /\1${e}[1;31m\2${e}[0m /" \
-    -e "s/ (high|critical) / ${e}[1;31m\1${e}[0m /" \
-    -e "s/ (medium) / ${e}[1;33m\1${e}[0m /" \
-    -e "s/^(Status: )(affected)/\1${e}[31m\2${e}[0m/" \
-    -e "s/^(Replacement: )(.*)$/${e}[2m\1${e}[0m${e}[32m\2${e}[0m/" \
+    -e "s/^(HIGH|CRITICAL)( |$)/${e}[1;91m\1${e}[0m\2/" \
+    -e "s/^(MEDIUM)( |$)/${e}[1;93m\1${e}[0m\2/" \
+    -e "s/^(LOW)( |$)/${e}[1;94m\1${e}[0m\2/" \
+    -e "s/^( +)(HIGH|CRITICAL) /\1${e}[1;91m\2${e}[0m /" \
+    -e "s/ (high|critical) / ${e}[1;91m\1${e}[0m /" \
+    -e "s/ (medium) / ${e}[1;93m\1${e}[0m /" \
+    -e "s/^(Status: )(affected)/\1${e}[91m\2${e}[0m/" \
+    -e "s/^(Replacement: )(.*)$/${e}[2m\1${e}[0m${e}[92m\2${e}[0m/" \
     -e "s/^(Status|Data|Event|Affected versions|Deadline|Sources?|ID|Rule|Location|Repository|Findings|Confidence|Detected):/${e}[2m&${e}[0m/" \
     -e "s/^(\+\+\+|---) .*/${e}[1m&${e}[0m/" \
-    -e "s/^\+[^+].*/${e}[32m&${e}[0m/" \
-    -e "s/^-[^-].*/${e}[31m&${e}[0m/" \
-    -e "s/^@@.*/${e}[36m&${e}[0m/" \
-    -e "s/^(20[0-9]{2}-[0-9]{2}) +\|(#+)/${e}[2m\1${e}[0m ${e}[2m|${e}[0m${e}[1;33m\2${e}[0m/" \
-    -e "s#(https?://[^ ]+)#${e}[4;34m\1${e}[0m#g" \
-    -e "s#( |^|\()(\.?[A-Za-z0-9_./-]+:[0-9]+)#\1${e}[36m\2${e}[0m#g"
+    -e "s/^\+[^+].*/${e}[92m&${e}[0m/" \
+    -e "s/^-[^-].*/${e}[91m&${e}[0m/" \
+    -e "s/^@@.*/${e}[96m&${e}[0m/" \
+    -e "s/^(20[0-9]{2}-[0-9]{2}) +\|(#+)/${e}[2m\1${e}[0m ${e}[2m|${e}[0m${e}[1;93m\2${e}[0m/" \
+    -e "s#(https?://[^ ]+)#${e}[4;94m\1${e}[0m#g" \
+    -e "s#( |^|\()(\.?[A-Za-z0-9_./-]+:[0-9]+)#\1${e}[96m\2${e}[0m#g"
 }
 
 npx() {
