@@ -224,9 +224,9 @@ export function renderBadgeSvg(
     `<rect x="${labelWidth}" width="${messageWidth}" height="${layout.height}" fill="${color}"/>`,
     "</g>",
     mark(PAD, (layout.height - layout.iconSize) / 2, layout.iconSize),
-    `<g font-family="${FONT}" font-size="${layout.fontSize}" font-weight="${layout.fontWeight}" text-rendering="geometricPrecision">`,
-    `<text x="${PAD + layout.iconSize + GAP}" y="${baseline}" fill="${WHITE}" textLength="${layout.labelTextWidth}" lengthAdjust="spacingAndGlyphs">${shownLabel}</text>`,
-    `<text x="${labelWidth + PAD}" y="${baseline}" fill="${readableTextColor(color)}" textLength="${messageText}" lengthAdjust="spacingAndGlyphs">${shownMessage}</text>`,
+    `<g font-family="${FONT}" font-size="${layout.fontSize * 10}" font-weight="${layout.fontWeight}" text-rendering="geometricPrecision" style="font-variant-ligatures:none" transform="scale(.1)">`,
+    `<text x="${(PAD + layout.iconSize + GAP) * 10}" y="${Math.round(baseline * 10)}" fill="${WHITE}" textLength="${layout.labelTextWidth * 10}">${shownLabel}</text>`,
+    `<text x="${(labelWidth + PAD) * 10}" y="${Math.round(baseline * 10)}" fill="${readableTextColor(color)}" textLength="${messageText * 10}">${shownMessage}</text>`,
     "</g>",
     "</svg>",
   ].join("");
