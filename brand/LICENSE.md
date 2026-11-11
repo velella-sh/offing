@@ -2,7 +2,7 @@
 
 Copyright © 2026 Armin Azimi. All rights reserved.
 
-The Offing name, `Version Notches` logo, wordmark, visual identity, templates,
+The Offing name, logo, wordmark, visual identity, templates,
 and other files in this `brand/` directory are proprietary brand assets. They are
 not licensed under the repository's Apache License 2.0.
 
@@ -17,7 +17,7 @@ solely to truthfully:
 - attribute output that was actually produced by Offing.
 
 This permission is non-exclusive, non-transferable, and revocable. Use must follow
-[`BRAND_GUIDE.md`](BRAND_GUIDE.md), must not imply sponsorship or endorsement, and
+the brand files in this directory (see [`README.md`](README.md)), must not imply sponsorship or endorsement, and
 must not create confusion about the source of a product or service.
 
 ## Permission is required

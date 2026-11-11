@@ -129,11 +129,11 @@ test("Codex submission assets stay review-ready and on-brand", async () => {
   assert.equal(manifest.interface.composerIcon, "./assets/offing-mark-light.svg");
   assert.equal(
     expected.get("plugins/codex/assets/offing-mark-light.svg"),
-    await readFile(resolve("brand/assets/offing-mark-light.svg"), "utf8"),
+    await readFile(resolve("brand/mark-day.svg"), "utf8"),
   );
   assert.equal(
     expected.get("plugins/codex/assets/offing-mark-dark.svg"),
-    await readFile(resolve("brand/assets/offing-mark-dark.svg"), "utf8"),
+    await readFile(resolve("brand/mark-night.svg"), "utf8"),
   );
   assert.equal(review.test_cases.positive.length, 5);
   assert.equal(review.test_cases.negative.length, 3);
@@ -144,15 +144,15 @@ test("plugin drift check rejects a changed generated package", async () => {
   const root = await mkdtemp(join(tmpdir(), "offing-plugin-drift-"));
   try {
     await mkdir(join(root, "skills/offing"), { recursive: true });
-    await mkdir(join(root, "brand/assets"), { recursive: true });
+    await mkdir(join(root, "brand"), { recursive: true });
     await mkdir(join(root, "integrations/dependency-guard"), { recursive: true });
     await mkdir(join(root, "examples/demo/.github/workflows"), { recursive: true });
     await mkdir(join(root, "examples/demo/src"), { recursive: true });
     await writeFile(join(root, "package.json"), await readFile(resolve("package.json"), "utf8"));
     await writeFile(join(root, "LICENSE"), await readFile(resolve("LICENSE"), "utf8"));
     for (const path of [
-      "brand/assets/offing-mark-light.svg",
-      "brand/assets/offing-mark-dark.svg",
+      "brand/mark-day.svg",
+      "brand/mark-night.svg",
       "integrations/dependency-guard/guard.mjs",
       "examples/demo/package.json.fixture",
       "examples/demo/.github/workflows/ci.yml",

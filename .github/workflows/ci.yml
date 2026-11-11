@@ -629,7 +629,7 @@ jobs:
     name: ci-ok
     if: always()
     # Site budget and docs doctor are called above when a queued change touches site files.
-    # Seaworthy and Lighthouse run in pages.yml against the Pages build artifact.
+    # Lighthouse runs in pages.yml against the Pages build artifact.
     needs: [changes, generated-files, check, coverage, docs, check-cross-os, site-budget, docs-doctor, self-scan, perf-budget, coverage-badge]
     runs-on: ubuntu-latest
     timeout-minutes: 5

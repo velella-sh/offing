@@ -31,13 +31,13 @@ test("reads line coverage from the LCOV report the single suite run writes", () 
     "end_of_record",
     "",
   ].join("\n");
-  assert.deepEqual(badgeFromLcov(lcov), { schemaVersion: 1, label: "coverage", message: "87.5%", color: "4C7C6D" });
+  assert.deepEqual(badgeFromLcov(lcov), { schemaVersion: 1, label: "coverage", message: "87.5%", color: "727169" });
 });
 
 test("colors the badge by threshold", () => {
-  assert.deepEqual(badge(94.33), { schemaVersion: 1, label: "coverage", message: "94.3%", color: "2F7D5B" });
-  assert.equal(badge(85).color, "4C7C6D");
+  assert.deepEqual(badge(94.33), { schemaVersion: 1, label: "coverage", message: "94.3%", color: "6A5590" });
+  assert.equal(badge(85).color, "727169");
   assert.equal(badge(75).color, "B89B3C");
   assert.equal(badge(65).color, "C9822F");
-  assert.equal(badge(10).color, "B84A3E");
+  assert.equal(badge(10).color, "9A3F5E");
 });

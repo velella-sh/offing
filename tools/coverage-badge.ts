@@ -29,14 +29,14 @@ export function badge(percent: number): Badge {
   // Brand palette (brand/tokens.css) and the severity colors in src/badge.ts, so the row looks like one set.
   const color =
     percent >= 90
-      ? "2F7D5B"
+      ? "6A5590"
       : percent >= 80
-        ? "4C7C6D"
+        ? "727169"
         : percent >= 70
           ? "B89B3C"
           : percent >= 60
             ? "C9822F"
-            : "B84A3E";
+            : "9A3F5E";
   return { schemaVersion: 1, label: "coverage", message: `${Math.round(percent * 10) / 10}%`, color };
 }
 

@@ -1,6 +1,6 @@
 ---
 title: Offing
-description: Know what breaks next.
+description: See what's in the offing. Fix it before it lands.
 layout: home
 ---
 
@@ -82,7 +82,7 @@ Found 5 lifecycle risks. The most urgent:
 - [Changelog](CHANGELOG.md): every release, with a stable link per version.
 - [Start contributing](CONTRIBUTE.md): pick a sized issue, follow its brief, and open one pull request.
 - [Codex plugin submission](CODEX_SUBMISSION.md): how the plugin is submitted to the Codex directory.
-- [Brand guide](https://github.com/velella-sh/offing/blob/main/brand/BRAND_GUIDE.md), [brand asset terms](https://github.com/velella-sh/offing/blob/main/brand/LICENSE.md), and the [distribution brand checklist](DISTRIBUTION_BRAND.md).
+- [Brand files](https://github.com/velella-sh/offing/blob/main/brand/README.md), [brand asset terms](https://github.com/velella-sh/offing/blob/main/brand/LICENSE.md), and the [distribution brand checklist](DISTRIBUTION_BRAND.md).
 - [Support](SUPPORT.md) and [terms](TERMS.md).
 - [Persian (فارسی)](fa/index.md): the quickstart in Persian, rendered right to left.
 

@@ -6,25 +6,25 @@
   <title id="arch-title">Offing architecture</title>
   <desc id="arch-desc">Adapters for CLI, GitHub Action, and MCP feed one scan engine that combines detectors and the registry into findings rendered as text, JSON, or annotations.</desc>
   <rect width="720" height="420" fill="#F7F7F5"/>
-  <rect x="40" y="28" width="200" height="56" rx="10" fill="#17211E"/>
-  <text x="140" y="62" text-anchor="middle" fill="#F3F6F4" font-family="system-ui,sans-serif" font-size="15" font-weight="600">CLI</text>
-  <rect x="260" y="28" width="200" height="56" rx="10" fill="#17211E"/>
-  <text x="360" y="62" text-anchor="middle" fill="#F3F6F4" font-family="system-ui,sans-serif" font-size="15" font-weight="600">GitHub Action</text>
-  <rect x="480" y="28" width="200" height="56" rx="10" fill="#17211E"/>
-  <text x="580" y="62" text-anchor="middle" fill="#F3F6F4" font-family="system-ui,sans-serif" font-size="15" font-weight="600">MCP server</text>
-  <path d="M140 84V112M360 84V112M580 84V112M140 112H580" stroke="#4C7C6D" stroke-width="2" fill="none"/>
-  <path d="M360 112V140" stroke="#4C7C6D" stroke-width="2"/>
-  <rect x="220" y="140" width="280" height="64" rx="12" fill="#23423A"/>
-  <text x="360" y="178" text-anchor="middle" fill="#F3F6F4" font-family="system-ui,sans-serif" font-size="18" font-weight="700">Scan engine</text>
-  <path d="M280 204V232M440 204V232" stroke="#4C7C6D" stroke-width="2"/>
-  <rect x="120" y="232" width="200" height="56" rx="10" fill="#FFFFFF" stroke="#4C7C6D" stroke-width="2"/>
-  <text x="220" y="266" text-anchor="middle" fill="#17211E" font-family="system-ui,sans-serif" font-size="15" font-weight="600">Detectors</text>
-  <rect x="400" y="232" width="200" height="56" rx="10" fill="#FFFFFF" stroke="#4C7C6D" stroke-width="2"/>
-  <text x="500" y="266" text-anchor="middle" fill="#17211E" font-family="system-ui,sans-serif" font-size="15" font-weight="600">Registry</text>
-  <path d="M220 288V316M500 288V316M220 316H500" stroke="#4C7C6D" stroke-width="2" fill="none"/>
-  <path d="M360 316V344" stroke="#4C7C6D" stroke-width="2"/>
-  <rect x="250" y="344" width="220" height="48" rx="10" fill="#9AC7B6"/>
-  <text x="360" y="374" text-anchor="middle" fill="#0C1110" font-family="system-ui,sans-serif" font-size="15" font-weight="700">Findings</text>
+  <rect x="40" y="28" width="200" height="56" rx="10" fill="#2A2438"/>
+  <text x="140" y="62" text-anchor="middle" fill="#DCD7BA" font-family="system-ui,sans-serif" font-size="15" font-weight="600">CLI</text>
+  <rect x="260" y="28" width="200" height="56" rx="10" fill="#2A2438"/>
+  <text x="360" y="62" text-anchor="middle" fill="#DCD7BA" font-family="system-ui,sans-serif" font-size="15" font-weight="600">GitHub Action</text>
+  <rect x="480" y="28" width="200" height="56" rx="10" fill="#2A2438"/>
+  <text x="580" y="62" text-anchor="middle" fill="#DCD7BA" font-family="system-ui,sans-serif" font-size="15" font-weight="600">MCP server</text>
+  <path d="M140 84V112M360 84V112M580 84V112M140 112H580" stroke="#727169" stroke-width="2" fill="none"/>
+  <path d="M360 112V140" stroke="#727169" stroke-width="2"/>
+  <rect x="220" y="140" width="280" height="64" rx="12" fill="#3A3450"/>
+  <text x="360" y="178" text-anchor="middle" fill="#DCD7BA" font-family="system-ui,sans-serif" font-size="18" font-weight="700">Scan engine</text>
+  <path d="M280 204V232M440 204V232" stroke="#727169" stroke-width="2"/>
+  <rect x="120" y="232" width="200" height="56" rx="10" fill="#FFFFFF" stroke="#727169" stroke-width="2"/>
+  <text x="220" y="266" text-anchor="middle" fill="#2A2438" font-family="system-ui,sans-serif" font-size="15" font-weight="600">Detectors</text>
+  <rect x="400" y="232" width="200" height="56" rx="10" fill="#FFFFFF" stroke="#727169" stroke-width="2"/>
+  <text x="500" y="266" text-anchor="middle" fill="#2A2438" font-family="system-ui,sans-serif" font-size="15" font-weight="600">Registry</text>
+  <path d="M220 288V316M500 288V316M220 316H500" stroke="#727169" stroke-width="2" fill="none"/>
+  <path d="M360 316V344" stroke="#727169" stroke-width="2"/>
+  <rect x="250" y="344" width="220" height="48" rx="10" fill="#A592CC"/>
+  <text x="360" y="374" text-anchor="middle" fill="#1F1F28" font-family="system-ui,sans-serif" font-size="15" font-weight="700">Findings</text>
   <text x="360" y="408" text-anchor="middle" fill="#5C5C57" font-family="system-ui,sans-serif" font-size="13">Text · JSON · annotations · SARIF · HTML</text>
 </svg>
 

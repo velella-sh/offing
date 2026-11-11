@@ -29,7 +29,7 @@ work in epic #1985 needs one written design before it can delete, merge, or rewi
    if one is still required after the release chain work.
 4. **Pull requests are for feedback, not the landing proof.** A pull request runs a fast subset so
    authors see failures early. Docs-only changes skip the test matrix and run the docs path instead.
-   Site jobs (Lighthouse, Seaworthy, docs doctor, site budget) run on a pull request only when site
+   Site jobs (Lighthouse, docs doctor, site budget) run on a pull request only when site
    files change. The queue still re-runs what it needs; a green pull request does not replace the
    queue.
 5. **`main` after the queue does not re-prove the same gate.** Once the queue is the only path,

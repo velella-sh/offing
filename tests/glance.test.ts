@@ -181,7 +181,7 @@ test("color colors the mark and the severity blocks; plain output has no escape 
   const plain = renderGlance(facts, { columns: 120 });
   assert.doesNotMatch(plain, /\u001b/);
   const colored = renderGlance(facts, { columns: 120, color: true });
-  assert.match(colored, /\u001b\[32m {6}█{3} {4}█{3}\u001b\[0m/);
+  assert.match(colored, /\u001b\[32m {7}█{8}\u001b\[0m/);
   assert.match(colored, /\u001b\[1;31m +critical +█ 1\u001b\[0m/);
   assert.match(colored, /\u001b\[36m +low +█ 1\u001b\[0m/);
 });

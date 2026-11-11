@@ -3,21 +3,17 @@ import { severityValues } from "./domain.js";
 import type { Finding, ScanResult, Severity } from "./domain.js";
 
 /**
- * The Offing mark as terminal blocks: the three lifecycle rings with their staggered version
- * notches (top, right, bottom), redrawn from `brand/assets/offing-mark-mono.svg` at 22×11 —
- * round in a terminal, where a cell is about twice as tall as it is wide.
+ * The Offing mark as terminal blocks: a half-sun on the horizon with three shortening
+ * reflections, redrawn from `brand/glyph-night.svg` in at most 22 columns.
  */
 export const GLANCE_MARK = [
-  "      ███    ███",
-  "   ███  ██████  ███",
-  " ███ ████    ████ ███",
-  "██  ██ ████████ ██  ██",
-  "██ ██ ██      ██ ██ ██",
-  "██ ██ ██      ██    ██",
-  "██ ██ ██      ██ ██ ██",
-  "██  ██ ██    ██ ██  ██",
-  " ███ ████    ████ ███",
-  "   ███  ██████  ███",
+  "       ████████",
+  "     ████████████",
+  "    ██████████████",
+  "██████████████████████",
+  "",
+  "   ████████████████",
+  "",
   "      ██████████",
 ] as const;
 

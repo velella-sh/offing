@@ -2,14 +2,14 @@ import type { ScanResult, Severity } from "./domain.js";
 import { severityValues } from "./domain.js";
 import { required } from "./required.js";
 
-/** Brand palette (brand/tokens.css) plus muted severity colors that sit next to it. */
+/** Brand palette (the "dusk" identity, see brand/README.md) plus muted severity colors that sit next to it. */
 const colors = {
-  clean: "#2F7D5B",
-  quiet: "#4C7C6D",
+  clean: "#6A5590",
+  quiet: "#727169",
   low: "#B89B3C",
   medium: "#C9822F",
-  high: "#B84A3E",
-  expired: "#8E3B34",
+  high: "#9A3F5E",
+  expired: "#6E2B44",
 } as const;
 
 const severityColors: Record<Severity, string> = {
@@ -43,7 +43,7 @@ export function badgeState(result: Pick<ScanResult, "findings" | "data">, expire
 /** Shields.io endpoint schema v1; contains aggregate counts only, after baseline comparison. */
 export function renderBadgeEndpoint(result: Pick<ScanResult, "findings" | "data">, expiredFailure = false): string {
   const { message, color } = badgeState(result, expiredFailure);
-  return JSON.stringify({ schemaVersion: 1, label: "offing", message, color, labelColor: "#23423A" });
+  return JSON.stringify({ schemaVersion: 1, label: "offing", message, color, labelColor: "#1F1F28" });
 }
 
 export type BadgeStyle = "flat" | "flat-square" | "for-the-badge";
@@ -62,7 +62,7 @@ const LARGE_LABEL_TEXT_WIDTH = 60;
 const GLYPH_WIDTH = 6.4;
 const FONT = "Verdana,Geneva,DejaVu Sans,sans-serif";
 const WHITE = "#FFFFFF";
-const DARK_TEXT = "#0C1110";
+const DARK_TEXT = "#1F1F28";
 
 interface BadgeLayout {
   height: number;
@@ -184,18 +184,14 @@ export function badgeSnippet(repository: string, format: BadgeSnippetFormat, bra
   return `[![offing](${image})](${target})`;
 }
 
-/** The Version Notches mark (brand/assets) in the badge's light-on-dark colors. */
+/** The half-sun mark (brand/glyph-night.svg) in the badge's light-on-dark color. */
 function mark(x: number, y: number, size = ICON): string {
-  const mask = (id: string, notch: string): string =>
-    `<mask id="${id}"><rect width="256" height="256" fill="#fff"/><rect ${notch}/></mask>`;
   return [
-    `<g transform="translate(${x} ${y}) scale(${size / 256})" fill="none" stroke-width="20">`,
-    mask("o", 'x="119" y="18" width="18" height="28"'),
-    mask("m", 'x="186" y="119" width="30" height="18"'),
-    mask("i", 'x="119" y="160" width="18" height="30"'),
-    '<circle cx="128" cy="128" r="96" stroke="#F3F6F4" mask="url(#o)"/>',
-    '<circle cx="128" cy="128" r="70" stroke="#9AC7B6" mask="url(#m)"/>',
-    '<circle cx="128" cy="128" r="44" stroke="#CFE8DD" mask="url(#i)"/>',
+    `<g transform="translate(${x} ${y}) scale(${size / 120})" fill="#A592CC">`,
+    '<path d="M30 56A30 30 0 0 1 90 56Z"/>',
+    '<rect x="20" y="62" width="80" height="10" rx="1.5"/>',
+    '<rect x="32" y="78" width="56" height="8" rx="1.5"/>',
+    '<rect x="46" y="92" width="28" height="8" rx="1.5"/>',
     "</g>",
   ].join("");
 }

@@ -213,7 +213,7 @@ mutation score as the ratio of mutants the tests detect.
 - Committed reference pages, answer pages, and Open Graph images match `registry/*.json`. The data API is buildable and schema-valid from `registry/*.json` (generated at site build; not committed).
 - The README coverage table names files each detector reads and commands that exist.
 - The documentation site builds with **zero broken internal links** and no accessibility errors at the level
-  Seaworthy checks.
+  the docs doctor checks.
 
 **Enforced by.**
 
@@ -222,13 +222,12 @@ mutation score as the ratio of mutants the tests detect.
   `check:data-api`, and `check:dashboard`. Reference, Open Graph, and answer checks fail on drift from
   their source; `check:llms`, `check:data-api`, and `check:dashboard` fail when the sources would not
   produce a well-formed build-time file.
-- Links and accessibility: **report-only**. `ci.yml` runs Seaworthy with `--fail-on none`, and `docs-doctor.yml`
-  sets `level: none`. This change does not turn them into gates, because it did not run the Seaworthy findings to
-  a clean state locally. The condition is in the next paragraph.
+- Links and accessibility: **report-only**. `docs-doctor.yml` sets `level: none`. This change does not turn
+  it into a gate, because it did not run the findings to a clean state locally. The condition is in the next
+  paragraph.
 
-**Condition to make links and accessibility gate.** A local run of the site build and Seaworthy with zero
-findings, or with each finding named in an allowlist with an owner and expiry. Then `--fail-on none` becomes
-`--fail-on error` and `docs-doctor.yml` raises its level, in one pull request.
+**Condition to make links and accessibility gate.** A local run of the site build and docs doctor with zero
+findings, or with each finding named in an allowlist with an owner and expiry. Then `docs-doctor.yml` raises its level, in one pull request.
 
 **Not done.** A test that every CLI command and flag appears in a documentation page. The existing docs tests check
 selected pages only. This is a follow-up issue, not a gate.
@@ -303,7 +302,7 @@ The code-debt items are done: the allowlist is empty. What remains needs its own
 1. Add a dependency-cruiser configuration or an architecture test for the transitive network rule and rules 4 and 5.
 2. Triage the high advisories in `examples/` and `extensions/vscode/`.
 3. Add a docs test that every CLI command and flag is documented.
-4. Clean the Seaworthy and docs-doctor findings, then make them gate (see the condition in [Docs](#8-docs)).
+4. Clean the docs-doctor findings, then make them gate (see the condition in [Docs](#8-docs)).
 5. ~~Set `thresholds.break` when the first complete mutation score exists~~ Done: break at 60 since 2026-11-07 (#2282).
 6. Raise the Scorecard score to 6.0 (see [Security](#9-security)).
 

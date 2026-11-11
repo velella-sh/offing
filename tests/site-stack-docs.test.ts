@@ -14,7 +14,7 @@ const sampleAgents = resolve("examples/agents/site-stack/AGENTS.md");
 const offingSubcommandsIn = (text: string) =>
   [...text.matchAll(/(?:^|\s|`|@velella\/)offing ([a-z][a-z0-9-]*)/g)].map((match) => match[1]!);
 
-test("the site stack guide and sample exist and name Offing and Seaworthy", async () => {
+test("the site stack guide and sample exist and name Offing", async () => {
   await access(siteStackDoc);
   await access(sampleAgents);
 
@@ -26,12 +26,9 @@ test("the site stack guide and sample exist and name Offing and Seaworthy", asyn
     ["examples/agents/site-stack/AGENTS.md", sample],
   ] as const) {
     assert.match(text, /Offing/i, label);
-    assert.match(text, /Seaworthy/i, label);
   }
 
   assert.match(sample, /offing check/, "the sample tells agents to check before adding deps");
-  assert.match(sample, /seaworthy verify/i, "the sample documents site verification after build");
-  assert.match(sample, /not on npm|first npm release|Pending Seaworthy/i, "Seaworthy maturity is honest");
 });
 
 test("every offing subcommand in the sample appears in the CLI usage text", async () => {
