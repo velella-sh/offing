@@ -16,7 +16,7 @@ Set Shell "bash"
 Set FontFamily "JetBrains Mono"
 Set FontSize 17
 Set LineHeight 1.35
-Set Width 1180
+Set Width 1400
 Set Height 520
 Set Padding 28
 Set Margin 56

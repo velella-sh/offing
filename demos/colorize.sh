@@ -19,7 +19,7 @@ offing_demo_setup() {
 _offing_color() {
   local e=$'\033'
   # Wrap long lines at a word boundary so the terminal never splits a word.
-  fold -s -w 100 | sed -E \
+  fold -s -w 104 | sed -E \
     -e 's/ \((today|[0-9]+ days? ago)\)$//' \
     -e "s/^(Offing[^:]*)/${e}[1;38;5;183m\1${e}[0m/" \
     -e "s/^(HIGH|CRITICAL)( |$)/${e}[1;31m\1${e}[0m\2/" \
