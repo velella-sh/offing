@@ -29,7 +29,7 @@ export const EVAL_INPUTS: readonly string[] = [
 
 const CONTEXT_BUDGET = {
   discoveryMetadataBytes: 512,
-  activatedSkillBytes: 4096,
+  activatedSkillBytes: 5120,
   manifestBytes: 2048,
 } as const;
 

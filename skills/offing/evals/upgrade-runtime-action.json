@@ -199,7 +199,7 @@
       "kind": "negative",
       "prompt": "Add the request package to this service so it can call the billing API.",
       "shouldTrigger": false,
-      "reason": "Adding a dependency belongs to offing-check-before-add."
+      "reason": "Adding a dependency belongs to the check-before-add workflow."
     },
     {
       "id": "cx-up-neg-add",
@@ -207,7 +207,7 @@
       "kind": "negative",
       "prompt": "npm install left-pad and use it for padding.",
       "shouldTrigger": false,
-      "reason": "Adding a dependency belongs to offing-check-before-add."
+      "reason": "Adding a dependency belongs to the check-before-add workflow."
     },
     {
       "id": "cl-up-neg-add",
@@ -215,7 +215,7 @@
       "kind": "negative",
       "prompt": "Add actions/checkout@v4 to the CI workflow.",
       "shouldTrigger": false,
-      "reason": "Adding an action belongs to offing-check-before-add."
+      "reason": "Adding an action belongs to the check-before-add workflow."
     },
     {
       "id": "as-up-neg-scan",
@@ -303,7 +303,7 @@
       "kind": "negative",
       "prompt": "Which package should I use for date handling?",
       "shouldTrigger": false,
-      "reason": "Choosing a new package belongs to offing-check-before-add."
+      "reason": "Choosing a new package belongs to the check-before-add workflow."
     },
     {
       "id": "cl-up-neg-refactor",

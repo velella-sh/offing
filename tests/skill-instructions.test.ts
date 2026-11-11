@@ -21,7 +21,7 @@ async function readSkills(): Promise<Array<readonly [string, string]>> {
 
 test("every Skill falls back to npx when neither MCP nor the CLI is available", async () => {
   const skills = await readSkills();
-  assert.ok(skills.length >= 2, "both shipped Skills must be covered");
+  assert.ok(skills.length >= 1, "the shipped Skill must be covered");
 
   for (const [name, contents] of skills) {
     assert.ok(contents.includes(npxFallback), `${name}/SKILL.md must fall back to ${npxFallback}`);

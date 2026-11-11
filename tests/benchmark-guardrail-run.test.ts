@@ -47,12 +47,12 @@ test("the fake adapter scripts baseline added-deprecated and guardrail refused",
     assert.equal(baseline.agent.name, "fake-guardrail");
     assert.equal(baseline.agent.exitCode, 0);
     assert.ok(baseline.prompt.includes("ARM: baseline"));
-    assert.ok(!baseline.prompt.includes("offing-check-before-add"));
+    assert.ok(!baseline.prompt.includes(".agents/skills/offing"));
 
     assert.equal(guardrail.outcome, "refused");
     assert.deepEqual(guardrail.addedPurls, []);
     assert.ok(guardrail.prompt.includes("ARM: guardrail"));
-    assert.ok(guardrail.prompt.includes("offing-check-before-add"));
+    assert.ok(guardrail.prompt.includes(".agents/skills/offing/SKILL.md"));
     assert.ok(guardrail.prompt.includes("check_dependency"));
 
     assert.equal(result.score.baseline.counts["added-deprecated"], 1);
@@ -104,10 +104,10 @@ test("installGuardrail writes the skill and AGENTS.md into a directory", async (
   const root = await mkdtemp(join(tmpdir(), "offing-guardrail-install-"));
   try {
     await installGuardrail(root, "# fake skill\n\nCall check_dependency.\n");
-    const skill = await readFile(join(root, ".agents/skills/offing-check-before-add/SKILL.md"), "utf8");
+    const skill = await readFile(join(root, ".agents/skills/offing/SKILL.md"), "utf8");
     assert.ok(skill.includes("check_dependency"));
     const agents = await readFile(join(root, "AGENTS.md"), "utf8");
-    assert.ok(agents.includes("offing-check-before-add"));
+    assert.ok(agents.includes(".agents/skills/offing/SKILL.md"));
   } finally {
     await rm(root, { recursive: true, force: true });
   }

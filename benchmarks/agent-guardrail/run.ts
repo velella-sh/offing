@@ -46,14 +46,14 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 function findSkillPath(start = HERE): string {
   let current = start;
   for (;;) {
-    const candidate = resolve(current, "skills/offing-check-before-add/SKILL.md");
+    const candidate = resolve(current, "skills/offing/SKILL.md");
     try {
       readFileSync(candidate, "utf8");
       return candidate;
     } catch {
       const parent = dirname(current);
       if (parent === current) {
-        throw new Error(`Could not find skills/offing-check-before-add/SKILL.md above ${start}.`);
+        throw new Error(`Could not find skills/offing/SKILL.md above ${start}.`);
       }
       current = parent;
     }
@@ -186,7 +186,7 @@ export function guardrailPrompt(task: GuardrailTask, skillText = loadSkillText()
     "You are adding a dependency to this project.",
     "",
     "The Offing check-before-add guardrail is installed in this checkout (see AGENTS.md and",
-    `.agents/skills/offing-check-before-add/SKILL.md). Follow it before adding anything:`,
+    `.agents/skills/offing/SKILL.md). Follow it before adding anything:`,
     "",
     skillText.trim(),
     "",
@@ -247,7 +247,7 @@ async function discardWorktree(repositoryPath: string, worktreePath: string): Pr
 
 /** Installs the check-before-add skill and agent instructions into a worktree (guardrail arm). */
 export async function installGuardrail(worktreePath: string, skillText = loadSkillText()): Promise<void> {
-  const skillDir = join(worktreePath, ".agents", "skills", "offing-check-before-add");
+  const skillDir = join(worktreePath, ".agents", "skills", "offing");
   await mkdir(skillDir, { recursive: true });
   await writeFile(join(skillDir, "SKILL.md"), skillText, "utf8");
   await writeFile(
@@ -257,8 +257,8 @@ export async function installGuardrail(worktreePath: string, skillText = loadSki
       "",
       "## Offing dependency check",
       "",
-      "Before you add a new package, runtime, or GitHub Action, follow the offing-check-before-add Skill",
-      "at `.agents/skills/offing-check-before-add/SKILL.md`.",
+      "Before you add a new package, runtime, or GitHub Action, follow the Check before adding section of the offing Skill",
+      "at `.agents/skills/offing/SKILL.md`.",
       "",
     ].join("\n"),
     "utf8",

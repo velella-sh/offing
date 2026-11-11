@@ -1,46 +1,42 @@
 # Offing Agent Skills
 
-Offing ships three portable Skills under `skills/`. Each follows the open Agent Skills directory format: standard YAML frontmatter plus Markdown instructions. There is no vendor-specific manifest, invocation policy, tool allowlist, script, or generated prompt.
+Offing ships one portable Skill under `skills/offing/`. It follows the open Agent Skills directory format: standard YAML frontmatter plus Markdown instructions. There is no vendor-specific manifest, invocation policy, tool allowlist, script, or generated prompt.
 
-| Skill | Directory | Moment |
-| --- | --- | --- |
-| `offing` | `skills/offing/` | Repository lifecycle scans and finding explain / migrate / verify workflows |
-| `offing-check-before-add` | `skills/offing-check-before-add/` | Adding or choosing a package, runtime, or GitHub Action |
-| `offing-upgrade-runtime-action` | `skills/offing-upgrade-runtime-action/` | Upgrading an already-declared runtime or GitHub Action |
+| Workflow in the Skill | Moment |
+| --- | --- |
+| Scan and migrate | Repository lifecycle scans and finding explain / migrate / verify |
+| Check before adding | Adding or choosing a package, runtime, or GitHub Action |
+| Upgrade a runtime or Action | Upgrading an already-declared runtime or GitHub Action |
 
 New to the dependency guardrail? Follow the tutorial [Stop your coding agent from adding deprecated packages](guides/agent-dependency-guard.md).
 
 ## Design
 
-Each Skill is an orchestration layer. It tells an agent when to act, then maps those intents to Offing's MCP tools or CLI commands. Lifecycle rules, evidence, affected-file calculation, migration steps, and verification behavior remain in the executable and versioned JSON contracts.
+The Skill is an orchestration layer. It tells an agent when to act, then maps those intents to Offing's MCP tools or CLI commands. Lifecycle rules, evidence, affected-file calculation, migration steps, and verification behavior remain in the executable and versioned JSON contracts.
 
-This split prevents prompt drift: improving a detector or migration packet changes every client without requiring a rewritten Skill. The descriptions name different moments on purpose so they do not compete for the same prompt.
+This prevents prompt drift: improving a detector or migration packet changes every client without requiring a rewritten Skill. The Skill opens with a table that routes the task to one of its three workflows, so a single install covers all three moments.
 
 ## Installation
 
-The skills CLI discovers the Skills directly from the Offing monorepo. No dedicated distribution repository is needed:
+The skills CLI discovers the Skill directly from the Offing monorepo. No dedicated distribution repository is needed:
 
 ```sh
 npx skills add velella-sh/offing
 ```
 
-The repository exposes three Skills. For a non-interactive or explicitly selected install, use:
+For a non-interactive or explicitly selected install, use:
 
 ```sh
 npx skills add velella-sh/offing --skill offing --yes
-npx skills add velella-sh/offing --skill offing-check-before-add --yes
-npx skills add velella-sh/offing --skill offing-upgrade-runtime-action --yes
 ```
 
-Update them with:
+Update it with:
 
 ```sh
 npx skills update offing
-npx skills update offing-check-before-add
-npx skills update offing-upgrade-runtime-action
 ```
 
-The npm package also includes the complete `skills/offing`, `skills/offing-check-before-add`, and `skills/offing-upgrade-runtime-action` folders for hosts that prefer a manual copy or link.
+The npm package also includes the complete `skills/offing` folder for hosts that prefer a manual copy or link.
 
 To tell the agents working in any other project to check dependencies with Offing, copy the snippet in [examples/agents-snippet.md](../examples/agents-snippet.md) into `AGENTS.md`, `CLAUDE.md`, or a similar instruction file.
 
@@ -85,7 +81,7 @@ Portable skills-CLI alternative: `npx skills add velella-sh/offing --agent codex
 npx skills add velella-sh/offing --agent cursor --yes
 ```
 
-**Verify.** `npx skills list` shows `offing`, `offing-check-before-add`, and `offing-upgrade-runtime-action`. Restart Cursor, then use the shared verify prompt. For the MCP server, see [MCP](MCP.md#one-command-install-per-host).
+**Verify.** `npx skills list` shows `offing`. Restart Cursor, then use the shared verify prompt. For the MCP server, see [MCP](MCP.md#one-command-install-per-host).
 
 ### VS Code
 
@@ -95,17 +91,17 @@ VS Code Copilot Chat picks up the Skills through the skills CLI's `github-copilo
 npx skills add velella-sh/offing --agent github-copilot --yes
 ```
 
-**Verify.** `npx skills list` shows all three Skills. Reload the VS Code window, open Copilot Chat in Agent mode, then use the shared verify prompt. For the MCP server, see [MCP](MCP.md#one-command-install-per-host).
+**Verify.** `npx skills list` shows `offing`. Reload the VS Code window, open Copilot Chat in Agent mode, then use the shared verify prompt. For the MCP server, see [MCP](MCP.md#one-command-install-per-host).
 
 ## One Skill for every ecosystem
 
-Offing briefly shipped four per-ecosystem Skills (Node.js, Python, GitHub Actions, containers) and removed them in favor of the lifecycle Skill. They were near-copies that differed only by a rule-prefix filter, so every workflow change had to be made five times, they could trigger together on one request, and they covered four of the ecosystems Offing supports. The claim that narrower descriptions trigger more reliably was never measured for that split. Later Skills split by *moment*, not ecosystem: `offing-check-before-add` for adding a dependency, and `offing-upgrade-runtime-action` for upgrading an already-declared runtime or GitHub Action after the upgrade-job eval showed misses (see below). If a measurement shows a gain from ecosystem splits, split by ecosystem then.
+Offing briefly shipped four per-ecosystem Skills (Node.js, Python, GitHub Actions, containers) and removed them in favor of one Skill. They were near-copies that differed only by a rule-prefix filter, so every workflow change had to be made five times, they could trigger together on one request, and they covered four of the ecosystems Offing supports. The claim that narrower descriptions trigger more reliably was never measured for that split. A later split by *moment* produced `offing-check-before-add` and `offing-upgrade-runtime-action` next to `offing`. Those were merged back into the single `offing` Skill (2026-11-11) so there is one install, one skills.sh entry, and one description to maintain; the three moments are now sections of that Skill and keep their own eval corpora below. If a measurement shows a gain from splitting, split then.
 
 The ecosystem-specific cautions live in the lifecycle Skill's "Ecosystem notes".
 
 ## Use the guardrail in this repository
 
-Agents working on Offing itself follow the same rule the check-before-add Skill teaches: run `offing check <purl>` before adding any dependency, runtime, or Action. Install the Skills as above, or run the check from source, which needs nothing else:
+Agents working on Offing itself follow the same rule the Check before adding workflow teaches: run `offing check <purl>` before adding any dependency, runtime, or Action. Install the Skill as above, or run the check from source, which needs nothing else:
 
 ```sh
 npm run dev -- check pkg:npm/request@2.88.2
@@ -125,11 +121,13 @@ On 2026-10-15, `npx skills add velella-sh/offing --list` discovered the `offing`
 | GitHub Copilot | `github-copilot` | Passed |
 | Gemini CLI | `gemini-cli` | Passed |
 
-The same install registered the Skill with skills.sh. It is discoverable as `velella-sh/offing@offing` at [skills.sh](https://skills.sh/velella-sh/offing/offing). The repository lists three Skills once published (`offing-check-before-add` and `offing-upgrade-runtime-action` alongside it). The skills CLI security summary reported Gen Agent Trust Hub **Safe**, Socket **0 alerts**, and Snyk **Low Risk** at validation time. These external assessments can change and do not replace review of the installed files.
+The same install registered the Skill with skills.sh. It is discoverable as `velella-sh/offing@offing` at [skills.sh](https://skills.sh/velella-sh/offing/offing). The skills CLI security summary reported Gen Agent Trust Hub **Safe**, Socket **0 alerts**, and Snyk **Low Risk** at validation time. These external assessments can change and do not replace review of the installed files.
 
 ## Evaluation
 
-### Lifecycle Skill (`offing`)
+### Scan-and-migrate workflow
+
+Each workflow keeps its own corpus and trigger proxy under `skills/offing/evals/`. The Skill triggers on the union of the three; the gates below apply to each workflow, and the separation check keeps them from claiming each other's prompts.
 
 Trigger evaluation cases live in `skills/offing/evals/cases.json`. The versioned corpus contains 114 prompts: 54 expected triggers and 60 expected non-triggers, including 24 deliberately ambiguous requests and six add-a-dependency prompts that must not select this Skill. Each of the `agent-skills`, `codex`, and `claude` discovery lanes has 38 cases.
 
@@ -163,11 +161,11 @@ Fifteen cases failed before the change. Eleven trigger requests missed because t
 
 This is a contract test for the concepts exposed by the skill metadata, not a claim that every model version will make an identical routing decision. Live host checks can add observations without weakening the deterministic CI gate. Generic dependency upgrades, vulnerability or security audits, deprecated source APIs, project scripts, configuration, and unrelated modernization are explicit negative cases.
 
-### Check-before-add Skill (`offing-check-before-add`)
+### Check-before-add workflow
 
-`skills/offing-check-before-add/evals/cases.json` measures the add-a-dependency moment: 54 prompts, 27 expected checks and 27 that should not trigger one, split evenly across the three discovery lanes. Positives add or choose a dependency in npm, PyPI, and GitHub Actions terms (`npm install request-promise`, `Add actions/checkout@v4 to the CI workflow`, `Which package should I use for date handling?`). Negatives are removals, installs of what the lockfile already declares, routine upgrades, `dependency injection`, tests, documentation, refactors, and repository lifecycle prompts that belong to `offing`.
+`skills/offing/evals/check-before-add.json` measures the add-a-dependency moment: 54 prompts, 27 expected checks and 27 that should not trigger one, split evenly across the three discovery lanes. Positives add or choose a dependency in npm, PyPI, and GitHub Actions terms (`npm install request-promise`, `Add actions/checkout@v4 to the CI workflow`, `Which package should I use for date handling?`). Negatives are removals, installs of what the lockfile already declares, routine upgrades, `dependency injection`, tests, documentation, refactors, and repository lifecycle prompts that belong to `offing`.
 
-`npm run eval:skill-triggers` reports recall and false-trigger rate for it under `dependencyGuard` (skill `offing-check-before-add`), overall and by lane, with the same gates (at least 40 cases, recall of 90% or more, false-trigger rate under 5%). It also fails when either Skill's positive prompts falsely trigger the other Skill's classifier (`separation` in the JSON output).
+`npm run eval:skill-triggers` reports recall and false-trigger rate for it under `dependencyGuard` (workflow `check-before-add`), overall and by lane, with the same gates (at least 40 cases, recall of 90% or more, false-trigger rate under 5%). It also fails when one workflow's positive prompts falsely trigger another workflow's classifier (`separation` in the JSON output).
 
 Current published baseline:
 
@@ -178,17 +176,17 @@ Current published baseline:
 | Codex | 18 | 100% | 0% |
 | Claude | 18 | 100% | 0% |
 
-### Upgrade runtime or Action Skill (`offing-upgrade-runtime-action`)
+### Upgrade runtime or Action workflow
 
-Issue #1598 asked whether to split further Skills for runtime upgrades and GitHub Actions upgrades. The decision corpus is the 24 positive prompts in `skills/offing-upgrade-runtime-action/evals/cases.json` (12 runtime, 12 Actions; natural phrasing and lifecycle-worded asks, split across the three discovery lanes). Measuring `offing` alone on those prompts:
+Issue #1598 asked whether to add a further Skill for runtime upgrades and GitHub Actions upgrades. The decision corpus is the 24 positive prompts in `skills/offing/evals/upgrade-runtime-action.json` (12 runtime, 12 Actions; natural phrasing and lifecycle-worded asks, split across the three discovery lanes). Measuring the scan-and-migrate description alone on those prompts:
 
-| Measurement | Cases | Covered by `offing` | Rate | Threshold | Decision |
+| Measurement | Cases | Covered by scan-and-migrate | Rate | Threshold | Decision |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Runtime and GitHub Actions upgrade job | 24 | 12 | 50% | 80% | Added `offing-upgrade-runtime-action` |
+| Runtime and GitHub Actions upgrade job | 24 | 12 | 50% | 80% | Added an upgrade workflow |
 
-Misses were everyday upgrade asks without lifecycle jargon (`Upgrade our Node.js runtime to the current LTS.`, `Bump actions/checkout and actions/setup-node.`, and ten peers). Lifecycle-worded upgrades still hit the existing Skill; the new Skill names the upgrade moment so those misses are covered without an ecosystem split.
+Misses were everyday upgrade asks without lifecycle jargon (`Upgrade our Node.js runtime to the current LTS.`, `Bump actions/checkout and actions/setup-node.`, and ten peers). Lifecycle-worded upgrades still hit the scan description; the upgrade workflow names the upgrade moment so those misses are covered.
 
-The same JSON file is the Skill's own trigger corpus: 42 prompts, 24 expected triggers and 18 non-triggers (additions, whole-repo scans, routine package bumps, security, docs, and verification). `npm run eval:skill-triggers` reports it under `upgradeRuntimeAction` with the same gates (at least 40 cases, recall of 90% or more, false-trigger rate under 5%) and fails when its positives falsely trigger the check-before-add classifier or the reverse.
+The same JSON file is the workflow's own trigger corpus: 42 prompts, 24 expected triggers and 18 non-triggers (additions, whole-repo scans, routine package bumps, security, docs, and verification). `npm run eval:skill-triggers` reports it under `upgradeRuntimeAction` with the same gates (at least 40 cases, recall of 90% or more, false-trigger rate under 5%) and fails when its positives falsely trigger the check-before-add classifier or the reverse. Because the three workflows now share one Skill, the proxies remain per-workflow concept checks; there is no single-description union metric.
 
 Current published baseline:
 

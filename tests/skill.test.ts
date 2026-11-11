@@ -34,11 +34,15 @@ test("Offing skill follows the portable Agent Skills contract", async () => {
   assert.equal(typeof frontmatter.description, "string");
   assert.ok(String(frontmatter.description).length <= 1024);
   assert.doesNotMatch(String(frontmatter.description), /[<>]/);
-  assert.match(String(frontmatter.description), /Do not use for adding a dependency/);
-  assert.match(String(frontmatter.description), /routine package upgrades|routine upgrades/);
+  assert.match(String(frontmatter.description), /before adding or choosing/);
+  assert.match(String(frontmatter.description), /upgrade an already-declared runtime or Action/);
+  assert.match(String(frontmatter.description), /Do not use for routine package upgrades/);
   assert.match(String(frontmatter.description), /vulnerability(?: or security)? audits/);
   assert.deepEqual(Object.keys(frontmatter).sort(), ["description", "license", "metadata", "name"]);
   assert.ok(body.split("\n").length < 100, "skill instructions should stay thin");
+  for (const heading of ["## Scan and migrate", "## Check before adding", "## Upgrade a runtime or Action"]) {
+    assert.ok(body.includes(heading), heading);
+  }
   assert.doesNotMatch(body, /^ {0,3}\[TODO:[^\n]*\]\s*$/m);
   assert.doesNotMatch(contents, /\b(Codex|Claude|Cursor|Gemini|OpenAI|Anthropic)\b/i);
 
@@ -105,24 +109,6 @@ test("skill distribution documents canonical discovery and host compatibility", 
   }
 });
 
-test("check-before-add skill follows the portable Agent Skills contract", async () => {
-  const contents = await readFile(resolve("skills/offing-check-before-add/SKILL.md"), "utf8");
-  const { frontmatter, body } = parseSkill(contents);
-
-  assert.equal(frontmatter.name, "offing-check-before-add");
-  assert.equal(typeof frontmatter.description, "string");
-  assert.ok(String(frontmatter.description).length <= 1024);
-  assert.doesNotMatch(String(frontmatter.description), /[<>]/);
-  assert.match(String(frontmatter.description), /before adding/);
-  assert.match(String(frontmatter.description), /Do not use for repository lifecycle scans/);
-  assert.deepEqual(Object.keys(frontmatter).sort(), ["description", "license", "metadata", "name"]);
-  assert.ok(body.split("\n").length < 80, "check-before-add instructions should stay thin");
-  assert.doesNotMatch(contents, /\b(Codex|Claude|Cursor|Gemini|OpenAI|Anthropic)\b/i);
-  assert.match(body, /\bcheck_dependency\b/);
-  assert.match(body, /offing check/);
-  assert.match(body, /normal authorization rules/);
-});
-
 test("the check-before-add corpus is balanced, labeled, and meets the trigger gates", async () => {
   const { calculateMetrics, classifyDependencyAddition, loadDependencyEvalCorpus, skillEvalHosts } = await import(
     "../benchmarks/skill-trigger-eval.js"
@@ -169,24 +155,6 @@ test("the dependency classifier also holds on prompts that are not in the corpus
     "Add retries to the upload function.",
   ])
     assert.equal(classifyDependencyAddition(prompt), false, prompt);
-});
-
-test("upgrade-runtime-action skill follows the portable Agent Skills contract", async () => {
-  const contents = await readFile(resolve("skills/offing-upgrade-runtime-action/SKILL.md"), "utf8");
-  const { frontmatter, body } = parseSkill(contents);
-
-  assert.equal(frontmatter.name, "offing-upgrade-runtime-action");
-  assert.equal(typeof frontmatter.description, "string");
-  assert.ok(String(frontmatter.description).length <= 1024);
-  assert.doesNotMatch(String(frontmatter.description), /[<>]/);
-  assert.match(String(frontmatter.description), /Upgrade an already-declared runtime/);
-  assert.match(String(frontmatter.description), /Do not use for adding a new dependency/);
-  assert.deepEqual(Object.keys(frontmatter).sort(), ["description", "license", "metadata", "name"]);
-  assert.ok(body.split("\n").length < 80, "upgrade-runtime-action instructions should stay thin");
-  assert.doesNotMatch(contents, /\b(Codex|Claude|Cursor|Gemini|OpenAI|Anthropic)\b/i);
-  assert.match(body, /\bscan_repository\b/);
-  assert.match(body, /\bcheck_dependency\b/);
-  assert.match(body, /normal authorization rules/);
 });
 
 test("the upgrade-runtime-action corpus meets the trigger gates and the deprecation coverage decision", async () => {

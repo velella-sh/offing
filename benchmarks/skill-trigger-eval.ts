@@ -170,7 +170,7 @@ const notAnAddition = [
 ];
 
 /**
- * Deterministic proxy for the `offing-check-before-add` Skill description: the task adds a new
+ * Deterministic proxy for the check-before-add workflow in the `offing` Skill description: the task adds a new
  * package, runtime, or action, or picks one. Removals, installs of what is already declared, routine
  * upgrades, repository lifecycle scans, and unrelated work do not trigger it. Like the lifecycle
  * proxy above, it encodes the concepts the skill states, not case IDs.
@@ -247,7 +247,7 @@ export async function loadSkillEvalCorpus(): Promise<SkillEvalCorpus> {
 
 export async function loadDependencyEvalCorpus(): Promise<DependencyEvalCorpus> {
   return JSON.parse(
-    await readFile(resolve("skills/offing-check-before-add/evals/cases.json"), "utf8"),
+    await readFile(resolve("skills/offing/evals/check-before-add.json"), "utf8"),
   ) as DependencyEvalCorpus;
 }
 
@@ -267,7 +267,7 @@ const packageNameBump =
   /\b(?:upgrade|bump|update)\b[^.?!]{0,30}\b(?!node|python|runtime|actions?(?:\/|\b)|github)[@\w.-]*[a-z][@\w.\/-]*\b(?:to|for)\b/;
 
 /**
- * Deterministic proxy for `offing-upgrade-runtime-action`: the task upgrades an already-declared
+ * Deterministic proxy for the upgrade workflow in the `offing` Skill: the task upgrades an already-declared
  * runtime or GitHub Action. Additions, whole-repo lifecycle discovery without an upgrade ask, and
  * routine package bumps stay out. Encodes the skill description concepts, not case IDs.
  */
@@ -298,7 +298,7 @@ export function classifyRuntimeActionUpgrade(prompt: string): boolean {
 
 export async function loadUpgradeRuntimeActionEvalCorpus(): Promise<UpgradeRuntimeActionEvalCorpus> {
   return JSON.parse(
-    await readFile(resolve("skills/offing-upgrade-runtime-action/evals/cases.json"), "utf8"),
+    await readFile(resolve("skills/offing/evals/upgrade-runtime-action.json"), "utf8"),
   ) as UpgradeRuntimeActionEvalCorpus;
 }
 
@@ -367,26 +367,29 @@ async function run(): Promise<void> {
   const result = {
     schemaVersion: corpus.schemaVersion,
     skill: "offing",
+    workflow: "scan-and-migrate",
     overall,
     byHost,
     failures,
     dependencyGuard: {
       schemaVersion: guardrail.schemaVersion,
-      skill: "offing-check-before-add",
+      skill: "offing",
+      workflow: "check-before-add",
       overall: guardrailOverall,
       byHost: guardrailByHost,
       failures: guardrailFailures,
     },
     upgradeRuntimeAction: {
       schemaVersion: upgradeJob.schemaVersion,
-      skill: "offing-upgrade-runtime-action",
+      skill: "offing",
+      workflow: "upgrade-runtime-action",
       overall: upgradeOverall,
       byHost: upgradeByHost,
       failures: upgradeFailures,
       deprecationCoverage: {
         threshold: 0.8,
         ...deprecationOnUpgradeJob,
-        decision: deprecationOnUpgradeJob.rate < 0.8 ? "added-offing-upgrade-runtime-action" : "kept-offing-only",
+        decision: deprecationOnUpgradeJob.rate < 0.8 ? "separate-upgrade-workflow" : "scan-workflow-covers-upgrades",
       },
     },
     separation: {

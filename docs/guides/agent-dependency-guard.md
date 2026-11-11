@@ -4,7 +4,7 @@ title: Stop your coding agent from adding deprecated packages
 
 # Stop your coding agent from adding deprecated packages
 
-Coding agents often reach for a familiar package without knowing it is deprecated. Offing's `offing-check-before-add` Skill makes the agent check a Package URL against bundled lifecycle rules before it adds anything. The check stays offline after the package is cached; no account or API key is required.
+Coding agents often reach for a familiar package without knowing it is deprecated. Offing's `offing` Skill (its "Check before adding" workflow) makes the agent check a Package URL against bundled lifecycle rules before it adds anything. The check stays offline after the package is cached; no account or API key is required.
 
 ## The problem, with a real package
 
@@ -38,10 +38,10 @@ Install both Offing Skills into your coding agent (lifecycle scans and the check
 npx skills add velella-sh/offing --yes
 ```
 
-To install only the dependency guardrail:
+To install it explicitly:
 
 ```bash
-npx skills add velella-sh/offing --skill offing-check-before-add --yes
+npx skills add velella-sh/offing --skill offing --yes
 ```
 
 Confirm it is present:
@@ -50,7 +50,7 @@ Confirm it is present:
 npx skills list
 ```
 
-You should see `offing-check-before-add`. Restart the agent host (Cursor, Claude Code, Codex, or VS Code Copilot) so it reloads Skills.
+You should see `offing`. Restart the agent host (Cursor, Claude Code, Codex, or VS Code Copilot) so it reloads Skills.
 
 One-command installs for each host, plus how to wire the local MCP server or CLI, are in the [Agent Skills guide](../AGENT_SKILLS.md#one-command-install-per-host).
 
