@@ -31,7 +31,7 @@ import { parsePurl } from "@velella/ebb/purl";
 import { REGISTRY_V2_SCHEMA_VERSION, validateRegistryV2 } from "@velella/ebb/registry";
 import type { LifecycleEvent, RegistryV2Rule } from "@velella/ebb/registry";
 
-export const README_PATH = "README.md";
+export const README_PATH = "docs/ECOSYSTEMS.md";
 export const README_DESCRIPTIONS_PATH = "docs/readme-coverage.json";
 export const README_START_MARKER = "<!-- readme-coverage:start -->";
 export const README_END_MARKER = "<!-- readme-coverage:end -->";
