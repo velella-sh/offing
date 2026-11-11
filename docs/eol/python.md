@@ -1,6 +1,7 @@
 ---
 title: "Is Python end of life? — versions, dates, sources"
 description: "Some Python releases are end of life. Python 3.10 and older are end-of-life as of 2026-10-01."
+permalink: "/eol/python.html"
 canonical_url: "https://velella.sh/offing/eol/python.html"
 ---
 

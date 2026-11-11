@@ -69,4 +69,4 @@ steps:
 - [راهنمای GitHub Action](../GITHUB_ACTION.md)
 - [ماتریس سازگاری](../COMPATIBILITY.md)
 - [مستندات انگلیسی](../index.md)
-- [ترجمهٔ کامل README](https://velella.sh/offing/i18n/fa/README.html)
+- [ترجمهٔ کامل README](https://velella.sh/offing/i18n/fa/README/)

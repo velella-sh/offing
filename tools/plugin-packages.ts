@@ -145,9 +145,9 @@ export async function expectedPluginFiles(root = process.cwd()): Promise<Map<str
     category: "Developer Tools",
     capabilities: ["Read"],
     websiteURL: "https://velella.sh/offing/",
-    supportURL: "https://velella.sh/offing/SUPPORT.html",
-    privacyPolicyURL: "https://velella.sh/offing/PRIVACY.html",
-    termsOfServiceURL: "https://velella.sh/offing/TERMS.html",
+    supportURL: "https://velella.sh/offing/SUPPORT/",
+    privacyPolicyURL: "https://velella.sh/offing/PRIVACY/",
+    termsOfServiceURL: "https://velella.sh/offing/TERMS/",
     defaultPrompt: [
       "Scan this repository for supported lifecycle risks.",
       "Explain the highest-severity Offing finding.",
@@ -186,7 +186,7 @@ export async function expectedPluginFiles(root = process.cwd()): Promise<Map<str
       runtimePackage: `offing@${packageMetadata.version}`,
     },
   });
-  const claudeReadme = `# Offing for Claude\n\nOffing helps Claude find, explain, migrate, and verify software lifecycle risks without duplicating detector logic in the plugin. Its Skill guides the workflow while the bundled local MCP configuration starts the exact Offing npm release declared by this plugin. Repository contents stay local unless you explicitly choose to share them.\n\n## Install\n\nFrom a Claude Code session:\n\n\`\`\`text\n/plugin install offing --marketplace velella-sh/offing\n\`\`\`\n\n## What you get\n\n- Evidence-backed scans for supported runtimes, dependencies, and GitHub Actions.\n- Clear explanations linked to the matching lifecycle rule.\n- Migration context and local verification through one consistent workflow.\n- The same scan, explain, context, and verify behavior used by the Codex adapter.\n- A dependency guard that warns, with evidence and a replacement, when an edit adds a deprecated package or action.\n\nNode.js ${packageMetadata.engines.node.replace(">=", "")} or newer is required for the local MCP server. See the [installation and management guide](https://velella.sh/offing/CLAUDE_PLUGIN.html) for marketplace, project, update, disable, and removal commands.\n`;
+  const claudeReadme = `# Offing for Claude\n\nOffing helps Claude find, explain, migrate, and verify software lifecycle risks without duplicating detector logic in the plugin. Its Skill guides the workflow while the bundled local MCP configuration starts the exact Offing npm release declared by this plugin. Repository contents stay local unless you explicitly choose to share them.\n\n## Install\n\nFrom a Claude Code session:\n\n\`\`\`text\n/plugin install offing --marketplace velella-sh/offing\n\`\`\`\n\n## What you get\n\n- Evidence-backed scans for supported runtimes, dependencies, and GitHub Actions.\n- Clear explanations linked to the matching lifecycle rule.\n- Migration context and local verification through one consistent workflow.\n- The same scan, explain, context, and verify behavior used by the Codex adapter.\n- A dependency guard that warns, with evidence and a replacement, when an edit adds a deprecated package or action.\n\nNode.js ${packageMetadata.engines.node.replace(">=", "")} or newer is required for the local MCP server. See the [installation and management guide](https://velella.sh/offing/CLAUDE_PLUGIN/) for marketplace, project, update, disable, and removal commands.\n`;
   const claudeMarketplace = json({
     $schema: "https://anthropic.com/claude-code/marketplace.schema.json",
     name: "offing",
@@ -275,7 +275,7 @@ export async function expectedPluginFiles(root = process.cwd()): Promise<Map<str
     readFile(resolve(root, "brand/assets/offing-mark-light.svg"), "utf8"),
     readFile(resolve(root, "brand/assets/offing-mark-dark.svg"), "utf8"),
   ]);
-  const codexReadme = `# Offing for Codex\n\nOffing finds, explains, and verifies supported software lifecycle risks in local repositories. The plugin combines the canonical Offing Skill with a read-only local MCP server and requires no Offing account.\n\nRepository analysis runs on the user's computer. Offing does not upload repository contents, execute migration commands, edit files, or open a network listener. The host still controls filesystem access, approvals, and any later edits an agent makes.\n\n## Install\n\nFrom the Offing repository, run:\n\n\`\`\`sh\ncodex plugin add offing@offing-codex\n\`\`\`\n\nNode.js ${packageMetadata.engines.node.replace(">=", "")} or newer is required. See the [Codex installation and management guide](https://velella.sh/offing/CODEX_PLUGIN.html) for installation, updates, validation, privacy boundaries, and removal.\n`;
+  const codexReadme = `# Offing for Codex\n\nOffing finds, explains, and verifies supported software lifecycle risks in local repositories. The plugin combines the canonical Offing Skill with a read-only local MCP server and requires no Offing account.\n\nRepository analysis runs on the user's computer. Offing does not upload repository contents, execute migration commands, edit files, or open a network listener. The host still controls filesystem access, approvals, and any later edits an agent makes.\n\n## Install\n\nFrom the Offing repository, run:\n\n\`\`\`sh\ncodex plugin add offing@offing-codex\n\`\`\`\n\nNode.js ${packageMetadata.engines.node.replace(">=", "")} or newer is required. See the [Codex installation and management guide](https://velella.sh/offing/CODEX_PLUGIN/) for installation, updates, validation, privacy boundaries, and removal.\n`;
   const reviewWalkthrough = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
   <title id="title">Offing lifecycle scan walkthrough</title>
   <desc id="desc">A branded terminal panel showing evidence-backed findings from the bundled review fixture.</desc>

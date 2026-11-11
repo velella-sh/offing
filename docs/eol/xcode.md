@@ -1,6 +1,7 @@
 ---
 title: "Is Xcode end of life? — versions, dates, sources"
 description: "Xcode has releases that are out of support. Xcode 15 through 25 are not accepted for App Store uploads as of 2026-04-28."
+permalink: "/eol/xcode.html"
 canonical_url: "https://velella.sh/offing/eol/xcode.html"
 ---
 

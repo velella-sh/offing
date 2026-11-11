@@ -1,6 +1,7 @@
 ---
 title: "Is Angular end of life? — versions, dates, sources"
 description: "Angular has releases that are out of support. @angular/core v18 and older are no longer supported. The source gives no day."
+permalink: "/eol/npm-angular-core.html"
 canonical_url: "https://velella.sh/offing/eol/npm-angular-core.html"
 ---
 

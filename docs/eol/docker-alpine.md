@@ -1,6 +1,7 @@
 ---
 title: "Is Alpine Linux end of life? — versions, dates, sources"
 description: "Some Alpine Linux releases are end of life. Alpine Linux image release line 3.21 is end-of-life as of 2026-11-01."
+permalink: "/eol/docker-alpine.html"
 canonical_url: "https://velella.sh/offing/eol/docker-alpine.html"
 ---
 

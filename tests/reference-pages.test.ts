@@ -144,15 +144,6 @@ test("every published rule twin is a valid ebb.rule.v1 document", async () => {
   }
 });
 
-test("the site head links a page's JSON twin when its front matter names one", async () => {
-  const include = await readFile("docs/_includes/head-custom.html", "utf8");
-  assert.match(include, /\{%-\s*if page\.json_twin\s*%\}/);
-  assert.match(
-    include,
-    /<link rel="alternate" type="application\/json" href="\{\{ page\.json_twin \| relative_url \}\}">/,
-  );
-});
-
 test("a page states status, versions, dates, sources, freshness, migration, and detectors", () => {
   const fixture = rule({
     migration: {
@@ -410,12 +401,12 @@ test("lookup data can never close the embedded JSON element", () => {
 });
 
 test("the site configuration gives the absolute URL the canonical links rely on", async () => {
-  const config = parse(await readFile("docs/_config.yml", "utf8")) as {
+  const config = parse(await readFile("docs/mizzen.yml", "utf8")) as {
     url: string;
-    baseurl: string;
+    base: string;
     defaults: Array<{ values: { image?: string } }>;
   };
-  assert.equal(`${config.url}${config.baseurl}`, SITE_URL);
+  assert.equal(`${config.url}${config.base}`, SITE_URL);
   assert.equal(config.defaults[0]?.values.image, "/assets/og/default.svg");
 });
 
@@ -743,5 +734,5 @@ test("CI runs the drift check, and Pages generates the gitignored site files", a
     jobs: { build: { steps: Array<{ name?: string; run?: string }> } };
   };
   const site = pages.jobs.build.steps.find((item) => item.run === "node dist/tools/build-reference-pages.js --site");
-  assert.ok(site, "pages.yml must generate sitemap.xml and rules/index.md before Jekyll");
+  assert.ok(site, "pages.yml must generate sitemap.xml and rules/index.md before Mizzen");
 });

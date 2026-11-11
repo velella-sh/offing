@@ -18,4 +18,4 @@ From a Claude Code session:
 - The same scan, explain, context, and verify behavior used by the Codex adapter.
 - A dependency guard that warns, with evidence and a replacement, when an edit adds a deprecated package or action.
 
-Node.js 22 or newer is required for the local MCP server. See the [installation and management guide](https://velella.sh/offing/CLAUDE_PLUGIN.html) for marketplace, project, update, disable, and removal commands.
+Node.js 22 or newer is required for the local MCP server. See the [installation and management guide](https://velella.sh/offing/CLAUDE_PLUGIN/) for marketplace, project, update, disable, and removal commands.

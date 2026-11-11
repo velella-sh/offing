@@ -13,7 +13,7 @@ Offing v0.1 is the first public, end-to-end release of local-first deprecation i
 
 ## Validation
 
-The release was tested against 20 public repositories pinned to immutable commits. The audited corpus contained 27 expected findings with no observed false positives or false negatives. Median local scan time was 8.19 ms and p95 was 48.88 ms on the development machine. See the [full methodology and limitations](https://velella.sh/offing/VALIDATION.html).
+The release was tested against 20 public repositories pinned to immutable commits. The audited corpus contained 27 expected findings with no observed false positives or false negatives. Median local scan time was 8.19 ms and p95 was 48.88 ms on the development machine. See the [full methodology and limitations](https://velella.sh/offing/VALIDATION/).
 
 ## Install
 
@@ -31,4 +31,4 @@ Node.js 22 or newer is required. Offing performs analysis locally and does not e
 - Agent Skill: `skills/offing`
 - Detector SDK: `@velella/offing/sdk`
 
-See the [documentation](https://velella.sh/offing/) and [90-second demo](https://velella.sh/offing/DEMO.html).
+See the [documentation](https://velella.sh/offing/) and [90-second demo](https://velella.sh/offing/DEMO/).

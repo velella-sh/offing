@@ -93,7 +93,7 @@ Do not raise it to make a single change pass.
 
 **Docs-only pull requests.** Skip the test matrix. Build and check reference pages, verify
 `llms-full.txt`, `dashboard/data.json`, and `api/v1` are buildable, generate `llms-full.txt`,
-`sitemap.xml`, `rules/index.md`, `dashboard/data.json`, and `api/v1` for the Jekyll site, and build
+`sitemap.xml`, `rules/index.md`, `dashboard/data.json`, and `api/v1` for the Mizzen site, and build
 the site instead.
 
 **When site files change** (`docs/` site sources, theme config, and Lighthouse config).
@@ -509,16 +509,16 @@ this page.
 
 ### Broken documentation site build (`pages build and deployment`, `docs doctor`, docs job)
 
-**Symptom.** The `Build the documentation site` step fails with a Jekyll/Ruby stack trace from
-`bundle exec jekyll build`. Second-most-failing workflow in the 30-day window above.
+**Symptom.** The `Build the documentation site` step fails with a Mizzen error from
+`mizzen build`. Second-most-failing workflow in the 30-day window above.
 
-**Cause.** Bad front matter, Liquid errors, or a docs source the site build cannot process. The
+**Cause.** Bad front matter, a redirect that collides with a page, or a docs source the site build cannot process. The
 docs-only path of `ci.yml` builds the same site, so this usually also fails pre-merge — unless the
 breaking change reached `main` through another path. A red `docs doctor` run means the same thing:
 the doctor's own findings are report-only (`level: none`), so only the site build can turn it red.
 
-**Fix.** Reproduce with `cd docs && bundle exec jekyll build --baseurl ""` and fix the docs source.
-Jekyll config and theme changes belong in site-focused PRs.
+**Fix.** Reproduce with `npx @velella/mizzen check docs` (plus `--theme @velella/lateen`) and fix the docs source.
+Mizzen config and theme changes belong in site-focused PRs.
 
 ### Seaworthy fails on the built site (`seaworthy` job)
 
@@ -612,7 +612,7 @@ just because a later task will fold it.
 | `ci.yml` | Pull request / merge queue / main | `pull_request`, `push` to `main`, `merge_group` | Main gate: classify docs vs code, `npm run check` matrix, quality, self-scan path, and the required `ci-ok` aggregator |
 | `decisions.yml` | Pull request | `pull_request` on contract paths | Fail when a public-contract change lacks a decision record |
 | `rules.yml` | Pull request / main | `pull_request` / `push` on fixture paths and `package-lock.json` | Fixture-test the rules the diff can affect |
-| `docs-doctor.yml` | Pull request / merge queue | `pull_request` on docs site paths; `workflow_call` from `ci.yml`; `workflow_dispatch` | Slipway doctor on the documentation site (report-only until the site is clean) |
+| `docs-doctor.yml` | Pull request / merge queue | `pull_request` on docs site paths; `workflow_call` from `ci.yml`; `workflow_dispatch` | `mizzen check` on the documentation site (errors fail; warnings are reported) |
 | `site-budget.yml` | Pull request / merge queue | `pull_request` on site paths; `workflow_call` from `ci.yml`; `workflow_dispatch` | Fail when the docs site exceeds size or LCP budgets |
 | `fuzz.yml` | Pull request / nightly | `pull_request` on parser paths; nightly schedule; `workflow_dispatch` | Deeper parser fuzz than the tight budget inside `npm run check` |
 | `workflow-lint.yml` | Main | `push` to `main` on workflow paths; `workflow_dispatch` | actionlint + zizmor on workflow YAML and `action.yml` |

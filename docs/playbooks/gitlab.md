@@ -71,7 +71,7 @@ include:
 - `baseline_warn_days` warns when a suppression expires within that many days.
 - `on_expired` decides what happens after the date. `resurface` reports the finding again. `fail` also fails the job, so an accepted risk cannot quietly stay accepted past its date.
 
-The baseline format and expiry behavior are the same as in the [GitHub Action](GITHUB_ACTION.md). Review every baseline change in the merge request like any other code change: a new suppression is an accepted risk, and it should carry a reason and a date a person chose.
+The baseline format and expiry behavior are the same as in the [GitHub Action](../GITHUB_ACTION.md). Review every baseline change in the merge request like any other code change: a new suppression is an accepted risk, and it should carry a reason and a date a person chose.
 
 To warn before a finding's support ends, set `min_support_days`. Leave it empty to report only what the data already marks.
 

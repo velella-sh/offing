@@ -1,6 +1,7 @@
 ---
 title: "Is Google Kubernetes Engine end of life? — versions, dates, sources"
 description: "Some Google Kubernetes Engine releases are end of life. GKE 1.31 is past end of extended support as of 2026-10-22."
+permalink: "/eol/google-kubernetes-engine.html"
 canonical_url: "https://velella.sh/offing/eol/google-kubernetes-engine.html"
 ---
 

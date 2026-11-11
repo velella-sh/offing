@@ -1,6 +1,7 @@
 ---
 title: "Is Elixir end of life? — versions, dates, sources"
 description: "Some Elixir releases are end of life. Elixir 1.15 no longer receives security updates as of 2026-06-03."
+permalink: "/eol/elixir.html"
 canonical_url: "https://velella.sh/offing/eol/elixir.html"
 ---
 

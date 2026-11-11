@@ -1,6 +1,7 @@
 ---
 title: "Is Laravel end of life? — versions, dates, sources"
 description: "Laravel has releases that are out of support. Laravel 11 is no longer supported as of 2026-03-12."
+permalink: "/eol/composer-laravel-framework.html"
 canonical_url: "https://velella.sh/offing/eol/composer-laravel-framework.html"
 ---
 

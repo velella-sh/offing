@@ -7,7 +7,7 @@
 // document per registry rule). Every document is validated against schemas/api-product.v1.schema.json
 // before it is written. Paths and object keys are sorted and nothing reads a clock, so the same registry
 // files always produce the same bytes. The tree is not committed: the Pages workflow generates it before
-// Jekyll builds so the public URLs stay the same without pull-request churn. Local `npm run build:data-api`
+// Mizzen builds so the public URLs stay the same without pull-request churn. Local `npm run build:data-api`
 // writes the same path for preview. With --check nothing is written: the command validates every document
 // against the schema and exits 1 when the registry would not produce a well-formed API. The pages site
 // serves docs/, so the output is published at https://velella.sh/offing/api/v1/.

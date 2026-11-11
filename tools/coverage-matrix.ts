@@ -501,7 +501,7 @@ export function replaceStateOfEolSection(document: string, section: string): str
 
 /** What the committed State of EOL page holds between its markers. */
 export const STATE_OF_EOL_PLACEHOLDER =
-  "The aggregate tables are built from the corpus and the last recorded full run when the site is built, so they are not committed and a corpus change never edits this page. Build them locally with `node dist/tools/coverage-matrix.js --site`; the live page is at <https://velella.sh/offing/state-of-eol.html>.";
+  "The aggregate tables are built from the corpus and the last recorded full run when the site is built, so they are not committed and a corpus change never edits this page. Build them locally with `node dist/tools/coverage-matrix.js --site`; the live page is at <https://velella.sh/offing/state-of-eol/>.";
 
 /** docs/state-of-eol.md as committed: the placeholder between the markers. */
 export async function buildStateOfEolDocument(root = "."): Promise<string> {

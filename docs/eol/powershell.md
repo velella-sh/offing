@@ -1,6 +1,7 @@
 ---
 title: "Is PowerShell end of life? — versions, dates, sources"
 description: "Some PowerShell releases are end of life. PowerShell 7.4 (LTS) is no longer supported as of 2026-11-10."
+permalink: "/eol/powershell.html"
 canonical_url: "https://velella.sh/offing/eol/powershell.html"
 ---
 

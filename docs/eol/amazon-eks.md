@@ -1,6 +1,7 @@
 ---
 title: "Is Amazon EKS end of life? — versions, dates, sources"
 description: "Some Amazon EKS releases are end of life. EKS 1.30 and earlier clusters are past end of extended support. The source gives no day."
+permalink: "/eol/amazon-eks.html"
 canonical_url: "https://velella.sh/offing/eol/amazon-eks.html"
 ---
 

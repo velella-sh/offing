@@ -1,6 +1,7 @@
 ---
 title: "Is Ruby end of life? — versions, dates, sources"
 description: "Some Ruby releases are end of life. Ruby 3.2 is end-of-life as of 2026-04-01. This page lists 12 reviewed lifecycle rules for pkg:generic/ruby, with the status, date, and source for each."
+permalink: "/eol/ruby.html"
 canonical_url: "https://velella.sh/offing/eol/ruby.html"
 ---
 

@@ -9,7 +9,7 @@
 // The tool never reads the clock and never uses the network: the reference day is the required --today argument,
 // and it is written into the output. `run-date` pins the reference day to the last full run so the published
 // file does not change with the clock.
-// The file is not committed: the Pages workflow generates it before Jekyll builds. Local `npm run build:dashboard`
+// The file is not committed: the Pages workflow generates it before Mizzen builds. Local `npm run build:dashboard`
 // writes the same path for preview. Output is deterministic: the same inputs and the same day give the same bytes.
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";

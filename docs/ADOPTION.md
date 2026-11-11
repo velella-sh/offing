@@ -77,7 +77,7 @@ Search Console shows which pages people land on from search, but its API needs a
    ```json
    {
      "pages": [
-       { "page": "https://velella.sh/offing/RULES.html", "clicks": 42, "impressions": 530 },
+       { "page": "https://velella.sh/offing/RULES/", "clicks": 42, "impressions": 530 },
        { "page": "https://velella.sh/offing/eol/", "clicks": 18, "impressions": 410 }
      ]
    }

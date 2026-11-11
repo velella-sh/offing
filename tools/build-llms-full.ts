@@ -6,7 +6,7 @@
 //
 // docs/llms.txt is the curated index and the only thing edited by hand; the full file is generated from it, so the
 // two cannot disagree about which pages exist. Output is deterministic.
-// The file is not committed: the Pages workflow generates it before Jekyll builds, so the public URL stays the same
+// The file is not committed: the Pages workflow generates it before Mizzen builds, so the public URL stays the same
 // without pull-request churn. Local `npm run build:llms` writes the same path for preview.
 
 import { readFile, writeFile } from "node:fs/promises";
@@ -27,18 +27,20 @@ export function indexedPages(index: string): IndexedPage[] {
   const pages: IndexedPage[] = [];
   for (const match of index.matchAll(/^- \[([^\]]+)\]\((https:\/\/[^)\s]+)\)/gm)) {
     const url = match[2]!;
-    if (!url.startsWith(SITE) || !url.endsWith(".html")) continue;
-    pages.push({ title: match[1]!, file: `${url.slice(SITE.length, -".html".length)}.md`, url });
+    if (!url.startsWith(SITE) || url === SITE) continue;
+    // A page is `<name>/` (its pretty URL) or `<name>.html` (a page that sets its own permalink).
+    if (url.endsWith("/")) pages.push({ title: match[1]!, file: `${url.slice(SITE.length, -1)}.md`, url });
+    else if (url.endsWith(".html")) pages.push({ title: match[1]!, file: `${url.slice(SITE.length, -5)}.md`, url });
   }
   return pages;
 }
 
-/** A Markdown page without its Jekyll front matter. */
+/** A Markdown page without its front matter. */
 export function stripFrontMatter(text: string): string {
   return text.startsWith("---\n") ? text.slice(text.indexOf("\n---\n", 4) + 5).replace(/^\n+/, "") : text;
 }
 
-/** Drops the `{% raw %}` guards that keep Jekyll from reading `{{ }}` in examples as Liquid. */
+/** Drops leftover `{% raw %}` guards from before the site moved off Liquid. */
 export function stripLiquidRaw(text: string): string {
   return text.replace(/^\{% (?:end)?raw %\}\r?\n/gm, "");
 }

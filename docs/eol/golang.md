@@ -1,6 +1,7 @@
 ---
 title: "Is Go end of life? — versions, dates, sources"
 description: "Go has releases that are out of support. Go 1.25 is no longer supported as of 2026-08-19. This page lists 6 reviewed lifecycle rules for pkg:generic/golang, with the status, date, and source for each."
+permalink: "/eol/golang.html"
 canonical_url: "https://velella.sh/offing/eol/golang.html"
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "Is Terraform end of life? — versions, dates, sources"
 description: "Some Terraform releases are end of life. The list() and map() functions were removed in Terraform 0.15. The source gives no day."
+permalink: "/eol/terraform.html"
 canonical_url: "https://velella.sh/offing/eol/terraform.html"
 ---
 

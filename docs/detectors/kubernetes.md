@@ -1,4 +1,3 @@
-{% raw %}
 # Kubernetes APIs
 
 The `kubernetes` detector reports API versions that the Kubernetes project says are no longer served, as declared in manifests, Helm chart templates, and kustomizations, and Helm chart dependencies that still point at the retired stable or incubator chart repositories. It is **stable**: its level is recorded as `stable` in `benchmarks/thresholds.json`, and the precision floor is enforced on the [public corpus](../VALIDATION.md#kubernetes-corpus) (thirty-six repositories, twenty-nine chosen blind). The evidence required for `stable` is in [Decision 0013](../decisions/0013-detector-maturity.md). The reasoning for API detection is in [Decision 0008](../decisions/0008-kubernetes-detector.md).
@@ -66,4 +65,3 @@ The rules are in `registry/kubernetes.json` and ship in the [data bundle](../DAT
 ## Validation
 
 Thirty-six public repositories at pinned commits cover this detector: seven targeted and twenty-nine chosen blind by the rules in [Validation](../VALIDATION.md#kubernetes-blind-selection) (the 2026-10-23 beta walk plus the 2026-11-08 stable expansion). The set includes plain manifests, Helm `Chart.yaml` dependencies on the retired stable repository, and Kustomize overlays. Every expected finding has a `maintainer-review` note naming the path and line. Corpus-wide evidence meets every stable count in [decision 0013](../decisions/0013-detector-maturity.md). Offline validate on the Kubernetes bucket reported precision 1 and recall 1 for `kubernetes`. The hits not reported are the forms this page lists as not judged: references below the top level of a document (a Flagger `autoscalerRef`), and files under `fixtures`, `testdata`, and similar skipped directories (`kind: List` items are judged).
-{% endraw %}

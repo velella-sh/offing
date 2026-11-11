@@ -2,7 +2,6 @@
 title: Detector layouts
 ---
 
-{% raw %}
 # Detector layouts
 
 The layout each built-in detector follows: one pure parser per file type, rules from a bundled registry, and a documented boundary. The authoring guide starts at [Detector authoring](../DETECTORS.md).
@@ -136,4 +135,3 @@ The Serverless runtimes detector follows the same layout. Its entry point, `src/
 
 The user-facing list of supported forms and limits for this detector is in [Serverless runtimes](serverless.md).
 
-{% endraw %}

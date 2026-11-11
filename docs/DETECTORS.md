@@ -1,4 +1,3 @@
-{% raw %}
 # Detector authoring
 
 Offing detectors are adapters at the detector SDK seam. They inspect a repository and return lifecycle findings; the scan engine handles detector attribution, sorting, reporting, and composition.
@@ -194,4 +193,3 @@ Moved to [Detector contracts: Source usage contracts](detectors/authoring-contra
 `offing.detector.v1` remains compatible throughout the `0.1.x` line. Additive fields will be optional. A future breaking interface will use a new API version so an old adapter fails clearly instead of producing unreliable findings.
 
 Run `npm run check` against the minimum Offing version your detector supports. The repository compatibility suite exercises an external adapter, rejects an old API version, validates registry failure modes, and runs the published example through the same engine seam used by built-in detectors.
-{% endraw %}

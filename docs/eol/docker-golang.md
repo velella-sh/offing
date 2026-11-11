@@ -1,6 +1,7 @@
 ---
 title: "Is Go Docker image end of life? — versions, dates, sources"
 description: "Some Go Docker image releases are end of life. Go image release lines 1.25 and older are end-of-life as of 2026-08-19."
+permalink: "/eol/docker-golang.html"
 canonical_url: "https://velella.sh/offing/eol/docker-golang.html"
 ---
 

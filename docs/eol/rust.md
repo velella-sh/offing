@@ -1,6 +1,7 @@
 ---
 title: "Is Rust end of life? — versions, dates, sources"
 description: "Rust has releases that are out of support. Rust 1.98 and older are no longer supported as of 2026-10-01."
+permalink: "/eol/rust.html"
 canonical_url: "https://velella.sh/offing/eol/rust.html"
 ---
 

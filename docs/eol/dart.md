@@ -1,6 +1,7 @@
 ---
 title: "Is Dart end of life? — versions, dates, sources"
 description: "Dart has releases that are out of support. Dart 3.12 no longer receives security updates as of 2026-08-12."
+permalink: "/eol/dart.html"
 canonical_url: "https://velella.sh/offing/eol/dart.html"
 ---
 

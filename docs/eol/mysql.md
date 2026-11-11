@@ -1,6 +1,7 @@
 ---
 title: "Is MySQL end of life? — versions, dates, sources"
 description: "Some MySQL releases are end of life. MySQL 8.0 is end-of-life as of 2026-04-30. This page lists 2 reviewed lifecycle rules for pkg:generic/mysql, with the status, date, and source for each."
+permalink: "/eol/mysql.html"
 canonical_url: "https://velella.sh/offing/eol/mysql.html"
 ---
 

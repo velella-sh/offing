@@ -1,6 +1,7 @@
 ---
 title: "Is Debian end of life? — versions, dates, sources"
 description: "Some Debian releases are end of life. Debian image release lines 11 and older are end-of-life as of 2026-08-31."
+permalink: "/eol/docker-debian.html"
 canonical_url: "https://velella.sh/offing/eol/docker-debian.html"
 ---
 

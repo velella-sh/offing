@@ -1,6 +1,7 @@
 ---
 title: "Is Spring Boot end of life? — versions, dates, sources"
 description: "Spring Boot has releases that are out of support. Spring Boot 1.x is out of open-source support. The source gives no day."
+permalink: "/eol/maven-org-springframework-boot-spring-boot.html"
 canonical_url: "https://velella.sh/offing/eol/maven-org-springframework-boot-spring-boot.html"
 ---
 

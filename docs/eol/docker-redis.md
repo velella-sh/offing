@@ -1,6 +1,7 @@
 ---
 title: "Is Redis Docker image end of life? — versions, dates, sources"
 description: "Some Redis Docker image releases are end of life. Redis image release lines 6.0 and older are end-of-life as of 2022-05-31."
+permalink: "/eol/docker-redis.html"
 canonical_url: "https://velella.sh/offing/eol/docker-redis.html"
 ---
 

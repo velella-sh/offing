@@ -1,6 +1,7 @@
 ---
 title: "Is MariaDB end of life? — versions, dates, sources"
 description: "Some MariaDB releases are end of life. MariaDB image release lines 10.10 and older are end-of-life as of 2026-07-06."
+permalink: "/eol/docker-mariadb.html"
 canonical_url: "https://velella.sh/offing/eol/docker-mariadb.html"
 ---
 

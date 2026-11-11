@@ -1,6 +1,7 @@
 ---
 title: "Is Python Docker image end of life? — versions, dates, sources"
 description: "Some Python Docker image releases are end of life. Python image release lines 3.10 and older are end-of-life as of 2026-10-01."
+permalink: "/eol/docker-python.html"
 canonical_url: "https://velella.sh/offing/eol/docker-python.html"
 ---
 

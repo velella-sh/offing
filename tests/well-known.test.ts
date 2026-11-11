@@ -71,7 +71,7 @@ test("docs/.well-known/mcp.json stays in sync with server.json and the MCP tools
   assert.deepEqual(mcp.packages, server.packages);
   assert.equal(mcp.transport.type, "stdio");
   assert.equal(mcp.packages[0]?.transport.type, "stdio");
-  assert.equal(mcp.documentationUrl, `${SITE}/MCP.html`);
+  assert.equal(mcp.documentationUrl, `${SITE}/MCP/`);
   assert.deepEqual(
     mcp.tools.map((tool) => tool.name),
     [...MCP_TOOL_NAMES],
@@ -85,7 +85,7 @@ test("docs/.well-known/agent.json describes the same skills as the MCP tools", (
   assert.equal(agent.name, server.title);
   assert.equal(agent.version, server.version);
   assert.equal(agent.url, server.websiteUrl);
-  assert.equal(agent.documentationUrl, `${SITE}/MCP.html`);
+  assert.equal(agent.documentationUrl, `${SITE}/MCP/`);
   assert.match(agent.protocolVersion, /^\d+\.\d+(\.\d+)?$/);
   assert.ok(agent.description.includes("stdio") || agent.description.includes("MCP"));
   assert.deepEqual(
@@ -99,11 +99,11 @@ test("docs/.well-known/agent.json describes the same skills as the MCP tools", (
   }
 });
 
-test("Jekyll publishes the .well-known folder", async () => {
-  const config = parse(await read("docs/_config.yml")) as { include?: string[] };
+test("Mizzen publishes the .well-known folder", async () => {
+  const config = parse(await read("docs/mizzen.yml")) as { include?: string[] };
   assert.ok(
     config.include?.includes(".well-known"),
-    "docs/_config.yml must include .well-known so Jekyll does not skip the dot folder",
+    "docs/mizzen.yml must include .well-known so Mizzen does not skip the dot folder",
   );
 });
 

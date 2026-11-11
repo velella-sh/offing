@@ -1,6 +1,7 @@
 ---
 title: "Is Scala end of life? — versions, dates, sources"
 description: "Some Scala releases are end of life. Scala 2.11 reached end of life as of 2016-01-01. This page lists 2 reviewed lifecycle rules for pkg:generic/scala, with the status, date, and source for each."
+permalink: "/eol/scala.html"
 canonical_url: "https://velella.sh/offing/eol/scala.html"
 ---
 

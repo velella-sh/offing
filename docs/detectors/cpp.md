@@ -1,4 +1,3 @@
-{% raw %}
 # C and C++
 
 The `cpp` detector reports CMake policy floors that CMake has removed or deprecated, as declared in `cmake_minimum_required`, and matches Conan, vcpkg, language-standard, and compiler declarations when a reviewed rule covers them. It is **supported**: it is scored on the [public corpus](../VALIDATION.md) and held to the corpus precision and recall floors.
@@ -46,4 +45,3 @@ The rules are in `registry/cpp.json` and ship in the [data bundle](../DATA.md). 
 ## Validation
 
 The corpus holds 15 pinned C/C++ ecosystem repositories: eleven with reviewed findings in that folder and four with none (`catchorg/Catch2`, `j2kun/mlir-tutorial`, `rogerorr/NtTrace`, and `jagheterfredrik/meb-preheat`). Across every ecosystem the corpus expects 242 `cpp` findings in 20 repositories. Of the 15 C/C++ entries, 11 were selected blind (73%). Every expected finding was checked by reading its line at the pinned commit; notes cite maintainer migration commits or the CMake policy documentation rather than Offing's output. Method and selection rules are in [Validation](../VALIDATION.md).
-{% endraw %}

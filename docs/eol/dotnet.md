@@ -1,6 +1,7 @@
 ---
 title: "Is .NET end of life? — versions, dates, sources"
 description: ".NET has releases that are out of support. .NET 8 is no longer supported as of 2026-11-10."
+permalink: "/eol/dotnet.html"
 canonical_url: "https://velella.sh/offing/eol/dotnet.html"
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: "Is PostgreSQL end of life? — versions, dates, sources"
 description: "Some PostgreSQL releases are end of life. PostgreSQL 13 is no longer a supported major version as of 2025-11-13."
+permalink: "/eol/postgresql.html"
 canonical_url: "https://velella.sh/offing/eol/postgresql.html"
 ---
 
