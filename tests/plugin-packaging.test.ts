@@ -17,7 +17,7 @@ test("generated plugin packages match canonical shared assets", async () => {
 
 test("every canonical Skill is packaged into both plugins", async () => {
   const expected = await expectedPluginFiles();
-  for (const name of ["offing-check-before-add", "offing", "offing-upgrade-runtime-action"]) {
+  for (const name of ["offing"]) {
     const canonical = await readFile(resolve("skills", name, "SKILL.md"), "utf8");
     assert.equal(expected.get(`plugins/codex/skills/${name}/SKILL.md`), canonical, name);
     assert.equal(expected.get(`plugins/claude/skills/${name}/SKILL.md`), canonical, name);

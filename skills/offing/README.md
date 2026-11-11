@@ -1,6 +1,6 @@
-# Offing deprecation
+# Offing
 
-Use Offing's evidence-backed repository lifecycle workflow from a compatible coding agent. The Skill covers discovery, explanation, migration context, and fresh verification for deprecated runtimes, package declarations, and GitHub Actions.
+Use Offing's evidence-backed lifecycle workflows from a compatible coding agent. One Skill covers three moments: scanning a repository and explaining, migrating, and verifying its findings; checking a package, runtime, or GitHub Action before adding it; and upgrading a runtime or Action the repository already declares.
 
 ## Install and update
 
@@ -10,7 +10,7 @@ Install the Skill from the Offing monorepo:
 npx skills add velella-sh/offing
 ```
 
-The repository exposes `offing` and `offing-check-before-add`. To select this Skill explicitly or automate installation:
+To select the Skill explicitly or automate installation:
 
 ```bash
 npx skills add velella-sh/offing --skill offing --yes
@@ -28,8 +28,10 @@ npx skills update offing
 - “Explain this Offing finding and show its lifecycle evidence.”
 - “Create migration context for this finding and migrate the affected usages.”
 - “Verify that the reported deprecation is gone after these changes.”
+- “Add the request package to this project.” (checks it first)
+- “Upgrade our Node.js runtime to the current LTS.”
 
-Routine dependency upgrades, vulnerability audits, deprecated application APIs, and unrelated modernization should use other workflows.
+Routine package upgrades, removals, vulnerability audits, deprecated application APIs, and unrelated modernization should use other workflows.
 
 ## Execution path
 
