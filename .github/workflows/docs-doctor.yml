@@ -42,4 +42,4 @@ jobs:
       - name: Check the documentation site
         # Mizzen builds the site in a temporary folder and reports every broken link, placeholder, and
         # navigation entry. Errors fail the job; warnings stay in the log.
-        run: $RUNNER_TEMP/site-tools/node_modules/.bin/mizzen check docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen"
+        run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" check docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen"'

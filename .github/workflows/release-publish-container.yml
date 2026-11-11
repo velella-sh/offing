@@ -54,9 +54,11 @@ jobs:
           if [ -n "$RELEASE_SHA" ]; then
             git tag --points-at HEAD | grep -Fx "v$version"
           fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "image=ghcr.io/${{ github.repository }}" >> "$GITHUB_OUTPUT"
-          echo "tags=ghcr.io/${{ github.repository }}:$version" >> "$GITHUB_OUTPUT"
+          {
+            echo "version=$version"
+            echo "image=ghcr.io/${{ github.repository }}"
+            echo "tags=ghcr.io/${{ github.repository }}:$version"
+          } >> "$GITHUB_OUTPUT"
           if [[ "$version" != *-* ]]; then
             echo "tags=ghcr.io/${{ github.repository }}:$version,ghcr.io/${{ github.repository }}:latest" >> "$GITHUB_OUTPUT"
           fi
