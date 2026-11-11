@@ -308,7 +308,7 @@ test("the release workflow attaches a signed SBOM after the binaries create the 
   assert.ok(steps.some((step) => step.if === "inputs.dry_run" && step.run?.includes("nothing was attached")));
   assert.equal(
     steps.find((step) => step.uses?.startsWith("sigstore/cosign-installer@"))?.uses,
-    "sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6",
+    "sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532",
   );
   const signRun = steps[sign]!.run ?? "";
   assert.match(signRun, /--yes --bundle sbom\.cdx\.json\.sigstore\.json sbom\.cdx\.json/);
