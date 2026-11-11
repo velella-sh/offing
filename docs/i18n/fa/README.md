@@ -18,7 +18,7 @@ title: Offing
 
 [![CI](https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat)](https://github.com/velella-sh/offing/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvelella-sh%2Foffing%2Fbadges%2Fcoverage.json&labelColor=1F1F28&style=flat)](https://github.com/velella-sh/offing/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/offing.svg?logo=npm&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat)](https://www.npmjs.com/package/@velella/offing)
+[![npm](https://img.shields.io/npm/v/@velella/offing?logo=npm&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat)](https://www.npmjs.com/package/@velella/offing)
 [![Offing](https://raw.githubusercontent.com/velella-sh/offing/badges/offing-badge.svg)](https://github.com/velella-sh/offing/actions/workflows/ci.yml)
 [![skills.sh](https://skills.sh/b/velella-sh/offing)](https://skills.sh/velella-sh/offing/offing)
 

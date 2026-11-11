@@ -15,7 +15,7 @@
 <p align="center">
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Coverage" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvelella-sh%2Foffing%2Fbadges%2Fcoverage.json&labelColor=1F1F28&style=flat"></a>
-  <a href="https://www.npmjs.com/package/@velella/offing"><img alt="npm" src="https://img.shields.io/npm/v/offing.svg?logo=npm&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
+  <a href="https://www.npmjs.com/package/@velella/offing"><img alt="npm" src="https://img.shields.io/npm/v/@velella/offing?logo=npm&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Offing" src="https://raw.githubusercontent.com/velella-sh/offing/badges/offing-badge.svg"></a>
   <a href="https://securityscorecards.dev/viewer/?uri=github.com/velella-sh/offing"><img alt="OpenSSF Scorecard" src="https://img.shields.io/ossf-scorecard/github.com/velella-sh/offing?label=openssf%20scorecard&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://www.bestpractices.dev/projects/16161"><img alt="OpenSSF Best Practices" src="https://img.shields.io/cii/level/16161?label=openssf%20best%20practices&labelColor=1F1F28&color=6A5590&style=flat"></a>
