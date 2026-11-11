@@ -124,9 +124,7 @@ process.env.EBB_DATA_DIR ??= process.env.OFFING_DATA_DIR;
 const offline = process.argv.includes("--offline");
 const warmOnly = process.argv.includes("--warm");
 if ((offline || warmOnly) && !cacheDir) {
-  console.error(
-    `${warmOnly ? "--warm" : "--offline"} needs OFFING_CORPUS_CACHE, for example ~/.cache/offing-corpus.`,
-  );
+  console.error(`${warmOnly ? "--warm" : "--offline"} needs OFFING_CORPUS_CACHE, for example ~/.cache/offing-corpus.`);
   process.exit(2);
 }
 if (offline && warmOnly) {

@@ -119,10 +119,7 @@ test("the command prints a plan with --dry-run, needs --yes without a terminal, 
   assert.equal(dry.code, 0, dry.stderr);
   assert.match(dry.stdout, /Would create CLAUDE\.md/);
   assert.match(dry.stdout, /Skill install \(supported hosts\):/);
-  assert.match(
-    dry.stdout,
-    /Claude Code: npx skills add velella-sh\/offing --agent claude-code --skill offing --yes/,
-  );
+  assert.match(dry.stdout, /Claude Code: npx skills add velella-sh\/offing --agent claude-code --skill offing --yes/);
   assert.match(dry.stdout, /Dry run: nothing was written/);
   await assert.rejects(readFile(join(root, "CLAUDE.md"), "utf8"));
 
@@ -174,9 +171,7 @@ test("installSetupSkills runs the exact command only when called, and dry-run ne
 
   const result = installSetupSkills(plan, { cwd: root, run });
   assert.deepEqual(result, { installed: ["Cursor"], failed: [] });
-  assert.deepEqual(calls, [
-    ["skills", "add", "velella-sh/offing", "--agent", "cursor", "--skill", "offing", "--yes"],
-  ]);
+  assert.deepEqual(calls, [["skills", "add", "velella-sh/offing", "--agent", "cursor", "--skill", "offing", "--yes"]]);
 });
 
 test("installSetupSkills records a failed host without throwing", async () => {

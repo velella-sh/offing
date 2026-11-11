@@ -215,10 +215,7 @@ test("the init command writes the hook and honors --dry-run", async () => {
     written.stdout,
     /Created \.github\/hooks\/offing\.json; GitHub Copilot now runs Offing after create and edit\./,
   );
-  assert.match(
-    await readFile(join(root, COPILOT_HOOKS_FILE), "utf8"),
-    /npx --no-install offing hook copilot/,
-  );
+  assert.match(await readFile(join(root, COPILOT_HOOKS_FILE), "utf8"), /npx --no-install offing hook copilot/);
 
   const again = spawnSync(process.execPath, [cli, "init", "--hooks-for", "copilot", root], { encoding: "utf8" });
   assert.equal(again.status, 0, again.stderr);

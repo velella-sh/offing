@@ -95,10 +95,7 @@ function brandChrome(title: string, description: string): string[] {
 /** Site-wide default: the brand social-preview card (tagline + command). */
 export function renderDefaultOgImage(): string {
   return [
-    ...brandChrome(
-      "Offing",
-      "Know what breaks next. Local-first deprecation intelligence for software repositories.",
-    ),
+    ...brandChrome("Offing", "Know what breaks next. Local-first deprecation intelligence for software repositories."),
     `<g font-family="Inter, Arial, sans-serif">`,
     `<text x="552" y="256" fill="#F3F6F4" font-size="68" font-weight="700" letter-spacing="7">OFFING</text>`,
     `<text x="555" y="310" fill="#9AC7B6" font-size="27" font-weight="500">Know what breaks next.</text>`,

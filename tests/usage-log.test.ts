@@ -125,10 +125,7 @@ test("the command reports that logging is off, and summarizes a file once it is 
   assert.equal(off.code, 0, off.stderr);
   assert.match(off.stdout, /Usage logging is off/);
 
-  assert.equal(
-    (await run({ OFFING_USAGE_LOG: file }, "check", "pkg:npm/request@2.88.2", "--fail-on", "none")).code,
-    0,
-  );
+  assert.equal((await run({ OFFING_USAGE_LOG: file }, "check", "pkg:npm/request@2.88.2", "--fail-on", "none")).code, 0);
   const on = await run({ OFFING_USAGE_LOG: file }, "usage", "--json");
   assert.equal(on.code, 0, on.stderr);
   const summary = JSON.parse(on.stdout);

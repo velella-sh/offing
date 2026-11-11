@@ -220,11 +220,21 @@ test("nested block comments blank the whole nest", () => {
 
 test("Package.resolved: reads pin versions with the line of state.version", async () => {
   assert.deepEqual(parsePackageResolved(await fixture("positive/Package.resolved.fixture")), [
-    { identity: "swift-argument-parser", value: "1.2.3", location: "https://github.com/apple/swift-argument-parser", line: 9 },
+    {
+      identity: "swift-argument-parser",
+      value: "1.2.3",
+      location: "https://github.com/apple/swift-argument-parser",
+      line: 9,
+    },
     { identity: "swift-log", value: "1.5.3", location: "https://github.com/apple/swift-log.git", line: 18 },
   ]);
   assert.deepEqual(parsePackageResolved(await fixture("zero/Package.resolved.fixture")), [
-    { identity: "swift-argument-parser", value: "1.3.0", location: "https://github.com/apple/swift-argument-parser", line: 9 },
+    {
+      identity: "swift-argument-parser",
+      value: "1.3.0",
+      location: "https://github.com/apple/swift-argument-parser",
+      line: 9,
+    },
   ]);
 });
 

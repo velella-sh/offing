@@ -122,11 +122,7 @@ test("SARIF records which data was used without anything that changes with the c
   const sarif = JSON.parse(renderSarif(result)) as {
     runs: Array<{ properties: { offingData: Record<string, string> } }>;
   };
-  assert.deepEqual(Object.keys(sarif.runs[0]!.properties.offingData).sort(), [
-    "reviewedThrough",
-    "source",
-    "version",
-  ]);
+  assert.deepEqual(Object.keys(sarif.runs[0]!.properties.offingData).sort(), ["reviewedThrough", "source", "version"]);
   assert.equal(sarif.runs[0]!.properties.offingData.version, result.data!.version);
   const later = { ...result, data: { ...result.data!, ageDays: result.data!.ageDays + 400, stale: true } };
   assert.equal(renderSarif(later), renderSarif(result), "the SARIF file does not depend on the data's age");

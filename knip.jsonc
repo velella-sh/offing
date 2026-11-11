@@ -1,11 +1,11 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  // package.json already names the CLI, MCP, and LSP binaries and the library exports, so knip reads
-  // those as entry points. The Action bundle has no manifest entry, and the tool, benchmark, and test
+  // package.json already names the one CLI binary and the library exports, so knip reads
+  // those as entry points. The Action bundle and the LSP module (reached through `offing lsp`) have no manifest entry, and the tool, benchmark, and test
   // scripts are run from dist, so they are listed here. Host modules are discovered by directory at run time.
   "workspaces": {
     ".": {
-      "entry": ["src/action.ts", "src/agent-hooks/hosts/*.ts", "tools/**/*.ts", "benchmarks/**/*.ts", "tests/**/*.test.ts"],
+      "entry": ["src/action.ts", "src/lsp.ts", "src/agent-hooks/hosts/*.ts", "tools/**/*.ts", "benchmarks/**/*.ts", "tests/**/*.test.ts"],
       "project": ["src/**/*.ts", "tools/**/*.ts", "benchmarks/**/*.ts", "tests/**/*.ts"]
     }
   },

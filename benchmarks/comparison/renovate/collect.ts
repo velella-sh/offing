@@ -51,9 +51,7 @@ function parseOptions(argv: readonly string[]): Options {
   return {
     renovate: resolve(renovate),
     node: values.get("--node") ?? process.execPath,
-    cache: resolve(
-      values.get("--cache") ?? process.env.OFFING_CORPUS_CACHE ?? join(homedir(), ".cache/offing-corpus"),
-    ),
+    cache: resolve(values.get("--cache") ?? process.env.OFFING_CORPUS_CACHE ?? join(homedir(), ".cache/offing-corpus")),
     concurrency: Number(values.get("--concurrency") ?? 4),
     force: values.has("--force"),
     ...(values.has("--only") ? { only: values.get("--only")! } : {}),

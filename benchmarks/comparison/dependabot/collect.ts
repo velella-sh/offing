@@ -66,9 +66,7 @@ function parseOptions(argv: readonly string[]): Options {
     else throw new Error(`Unknown or incomplete flag: ${flag}`);
   }
   return {
-    cache: resolve(
-      values.get("--cache") ?? process.env.OFFING_CORPUS_CACHE ?? join(homedir(), ".cache/offing-corpus"),
-    ),
+    cache: resolve(values.get("--cache") ?? process.env.OFFING_CORPUS_CACHE ?? join(homedir(), ".cache/offing-corpus")),
     concurrency: Number(values.get("--concurrency") ?? 16),
     force: values.has("--force"),
     ...(values.has("--only") ? { only: values.get("--only")! } : {}),

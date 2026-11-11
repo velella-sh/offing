@@ -163,7 +163,5 @@ async function readReceiptBaseline(path: string): Promise<ScanResult | string> {
   if (parsed === undefined) return `${path} is not valid JSON.`;
   if (parsed.skipped) return `${path}: ${parsed.skipped.detail}.`;
   const problem = scanReportProblem(parsed.value);
-  return problem === undefined
-    ? (parsed.value as ScanResult)
-    : `${path} is not an offing.scan.v1 report: ${problem}`;
+  return problem === undefined ? (parsed.value as ScanResult) : `${path} is not an offing.scan.v1 report: ${problem}`;
 }

@@ -409,9 +409,7 @@ function elixirResolved(value: string): Resolved {
 
 function otpVersionResolved(value: string): Resolved {
   const release = otpInputReleaseOf(value);
-  return release === undefined
-    ? { unresolved: `"${value}" is not an Erlang/OTP version Offing reads` }
-    : { release };
+  return release === undefined ? { unresolved: `"${value}" is not an Erlang/OTP version Offing reads` } : { release };
 }
 
 function collectWorkflow(contents: string, path: string, pins: ElixirPins): void {

@@ -37,10 +37,7 @@ test("quotes mentions only outside code spans and leaves addresses and versions 
   assert.equal(quoteMentions("already `@offing-dev` quoted"), "already `@offing-dev` quoted");
   assert.equal(quoteMentions("mail a@b.com"), "mail a@b.com");
   assert.equal(quoteMentions("offing@v0.7.2 and runtime@version"), "offing@v0.7.2 and runtime@version");
-  assert.equal(
-    quoteMentions("install @offing-dev/backstage-plugin now"),
-    "install `@offing-dev/backstage-plugin` now",
-  );
+  assert.equal(quoteMentions("install @offing-dev/backstage-plugin now"), "install `@offing-dev/backstage-plugin` now");
   assert.equal(quoteMentions("@one and @two"), "`@one` and `@two`");
   assert.equal(quoteMentions("see (@three)"), "see (`@three`)");
 });

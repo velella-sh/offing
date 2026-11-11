@@ -160,10 +160,7 @@ test("plugin drift check rejects a changed generated package", async () => {
     ]) {
       await writeFile(join(root, path), await readFile(resolve(path), "utf8"));
     }
-    await writeFile(
-      join(root, "skills/offing/SKILL.md"),
-      await readFile(resolve("skills/offing/SKILL.md"), "utf8"),
-    );
+    await writeFile(join(root, "skills/offing/SKILL.md"), await readFile(resolve("skills/offing/SKILL.md"), "utf8"));
     await mkdir(join(root, "plugins/codex/review-fixtures/demo"), { recursive: true });
     await writeFile(join(root, "plugins/codex/review-fixtures/demo/package.json"), "{}");
     await buildPluginPackages(root);

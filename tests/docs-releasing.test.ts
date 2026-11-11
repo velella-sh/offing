@@ -137,11 +137,7 @@ test("every place that carries the release version agrees with package.json", as
     "integrations/claude-code/pre-install-guard.mjs",
   ];
   for (const path of pins)
-    assert.match(
-      await read(path),
-      new RegExp(`offing@${version.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),
-      path,
-    );
+    assert.match(await read(path), new RegExp(`offing@${version.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`), path);
   assert.match(
     await read("README.md"),
     new RegExp(`velella-sh/offing@v${version.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),

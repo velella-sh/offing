@@ -23,9 +23,7 @@ test("the Jenkinsfile runs one Offing stage that reports before the gate can fai
   assert.match(jenkins, /stages \{/);
   assert.equal([...jenkins.matchAll(/^\s*stage\(/gm)].length, 1);
   assert.match(jenkins, /stage\('Offing lifecycle scan'\)/);
-  const report = jenkins.indexOf(
-    "sh 'npx --yes @velella/offing scan . --format junit > offing-report.xml || true'",
-  );
+  const report = jenkins.indexOf("sh 'npx --yes @velella/offing scan . --format junit > offing-report.xml || true'");
   const gate = jenkins.indexOf("sh 'npx --yes @velella/offing scan . --fail-on high'");
   assert.ok(report >= 0, "the report command is missing");
   assert.ok(gate > report, "the gate must run after the report is written");

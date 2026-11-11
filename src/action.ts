@@ -239,9 +239,7 @@ async function updateTrackingIssue(outcome: Awaited<ReturnType<typeof runGitHubA
     const token = process.env["INPUT_GITHUB-TOKEN"];
     const repository = process.env.GITHUB_REPOSITORY;
     if (!token || !repository) {
-      console.log(
-        "::notice title=Offing tracking issue skipped::tracking-issue needs a token and GITHUB_REPOSITORY.",
-      );
+      console.log("::notice title=Offing tracking issue skipped::tracking-issue needs a token and GITHUB_REPOSITORY.");
       return;
     }
     const workspace = process.env.GITHUB_WORKSPACE ?? process.cwd();
@@ -555,11 +553,7 @@ function runSummary(
 function proposedBaselineFor(outcome: RunOutcome, path: string): ProposedBaseline {
   return {
     path,
-    baseline: createBaseline(
-      outcome.result,
-      {},
-      { schemaVersion: "offing.baseline.v1", createdAt: "", findings: [] },
-    ),
+    baseline: createBaseline(outcome.result, {}, { schemaVersion: "offing.baseline.v1", createdAt: "", findings: [] }),
   };
 }
 

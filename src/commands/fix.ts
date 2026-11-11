@@ -88,10 +88,7 @@ export const command: CliCommand = {
       if (pre !== undefined) return pre;
       // Patches are printed unless --branch asks for a local, reviewable commit; nothing is ever pushed.
       if (!validFixArguments(state.args, state.positional)) {
-        return ctx.fail(
-          "usage",
-          "Usage: offing fix [path] [--dry-run | --branch] [--json | --show [--no-animation]]",
-        );
+        return ctx.fail("usage", "Usage: offing fix [path] [--dry-run | --branch] [--json | --show [--no-animation]]");
       }
       const scanned = await scanRepository(state.pathArgument, builtInDetectors, { noCache: state.noCache });
       const plan = await planFixReport(scanned);

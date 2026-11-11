@@ -275,8 +275,7 @@ const OFFING_CURSOR_HOOK_COMMAND = /\boffing(?:-deprecation)?\b.*\bhook\s+cursor
 
 function hasOffingAfterFileEdit(entries: readonly unknown[]): boolean {
   return entries.some(
-    (entry) =>
-      isRecord(entry) && typeof entry.command === "string" && OFFING_CURSOR_HOOK_COMMAND.test(entry.command),
+    (entry) => isRecord(entry) && typeof entry.command === "string" && OFFING_CURSOR_HOOK_COMMAND.test(entry.command),
   );
 }
 

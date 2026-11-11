@@ -86,8 +86,7 @@ const LITERAL = /^v?(\d+)(?:\.(\d+|x|\*))?(?:\.(\d+|x|\*))?$/i;
 
 export function classifyNodeVersion(value: string): NodeVersionClass {
   const match = LITERAL.exec(value);
-  if (!match)
-    return { kind: "unclassified", reason: `"${value}" is not a plain version, so Offing does not read it` };
+  if (!match) return { kind: "unclassified", reason: `"${value}" is not a plain version, so Offing does not read it` };
   const [, major, minor, patch] = match;
   const open = (part: string | undefined): boolean => part === undefined || /^[x*]$/i.test(part);
   if (open(minor)) return { kind: "versions", lowest: `${major}.0.0`, highest: `${major}.${UNBOUNDED}.${UNBOUNDED}` };

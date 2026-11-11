@@ -242,9 +242,7 @@ export function calculateMetrics(
 }
 
 export async function loadSkillEvalCorpus(): Promise<SkillEvalCorpus> {
-  return JSON.parse(
-    await readFile(resolve("skills/offing/evals/cases.json"), "utf8"),
-  ) as SkillEvalCorpus;
+  return JSON.parse(await readFile(resolve("skills/offing/evals/cases.json"), "utf8")) as SkillEvalCorpus;
 }
 
 export async function loadDependencyEvalCorpus(): Promise<DependencyEvalCorpus> {
@@ -388,10 +386,7 @@ async function run(): Promise<void> {
       deprecationCoverage: {
         threshold: 0.8,
         ...deprecationOnUpgradeJob,
-        decision:
-          deprecationOnUpgradeJob.rate < 0.8
-            ? "added-offing-upgrade-runtime-action"
-            : "kept-offing-only",
+        decision: deprecationOnUpgradeJob.rate < 0.8 ? "added-offing-upgrade-runtime-action" : "kept-offing-only",
       },
     },
     separation: {

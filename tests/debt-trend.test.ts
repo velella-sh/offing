@@ -33,11 +33,7 @@ test("a first baseline has no history unless it replaces an earlier one", () => 
 });
 
 test("history carries forward, sorted, with the change since the last entry", () => {
-  const first = createBaseline(
-    scanWith(3),
-    {},
-    { schemaVersion: "offing.baseline.v1", createdAt: "", findings: [] },
-  );
+  const first = createBaseline(scanWith(3), {}, { schemaVersion: "offing.baseline.v1", createdAt: "", findings: [] });
   assert.deepEqual(
     first.history?.map((entry) => entry.count),
     [3],

@@ -26,12 +26,7 @@ test("llms.txt follows the llms.txt format: a title, a summary, and sections of 
   assert.match(lines[2]!, /^> .{80,}/, "a one-paragraph summary as a block quote");
   assert.ok(index.endsWith("\n") && !index.includes("\r"));
   const sections = lines.filter((line) => line.startsWith("## "));
-  assert.deepEqual(sections, [
-    "## Use Offing",
-    "## Evidence, data, and trust",
-    "## Extend Offing",
-    "## Optional",
-  ]);
+  assert.deepEqual(sections, ["## Use Offing", "## Evidence, data, and trust", "## Extend Offing", "## Optional"]);
   const items = lines.filter((line) => line.startsWith("- "));
   assert.ok(items.length >= 12);
   for (const item of items) assert.match(item, /^- \[[^\]]+\]\(https:\/\/[^)\s]+\): .{10,}\.$/, item);

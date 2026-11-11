@@ -361,10 +361,7 @@ test("the lookup page inlines every rule with sources and makes no requests", as
   assert.ok(entries.length >= 100);
   assert.match(page, /^<!doctype html>\n<html lang="en">/);
   assert.match(page, /<link rel="canonical" href="https:\/\/velella\.sh\/offing\/lookup\.html" \/>/);
-  assert.match(
-    page,
-    /<meta property="og:image" content="https:\/\/velella\.sh\/offing\/assets\/og\/default\.svg" \/>/,
-  );
+  assert.match(page, /<meta property="og:image" content="https:\/\/velella\.sh\/offing\/assets\/og\/default\.svg" \/>/);
   assert.match(page, /<script type="application\/json" id="lookup-data">/);
   assert.doesNotMatch(page, /\bfetch\s*\(|XMLHttpRequest|navigator\.sendBeacon/);
   assert.match(page, /makes no network requests after it loads/);

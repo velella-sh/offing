@@ -115,10 +115,7 @@ test("local MCP server exposes the complete scan-to-verification workflow", asyn
       name: "list_deprecations",
       arguments: { repository_path: root },
     });
-    assert.equal(
-      (deprecations.structuredContent as { schemaVersion: string }).schemaVersion,
-      "offing.deprecations.v1",
-    );
+    assert.equal((deprecations.structuredContent as { schemaVersion: string }).schemaVersion, "offing.deprecations.v1");
     const deprecationsSchema = JSON.parse(await readFile(resolve("schemas/deprecations.v1.schema.json"), "utf8")) as {
       required: string[];
     };

@@ -62,8 +62,7 @@ test("host-specific fields follow each vendor's documented format", async () => 
     (await readJson<{ servers: { offing: Server } }>("copilot/.vscode/mcp.json")).servers.offing.type,
     "stdio",
   );
-  const agent = (await readJson<{ mcpServers: { offing: Server } }>("copilot/coding-agent-mcp.json")).mcpServers
-    .offing;
+  const agent = (await readJson<{ mcpServers: { offing: Server } }>("copilot/coding-agent-mcp.json")).mcpServers.offing;
   assert.equal(agent.type, "local");
   assert.deepEqual(
     [...agent.tools!].sort(),
@@ -82,9 +81,8 @@ test("host-specific fields follow each vendor's documented format", async () => 
   assert.equal(extension.contextFileName, "GEMINI.md");
   const cursorRule = await read("cursor/.cursor/rules/offing.mdc");
   assert.match(cursorRule, /^---\ndescription: .+\nalwaysApply: true\n---\n/);
-  const cline = (
-    await readRepoJson<{ mcpServers: { offing: Server } }>("integrations/cline/cline_mcp_settings.json")
-  ).mcpServers.offing;
+  const cline = (await readRepoJson<{ mcpServers: { offing: Server } }>("integrations/cline/cline_mcp_settings.json"))
+    .mcpServers.offing;
   assert.equal(cline.disabled, false);
   assert.deepEqual(cline.autoApprove, []);
   const windsurfRule = await read("windsurf/.windsurf/rules/offing.md");
@@ -120,18 +118,14 @@ test("the Cursor rule ships with the integration and the example, byte for byte 
     integration,
     /^---\ndescription: Check a dependency with Offing before adding it\nalwaysApply: true\n---\n\n/,
   );
-  assert.ok(
-    integration.includes("`check_dependency`") && integration.includes("npx @velella/offing check <purl>"),
-  );
+  assert.ok(integration.includes("`check_dependency`") && integration.includes("npx @velella/offing check <purl>"));
 });
 
 test("the Copilot instructions ship with the integration and the example, byte for byte identical", async () => {
   const integration = await readRepo("integrations/copilot/copilot-instructions.md");
   assert.equal(integration, await read("copilot/.github/copilot-instructions.md"));
   assert.ok(integration.startsWith("# Offing dependency check\n"));
-  assert.ok(
-    integration.includes("`check_dependency`") && integration.includes("npx @velella/offing check <purl>"),
-  );
+  assert.ok(integration.includes("`check_dependency`") && integration.includes("npx @velella/offing check <purl>"));
   assert.doesNotMatch(
     integration,
     /^---/,

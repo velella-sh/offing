@@ -66,9 +66,7 @@ const HOSTS: Host[] = [
     label: "Kilo Code",
     markers: [".kilo", ".kilocode", "kilo.jsonc", "kilo.json"],
     file: (found) =>
-      found.includes(".kilocode") && !found.includes(".kilo")
-        ? ".kilocode/rules/offing.md"
-        : ".kilo/rules/offing.md",
+      found.includes(".kilocode") && !found.includes(".kilo") ? ".kilocode/rules/offing.md" : ".kilo/rules/offing.md",
   },
   {
     id: "windsurf",
@@ -82,9 +80,7 @@ const HOSTS: Host[] = [
     label: "Cline",
     markers: [".cline", ".clinerules"],
     file: (found) =>
-      found.includes(".cline") && !found.includes(".clinerules")
-        ? ".cline/rules/offing.md"
-        : ".clinerules/offing.md",
+      found.includes(".cline") && !found.includes(".clinerules") ? ".cline/rules/offing.md" : ".clinerules/offing.md",
   },
   {
     id: "aider",

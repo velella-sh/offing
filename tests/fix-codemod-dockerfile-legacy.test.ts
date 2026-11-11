@@ -29,9 +29,7 @@ test("rewrites MAINTAINER and the legacy ENV form to the after fixture", async (
     .filter((line) => !line.startsWith("-"))
     .map((line) => line.slice(1));
   assert.deepEqual(rebuilt, after.split("\n").slice(start, start + rebuilt.length));
-  assert.ok(
-    patches[0]!.diff.includes('\n+LABEL org.opencontainers.image.authors="Offing Team <team@example.com>"\n'),
-  );
+  assert.ok(patches[0]!.diff.includes('\n+LABEL org.opencontainers.image.authors="Offing Team <team@example.com>"\n'));
   assert.ok(patches[0]!.diff.includes('\n+ENV MULTI="one two"\n'));
 
   assert.equal(await apply(root, renderPatches(patches), "Dockerfile"), after);

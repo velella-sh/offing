@@ -387,9 +387,7 @@ async function guidedInit(
 function printGuidedSteps(steps: InitStep[], dryRun: boolean, gate: Severity): void {
   for (const step of steps) {
     if (step.change === "advice") {
-      process.stdout.write(
-        `Add this to ${step.file} to scan with the Offing GitLab component:\n\n${step.snippet}\n`,
-      );
+      process.stdout.write(`Add this to ${step.file} to scan with the Offing GitLab component:\n\n${step.snippet}\n`);
       continue;
     }
     if (step.change === "managed") {

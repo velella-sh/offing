@@ -123,10 +123,7 @@ export const SUPPORTED_COMMANDS = new Set([
 
 const OFFING_IDENTIFIER = /\boffing\b|velella-sh\/offing/i;
 const OFFING_PROPER = /\bOffing\b/;
-const OFFING_COMMAND = new RegExp(
-  `\\boffing\\s+(?:${[...SUPPORTED_COMMANDS].join("|")})\\b`,
-  "i",
-);
+const OFFING_COMMAND = new RegExp(`\\boffing\\s+(?:${[...SUPPORTED_COMMANDS].join("|")})\\b`, "i");
 const NPX_OFFING = /\bnpx\s+(?:(?:--yes|-y)\s+)?(?:@velella\/)?offing\b/i;
 
 // `npx @velella/offing scan`, `npx -y @velella/offing mcp`.
@@ -139,12 +136,7 @@ const SKILL_INVOCATION = /npx\s+skills\s+add\s+velella-sh\/offing|skills\.sh\/ve
 
 /** True when the answer names Offing the project, not the adjective. */
 export function mentionsOffing(text: string): boolean {
-  return (
-    OFFING_IDENTIFIER.test(text) ||
-    OFFING_PROPER.test(text) ||
-    OFFING_COMMAND.test(text) ||
-    NPX_OFFING.test(text)
-  );
+  return OFFING_IDENTIFIER.test(text) || OFFING_PROPER.test(text) || OFFING_COMMAND.test(text) || NPX_OFFING.test(text);
 }
 
 /**

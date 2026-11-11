@@ -76,18 +76,9 @@ test("prints README markup for every snippet format", () => {
   const image = "https://raw.githubusercontent.com/velella-sh/offing/offing-badge/offing-badge.svg";
   const target = "https://github.com/velella-sh/offing";
   assert.equal(badgeSnippet("velella-sh/offing", "markdown"), `[![offing](${image})](${target})`);
-  assert.equal(
-    badgeSnippet("velella-sh/offing", "html"),
-    `<a href="${target}"><img alt="offing" src="${image}"></a>`,
-  );
-  assert.equal(
-    badgeSnippet("velella-sh/offing", "rst"),
-    `.. image:: ${image}\n   :target: ${target}\n   :alt: offing`,
-  );
-  assert.match(
-    badgeSnippet("velella-sh/offing", "markdown", "badges/offing"),
-    /\/badges\/offing\/offing-badge\.svg/,
-  );
+  assert.equal(badgeSnippet("velella-sh/offing", "html"), `<a href="${target}"><img alt="offing" src="${image}"></a>`);
+  assert.equal(badgeSnippet("velella-sh/offing", "rst"), `.. image:: ${image}\n   :target: ${target}\n   :alt: offing`);
+  assert.match(badgeSnippet("velella-sh/offing", "markdown", "badges/offing"), /\/badges\/offing\/offing-badge\.svg/);
 });
 
 test("escapes a hostile repository name instead of emitting it into the markup", () => {

@@ -39,10 +39,7 @@ test("bumpFormula rewrites the url and sha256 and reports the previous version",
   assert.equal(result.previousVersion, "0.4.0");
   assert.equal(script.readPinnedVersion(result.content), "0.7.1");
   assert.match(result.content, new RegExp(`sha256 "${NEXT_SHA}"`));
-  assert.match(
-    result.content,
-    /url "https:\/\/registry\.npmjs\.org\/offing\/-\/offing-0\.7\.1\.tgz"/,
-  );
+  assert.match(result.content, /url "https:\/\/registry\.npmjs\.org\/offing\/-\/offing-0\.7\.1\.tgz"/);
 });
 
 test("bumpFormula is a no-op when the pin already matches", () => {
@@ -61,10 +58,7 @@ test("bumpFormula refuses bad inputs and formulas that are not a single npm pin"
     () => script.bumpFormula("class X; end", { version: "0.7.1", sha256: NEXT_SHA }),
     /missing the offing npm url/,
   );
-  const twoUrls = SAMPLE.replace(
-    "license",
-    `url "https://registry.npmjs.org/offing/-/offing-0.5.0.tgz"\n  license`,
-  );
+  const twoUrls = SAMPLE.replace("license", `url "https://registry.npmjs.org/offing/-/offing-0.5.0.tgz"\n  license`);
   assert.throws(() => script.bumpFormula(twoUrls, { version: "0.7.1", sha256: NEXT_SHA }), /exactly one url/);
 });
 

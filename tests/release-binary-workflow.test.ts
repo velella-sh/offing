@@ -128,9 +128,7 @@ test("every release asset is uploaded exactly once", () => {
     .split(/\s+/);
   assert.deepEqual(signedGlobs, ["offing-*", "SHA256SUMS"], "nothing the release produces is left unsigned");
 
-  const binaryNames = releaseTargets.map(
-    (target) => `offing-1.2.3-${target}${target === "win32-x64" ? ".exe" : ""}`,
-  );
+  const binaryNames = releaseTargets.map((target) => `offing-1.2.3-${target}${target === "win32-x64" ? ".exe" : ""}`);
   const signedNames = signedGlobs.flatMap((glob) => expandGlob(glob, [...binaryNames, "SHA256SUMS"]));
   assert.deepEqual(
     [...signedNames].sort(),

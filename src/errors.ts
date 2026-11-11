@@ -67,8 +67,7 @@ export function isOfflineDataUpdateFailure(detail: string): boolean {
 export function offlineDataUpdate(detail: string): ActionableMessage {
   return {
     cause: detail,
-    nextStep:
-      "Connect to the network and retry `offing data update`, or keep using the bundled data without updating.",
+    nextStep: "Connect to the network and retry `offing data update`, or keep using the bundled data without updating.",
   };
 }
 

@@ -218,10 +218,7 @@ test("the init command writes the hook and honors --dry-run", async () => {
     written.stdout,
     /Created \.gemini\/settings\.json; Gemini CLI now runs Offing after write_file and replace\./,
   );
-  assert.match(
-    await readFile(join(root, GEMINI_SETTINGS_FILE), "utf8"),
-    /npx --no-install offing hook gemini/,
-  );
+  assert.match(await readFile(join(root, GEMINI_SETTINGS_FILE), "utf8"), /npx --no-install offing hook gemini/);
 
   const again = spawnSync(process.execPath, [cli, "init", "--hooks-for", "gemini", root], { encoding: "utf8" });
   assert.equal(again.status, 0, again.stderr);

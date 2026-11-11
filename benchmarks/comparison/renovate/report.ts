@@ -53,10 +53,7 @@ function familyTable(groups: readonly GroupResult[]): string[] {
 }
 
 function timingTable(groups: readonly GroupResult[]): string[] {
-  const lines = [
-    "| Selection | Offing total / median / max | Renovate total / median / max |",
-    "| --- | --- | --- |",
-  ];
+  const lines = ["| Selection | Offing total / median / max | Renovate total / median / max |", "| --- | --- | --- |"];
   for (const group of groups) {
     lines.push(`| ${label(group.selection)} | ${timing(group.offingTime)} | ${timing(group.renovateTime)} |`);
   }

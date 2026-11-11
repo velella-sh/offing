@@ -121,10 +121,7 @@ test("the README links resolve and its commands exist", async () => {
     [...readme.matchAll(/\]\((?!https?:|#)([^)#\s]+)(?:#[^)]*)?\)/g)].map((match) => match[1]!),
   ))
     await access(resolve(link));
-  assert.ok(
-    manifest.bin["offing"],
-    "every `npx @velella/offing …` command in the README needs a bin of that name",
-  );
+  assert.ok(manifest.bin["offing"], "every `npx @velella/offing …` command in the README needs a bin of that name");
   const mentioned = [...readme.matchAll(/npx @velella\/offing ([a-z-]+)/g)].map((match) => match[1]!);
   const registered = new Set(registeredCommands.map((command) => command.name));
   for (const command of new Set(mentioned))

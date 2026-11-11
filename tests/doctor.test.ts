@@ -26,10 +26,7 @@ async function installationFixture(): Promise<string> {
     }),
   );
   await writeFile(join(root, "dist", "src", "cli.js"), "");
-  await writeFile(
-    join(root, "skills", "offing", "SKILL.md"),
-    "---\nname: offing\ndescription: Test fixture\n---\n",
-  );
+  await writeFile(join(root, "skills", "offing", "SKILL.md"), "---\nname: offing\ndescription: Test fixture\n---\n");
   return root;
 }
 

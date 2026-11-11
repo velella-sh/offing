@@ -172,7 +172,9 @@ async function mcpCheck(installationRoot: string, manifest?: PackageManifest): P
     category: "mcp",
     status: "fail",
     summary: "The local MCP stdio server entry point is unavailable.",
-    details: entry ? `Missing built entry: ${entry}` : "The offing CLI entry (which serves `offing mcp`) is not declared.",
+    details: entry
+      ? `Missing built entry: ${entry}`
+      : "The offing CLI entry (which serves `offing mcp`) is not declared.",
     remediation: "Reinstall the package or run npm run build in an Offing source checkout.",
   };
 }

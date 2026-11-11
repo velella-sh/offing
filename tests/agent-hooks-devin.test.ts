@@ -219,10 +219,7 @@ test("the init command writes the hook and honors --dry-run", async () => {
     written.stdout,
     /Created \.devin\/hooks\.v1\.json; Devin Local now runs Offing after write, edit, and apply_patch\./,
   );
-  assert.match(
-    await readFile(join(root, DEVIN_HOOKS_FILE), "utf8"),
-    /npx --no-install offing hook devin/,
-  );
+  assert.match(await readFile(join(root, DEVIN_HOOKS_FILE), "utf8"), /npx --no-install offing hook devin/);
 
   const again = spawnSync(process.execPath, [cli, "init", "--hooks-for", "devin", root], { encoding: "utf8" });
   assert.equal(again.status, 0, again.stderr);

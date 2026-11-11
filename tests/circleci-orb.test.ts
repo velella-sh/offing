@@ -73,10 +73,7 @@ test("the scan command writes the report before it applies the gate", async () =
   const steps = orb.commands.scan!.steps!;
   const scan = steps[0]!.run!;
   assert.ok(scan, "the first step runs the scan");
-  assert.ok(
-    scan.command.includes("offing@<< parameters.version >>"),
-    "the scan pins the package version",
-  );
+  assert.ok(scan.command.includes("offing@<< parameters.version >>"), "the scan pins the package version");
   assert.ok(scan.command.includes("--fail-on"), "the scan applies the severity gate");
   assert.ok(scan.command.includes("/tmp/offing-scan-status"), "the scan writes the status file");
   const store = steps[1]!.store_artifacts!;

@@ -53,10 +53,7 @@ async function ruleCheckout(
 ): Promise<string> {
   const root = await mkdtemp(join(tmpdir(), "offing-new-rule-"));
   roots.push(root);
-  await writeFile(
-    join(root, "package.json"),
-    JSON.stringify({ name: "@velella/offing", version: "0.0.0" }, null, 2),
-  );
+  await writeFile(join(root, "package.json"), JSON.stringify({ name: "@velella/offing", version: "0.0.0" }, null, 2));
   await mkdir(join(root, "tests", "fixtures"), { recursive: true });
   for (const [path, contents] of Object.entries(registries)) {
     await mkdir(dirname(join(root, path)), { recursive: true });
