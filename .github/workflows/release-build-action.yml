@@ -9,6 +9,22 @@ on:
         description: Build and smoke only; do not push release/<tag>
         type: boolean
         required: true
+      version:
+        description: Build for this package.json version even though the push did not change it
+        type: string
+        required: false
+        default: ""
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build and smoke only; do not push release/<tag>
+        type: boolean
+        required: false
+        default: false
+      version:
+        description: Version in package.json on main to build release/v<version> for, when no push did
+        type: string
+        required: true
 
 permissions:
   contents: read
@@ -36,10 +52,19 @@ jobs:
       - name: Select the version this push released
         id: release
         shell: bash
+        env:
+          REQUESTED: ${{ inputs.version }}
         run: |
           version="$(node -p "require('./package.json').version")"
           previous="$(git show 'HEAD^:package.json' | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")"
           echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [ -n "$REQUESTED" ]; then
+            if [ "$REQUESTED" != "$version" ] || [ "$GITHUB_REF" != "refs/heads/main" ]; then
+              echo "::error::version $REQUESTED must equal package.json ($version) on main."
+              exit 1
+            fi
+            previous=""
+          fi
           if [ "$version" = "$previous" ]; then
             echo "create=false" >> "$GITHUB_OUTPUT"
             echo "This push does not change the version in package.json, so there is no release to build." | tee -a "$GITHUB_STEP_SUMMARY"
