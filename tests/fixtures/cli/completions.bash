@@ -5,7 +5,7 @@ _offing() {
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   command="${COMP_WORDS[1]}"
   if [ "$COMP_CWORD" -eq 1 ]; then
-    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions hook lsp prompt recommend timelapse verify wrapped --help --version" -- "$cur"))
+    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions hook lsp prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
     return
   fi
   case "$prev" in
@@ -60,6 +60,7 @@ _offing() {
     lsp) opts="" ;;
     prompt) opts="--format --symbol" ;;
     recommend) opts="--min-days --as-of --json" ;;
+    rollback-readiness) opts="--candidate --within-days --json" ;;
     timelapse) opts="--from --to --svg --json --no-animation" ;;
     verify) opts="--data-version" ;;
     wrapped) opts="--year --svg --json --no-animation" ;;

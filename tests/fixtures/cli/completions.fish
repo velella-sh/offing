@@ -42,6 +42,7 @@ complete -c offing -n __fish_use_subcommand -a hook
 complete -c offing -n __fish_use_subcommand -a lsp
 complete -c offing -n __fish_use_subcommand -a prompt
 complete -c offing -n __fish_use_subcommand -a recommend
+complete -c offing -n __fish_use_subcommand -a rollback-readiness
 complete -c offing -n __fish_use_subcommand -a timelapse
 complete -c offing -n __fish_use_subcommand -a verify
 complete -c offing -n __fish_use_subcommand -a wrapped
@@ -175,6 +176,9 @@ complete -c offing -n '__fish_seen_subcommand_from prompt' -l symbol
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l min-days
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l as-of
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l json
+complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l candidate
+complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l within-days
+complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l json
 complete -c offing -n '__fish_seen_subcommand_from timelapse' -l from
 complete -c offing -n '__fish_seen_subcommand_from timelapse' -l to
 complete -c offing -n '__fish_seen_subcommand_from timelapse' -l svg

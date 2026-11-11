@@ -1,0 +1,1 @@
+- Define the rollback-readiness CLI flags and validate rollback candidates and the warning window.
