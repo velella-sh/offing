@@ -19,7 +19,7 @@
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Offing" src="https://raw.githubusercontent.com/velella-sh/offing/badges/offing-badge.svg"></a>
   <a href="https://securityscorecards.dev/viewer/?uri=github.com/velella-sh/offing"><img alt="OpenSSF Scorecard" src="https://img.shields.io/ossf-scorecard/github.com/velella-sh/offing?label=openssf%20scorecard&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://www.bestpractices.dev/projects/16161"><img alt="OpenSSF Best Practices" src="https://img.shields.io/cii/level/16161?label=openssf%20best%20practices&labelColor=1F1F28&color=6A5590&style=flat"></a>
-  <a href="https://github.com/arminazimi/slipway"><img alt="Slipway" src="https://img.shields.io/badge/docs%20checked%20by-slipway-6A5590?labelColor=1F1F28&style=flat"></a>
+  <a href="https://github.com/velella-sh/mizzen"><img alt="Docs built with Mizzen" src="https://raw.githubusercontent.com/velella-sh/offing/main/brand/badges/docs-built-with-mizzen.svg"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/codeql.yml?branch=main&label=CodeQL&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://skills.sh/velella-sh/offing/offing"><img alt="skills.sh" src="https://skills.sh/b/velella-sh/offing"></a>
 </p>
