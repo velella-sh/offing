@@ -17,6 +17,7 @@ Set Width 1280
 Set Height 520
 Set FontSize 16
 Set Padding 24
+Set FontFamily "JetBrains Mono"
 Set Theme "Catppuccin Mocha"
 Set TypingSpeed 25ms
 Set CursorBlink false
@@ -24,9 +25,10 @@ Set CursorBlink false
 # Pin the prompt so the recording never shows the build machine's PS1.
 Hide
 Type "export PS1='offing $ '" Enter
+Type "source demos/colorize.sh" Enter
 Type "clear" Enter
 Show
 
-Type 'node dist/src/cli.js check pkg:npm/request@2.88.2 ; echo "exit $?"' Enter
+Type 'npx @velella/offing check pkg:npm/request@2.88.2 ; echo "exit $?"' Enter
 Wait+Screen@30s /exit 1/
 Sleep 4

@@ -16,6 +16,7 @@ Set Width 1280
 Set Height 520
 Set FontSize 16
 Set Padding 24
+Set FontFamily "JetBrains Mono"
 Set Theme "Catppuccin Mocha"
 Set TypingSpeed 25ms
 Set CursorBlink false
@@ -23,9 +24,10 @@ Set CursorBlink false
 # Pin the prompt so the recording never shows the build machine's PS1.
 Hide
 Type "export PS1='offing $ '" Enter
+Type "source demos/colorize.sh" Enter
 Type "clear" Enter
 Show
 
-Type "node dist/src/cli.js explain 'github-actions.checkout.node20:.github/workflows/ci.yml:9' examples/demo" Enter
+Type "npx @velella/offing explain 'github-actions.checkout.node20:.github/workflows/ci.yml:9' examples/demo" Enter
 Wait@30s /offing .*$/
 Sleep 4

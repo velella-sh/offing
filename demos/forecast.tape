@@ -21,6 +21,7 @@ Set Width 1280
 Set Height 620
 Set FontSize 16
 Set Padding 24
+Set FontFamily "JetBrains Mono"
 Set Theme "Catppuccin Mocha"
 Set TypingSpeed 15ms
 Set CursorBlink false
@@ -28,18 +29,19 @@ Set CursorBlink false
 # Pin the prompt so the recording never shows the build machine's PS1.
 Hide
 Type "export PS1='offing $ '" Enter
+Type "source demos/colorize.sh" Enter
 Type "clear" Enter
 Show
 
-Type "node dist/src/cli.js scan examples/demo --no-cache --format compact" Enter
+Type "npx @velella/offing scan examples/demo --no-cache --format compact" Enter
 Wait@30s /offing .*$/
 Sleep 2
 
-Type "node dist/src/cli.js forecast examples/demo --timeline --as-of 2026-11-06" Enter
+Type "npx @velella/offing forecast examples/demo --timeline --as-of 2026-11-06" Enter
 Wait@30s /offing .*$/
 Sleep 4
 
-Type "node dist/src/cli.js scan examples/demo --no-cache --format html > /tmp/offing-report.html" Enter
+Type "npx @velella/offing scan examples/demo --no-cache --format html > /tmp/offing-report.html" Enter
 Wait@30s /offing .*$/
 Type "echo file:///tmp/offing-report.html" Enter
 Wait@30s /offing .*$/
