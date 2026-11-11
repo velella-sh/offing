@@ -15,9 +15,9 @@ Require bash
 Set Shell "bash"
 Set FontFamily "JetBrains Mono"
 Set FontSize 17
-Set LineHeight 1.35
-Set Width 1180
-Set Height 560
+Set LineHeight 1.1
+Set Width 1400
+Set Height 410
 Set Padding 28
 Set Margin 56
 Set MarginFill "demos/frame.png"
@@ -36,6 +36,6 @@ Show
 Type "npx @velella/offing baseline ." Enter
 Wait@30s /❯ *$/
 Sleep 1
-Type "npx @velella/offing scan . --baseline .offing-baseline.json" Enter
+Type "npx @velella/offing scan . --baseline .offing-baseline.json --format compact" Enter
 Wait@30s /❯ *$/
 Sleep 4
