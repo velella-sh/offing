@@ -60,14 +60,6 @@ Node.js, npm, Deno and Bun · Python · Go · Rust · Java and Kotlin · .NET ·
 
 The full table, with the files read and what is reported for each, is in [Ecosystem coverage](docs/ECOSYSTEMS.md). Maturity per detector is in the [compatibility matrix](docs/COMPATIBILITY.md#ecosystem-coverage).
 
-## See it run
-
-Recorded from the real CLI on the bundled demo project, rendered by CI from the tapes in [`demos/`](demos/).
-
-| Scan | Explain one finding | Check before adding |
-| --- | --- | --- |
-| ![scan --demo prints five findings, one per line](docs/assets/demos/scan.gif) | ![explain prints the rule, replacement, deadline and sources](docs/assets/demos/explain.gif) | ![check pkg:npm/request exits 1 with the replacement and its source](docs/assets/demos/agent.gif) |
-
 ## For coding agents
 
 ```bash

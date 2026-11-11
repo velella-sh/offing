@@ -1,10 +1,11 @@
-# Offing demo tape: `explain` one finding of the offline demo project, with its
-# source links and the replacement.
+# Offing demo tape: The evidence and migration direction for one finding.
 #
-# Determinism: the finding id is fixed by the demo project, and `explain`
-# prints no clock reading, so re-renders change only when the rule or the CLI
-# output changes. Render from the repository root; see demos/scan.tape for the
-# one-command regeneration loop and the CI drift gate in .github/workflows/demos.yml.
+# Rendered by CI (.github/workflows/demos.yml) from the repository root after
+# `npm run build`; never recorded by hand. demos/colorize.sh prepares a clean
+# copy of examples/demo in /tmp/offing-demo, sets the prompt, and colors the
+# output. Regenerate every recording with:
+#
+#   for tape in demos/*.tape; do vhs "$tape" || exit 1; done
 
 Output docs/assets/demos/explain.gif
 
@@ -12,22 +13,26 @@ Require node
 Require bash
 
 Set Shell "bash"
-Set Width 1280
-Set Height 520
-Set FontSize 16
-Set Padding 24
 Set FontFamily "JetBrains Mono"
-Set Theme "Catppuccin Mocha"
-Set TypingSpeed 25ms
+Set FontSize 17
+Set LineHeight 1.35
+Set Width 1180
+Set Height 560
+Set Padding 28
+Set Margin 56
+Set MarginFill "demos/frame.png"
+Set BorderRadius 14
+Set WindowBar Colorful
+Set Theme {"name":"Kanagawa","black":"#16161d","red":"#c34043","green":"#76946a","yellow":"#c0a36e","blue":"#7e9cd8","magenta":"#957fb8","cyan":"#6a9589","white":"#c8c093","brightBlack":"#727169","brightRed":"#e82424","brightGreen":"#98bb6c","brightYellow":"#e6c384","brightBlue":"#7fb4ca","brightMagenta":"#938aa9","brightCyan":"#7aa89f","brightWhite":"#dcd7ba","background":"#1f1f28","foreground":"#dcd7ba","selection":"#2d4f67","cursor":"#c8c093"}
+Set TypingSpeed 40ms
 Set CursorBlink false
 
-# Pin the prompt so the recording never shows the build machine's PS1.
 Hide
-Type "export PS1='offing $ '" Enter
 Type "source demos/colorize.sh" Enter
+Type "offing_demo_setup" Enter
 Type "clear" Enter
 Show
 
-Type "npx @velella/offing explain 'github-actions.checkout.node20:.github/workflows/ci.yml:9' examples/demo" Enter
-Wait@30s /offing .*$/
+Type "npx @velella/offing explain 'github-actions.checkout.node20:.github/workflows/ci.yml:9' ." Enter
+Wait@30s /❯ *$/
 Sleep 4
