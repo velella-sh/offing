@@ -2,9 +2,128 @@
 title: Offing
 description: See what's in the offing. Fix it before it lands.
 layout: home
+hero:
+  eyebrow: Local-first end-of-life and deprecation scanner
+  title: See what's in the offing. Fix it before it lands.
+  lead: Offing finds the runtimes, packages, and GitHub Actions in a repository that are already end-of-life or deprecated, shows the exact file and line, and backs every finding with an authoritative source, a replacement, and migration steps. Locally, offline, with no account.
+actions:
+  - label: Install
+    url: INSTALL/
+    primary: true
+  - label: 90-second demo
+    url: DEMO/
+sections:
+  - title: Try it
+    url: INSTALL/
+    description: Install, scan, and read the first findings.
+    icon: "M5 4h10l4 4v12H5zM14 4v5h5M9 13h6M9 17h6"
+    links:
+      - title: Install
+        url: INSTALL/
+      - title: Five-step quickstart
+        url: QUICKSTART/
+      - title: 90-second demo
+        url: DEMO/
+      - title: CLI reference
+        url: CLI/
+      - title: "Playbook: manual CLI checks"
+        url: playbooks/cli/
+      - title: Runtime drift
+        url: DRIFT/
+      - title: Upgrade check
+        url: UPGRADE_CHECK/
+      - title: Local MCP server
+        url: MCP/
+      - title: Environment doctor and compatibility
+        url: COMPATIBILITY/
+  - title: Set up CI
+    url: GITHUB_ACTION/
+    description: Pull request comments, SARIF, gates, and hooks.
+    icon: "M4 12a8 8 0 1 0 3-6.2M4 4v4h4"
+    links:
+      - title: GitHub Action
+        url: GITHUB_ACTION/
+      - title: "Playbook: GitHub Actions"
+        url: playbooks/github/
+      - title: GitLab CI/CD component
+        url: GITLAB/
+      - title: "Playbook: GitLab pipelines"
+        url: playbooks/gitlab/
+      - title: Organization rollout
+        url: ORG_ROLLOUT/
+      - title: Hooks
+        url: HOOKS/
+      - title: Privacy
+        url: PRIVACY/
+  - title: Use with agents
+    url: AGENT_SKILLS/
+    description: The Agent Skill, MCP server, plugins, and migration packets.
+    icon: "M12 3v3M12 18v3M3 12h3M18 12h3M7 7l2 2M15 15l2 2M17 7l-2 2M9 15l-2 2"
+    links:
+      - title: Agent Skill
+        url: AGENT_SKILLS/
+      - title: "Playbook: agent-driven migrations"
+        url: playbooks/agent/
+      - title: Migration packets
+        url: MIGRATION_PACKETS/
+      - title: Migration plans
+        url: PLAN/
+      - title: Capability manifest
+        url: CAPABILITIES/
+      - title: Claude plugin
+        url: CLAUDE_PLUGIN/
+      - title: Codex plugin
+        url: CODEX_PLUGIN/
+      - title: Codex and Claude plugin packaging
+        url: PLUGIN_PACKAGING/
+      - title: Cross-host plugin evaluation and security boundaries
+        url: PLUGIN_EVALS/
+  - title: Reference
+    url: RULES/
+    description: Rules, data, detectors, trust, and project records.
+    icon: "M4 5h7a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4zM20 5h-6a3 3 0 0 0-3 3v11a2 2 0 0 1 2-2h7z"
+    links:
+      - title: Lifecycle rules
+        url: RULES/
+      - title: Lifecycle data
+        url: DATA/
+      - title: Detector reference
+        url: detectors/
+      - title: Detector SDK
+        url: DETECTORS/
+      - title: Lifecycle importers
+        url: IMPORTERS/
+      - title: Maintainer CLE declarations
+        url: MAINTAINERS/
+      - title: Architecture and trust boundaries
+        url: ARCHITECTURE/
+      - title: Threat model
+        url: THREAT_MODEL/
+      - title: Validation results
+        url: VALIDATION/
+      - title: Benchmarks
+        url: BENCHMARKS/
+      - title: State of EOL
+        url: state-of-eol/
+      - title: Offing compared with Renovate, Dependabot, and endoflife.date
+        url: compare/
+      - title: Decision records
+        url: decisions/
+      - title: Roadmap
+        url: ROADMAP/
+      - title: Post-launch notes and next roadmap
+        url: NEXT/
+      - title: Changelog
+        url: CHANGELOG/
+      - title: Start contributing
+        url: CONTRIBUTE/
+      - title: Codex plugin submission
+        url: CODEX_SUBMISSION/
+      - title: Persian (فارسی)
+        url: fa/
 ---
 
-Offing finds the runtimes, packages, and GitHub Actions in a repository that are already end-of-life or deprecated, shows the exact file and line, and backs every finding with an authoritative source, a replacement, and migration steps — locally, offline, and with no account.
+The rules behind every finding are in [Lifecycle rules](RULES.md).
 
 Read this in: **English** · [فارسی](i18n/fa/README.md).
 
@@ -28,63 +147,6 @@ Found 5 lifecycle risks. The most urgent:
   …and 2 more below.
 ```
 
-## Try it
-
-- [Install](INSTALL.md): one page for every channel — npm, Action, MCP, plugins, Docker, and Homebrew.
-- [Five-step quickstart](QUICKSTART.md): from the first scan to a baseline in CI.
-- [90-second demo](DEMO.md): a deliberately outdated project, scanned, explained, and turned into migration context.
-- [CLI reference](CLI.md): every command, flag, shell completion, and exit code.
-- [Playbook: manual CLI checks](playbooks/cli.md): scan, read, decide, accept, and keep findings from returning.
-- [Runtime drift](DRIFT.md): every runtime version a repository states, and whether they agree.
-- [Upgrade check](UPGRADE_CHECK.md): whether a project can move to a target runtime, with each blocker and its evidence.
-- [Local MCP server](MCP.md): the tools and output schemas an agent can call.
-- [Environment doctor and compatibility](COMPATIBILITY.md): supported ecosystems, hosts, and maturity.
-
-## Set up CI
-
-- [GitHub Action](GITHUB_ACTION.md): pull request comments, SARIF code scanning, and severity gates.
-- [Playbook: GitHub Actions](playbooks/github.md): add the Action, read what it reports, and accept findings on purpose.
-- [GitLab CI/CD component](GITLAB.md): the component, its permissions, and self-managed constraints.
-- [Playbook: GitLab pipelines](playbooks/gitlab.md): gate merges on severity and accept known findings.
-- [Organization rollout](ORG_ROLLOUT.md): scan every repository with one reusable workflow and a weekly digest.
-- [Hooks](HOOKS.md): scan before every push, or block a deprecated package install in an agent.
-- [Privacy](PRIVACY.md): what stays on your machine and the one command that uses the network.
-
-## Use with agents
-
-- [Agent Skill](AGENT_SKILLS.md): the portable skill for coding agents and how its triggering is evaluated.
-- [Playbook: agent-driven migrations](playbooks/agent.md): migrate one finding while Offing supplies the facts and the proof.
-- [Migration packets](MIGRATION_PACKETS.md): the structured context Offing builds for one finding.
-- [Migration plans](PLAN.md): waves of independent migration tasks for parallel agent sessions.
-- [Capability manifest](CAPABILITIES.md): how a tool or agent discovers what Offing can do.
-- [Claude plugin](CLAUDE_PLUGIN.md): install Offing, its Skill, and the dependency guard in Claude Code.
-- [Codex plugin](CODEX_PLUGIN.md): install Offing and the dependency guard in Codex.
-- [Codex and Claude plugin packaging](PLUGIN_PACKAGING.md): how the plugins are built and published.
-- [Cross-host plugin evaluation and security boundaries](PLUGIN_EVALS.md): what each host can and cannot enforce.
-
-## Reference
-
-- [Lifecycle rules](RULES.md): the rule format, the evidence policy, and how to write a rule.
-- [Lifecycle data](DATA.md): signed data updates, pinning, offline guarantees, and the trust model.
-- [Detector reference](detectors/index.md): one page per ecosystem, with what each detector reads and reports.
-- [Detector SDK](DETECTORS.md): the public seam and how to start a new detector.
-- [Lifecycle importers](IMPORTERS.md): drafting rules from authoritative sources for review.
-- [Maintainer CLE declarations](MAINTAINERS.md): how installed packages declare their lifecycle.
-- [Architecture and trust boundaries](ARCHITECTURE.md): the layers and what each one must not do.
-- [Threat model](THREAT_MODEL.md): trust boundaries, threats, and residual risks.
-- [Validation results](VALIDATION.md): the public corpus, precision thresholds, and measured results.
-- [Benchmarks](BENCHMARKS.md): the agent migration benchmark, its task set, and how it is scored.
-- [State of EOL](state-of-eol.md): corpus findings aggregated by product and release line.
-- [Offing compared with Renovate, Dependabot, and endoflife.date](compare/index.md): what each tool answers, and where each is stronger.
-- [Decision records](decisions/index.md): the decisions behind public contracts.
-- [Roadmap](ROADMAP.md): phases and what each one delivers.
-- [Post-launch notes and next roadmap](NEXT.md): what shipped after v0.1 and what comes next.
-- [Changelog](CHANGELOG.md): every release, with a stable link per version.
-- [Start contributing](CONTRIBUTE.md): pick a sized issue, follow its brief, and open one pull request.
-- [Codex plugin submission](CODEX_SUBMISSION.md): how the plugin is submitted to the Codex directory.
-- [Brand files](https://github.com/velella-sh/offing/blob/main/brand/README.md), [brand asset terms](https://github.com/velella-sh/offing/blob/main/brand/LICENSE.md), and the [distribution brand checklist](DISTRIBUTION_BRAND.md).
-- [Support](SUPPORT.md) and [terms](TERMS.md).
-- [Persian (فارسی)](fa/index.md): the quickstart in Persian, rendered right to left.
 
 [Source code](https://github.com/velella-sh/offing) · [Report an issue](https://github.com/velella-sh/offing/issues) · [npm package](https://www.npmjs.com/package/@velella/offing)
 
