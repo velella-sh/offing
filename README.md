@@ -41,11 +41,31 @@ npx @velella/offing check pkg:npm/request@2.88.2   # exits 1: deprecated, with t
 
 Requirements: Node.js 22 or newer. Read this in: **English** · [فارسی](docs/i18n/fa/README.md).
 
+## What you get
+
+- **Exact location, real source.** Every finding names the file and line, links the authoritative source for the rule, and gives the replacement and migration steps. Nothing is guessed: a package with no rule reports `no-data`, never "safe".
+- **Check before you add.** `check pkg:npm/request@2.88.2` answers for one dependency without scanning anything, and exits `1` when a rule at or above `--fail-on` applies.
+- **Only new problems.** `baseline` records accepted findings; `scan --baseline` then reports only regressions, so a legacy repository can adopt Offing on day one.
+- **Migration packets.** `context '<finding-id>' --json` hands a person or a coding agent the constraints, the affected files and usages, the sources, and suggested verification commands. Offing never runs them for you.
+- **Usage, not just declarations.** For npm and Ruby it finds the imports and calls that use a deprecated package, so you see what a migration has to touch.
+- **Fresh data, still offline.** Scans never touch the network. `data update` refreshes lifecycle rules from signed bundles when you ask, and refuses anything it cannot verify.
+- **Works where you work.** CLI, local MCP server, GitHub Action with SARIF for code scanning, and an Agent Skill. Setup for Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot and Kilo Code is one command: `setup`.
+- **Private by design.** No account needed, and no repository upload.
+
+## What it covers
+
+Runtimes, package manifests and lockfiles, CI and infrastructure files across:
+
+Node.js, npm, Deno and Bun · Python · Go · Rust · Java and Kotlin · .NET · Ruby · PHP · Swift · Android · Dart and Flutter · Elixir · Scala · C and C++ · GitHub Actions · CI runner images · Container base images · Kubernetes APIs · Terraform · Serverless runtimes · Database runtimes · PowerShell.
+
+The full table, with the files read and what is reported for each, is in [Ecosystem coverage](docs/ECOSYSTEMS.md). Maturity per detector is in the [compatibility matrix](docs/COMPATIBILITY.md#ecosystem-coverage).
+
 ## For coding agents
 
 ```bash
 npx skills add velella-sh/offing        # the Agent Skill, listed on skills.sh
 npx @velella/offing setup               # tell each coding agent in the repo to check before adding
+npx @velella/offing context '<finding-id>' . --json   # migration packet for an agent
 npx --yes @velella/offing mcp           # local MCP server over stdio
 ```
 
@@ -63,7 +83,7 @@ steps:
 
 ![Offing pull request comment showing severity counts and the top lifecycle findings with file locations](https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/screenshots/pr-comment.webp)
 
-Setup, inputs, SARIF and baselines are in the [GitHub Action guide](docs/GITHUB_ACTION.md).
+Offing annotates the pull request at the exact line, posts one summary comment with the evidence, suppresses accepted findings with a baseline, fails on the severity you choose, and uploads the complete JSON report or SARIF. Scans run on the runner, so repository contents never leave it. Pin a full commit SHA instead of a tag when you need an immutable reference. Setup, inputs, permissions and artifacts are in the [GitHub Action guide](docs/GITHUB_ACTION.md).
 
 ## Why not just Renovate?
 
