@@ -1,0 +1,289 @@
+import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
+import { access, mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { after, test } from "node:test";
+import { promisify } from "node:util";
+
+import {
+  renderScaffold,
+  renderScaffoldResult,
+  scaffoldDetector,
+  scaffoldNames,
+  ScaffoldError,
+} from "../tools/scaffold/index.js";
+import { runCli } from "./cli-runner.js";
+import { compile, compileCheckout, removeAll, runTest, scaffoldCheckout } from "./scaffold-helpers.js";
+
+const execute = promisify(execFile);
+const roots: string[] = [];
+
+after(() => removeAll(roots));
+
+const exists = (path: string) =>
+  access(path).then(
+    () => true,
+    () => false,
+  );
+
+test("names are derived from the id", () => {
+  assert.deepEqual(scaffoldNames("go-modules"), {
+    id: "go-modules",
+    ecosystem: "go-modules",
+    camel: "goModules",
+    pascal: "GoModules",
+    title: "Go modules",
+  });
+  assert.deepEqual(scaffoldNames("rust-crates", "cargo"), {
+    id: "rust-crates",
+    ecosystem: "cargo",
+    camel: "rustCrates",
+    pascal: "RustCrates",
+    title: "Rust crates",
+  });
+  assert.deepEqual(scaffoldNames("go"), { id: "go", ecosystem: "go", camel: "go", pascal: "Go", title: "Go" });
+  assert.equal(scaffoldNames("k8s-api").camel, "k8sApi");
+});
+
+test("ids that the SDK would reject, or that could escape the repository, are refused", () => {
+  for (const bad of [
+    "",
+    "Go",
+    "go_modules",
+    "1go",
+    "go--modules",
+    "-go",
+    "go-",
+    "go modules",
+    "../evil",
+    "go/modules",
+    "go.mod",
+    "GO-MODULES",
+  ]) {
+    assert.throws(
+      () => scaffoldNames(bad),
+      (error: unknown) => error instanceof ScaffoldError && /not a valid detector id/.test(error.message),
+      JSON.stringify(bad),
+    );
+  }
+  assert.throws(() => scaffoldNames("go", "Go"), /not a valid ecosystem slug/);
+  assert.throws(() => scaffoldNames("go", "../x"), /not a valid ecosystem slug/);
+});
+
+test("the skeleton is eight files at predictable paths, and the rules stay in Ebb", () => {
+  const names = scaffoldNames("go-modules", "go");
+  const files = renderScaffold(names);
+  assert.deepEqual(
+    [...files.keys()],
+    [
+      "src/detectors/go-modules.ts",
+      "src/detectors/go-modules/parse.ts",
+      "tests/go-modules-detector.test.ts",
+      "tests/go-modules-parse.test.ts",
+      "tests/fixtures/go-modules/README.md",
+      "tests/fixtures/go-modules/zero/README.md",
+      "tests/fixtures/go-modules/malformed/README.md",
+      "docs/detectors/go-modules.md",
+    ],
+  );
+  assert.ok(![...files.keys()].some((path) => path.includes("registry")), "rules are added to Ebb, not here");
+
+  const detector = files.get("src/detectors/go-modules.ts")!;
+  assert.match(detector, /import \{ defineDetector, DETECTOR_API_VERSION \} from "\.\.\/sdk\.js";/);
+  assert.match(detector, /export const goModulesDetector = defineDetector\(\{/);
+  assert.match(detector, /id: "go-modules",/);
+  assert.doesNotMatch(detector, /from "\.\.\/(?!sdk\.js)/, "a detector uses the public SDK only");
+  assert.match(
+    files.get("tests/go-modules-detector.test.ts")!,
+    /import \{ goModulesDetector \} from "\.\.\/src\/detectors\/go-modules\.js";/,
+  );
+  assert.match(files.get("docs/detectors/go-modules.md")!, /^# Go modules detector/);
+  for (const contents of files.values())
+    assert.ok(!/\{\{\s*\w+\s*\}\}|\$\{names\.|\bundefined\b|\[object /.test(contents), "no unrendered placeholder");
+});
+
+test("it refuses to run outside a checkout of the repository", async () => {
+  const empty = await mkdtemp(join(tmpdir(), "offing-not-a-checkout-"));
+  roots.push(empty);
+  await assert.rejects(scaffoldDetector("sample", { root: empty }), /checkout of the Offing repository/);
+  await writeFile(join(empty, "package.json"), JSON.stringify({ name: "someone-else" }));
+  await assert.rejects(scaffoldDetector("sample", { root: empty }), /checkout of the Offing repository/);
+  assert.equal(await exists(join(empty, "src")), false, "nothing was created");
+});
+
+test("an existing file stops the whole run before anything is written", async () => {
+  const checkout = await scaffoldCheckout(roots);
+  await mkdir(join(checkout, "docs", "detectors"), { recursive: true });
+  await writeFile(join(checkout, "docs", "detectors", "sample.md"), "mine\n");
+  await assert.rejects(
+    scaffoldDetector("sample", { root: checkout }),
+    /Nothing was written: docs\/detectors\/sample\.md already exists/,
+  );
+  assert.equal(await readFile(join(checkout, "docs", "detectors", "sample.md"), "utf8"), "mine\n");
+  for (const path of ["src/detectors/sample.ts", "tests/sample-detector.test.ts", "tests/fixtures/sample"]) {
+    assert.equal(await exists(join(checkout, path)), false, path);
+  }
+});
+
+test("a generated skeleton compiles and passes the conformance suite with zero rules", async () => {
+  const checkout = await compileCheckout(roots);
+  const result = await scaffoldDetector("sample-lang", { root: checkout, ecosystem: "sample" });
+  assert.equal(result.files.length, 8);
+  for (const file of result.files) assert.ok(await exists(join(checkout, file)), file);
+
+  const compiled = await compile(checkout);
+  assert.equal(compiled.ok, true, compiled.output);
+  const tested = await runTest(checkout, "dist/tests/sample-lang-detector.test.js");
+  assert.equal(tested.ok, true, tested.output);
+  assert.match(tested.output, /sample-lang passes detector conformance/);
+  assert.match(tested.output, /(?:# |ℹ )pass 1/);
+});
+
+test("the result lists the files and the manual steps that remain", async () => {
+  const checkout = await scaffoldCheckout(roots);
+  const text = renderScaffoldResult(await scaffoldDetector("sample-lang", { root: checkout, ecosystem: "sample" }));
+  assert.match(text, /^Created the Sample lang detector skeleton:/);
+  assert.match(text, /  src\/detectors\/sample-lang\.ts/);
+  assert.match(text, /1\. Register the detector: .*sampleLangDetector.*builtInDetectors/);
+  assert.match(text, /Add the rules to registry\/sample-lang\.json in Ebb/);
+  assert.match(text, /npm run check/);
+});
+
+test("the command creates the skeleton from a checkout, and explains itself elsewhere", async () => {
+  // One real spawn keeps the process boundary covered; the rest run in process, where a call costs milliseconds.
+  const spawned = (args: string[], cwd: string) =>
+    execute(process.execPath, [resolve("dist/src/cli.js"), ...args], { cwd }).then(
+      (value) => ({ code: 0, ...value }),
+      (error: { code: number; stdout: string; stderr: string }) => error,
+    );
+  const run = async (args: string[], cwd: string) => await runCli(args, { cwd });
+
+  const checkout = await scaffoldCheckout(roots);
+  const created = await run(["new-detector", "tiny-lang"], checkout);
+  assert.equal(created.code, 0, created.stderr);
+  assert.match(created.stdout, /Created the Tiny lang detector skeleton/);
+  assert.equal(await exists(join(checkout, "src", "detectors", "tiny-lang.ts")), true);
+
+  const again = await run(["new-detector", "tiny-lang"], checkout);
+  assert.equal(again.code, 2);
+  assert.match(again.stderr, /Nothing was written/);
+
+  const rejected = await run(["new-detector", "Bad_Id", "--json"], checkout);
+  assert.equal(rejected.code, 2);
+  const document = JSON.parse(rejected.stdout) as {
+    schemaVersion: string;
+    error: { code: string; reason: string };
+  };
+  assert.equal(document.schemaVersion, "offing.error.v1");
+  assert.equal(document.error.code, "usage");
+  assert.equal(document.error.reason, "scaffold-failed");
+
+  const outside = await mkdtemp(join(tmpdir(), "offing-outside-"));
+  roots.push(outside);
+  assert.match((await run(["new-detector", "tiny-lang"], outside)).stderr, /checkout of the Offing repository/);
+
+  for (const args of [
+    ["new-detector"],
+    ["new-detector", "Bad_Id"],
+    ["new-detector", "ok", "--ecosystem"],
+    ["new-detector", "ok", "--ecosystem", "--json"],
+  ]) {
+    const failure = await run(args, checkout);
+    assert.equal(failure.code, 2, args.join(" "));
+    assert.notEqual(failure.stderr, "", args.join(" "));
+  }
+  assert.match((await spawned(["new-detector"], checkout)).stderr, /Usage: offing new-detector <id>/);
+});
+
+test("a detector id that is already taken is refused, and nothing is written", async () => {
+  const checkout = await scaffoldCheckout(roots);
+  for (const [id, detectorFile] of [
+    ["npm", "src/detectors/npm/index.ts"],
+    ["python", "src/detectors/python/index.ts"],
+    ["github-actions", "src/detectors/github-actions.ts"],
+  ] as const) {
+    await assert.rejects(
+      scaffoldDetector(id, { root: checkout }),
+      (error: unknown) =>
+        error instanceof ScaffoldError &&
+        error.message.startsWith("Nothing was written:") &&
+        error.message.includes(`the detector id "${id}" is already used by ${detectorFile}`),
+      id,
+    );
+  }
+  assert.equal(await exists(join(checkout, "tests", "fixtures", "npm")), false);
+  assert.equal(await exists(join(checkout, "docs", "detectors")), false);
+});
+
+test("a registry name or rule namespace that is already taken is refused", async () => {
+  const checkout = await scaffoldCheckout(roots);
+  // nodejs has a registry but no detector of its own: the npm detector reads it.
+  await assert.rejects(
+    scaffoldDetector("nodejs", { root: checkout }),
+    /"nodejs" is already a registry name or rule namespace, used by registry\/nodejs\.json/,
+  );
+  await assert.rejects(
+    scaffoldDetector("my-runtimes", { root: checkout, ecosystem: "nodejs" }),
+    /the ecosystem "nodejs" is already used by registry\/nodejs\.json; rule ids and registries must stay unique/,
+  );
+  await assert.rejects(
+    scaffoldDetector("my-npm", { root: checkout, ecosystem: "npm" }),
+    /the ecosystem "npm" is already used by registry\/npm\.json/,
+  );
+
+  // A rule-id prefix counts even when no registry file or ecosystem carries that name.
+  await writeFile(
+    join(checkout, "registry", "legacy-rules.json"),
+    JSON.stringify({
+      schemaVersion: "ebb.registry.v2",
+      ecosystem: "legacy-rules",
+      rules: [{ id: "oldstuff.package.thing.deprecated" }],
+    }),
+  );
+  await assert.rejects(
+    scaffoldDetector("oldstuff", { root: checkout }),
+    /"oldstuff" is already a registry name or rule namespace, used by registry\/legacy-rules\.json/,
+  );
+  await assert.rejects(
+    scaffoldDetector("legacy-rules", { root: checkout }),
+    /"legacy-rules" is already a registry name/,
+  );
+});
+
+test("every collision is reported at once, so one run is enough to fix a name", async () => {
+  const checkout = await scaffoldCheckout(roots);
+  await assert.rejects(scaffoldDetector("npm", { root: checkout, ecosystem: "python" }), (error: unknown) => {
+    const message = (error as Error).message;
+    return (
+      message.includes('the detector id "npm"') &&
+      message.includes('"npm" is already a registry name') &&
+      message.includes('the ecosystem "python" is already used by registry/python.json')
+    );
+  });
+});
+
+test("detectors written as classes are found too, and fresh names still work", async () => {
+  const checkout = await scaffoldCheckout(roots);
+  await writeFile(
+    join(checkout, "src", "detectors", "legacy.ts"),
+    'export class Legacy {\n  readonly id = "legacy-class";\n}\n',
+  );
+  await assert.rejects(
+    scaffoldDetector("legacy-class", { root: checkout }),
+    /the detector id "legacy-class" is already used by src\/detectors\/legacy\.ts/,
+  );
+  const created = await scaffoldDetector("fresh-one", { root: checkout });
+  assert.equal(created.files.length, 8);
+  await assert.rejects(
+    scaffoldDetector("fresh-one", { root: checkout }),
+    /Nothing was written: the detector id "fresh-one" is already used by src\/detectors\/fresh-one\.ts/,
+  );
+});
+
+test("the command reports a collision with a usage-style exit code", async () => {
+  const checkout = await scaffoldCheckout(roots);
+  const result = await runCli(["new-detector", "python"], { cwd: checkout });
+  assert.equal(result.code, 2);
+  assert.match(result.stderr, /the detector id "python" is already used by src\/detectors\/python\/index\.ts/);
+});

@@ -1,0 +1,569 @@
+import assert from "node:assert/strict";
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { resolve } from "node:path";
+import { test } from "node:test";
+
+import {
+  collect,
+  countRepeatRepositories,
+  distinctRepositories,
+  distinctRepositoryNames,
+  formatChange,
+  formatSkillsInstallsReport,
+  goatCounterSource,
+  MAXIMUM_LANDING_PAGES,
+  parseContributorMetrics,
+  parseDownloads,
+  parseGoatCounter,
+  parseLandingPages,
+  parseMcpRegistry,
+  parseScorecard,
+  parseSkillsInstalls,
+  previousMonth,
+  readPreviousSnapshot,
+  SCHEMA_VERSION,
+  SEARCH_CONSOLE_SOURCE,
+  searchConsoleInputPath,
+  SERVICE_REPORTS,
+  SKILLS_SH_SOURCE,
+} from "../tools/adoption-metrics.js";
+import type { Fetcher, LandingPage, Metric, Snapshot } from "../tools/adoption-metrics.js";
+
+/** Trimmed skills.sh repository page: total installs plus the per-Skill table. */
+const SAVED_SKILLS_SH_PAGE = `<!DOCTYPE html><html><body><main>
+<h1>velella-sh/offing</h1>
+<span>1<!-- --> <!-- -->skill</span>
+<span>6<!-- --> total installs</span>
+<div class="hidden lg:grid"><div>Skill</div><div>Installs</div></div>
+<a href="/velella-sh/offing/offing">
+  <div><h3 class="font-semibold text-foreground truncate">offing</h3></div>
+  <div class="lg:col-span-3 text-right"><span class="font-mono text-sm text-foreground">6</span></div>
+</a>
+</main></body></html>`;
+
+/** Multi-Skill skills.sh page used to check per-Skill parsing. */
+const SAVED_SKILLS_SH_MULTI_PAGE = `<!DOCTYPE html><html><body><main>
+<span>4<!-- --> total installs</span>
+<a href="/coalesce-labs/offing-skills/offing-context">
+  <div><h3 class="font-semibold text-foreground truncate">offing-context</h3></div>
+  <div><span class="font-mono text-sm text-foreground">2</span></div>
+</a>
+<a href="/coalesce-labs/offing-skills/offing-bookmarks">
+  <div><h3 class="font-semibold text-foreground truncate">offing-bookmarks</h3></div>
+  <div><span class="font-mono text-sm text-foreground">2</span></div>
+</a>
+</main></body></html>`;
+
+test("counts distinct repositories and leaves out the project's own", () => {
+  const item = (name: string) => ({ repository: { full_name: name } });
+  assert.equal(
+    distinctRepositories([
+      item("a/one"),
+      item("a/one"),
+      item("B/Two"),
+      item("b/two"),
+      item("velella-sh/offing"),
+      item("velella-sh/other"),
+      {},
+    ]),
+    2,
+  );
+  assert.equal(distinctRepositories([]), 0);
+  assert.deepEqual(distinctRepositoryNames([item("b/two"), item("a/one"), item("velella-sh/offing")]), [
+    "a/one",
+    "b/two",
+  ]);
+});
+
+test("calculates previous calendar month correctly across month and year boundaries", () => {
+  assert.equal(previousMonth("2026-10-28"), "2026-09");
+  assert.equal(previousMonth("2026-01-15"), "2025-12");
+  assert.equal(previousMonth("2027-03-01"), "2027-02");
+});
+
+test("counts repeat repositories active in consecutive months", () => {
+  const current = ["org/repo-a", "org/repo-b", "org/repo-c"];
+  const previous = ["org/repo-b", "ORG/REPO-C", "org/repo-d"];
+  assert.equal(countRepeatRepositories(current, previous), 2);
+  assert.equal(countRepeatRepositories(current, []), 0);
+  assert.equal(countRepeatRepositories([], previous), 0);
+});
+
+test("reads npm downloads and reports an unpublished package as unavailable", () => {
+  assert.deepEqual(parseDownloads(200, '{"downloads": 42}'), {
+    status: "ok",
+    value: 42,
+    source: "https://api.npmjs.org/downloads/point/last-week/@velella/offing",
+  });
+  assert.equal(parseDownloads(404, '{"error":"package offing not found"}').status, "unavailable");
+  assert.equal(parseDownloads(500, "").status, "unavailable");
+  assert.equal(parseDownloads(200, "{}").status, "unavailable");
+});
+
+test("finds the MCP Registry entry by repository", () => {
+  const listed = JSON.stringify({
+    servers: [
+      { server: { name: "io.github.other/x", repository: { url: "https://github.com/other/x" } } },
+      {
+        server: {
+          name: "io.github.velella-sh/offing",
+          repository: { url: "https://github.com/velella-sh/offing" },
+        },
+      },
+    ],
+  });
+  assert.deepEqual(parseMcpRegistry(200, listed), {
+    status: "ok",
+    value: true,
+    detail: "io.github.velella-sh/offing",
+    source: "https://registry.modelcontextprotocol.io/v0/servers?search=offing",
+  });
+  assert.equal((parseMcpRegistry(200, '{"servers":[]}') as { value: boolean }).value, false);
+  assert.equal(parseMcpRegistry(503, "").status, "unavailable");
+});
+
+test("reads total and per-Skill installs from a saved skills.sh repository page", () => {
+  const metric = parseSkillsInstalls(200, SAVED_SKILLS_SH_PAGE);
+  assert.deepEqual(metric, {
+    status: "ok",
+    value: 6,
+    skills: [{ name: "offing", installs: 6 }],
+    source: SKILLS_SH_SOURCE,
+  });
+});
+
+test("reads per-Skill installs when a repository publishes more than one Skill", () => {
+  const metric = parseSkillsInstalls(
+    200,
+    SAVED_SKILLS_SH_MULTI_PAGE,
+    "https://www.skills.sh/coalesce-labs/offing-skills",
+  );
+  assert.equal(metric.status, "ok");
+  assert.equal((metric as { value: number }).value, 4);
+  assert.deepEqual((metric as { skills: Array<{ name: string; installs: number }> }).skills, [
+    { name: "offing-bookmarks", installs: 2 },
+    { name: "offing-context", installs: 2 },
+  ]);
+});
+
+test("falls back to schema.org userInteractionCount on a single-Skill page", () => {
+  assert.equal((parseSkillsInstalls(200, '..."userInteractionCount":4}...') as { value: number }).value, 4);
+  assert.equal(parseSkillsInstalls(200, "<html></html>").status, "unavailable");
+  assert.equal(parseSkillsInstalls(404, "").status, "unavailable");
+});
+
+test("formats signed week-over-week change without treating a missing previous as zero", () => {
+  assert.equal(formatChange(10, 7), "+3");
+  assert.equal(formatChange(7, 10), "-3");
+  assert.equal(formatChange(5, 5), "0");
+  assert.equal(formatChange(5, null), "—");
+  assert.equal(formatChange("unavailable", 3), "unavailable");
+});
+
+test("skills.sh report shows total and per-Skill week-over-week change", () => {
+  const current: Snapshot = {
+    schemaVersion: SCHEMA_VERSION,
+    date: "2026-10-28",
+    metrics: {
+      skillsShInstalls: {
+        status: "ok",
+        value: 6,
+        skills: [{ name: "offing", installs: 6 }],
+        source: SKILLS_SH_SOURCE,
+      },
+    },
+  };
+  const previous: Snapshot = {
+    schemaVersion: SCHEMA_VERSION,
+    date: "2026-10-16",
+    metrics: {
+      skillsShInstalls: {
+        status: "ok",
+        value: 4,
+        skills: [{ name: "offing", installs: 4 }],
+        source: SKILLS_SH_SOURCE,
+      },
+    },
+  };
+  const report = formatSkillsInstallsReport(current, previous);
+  assert.match(report, /\| Total \| 6 \| \+2 \|/);
+  assert.match(report, /\| offing \| 6 \| \+2 \|/);
+  assert.match(report, /Change vs last week/);
+  assert.match(report, new RegExp(SKILLS_SH_SOURCE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+
+  const firstWeek = formatSkillsInstallsReport(current, null);
+  assert.match(firstWeek, /\| Total \| 6 \| — \|/);
+  assert.match(firstWeek, /\| offing \| 6 \| — \|/);
+});
+
+test("readPreviousSnapshot returns the newest snapshot older than the given date", async () => {
+  const tmp = await mkdtemp(resolve(tmpdir(), "offing-skills-prev-"));
+  try {
+    const older: Snapshot = { schemaVersion: SCHEMA_VERSION, date: "2026-10-16", metrics: {} };
+    const newer: Snapshot = { schemaVersion: SCHEMA_VERSION, date: "2026-10-21", metrics: {} };
+    await writeFile(resolve(tmp, "2026-10-16.json"), JSON.stringify(older));
+    await writeFile(resolve(tmp, "2026-10-21.json"), JSON.stringify(newer));
+    const previous = await readPreviousSnapshot("2026-10-28", tmp);
+    assert.equal(previous?.date, "2026-10-21");
+    assert.equal(await readPreviousSnapshot("2026-10-16", tmp), null);
+  } finally {
+    await rm(tmp, { recursive: true, force: true });
+  }
+});
+
+test("builds the GoatCounter counter URL for the 30 days ending on the snapshot date", () => {
+  assert.equal(
+    goatCounterSource("offing", "2026-10-28"),
+    "https://offing.goatcounter.com/counter/TOTAL.json?start=2026-09-29&end=2026-10-28",
+  );
+  assert.equal(
+    goatCounterSource("offing", "2026-01-05"),
+    "https://offing.goatcounter.com/counter/TOTAL.json?start=2025-12-07&end=2026-01-05",
+  );
+});
+
+test("reads docs pageviews from the public GoatCounter counter", () => {
+  const source = goatCounterSource("offing", "2026-10-28");
+  assert.deepEqual(parseGoatCounter(200, '{"count":"1,234","count_unique":"1,234"}', source), {
+    status: "ok",
+    value: 1234,
+    source,
+  });
+  assert.equal((parseGoatCounter(200, '{"count":"0"}', source) as { value: number }).value, 0);
+  assert.equal((parseGoatCounter(200, '{"count":"1 234"}', source) as { value: number }).value, 1234);
+  assert.equal(parseGoatCounter(403, "", source).status, "unavailable");
+  assert.equal(parseGoatCounter(500, "", source).status, "unavailable");
+  assert.equal(parseGoatCounter(200, '{"count":"1.2k"}', source).status, "unavailable");
+  assert.equal(parseGoatCounter(200, "{}", source).status, "unavailable");
+  assert.equal(parseGoatCounter(200, "not json", source).status, "unavailable");
+});
+
+test("reads the Scorecard score and reports a missing score as unavailable", () => {
+  assert.deepEqual(parseScorecard(200, '{"score": 3.1}'), {
+    status: "ok",
+    value: 3.1,
+    detail: "https://securityscorecards.dev/viewer/?uri=github.com/velella-sh/offing",
+    source: "https://api.securityscorecards.dev/projects/github.com/velella-sh/offing",
+  });
+  assert.equal(parseScorecard(404, '{"message":"repo not found"}').status, "unavailable");
+  assert.equal(parseScorecard(500, "").status, "unavailable");
+  assert.equal(parseScorecard(200, "{}").status, "unavailable");
+  assert.equal(parseScorecard(200, "invalid-json").status, "unavailable");
+});
+
+test("parses external and first-time contributors from merged PR search results", () => {
+  const data = JSON.stringify({
+    items: [
+      // September contributor with an October PR (not first-time in October)
+      { user: { login: "sept-user", type: "User" }, closed_at: "2026-09-20T10:00:00Z" },
+      { user: { login: "sept-user", type: "User" }, closed_at: "2026-10-05T10:00:00Z" },
+      // Contributor whose only PR is in October (first-time in October)
+      { user: { login: "oct-user", type: "User" }, closed_at: "2026-10-12T10:00:00Z" },
+      // Contributor with two PRs both in October (first-time in October)
+      { user: { login: "oct-repeat", type: "User" }, closed_at: "2026-10-02T10:00:00Z" },
+      { user: { login: "oct-repeat", type: "User" }, closed_at: "2026-10-14T10:00:00Z" },
+      // Contributor with no closed_at (counts as external, but ignored for first-time)
+      { user: { login: "no-date", type: "User" } },
+      // Owner (excluded)
+      { user: { login: "arminazimi", type: "User" }, closed_at: "2026-10-01T10:00:00Z" },
+      // Bots (excluded)
+      { user: { login: "renovate[bot]", type: "Bot" }, closed_at: "2026-10-01T10:00:00Z" },
+      { user: { login: "custom-bot[bot]", type: "User" }, closed_at: "2026-10-01T10:00:00Z" },
+    ],
+  });
+  const result = parseContributorMetrics(200, data, "2026-10-28");
+  assert.equal(result.externalContributors.status, "ok");
+  assert.equal((result.externalContributors as { value: number }).value, 4);
+  assert.equal(result.firstTimeContributors.status, "ok");
+  assert.equal((result.firstTimeContributors as { value: number }).value, 2);
+});
+
+test("reports contributor metrics as unavailable on HTTP error or invalid response", () => {
+  const httpErr = parseContributorMetrics(500, "", "2026-10-28");
+  assert.equal(httpErr.externalContributors.status, "unavailable");
+  assert.equal(httpErr.firstTimeContributors.status, "unavailable");
+
+  const badJson = parseContributorMetrics(200, "not json", "2026-10-28");
+  assert.equal(badJson.externalContributors.status, "unavailable");
+  assert.equal(badJson.firstTimeContributors.status, "unavailable");
+
+  const noItems = parseContributorMetrics(200, "{}", "2026-10-28");
+  assert.equal(noItems.externalContributors.status, "unavailable");
+  assert.equal(noItems.firstTimeContributors.status, "unavailable");
+});
+
+test("one failing source is recorded and does not stop the others", async () => {
+  const fetcher: Fetcher = async (url) => {
+    const { hostname } = new URL(url);
+    if (hostname === "api.npmjs.org") throw new Error("network down");
+    if (url.includes("skills.sh")) return { status: 200, text: SAVED_SKILLS_SH_PAGE };
+    if (hostname === "registry.modelcontextprotocol.io") return { status: 200, text: '{"servers":[]}' };
+    if (url.includes("api.github.com/repos/"))
+      return { status: 200, text: '{"stargazers_count": 3, "forks_count": 1}' };
+    if (url.includes("securityscorecards.dev")) return { status: 200, text: '{"score": 3.1}' };
+    if (url.includes("search/issues")) {
+      return {
+        status: 200,
+        text: JSON.stringify({
+          total_count: 3,
+          items: [
+            { user: { login: "contributor-one", type: "User" }, closed_at: "2026-10-05T12:00:00Z" },
+            { user: { login: "contributor-one", type: "User" }, closed_at: "2026-10-10T12:00:00Z" },
+            { user: { login: "contributor-two", type: "User" }, closed_at: "2026-10-15T12:00:00Z" },
+          ],
+        }),
+      };
+    }
+    return {
+      status: 200,
+      text: JSON.stringify({
+        total_count: 2,
+        items: [{ repository: { full_name: "x/a" } }, { repository: { full_name: "x/b" } }],
+      }),
+    };
+  };
+  const snapshot = await collect("2026-10-16", fetcher, "token");
+  assert.equal(snapshot.schemaVersion, SCHEMA_VERSION);
+  assert.deepEqual(
+    [snapshot.metrics.npmWeeklyDownloads!.status, (snapshot.metrics.npmWeeklyDownloads as { reason: string }).reason],
+    ["unavailable", "network down"],
+  );
+  assert.equal((snapshot.metrics.githubActionRepositories as { value: number }).value, 2);
+  assert.equal((snapshot.metrics.repeatActionRepositories as { value: number }).value, 0);
+  assert.equal((snapshot.metrics.skillsShInstalls as { value: number }).value, 6);
+  assert.deepEqual(
+    (snapshot.metrics.skillsShInstalls as { skills: Array<{ name: string; installs: number }> }).skills,
+    [{ name: "offing", installs: 6 }],
+  );
+  assert.equal(snapshot.metrics.skillsShInstalls!.source, SKILLS_SH_SOURCE);
+  assert.equal((snapshot.metrics.githubStars as { value: number }).value, 3);
+  assert.equal((snapshot.metrics.scorecardScore as { value: number }).value, 3.1);
+  assert.equal((snapshot.metrics.externalContributors as { value: number }).value, 2);
+  assert.equal((snapshot.metrics.firstTimeContributors as { value: number }).value, 2);
+  assert.deepEqual(snapshot.serviceReports, SERVICE_REPORTS);
+});
+
+test("records docs pageviews from GoatCounter when a site is configured", async () => {
+  const requested: string[] = [];
+  const fetcher: Fetcher = async (url) => {
+    requested.push(url);
+    if (url.includes("goatcounter.com/counter/TOTAL.json")) return { status: 200, text: '{"count":"1,234"}' };
+    return { status: 404, text: "" };
+  };
+  const snapshot = await collect("2026-10-28", fetcher, undefined, undefined, "offing");
+  const metric = snapshot.metrics.docsPageViews as { status: string; value: number; source: string; detail: string };
+  assert.equal(metric.status, "ok");
+  assert.equal(metric.value, 1234);
+  assert.equal(metric.source, "https://offing.goatcounter.com/counter/TOTAL.json?start=2026-09-29&end=2026-10-28");
+  assert.equal(metric.detail, "pageviews in the 30 days ending on the snapshot date");
+  assert.deepEqual(
+    requested.filter((url) => url.includes("goatcounter")),
+    [metric.source],
+  );
+});
+
+test("docs traffic is unavailable, never zero, when GoatCounter is not configured", async () => {
+  const snapshot = await collect("2026-10-28", async () => ({ status: 500, text: "" }), undefined, undefined, "");
+  const metric = snapshot.metrics.docsPageViews as { status: string; reason: string };
+  assert.equal(metric.status, "unavailable");
+  assert.match(metric.reason, /OFFING_GOATCOUNTER_SITE/);
+
+  const invalid = await collect(
+    "2026-10-28",
+    async () => ({ status: 200, text: '{"count":"9"}' }),
+    undefined,
+    undefined,
+    "evil.example/site",
+  );
+  assert.equal(invalid.metrics.docsPageViews!.status, "unavailable");
+  assert.match((invalid.metrics.docsPageViews as { reason: string }).reason, /not a valid GoatCounter site code/);
+});
+
+test("reads the maintainer's Search Console landing pages, largest first and capped at ten", () => {
+  const pages = Array.from({ length: 12 }, (_, index) => ({
+    page: `/page-${String(index).padStart(2, "0")}`,
+    clicks: index,
+    impressions: 100,
+  }));
+  const metric = parseLandingPages(200, JSON.stringify({ pages }), SEARCH_CONSOLE_SOURCE);
+  assert.equal(metric.status, "ok");
+  assert.equal((metric as { value: number }).value, MAXIMUM_LANDING_PAGES);
+  assert.deepEqual(
+    (metric as { pages: LandingPage[] }).pages.map((page) => page.page),
+    [
+      "/page-11",
+      "/page-10",
+      "/page-09",
+      "/page-08",
+      "/page-07",
+      "/page-06",
+      "/page-05",
+      "/page-04",
+      "/page-03",
+      "/page-02",
+    ],
+  );
+  assert.equal(metric.source, SEARCH_CONSOLE_SOURCE);
+});
+
+test("breaks landing-page ties by impressions and then page", () => {
+  const metric = parseLandingPages(
+    200,
+    JSON.stringify({
+      pages: [
+        { page: "/b", clicks: 1, impressions: 2 },
+        { page: "/a", clicks: 1, impressions: 2 },
+        { page: "/c", clicks: 1, impressions: 9 },
+      ],
+    }),
+    SEARCH_CONSOLE_SOURCE,
+  );
+  assert.deepEqual(
+    (metric as { pages: LandingPage[] }).pages.map((page) => page.page),
+    ["/c", "/a", "/b"],
+  );
+});
+
+test("reports landing pages as unavailable when the file is missing or invalid", () => {
+  const missing = parseLandingPages(404, "", SEARCH_CONSOLE_SOURCE);
+  assert.equal(missing.status, "unavailable");
+  assert.match((missing as { reason: string }).reason, /has not entered/);
+  assert.equal(parseLandingPages(500, "", SEARCH_CONSOLE_SOURCE).status, "unavailable");
+  assert.equal(parseLandingPages(200, "not json", SEARCH_CONSOLE_SOURCE).status, "unavailable");
+  assert.equal(parseLandingPages(200, "{}", SEARCH_CONSOLE_SOURCE).status, "unavailable");
+  assert.equal(parseLandingPages(200, '{"pages":[]}', SEARCH_CONSOLE_SOURCE).status, "unavailable");
+  const invalidInputs: unknown[] = [
+    [{ page: "", clicks: 1, impressions: 1 }],
+    [{ page: "/a", clicks: -1, impressions: 1 }],
+    [{ page: "/a", clicks: 1.5, impressions: 1 }],
+    [{ page: "/a", clicks: 1, impressions: "2" }],
+    [{ page: "/a", clicks: 1 }],
+    [null],
+    [
+      { page: "/a", clicks: 1, impressions: 2 },
+      { page: "/a", clicks: 3, impressions: 4 },
+    ],
+  ];
+  for (const pages of invalidInputs) {
+    const metric = parseLandingPages(200, JSON.stringify({ pages }), SEARCH_CONSOLE_SOURCE);
+    assert.equal(metric.status, "unavailable", JSON.stringify(pages));
+  }
+});
+
+test("reads the Search Console file named after the snapshot's month", () => {
+  assert.equal(searchConsoleInputPath("2026-10-28", "/tmp/console"), resolve("/tmp/console", "2026-10.json"));
+});
+
+test("collect records the month's Search Console landing pages from the maintainer's file", async () => {
+  const tmp = await mkdtemp(resolve(tmpdir(), "offing-landing-pages-"));
+  try {
+    const adoptionDir = resolve(tmp, "adoption");
+    const consoleDir = resolve(tmp, "search-console");
+    await mkdir(consoleDir, { recursive: true });
+    await writeFile(
+      resolve(consoleDir, "2026-10.json"),
+      JSON.stringify({
+        pages: [
+          { page: "https://example.test/RULES.html", clicks: 7, impressions: 80 },
+          { page: "https://example.test/", clicks: 9, impressions: 200 },
+        ],
+      }),
+    );
+    const fetcher: Fetcher = async () => ({ status: 404, text: "" });
+
+    const snapshot = await collect("2026-10-28", fetcher, undefined, adoptionDir);
+    const metric = snapshot.metrics.searchConsoleLandingPages as {
+      status: string;
+      value: number;
+      pages: LandingPage[];
+      source: string;
+    };
+    assert.equal(metric.status, "ok");
+    assert.equal(metric.value, 2);
+    assert.deepEqual(metric.pages, [
+      { page: "https://example.test/", clicks: 9, impressions: 200 },
+      { page: "https://example.test/RULES.html", clicks: 7, impressions: 80 },
+    ]);
+    assert.equal(metric.source, SEARCH_CONSOLE_SOURCE);
+
+    const nextMonth = await collect("2026-11-02", fetcher, undefined, adoptionDir);
+    const missing = nextMonth.metrics.searchConsoleLandingPages as { status: string; reason: string };
+    assert.equal(missing.status, "unavailable");
+    assert.match(missing.reason, /has not entered/);
+  } finally {
+    await rm(tmp, { recursive: true, force: true });
+  }
+});
+
+test("without a token the code-search metrics are unavailable, never zero", async () => {
+  const snapshot = await collect("2026-10-16", async () => ({ status: 404, text: "" }), undefined);
+  for (const name of [
+    "githubActionRepositories",
+    "repeatActionRepositories",
+    "preCommitRepositories",
+    "gitlabComponentRepositories",
+  ]) {
+    assert.equal(snapshot.metrics[name]!.status, "unavailable", name);
+  }
+});
+
+test("counts repeat action repositories across consecutive months", async () => {
+  const tmp = await mkdtemp(resolve(tmpdir(), "offing-repeat-"));
+  try {
+    const prevSnapshot: Snapshot = {
+      schemaVersion: SCHEMA_VERSION,
+      date: "2026-09-15",
+      metrics: {
+        githubActionRepositories: {
+          status: "ok",
+          value: 2,
+          repositories: ["user/retained", "user/churned"],
+          source: "https://github.com/search?type=code&q=test",
+        },
+      },
+    };
+    await writeFile(resolve(tmp, "2026-09-15.json"), JSON.stringify(prevSnapshot));
+
+    const fetcher: Fetcher = async (url) => {
+      if (url.includes("search/code")) {
+        return {
+          status: 200,
+          text: JSON.stringify({
+            total_count: 2,
+            items: [{ repository: { full_name: "USER/RETAINED" } }, { repository: { full_name: "user/new" } }],
+          }),
+        };
+      }
+      return { status: 200, text: "{}" };
+    };
+
+    const snapshot = await collect("2026-10-15", fetcher, "token", tmp);
+    assert.equal((snapshot.metrics.githubActionRepositories as { value: number }).value, 2);
+    assert.equal((snapshot.metrics.repeatActionRepositories as { value: number }).value, 1);
+  } finally {
+    await rm(tmp, { recursive: true, force: true });
+  }
+});
+
+test("every committed snapshot is well formed and named after its date", async () => {
+  const names = (await readdir(resolve("metrics/adoption"))).filter((name) => name.endsWith(".json")).sort();
+  assert.ok(names.length >= 1);
+  for (const name of names) {
+    const snapshot = JSON.parse(await readFile(resolve("metrics/adoption", name), "utf8")) as Snapshot;
+    assert.equal(snapshot.schemaVersion, SCHEMA_VERSION);
+    assert.equal(`${snapshot.date}.json`, name);
+    const documented = await readFile(resolve("docs/ADOPTION.md"), "utf8");
+    for (const [metric, value] of Object.entries(snapshot.metrics) as Array<[string, Metric]>) {
+      assert.ok(documented.includes(`\`${metric}\``), `${metric} is not documented in docs/ADOPTION.md`);
+      assert.ok(value.status === "ok" || value.reason.length > 0, metric);
+      assert.match(value.source, /^https:\/\//, metric);
+    }
+    if (snapshot.serviceReports) {
+      for (const [service, url] of Object.entries(snapshot.serviceReports)) {
+        assert.ok(documented.includes(`\`${service}\``), `${service} is not documented in docs/ADOPTION.md`);
+        assert.match(url, /^https:\/\//, service);
+      }
+    }
+  }
+});

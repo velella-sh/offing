@@ -1,0 +1,152 @@
+---
+title: "django-celery is no longer required — dates, impact, migration"
+description: "The project states that django-celery is no longer required because Celery supports Django directly."
+layout: doc
+permalink: "/rules/python.package.django-celery.deprecated.html"
+canonical_url: "https://velella.sh/offing/rules/python.package.django-celery.deprecated.html"
+image: "/assets/og/python.package.django-celery.deprecated.svg"
+review_date: "2026-10-16"
+last_modified_at: "2026-10-16"
+json_twin: "/rules/python.package.django-celery.deprecated.json"
+---
+
+# django-celery is no longer required
+
+**Deprecated.** The source gives no day. Replacement: Celery's built-in Django integration. Source: [django-celery retirement notice](https://pypi.org/project/django-celery/).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/django-celery
+```
+
+The project states that django-celery is no longer required because Celery supports Django directly.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | high |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/django-celery` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Replacement | Celery's built-in Django integration |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `python.package.django-celery.deprecated` |
+
+## Sources
+
+- [django-celery retirement notice](https://pypi.org/project/django-celery/) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve task discovery, broker and result settings, periodic schedules, worker startup, retries, and Django application initialization.
+
+**Steps**
+
+1. **Adopt Celery's Django integration.** Configure the Celery application using the current Django integration and translate djcelery settings and setup calls.
+2. **Remove django-celery.** Remove django-celery and djcelery from dependencies, installed applications, imports, commands, and migrations after data needs are resolved.
+
+**Verification**
+
+- `python -m pytest`: Run task, scheduling, result-backend, and repository tests.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.django-celery.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.django-celery.deprecated.html",
+      "url": "https://velella.sh/offing/rules/python.package.django-celery.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.django-celery.deprecated.html",
+      "headline": "django-celery is no longer required — dates, impact, migration",
+      "description": "The project states that django-celery is no longer required because Celery supports Django directly.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "deprecated",
+        "python",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "django-celery is no longer required",
+        "identifier": "pkg:pypi/django-celery"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "django-celery retirement notice",
+          "url": "https://pypi.org/project/django-celery/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.django-celery.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.django-celery.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/django-celery?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:pypi/*. Source: django-celery retirement notice (https://pypi.org/project/django-celery/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:pypi/django-celery?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Celery's built-in Django integration"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/django-celery?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/django-celery."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

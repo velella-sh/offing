@@ -1,0 +1,17 @@
+{
+  "repository": "jberkel/sms-backup-plus",
+  "commit": "fd33c3209c80598632d0323237fc86fa4ffea710",
+  "ecosystem": "android",
+  "selection": "targeted",
+  "expected": [
+    {
+      "ruleId": "android.play-billing.version-7",
+      "path": "app/build.gradle",
+      "line": 78,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 78 of app/build.gradle reads `implementation 'com.android.billingclient:billing:7.1.1'`. Google Play Billing Library majors follow the two-year deprecation cycle on https://developer.android.com/google/play/billing/deprecation-faq."
+      }
+    }
+  ]
+}

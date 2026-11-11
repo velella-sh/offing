@@ -1,0 +1,157 @@
+---
+title: "read-package-json is no longer supported — dates, impact, migration"
+description: "npm states that read-package-json is no longer supported and recommends @npmcli/package-json."
+layout: doc
+permalink: "/rules/npm.package.read-package-json.eol.html"
+canonical_url: "https://velella.sh/offing/rules/npm.package.read-package-json.eol.html"
+image: "/assets/og/npm.package.read-package-json.eol.svg"
+review_date: "2026-10-16"
+last_modified_at: "2026-10-16"
+json_twin: "/rules/npm.package.read-package-json.eol.json"
+---
+
+# read-package-json is no longer supported
+
+**End of life.** The source gives no day. Replacement: @npmcli/package-json. Source: [read-package-json package deprecation notice](https://www.npmjs.com/package/read-package-json).
+
+Check a version:
+
+```bash
+offing check pkg:npm/read-package-json
+```
+
+npm states that read-package-json is no longer supported and recommends @npmcli/package-json.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of life |
+| Severity | high |
+| Ecosystem | `npm` |
+| Component | `pkg:npm/read-package-json` |
+| Affected versions | `vers:npm/*` |
+| Date from the source | The source gives no day |
+| Replacement | @npmcli/package-json |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi, drafted by the `npm-deprecated` importer |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `npm.package.read-package-json.eol` |
+
+## Sources
+
+- [read-package-json package deprecation notice](https://www.npmjs.com/package/read-package-json) (accessed 2026-10-16)
+- [read-package-json registry metadata](https://registry.npmjs.org/read-package-json/latest) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve package normalization, extra metadata loading, error handling, file paths, warnings, and callback or promise timing relied on by callers.
+
+**Steps**
+
+1. **Move to @npmcli/package-json.** Replace the dependency and reads with @npmcli/package-json, adapting its promise-based API and normalized result shape.
+
+**Verification**
+
+- `npm run test --if-present`: Run valid, malformed, missing, and normalized package metadata tests.
+
+## Detected by
+
+The `npm` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [abab is deprecated](npm.package.abab.deprecated.html)
+- [@angular/core v18 and older are no longer supported](npm.package.angular.core.v18-and-older.end-of-support.html)
+- [@angular/core v19 is no longer supported](npm.package.angular.core.v19.end-of-support.html)
+- [@angular/core v20 reaches end of life on 2026-11-28](npm.package.angular.core.v20.scheduled-end-of-life.html)
+- [@angular/core v21 reaches end of life on 2027-06-30](npm.package.angular.core.v21.scheduled-end-of-life.html)
+- [@angular/core v22 reaches end of life on 2028-06-30](npm.package.angular.core.v22.scheduled-end-of-life.html)
+- [are-we-there-yet is no longer supported](npm.package.are-we-there-yet.eol.html)
+- [babel-eslint is deprecated](npm.package.babel-eslint.deprecated.html)
+
+
+## Data
+
+This page is generated from [`registry/npm.json`](https://github.com/velella-sh/offing/blob/main/registry/npm.json), rule `npm.package.read-package-json.eol`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/npm.package.read-package-json.eol.html",
+      "url": "https://velella.sh/offing/rules/npm.package.read-package-json.eol.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/npm.package.read-package-json.eol.html",
+      "headline": "read-package-json is no longer supported — dates, impact, migration",
+      "description": "npm states that read-package-json is no longer supported and recommends @npmcli/package-json.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "end-of-life",
+        "npm",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "read-package-json is no longer supported",
+        "identifier": "pkg:npm/read-package-json"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "read-package-json package deprecation notice",
+          "url": "https://www.npmjs.com/package/read-package-json"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "read-package-json registry metadata",
+          "url": "https://registry.npmjs.org/read-package-json/latest"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/npm.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/npm.package.read-package-json.eol.html#faq",
+      "url": "https://velella.sh/offing/rules/npm.package.read-package-json.eol.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:npm/read-package-json?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of life. The source gives no day. Affected versions: vers:npm/*. Source: read-package-json package deprecation notice (https://www.npmjs.com/package/read-package-json)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:npm/read-package-json?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "@npmcli/package-json"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:npm/read-package-json?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:npm/read-package-json."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

@@ -1,0 +1,579 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { test } from "node:test";
+
+import {
+  MAXIMUM_INPUT_BYTES,
+  parseTerraformFile,
+  parseTerraformLegacy,
+} from "../src/detectors/terraform/parse-terraform.js";
+import { parseManagedKubernetes } from "../src/detectors/terraform/kubernetes.js";
+
+const fixtures = resolve("tests/fixtures/terraform");
+const dollar = "$";
+
+async function fixture(path: string): Promise<string> {
+  return readFile(resolve(fixtures, path), "utf8");
+}
+
+test("parses required_version and provider constraints with exact lines", async () => {
+  assert.deepEqual(parseTerraformFile(await fixture("positive/main.tf")), [
+    { kind: "required_version", value: "~> 0.12.31", line: 2 },
+    { kind: "provider_version", provider: "aws", source: "hashicorp/aws", value: "~> 3.0", line: 7 },
+  ]);
+  assert.deepEqual(parseTerraformFile(await fixture("zero/main.tf")), [
+    { kind: "required_version", value: "~> 1.17.0", line: 2 },
+    { kind: "provider_version", provider: "aws", source: "hashicorp/aws", value: "~> 5.0", line: 7 },
+  ]);
+});
+
+test("ignores comments, variable defaults, references, modules, resources, and strings", async () => {
+  assert.deepEqual(parseTerraformFile(await fixture("negative/main.tf")), []);
+});
+
+test("returns nothing for malformed files", async () => {
+  assert.deepEqual(parseTerraformFile(await fixture("malformed/main.tf")), []);
+  assert.deepEqual(parseTerraformFile('terraform {\n  required_version = "~> 1.0"\n'), []);
+  assert.deepEqual(parseTerraformFile('terraform {\n  /* required_version = "1.0"\n}\n'), []);
+  assert.deepEqual(parseTerraformFile(""), []);
+});
+
+test("supports several terraform blocks, CRLF, a byte order mark, and a provider without source", () => {
+  const contents =
+    '﻿terraform {\r\n  required_version = ">= 1.5"\r\n}\r\nterraform {\r\n  required_providers {\r\n    null = {\r\n      version = "3.2.1"\r\n    }\r\n  }\r\n}\r\n';
+  assert.deepEqual(parseTerraformFile(contents), [
+    { kind: "required_version", value: ">= 1.5", line: 2 },
+    { kind: "provider_version", provider: "null", value: "3.2.1", line: 7 },
+  ]);
+});
+
+test("accepts one-line blocks and trailing comments", () => {
+  assert.deepEqual(parseTerraformFile('terraform { required_version = "1.5.7" }\n'), [
+    { kind: "required_version", value: "1.5.7", line: 1 },
+  ]);
+  assert.deepEqual(parseTerraformFile('terraform {\n  required_version = "1.5.7" # pinned\n}\n'), [
+    { kind: "required_version", value: "1.5.7", line: 2 },
+  ]);
+});
+
+test("skips dynamic and unsupported value forms", () => {
+  for (const value of [
+    "var.v",
+    '"${var.v}"',
+    '"1.0\\n"',
+    '""',
+    'format("%s", "1.0")',
+    '"1.0" + "x"',
+    '[ "1.0" ]',
+    "<<EOT\n1.0\nEOT",
+  ]) {
+    assert.deepEqual(parseTerraformFile(`terraform {\n  required_version = ${value}\n}\n`), [], value);
+  }
+  assert.deepEqual(parseTerraformFile('terraform "x" {\n  required_version = "1.0"\n}\n'), []);
+  assert.deepEqual(parseTerraformFile('locals {\n  terraform {\n    required_version = "1.0"\n  }\n}\n'), []);
+  assert.deepEqual(parseTerraformFile('terraform {\n  backend "s3" {\n    required_version = "1.0"\n  }\n}\n'), []);
+});
+
+test("does not read nested or non-provider version attributes", () => {
+  const contents = `terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      configuration_aliases = [aws.west]
+      nested = {
+        version = "9.9.9"
+      }
+    }
+    google = "~> 4.0"
+  }
+}
+`;
+  assert.deepEqual(parseTerraformFile(contents), []);
+});
+
+test("bounds oversized input", () => {
+  const padding = "# ".padEnd(MAXIMUM_INPUT_BYTES + 1, "x");
+  assert.deepEqual(parseTerraformFile(`${padding}\nterraform {\n  required_version = "1.0"\n}\n`), []);
+  const longLine = `terraform {\n  required_version = "1.0"\n  # ${"x".repeat(5000)}\n}\n`;
+  assert.deepEqual(parseTerraformFile(longLine), [{ kind: "required_version", value: "1.0", line: 2 }]);
+});
+
+test("parses managed Kubernetes versions from resources and modules", () => {
+  const contents = `module "eks" {
+  source          = "terraform-aws-modules/eks/aws"
+  cluster_version = "1.33"
+}
+
+resource "google_container_cluster" "primary" {
+  name               = "primary"
+  min_master_version = "1.30"
+}
+
+resource "azurerm_kubernetes_cluster" "main" {
+  kubernetes_version = "1.31.4"
+}
+`;
+  assert.deepEqual(parseManagedKubernetes(contents), [
+    {
+      product: "amazon-eks",
+      block: "module",
+      name: "eks",
+      attribute: "cluster_version",
+      value: "1.33",
+      literal: true,
+      line: 3,
+    },
+    {
+      product: "google-kubernetes-engine",
+      block: "google_container_cluster",
+      name: "primary",
+      attribute: "min_master_version",
+      value: "1.30",
+      literal: true,
+      line: 8,
+    },
+    {
+      product: "azure-kubernetes-service",
+      block: "azurerm_kubernetes_cluster",
+      name: "main",
+      attribute: "kubernetes_version",
+      value: "1.31.4",
+      literal: true,
+      line: 12,
+    },
+  ]);
+});
+
+test("decides a module's managed Kubernetes vendor from its registry source", () => {
+  const contents = `module "eks-cluster-version" {
+  source          = "terraform-aws-modules/eks/aws"
+  cluster_version = "1.31"
+}
+
+module "eks-kubernetes-version" {
+  source             = "terraform-aws-modules/eks/aws"
+  kubernetes_version = "1.31"
+}
+
+module "aks" {
+  source             = "Azure/aks/azurerm"
+  kubernetes_version = "1.30"
+}
+
+module "gke" {
+  source             = "terraform-google-modules/kubernetes-engine/google"
+  kubernetes_version = "1.29"
+  min_master_version = "1.29"
+}
+
+module "gke-private" {
+  source             = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster?ref=v30.0.0"
+  kubernetes_version = "1.28"
+}
+
+module "eks-host" {
+  source          = "registry.terraform.io/terraform-aws-modules/eks/aws"
+  cluster_version = "1.27"
+}
+
+module "aks-wrong-attribute" {
+  source          = "Azure/aks/azurerm"
+  cluster_version = "1.20"
+}
+`;
+  assert.deepEqual(parseManagedKubernetes(contents), [
+    {
+      product: "amazon-eks",
+      block: "module",
+      name: "eks-cluster-version",
+      attribute: "cluster_version",
+      value: "1.31",
+      literal: true,
+      line: 3,
+    },
+    {
+      product: "amazon-eks",
+      block: "module",
+      name: "eks-kubernetes-version",
+      attribute: "kubernetes_version",
+      value: "1.31",
+      literal: true,
+      line: 8,
+    },
+    {
+      product: "azure-kubernetes-service",
+      block: "module",
+      name: "aks",
+      attribute: "kubernetes_version",
+      value: "1.30",
+      literal: true,
+      line: 13,
+    },
+    {
+      product: "google-kubernetes-engine",
+      block: "module",
+      name: "gke",
+      attribute: "kubernetes_version",
+      value: "1.29",
+      literal: true,
+      line: 18,
+    },
+    {
+      product: "google-kubernetes-engine",
+      block: "module",
+      name: "gke",
+      attribute: "min_master_version",
+      value: "1.29",
+      literal: true,
+      line: 19,
+    },
+    {
+      product: "google-kubernetes-engine",
+      block: "module",
+      name: "gke-private",
+      attribute: "kubernetes_version",
+      value: "1.28",
+      literal: true,
+      line: 24,
+    },
+    {
+      product: "amazon-eks",
+      block: "module",
+      name: "eks-host",
+      attribute: "cluster_version",
+      value: "1.27",
+      literal: true,
+      line: 29,
+    },
+  ]);
+});
+
+test("an unknown module source leaves the version attributes without a product", () => {
+  const contents = `module "local" {
+  source             = "./modules/eks"
+  kubernetes_version = "1.31"
+}
+
+module "git" {
+  source             = "git::https://example.com/eks.git?ref=v1"
+  min_master_version = "1.30"
+}
+
+module "no-source" {
+  cluster_version = "1.29"
+}
+
+module "variable-source" {
+  source             = var.module_source
+  kubernetes_version = var.kubernetes_version
+}
+`;
+  assert.deepEqual(parseManagedKubernetes(contents), [
+    { block: "module", name: "local", attribute: "kubernetes_version", value: "1.31", literal: true, line: 3 },
+    { block: "module", name: "git", attribute: "min_master_version", value: "1.30", literal: true, line: 8 },
+    { block: "module", name: "no-source", attribute: "cluster_version", value: "1.29", literal: true, line: 12 },
+    {
+      block: "module",
+      name: "variable-source",
+      attribute: "kubernetes_version",
+      value: "var.kubernetes_version",
+      literal: false,
+      line: 17,
+    },
+  ]);
+  assert.deepEqual(
+    parseManagedKubernetes(
+      'module "prototype" {\n  source             = "constructor"\n  kubernetes_version = "1.20"\n}\n',
+    ),
+    [{ block: "module", name: "prototype", attribute: "kubernetes_version", value: "1.20", literal: true, line: 3 }],
+  );
+});
+
+test("returns references, interpolations, and other expressions as non-literal", () => {
+  assert.deepEqual(
+    parseManagedKubernetes(`module "eks" {
+  source          = "terraform-aws-modules/eks/aws"
+  cluster_version = var.eks_version
+}
+resource "azurerm_kubernetes_cluster" "main" {
+  kubernetes_version = module.aks.version
+}
+resource "google_container_cluster" "primary" {
+  min_master_version = local.gke_version
+}
+resource "azurerm_kubernetes_cluster" "other" {
+  kubernetes_version = "${dollar}{var.interpolated}"
+}
+`),
+    [
+      {
+        product: "amazon-eks",
+        block: "module",
+        name: "eks",
+        attribute: "cluster_version",
+        value: "var.eks_version",
+        literal: false,
+        line: 3,
+      },
+      {
+        product: "azure-kubernetes-service",
+        block: "azurerm_kubernetes_cluster",
+        name: "main",
+        attribute: "kubernetes_version",
+        value: "module.aks.version",
+        literal: false,
+        line: 6,
+      },
+      {
+        product: "google-kubernetes-engine",
+        block: "google_container_cluster",
+        name: "primary",
+        attribute: "min_master_version",
+        value: "local.gke_version",
+        literal: false,
+        line: 9,
+      },
+      {
+        product: "azure-kubernetes-service",
+        block: "azurerm_kubernetes_cluster",
+        name: "other",
+        attribute: "kubernetes_version",
+        value: '"\${var.interpolated}"',
+        literal: false,
+        line: 12,
+      },
+    ],
+  );
+});
+
+test("ignores unrelated blocks, resource types, attributes, and nested values", () => {
+  const contents = `locals {
+  cluster_version = "1.20"
+}
+
+resource "aws_eks_cluster" "main" {
+  version = "1.20"
+}
+
+resource "google_container_cluster" "primary" {
+  version = "1.20"
+  node_config {
+    kubernetes_version = "1.20"
+  }
+}
+
+module "vpc" {
+  version = "3.0.0"
+}
+
+module {
+  kubernetes_version = "1.20"
+}
+
+resource "azurerm_kubernetes_cluster" {
+  kubernetes_version = "1.20"
+}
+
+resource "azurerm_kubernetes_cluster" "empty" {
+  kubernetes_version =
+}
+
+terraform {
+  kubernetes_version = "1.20"
+}
+`;
+  assert.deepEqual(parseManagedKubernetes(contents), []);
+  assert.deepEqual(
+    parseManagedKubernetes(
+      'resource "azurerm_kubernetes_cluster" "main" {\n  kubernetes_version = "1.31" + var.suffix\n}\n',
+    ),
+    [],
+  );
+});
+
+test("accepts one-line blocks, CRLF, a byte order mark, and trailing comments", () => {
+  assert.deepEqual(
+    parseManagedKubernetes('resource "azurerm_kubernetes_cluster" "main" { kubernetes_version = "1.31" }\n'),
+    [
+      {
+        product: "azure-kubernetes-service",
+        block: "azurerm_kubernetes_cluster",
+        name: "main",
+        attribute: "kubernetes_version",
+        value: "1.31",
+        literal: true,
+        line: 1,
+      },
+    ],
+  );
+  const contents =
+    '\ufeffmodule "eks" {\r\n  source          = "terraform-aws-modules/eks/aws"\r\n  cluster_version = "1.31" # pinned\r\n}\r\n';
+  assert.deepEqual(parseManagedKubernetes(contents), [
+    {
+      product: "amazon-eks",
+      block: "module",
+      name: "eks",
+      attribute: "cluster_version",
+      value: "1.31",
+      literal: true,
+      line: 3,
+    },
+  ]);
+});
+
+test("returns nothing for malformed or oversized managed Kubernetes input", () => {
+  assert.deepEqual(parseManagedKubernetes('module "eks" {\n  cluster_version = "1.31\n}\n'), []);
+  assert.deepEqual(parseManagedKubernetes('module "eks" {\n  # cluster_version = "1.31"\n}\n'), []);
+  assert.deepEqual(parseManagedKubernetes(""), []);
+  const padding = "# ".padEnd(MAXIMUM_INPUT_BYTES + 1, "x");
+  assert.deepEqual(parseManagedKubernetes(`${padding}\nmodule "eks" {\n  cluster_version = "1.31"\n}\n`), []);
+});
+
+test("parses interpolation-only strings with their context and exact location", () => {
+  const contents = `locals {
+  a = "\${var.name}"
+  b = "\${lookup(var.tags, "Name")}"
+  c = {
+    "\${var.key}" = "value"
+  }
+}
+
+resource "aws_instance" "\${var.label}" {}
+
+output "x" {
+  value = list(80, 443)
+}
+`;
+  assert.deepEqual(
+    parseTerraformLegacy(contents).map((declaration) =>
+      declaration.kind === "interpolation_only"
+        ? [declaration.kind, declaration.context, declaration.expression, declaration.line, declaration.column]
+        : [
+            declaration.kind,
+            declaration.name,
+            declaration.arguments,
+            declaration.oneLine,
+            declaration.line,
+            declaration.column,
+          ],
+    ),
+    [
+      ["interpolation_only", "value", "var.name", 2, 7],
+      ["interpolation_only", "value", 'lookup(var.tags, "Name")', 3, 7],
+      ["interpolation_only", "key", "var.key", 5, 5],
+      ["interpolation_only", "label", "var.label", 9, 25],
+      ["legacy_function", "list", ["80", "443"], true, 12, 11],
+    ],
+  );
+});
+
+test("parses list() and map() arguments and marks a call that spans lines", () => {
+  const contents = `locals {
+  a = list("a", "b",)
+  b = map("k", "v", "k2", 2)
+  c = list(
+    "a",
+  )
+  d = map(
+    "k",
+    "v",
+  )
+  e = "\${list("a")}"
+}
+`;
+  assert.deepEqual(
+    parseTerraformLegacy(contents).map((declaration) =>
+      declaration.kind === "interpolation_only"
+        ? [declaration.kind, declaration.expression, declaration.line, declaration.column]
+        : [
+            declaration.kind,
+            declaration.name,
+            declaration.arguments,
+            declaration.oneLine,
+            declaration.line,
+            declaration.column,
+          ],
+    ),
+    [
+      ["legacy_function", "list", ['"a"', '"b"'], true, 2, 7],
+      ["legacy_function", "map", ['"k"', '"v"', '"k2"', "2"], true, 3, 7],
+      ["legacy_function", "list", ['"a"'], false, 4, 7],
+      ["legacy_function", "map", ['"k"', '"v"'], false, 7, 7],
+      ["interpolation_only", 'list("a")', 11, 7],
+      ["legacy_function", "list", ['"a"'], true, 11, 10],
+    ],
+  );
+});
+
+test("does not read interpolation-only strings or removed calls from text, comments, heredocs, or type constraints", () => {
+  const contents = `locals {
+  prefixed  = "prefix-\${var.x}"
+  suffixed  = "\${var.x}-suffix"
+  joined    = "\${var.x}\${var.y}"
+  escaped   = "$\${var.x}"
+  directive = "%{ if var.x }yes%{ endif }"
+  quoted    = "list(1, 2)"
+  typed1    = list(string)
+  typed2    = map(object({ name = string }))
+  typed3    = list(map(string))
+  attrlist  = list
+  dotted    = local.list(1, 2)
+  # name = "\${var.comment}"
+  // ports = list(1, 2)
+  /* other = map("a", "b") */
+  heredoc   = <<EOT
+\${var.heredoc}
+list(1, 2)
+EOT
+}
+`;
+  assert.deepEqual(parseTerraformLegacy(contents), []);
+});
+
+test("returns nothing for an unterminated string or an oversized file", () => {
+  assert.deepEqual(parseTerraformLegacy('locals {\n  a = "\${var.x}\n}\n'), []);
+  const padding = "# ".padEnd(MAXIMUM_INPUT_BYTES + 1, "x");
+  assert.deepEqual(parseTerraformLegacy(`${padding}\nlocals {\n  a = "\${var.x}"\n}\n`), []);
+});
+
+test("skips escapes and comments while reading call arguments", () => {
+  const contents = `locals {
+  a = list("a\\"b", "c")
+  b = list(1, /* note */ 2)
+  c = list(
+    1, # note
+    2,
+  )
+  d = "\${var.open"
+}
+`;
+  assert.deepEqual(
+    parseTerraformLegacy(contents).map((declaration) =>
+      declaration.kind === "interpolation_only"
+        ? [declaration.kind, declaration.expression, declaration.line, declaration.column]
+        : [
+            declaration.kind,
+            declaration.name,
+            declaration.arguments,
+            declaration.oneLine,
+            declaration.line,
+            declaration.column,
+          ],
+    ),
+    [
+      ["legacy_function", "list", ['"a\\"b"', '"c"'], true, 2, 7],
+      ["legacy_function", "list", ["1", "/* note */ 2"], true, 3, 7],
+      ["legacy_function", "list", ["1", "# note\n    2"], false, 4, 7],
+    ],
+  );
+});
+
+test("ignores unterminated calls, strings, and comments instead of guessing", () => {
+  assert.deepEqual(parseTerraformLegacy("locals {\n  a = list(1, 2\n}\n"), []);
+  assert.deepEqual(parseTerraformLegacy('locals {\n  a = map("k", "v" /* note\n}\n'), []);
+  assert.deepEqual(parseTerraformLegacy("locals {\n  a = list(1, # note"), []);
+  assert.deepEqual(parseTerraformLegacy("locals {\n  a = list(1, // note"), []);
+  assert.deepEqual(parseTerraformLegacy('locals {\n  a = list("unterminated'), []);
+  assert.deepEqual(parseTerraformLegacy('locals {\n  a = list("${var.open'), []);
+});

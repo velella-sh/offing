@@ -1,0 +1,17 @@
+{
+  "repository": "Aefyr/SAI",
+  "commit": "55505d231b1390e824d1cc0c8f4fa35fd4677105",
+  "ecosystem": "android",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "github-actions.stale.node20",
+      "path": ".github/workflows/stale.yml",
+      "line": 13,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 13 of .github/workflows/stale.yml reads `- uses: actions/stale@v1`. The cited workflow pin is below the supported major for that Action under Offing's reviewed GitHub Actions lifecycle rules."
+      }
+    }
+  ]
+}

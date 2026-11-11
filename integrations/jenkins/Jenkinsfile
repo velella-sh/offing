@@ -1,0 +1,19 @@
+// Offing lifecycle scan. The agent needs Node.js 22 or newer for npx to run the package.
+// For reproducible builds, pin the version in both commands (offing@X.Y.Z).
+pipeline {
+  agent any
+  stages {
+    stage('Offing lifecycle scan') {
+      steps {
+        // The report is written before the gate is applied, so it is kept even when the build fails.
+        sh 'npx --yes @velella/offing scan . --format junit > offing-report.xml || true'
+        sh 'npx --yes @velella/offing scan . --fail-on high'
+      }
+      post {
+        always {
+          junit 'offing-report.xml'
+        }
+      }
+    }
+  }
+}

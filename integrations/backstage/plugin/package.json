@@ -1,0 +1,69 @@
+{
+  "name": "@offing-dev/backstage-plugin",
+  "version": "0.1.1",
+  "description": "Backstage entity card that shows Offing lifecycle risk per component from the portal export.",
+  "keywords": [
+    "backstage",
+    "backstage-plugin",
+    "offing",
+    "end-of-life",
+    "lifecycle",
+    "deprecation"
+  ],
+  "homepage": "https://github.com/velella-sh/offing/tree/main/integrations/backstage#readme",
+  "bugs": {
+    "url": "https://github.com/velella-sh/offing/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/velella-sh/offing.git",
+    "directory": "integrations/backstage/plugin"
+  },
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "backstage": {
+    "role": "frontend-plugin",
+    "pluginId": "offing",
+    "pluginPackages": [
+      "@offing-dev/backstage-plugin",
+      "@offing-dev/backstage-plugin-backend",
+      "@offing-dev/backstage-plugin-common"
+    ]
+  },
+  "sideEffects": false,
+  "scripts": {
+    "start": "backstage-cli package start",
+    "build": "backstage-cli package build",
+    "lint": "backstage-cli package lint",
+    "test": "backstage-cli package test",
+    "clean": "backstage-cli package clean"
+  },
+  "dependencies": {
+    "@offing-dev/backstage-plugin-common": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@backstage/catalog-model": "^1.0.0",
+    "@backstage/core-components": "^0.14.0 || ^0.15.0 || ^0.16.0 || ^0.17.0",
+    "@backstage/core-plugin-api": "^1.0.0",
+    "@backstage/plugin-catalog-react": "^1.0.0",
+    "@material-ui/core": "^4.12.0",
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "devDependencies": {
+    "@backstage/catalog-model": "^1.7.0",
+    "@backstage/cli": "^0.30.0",
+    "@backstage/core-components": "^0.16.0",
+    "@backstage/core-plugin-api": "^1.10.0",
+    "@backstage/plugin-catalog-react": "^1.14.0",
+    "@material-ui/core": "^4.12.4",
+    "@types/react": "^18.3.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ]
+}

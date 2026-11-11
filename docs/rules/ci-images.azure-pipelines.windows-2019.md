@@ -1,0 +1,155 @@
+---
+title: "Azure Pipelines Windows Server 2019 hosted image is retired — dates, impact, migration"
+description: "The Windows Server 2019 hosted image was retired on 2025-12-31. The Azure DevOps blog sets that full removal date, and the Microsoft-hosted agents page records the same retirement."
+layout: doc
+permalink: "/rules/ci-images.azure-pipelines.windows-2019.html"
+canonical_url: "https://velella.sh/offing/rules/ci-images.azure-pipelines.windows-2019.html"
+image: "/assets/og/ci-images.azure-pipelines.windows-2019.svg"
+review_date: "2026-10-21"
+last_modified_at: "2026-10-21"
+json_twin: "/rules/ci-images.azure-pipelines.windows-2019.json"
+---
+
+# Azure Pipelines Windows Server 2019 hosted image is retired
+
+**Removed** as of 2025-12-31. Replacement: windows-2022, windows-2025, or windows-latest. Source: [Upcoming Updates for Azure Pipelines Agents Images](https://devblogs.microsoft.com/devops/upcoming-updates-for-azure-pipelines-agents-images/).
+
+Check a version:
+
+```bash
+offing check pkg:generic/azure-pipelines/windows-image
+```
+
+The Windows Server 2019 hosted image was retired on 2025-12-31. The Azure DevOps blog sets that full removal date, and the Microsoft-hosted agents page records the same retirement.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Removed |
+| Severity | high |
+| Ecosystem | `ci-images` |
+| Component | `pkg:generic/azure-pipelines/windows-image` |
+| Affected versions | `vers:intdot/2019` |
+| Date from the source | 2025-12-31 |
+| Replacement | windows-2022, windows-2025, or windows-latest |
+| Evidence last seen | 2026-10-21 |
+| Reviewed | 2026-10-21 by arminazimi |
+| Review due | 2027-10-21 (365 days after the last review) |
+| Rule ID | `ci-images.azure-pipelines.windows-2019` |
+
+## Sources
+
+- [Upcoming Updates for Azure Pipelines Agents Images](https://devblogs.microsoft.com/devops/upcoming-updates-for-azure-pipelines-agents-images/) (accessed 2026-10-21)
+- [Microsoft-hosted agents for Azure Pipelines](https://learn.microsoft.com/azure/devops/pipelines/agents/hosted) (accessed 2026-10-21)
+
+## Migration
+
+**Constraints**
+
+- Change only Microsoft-hosted pool.vmImage labels. This retirement does not apply to self-hosted Windows Server 2019 agents, Managed DevOps Pools, or VM scale sets.
+- The notice names windows-2022, windows-2025, or windows-latest. Pin windows-2022 or windows-2025 when the pipeline must stay on one Windows Server release, because windows-latest moves when Microsoft updates the alias.
+
+**Steps**
+
+1. **Retarget the hosted image.** Change the reported pool.vmImage from windows-2019 to windows-2022, windows-2025, or windows-latest (see the replacement).
+2. **Align other Azure Pipelines pools.** Update every other azure-pipelines.yml pool, including stage and job pools, that still pins windows-2019. Leave self-hosted pool names unchanged.
+
+**Verification**
+
+- `gitlab-ci-lint || circleci config validate`: Lint .gitlab-ci.yml with gitlab-ci-lint, or .circleci/config.yml with circleci config validate, when the repository has that file. Azure Pipelines has no equivalent local validator: queue the pipeline and confirm the job uses the replacement vmImage.
+
+## Detected by
+
+The `ci-images` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [Azure Pipelines macOS 13 Ventura hosted image is retired](ci-images.azure-pipelines.macos-13.html)
+- [Azure Pipelines macOS 14 Sonoma hosted image is scheduled for removal on 2026-11-23](ci-images.azure-pipelines.macos-14.html)
+- [Azure Pipelines Ubuntu 20.04 hosted image is retired](ci-images.azure-pipelines.ubuntu-20.04.html)
+- [Azure Pipelines Ubuntu 22.04 hosted image is scheduled for removal](ci-images.azure-pipelines.ubuntu-22.04.html)
+
+
+## Data
+
+This page is generated from [`registry/ci-images.json`](https://github.com/velella-sh/offing/blob/main/registry/ci-images.json), rule `ci-images.azure-pipelines.windows-2019`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/ci-images.azure-pipelines.windows-2019.html",
+      "url": "https://velella.sh/offing/rules/ci-images.azure-pipelines.windows-2019.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/ci-images.azure-pipelines.windows-2019.html",
+      "headline": "Azure Pipelines Windows Server 2019 hosted image is retired — dates, impact, migration",
+      "description": "The Windows Server 2019 hosted image was retired on 2025-12-31. The Azure DevOps blog sets that full removal date, and the Microsoft-hosted agents page records the same retirement.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-21",
+      "keywords": [
+        "removed",
+        "ci-images",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "Azure Pipelines Windows Server 2019 hosted image is retired",
+        "identifier": "pkg:generic/azure-pipelines/windows-image"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Upcoming Updates for Azure Pipelines Agents Images",
+          "url": "https://devblogs.microsoft.com/devops/upcoming-updates-for-azure-pipelines-agents-images/"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Microsoft-hosted agents for Azure Pipelines",
+          "url": "https://learn.microsoft.com/azure/devops/pipelines/agents/hosted"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/ci-images.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/ci-images.azure-pipelines.windows-2019.html#faq",
+      "url": "https://velella.sh/offing/rules/ci-images.azure-pipelines.windows-2019.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/azure-pipelines/windows-image?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Removed as of 2025-12-31. Affected versions: vers:intdot/2019. Source: Upcoming Updates for Azure Pipelines Agents Images (https://devblogs.microsoft.com/devops/upcoming-updates-for-azure-pipelines-agents-images/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/azure-pipelines/windows-image?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "windows-2022, windows-2025, or windows-latest"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/azure-pipelines/windows-image?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/azure-pipelines/windows-image."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

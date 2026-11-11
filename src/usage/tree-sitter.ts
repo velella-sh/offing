@@ -1,0 +1,150 @@
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import type { Language, ParseOptions, Parser, Query, Tree } from "./vendor/tree-sitter/tree-sitter.js";
+
+import type { SourceLanguage } from "../domain.js";
+import { readBundledText } from "../bundled-assets.js";
+import { required } from "../required.js";
+
+// Trimmed runtime + grammars under ./vendor/tree-sitter (from @vscode/tree-sitter-wasm). Offline, no native build.
+// The WebAssembly modules are committed as base64 text (`*.wasm.b64`) and decoded in memory, so the
+// package contains no binary artifact; `manifest.json` records the upstream source and SHA-256 of each.
+// The runtime is `.cjs` so Node treats it as CommonJS inside this `"type": "module"` package.
+const nodeRequire = createRequire(import.meta.url);
+const vendorDirectory = dirname(fileURLToPath(new URL("./vendor/tree-sitter/tree-sitter.cjs", import.meta.url)));
+
+type TreeSitter = typeof import("./vendor/tree-sitter/tree-sitter.js");
+
+/**
+ * Emscripten module options the runtime accepts but the published typings omit: `wasmBinary` lets it
+ * instantiate the decoded payload instead of reading a `.wasm` file.
+ */
+interface ParserInitOptions {
+  wasmBinary: Uint8Array;
+  locateFile: (file: string, folder: string) => string;
+}
+
+export type TreeSitterGrammar = "javascript" | "typescript" | "tsx" | "python";
+
+/** Same ceiling the regex scanner applies, so both engines skip the same files. */
+export const maximumParseBytes = 1_000_000;
+
+/** Wall-clock budget for one parse; a pathological file is skipped instead of stalling a scan. */
+export const parseBudgetMilliseconds = 5_000;
+
+let runtime: Promise<{ module: TreeSitter; directory: string }> | undefined;
+const languages = new Map<TreeSitterGrammar, Promise<Language>>();
+const parsers = new Map<TreeSitterGrammar, Parser>();
+
+/** Reads a committed base64 payload and decodes it without touching the network or the filesystem beyond the vendor directory. */
+async function loadPayload(directory: string, file: string): Promise<Uint8Array> {
+  const encoded = await readBundledText(join(directory, `${file}.b64`));
+  return new Uint8Array(Buffer.from(encoded, "base64"));
+}
+
+function loadRuntime(): Promise<{ module: TreeSitter; directory: string }> {
+  runtime ??= (async () => {
+    const module = nodeRequire(join(vendorDirectory, "tree-sitter.cjs")) as TreeSitter;
+    const wasmBinary = await loadPayload(vendorDirectory, "tree-sitter.wasm");
+    // `wasmBinary` is an Emscripten module option the published typings do not expose. Supplying it
+    // means the runtime instantiates the decoded payload and never reads a `.wasm` file.
+    const options: ParserInitOptions = { wasmBinary, locateFile: (file: string) => file };
+    await module.Parser.init(options);
+    return { module, directory: vendorDirectory };
+  })();
+  runtime.catch(() => {
+    runtime = undefined;
+  });
+  return runtime;
+}
+
+function loadLanguage(grammar: TreeSitterGrammar): Promise<Language> {
+  let language = languages.get(grammar);
+  if (!language) {
+    language = loadRuntime().then(async ({ module, directory }) =>
+      module.Language.load(await loadPayload(directory, `tree-sitter-${grammar}.wasm`)),
+    );
+    languages.set(grammar, language);
+    language.catch(() => languages.delete(grammar));
+  }
+  return language;
+}
+
+const queries = new Map<string, Promise<Query>>();
+
+/**
+ * Compiles `queries/<name>.scm` files (shipped next to this module, concatenated in order) against a grammar, once. Queries are
+ * checked into the repository as text so contributors can read and extend them without touching TypeScript.
+ */
+export function loadQuery(grammar: TreeSitterGrammar, ...names: string[]): Promise<Query> {
+  const key = `${grammar}:${names.join("+")}`;
+  let query = queries.get(key);
+  if (!query) {
+    query = Promise.all([
+      loadRuntime(),
+      loadLanguage(grammar),
+      Promise.all(names.map((name) => readBundledText(new URL(`./queries/${name}.scm`, import.meta.url)))),
+    ]).then(([{ module }, language, sources]) => new module.Query(language, sources.join("\n")));
+    queries.set(key, query);
+    query.catch(() => queries.delete(key));
+  }
+  return query;
+}
+
+/** Picks the grammar for a source file, or undefined when no tree-sitter grammar covers it. */
+export function grammarFor(language: SourceLanguage, path: string): TreeSitterGrammar | undefined {
+  if (language === "python") return "python";
+  if (language === "javascript") return "javascript";
+  if (language === "typescript") return path.toLowerCase().endsWith(".tsx") ? "tsx" : "typescript";
+  return undefined;
+}
+
+/**
+ * Parses source text with a lazily loaded grammar. Returns undefined when the file exceeds
+ * {@link maximumParseBytes} or the parse budget. The caller owns the tree and must call `delete()`.
+ */
+export async function parseSource(
+  grammar: TreeSitterGrammar,
+  source: string,
+  budgetMilliseconds = parseBudgetMilliseconds,
+): Promise<Tree | undefined> {
+  if (Buffer.byteLength(source) > maximumParseBytes) return undefined;
+  const language = await loadLanguage(grammar);
+  let parser = parsers.get(grammar);
+  if (!parser) {
+    const { module } = await loadRuntime();
+    parser = new module.Parser();
+    parser.setLanguage(language);
+    parsers.set(grammar, parser);
+  }
+  const deadline = Date.now() + budgetMilliseconds;
+  const options: ParseOptions = { progressCallback: () => Date.now() > deadline };
+  try {
+    return parser.parse(source, null, options) ?? undefined;
+  } finally {
+    parser.reset();
+  }
+}
+
+/** Maps a node's start offset to a one-based line and column, for a source text parsed once. */
+export function lineLocator(source: string): (offset: number) => { line: number; column: number } {
+  const starts = [0];
+  for (const match of source.matchAll(/\r?\n/g)) starts.push(match.index + match[0].length);
+  return (offset) => {
+    let low = 0;
+    let high = starts.length - 1;
+    while (low < high) {
+      const middle = Math.ceil((low + high) / 2);
+      if (required(starts[middle], "line start") <= offset) low = middle;
+      else high = middle - 1;
+    }
+    return { line: low + 1, column: offset - required(starts[low], "line start") + 1 };
+  };
+}
+
+/** The trimmed text of a one-based line of a source the caller already split into lines. */
+export function lineExcerpt(lines: readonly string[], line: number): string {
+  return required(lines[line - 1], "the source line").trim();
+}

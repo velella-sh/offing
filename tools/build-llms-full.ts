@@ -1,0 +1,110 @@
+// Builds docs/llms-full.txt: the full text of every page that docs/llms.txt links to, in the order it lists them.
+//
+//   npm run build --silent
+//   node dist/tools/build-llms-full.js            # writes docs/llms-full.txt (gitignored; Pages builds it)
+//   node dist/tools/build-llms-full.js --check    # exits 1 if a linked page is missing or the text is malformed
+//
+// docs/llms.txt is the curated index and the only thing edited by hand; the full file is generated from it, so the
+// two cannot disagree about which pages exist. Output is deterministic.
+// The file is not committed: the Pages workflow generates it before Jekyll builds, so the public URL stays the same
+// without pull-request churn. Local `npm run build:llms` writes the same path for preview.
+
+import { readFile, writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
+export const SITE = "https://velella.sh/offing/";
+
+export interface IndexedPage {
+  title: string;
+  /** The page's file under docs/, such as `MCP.md`. */
+  file: string;
+  url: string;
+}
+
+/** The pages an llms.txt index links to on this site, in order, as the Markdown sources that produce them. */
+export function indexedPages(index: string): IndexedPage[] {
+  const pages: IndexedPage[] = [];
+  for (const match of index.matchAll(/^- \[([^\]]+)\]\((https:\/\/[^)\s]+)\)/gm)) {
+    const url = match[2]!;
+    if (!url.startsWith(SITE) || !url.endsWith(".html")) continue;
+    pages.push({ title: match[1]!, file: `${url.slice(SITE.length, -".html".length)}.md`, url });
+  }
+  return pages;
+}
+
+/** A Markdown page without its Jekyll front matter. */
+export function stripFrontMatter(text: string): string {
+  return text.startsWith("---\n") ? text.slice(text.indexOf("\n---\n", 4) + 5).replace(/^\n+/, "") : text;
+}
+
+/** Drops the `{% raw %}` guards that keep Jekyll from reading `{{ }}` in examples as Liquid. */
+export function stripLiquidRaw(text: string): string {
+  return text.replace(/^\{% (?:end)?raw %\}\r?\n/gm, "");
+}
+
+export function buildLlmsFull(index: string, pages: ReadonlyMap<string, string>): string {
+  const parts = [
+    "# Offing: full documentation",
+    "",
+    "> The complete text of the Offing documentation pages listed in llms.txt, in that order. Each section starts with the page's public address.",
+    "",
+  ];
+  for (const page of indexedPages(index)) {
+    const body = pages.get(page.file);
+    if (body === undefined)
+      throw new Error(`docs/llms.txt links to ${page.url}, but docs/${page.file} does not exist.`);
+    parts.push(
+      "---",
+      "",
+      `Source: ${page.url}`,
+      "",
+      stripLiquidRaw(stripFrontMatter(body)).replaceAll("\r\n", "\n").trim(),
+      "",
+    );
+  }
+  return `${parts.join("\n").trimEnd()}\n`;
+}
+
+export async function renderLlmsFull(root = "."): Promise<string> {
+  const index = await readFile(resolve(root, "docs/llms.txt"), "utf8");
+  const pages = new Map<string, string>();
+  for (const page of indexedPages(index)) {
+    pages.set(page.file, await readFile(resolve(root, "docs", page.file), "utf8").catch(() => undefined as never));
+  }
+  for (const [file, body] of pages) if (body === undefined) pages.delete(file);
+  return buildLlmsFull(index, pages);
+}
+
+/** True when the rendered full text has the shape Pages must publish. */
+export function isWellFormedLlmsFull(text: string): boolean {
+  return (
+    text.startsWith("# Offing: full documentation\n\n> ") &&
+    text.endsWith("\n") &&
+    !text.endsWith("\n\n") &&
+    !text.includes("\r") &&
+    text.length > 50_000
+  );
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const target = resolve("docs/llms-full.txt");
+  renderLlmsFull().then(
+    async (text) => {
+      if (process.argv.includes("--check")) {
+        if (!isWellFormedLlmsFull(text)) {
+          process.stderr.write("docs/llms-full.txt would be malformed. Fix the pages linked from docs/llms.txt.\n");
+          process.exit(1);
+        }
+        process.stdout.write(`docs/llms-full.txt is buildable (${text.length} characters)\n`);
+        return;
+      }
+      await writeFile(target, text);
+      process.stdout.write(`Wrote ${target} (${text.length} characters)\n`);
+    },
+    (error: unknown) => {
+      process.stderr.write(`${(error as Error).message}\n`);
+      process.exit(1);
+    },
+  );
+}

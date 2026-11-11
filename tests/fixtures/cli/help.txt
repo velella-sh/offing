@@ -1,0 +1,129 @@
+Offing — local-first deprecation intelligence
+
+Usage:
+  offing scan [path] [--no-cache] [--json | --format <text|json|markdown|junit|sarif|rdjson|codequality|compact|html|slack|teams|webhook|mermaid>]
+  offing scan --demo [--json | --format <text|json|markdown|junit|sarif|rdjson|codequality|compact|html|slack|teams|webhook|mermaid>]   # scan an in-memory demo project that always has findings
+  offing scan [path] --baseline <file> [--baseline <file>...] [--baseline-warn-days <n>] [--on-expired resurface|fail] [--today <YYYY-MM-DD>] [--json]
+  offing scan [path] --as-of <YYYY-MM-DD> [--json]   # scan as the world will look on a date; --today is an alias
+  offing scan [path] --min-support-days <n>   # warn on lines whose support ends within n days
+  offing scan [path] --write-status
+  offing scan [path] --interactive   # browse findings and open them in $EDITOR; plain text when not a terminal
+  offing scan [path] --fail-on <severity|none>   # exit 1 when a finding is at or above the severity
+  offing scan [path] --ignore <path>   # ignore paths or glob patterns during scan
+  offing scan [path] --only <ecosystem|rule-prefix>   # keep only matching findings; repeatable
+  offing scan [path] --exclude <ecosystem|rule-prefix>   # drop matching findings; repeatable
+  offing scan [path] --no-cache   # bypass the scan cache and re-scan all files fresh
+  offing scan <path> <path>... [--all <dir>] [--json]   # several projects, per-project and combined counts
+  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--svg [--animate] | --timeline | --json | --format mermaid]   # what reaches end of life next, by month
+  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--timeline | --json | --format mermaid]   # what reaches end of life next, by month
+  offing countdown [path] [--as-of <YYYY-MM-DD>] [--limit <n>] [--json] [--once] [--no-animation]   # live countdown to each dated deadline
+  offing plan [path] [--json] [--wave <n>]   # migration waves from a scan; --wave prints one zero-based wave
+  offing status-card [path] [--name <label>]   # print a static SVG summary of findings, next end of life, and data age
+  offing glance [path] [--as-of <YYYY-MM-DD>] [--json]   # one-screen summary: the mark beside ecosystems, findings, deadlines, and data age
+  offing lookup <product> [version] [--json]   # support status, end-of-life date, and evidence for a product
+  offing inventory <file>... [--format auto|<importer-id>] [--json] [--fail-on <severity|none>] [--redact]   # lifecycle of what a cloud or cluster export names; reads files only
+  offing drift [path] [--json] [--check] [--runtime <id>] [--align <release>]   # report every runtime version a repository states and whether they agree
+  offing drift [path] [--json] [--check] [--runtime <id>] [--align <release>]   # report runtime versions that disagree, per runtime; never writes a file
+  offing upgrade-check --to <runtime@version> [path] [--json]   # dependencies whose declared support excludes the target runtime
+  offing badge [path] --snippet <markdown|html|rst> [--repo <owner/name>] [--branch <name>]   # print README markup for the published badge
+  offing badge [path] --shields   # print shields.io endpoint JSON for the current scan
+  offing diff <base>..<head> [path] [--json]   # findings a change introduced or fixed; exit 1 only when it introduced some
+  offing drift [path] [--json] [--check] [--runtime <id>] [--align <release>]   # report runtime versions that disagree; --align prints a patch and writes nothing
+  offing drift [path] [--json] [--check] [--runtime <id>] [--align <release>]   # report every runtime version a repository states and whether they agree
+  offing receipt [path] --before <scan.json> [--format markdown|json] [--fail-on-introduced]   # what a change resolved, left, or introduced; never runs a command
+  offing scan [path] --by-owner [--json]   # group findings by CODEOWNERS owner; files with no owner are listed as unowned
+  offing rollup <report.json>... [--owners <file>] [--json | --html]   # merge saved scan reports by product and owner; reads files only
+  offing renovate-preset [path]   # print Renovate packageRules for replacements and runtime pins; does not edit config
+  offing dependabot-config [path]   # print a dependabot.yml that groups updates for deprecated packages; does not write files
+  offing fix [path] [--dry-run] [--json]   # print patches for deterministic fixes; nothing is written
+  offing fix [path] --branch               # apply the fixes on a local offing/fix branch and commit; never pushes
+  offing fix [path] --show [--branch] [--no-animation]   # play the fixes as a before-and-after view; nothing is written without --branch
+  offing baseline [path] [--output <file>]
+  offing check <purl> [--fail-on <severity|none>] [--json]
+  offing check-snippet --path <path> [--json]   # check one snippet from stdin before writing it; reads no repository
+  offing guard [--fail-on <severity|none>] [--force] npm install <package>...   # check first; flags after npm go to npm
+  offing usage [--file <path>] [--json]
+  offing mcp
+  offing data status [--json]
+  offing export --format cle [--data-version <version>]   # CLE 1.0 snapshots, one JSON document per line and component; skipped rules reported on stderr
+  offing export --format portal [path...] [--data-version <version>] [--report-base-url <url>]   # developer-portal catalog: severity counts, next end-of-life date, and report link per scanned path
+  offing sbom enrich <bom.json> [--data-version <version>]   # print enriched CycloneDX or SPDX 2.3 JSON; leaves the input unchanged
+  offing watch add|remove <path>   # register a project for the digest
+  offing watch [run] [--weekly] [--json]   # re-scan registered projects, print only what changed
+  offing watch list [--json]
+  offing init [path] [--file AGENTS.md|CLAUDE.md] [--fail-on <severity>] [--yes] [--dry-run]   # ask what to set up; apply the defaults for CI, the pre-push hook, and agents
+  offing init agent [path] [--file AGENTS.md|CLAUDE.md] [--dry-run]   # detect agent host and write matching config
+  offing init --agents [path] [--file AGENTS.md|CLAUDE.md] [--dry-run]
+  offing init --hooks [path] [--fail-on <severity>] [--dry-run]   # git pre-push hook; combine with --agents
+  offing init --personal [--fail-on <severity>] [--yes] [--dry-run]   # global config and pre-push hook for every repository
+  offing setup [path] [--yes] [--dry-run]
+  offing new-detector <id> [--ecosystem <slug>]
+  offing new-rule <id> [--ecosystem <slug>]   # create match/clean fixtures for a rule Ebb defines
+  offing rules lint [file...]   # check lifecycle rules for problems before CI does; exits 1 on any problem
+  offing rules test <id>   # run a rule against tests/fixtures/<id>/match and clean; exits 1 on a failed fixture
+  offing data update [--data-version <version>] [--json]
+  offing explain <finding-id> [path] [--json]
+  offing context <finding-id> [path] [--json]
+  offing doctor [path] [--system] [--json]
+  offing report-issue <finding-id> [path] [--output <file>]
+  offing capabilities [--json]
+  offing completions <bash|zsh|fish>   # print a shell completion script
+  offing lsp
+  offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol
+  offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one agent host; docs/HOOKS.md lists them
+  offing prompt [path] [--format <text|json>] [--symbol <s>]   # shell prompt segment such as ⏳2, read from the scan cache only
+  offing recommend <product|purl> [--min-days <n>] [--as-of <date>] [--json]   # which release line to write today (default 180 days of support)
+  offing timelapse [path] [--from <YYYY-MM>] [--to <YYYY-MM>] [--svg <file>] [--json]   # month-by-month aging: files turn red as deadlines pass
+  offing verify [path]   # check the installed release's files against its manifest and say what it cannot check offline
+  offing watch --board [--json]   # ranked risk board across watched projects, with trend arrows
+  offing wrapped [path] [--year <YYYY>] [--svg <file>] [--json]   # year-in-review cards: fixed, introduced, net, oldest ended, top owners, next deadline
+  offing --debug …   # on unexpected failures, print the stack trace
+  offing --help
+  offing --version
+
+Examples:
+  offing scan . --fail-on high
+  offing baseline . --output offing-baseline.json
+  offing forecast . --months 6
+  offing forecast . --months 6
+  offing countdown . --as-of 2026-10-25
+  offing plan . --json
+  offing status-card . --name acme/widgets
+  offing glance . --as-of 2026-11-01
+  offing lookup node 18
+  offing drift . --check
+  offing upgrade-check --to nodejs@22
+  offing inventory lambda.json
+  offing badge . --snippet markdown
+  offing diff main..HEAD
+  offing drift . --check
+  offing receipt . --before before.json
+  offing rollup reports/*.json --owners owners.json --html
+  offing renovate-preset .
+  offing dependabot-config .
+  offing fix . --dry-run
+  offing check pkg:npm/request@2.88.2
+  offing check-snippet --path Dockerfile < Dockerfile.new
+  offing guard npm install request
+  offing usage --json
+  offing mcp
+  offing data status
+  offing watch add ~/code/my-app
+  offing init --hooks --dry-run
+  offing setup --dry-run
+  offing new-detector my-lang --ecosystem my-lang
+  offing new-rule npm.package.sample.deprecated
+  offing rules lint
+  offing explain <finding-id> .
+  offing context <finding-id> .
+  offing doctor --system
+  offing report-issue <finding-id> . --output issue.md
+  offing capabilities --json
+  offing completions zsh > ~/.zfunc/_offing
+  offing hook claude-code
+  offing lsp
+  offing prompt --symbol EOL:
+  offing recommend node
+  offing timelapse . --from 2026-11 --to 2028-10
+  offing verify
+  offing wrapped . --year 2025

@@ -1,0 +1,259 @@
+{
+  "schemaVersion": "offing.corpus-thresholds.v1",
+  "budget": {
+    "maxWallSeconds": 600,
+    "maxFetchedBytes": 500000000
+  },
+  "detectors": {
+    "android": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "ci-images": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "container": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "cpp": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "dart": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "database": {
+      "level": "experimental",
+      "stable": false,
+      "minPrecision": 0.95
+    },
+    "deno": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "dotnet": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "elixir": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "go": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "java": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "kubernetes": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "github-actions": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "nodejs": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "npm": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "php": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "python": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "ruby": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "rust": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "scala": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "serverless": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "shell": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "swift": {
+      "level": "stable",
+      "stable": true,
+      "minPrecision": 0.95
+    },
+    "terraform": {
+      "level": "experimental",
+      "stable": false,
+      "minPrecision": 0.95
+    }
+  },
+  "lastFullRun": {
+    "date": "2026-11-06",
+    "commit": "dcc9f320",
+    "repositories": 557,
+    "findings": 3208,
+    "precision": 1,
+    "recall": 1,
+    "perDetector": {
+      "android": {
+        "truePositives": 10,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "ci-images": {
+        "truePositives": 13,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "container": {
+        "truePositives": 368,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "cpp": {
+        "truePositives": 19,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "dart": {
+        "truePositives": 8,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "database": {
+        "truePositives": 20,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "deno": {
+        "truePositives": 0,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "dotnet": {
+        "truePositives": 304,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "elixir": {
+        "truePositives": 0,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "github-actions": {
+        "truePositives": 1262,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "go": {
+        "truePositives": 111,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "java": {
+        "truePositives": 61,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "kubernetes": {
+        "truePositives": 80,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "nodejs": {
+        "truePositives": 349,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "npm": {
+        "truePositives": 108,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "php": {
+        "truePositives": 5,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "python": {
+        "truePositives": 135,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "ruby": {
+        "truePositives": 24,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "rust": {
+        "truePositives": 63,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "scala": {
+        "truePositives": 2,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "serverless": {
+        "truePositives": 168,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "shell": {
+        "truePositives": 12,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "swift": {
+        "truePositives": 20,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      },
+      "terraform": {
+        "truePositives": 66,
+        "falsePositives": 0,
+        "falseNegatives": 0
+      }
+    }
+  }
+}

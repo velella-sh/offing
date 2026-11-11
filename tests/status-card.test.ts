@@ -1,0 +1,125 @@
+import { rm } from "node:fs/promises";
+import assert from "node:assert/strict";
+import { resolve } from "node:path";
+import { test, after } from "node:test";
+
+import type { Finding, ScanResult, Severity } from "../src/domain.js";
+import { renderStatusCard } from "../src/status-card.js";
+import { runCli } from "./cli-runner.js";
+
+import { copyFixtureTree } from "./fixture-copies.js";
+
+const fixtureRoots: string[] = [];
+const smokeFixture = await copyFixtureTree(resolve("tests/fixtures/smoke"), fixtureRoots);
+after(async () => {
+  await Promise.all(fixtureRoots.map((root) => rm(root, { recursive: true, force: true })));
+});
+
+type Input = Pick<ScanResult, "findings" | "data">;
+
+const finding = (severity: Severity, deadline?: string) => ({ severity, deadline }) as unknown as Finding;
+const data = (overrides: Partial<NonNullable<ScanResult["data"]>> = {}): NonNullable<ScanResult["data"]> => ({
+  source: "bundled",
+  version: "2026.10.1",
+  createdAt: null,
+  reviewedThrough: "2026-10-01",
+  ageDays: 12,
+  stale: false,
+  ...overrides,
+});
+const card = (findings: Finding[], info?: NonNullable<ScanResult["data"]>, name?: string) =>
+  renderStatusCard({ findings, data: info } as Input, name === undefined ? {} : { repository: name });
+
+test("identical input renders byte-identical output", () => {
+  const input = { findings: [finding("high", "2027-01-01"), finding("low", "2026-12-01")], data: data() } as Input;
+  assert.equal(renderStatusCard(input), renderStatusCard(input));
+  assert.equal(card([finding("high", "2027-01-01")], data()), card([finding("high", "2027-01-01")], data()));
+});
+
+test("the card reports findings, the earliest deadline, and data age", () => {
+  const output = card(
+    [finding("low", "2028-05-01"), finding("high", "2026-12-01")],
+    data({ ageDays: 1 }),
+    "acme/widgets",
+  );
+  assert.match(output, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"/);
+  assert.match(output, /<title id="status-title">offing status for acme\/widgets<\/title>/);
+  assert.match(output, /2 high/);
+  assert.match(output, />2<\/text>/);
+  assert.match(output, />2026-12-01<\/text>/);
+  assert.match(output, /v2026\.10\.1 · reviewed 2026-10-01 · 1 day old/);
+  assert.match(output, /role="img" aria-labelledby="status-title status-desc"/);
+});
+
+test("an empty repository reads clean with no dated work and no data", () => {
+  const output = card([]);
+  assert.match(output, />clean</);
+  assert.match(output, />not dated</);
+  assert.match(output, />not reported</);
+});
+
+test("stale data is called out", () => {
+  const output = card([], data({ ageDays: 45, stale: true }));
+  assert.match(output, /45 days old · stale/);
+  assert.match(output, /Data v2026\.10\.1 · reviewed 2026-10-01 · 45 days old · stale\./);
+});
+
+test("hostile labels and data versions are escaped", () => {
+  const hostile = `<script>alert("x")</script> & 'quoted'`;
+  const output = card([finding("high")], data({ version: hostile }), hostile);
+  assert.doesNotMatch(output, /<script/i);
+  assert.match(output, /&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt; &amp; &apos;quoted&apos;/);
+});
+
+test("the CLI renders a card for the scanned path", async () => {
+  const result = await runCli(["status-card", smokeFixture, "--name", "acme/widgets"]);
+  assert.equal(result.code, 0);
+  assert.match(result.stdout, /^<svg /);
+  assert.match(result.stdout, /offing status for acme\/widgets/);
+  assert.equal((await runCli(["status-card", "--bogus"])).code, 2);
+});
+
+test("social size is 1200x630 with brand fonts and no external references", () => {
+  const output = renderStatusCard({ findings: [finding("high", "2026-12-01")], data: data({ ageDays: 1 }) } as Input, {
+    repository: "acme/widgets",
+    size: "social",
+  });
+  assert.match(
+    output,
+    /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" width="1200" height="630" viewBox="0 0 1200 630"/,
+  );
+  assert.match(output, /font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"/);
+  assert.match(output, /<title id="status-title">offing status for acme\/widgets<\/title>/);
+  assert.match(output, />1 high</);
+  assert.match(output, />2026-12-01</);
+  assert.equal([...output.matchAll(/https?:\/\//g)].length, 1); // xmlns only
+  assert.doesNotMatch(output, /@import|url\(|xlink:href|\shref="/i);
+  assert.equal(
+    renderStatusCard({ findings: [], data: data() } as Input, { size: "social" }),
+    renderStatusCard({ findings: [], data: data() } as Input, { size: "social" }),
+  );
+});
+
+test("social metrics stay inside the inner panel with a long stale data line", () => {
+  const panelRight = 1104;
+  const output = renderStatusCard(
+    {
+      findings: [finding("high", "2026-12-01")],
+      data: data({ reviewedThrough: "2026-10-28", ageDays: 45, stale: true }),
+    } as Input,
+    { repository: "acme/widgets", size: "social" },
+  );
+  assert.match(output, /v2026\.10\.1 · reviewed 2026-10-28 · 45 days old · stale/);
+  for (const match of output.matchAll(/<text x="(\d+)"[^>]*font-size="(\d+)"[^>]*>([^<]*)<\/text>/g)) {
+    const x = Number(match[1]);
+    const fontSize = Number(match[2]);
+    const text = match[3]!
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&amp;/g, "&");
+    const estimatedRight = x + text.length * fontSize * 0.6;
+    assert.ok(estimatedRight <= panelRight, `"${text}" ends at ~${estimatedRight}, past ${panelRight}`);
+  }
+});

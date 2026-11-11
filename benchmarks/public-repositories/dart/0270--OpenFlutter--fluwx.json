@@ -1,0 +1,26 @@
+{
+  "repository": "OpenFlutter/fluwx",
+  "commit": "aa89699635f24947f036b9139336beaedb7a8271",
+  "ecosystem": "dart",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "github-actions.setup-java.node20",
+      "path": ".github/workflows/build_test.yml",
+      "line": 174,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 174 of .github/workflows/build_test.yml reads `uses: actions/setup-java@v3`. The cited workflow pin is below the supported major for that Action under Offing's reviewed GitHub Actions lifecycle rules."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-java.node20",
+      "path": ".github/workflows/build_test.yml",
+      "line": 199,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 199 of .github/workflows/build_test.yml reads `uses: actions/setup-java@v3`. The cited workflow pin is below the supported major for that Action under Offing's reviewed GitHub Actions lifecycle rules."
+      }
+    }
+  ]
+}

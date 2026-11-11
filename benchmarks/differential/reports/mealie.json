@@ -1,0 +1,202 @@
+{
+  "schemaVersion": "offing.differential.renovate.v1",
+  "repository": "mealie-recipes/mealie",
+  "summary": {
+    "agree": 17,
+    "offing-only": 0,
+    "renovate-only": 4,
+    "inconclusive": 0
+  },
+  "comparisons": [
+    {
+      "family": "base-image",
+      "path": "Dockerfile",
+      "name": "python",
+      "offing": ["container.python.eol-3.10-and-older"],
+      "renovate": "update",
+      "outcome": "agree",
+      "note": "Offing says the base image is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "base-image",
+      "path": "docs/Dockerfile",
+      "name": "python",
+      "offing": ["container.python.eol-3.10-and-older"],
+      "renovate": "update",
+      "outcome": "agree",
+      "note": "Offing says the base image is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "base-image",
+      "path": "frontend/Dockerfile",
+      "name": "node",
+      "offing": ["container.node.eol-21-and-older"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the base image is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "frontend/package.json",
+      "name": "@nuxt/types",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "frontend/package.json",
+      "name": "@nuxt/typescript-build",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "frontend/package.json",
+      "name": "eslint-plugin-nuxt",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "frontend/package.json",
+      "name": "vue2-script-setup-transform",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/backend-docker-nightly.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/backend-docker-nightly.yml",
+      "name": "login-action",
+      "offing": ["github-actions.login-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/backend-docker-nightly.yml",
+      "name": "setup-buildx-action",
+      "offing": ["github-actions.setup-buildx-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/backend-docker-nightly.yml",
+      "name": "setup-qemu-action",
+      "offing": ["github-actions.setup-qemu-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/backend-tests.yml",
+      "name": "cache",
+      "offing": ["github-actions.cache.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/backend-tests.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/backend-tests.yml",
+      "name": "setup-python",
+      "offing": ["github-actions.setup-python.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/build-docs.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/frontend-docker-nightly.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/frontend-docker-nightly.yml",
+      "name": "login-action",
+      "offing": ["github-actions.login-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/frontend-docker-nightly.yml",
+      "name": "setup-buildx-action",
+      "offing": ["github-actions.setup-buildx-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/frontend-docker-nightly.yml",
+      "name": "setup-qemu-action",
+      "offing": ["github-actions.setup-qemu-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/frontend-lint.yml",
+      "name": "cache",
+      "offing": ["github-actions.cache.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/frontend-lint.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    }
+  ],
+  "notComparable": ["python.runtime"]
+}

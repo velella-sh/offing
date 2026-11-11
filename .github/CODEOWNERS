@@ -1,0 +1,103 @@
+# Maintainer review is required where correctness matters most.
+# Lifecycle evidence, public contracts, and CI/release automation.
+# Per-ecosystem detector owners are listed in /MAINTAINERS.md.
+
+/schemas/                 @arminazimi
+/src/sdk.ts               @arminazimi
+/src/domain.ts            @arminazimi
+/src/index.ts             @arminazimi
+/.github/workflows/       @arminazimi
+/.github/CODEOWNERS       @arminazimi
+/MAINTAINERS.md           @arminazimi
+/action.yml               @arminazimi
+
+# Core runtime — the scan engine, registry loader, and source usage that every entry point calls.
+/src/engine/               @arminazimi
+/src/source-usage.ts      @arminazimi
+
+# Adapters — the CLI, MCP server, and GitHub Action wrap the core; their entry points decide what users run.
+/src/cli.ts               @arminazimi
+/src/cli-main.ts          @arminazimi
+/src/mcp.ts               @arminazimi
+/src/mcp-server.ts        @arminazimi
+/src/mcp-http.ts          @arminazimi
+/src/action.ts            @arminazimi
+/src/github-action.ts     @arminazimi
+
+# Release surface — the package manifest, the Action bundle inputs, the image, and the release tooling.
+/package.json             @arminazimi
+/package-lock.json        @arminazimi
+/server.json              @arminazimi
+/CITATION.cff             @arminazimi
+/Dockerfile               @arminazimi
+/.gitlab-ci.yml           @arminazimi
+/.pre-commit-hooks.yaml   @arminazimi
+/tsconfig.json            @arminazimi
+/tools/                   @arminazimi
+
+# Quality gate — the checker, allowlist, CI job that runs them, opt-in hooks, and the criteria doc.
+# Maintainer review is required so a pull request cannot loosen the gate that judges it.
+/tools/check-quality.ts              @arminazimi
+/benchmarks/quality-allowlist.json   @arminazimi
+/.github/workflows/ci.yml            @arminazimi
+/.githooks/                          @arminazimi
+/docs/QUALITY.md                     @arminazimi
+
+# Shared registry data (not a single ecosystem).
+
+# Detector owners — one accountable reviewer per ecosystem.
+# Last matching pattern wins; keep ecosystem pairs adjacent.
+
+/src/detectors/android/           @arminazimi
+
+/src/detectors/ci-images/         @arminazimi
+
+/src/detectors/container/         @arminazimi
+
+/src/detectors/cpp/               @arminazimi
+
+/src/detectors/dart/              @arminazimi
+
+/src/detectors/database/          @arminazimi
+
+/src/detectors/deno/              @arminazimi
+
+/src/detectors/dotnet/            @arminazimi
+
+/src/detectors/elixir/            @arminazimi
+
+/src/detectors/github-actions.ts         @arminazimi
+/src/detectors/github-actions-node.ts    @arminazimi
+/src/detectors/github-actions-dotnet.ts  @arminazimi
+
+/src/detectors/go/                @arminazimi
+
+/src/detectors/java/              @arminazimi
+
+/src/detectors/kubernetes/        @arminazimi
+
+# Node.js runtime rules share the npm detector implementation.
+/src/detectors/npm.ts             @arminazimi
+
+/src/detectors/php/               @arminazimi
+
+/src/detectors/python/           @arminazimi
+
+/src/detectors/ruby/              @arminazimi
+
+/src/detectors/rust/              @arminazimi
+
+/src/detectors/scala/             @arminazimi
+
+/src/detectors/serverless/        @arminazimi
+
+/src/detectors/shell/             @arminazimi
+
+/src/detectors/swift/             @arminazimi
+
+/src/detectors/terraform/         @arminazimi
+
+# CLE ingest reads packaged cle.json; no ecosystem registry file.
+/src/cle-ingest.ts                @arminazimi
+
+# Catch-all for other registry paths (new ecosystems land here until listed above).

@@ -1,0 +1,175 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { test } from "node:test";
+
+import { MCP_TOOL_NAMES } from "../src/mcp.js";
+
+const read = (path: string) => readFile(resolve("examples/agents", path), "utf8");
+const readRepo = (path: string) => readFile(resolve(path), "utf8");
+const readJson = async <T>(path: string) => JSON.parse(await read(path)) as T;
+const readRepoJson = async <T>(path: string) => JSON.parse(await readRepo(path)) as T;
+
+const { version } = JSON.parse(await readFile(resolve("package.json"), "utf8")) as { version: string };
+const packageSpec = `@velella/offing@${version}`;
+const serverArguments = ["--yes", packageSpec, "mcp"];
+
+interface Server {
+  command: string;
+  args: string[];
+  type?: string;
+  tools?: string[];
+  trust?: boolean;
+  disabled?: boolean;
+  autoApprove?: string[];
+}
+
+test("every host starts the pinned MCP server with the current package version", async () => {
+  const cursor = await readJson<{ mcpServers: { offing: Server } }>("cursor/.cursor/mcp.json");
+  const gemini = await readJson<{ mcpServers: { offing: Server } }>("gemini/gemini-extension.json");
+  const geminiSettings = await readJson<{ mcpServers: { offing: Server } }>("gemini/settings.json");
+  const vscode = await readJson<{ servers: { offing: Server } }>("copilot/.vscode/mcp.json");
+  const codingAgent = await readJson<{ mcpServers: { offing: Server } }>("copilot/coding-agent-mcp.json");
+  const cline = await readRepoJson<{ mcpServers: { offing: Server } }>("integrations/cline/cline_mcp_settings.json");
+  const windsurf = await readJson<{ mcpServers: { offing: Server } }>("windsurf/mcp_config.json");
+  for (const server of [
+    cursor.mcpServers.offing,
+    gemini.mcpServers.offing,
+    geminiSettings.mcpServers.offing,
+    vscode.servers.offing,
+    codingAgent.mcpServers.offing,
+    cline.mcpServers.offing,
+    windsurf.mcpServers.offing,
+  ]) {
+    assert.equal(server.command, "npx");
+    assert.deepEqual(server.args, serverArguments);
+  }
+  const kilo = await readJson<{
+    mcp: { offing: { type: string; command: string[]; enabled: boolean } };
+    instructions: string[];
+  }>("kilo/kilo.jsonc");
+  assert.deepEqual(kilo.mcp.offing.command, ["npx", ...serverArguments]);
+  assert.equal(kilo.mcp.offing.type, "local");
+  assert.deepEqual(kilo.instructions, [".kilo/rules/*.md"]);
+});
+
+test("host-specific fields follow each vendor's documented format", async () => {
+  assert.equal(
+    (await readJson<{ mcpServers: { offing: Server } }>("cursor/.cursor/mcp.json")).mcpServers.offing.type,
+    "stdio",
+  );
+  assert.equal(
+    (await readJson<{ servers: { offing: Server } }>("copilot/.vscode/mcp.json")).servers.offing.type,
+    "stdio",
+  );
+  const agent = (await readJson<{ mcpServers: { offing: Server } }>("copilot/coding-agent-mcp.json")).mcpServers
+    .offing;
+  assert.equal(agent.type, "local");
+  assert.deepEqual(
+    [...agent.tools!].sort(),
+    [...MCP_TOOL_NAMES].sort(),
+    "the coding agent allowlist must name exactly the server's tools, never *",
+  );
+  assert.equal(
+    (await readJson<{ mcpServers: { offing: Server } }>("gemini/settings.json")).mcpServers.offing.trust,
+    false,
+  );
+  const extension = await readJson<{ name: string; version: string; contextFileName: string }>(
+    "gemini/gemini-extension.json",
+  );
+  assert.match(extension.name, /^[a-z0-9-]+$/);
+  assert.equal(extension.version, version);
+  assert.equal(extension.contextFileName, "GEMINI.md");
+  const cursorRule = await read("cursor/.cursor/rules/offing.mdc");
+  assert.match(cursorRule, /^---\ndescription: .+\nalwaysApply: true\n---\n/);
+  const cline = (
+    await readRepoJson<{ mcpServers: { offing: Server } }>("integrations/cline/cline_mcp_settings.json")
+  ).mcpServers.offing;
+  assert.equal(cline.disabled, false);
+  assert.deepEqual(cline.autoApprove, []);
+  const windsurfRule = await read("windsurf/.windsurf/rules/offing.md");
+  assert.match(windsurfRule, /^---\ntrigger: always_on\ndescription: .+\n---\n/);
+});
+
+test("every host's instruction file carries the shared dependency-check text", async () => {
+  const shared = (await read("dependency-check.md")).split("\n\n").slice(1).join("\n\n").trim();
+  assert.ok(shared.includes("`check_dependency`"));
+  for (const path of [
+    "cursor/.cursor/rules/offing.mdc",
+    "gemini/GEMINI.md",
+    "copilot/.github/copilot-instructions.md",
+    "kilo/.kilo/rules/offing.md",
+    "windsurf/.windsurf/rules/offing.md",
+  ]) {
+    assert.ok((await read(path)).includes(shared), `${path} must contain the shared instruction text`);
+  }
+  assert.ok(
+    (await readRepo("integrations/cline/.clinerules/offing.md")).includes(shared),
+    "integrations/cline/.clinerules/offing.md must contain the shared instruction text",
+  );
+  assert.ok(
+    (await readRepo("integrations/aider/CONVENTIONS.md")).includes(shared),
+    "integrations/aider/CONVENTIONS.md must contain the shared instruction text",
+  );
+});
+
+test("the Cursor rule ships with the integration and the example, byte for byte identical", async () => {
+  const integration = await readRepo("integrations/cursor/offing.mdc");
+  assert.equal(integration, await read("cursor/.cursor/rules/offing.mdc"));
+  assert.match(
+    integration,
+    /^---\ndescription: Check a dependency with Offing before adding it\nalwaysApply: true\n---\n\n/,
+  );
+  assert.ok(
+    integration.includes("`check_dependency`") && integration.includes("npx @velella/offing check <purl>"),
+  );
+});
+
+test("the Copilot instructions ship with the integration and the example, byte for byte identical", async () => {
+  const integration = await readRepo("integrations/copilot/copilot-instructions.md");
+  assert.equal(integration, await read("copilot/.github/copilot-instructions.md"));
+  assert.ok(integration.startsWith("# Offing dependency check\n"));
+  assert.ok(
+    integration.includes("`check_dependency`") && integration.includes("npx @velella/offing check <purl>"),
+  );
+  assert.doesNotMatch(
+    integration,
+    /^---/,
+    "Copilot has no front matter like Cursor rules; the file is plain instructions",
+  );
+});
+
+test("the instruction text names only tools and CLI commands that exist", async () => {
+  const text = await read("dependency-check.md");
+  for (const tool of text
+    .match(/`([a-z_]+)`/g)
+    ?.map((name) => name.slice(1, -1))
+    .filter((name) => name.includes("_")) ?? []) {
+    assert.ok((MCP_TOOL_NAMES as readonly string[]).includes(tool), `${tool} is not an MCP tool`);
+  }
+  assert.match(text, /npx @velella\/offing check <purl>/);
+});
+
+test("each host README links its vendor documentation and is honest about verification", async () => {
+  for (const host of ["cursor", "gemini", "copilot", "kilo", "windsurf"]) {
+    const readme = await read(`${host}/README.md`);
+    assert.match(readme, /Documentation: .*https:\/\//, host);
+    if (host === "cursor") assert.match(readme, /\*\*Checked in the host \(2026-10-19, Cursor 3\.25\.9/, host);
+    else if (host === "copilot") assert.match(readme, /\*\*Checked in the host \(2026-10-19, VS Code 1\.142\.0/, host);
+    else if (host === "kilo") assert.match(readme, /\*\*Checked in the host \(2026-10-19, Kilo 0\.1\.12/, host);
+    else assert.match(readme, /has \*\*not\*\* been run inside a live installation of the host/, host);
+    assert.match(readme, /\*\*Checked \(2026-10-18[^)]*\):\*\*.*@velella\/offing@0\.1\.0 mcp/, host);
+    assert.doesNotMatch(readme, /needs the `offing` package to be published/, host);
+  }
+  const clineReadme = await readRepo("integrations/cline/README.md");
+  assert.match(clineReadme, /Documentation: .*https:\/\//);
+  assert.match(clineReadme, /has \*\*not\*\* been run inside a live installation of the host/);
+  assert.match(clineReadme, /\*\*Checked \(2026-10-18[^)]*\):\*\*.*@velella\/offing@0\.1\.0 mcp/);
+  assert.doesNotMatch(clineReadme, /needs the `offing` package to be published/);
+  const aiderReadme = await readRepo("integrations/aider/README.md");
+  assert.match(aiderReadme, /Documentation: .*https:\/\//);
+  assert.match(aiderReadme, /has \*\*not\*\* been run inside a live installation of Aider/);
+  assert.match(aiderReadme, /\*\*Checked \(2026-10-27[^)]*\):\*\*.*@velella\/offing@0\.1\.0/);
+  assert.match(aiderReadme, /npx @velella\/offing check pkg:npm\/request/);
+  assert.doesNotMatch(aiderReadme, /needs the `offing` package to be published/);
+});

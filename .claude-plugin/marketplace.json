@@ -1,0 +1,31 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "offing",
+  "description": "Official Offing plugins for software lifecycle intelligence.",
+  "owner": {
+    "name": "Offing",
+    "url": "https://velella.sh/offing/"
+  },
+  "plugins": [
+    {
+      "name": "offing",
+      "source": "./plugins/claude",
+      "description": "Find, explain, migrate, and verify evidence-backed software lifecycle risks.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Offing",
+        "url": "https://github.com/velella-sh/offing"
+      },
+      "homepage": "https://velella.sh/offing/",
+      "repository": "https://github.com/velella-sh/offing",
+      "license": "Apache-2.0",
+      "category": "development",
+      "keywords": [
+        "deprecation",
+        "lifecycle",
+        "mcp",
+        "developer-tools"
+      ]
+    }
+  ]
+}

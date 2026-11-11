@@ -1,0 +1,256 @@
+{
+  "schemaVersion": "offing.differential.renovate.v1",
+  "repository": "excalidraw/excalidraw",
+  "summary": {
+    "agree": 23,
+    "offing-only": 2,
+    "renovate-only": 2,
+    "inconclusive": 0
+  },
+  "comparisons": [
+    {
+      "family": "base-image",
+      "path": ".codesandbox/Dockerfile",
+      "name": "node",
+      "offing": ["container.node.eol-21-and-older"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the base image is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "base-image",
+      "path": "Dockerfile",
+      "name": "node",
+      "offing": ["container.node.eol-21-and-older"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the base image is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "base-image",
+      "path": "examples/with-script-in-browser/.codesandbox/Dockerfile",
+      "name": "node",
+      "offing": ["container.node.eol-21-and-older"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the base image is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "examples/with-nextjs/package.json",
+      "name": "next.14",
+      "offing": ["npm.package.next.14.support-end"],
+      "renovate": "not-seen",
+      "outcome": "offing-only",
+      "note": "Renovate did not list this npm package at all."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/socket.io-client",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "types.socket.io-client",
+      "offing": ["npm.package.types.socket.io-client.deprecated"],
+      "renovate": "not-seen",
+      "outcome": "offing-only",
+      "note": "Renovate did not list this npm package at all."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "packages/excalidraw/package.json",
+      "name": "@types/pako",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/autorelease-excalidraw.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/autorelease-excalidraw.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/build-docker.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/lint.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/lint.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/locales-coverage.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/locales-coverage.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/publish-docker.yml",
+      "name": "build-push-action",
+      "offing": ["github-actions.build-push-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/publish-docker.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/publish-docker.yml",
+      "name": "login-action",
+      "offing": ["github-actions.login-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/publish-docker.yml",
+      "name": "setup-buildx-action",
+      "offing": ["github-actions.setup-buildx-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/publish-docker.yml",
+      "name": "setup-qemu-action",
+      "offing": ["github-actions.setup-qemu-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/sentry-production.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/sentry-production.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/size-limit.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/size-limit.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/test-coverage-pr.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/test-coverage-pr.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/test.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/test.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    }
+  ],
+  "notComparable": ["nodejs.runtime"]
+}

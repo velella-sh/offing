@@ -1,0 +1,373 @@
+{
+  "schemaVersion": "offing.differential.renovate.v1",
+  "repository": "outline/outline",
+  "summary": {
+    "agree": 22,
+    "offing-only": 5,
+    "renovate-only": 13,
+    "inconclusive": 0
+  },
+  "comparisons": [
+    {
+      "family": "base-image",
+      "path": "Dockerfile",
+      "name": "node",
+      "offing": ["container.node.eol-21-and-older"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the base image is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "base-image",
+      "path": "Dockerfile.base",
+      "name": "node",
+      "offing": ["container.node.eol-21-and-older"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the base image is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/diff",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/dotenv",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/emoji-regex",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/form-data",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/glob",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/koa-helmet",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/koa-useragent",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/react-virtualized-auto-sizer",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/react-window",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/refractor",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/sanitize-filename",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "@types/sequelize",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "babel-eslint",
+      "offing": ["npm.package.babel-eslint.deprecated"],
+      "renovate": "deprecated",
+      "outcome": "agree",
+      "note": "Both report the package as deprecated."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "crypto-js",
+      "offing": ["npm.package.crypto-js.deprecated"],
+      "renovate": "deprecated",
+      "outcome": "agree",
+      "note": "Both report the package as deprecated."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "i18next-parser",
+      "offing": ["npm.package.i18next-parser.deprecated"],
+      "renovate": "deprecated",
+      "outcome": "agree",
+      "note": "Both report the package as deprecated."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "koa-router",
+      "offing": ["npm.package.koa-router.deprecated"],
+      "renovate": "deprecated",
+      "outcome": "agree",
+      "note": "Both report the package as deprecated."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "react-waypoint",
+      "offing": [],
+      "renovate": "deprecated",
+      "outcome": "renovate-only",
+      "note": "Renovate prints a deprecation notice; Offing has no rule for this package."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "socket.io-redis",
+      "offing": ["npm.package.socket.io-redis.deprecated"],
+      "renovate": "deprecated",
+      "outcome": "agree",
+      "note": "Both report the package as deprecated."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "types.dotenv",
+      "offing": ["npm.package.types.dotenv.deprecated"],
+      "renovate": "not-seen",
+      "outcome": "offing-only",
+      "note": "Renovate did not list this npm package at all."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "types.emoji-regex",
+      "offing": ["npm.package.types.emoji-regex.deprecated"],
+      "renovate": "not-seen",
+      "outcome": "offing-only",
+      "note": "Renovate did not list this npm package at all."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "types.form-data",
+      "offing": ["npm.package.types.form-data.deprecated"],
+      "renovate": "not-seen",
+      "outcome": "offing-only",
+      "note": "Renovate did not list this npm package at all."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "types.koa-useragent",
+      "offing": ["npm.package.types.koa-useragent.deprecated"],
+      "renovate": "not-seen",
+      "outcome": "offing-only",
+      "note": "Renovate did not list this npm package at all."
+    },
+    {
+      "family": "deprecated-package",
+      "path": "package.json",
+      "name": "types.sanitize-filename",
+      "offing": ["npm.package.types.sanitize-filename.deprecated"],
+      "renovate": "not-seen",
+      "outcome": "offing-only",
+      "note": "Renovate did not list this npm package at all."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/auto_close_prs.yml",
+      "name": "github-script",
+      "offing": ["github-actions.github-script.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/calibreapp-image-actions.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/ci.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/ci.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/codeql-analysis.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/docker.yml",
+      "name": "build-push-action",
+      "offing": ["github-actions.build-push-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/docker.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/docker.yml",
+      "name": "download-artifact",
+      "offing": ["github-actions.download-artifact.retired"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/docker.yml",
+      "name": "login-action",
+      "offing": ["github-actions.login-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/docker.yml",
+      "name": "metadata-action",
+      "offing": ["github-actions.metadata-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/docker.yml",
+      "name": "setup-buildx-action",
+      "offing": ["github-actions.setup-buildx-action.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/docker.yml",
+      "name": "upload-artifact",
+      "offing": ["github-actions.upload-artifact.retired"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/lint.yml",
+      "name": "checkout",
+      "offing": ["github-actions.checkout.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/lint.yml",
+      "name": "setup-node",
+      "offing": ["github-actions.setup-node.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    },
+    {
+      "family": "github-action",
+      "path": ".github/workflows/stale.yml",
+      "name": "stale",
+      "offing": ["github-actions.stale.node20"],
+      "renovate": "major-update",
+      "outcome": "agree",
+      "note": "Offing says the GitHub Action is past end of life; Renovate offers an update. Renovate does not say the old line is unsupported."
+    }
+  ],
+  "notComparable": ["nodejs.runtime"]
+}

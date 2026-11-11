@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/velella-sh/offing/schemas/context.v1.schema.json",
+  "title": "Offing migration context v1",
+  "type": "object",
+  "required": ["schemaVersion", "generatedAt", "repositoryRoot", "finding", "affectedFiles", "usages", "constraints", "steps", "sources", "verification"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "offing.context.v1" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "repositoryRoot": { "type": "string" },
+    "finding": { "$ref": "scan.v1.schema.json#/properties/findings/items" },
+    "affectedFiles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    },
+    "usages": {
+      "type": "array",
+      "items": { "$ref": "scan.v1.schema.json#/properties/findings/items/properties/usages/items" }
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "instructions", "targets", "paths"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "instructions": { "type": "string" },
+          "targets": { "enum": ["declaration", "usages", "all"] },
+          "paths": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "scan.v1.schema.json#/properties/findings/items/properties/sources/items" }
+    },
+    "verification": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["command", "purpose"],
+        "additionalProperties": false,
+        "properties": {
+          "command": { "type": "string" },
+          "purpose": { "type": "string" }
+        }
+      }
+    },
+    "upgradePath": {
+      "type": "object",
+      "required": ["from", "skipped", "target"],
+      "additionalProperties": false,
+      "properties": {
+        "from": { "$ref": "#/$defs/upgradeLine" },
+        "skipped": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/upgradeLine" }
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "versions": { "type": "string" },
+            "title": { "type": "string" },
+            "endsOn": { "type": "string" },
+            "replacement": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "upgradeLine": {
+      "type": "object",
+      "required": ["ruleId", "versions", "title", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "ruleId": { "type": "string" },
+        "versions": { "type": "string" },
+        "title": { "type": "string" },
+        "status": { "enum": ["ended", "ending-soon"] },
+        "endsOn": { "type": "string" }
+      }
+    }
+  }
+}

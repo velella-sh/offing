@@ -1,0 +1,252 @@
+import assert from "node:assert/strict";
+import { chmod, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { after, test } from "node:test";
+
+import type { SourceUsageContract } from "../src/domain.js";
+import { nodeFileSystem } from "../src/node-file-system.js";
+import { analyzeSourceUsage } from "../src/source-usage.js";
+
+const temporaryRoots: string[] = [];
+
+after(async () => {
+  await Promise.all(temporaryRoots.map((root) => rm(root, { recursive: true, force: true })));
+});
+
+async function repository(files: Record<string, string>): Promise<string> {
+  const root = await mkdtemp(join(tmpdir(), "offing-usage-"));
+  temporaryRoots.push(root);
+  for (const [path, contents] of Object.entries(files)) {
+    const absolutePath = join(root, path);
+    await mkdir(dirname(absolutePath), { recursive: true });
+    await writeFile(absolutePath, contents);
+  }
+  return root;
+}
+
+const requestContract: SourceUsageContract = {
+  id: "request",
+  matchers: [
+    { kind: "import", language: "typescript", module: "request" },
+    {
+      kind: "call",
+      language: "typescript",
+      module: "request",
+      targets: ["default", "get", "post"],
+    },
+    { kind: "import", language: "javascript", module: "request" },
+    {
+      kind: "call",
+      language: "javascript",
+      module: "request",
+      targets: ["default", "get", "post"],
+    },
+  ],
+};
+
+test("locates JavaScript and TypeScript imports and alias-aware calls", async () => {
+  const root = await repository({
+    "src/client.ts": `import legacyRequest from "request";
+legacyRequest.get("https://example.com");
+const text = "legacyRequest.post()";
+// legacyRequest.post("ignored");
+`,
+    "src/worker.cjs": `const { post: send } = require("request");
+send({ url: "https://example.com" });
+`,
+    "node_modules/request/index.js": `module.exports = request;
+request.get();
+`,
+  });
+
+  const [analysis] = await analyzeSourceUsage(root, [requestContract]);
+
+  assert.equal(analysis?.usages.length, 4);
+  assert.deepEqual(
+    analysis?.usages.map((usage) => [usage.kind, usage.location.path, usage.location.line]),
+    [
+      ["import", "src/client.ts", 1],
+      ["call", "src/client.ts", 2],
+      ["import", "src/worker.cjs", 1],
+      ["call", "src/worker.cjs", 2],
+    ],
+  );
+  assert.deepEqual(analysis?.impact, { usageCount: 4, affectedFiles: 2, level: "medium" });
+});
+
+test("locates Python imports, imported calls, and configuration keys", async () => {
+  const root = await repository({
+    "app.py": `import nose as legacy
+legacy.run()
+from nose import main as nose_main
+nose_main()
+`,
+    "settings.py": `TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
+`,
+    "setup.cfg": `[aliases]
+test_suite = nose.collector
+`,
+  });
+  const contracts: SourceUsageContract[] = [
+    {
+      id: "nose",
+      matchers: [
+        { kind: "import", language: "python", module: "nose" },
+        { kind: "call", language: "python", module: "nose", targets: ["run", "main"] },
+        {
+          kind: "config-key",
+          language: "ini",
+          key: "test_suite",
+          valueIncludes: "nose.collector",
+        },
+      ],
+    },
+    {
+      id: "django-nose",
+      matchers: [
+        {
+          kind: "config-key",
+          language: "python",
+          key: "TEST_RUNNER",
+          valueIncludes: "django_nose",
+        },
+      ],
+    },
+  ];
+
+  const analyses = await analyzeSourceUsage(root, contracts);
+
+  assert.equal(analyses[0]?.usages.length, 5);
+  assert.equal(analyses[1]?.usages.length, 1);
+  assert.equal(analyses[1]?.usages[0]?.location.line, 1);
+  assert.equal(analyses[1]?.usages[0]?.location.column, 1);
+});
+
+test("reports no usages for lookalikes in comments and strings", async () => {
+  const root = await repository({
+    "src/clean.ts": `// import request from "request";
+const example = "request.get()";
+export function requestFactory() {}
+`,
+  });
+
+  const [analysis] = await analyzeSourceUsage(root, [requestContract]);
+
+  assert.deepEqual(analysis?.usages, []);
+  assert.deepEqual(analysis?.impact, { usageCount: 0, affectedFiles: 0, level: "none" });
+});
+
+test("evaluates symbol matchers with the parser and ignores them in the regex scanner", async () => {
+  const root = await repository({ "src/app.js": "import { render } from 'react-dom';\nrender(app, root);\n" });
+  const contracts: SourceUsageContract[] = [
+    {
+      id: "react-dom-render",
+      matchers: [{ kind: "symbol", language: "javascript", module: "react-dom", symbol: "render", shape: "call" }],
+    },
+  ];
+  const [parsed] = await analyzeSourceUsage(root, contracts);
+  assert.deepEqual(
+    parsed?.usages.map((usage) => [usage.kind, usage.symbol, usage.location.line, usage.location.column]),
+    [["symbol", "react-dom.render", 2, 1]],
+  );
+  const [regex] = await analyzeSourceUsage(root, contracts, { parser: false });
+  assert.deepEqual(regex?.usages, []);
+});
+
+test("skips a directory that cannot be read and keeps usages from the rest of the tree", async (t) => {
+  if (process.platform === "win32") return t.skip("chmod 000 is not meaningful on Windows");
+  if (typeof process.getuid === "function" && process.getuid() === 0)
+    return t.skip("root can read chmod 000 directories");
+
+  const root = await repository({
+    "src/client.ts": `import legacyRequest from "request";
+legacyRequest.get("https://example.com");
+`,
+    "locked/hidden.ts": `import legacyRequest from "request";
+legacyRequest.get("https://example.com");
+`,
+  });
+  const locked = join(root, "locked");
+  await chmod(locked, 0o000);
+  try {
+    const [analysis] = await analyzeSourceUsage(root, [requestContract]);
+    assert.deepEqual(
+      analysis?.usages.map((usage) => [usage.kind, usage.location.path, usage.location.line]),
+      [
+        ["import", "src/client.ts", 1],
+        ["call", "src/client.ts", 2],
+      ],
+    );
+  } finally {
+    await chmod(locked, 0o700);
+  }
+});
+
+test("keeps dependency and fixture trees out of Ruby usage while still reading them for other languages", async () => {
+  const contracts: SourceUsageContract[] = [
+    { id: "active-record", matchers: [{ kind: "import", language: "ruby", module: "active_record" }] },
+    requestContract,
+  ];
+  const root = await repository({
+    "app/models/user.rb": 'require "active_record"\n',
+    "vendor/bundle/active_record.rb": 'require "active_record"\n',
+    "spec/fixtures/record.rb": 'require "active_record"\n',
+    "vendor/legacy/client.ts": `import legacyRequest from "request";
+legacyRequest.get("https://example.com");
+`,
+  });
+
+  const [ruby, typescript] = await analyzeSourceUsage(root, contracts);
+  assert.deepEqual(
+    ruby?.usages.map((usage) => [usage.kind, usage.location.path, usage.location.line]),
+    [["import", "app/models/user.rb", 1]],
+  );
+  assert.deepEqual(
+    typescript?.usages.map((usage) => [usage.kind, usage.location.path, usage.location.line]),
+    [
+      ["import", "vendor/legacy/client.ts", 1],
+      ["call", "vendor/legacy/client.ts", 2],
+    ],
+  );
+});
+
+test("the same usage in two files is reported once per file, not collapsed across files (#2146)", async () => {
+  const source = `import request from "request";\nrequest("https://example.com");\n`;
+  const root = await repository({ "a/one.ts": source, "b/two.ts": source });
+  const [analysis] = await analyzeSourceUsage(root, [requestContract]);
+  const paths = new Set(analysis?.usages.map((usage) => usage.location.path));
+  assert.deepEqual([...paths].sort(), ["a/one.ts", "b/two.ts"]);
+  const perFile = (path: string): number =>
+    analysis?.usages.filter((usage) => usage.location.path === path).length ?? 0;
+  assert.equal(perFile("a/one.ts"), perFile("b/two.ts"));
+  assert.ok(perFile("a/one.ts") >= 2);
+});
+
+test("analysis reads the first file before it has statted the rest of the tree (#2146)", async () => {
+  const fileCount = 60;
+  const files: Record<string, string> = {};
+  for (let index = 0; index < fileCount; index += 1) {
+    files[`src/file-${index}.ts`] = `import request from "request";\nrequest("https://example.com/${index}");\n`;
+  }
+  const root = await repository(files);
+  let statted = 0;
+  let stattedAtFirstRead = -1;
+  const fileSystem = {
+    ...nodeFileSystem,
+    size: (path: string) => {
+      statted += 1;
+      return nodeFileSystem.size(path);
+    },
+    readText: (path: string) => {
+      if (stattedAtFirstRead === -1) stattedAtFirstRead = statted;
+      return nodeFileSystem.readText(path);
+    },
+  };
+
+  const [analysis] = await analyzeSourceUsage(root, [requestContract], { fileSystem });
+
+  assert.equal(analysis?.usages.length, fileCount * 2);
+  // A walk that collects every file first would have statted all of them before the first read.
+  assert.ok(stattedAtFirstRead > 0 && stattedAtFirstRead < fileCount, `statted ${stattedAtFirstRead}`);
+});

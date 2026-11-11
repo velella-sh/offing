@@ -1,0 +1,269 @@
+name: Corpus
+
+# Pull request CI stays offline. One workflow covers three corpus modes:
+# - affected: path-filtered signal for ecosystems a change touches (restore-only cache)
+# - full: weekly (and on-demand) compare against the pinned corpus
+# - record: twice-monthly (and on-demand) record a clean full run into a maintainer PR
+# Do not add the affected job to required checks; it needs the network.
+on:
+  schedule:
+    - cron: "17 5 * * 1"
+    - cron: "41 5 1,15 * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Which corpus run to perform"
+        type: choice
+        options:
+          - affected
+          - full
+          - record
+        default: full
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "package-lock.json"
+      - "tests/fixtures/**"
+      - "benchmarks/**"
+      - ".github/workflows/corpus.yml"
+  pull_request:
+    paths:
+      - "src/**"
+      - "package-lock.json"
+      - "tests/fixtures/**"
+      - "benchmarks/**"
+      - ".github/workflows/corpus.yml"
+
+# Least privilege by default. The record job elevates write only for its own steps.
+# There is no pull_request_target, so code from a fork runs without any credential.
+permissions:
+  contents: read
+
+concurrency:
+  group: corpus-${{ github.event.inputs.mode || github.event.schedule || format('{0}-{1}', github.event_name, github.sha) }}
+  cancel-in-progress: false
+
+env:
+  OFFING_CORPUS_CACHE: ${{ github.workspace }}/.corpus-cache
+
+jobs:
+  affected:
+    name: corpus (affected ecosystems)
+    if: >-
+      github.event_name == 'pull_request' || github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && inputs.mode == 'affected')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          # The affected ecosystems come from the diff against the base branch, which needs its history.
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - run: npm run build --silent
+      # Restore only: the weekly full job saves the cache, and a pull request must not write a
+      # gigabyte-scale entry that could push it out. The prefix finds the newest cache the default
+      # branch saved. Offline and fast: fails when a detector expects fewer corpus findings than the
+      # committed snapshot, so a known finding cannot be dropped without updating
+      # benchmarks/corpus-snapshot.json on purpose.
+      - name: Compare the corpus expectations with the snapshot
+        run: node dist/benchmarks/corpus-snapshot.js
+      # Offline and fast: fails when an ecosystem bucket holds fewer pinned repositories than
+      # benchmarks/corpus-targets.json records, so a pull request cannot quietly shrink the corpus.
+      - name: Compare the corpus counts with the committed targets
+        run: node dist/benchmarks/corpus-targets.js
+      - name: Restore the corpus checkout cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ env.OFFING_CORPUS_CACHE }}
+          key: corpus-checkouts-${{ hashFiles('benchmarks/public-repositories/**') }}
+          restore-keys: |
+            corpus-checkouts-
+      - name: Check the affected ecosystems against the pinned corpus
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ -z "$BASE_SHA" ]; then
+            git fetch --no-tags origin main
+            BASE_SHA=$(git rev-parse origin/main)
+          else
+            git fetch --no-tags origin "$BASE_SHA"
+          fi
+          node dist/benchmarks/public-repositories.js --changed "$BASE_SHA" --output corpus-result.json 2>&1 | tee corpus.log
+      - name: Show the result in the job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "### Corpus check for the affected ecosystems"
+            echo
+            if grep -q '^No corpus ecosystem is affected' corpus.log; then
+              echo "No corpus ecosystem is affected by this change, so nothing was fetched or run."
+            else
+              grep '^changed: ' corpus.log | sed 's/^/- /' || true
+              echo
+              if grep -qE '^(UNEXPECTED|MISSING|FAILED)' corpus.log; then
+                echo '```text'
+                grep -E '^(UNEXPECTED|MISSING|FAILED)' corpus.log
+                echo '```'
+              else
+                echo "No UNEXPECTED, MISSING, or FAILED findings."
+              fi
+              echo
+              grep -E '^(COST|BUDGET)' corpus.log | sed 's/^/    /' || true
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload the result
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: corpus-affected-result-${{ github.run_id }}
+          path: corpus-result.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+  full:
+    # Eight shards keep one full run inside its budget at the 4,600-repository target: a shard owns
+    # every eighth entry, so each job fetches and scans about one eighth of the corpus. The shards
+    # run in parallel and the merge job rebuilds the single full report, including the floors.
+    name: corpus (full shard ${{ matrix.shard }}/8)
+    if: >-
+      github.event.schedule == '17 5 * * 1' ||
+      (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - run: npm run build --silent
+      # Pinned commits never change, so earlier checkouts stay valid. Shard membership is
+      # deterministic, so an entry is stored by exactly one shard and no checkout is cached twice.
+      # The shared restore prefix lets a shard start from another shard's cache (and the affected
+      # and record jobs reuse the newest one) after the corpus hash changes. Restore and save are
+      # separate steps so the cache is saved even when the comparison fails.
+      - name: Restore the shared corpus checkout cache
+        id: corpus-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ env.OFFING_CORPUS_CACHE }}
+          key: corpus-checkouts-${{ hashFiles('benchmarks/public-repositories/**') }}-shard-${{ matrix.shard }}
+          restore-keys: |
+            corpus-checkouts-
+      - name: Compare this shard with the pinned corpus
+        env:
+          SHARD: ${{ matrix.shard }}
+          SHARD_COUNT: "8"
+        # One repository at a time, each in a child process with a memory ceiling (--memory-limit). A
+        # repository that fails is named in the report and fails the run instead of crashing it.
+        run: node dist/benchmarks/public-repositories.js --shard "$SHARD/$SHARD_COUNT" --output "corpus-result-$SHARD.json"
+      - name: Save the shard cache
+        if: always() && steps.corpus-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ env.OFFING_CORPUS_CACHE }}
+          key: corpus-checkouts-${{ hashFiles('benchmarks/public-repositories/**') }}-shard-${{ matrix.shard }}
+      - name: Upload the shard report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: corpus-shard-${{ matrix.shard }}-${{ github.run_id }}
+          path: corpus-result-${{ matrix.shard }}.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+  merge:
+    # Rebuilds one full report from the shard reports, so the precision and recall floors, the job
+    # summary, and the artifact describe the whole corpus rather than eight parts of it.
+    name: corpus (merge shards)
+    needs: full
+    if: >-
+      always() && needs.full.result == 'success' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - run: npm run build --silent
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: corpus-shard-*-${{ github.run_id }}
+          path: shard-reports
+          merge-multiple: true
+      - name: Merge the shard reports into one full run
+        run: node dist/benchmarks/corpus-merge.js --dir shard-reports --output corpus-result.json
+      - name: Show the run cost in the job summary
+        if: always()
+        run: |
+          if [ -s corpus-result.json ]; then
+            jq -r '"### Corpus run cost\n\n| Metric | Value |\n| --- | --- |\n| Wall time (slowest shard) | \(.cost.wallMs / 1000 | . * 10 | round / 10) s (budget \(.budget.maxWallSeconds) s per shard) |\n| Fetch time (summed) | \(.cost.fetchMs / 1000 | . * 10 | round / 10) s |\n| Cache hits / misses | \(.cost.cacheHits) / \(.cost.cacheMisses) |\n| Fetched | \(.cost.bytesFetched / 1000000 | . * 10 | round / 10) MB (budget \(.budget.maxFetchedBytes / 1000000) MB per shard) |\n\n" + (if (.budgetWarnings | length) > 0 then "**Over budget:**\n" + (.budgetWarnings | map("- " + .) | join("\n")) + "\n" else "Within budget.\n" end)' corpus-result.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload the merged result
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: corpus-result-${{ github.run_id }}
+          path: corpus-result.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+  record:
+    name: corpus (record)
+    if: >-
+      github.event.schedule == '41 5 1,15 * *' ||
+      (github.event_name == 'workflow_dispatch' && inputs.mode == 'record')
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        # zizmor: ignore[artipacked] -- it pushes the recorded-run branch with the checkout token
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - name: Restore the corpus checkout cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ env.OFFING_CORPUS_CACHE }}
+          key: corpus-checkouts-${{ hashFiles('benchmarks/public-repositories/**') }}
+          restore-keys: |
+            corpus-checkouts-
+      # Refuses to record a partial or failing run; the step then fails and no pull request is opened.
+      - name: Run the full corpus and record it
+        run: npm run record:corpus-run
+      - name: Open a pull request with the record
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet; then
+            echo "Nothing changed; the recorded run is already current."
+            exit 0
+          fi
+          branch="chore/corpus-run-$(date -u +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit -am "chore(validation): record the full corpus run"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "chore(validation): record the full corpus run" \
+            --body "Recorded by the scheduled full-run workflow so \`lastFullRun\` in \`benchmarks/thresholds.json\` stays within 30 days (decision 0013). The run was complete and clean; review the numbers before merging."

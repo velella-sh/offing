@@ -1,0 +1,221 @@
+name: Offing lifecycle intelligence
+description: Find end-of-life runtimes, deprecated packages, and retired Actions at the exact line — offline and evidence-backed.
+author: Offing
+
+branding:
+  icon: activity
+  color: gray-dark
+
+inputs:
+  path:
+    description: Repository root or subdirectory to scan. Defaults to the checked-out repository.
+    required: false
+    default: .
+  paths:
+    description: >-
+      Multi-line list of directories (or globs such as packages/*) to scan in one run, relative to
+      path. Each match is scanned separately; findings are combined into one report and SARIF, with
+      a job-summary section per package. Leave empty to scan only path.
+    required: false
+    default: ""
+  baseline:
+    description: >-
+      Optional baseline path relative to path. Leave empty to report every finding. On the first run of an
+      offing/onboarding pull request a missing baseline does not fail the job: Offing records today's
+      findings as a suggested file in the pull request comment instead.
+    required: false
+    default: ""
+  baseline-warn-days:
+    description: Warn when a suppression in the baseline expires within this many days (0 to 365).
+    required: false
+    default: "14"
+  on-expired:
+    description: >-
+      What a baseline suppression does after its expires date: resurface (its finding is reported again) or
+      fail (also fail the job).
+    required: false
+    default: resurface
+  min-support-days:
+    description: >-
+      Warn (medium severity) on lines whose support ends within this many days. Leave empty to report only
+      what the data already marks.
+    required: false
+    default: ""
+  fail-on-severity:
+    description: Lowest severity that fails the job (none, info, low, medium, high, or critical).
+    required: false
+    default: high
+  mode:
+    description: >-
+      scan (default) scans the checked-out tree. diff compares the pull request base and head from the
+      event payload, fails only on findings the pull request introduces, and lists the fixed ones in the
+      summary. Outside pull request events, or when the event lacks those SHAs, it falls back to scan.
+    required: false
+    default: scan
+  annotations:
+    description: >-
+      Which findings become workflow annotations: changed annotates only findings on lines the pull request
+      added or changed (the default in diff mode), all annotates every finding (the default in scan mode), and
+      none emits no annotations. Findings left out stay counted in the summary and the JSON report.
+    required: false
+    default: ""
+  report-name:
+    description: Artifact name for the JSON report when upload-report is true.
+    required: false
+    default: offing-report
+  upload-report:
+    description: Upload the JSON report to GitHub Actions artifacts. The local report is always generated.
+    required: false
+    default: "true"
+  upload-sarif:
+    description: >-
+      Upload the findings to GitHub code scanning as SARIF. Needs the security-events: write permission
+      on the job; leave it off for pull requests from forks, whose token is read-only.
+    required: false
+    default: "false"
+  upload-badge:
+    description: Generate and upload aggregate lifecycle counts as a Shields.io endpoint JSON and a branded SVG badge artifact.
+    required: false
+    default: "false"
+  pr-comment:
+    description: >-
+      Post one summary comment on pull requests and update it on every re-run. Needs the
+      pull-requests: write permission on the job; leave it off for pull requests from forks, whose token is read-only.
+      The baseline proposal on an offing/onboarding pull request is posted even when this is false.
+    required: false
+    default: "false"
+  commands:
+    description: >-
+      Answer /offing explain and /offing ignore commands in pull request comments when the workflow
+      runs on issue_comment. Replies only to OWNER, MEMBER, and COLLABORATOR comments, and never pushes.
+      Needs the pull-requests: write permission on the job.
+    required: false
+    default: "false"
+  fix-pr:
+    description: >-
+      Open or update one pull request on the offing/fixes branch with every deterministic fix, and close
+      it when nothing is left to fix. Runs only on schedule and workflow_dispatch events. Needs the
+      contents: write and pull-requests: write permissions on the job.
+    required: false
+    default: "false"
+  suggest-fixes:
+    description: >-
+      Post one pull request review whose suggestion blocks apply the deterministic fixes for findings on
+      lines the pull request added or changed. Needs mode: diff and the pull-requests: write permission;
+      pull requests from forks are skipped because their token is read-only.
+    required: false
+    default: "false"
+  agent-authors:
+    description: >-
+      Comma-separated logins whose pull requests get the agent section in the pull request comment. In diff
+      mode the comment then lists the stale choices the pull request introduced, with each replacement and
+      evidence link. Set to none to turn the section off. The default covers the Copilot coding agent,
+      Jules, Devin, OpenAI Codex cloud, and Claude.
+    required: false
+    default: "Copilot, google-labs-jules[bot], devin-ai-integration[bot], chatgpt-codex-connector[bot], claude[bot]"
+  github-token:
+    description: Token used to post the pull request comment, command reply, or fix suggestions, to open, update, or close the fix pull request, and to update the tracking issue.
+    required: false
+    default: ${{ github.token }}
+  tracking-issue:
+    description: >-
+      Keep one issue up to date on schedule and workflow_dispatch runs. It lists findings by
+      end-of-life date, says what changed since the last run, and closes when nothing is left.
+      Needs the issues: write permission on the job.
+    required: false
+    default: "false"
+  attribution:
+    description: >-
+      Add one line to the job summary that says the scan was done by Offing and links to it.
+      Set to "false" to leave it out.
+    required: false
+    default: "true"
+
+outputs:
+  report-path:
+    description: Absolute runner path to the generated JSON report, whether or not it is uploaded.
+    value: ${{ steps.scan.outputs.report-path }}
+  finding-count:
+    description: Number of findings remaining after baseline comparison, as a decimal string.
+    value: ${{ steps.scan.outputs.finding-count }}
+  has-new-findings:
+    description: >-
+      "true" when findings remain after baseline comparison, otherwise "false". In diff mode it covers
+      the findings the pull request introduces.
+    value: ${{ steps.scan.outputs.has-new-findings }}
+  highest-severity:
+    description: >-
+      The highest severity among the remaining findings (info, low, medium, high, or critical), or empty
+      when there are none.
+    value: ${{ steps.scan.outputs.highest-severity }}
+  next-eol-date:
+    description: >-
+      The earliest end-of-life date among the remaining findings (YYYY-MM-DD), or empty when no finding
+      carries a deadline.
+    value: ${{ steps.scan.outputs.next-eol-date }}
+  findings-json:
+    description: >-
+      The remaining findings as one compact JSON array. Each entry has id, ruleId, severity, title, path,
+      and line and deadline when known.
+    value: ${{ steps.scan.outputs.findings-json }}
+  badge-path:
+    description: Absolute runner path to the Shields.io endpoint JSON, or empty when upload-badge is false.
+    value: ${{ steps.scan.outputs.badge-path }}
+  badge-svg-path:
+    description: Absolute runner path to the SVG badge, or empty when upload-badge is false.
+    value: ${{ steps.scan.outputs.badge-svg-path }}
+  sarif-path:
+    description: Absolute runner path to the generated SARIF file, or empty when upload-sarif is false.
+    value: ${{ steps.scan.outputs.sarif-path }}
+
+runs:
+  using: composite
+  steps:
+    - id: scan
+      name: Scan repository
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/dist/action/index.js"
+      env:
+        INPUT_PATH: ${{ inputs.path }}
+        INPUT_PATHS: ${{ inputs.paths }}
+        INPUT_BASELINE: ${{ inputs.baseline }}
+        INPUT_BASELINE-WARN-DAYS: ${{ inputs.baseline-warn-days }}
+        INPUT_ON-EXPIRED: ${{ inputs.on-expired }}
+        INPUT_MIN-SUPPORT-DAYS: ${{ inputs.min-support-days }}
+        INPUT_FAIL-ON-SEVERITY: ${{ inputs.fail-on-severity }}
+        INPUT_MODE: ${{ inputs.mode }}
+        INPUT_ANNOTATIONS: ${{ inputs.annotations }}
+        INPUT_UPLOAD-SARIF: ${{ inputs.upload-sarif }}
+        INPUT_UPLOAD-BADGE: ${{ inputs.upload-badge }}
+        INPUT_PR-COMMENT: ${{ inputs.pr-comment }}
+        INPUT_SUGGEST-FIXES: ${{ inputs.suggest-fixes }}
+        INPUT_AGENT-AUTHORS: ${{ inputs.agent-authors }}
+        INPUT_COMMANDS: ${{ inputs.commands }}
+        INPUT_FIX-PR: ${{ inputs.fix-pr }}
+        INPUT_TRACKING-ISSUE: ${{ inputs.tracking-issue }}
+        INPUT_GITHUB-TOKEN: ${{ inputs.github-token }}
+        INPUT_ATTRIBUTION: ${{ inputs.attribution }}
+    - name: Upload machine-readable report
+      if: always() && inputs.upload-report == 'true' && steps.scan.outputs.report-path != ''
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: ${{ inputs.report-name }}
+        path: ${{ steps.scan.outputs.report-path }}
+        if-no-files-found: error
+        retention-days: 14
+    - name: Upload README badge endpoint
+      if: always() && inputs.upload-badge == 'true' && steps.scan.outputs.badge-path != ''
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: offing-badge
+        path: |
+          ${{ steps.scan.outputs.badge-path }}
+          ${{ steps.scan.outputs.badge-svg-path }}
+        if-no-files-found: error
+        retention-days: 14
+    - name: Upload findings to code scanning
+      if: always() && inputs.upload-sarif == 'true' && steps.scan.outputs.sarif-path != ''
+      uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4
+      with:
+        sarif_file: ${{ steps.scan.outputs.sarif-path }}
+        category: offing

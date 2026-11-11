@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/velella-sh/offing/schemas/public-validation.v1.schema.json",
+  "title": "Offing public validation corpus v1",
+  "type": "object",
+  "required": ["schemaVersion", "repositories"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "offing.public-validation.v1" },
+    "repositories": {
+      "type": "array",
+      "minItems": 20,
+      "items": {
+        "type": "object",
+        "required": ["repository", "commit", "ecosystem", "expected"],
+        "additionalProperties": false,
+        "properties": {
+          "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+          "commit": { "type": "string", "pattern": "^[a-fA-F0-9]{40}$" },
+          "ecosystem": {
+            "enum": [
+              "android",
+              "ci-images",
+              "container",
+              "cpp",
+              "dart",
+              "database",
+              "deno",
+              "dotnet",
+              "elixir",
+              "go",
+              "java",
+              "kubernetes",
+              "node",
+              "node-actions",
+              "php",
+              "python",
+              "ruby",
+              "rust",
+              "scala",
+              "serverless",
+              "shell",
+              "swift",
+              "terraform"
+            ]
+          },
+          "selection": { "enum": ["blind", "targeted"] },
+          "expected": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["ruleId", "path", "groundTruthSource"],
+              "additionalProperties": false,
+              "properties": {
+                "ruleId": { "type": "string", "minLength": 1 },
+                "path": { "type": "string", "minLength": 1 },
+                "line": { "type": "integer", "minimum": 1 },
+                "groundTruthSource": {
+                  "type": "object",
+                  "required": ["kind"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "migration-commit",
+                        "upstream-changelog",
+                        "ci-failure",
+                        "differential-tool",
+                        "maintainer-review"
+                      ]
+                    },
+                    "url": { "type": "string", "pattern": "^https://[^\\s]+$" },
+                    "note": { "type": "string", "minLength": 1 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

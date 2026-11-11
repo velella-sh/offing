@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "offing.differential.xeol.v1",
+  "repository": "outline/outline",
+  "summary": {
+    "agree": 0,
+    "offing-only": 11,
+    "xeol-only": 0
+  },
+  "comparisons": [
+    {
+      "product": "babel-eslint",
+      "offing": ["npm.package.babel-eslint.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "crypto-js",
+      "offing": ["npm.package.crypto-js.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "i18next-parser",
+      "offing": ["npm.package.i18next-parser.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "koa-router",
+      "offing": ["npm.package.koa-router.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "nodejs",
+      "offing": [
+        "container.node.eol-21-and-older",
+        "nodejs.runtime.eol-18",
+        "nodejs.runtime.eol-19",
+        "nodejs.runtime.eol-20"
+      ],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "socket.io-redis",
+      "offing": ["npm.package.socket.io-redis.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "types.dotenv",
+      "offing": ["npm.package.types.dotenv.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "types.emoji-regex",
+      "offing": ["npm.package.types.emoji-regex.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "types.form-data",
+      "offing": ["npm.package.types.form-data.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "types.koa-useragent",
+      "offing": ["npm.package.types.koa-useragent.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "types.sanitize-filename",
+      "offing": ["npm.package.types.sanitize-filename.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    }
+  ],
+  "notComparable": [
+    "github-actions.build-push-action",
+    "github-actions.checkout",
+    "github-actions.download-artifact",
+    "github-actions.github-script",
+    "github-actions.login-action",
+    "github-actions.metadata-action",
+    "github-actions.setup-buildx-action",
+    "github-actions.setup-node",
+    "github-actions.stale",
+    "github-actions.upload-artifact"
+  ]
+}

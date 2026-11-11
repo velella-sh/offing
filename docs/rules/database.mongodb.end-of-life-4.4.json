@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "ebb.rule.v1",
+  "id": "database.mongodb.end-of-life-4.4",
+  "ecosystem": "database",
+  "purl": "pkg:generic/mongodb",
+  "affectedVersions": "vers:semver/>=4.4.0|<4.5.0",
+  "event": "end-of-life",
+  "severity": "high",
+  "title": "MongoDB Server 4.4 is end-of-life",
+  "summary": "MongoDB Server 4.4 reached end of life on 2024-02-29 and no longer receives fixes from the vendor.",
+  "deadline": "2024-02-29",
+  "sources": [
+    {
+      "title": "MongoDB Server support policy (vendor)",
+      "url": "https://www.mongodb.com/legal/support-policy",
+      "accessedAt": "2026-11-10"
+    },
+    {
+      "title": "endoflife.date (index; the vendor page above is the evidence)",
+      "url": "https://endoflife.date/mongodb",
+      "accessedAt": "2026-11-10"
+    },
+    {
+      "title": "MongoDB Versions and Upgrade Paths",
+      "url": "https://www.mongodb.com/docs/mongodb-versions/",
+      "accessedAt": "2026-11-11"
+    },
+    {
+      "title": "Upgrade a Replica Set to MongoDB 8.0",
+      "url": "https://www.mongodb.com/docs/manual/release-notes/8.0-upgrade-replica-set/",
+      "accessedAt": "2026-11-11"
+    }
+  ],
+  "provenance": {
+    "observedAt": "2026-11-10",
+    "reviewedAt": "2026-11-11",
+    "reviewer": "arminazimi"
+  },
+  "migration": {
+    "constraints": [
+      "MongoDB documents that a deployment must upgrade through each major release in turn; it does not support jumping straight to a distant major. The 8.0 upgrade guide states that to upgrade from a version earlier than 7.0 you must successively upgrade major releases until you reach 7.0, and only then move to 8.0.",
+      "Upgrading the binaries and raising featureCompatibilityVersion are two separate steps for each release. While FCV stays at the old value a self-managed deployment can still downgrade; raising it enables features that write data older versions cannot read.",
+      "Each release has its own upgrade page with standalone, replica set, and sharded cluster procedures, and its own compatibility changes. Read the page for every release you cross, and confirm your drivers support the target version before you start.",
+      "Changing a Compose image tag restarts the container but does not migrate data: point the new version at the existing volume only after a backup exists."
+    ],
+    "steps": [
+      {
+        "id": "back-up-data",
+        "title": "Back up the data first",
+        "instructions": "Take a verified backup of every MongoDB deployment in the reported files before changing any version, and keep it until the new version serves traffic without errors.",
+        "targets": "all"
+      },
+      {
+        "id": "upgrade-data",
+        "title": "Upgrade the MongoDB deployment",
+        "instructions": "Follow the vendor upgrade procedure for your topology, one release at a time: replace the binaries (secondaries first, then step down the primary and upgrade it), then raise featureCompatibilityVersion once the release has run correctly. Test in a non-production deployment first.",
+        "targets": "declaration"
+      },
+      {
+        "id": "raise-declared-version",
+        "title": "Raise the declared version",
+        "instructions": "Change the image tag in every Compose file that runs MongoDB, including overrides, to the release you upgraded to. Do this in every file and environment, not only the reported line.",
+        "targets": "all"
+      },
+      {
+        "id": "align-clients",
+        "title": "Check clients and tooling",
+        "instructions": "Update drivers, ODMs, CI service containers, and local setup documentation that assume the old MongoDB version.",
+        "targets": "all"
+      }
+    ],
+    "verification": [
+      {
+        "command": "docker compose config",
+        "purpose": "Confirm the Compose file is valid and shows the intended MongoDB image tag after the change."
+      },
+      {
+        "command": "mongosh --quiet --eval \"db.version()\"",
+        "purpose": "Confirm the running server reports the intended MongoDB version."
+      },
+      {
+        "command": "mongosh --quiet --eval \"db.adminCommand({ getParameter: 1, featureCompatibilityVersion: 1 })\"",
+        "purpose": "Confirm featureCompatibilityVersion matches the upgrade step you have completed."
+      },
+      {
+        "command": "terraform plan",
+        "purpose": "Review the plan and confirm no Terraform-managed resource still declares the retired version line, and that any version change is intended."
+      }
+    ]
+  }
+}

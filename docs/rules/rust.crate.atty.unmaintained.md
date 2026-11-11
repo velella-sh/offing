@@ -1,0 +1,147 @@
+---
+title: "atty is no longer maintained — dates, impact, migration"
+description: "The maintainer of atty has published an official notice that the crate is no longer under development and that users should rely on the standard library's IsTerminal trait."
+layout: doc
+permalink: "/rules/rust.crate.atty.unmaintained.html"
+canonical_url: "https://velella.sh/offing/rules/rust.crate.atty.unmaintained.html"
+image: "/assets/og/rust.crate.atty.unmaintained.svg"
+review_date: "2026-10-17"
+last_modified_at: "2026-10-17"
+json_twin: "/rules/rust.crate.atty.unmaintained.json"
+---
+
+# atty is no longer maintained
+
+**Deprecated.** The source gives no day. Replacement: std::io::IsTerminal (stable since Rust 1.70), or the is-terminal crate for older compilers. Source: [RustSec advisory RUSTSEC-2024-0375](https://rustsec.org/advisories/RUSTSEC-2024-0375.html).
+
+Check a version:
+
+```bash
+offing check pkg:cargo/atty
+```
+
+The maintainer of atty has published an official notice that the crate is no longer under development and that users should rely on the standard library's IsTerminal trait.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `rust` |
+| Component | `pkg:cargo/atty` |
+| Affected versions | `vers:cargo/*` |
+| Date from the source | The source gives no day |
+| Replacement | std::io::IsTerminal (stable since Rust 1.70), or the is-terminal crate for older compilers |
+| Evidence last seen | 2026-10-17 |
+| Reviewed | 2026-10-17 by arminazimi |
+| Review due | 2026-12-01 (45 days after the last review) |
+| Rule ID | `rust.crate.atty.unmaintained` |
+
+## Sources
+
+- [RustSec advisory RUSTSEC-2024-0375](https://rustsec.org/advisories/RUSTSEC-2024-0375.html) (accessed 2026-10-17)
+
+## Migration
+
+**Constraints**
+
+- Preserve how colored or interactive output is chosen when stdout or stderr is not a terminal.
+
+**Steps**
+
+1. **Use std::io::IsTerminal.** Replace `atty::is(Stream::Stdout)` with `std::io::stdout().is_terminal()` (stable since Rust 1.70, `use std::io::IsTerminal`), or use the is-terminal crate on older compilers, and remove the atty dependency.
+
+**Verification**
+
+- `cargo build --all-targets && cargo test`: Build and test after removing atty.
+
+## Detected by
+
+The `rust` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [ansi_term is no longer maintained](rust.crate.ansi-term.unmaintained.html)
+- [failure is no longer maintained](rust.crate.failure.unmaintained.html)
+- [tempdir is no longer maintained](rust.crate.tempdir.unmaintained.html)
+- [Rust 1.98 and older are no longer supported](rust.toolchain.end-of-support-1.98-and-older.html)
+
+
+## Data
+
+This page is generated from [`registry/rust.json`](https://github.com/velella-sh/offing/blob/main/registry/rust.json), rule `rust.crate.atty.unmaintained`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/rust.crate.atty.unmaintained.html",
+      "url": "https://velella.sh/offing/rules/rust.crate.atty.unmaintained.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/rust.crate.atty.unmaintained.html",
+      "headline": "atty is no longer maintained — dates, impact, migration",
+      "description": "The maintainer of atty has published an official notice that the crate is no longer under development and that users should rely on the standard library's IsTerminal trait.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-17",
+      "keywords": [
+        "deprecated",
+        "rust",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "atty is no longer maintained",
+        "identifier": "pkg:cargo/atty"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "RustSec advisory RUSTSEC-2024-0375",
+          "url": "https://rustsec.org/advisories/RUSTSEC-2024-0375.html"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/rust.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/rust.crate.atty.unmaintained.html#faq",
+      "url": "https://velella.sh/offing/rules/rust.crate.atty.unmaintained.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:cargo/atty?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:cargo/*. Source: RustSec advisory RUSTSEC-2024-0375 (https://rustsec.org/advisories/RUSTSEC-2024-0375.html)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:cargo/atty?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "std::io::IsTerminal (stable since Rust 1.70), or the is-terminal crate for older compilers"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:cargo/atty?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:cargo/atty."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

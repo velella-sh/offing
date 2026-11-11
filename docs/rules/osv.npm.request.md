@@ -1,0 +1,121 @@
+---
+title: "request has unfixed OSV advisories — dates, impact, migration"
+description: "OSV lists GHSA-p8p7-x288-28g6 against request with no fixed version in the affected ranges."
+layout: doc
+permalink: "/rules/osv.npm.request.html"
+canonical_url: "https://velella.sh/offing/rules/osv.npm.request.html"
+image: "/assets/og/osv.npm.request.svg"
+review_date: "2026-10-27"
+last_modified_at: "2026-10-27"
+json_twin: "/rules/osv.npm.request.json"
+---
+
+# request has unfixed OSV advisories
+
+**Deprecated.** The source gives no day. Source: [GHSA-p8p7-x288-28g6](https://osv.dev/vulnerability/GHSA-p8p7-x288-28g6).
+
+Check a version:
+
+```bash
+offing check pkg:npm/request
+```
+
+OSV lists GHSA-p8p7-x288-28g6 against request with no fixed version in the affected ranges.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | high |
+| Ecosystem | `osv` |
+| Component | `pkg:npm/request` |
+| Affected versions | `vers:npm/*` |
+| Date from the source | The source gives no day |
+| Evidence last seen | 2026-10-27 |
+| Reviewed | 2026-10-27 by arminazimi, drafted by the `osv` importer |
+| Review due | 2027-10-27 (365 days after the last review) |
+| Rule ID | `osv.npm.request` |
+
+## Sources
+
+- [GHSA-p8p7-x288-28g6](https://osv.dev/vulnerability/GHSA-p8p7-x288-28g6) (accessed 2026-10-27)
+
+## Detected by
+
+No built-in detector reads `osv` declarations yet; the rule is data in the [lifecycle registry](https://github.com/velella-sh/offing/blob/main/registry/osv.json).
+
+## Related
+
+### Same ecosystem
+
+- [pycrypto has unfixed OSV advisories](osv.pypi.pycrypto.html)
+
+
+## Data
+
+This page is generated from [`registry/osv.json`](https://github.com/velella-sh/offing/blob/main/registry/osv.json), rule `osv.npm.request`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/osv.npm.request.html",
+      "url": "https://velella.sh/offing/rules/osv.npm.request.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/osv.npm.request.html",
+      "headline": "request has unfixed OSV advisories — dates, impact, migration",
+      "description": "OSV lists GHSA-p8p7-x288-28g6 against request with no fixed version in the affected ranges.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-27",
+      "keywords": [
+        "deprecated",
+        "osv",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "request has unfixed OSV advisories",
+        "identifier": "pkg:npm/request"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "GHSA-p8p7-x288-28g6",
+          "url": "https://osv.dev/vulnerability/GHSA-p8p7-x288-28g6"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/osv.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/osv.npm.request.html#faq",
+      "url": "https://velella.sh/offing/rules/osv.npm.request.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:npm/request?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:npm/*. Source: GHSA-p8p7-x288-28g6 (https://osv.dev/vulnerability/GHSA-p8p7-x288-28g6)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:npm/request?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:npm/request."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

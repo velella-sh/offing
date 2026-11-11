@@ -1,0 +1,172 @@
+import type { Forecast, ForecastEvent } from "@velella/ebb/forecast";
+import { required } from "./required.js";
+import type { Severity } from "./domain.js";
+
+export interface ForecastSvgOptions {
+  /** Total width in pixels. Defaults to 720. */
+  width?: number;
+  /** Grow the bars in date order and pulse the today marker with CSS. Defaults to false. */
+  animate?: boolean;
+}
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const severityOrder: readonly Severity[] = ["critical", "high", "medium", "low", "info"];
+const LANE_TOP = 84;
+const LANE_HEIGHT = 16;
+const AXIS_Y = 176;
+const HEIGHT = 220;
+const PAD = 24;
+const LEFT = 64;
+const RIGHT = 24;
+
+/** The XML predefined entities; the pattern in `escape` can only select one of these keys. */
+const entities: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" };
+
+const escape = (value: string): string =>
+  value.replace(/[&<>"']/g, (character) => required(entities[character], "SVG entity"));
+
+const pad = (value: number): string => String(value).padStart(2, "0");
+
+/** Every calendar month between two ISO dates, inclusive. */
+function monthKeys(start: string, end: string): string[] {
+  const keys: string[] = [];
+  let year = Number(start.slice(0, 4));
+  let month = Number(start.slice(5, 7));
+  const endYear = Number(end.slice(0, 4));
+  const endMonth = Number(end.slice(5, 7));
+  while (year < endYear || (year === endYear && month <= endMonth)) {
+    keys.push(`${year}-${pad(month)}`);
+    month += 1;
+    if (month > 12) {
+      month = 1;
+      year += 1;
+    }
+  }
+  return keys;
+}
+
+const dayNumber = (date: string): number => Math.floor(Date.parse(`${date}T00:00:00Z`) / 86_400_000);
+
+function laneY(severity: Severity): number {
+  const lane = severityOrder.indexOf(severity);
+  return LANE_TOP + Math.max(lane, 0) * LANE_HEIGHT;
+}
+
+function describe(event: ForecastEvent): string {
+  const affects =
+    event.findings.length === 0
+      ? ""
+      : `, affects ${event.findings.length} finding${event.findings.length === 1 ? "" : "s"}`;
+  return `${event.date}: ${event.title} (${event.severity}${affects})`;
+}
+
+const ANIMATION_STYLES: readonly string[] = [
+  ".offing-forecast .forecast-bar{opacity:.35;transform-box:fill-box;transform-origin:left center;animation:forecast-grow .5s cubic-bezier(.2,.8,.2,1) both}",
+  ".offing-forecast .forecast-today{animation:forecast-pulse 1.2s ease-in-out 2}",
+  ".offing-forecast .forecast-today line{stroke:var(--muted);stroke-dasharray:2 3}.offing-forecast .forecast-today text{fill:var(--muted);font-size:9px}",
+  "@keyframes forecast-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}",
+  "@keyframes forecast-pulse{0%,100%{opacity:1}50%{opacity:.2}}",
+  "@media (prefers-reduced-motion:reduce){.offing-forecast .forecast-bar,.offing-forecast .forecast-today{animation:none}}",
+];
+
+const BASE_STYLES: readonly string[] = [
+  ".offing-forecast{--bg:#FFFFFF;--fg:#0C1110;--muted:#5E736B;--line:#DCE5E1;--critical:#B84A3E;--high:#B84A3E;--medium:#C9822F;--low:#B89B3C;--info:#4C7C6D}",
+  "@media (prefers-color-scheme:dark){.offing-forecast{--bg:#0C1110;--fg:#E7EDEA;--muted:#9AB0A7;--line:#23423A;--critical:#E58F83;--high:#E58F83;--medium:#E0A766;--low:#D6C171;--info:#8FB8A8}}",
+  ".offing-forecast{font-family:Verdana,Geneva,DejaVu Sans,sans-serif}",
+  ".offing-forecast text{fill:var(--fg)}.offing-forecast .forecast-muted{fill:var(--muted)}",
+  ".offing-forecast .forecast-background{fill:var(--bg)}",
+  ".offing-forecast .forecast-line{stroke:var(--line);fill:none}.offing-forecast .forecast-tick{stroke:var(--line)}",
+  ".offing-forecast .forecast-month{fill:var(--muted);font-size:10px}",
+  ".offing-forecast .forecast-event{stroke:var(--bg);stroke-width:1.5}",
+  ".offing-forecast .critical,.offing-forecast .high{fill:var(--critical)}",
+  ".offing-forecast .medium{fill:var(--medium)}.offing-forecast .low{fill:var(--low)}.offing-forecast .info{fill:var(--info)}",
+];
+
+/** The month tick marks and labels along the axis. */
+function monthTicks(forecast: Forecast, inner: number, xFor: (date: string) => number): string[] {
+  const keys = monthKeys(forecast.today, forecast.until);
+  const labelEvery = Math.max(1, Math.ceil(keys.length / Math.max(1, Math.floor(inner / 64))));
+  return keys.map((month, index) => {
+    const x = xFor(`${month}-01`).toFixed(1);
+    const label =
+      index % labelEvery === 0
+        ? `<text class="forecast-month" x="${x}" y="${AXIS_Y + 20}" text-anchor="middle">${escape(`${MONTHS[Number(month.slice(5, 7)) - 1]} ${month.slice(0, 4)}`)}</text>`
+        : "";
+    return `<line class="forecast-tick" x1="${x}" y1="${AXIS_Y}" x2="${x}" y2="${AXIS_Y + 5}"/>${label}`;
+  });
+}
+
+type ForecastEventItem = Forecast["groups"][number]["events"][number];
+
+function eventMarkers(events: readonly ForecastEventItem[], xFor: (date: string) => number): string[] {
+  return events.map((event) => {
+    const affecting = event.findings.length > 0;
+    return `<circle class="forecast-event ${event.severity}${affecting ? " affecting" : ""}" cx="${xFor(event.date).toFixed(1)}" cy="${laneY(event.severity)}" r="${affecting ? 7 : 4}"><title>${escape(describe(event))}</title></circle>`;
+  });
+}
+
+/** The growing bars drawn behind the markers when the chart animates. */
+function eventBars(events: readonly ForecastEventItem[], xFor: (date: string) => number): string[] {
+  const stagger = events.length > 1 ? Math.min(90, Math.floor(5000 / (events.length - 1))) : 0;
+  return events.map((event, index) => {
+    const barWidth = xFor(event.date) - LEFT;
+    if (barWidth < 2) return "";
+    const affecting = event.findings.length > 0;
+    const barHeight = affecting ? 5 : 3;
+    return `<rect class="forecast-bar ${event.severity}${affecting ? " affecting" : ""}" x="${LEFT}" y="${(laneY(event.severity) - barHeight / 2).toFixed(1)}" width="${barWidth.toFixed(1)}" height="${barHeight}" rx="${barHeight / 2}" style="animation-delay:${index * stagger}ms"/>`;
+  });
+}
+
+/**
+ * A self-contained SVG timeline of the forecast: one marker per event, larger when the event affects the scanned
+ * repository. No script, no fonts, and no external references, so it renders under `default-src 'none'` and reads in
+ * light and dark through CSS custom properties.
+ *
+ * With `animate`, each event gets a bar from today to its date that grows in date order, and the today marker
+ * pulses twice. Both use CSS keyframes only; `prefers-reduced-motion` shows the final frame immediately.
+ */
+export function renderForecastSvg(forecast: Forecast, options: ForecastSvgOptions = {}): string {
+  const width = Number.isFinite(options.width) ? Math.max(320, Math.round(required(options.width, "svg width"))) : 720;
+  const animate = options.animate === true;
+  const inner = width - LEFT - RIGHT;
+  const start = dayNumber(forecast.today);
+  const span = dayNumber(forecast.until) - start;
+  const xFor = (date: string): number => {
+    const offset = span <= 0 ? 0 : Math.min(1, Math.max(0, (dayNumber(date) - start) / span));
+    return LEFT + offset * inner;
+  };
+  const events = forecast.groups.flatMap((group) => group.events);
+  const description = [
+    `End-of-life forecast from ${forecast.today} to ${forecast.until}: ${forecast.total} events, ${forecast.affecting} affecting this repository.`,
+    ...events.map(describe),
+  ].join(" ");
+  const markers = eventMarkers(events, xFor);
+  const bars = animate ? eventBars(events, xFor) : [];
+  const today = animate
+    ? `<g class="forecast-today"><line x1="${LEFT}" y1="${LANE_TOP - 12}" x2="${LEFT}" y2="${AXIS_Y}"/><text x="${LEFT + 4}" y="${LANE_TOP - 6}">today</text></g>`
+    : "";
+  const animationStyles = animate ? ANIMATION_STYLES : [];
+  const ticks = monthTicks(forecast, inner, xFor);
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${HEIGHT}" viewBox="0 0 ${width} ${HEIGHT}" role="img" aria-labelledby="forecast-title forecast-desc" class="offing-forecast">`,
+    `<title id="forecast-title">End-of-life forecast</title>`,
+    `<desc id="forecast-desc">${escape(description)}</desc>`,
+    "<style>",
+    ...BASE_STYLES,
+    ...animationStyles,
+    "</style>",
+    '<rect class="forecast-background" width="100%" height="100%"/>',
+    `<text x="${PAD}" y="30" font-size="15" font-weight="700">End-of-life forecast</text>`,
+    `<text class="forecast-muted" x="${PAD}" y="50" font-size="11">${escape(`${forecast.total} events · ${forecast.affecting} affecting this repository · ${forecast.today} to ${forecast.until}`)}</text>`,
+    ...severityOrder.map(
+      (severity, index) =>
+        `<text class="forecast-muted" x="8" y="${LANE_TOP + index * LANE_HEIGHT + 4}" font-size="9">${severity}</text>`,
+    ),
+    `<line class="forecast-line" x1="${LEFT}" y1="${AXIS_Y}" x2="${width - RIGHT}" y2="${AXIS_Y}"/>`,
+    ...ticks,
+    ...bars,
+    today,
+    ...markers,
+    "</svg>",
+  ].join("");
+}

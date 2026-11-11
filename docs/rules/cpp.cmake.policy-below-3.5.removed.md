@@ -1,0 +1,163 @@
+---
+title: "CMake policy versions older than 3.5 are removed — dates, impact, migration"
+description: "CMake 4.0 removed compatibility with policy versions older than 3.5. A cmake_minimum_required(VERSION) or cmake_policy(VERSION) call that does not set the policy version to at least 3.5 (optionally…"
+layout: doc
+permalink: "/rules/cpp.cmake.policy-below-3.5.removed.html"
+canonical_url: "https://velella.sh/offing/rules/cpp.cmake.policy-below-3.5.removed.html"
+image: "/assets/og/cpp.cmake.policy-below-3.5.removed.svg"
+review_date: "2026-10-19"
+last_modified_at: "2026-10-19"
+json_twin: "/rules/cpp.cmake.policy-below-3.5.removed.json"
+---
+
+# CMake policy versions older than 3.5 are removed
+
+**Removed** as of 2025-03-27. Replacement: cmake_minimum_required(VERSION 3.5) or newer, or VERSION &lt;min&gt;...&lt;max&gt; with &lt;max&gt; at least 3.5. Source: [CMake 4.0 release notes (compatibility older than 3.5 removed)](https://cmake.org/cmake/help/latest/release/4.0.html).
+
+Check a version:
+
+```bash
+offing check pkg:generic/cmake
+```
+
+CMake 4.0 removed compatibility with policy versions older than 3.5. A cmake_minimum_required(VERSION) or cmake_policy(VERSION) call that does not set the policy version to at least 3.5 (optionally via ...&lt;policy_max&gt;) produces an error on CMake 4.0 and newer. CMake 4.0.0 was published on 2025-03-27.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Removed |
+| Severity | high |
+| Ecosystem | `cpp` |
+| Component | `pkg:generic/cmake` |
+| Affected versions | `vers:semver/<3.5.0` |
+| Date from the source | 2025-03-27 |
+| Replacement | cmake_minimum_required(VERSION 3.5) or newer, or VERSION &lt;min&gt;...&lt;max&gt; with &lt;max&gt; at least 3.5 |
+| Evidence last seen | 2026-10-19 |
+| Reviewed | 2026-10-19 by arminazimi |
+| Review due | 2027-04-17 (180 days after the last review) |
+| Rule ID | `cpp.cmake.policy-below-3.5.removed` |
+
+## Sources
+
+- [CMake 4.0 release notes (compatibility older than 3.5 removed)](https://cmake.org/cmake/help/latest/release/4.0.html) (accessed 2026-10-19)
+- [cmake_minimum_required (Changed in 4.0)](https://cmake.org/cmake/help/latest/command/cmake_minimum_required.html) (accessed 2026-10-19)
+- [CMake 4.0.0 GitHub release](https://github.com/Kitware/CMake/releases/tag/v4.0.0) (accessed 2026-10-19)
+
+## Migration
+
+**Constraints**
+
+- Raising the policy version can change NEW policy behavior; read the policies introduced between the old and new floor before committing.
+- Projects that must still configure on older CMake can use VERSION &lt;min&gt;...&lt;max&gt; so the minimum stays low while the policy max is at least 3.5 on newer CMake.
+
+**Steps**
+
+1. **Raise the reported cmake_minimum_required policy version.** Change the reported cmake_minimum_required(VERSION …) so the effective policy version is at least 3.5 (for example VERSION 3.16, or VERSION 2.8.12...3.16).
+
+**Verification**
+
+- `cmake -S . -B build`: Configure the project with a CMake 4.x toolchain and confirm the policy floor is accepted.
+
+## Detected by
+
+The `cpp` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Other versions of this product
+
+- [CMake policy versions older than 3.10 are deprecated](cpp.cmake.policy-below-3.10.deprecated.html)
+
+### Same ecosystem
+
+- [The Visual Studio 12 2013 generator is removed](cpp.cmake.generator.visual-studio-12-2013.removed.html)
+- [The CMakeFindFrameworks module is deprecated](cpp.cmake.module.cmake-find-frameworks.deprecated.html)
+- [The FindGDAL module is deprecated](cpp.cmake.module.find-gdal.deprecated.html)
+
+
+## Data
+
+This page is generated from [`registry/cpp.json`](https://github.com/velella-sh/offing/blob/main/registry/cpp.json), rule `cpp.cmake.policy-below-3.5.removed`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/cpp.cmake.policy-below-3.5.removed.html",
+      "url": "https://velella.sh/offing/rules/cpp.cmake.policy-below-3.5.removed.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/cpp.cmake.policy-below-3.5.removed.html",
+      "headline": "CMake policy versions older than 3.5 are removed — dates, impact, migration",
+      "description": "CMake 4.0 removed compatibility with policy versions older than 3.5. A cmake_minimum_required(VERSION) or cmake_policy(VERSION) call that does not set the policy version to at least 3.5 (optionally…",
+      "inLanguage": "en",
+      "dateModified": "2026-10-19",
+      "keywords": [
+        "removed",
+        "cpp",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "CMake policy versions older than 3.5 are removed",
+        "identifier": "pkg:generic/cmake"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "CMake 4.0 release notes (compatibility older than 3.5 removed)",
+          "url": "https://cmake.org/cmake/help/latest/release/4.0.html"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "cmake_minimum_required (Changed in 4.0)",
+          "url": "https://cmake.org/cmake/help/latest/command/cmake_minimum_required.html"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "CMake 4.0.0 GitHub release",
+          "url": "https://github.com/Kitware/CMake/releases/tag/v4.0.0"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/cpp.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/cpp.cmake.policy-below-3.5.removed.html#faq",
+      "url": "https://velella.sh/offing/rules/cpp.cmake.policy-below-3.5.removed.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/cmake?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Removed as of 2025-03-27. Affected versions: vers:semver/\u003c3.5.0. Source: CMake 4.0 release notes (compatibility older than 3.5 removed) (https://cmake.org/cmake/help/latest/release/4.0.html)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/cmake?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "cmake_minimum_required(VERSION 3.5) or newer, or VERSION \u003cmin>...\u003cmax> with \u003cmax> at least 3.5"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/cmake?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/cmake."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

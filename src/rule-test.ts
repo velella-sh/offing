@@ -1,0 +1,286 @@
+// Runs one lifecycle rule against its positive and negative fixtures, without writing test code.
+//
+//   offing rules test <rule-id>
+//
+// The fixtures live in `tests/fixtures/<rule-id>/match` and `tests/fixtures/<rule-id>/clean`. The match fixture
+// must observe the rule; the clean fixture must not. Both directories are scanned as untrusted input and offline.
+
+import { cp, mkdtemp, readdir, readFile, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { createRequire } from "node:module";
+import { dirname, join, relative } from "node:path";
+
+import { builtInDetectors } from "./detectors/index.js";
+import { restoreFixtureNames } from "./fixture-names.js";
+import type { Finding, SourceUsage, UsageMatcher } from "./domain.js";
+import { scanRepository } from "./engine/index.js";
+import { runInventory } from "./inventory/index.js";
+import { analyzeSourceUsage } from "./source-usage.js";
+import { OffingError } from "./offing-error.js";
+
+export class RuleTestError extends OffingError {
+  constructor(message: string) {
+    super("invalid-argument", message);
+    this.name = "RuleTestError";
+  }
+}
+
+export interface RuleTestOptions {
+  /**
+   * Repository root holding `tests/fixtures`; defaults to the current directory. Rules come from its `registry/` when
+   * it has one, otherwise from the installed `@velella/ebb`.
+   */
+  root?: string;
+  /** Fixtures root; defaults to `<root>/tests/fixtures`. */
+  fixturesRoot?: string;
+}
+
+export interface FixtureObservation {
+  /** Repository-relative path such as `package.json`, with the line where the rule was observed. */
+  path: string;
+  line: number;
+  /** What was seen: a finding title or, for a usage, the symbol. */
+  label: string;
+}
+
+export interface FixtureOutcome {
+  kind: "match" | "clean";
+  directory: string;
+  passed: boolean;
+  findings: FixtureObservation[];
+  usages: FixtureObservation[];
+  /** Why the fixture failed, when it did. */
+  problem?: string;
+}
+
+export interface RuleTestResult {
+  ruleId: string;
+  /** Repository-relative path of the registry that defines the rule. */
+  registry: string;
+  passed: boolean;
+  fixtures: FixtureOutcome[];
+}
+
+interface FoundRule {
+  rule: Record<string, unknown>;
+  registry: string;
+}
+
+const NOT_A_REGISTRY = new Set(["sources.lock.json"]);
+
+/**
+ * Where the rules come from: `<root>/registry` in a checkout of the Ebb repository (or a test repository), otherwise
+ * the registries of the installed `@velella/ebb` package, which are the rules a scan uses. `label` is how a report
+ * names the directory.
+ */
+export async function ruleRegistryDirectory(root: string): Promise<{ directory: string; label: string }> {
+  const local = join(root, "registry");
+  if (await isDirectory(local)) return { directory: local, label: "registry" };
+  const installed = dirname(createRequire(import.meta.url).resolve("@velella/ebb/package.json"));
+  return { directory: join(installed, "registry"), label: "@velella/ebb/registry" };
+}
+
+/** The rule with this id in the registries, or a clear error naming what to check. */
+async function findRule(root: string, ruleId: string): Promise<FoundRule> {
+  const { directory, label } = await ruleRegistryDirectory(root);
+  let entries;
+  try {
+    entries = await readdir(directory, { withFileTypes: true });
+  } catch {
+    throw new RuleTestError(`No rule registry was found at ${directory}. Install dependencies with npm ci.`);
+  }
+  for (const entry of entries
+    .filter(
+      (candidate) =>
+        candidate.isFile() &&
+        candidate.name.endsWith(".json") &&
+        !NOT_A_REGISTRY.has(candidate.name) &&
+        !candidate.name.endsWith("-shas.json"),
+    )
+    .sort((left, right) => left.name.localeCompare(right.name))) {
+    const file = join(directory, entry.name);
+    let value: unknown;
+    try {
+      value = JSON.parse(await readFile(file, "utf8"));
+    } catch {
+      continue;
+    }
+    if (typeof value !== "object" || value === null) continue;
+    const rules = (value as { rules?: unknown }).rules;
+    if (!Array.isArray(rules)) continue;
+    for (const rule of rules) {
+      if (typeof rule === "object" && rule !== null && (rule as { id?: unknown }).id === ruleId) {
+        return { rule: rule as Record<string, unknown>, registry: `${label}/${entry.name}` };
+      }
+    }
+  }
+  throw new RuleTestError(
+    `No rule has the id "${ruleId}" in ${label}/*.json. Rules live in @velella/ebb; a new rule is added there first.`,
+  );
+}
+
+/** The usages the rule's own matchers find in the fixture; rules without matchers observe nothing this way. */
+async function usageObservations(
+  directory: string,
+  ruleId: string,
+  rule: Record<string, unknown>,
+): Promise<FixtureObservation[]> {
+  const matchers = Array.isArray(rule.usage) ? (rule.usage as UsageMatcher[]) : [];
+  if (matchers.length === 0) return [];
+  const [analysis] = await analyzeSourceUsage(directory, [{ id: ruleId, matchers }]);
+  return (analysis?.usages ?? []).map((usage: SourceUsage) => ({
+    path: usage.location.path,
+    line: usage.location.line ?? 1,
+    label: `${usage.kind} ${usage.symbol}`,
+  }));
+}
+
+function findingObservations(findings: readonly Finding[]): FixtureObservation[] {
+  return findings.map((finding) => ({
+    path: finding.location.path,
+    line: finding.location.line ?? 1,
+    label: finding.title,
+  }));
+}
+
+/** The JSON exports under a fixture, to the depth fixtures use; the inventory importers read only these. */
+async function exportFiles(directory: string, depth = 0): Promise<string[]> {
+  if (depth > 3) return [];
+  const files: string[] = [];
+  let entries;
+  try {
+    entries = await readdir(directory, { withFileTypes: true });
+  } catch {
+    return files;
+  }
+  for (const entry of entries.sort((left, right) => left.name.localeCompare(right.name))) {
+    const path = join(directory, entry.name);
+    if (entry.isSymbolicLink()) continue;
+    if (entry.isDirectory()) files.push(...(await exportFiles(path, depth + 1)));
+    else if (entry.isFile() && entry.name.endsWith(".json")) files.push(path);
+  }
+  return files;
+}
+
+/** The items an inventory importer reads from the fixture's exports that the rule reports; a rule judged only by `offing inventory` is observed this way. */
+async function inventoryObservations(directory: string, ruleId: string): Promise<FixtureObservation[]> {
+  const files = await exportFiles(directory);
+  if (files.length === 0) return [];
+  const report = await runInventory(files);
+  return report.results
+    .filter((result) => result.check.findings.some((finding) => finding.ruleId === ruleId))
+    .map((result) => ({
+      path: relative(directory, result.item.file).replaceAll("\\", "/"),
+      line: 1,
+      label: `${result.item.resource} ${result.item.pointer}`,
+    }));
+}
+
+/** Restores the fixture's real file names in a temporary copy, then observes the rule there. */
+async function observeFixture(
+  fixture: string,
+  ruleId: string,
+  rule: Record<string, unknown>,
+): Promise<{ findings: FixtureObservation[]; usages: FixtureObservation[] }> {
+  const materialized = await mkdtemp(join(tmpdir(), "offing-rule-test-"));
+  try {
+    await cp(fixture, materialized, { recursive: true });
+    await restoreFixtureNames(materialized);
+    const scan = await scanRepository(materialized, builtInDetectors, { noCache: true });
+    const findings = [
+      ...findingObservations(scan.findings.filter((finding) => finding.ruleId === ruleId)),
+      ...(await inventoryObservations(materialized, ruleId)),
+    ];
+    const usages = findings.length > 0 ? [] : await usageObservations(materialized, ruleId, rule);
+    return { findings, usages };
+  } finally {
+    await rm(materialized, { recursive: true, force: true });
+  }
+}
+
+async function isDirectory(path: string): Promise<boolean> {
+  try {
+    return (await stat(path)).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+function describe(observations: readonly FixtureObservation[]): string[] {
+  return observations.map((observation) => `${observation.path}:${observation.line} ${observation.label}`);
+}
+
+/** Judges what a fixture produced: a match fixture must find something, a clean one nothing. */
+function fixtureOutcome(
+  kind: "match" | "clean",
+  directory: string,
+  ruleId: string,
+  findings: FixtureOutcome["findings"],
+  usages: FixtureOutcome["usages"],
+): FixtureOutcome {
+  const observed = findings.length > 0 || usages.length > 0;
+  const passed = kind === "match" ? observed : !observed;
+  const problem =
+    kind === "match"
+      ? `expected at least one finding for "${ruleId}"; got none.`
+      : `expected no findings for "${ruleId}"; got ${findings.length + usages.length}.`;
+  return { kind, directory, passed, findings, usages, ...(passed ? {} : { problem }) };
+}
+
+/**
+ * Runs the rule against both fixtures. A fixture observes a rule when the detectors report it there, or -- for a
+ * rule that declares usage matchers -- when the usage analysis finds one.
+ */
+export async function testRule(ruleId: string, options: RuleTestOptions = {}): Promise<RuleTestResult> {
+  const root = options.root ?? process.cwd();
+  const fixturesRoot = options.fixturesRoot ?? join(root, "tests", "fixtures");
+  const found = await findRule(root, ruleId);
+  const directory = join(fixturesRoot, ruleId);
+  const shownPath = (path: string): string => {
+    const relativePath = relative(root, path);
+    return relativePath.startsWith("..") ? path : relativePath.replaceAll("\\", "/");
+  };
+
+  const fixtures: FixtureOutcome[] = [];
+  for (const kind of ["match", "clean"] as const) {
+    const fixture = join(directory, kind);
+    const shown = shownPath(fixture);
+    if (!(await isDirectory(fixture))) {
+      fixtures.push({
+        kind,
+        directory: shown,
+        passed: false,
+        findings: [],
+        usages: [],
+        problem: `missing fixture: ${shown} is not a directory. Create both ${shownPath(directory)}/match and clean; see docs/RULES.md.`,
+      });
+      continue;
+    }
+    const { findings, usages } = await observeFixture(fixture, ruleId, found.rule);
+    fixtures.push(fixtureOutcome(kind, shown, ruleId, findings, usages));
+  }
+
+  return {
+    ruleId,
+    registry: found.registry,
+    passed: fixtures.every((fixture) => fixture.passed),
+    fixtures,
+  };
+}
+
+export function renderRuleTestText(result: RuleTestResult): string {
+  const lines = [`${result.passed ? "Passed" : "Failed"} ${result.ruleId} (${result.registry})`];
+  for (const fixture of result.fixtures) {
+    const observed = describe([...fixture.findings, ...fixture.usages]);
+    if (fixture.problem !== undefined) {
+      lines.push(`  ${fixture.kind}: ${fixture.problem}`);
+      if (observed.length > 0) for (const entry of observed) lines.push(`    ${entry}`);
+    } else {
+      lines.push(
+        `  ${fixture.kind}: ${observed.length === 0 ? "none" : `${observed.length} observation${observed.length === 1 ? "" : "s"}`}`,
+      );
+      for (const entry of observed) lines.push(`    ${entry}`);
+    }
+  }
+  return lines.join("\n");
+}

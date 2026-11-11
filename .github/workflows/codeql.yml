@@ -1,0 +1,54 @@
+name: CodeQL
+
+# Static analysis before merge, in the merge queue so every commit that reaches main is analyzed,
+# on main, and weekly or on demand.
+# Results go to the same code-scanning dashboard as the Scorecard and Offing
+# SARIF uploads. Pinned to full commit SHAs; see SECURITY.md for token scopes.
+on:
+  pull_request:
+  merge_group:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "41 2 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
+
+jobs:
+  analyze:
+    name: analyze (javascript-typescript)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      # Checkout the repository.
+      contents: read
+      # Read workflow metadata when a pull request comes from a fork.
+      actions: read
+      # Upload results to the code-scanning dashboard.
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          # The package is TypeScript with JavaScript sources for the Action bundle;
+          # every other language in the tree is test fixture data.
+          languages: javascript-typescript
+          # JavaScript and TypeScript need no build for extraction.
+          build-mode: none
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          category: "/language:javascript-typescript"

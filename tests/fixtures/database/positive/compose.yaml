@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: orders
+  legacy:
+    image: "mysql:5.7"
+  web:
+    build: .
+  cache:
+    image: "redis:7.0"

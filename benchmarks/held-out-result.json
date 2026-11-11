@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "offing.held-out-result.v1",
+  "scope": ["github-actions.checkout", "github-actions.setup-node", "github-actions.cache", "nodejs.runtime"],
+  "summary": {
+    "repositories": 15,
+    "truePositives": 73,
+    "falsePositives": 3,
+    "falseNegatives": 0,
+    "precision": 0.9605,
+    "recall": 1
+  },
+  "repositories": [
+    {
+      "repository": "hapijs/catbox",
+      "commit": "a234a68e528480ab29dbc83ab588e045a75bb010",
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "davidchambers/Base64.js",
+      "commit": "22192690552ba07bf035f95a5d2d1a0e2f0ced46",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "williamnie/netSend",
+      "commit": "877f7167b4ee539c7777ea62ea784832b2f5418d",
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "afcapel/stimulus-autocomplete",
+      "commit": "e2115d641cb1d212573476cda602d69b62f483b5",
+      "truePositives": 1,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "reid/node-jslint",
+      "commit": "1eefcc48116fe4fbc3b585ebd2922b3509f4f4de",
+      "truePositives": 2,
+      "falsePositives": 2,
+      "falseNegatives": 0,
+      "precision": 0.5,
+      "recall": 1,
+      "unexpected": ["nodejs.runtime:.github/workflows/test.yml:12", "nodejs.runtime:package.json:49"],
+      "missing": []
+    },
+    {
+      "repository": "xpgo/obsidian-folder-note-plugin",
+      "commit": "272bbdc9a674fd333e6a97b02611868797648585",
+      "truePositives": 1,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "komodojp/tinyld",
+      "commit": "c5f382f045c73e028eec5c5e24bb1e67d6c89def",
+      "truePositives": 6,
+      "falsePositives": 1,
+      "falseNegatives": 0,
+      "precision": 0.8571,
+      "recall": 1,
+      "unexpected": ["nodejs.runtime:package.json:123"],
+      "missing": []
+    },
+    {
+      "repository": "ridafkih/schemix",
+      "commit": "a8ca9ab6e879dcb0164eba283299e99b862a8227",
+      "truePositives": 9,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "nirsky/figma-plugin-react-template",
+      "commit": "158144e8ed0bd6da014f34a0f160881268f8bbb3",
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "Barrior/JParticles",
+      "commit": "82d82f9fcaacf077bceafd6aa37bddb606b83280",
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "mobxjs/mobx-angular",
+      "commit": "30a4b44bd153486f1ac25e4fd022db21cc2cd96e",
+      "truePositives": 4,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "mattieha/slider-button-card",
+      "commit": "877bc94e55b14c1dea0e1e419fb60255a4b1e9a3",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "DataV-Team/DataV-Vue3",
+      "commit": "f968ef287710665db45b2f01cf2cd6e090ffcc77",
+      "truePositives": 32,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "iamcco/coc-flutter",
+      "commit": "883c269eaacbeddbd4fb08e32e6a05051933429d",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    },
+    {
+      "repository": "antfu/vscode-vite",
+      "commit": "57f6c6b6978b635bd25ab511744a8b5219fcf2f1",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "unexpected": [],
+      "missing": []
+    }
+  ]
+}

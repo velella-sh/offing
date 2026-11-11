@@ -1,0 +1,419 @@
+// Generates the static lifecycle API under docs/api/v1/ from registry/*.json.
+//
+//   node dist/tools/build-data-api.js [--check] [--root DIR]
+//
+// Output: index.json, products/<id>.json (one per PURL identity), recent.json (the rules with the
+// newest review dates), types/<type>.json (the products of one PURL type), and rules/<id>.json (one
+// document per registry rule). Every document is validated against schemas/api-product.v1.schema.json
+// before it is written. Paths and object keys are sorted and nothing reads a clock, so the same registry
+// files always produce the same bytes. The tree is not committed: the Pages workflow generates it before
+// Jekyll builds so the public URLs stay the same without pull-request churn. Local `npm run build:data-api`
+// writes the same path for preview. With --check nothing is written: the command validates every document
+// against the schema and exits 1 when the registry would not produce a well-formed API. The pages site
+// serves docs/, so the output is published at https://velella.sh/offing/api/v1/.
+
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
+import { Ajv2020 } from "ajv/dist/2020.js";
+
+import { parsePurl, purlIdentity } from "@velella/ebb/purl";
+import type { PackageUrl } from "@velella/ebb/purl";
+import { lifecycleEvents, REGISTRY_V2_SCHEMA_VERSION, validateRegistryV2 } from "@velella/ebb/registry";
+import type { LifecycleEvent, RegistryV2, RegistryV2Rule } from "@velella/ebb/registry";
+
+export const API_DIRECTORY = "docs/api/v1";
+export const PRODUCTS_DIRECTORY = `${API_DIRECTORY}/products`;
+export const TYPES_DIRECTORY = `${API_DIRECTORY}/types`;
+export const RULES_DIRECTORY = `${API_DIRECTORY}/rules`;
+export const INDEX_SCHEMA_VERSION = "ebb.api-index.v1" as const;
+export const PRODUCT_SCHEMA_VERSION = "ebb.api-product.v1" as const;
+export const RECENT_SCHEMA_VERSION = "ebb.api-recent.v1" as const;
+export const TYPE_SCHEMA_VERSION = "ebb.api-type.v1" as const;
+export const RULE_SCHEMA_VERSION = "ebb.api-rule.v1" as const;
+/** The recent-changes file carries the rules with the newest review dates, at most this many. */
+export const RECENT_LIMIT = 100;
+
+export interface GeneratedFile {
+  /** Repository-relative path. */
+  path: string;
+  contents: string;
+}
+
+export interface ApiDocumentFile {
+  path: string;
+  document: ApiDocument;
+}
+
+export interface ApiIndexEntry {
+  id: string;
+  purl: string;
+  type: string;
+  namespace?: string;
+  name: string;
+  ecosystems: string[];
+  events: LifecycleEvent[];
+  earliestDeadline?: string;
+  latestReview: string;
+  rules: number;
+  path: string;
+}
+
+export interface ApiTypeIndexEntry {
+  type: string;
+  products: number;
+  rules: number;
+  path: string;
+}
+
+export interface ApiIndex {
+  schemaVersion: typeof INDEX_SCHEMA_VERSION;
+  products: ApiIndexEntry[];
+  types: ApiTypeIndexEntry[];
+  recent: string;
+  rules: number;
+  latestReview: string;
+}
+
+export interface ApiProduct {
+  schemaVersion: typeof PRODUCT_SCHEMA_VERSION;
+  id: string;
+  purl: string;
+  type: string;
+  namespace?: string;
+  name: string;
+  ecosystems: string[];
+  events: LifecycleEvent[];
+  earliestDeadline?: string;
+  latestReview: string;
+  rules: RegistryV2Rule[];
+}
+
+export interface ApiChange {
+  ruleId: string;
+  productId: string;
+  path: string;
+  purl: string;
+  ecosystem: string;
+  event: LifecycleEvent;
+  severity: RegistryV2Rule["severity"];
+  title: string;
+  deadline?: string;
+  reviewedAt: string;
+  observedAt: string;
+}
+
+export interface ApiRecent {
+  schemaVersion: typeof RECENT_SCHEMA_VERSION;
+  changes: ApiChange[];
+}
+
+export interface ApiType {
+  schemaVersion: typeof TYPE_SCHEMA_VERSION;
+  type: string;
+  products: ApiIndexEntry[];
+  rules: number;
+}
+
+export interface ApiRule {
+  schemaVersion: typeof RULE_SCHEMA_VERSION;
+  productId: string;
+  productPath: string;
+  rule: RegistryV2Rule;
+}
+
+export type ApiDocument = ApiIndex | ApiProduct | ApiRecent | ApiType | ApiRule;
+
+const compare = (left: string, right: string): number => (left < right ? -1 : left > right ? 1 : 0);
+
+/** Sorts object keys at every level, so a reformatted registry still gives identical bytes. */
+function canonical(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonical);
+  if (typeof value === "object" && value !== null) {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .filter(([, item]) => item !== undefined)
+        .sort(([left], [right]) => compare(left, right))
+        .map(([key, item]) => [key, canonical(item)]),
+    );
+  }
+  return value;
+}
+
+export const renderDocument = (document: unknown): string => `${JSON.stringify(canonical(document), null, 2)}\n`;
+
+/** A stable, file-name-safe id for one PURL identity: pkg:npm/%40angular/core becomes npm-angular-core. */
+export function productId(purl: string): string {
+  return idFor(parsePurl(purl));
+}
+
+function idFor(purl: PackageUrl): string {
+  const parts = [purl.type, ...(purl.namespace ? purl.namespace.split("/") : []), purl.name];
+  return parts
+    .join("-")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase();
+}
+
+/** The v2 registries in `directory`, in ecosystem order. Other JSON files there are not rule registries. */
+export async function loadRegistries(directory = "node_modules/@velella/ebb/registry"): Promise<RegistryV2[]> {
+  const registries: RegistryV2[] = [];
+  for (const name of (await readdir(directory)).filter((file) => file.endsWith(".json")).sort()) {
+    const value = JSON.parse(await readFile(join(directory, name), "utf8")) as { schemaVersion?: string };
+    if (value.schemaVersion === REGISTRY_V2_SCHEMA_VERSION) registries.push(validateRegistryV2(value));
+  }
+  return registries.sort((left, right) => compare(left.ecosystem, right.ecosystem));
+}
+
+const latest = (dates: readonly string[]): string => dates.reduce((newest, date) => (date > newest ? date : newest));
+const earliest = (dates: readonly string[]): string | undefined =>
+  dates.length === 0 ? undefined : dates.reduce((oldest, date) => (date < oldest ? date : oldest));
+
+interface ProductGroup {
+  id: string;
+  purl: string;
+  parsed: PackageUrl;
+  rules: RegistryV2Rule[];
+}
+
+export function buildDocuments(registries: readonly RegistryV2[]): ApiDocumentFile[] {
+  const groups = new Map<string, ProductGroup>();
+  const purlById = new Map<string, string>();
+  const ruleIds = new Set<string>();
+
+  for (const registry of registries) {
+    for (const rule of registry.rules) {
+      if (ruleIds.has(rule.id)) throw new Error(`Rule id "${rule.id}" appears in more than one registry.`);
+      ruleIds.add(rule.id);
+      const purl = purlIdentity(rule.purl);
+      const parsed = parsePurl(purl);
+      const id = idFor(parsed);
+      const existing = purlById.get(id);
+      if (existing !== undefined && existing !== purl) {
+        throw new Error(`Products "${existing}" and "${purl}" both map to id "${id}".`);
+      }
+      purlById.set(id, purl);
+      const group = groups.get(purl) ?? { id, purl, parsed, rules: [] };
+      group.rules.push(rule);
+      groups.set(purl, group);
+    }
+  }
+
+  if (groups.size === 0) throw new Error("The registry has no rules, so the API would be empty.");
+
+  const documents: ApiDocumentFile[] = [];
+  const indexEntries: ApiIndexEntry[] = [];
+  const changes: ApiChange[] = [];
+  const typeGroups = new Map<string, { products: ApiIndexEntry[]; rules: number }>();
+
+  for (const product of [...groups.values()].sort((left, right) => compare(left.id, right.id))) {
+    const rules = [...product.rules].sort((left, right) => compare(left.id, right.id));
+    const ecosystems = [...new Set(rules.map((rule) => rule.ecosystem))].sort(compare);
+    const events = lifecycleEvents.filter((event) => rules.some((rule) => rule.event === event));
+    const deadline = earliest(rules.flatMap((rule) => (rule.deadline === undefined ? [] : [rule.deadline])));
+    const latestReview = latest(rules.map((rule) => rule.provenance.reviewedAt));
+    const path = `products/${product.id}.json`;
+
+    documents.push({
+      path: `${API_DIRECTORY}/${path}`,
+      document: {
+        schemaVersion: PRODUCT_SCHEMA_VERSION,
+        id: product.id,
+        purl: product.purl,
+        type: product.parsed.type,
+        ...(product.parsed.namespace === undefined ? {} : { namespace: product.parsed.namespace }),
+        name: product.parsed.name,
+        ecosystems,
+        events,
+        ...(deadline === undefined ? {} : { earliestDeadline: deadline }),
+        latestReview,
+        rules,
+      },
+    });
+    const indexEntry: ApiIndexEntry = {
+      id: product.id,
+      purl: product.purl,
+      type: product.parsed.type,
+      ...(product.parsed.namespace === undefined ? {} : { namespace: product.parsed.namespace }),
+      name: product.parsed.name,
+      ecosystems,
+      events,
+      ...(deadline === undefined ? {} : { earliestDeadline: deadline }),
+      latestReview,
+      rules: rules.length,
+      path,
+    };
+    indexEntries.push(indexEntry);
+    const typeGroup = typeGroups.get(indexEntry.type) ?? { products: [], rules: 0 };
+    typeGroup.products.push(indexEntry);
+    typeGroup.rules += rules.length;
+    typeGroups.set(indexEntry.type, typeGroup);
+    for (const rule of rules) {
+      documents.push({
+        path: `${RULES_DIRECTORY}/${rule.id}.json`,
+        document: {
+          schemaVersion: RULE_SCHEMA_VERSION,
+          productId: product.id,
+          productPath: path,
+          rule,
+        },
+      });
+      changes.push({
+        ruleId: rule.id,
+        productId: product.id,
+        path,
+        purl: product.purl,
+        ecosystem: rule.ecosystem,
+        event: rule.event,
+        severity: rule.severity,
+        title: rule.title,
+        ...(rule.deadline === undefined ? {} : { deadline: rule.deadline }),
+        reviewedAt: rule.provenance.reviewedAt,
+        observedAt: rule.provenance.observedAt,
+      });
+    }
+  }
+
+  const typeEntries: ApiTypeIndexEntry[] = [];
+  for (const [type, group] of [...typeGroups].sort(([left], [right]) => compare(left, right))) {
+    const path = `types/${type}.json`;
+    typeEntries.push({ type, products: group.products.length, rules: group.rules, path });
+    documents.push({
+      path: `${TYPES_DIRECTORY}/${type}.json`,
+      document: {
+        schemaVersion: TYPE_SCHEMA_VERSION,
+        type,
+        products: group.products,
+        rules: group.rules,
+      },
+    });
+  }
+
+  const latestReview = latest(changes.map((change) => change.reviewedAt));
+  documents.push({
+    path: `${API_DIRECTORY}/index.json`,
+    document: {
+      schemaVersion: INDEX_SCHEMA_VERSION,
+      products: indexEntries,
+      types: typeEntries,
+      recent: "recent.json",
+      rules: ruleIds.size,
+      latestReview,
+    },
+  });
+
+  changes.sort(
+    (left, right) =>
+      compare(right.reviewedAt, left.reviewedAt) ||
+      compare(right.observedAt, left.observedAt) ||
+      compare(left.ruleId, right.ruleId),
+  );
+  documents.push({
+    path: `${API_DIRECTORY}/recent.json`,
+    document: { schemaVersion: RECENT_SCHEMA_VERSION, changes: changes.slice(0, RECENT_LIMIT) },
+  });
+
+  return documents.sort((left, right) => compare(left.path, right.path));
+}
+
+export const renderFiles = (documents: readonly ApiDocumentFile[]): GeneratedFile[] =>
+  documents.map(({ path, document }) => ({ path, contents: renderDocument(document) }));
+
+export function buildFiles(registries: readonly RegistryV2[]): GeneratedFile[] {
+  return renderFiles(buildDocuments(registries));
+}
+
+/** Validates every document against the published schema and the registry rule definition it references. */
+export async function validateDocuments(documents: readonly ApiDocumentFile[], root = "."): Promise<void> {
+  const apiSchema = JSON.parse(
+    await readFile(resolve(root, "node_modules/@velella/ebb/schemas/api-product.v1.schema.json"), "utf8"),
+  ) as object;
+  const registrySchema = JSON.parse(
+    await readFile(resolve(root, "node_modules/@velella/ebb/schemas/registry.v2.schema.json"), "utf8"),
+  ) as object;
+  const ajv = new Ajv2020({ allErrors: true });
+  ajv.addSchema(registrySchema);
+  const validate = ajv.compile(apiSchema);
+  for (const file of documents) {
+    if (!validate(file.document)) {
+      throw new Error(
+        `${file.path} does not match schemas/api-product.v1.schema.json: ${ajv.errorsText(validate.errors, { separator: "; " })}`,
+      );
+    }
+  }
+}
+
+async function jsonFilesIn(directory: string): Promise<string[]> {
+  return (await readdir(directory).catch(() => [] as string[])).filter((name) => name.endsWith(".json")).sort(compare);
+}
+
+/** Files that differ from `files`, and generated files that the registry no longer produces. */
+export async function drift(files: readonly GeneratedFile[], root = "."): Promise<string[]> {
+  const problems: string[] = [];
+  for (const file of files) {
+    const actual = await readFile(resolve(root, file.path), "utf8").catch(() => undefined);
+    if (actual === undefined) problems.push(`missing: ${file.path}`);
+    else if (actual !== file.contents) problems.push(`differs: ${file.path}`);
+  }
+  const expected = new Set(files.map((file) => file.path));
+  for (const directory of [API_DIRECTORY, PRODUCTS_DIRECTORY, TYPES_DIRECTORY, RULES_DIRECTORY]) {
+    for (const name of await jsonFilesIn(resolve(root, directory))) {
+      const path = `${directory}/${name}`;
+      if (!expected.has(path)) problems.push(`stale: ${path}`);
+    }
+  }
+  return problems.sort(compare);
+}
+
+export async function write(files: readonly GeneratedFile[], root = "."): Promise<void> {
+  const expected = new Set(files.map((file) => file.path));
+  for (const directory of [API_DIRECTORY, PRODUCTS_DIRECTORY, TYPES_DIRECTORY, RULES_DIRECTORY]) {
+    await mkdir(resolve(root, directory), { recursive: true });
+    for (const name of await jsonFilesIn(resolve(root, directory))) {
+      if (!expected.has(`${directory}/${name}`)) await rm(resolve(root, directory, name));
+    }
+  }
+  for (const file of files) await writeFile(resolve(root, file.path), file.contents);
+}
+
+function option(argv: readonly string[], name: string): string | undefined {
+  const index = argv.indexOf(name);
+  return index >= 0 ? argv[index + 1] : undefined;
+}
+
+/** True when the rendered API tree has the shape Pages must publish. */
+export function isWellFormedDataApi(files: readonly GeneratedFile[]): boolean {
+  if (files.length === 0) return false;
+  const paths = new Set(files.map((file) => file.path));
+  if (!paths.has(`${API_DIRECTORY}/index.json`) || !paths.has(`${API_DIRECTORY}/recent.json`)) return false;
+  return files.every((file) => file.contents.endsWith("\n") && !file.contents.includes("\r"));
+}
+
+export async function main(argv: readonly string[] = process.argv.slice(2), cwd = "."): Promise<number> {
+  const root = resolve(option(argv, "--root") ?? cwd);
+  const documents = buildDocuments(await loadRegistries(resolve(root, "node_modules/@velella/ebb/registry")));
+  await validateDocuments(documents, root);
+  const files = renderFiles(documents);
+  if (argv.includes("--check")) {
+    if (!isWellFormedDataApi(files)) {
+      console.error(`The static API under ${API_DIRECTORY}/ would be malformed. Fix registry/*.json.`);
+      return 1;
+    }
+    console.log(`${API_DIRECTORY}/ is buildable (${files.length} files)`);
+    return 0;
+  }
+  await write(files, root);
+  console.log(`Wrote ${files.length} files under ${API_DIRECTORY}/.`);
+  return 0;
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  try {
+    process.exitCode = await main();
+  } catch (error) {
+    process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
+    process.exitCode = 1;
+  }
+}

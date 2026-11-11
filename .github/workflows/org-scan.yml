@@ -1,0 +1,222 @@
+name: Offing organization scan
+
+# Product workflow: list every repository in a GitHub organization, scan each with Offing
+# offline, roll up findings, and optionally post a Slack or Teams digest. Call it from another
+# workflow (`workflow_call`) or run it here with workflow_dispatch. See docs/ORG_ROLLOUT.md.
+
+on:
+  workflow_call:
+    inputs:
+      organization:
+        description: >-
+          GitHub organization to scan. Defaults to the owner of the caller
+          repository. User accounts and repositories outside an organization are
+          not supported.
+        required: false
+        default: ""
+        type: string
+      fail-on-severity:
+        description: Lowest severity that fails a scan job (none, info, low, medium, high, or critical).
+        required: false
+        default: high
+        type: string
+      max-jobs:
+        description: Maximum number of repositories scanned in parallel (bounded concurrency).
+        required: false
+        default: 10
+        type: number
+    secrets:
+      github-token:
+        description: >-
+          Token with read access to the organization's repositories. Pass a
+          `GITHUB_TOKEN` when the caller can read the organization with its
+          default token; otherwise pass a dedicated read-only token.
+        required: false
+      slack-webhook-url:
+        description: >-
+          Incoming-webhook URL for a Slack channel. When set, a digest of the
+          rollup result is posted after every scan. Leave empty to skip Slack
+          notifications.
+        required: false
+      teams-webhook-url:
+        description: >-
+          Workflow-webhook URL for a Microsoft Teams channel. When set, a digest
+          of the rollup result is posted after every scan. Leave empty to skip
+          Teams notifications.
+        required: false
+  workflow_dispatch:
+    inputs:
+      organization:
+        description: GitHub organization to scan. Defaults to the owner of this repository.
+        required: false
+        default: ""
+        type: string
+      fail-on-severity:
+        description: Lowest severity that fails a scan job (none, info, low, medium, high, or critical).
+        required: false
+        default: high
+        type: string
+      max-jobs:
+        description: Maximum number of repositories scanned in parallel (bounded concurrency).
+        required: false
+        default: 10
+        type: number
+
+permissions:
+  contents: read
+
+jobs:
+  list:
+    name: List repositories
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      organization: ${{ steps.list.outputs.organization }}
+      repositories: ${{ steps.list.outputs.repositories }}
+    env:
+      GH_TOKEN: ${{ secrets.github-token || github.token }}
+    steps:
+      - name: List repositories with a read-only token
+        id: list
+        env:
+          ORGANIZATION: ${{ inputs.organization || github.repository_owner }}
+        run: |
+          repositories="$(gh api --paginate "/orgs/$ORGANIZATION/repos?per_page=100" --jq '[.[] | select(.archived == false and .disabled == false) | .name] | unique | sort')"
+          echo "organization=$ORGANIZATION" >> "$GITHUB_OUTPUT"
+          echo "repositories=$(printf '%s' "$repositories" | jq -c .)" >> "$GITHUB_OUTPUT"
+          echo "Found $(printf '%s' "$repositories" | jq 'length') scannable repositories in $ORGANIZATION."
+
+  scan:
+    name: scan ${{ matrix.repo }}
+    needs: list
+    if: ${{ needs.list.outputs.repositories != '[]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ inputs.max-jobs }}
+      matrix:
+        repo: ${{ fromJSON(needs.list.outputs.repositories) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: ${{ needs.list.outputs.organization }}/${{ matrix.repo }}
+          persist-credentials: false
+      - uses: velella-sh/offing@a0225978d6fae230468cf7efd47d4b1b3a4cbc33 # v0.7.1
+        with:
+          fail-on-severity: ${{ inputs.fail-on-severity }}
+          report-name: offing-report-${{ matrix.repo }}
+
+  notify:
+    name: Send digest
+    needs: [list, scan]
+    # Run even when some scan jobs fail so teams always get the weekly digest.
+    if: ${{ always() && needs.list.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+    steps:
+      - name: Check webhook configuration
+        id: webhooks
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.slack-webhook-url }}
+          TEAMS_WEBHOOK_URL: ${{ secrets.teams-webhook-url }}
+        run: |
+          slack="false"
+          teams="false"
+          any="false"
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            slack="true"
+            any="true"
+          fi
+          if [ -n "$TEAMS_WEBHOOK_URL" ]; then
+            teams="true"
+            any="true"
+          fi
+          {
+            echo "slack=$slack"
+            echo "teams=$teams"
+            echo "any=$any"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Download scan reports
+        if: ${{ steps.webhooks.outputs.any == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.run_id }}
+          REPO: ${{ github.repository }}
+        run: |
+          mkdir -p reports
+          gh api \
+            "/repos/$REPO/actions/runs/$RUN_ID/artifacts?per_page=100" \
+            --paginate \
+            --jq '.artifacts[] | select(.name | startswith("offing-report-")) | .id' \
+          | while read -r id; do
+              gh api "/repos/$REPO/actions/artifacts/$id/zip" > "reports/${id}.zip" 2>/dev/null || true
+              unzip -q -o "reports/${id}.zip" -d "reports/${id}" 2>/dev/null || true
+              rm -f "reports/${id}.zip"
+            done
+          echo "Downloaded $(find reports -name '*.json' | wc -l | tr -d ' ') report(s)."
+
+      - name: Build digest text
+        if: ${{ steps.webhooks.outputs.any == 'true' }}
+        run: |
+          reports=()
+          while IFS= read -r -d '' file; do
+            reports+=("$file")
+          done < <(find reports -name '*.json' -print0 | sort -z)
+          if [ "${#reports[@]}" -eq 0 ]; then
+            echo "Offing organization scan complete: no reports found." > digest.txt
+          else
+            npx --yes @velella/offing@0.7.1 rollup "${reports[@]}" > digest.txt
+          fi
+
+      - name: Post to Slack
+        if: ${{ steps.webhooks.outputs.slack == 'true' }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.slack-webhook-url }}
+        run: |
+          payload="$(jq -n --rawfile raw digest.txt '
+            ($raw | gsub("&"; "&amp;") | gsub("<"; "&lt;") | gsub(">"; "&gt;")) as $escaped |
+            (if ($escaped | length) > 3000 then (($escaped[:2989] | sub("&[a-z]{0,3}$"; "")) + "\n…truncated") else $escaped end) as $final |
+            {
+              text: "Offing organization digest",
+              blocks: [
+                {type: "header", text: {type: "plain_text", text: "Offing organization digest", emoji: false}},
+                {type: "section", text: {type: "mrkdwn", text: $final}}
+              ]
+            }
+          ')"
+          curl --silent --show-error --fail \
+            -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "$payload"
+
+      - name: Post to Teams
+        if: ${{ steps.webhooks.outputs.teams == 'true' }}
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.teams-webhook-url }}
+        run: |
+          payload="$(jq -n --rawfile raw digest.txt '{
+            type: "message",
+            attachments: [{
+              contentType: "application/vnd.microsoft.card.adaptive",
+              contentUrl: null,
+              content: {
+                "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                type: "AdaptiveCard",
+                version: "1.4",
+                body: [
+                  {type: "TextBlock", text: "Offing organization digest", weight: "Bolder", size: "Medium", wrap: true},
+                  {type: "TextBlock", text: $raw, wrap: true}
+                ]
+              }
+            }]
+          }')"
+          curl --silent --show-error --fail \
+            -X POST "$TEAMS_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "$payload"

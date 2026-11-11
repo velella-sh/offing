@@ -1,0 +1,430 @@
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
+export const skillEvalHosts = ["agent-skills", "codex", "claude"] as const;
+export type SkillEvalHost = (typeof skillEvalHosts)[number];
+export type SkillEvalKind = "positive" | "negative" | "ambiguous";
+
+export interface SkillEvalCase {
+  id: string;
+  host: SkillEvalHost;
+  kind: SkillEvalKind;
+  prompt: string;
+  shouldTrigger: boolean;
+  reason: string;
+}
+
+export interface SkillEvalCorpus {
+  schemaVersion: "offing.skill-evals.v2";
+  cases: SkillEvalCase[];
+}
+
+export interface SkillTriggerMetrics {
+  cases: number;
+  expectedTriggers: number;
+  expectedNonTriggers: number;
+  truePositives: number;
+  falsePositives: number;
+  recall: number;
+  falseTriggerRate: number;
+}
+
+const deprecationTerms = [/\bdeprecated?\b/, /\bdeprecation\b/];
+
+const lifecycleStatusTerms = [
+  /\bend[ -]of[ -](?:life|support)\b/,
+  /\beol\b/,
+  /\bout[ -]of[ -](?:support|maintenance)\b/,
+  /\bunsupported\b/,
+  /\bstill (?:support|supports)\b/,
+  /\b(?:still |actively |currently |already )?supported\b/,
+  /\b(?:still |actively |currently |already )?maintained\b/,
+  /\b(?:receiving|gets?|getting) (?:security )?(?:updates|fixes|patches|support)\b/,
+  /\bretired?\b/,
+  /\bsunset\b/,
+  /\bobsolete\b/,
+  /\bno longer (?:supported|maintained|updated)\b/,
+  /\bmaintenance (?:has )?ended\b/,
+  /\bend of maintenance\b/,
+  /\bmaintenance (?:status|window|mode)\b/,
+  /\bsupport (?:window|status)\b/,
+  /\bpast (?:its )?(?:support|end[ -]of[ -]life)\b/,
+  /\b(?:stops?|stopped) (?:receiving|getting) (?:updates|fixes|support)\b/,
+  /\blifecycle status\b/,
+];
+
+const lifecycleTerms = [...deprecationTerms, ...lifecycleStatusTerms];
+
+const repositoryDependencyTerms = [
+  /\brepositor(?:y|ies)\b/,
+  /\brepo\b/,
+  /\bruntimes?\b/,
+  /\bnode(?:\.js|js)?\b/,
+  /\bpython\b/,
+  /\bpackage(?:s| declarations?)?\b/,
+  /\bdependenc(?:y|ies)\b/,
+  /\bgithub actions?\b/,
+  /\bactions\/[\w-]+\b/,
+  /\bworkflows?\b/,
+  /\bmanifests?\b/,
+  /\bpackage\.json\b/,
+  /\brequirements(?:\.txt)?\b/,
+  /\bpyproject(?:\.toml)?\b/,
+  /\bnvmrc\b/,
+  /\blockfiles?\b/,
+  /\b(?:dockerfile|container(?: image)?|base image)\b/,
+  /\bci (?:action|pipeline|configuration)\b/,
+  /\btoolchain\b/,
+];
+
+const offingFindingTerms = [
+  /\boffing (?:finding|scan|report|context|migration|verification)\b/,
+  /\bfinding id\b/,
+  /\b(?:deprecation|lifecycle|end[ -]of[ -]life|eol|retirement|support) finding\b/,
+  /\b(?:this|that|selected|reported|same|current) finding\b/,
+  /\bmigration (?:packet|context)\b[^.?!]*\b(?:finding|deprecation|lifecycle)\b/,
+  /\b(?:finding|deprecation|lifecycle)\b[^.?!]*\bmigration (?:packet|context)\b/,
+  /\bverify (?:that )?(?:this |the )?(?:deprecation|finding|lifecycle)\b/,
+];
+
+const securityTerms = [
+  /\bvulnerabilit(?:y|ies)\b/,
+  /\bsecurity audit\b/,
+  /\bcve-?\d*/,
+  /\bsnyk\b/,
+  /\bosv\b/,
+  /\bdependabot alert\b/,
+];
+
+const sourceApiTerms = [
+  /\bdeprecated (?:[\w.-]+ ){0,2}(?:apis?|methods?|functions?|components?|props?|hooks?|endpoints?|classes?)\b/,
+  /\b(?:apis?|methods?|functions?|components?|props?|hooks?|endpoints?|classes?) (?:is|are|was|were|has been|have been) deprecated\b/,
+  /\bdeprecated (?:[\w.-]+ ){0,2}(?:scripts?|commands?|config(?:uration)?s?|settings?|fields?|features?|flags?|tests?)\b/,
+  /\b(?:scripts?|commands?|config(?:uration)?s?|settings?|fields?|features?|flags?|tests?) (?:is|are|was|were|has been|have been) deprecated\b/,
+  /\bdeprecat(?:e|es|ing) (?:the |our |this )?(?:[\w.-]+ ){0,2}(?:apis?|methods?|functions?|components?|props?|hooks?|endpoints?|classes?|scripts?|commands?|config(?:uration)?s?|settings?|fields?|features?|flags?|tests?)\b/,
+];
+
+const routineUpgradeTerms = [
+  /\b(?:upgrade|update|bump) (?:all |every |the )?(?:dependencies|dependency|packages?)\b/,
+  /\blatest (?:version|versions|release)\b/,
+  /\brefresh (?:the )?lockfile\b/,
+  /\brenovate\b/,
+];
+
+function matchesAny(prompt: string, patterns: RegExp[]): boolean {
+  return patterns.some((pattern) => pattern.test(prompt));
+}
+
+/**
+ * Deterministic proxy for metadata-only skill selection. It intentionally uses
+ * concepts stated in the skill description, not case IDs or expected labels.
+ * A lifecycle status is required for source-API and configuration requests to
+ * count as triggers, so a deprecated hook or npm script stays a non-goal even
+ * when the repository uses a supported runtime.
+ */
+export function classifySkillTrigger(prompt: string): boolean {
+  const normalized = prompt.toLowerCase().replaceAll("’", "'");
+  const hasLifecycle = matchesAny(normalized, lifecycleTerms);
+  const hasLifecycleStatus = matchesAny(normalized, lifecycleStatusTerms);
+  const hasRepositoryDependency = matchesAny(normalized, repositoryDependencyTerms);
+  const hasOffingFinding = matchesAny(normalized, offingFindingTerms);
+
+  if (matchesAny(normalized, securityTerms) && !hasLifecycle && !hasOffingFinding) {
+    return false;
+  }
+  if (matchesAny(normalized, sourceApiTerms) && !hasLifecycleStatus && !hasOffingFinding) {
+    return false;
+  }
+  if (matchesAny(normalized, routineUpgradeTerms) && !hasLifecycle && !hasOffingFinding) {
+    return false;
+  }
+
+  return hasOffingFinding || (hasLifecycle && hasRepositoryDependency);
+}
+
+// --- Dependency guard: should an agent check a dependency before this task? -------------------------------
+
+export interface DependencyEvalCorpus {
+  schemaVersion: "offing.dependency-guard-evals.v1";
+  cases: SkillEvalCase[];
+}
+
+const packageManagerCommand =
+  /\b(?:npm|pnpm|yarn|bun|pip3?|pipx|poetry|uv|cargo|gem|go)\s+(?:install|add|i|get)\b(?:\s+-{1,2}[\w-]+)*\s+(?!and\b|then\b|the\b|before\b|to\b|from\b|in\b|so\b|if\b|for\b|again\b)[@\w.\/-]*[a-z]/;
+const addVerb =
+  /\b(?:add|install|introduce|include|adopt|pull in|bring in|switch to|swap in|pick|choose|start using|use)\b/;
+const dependencyNoun = /\b(?:package|library|dependency|dependencies|github action|action|npm package|pypi package)\b/;
+const namedPackageAfterVerb =
+  /\b(?:install|pull in|bring in|introduce|adopt|include|start using)\s+(?:the |a |an )?(?!all\b|dependencies\b|packages\b)[@\w.\/-]*[-.@\/][@\w.\/-]+/;
+const addToManifest =
+  /\b(?:add|put|append)\b[^.?!]{0,50}\bto\b[^.?!]{0,20}\b(?:requirements(?:\.txt)?|package\.json|pyproject(?:\.toml)?|dependencies|devdependencies|go\.mod|cargo\.toml)\b/;
+const actionReference = /\b(?:add|use|include|insert)\b[^.?!]{0,40}\b(?:actions\/[\w.-]+|[\w.-]+\/[\w.-]+@v?\d)/;
+const choosePackage =
+  /\b(?:which|what) (?:package|library|module)\b[^.?!]*\b(?:use|pick|choose|adopt)\b|\breplace\b[^.?!]{0,40}\bwith\b[^.?!]{0,30}\b(?:package|library|module)\b/;
+const notAnAddition = [
+  /\bdependency injection\b/,
+  /\b(?:from the lockfile|project's dependencies|all (?:the )?dependencies|declared dependencies)\b/,
+  /\b(?:upgrade|update|bump)\b[^.?!]*\b(?:latest|all)\b/,
+  /\b(?:remove|uninstall|delete|drop)\b[^.?!]*\b(?:package|packages|dependency|dependencies)\b(?![^.?!]*\b(?:add|install|pick|choose|replace)\b)/,
+];
+
+/**
+ * Deterministic proxy for the `offing-check-before-add` Skill description: the task adds a new
+ * package, runtime, or action, or picks one. Removals, installs of what is already declared, routine
+ * upgrades, repository lifecycle scans, and unrelated work do not trigger it. Like the lifecycle
+ * proxy above, it encodes the concepts the skill states, not case IDs.
+ */
+export function classifyDependencyAddition(prompt: string): boolean {
+  const normalized = prompt.toLowerCase().replaceAll("’", "'");
+  if (
+    matchesAny(normalized, notAnAddition) &&
+    !packageManagerCommand.test(normalized) &&
+    !addToManifest.test(normalized)
+  ) {
+    return choosePackage.test(normalized);
+  }
+  const strongAdd =
+    packageManagerCommand.test(normalized) ||
+    addToManifest.test(normalized) ||
+    actionReference.test(normalized) ||
+    choosePackage.test(normalized) ||
+    namedPackageAfterVerb.test(normalized);
+  if (strongAdd) {
+    return true;
+  }
+  // Weak "use/add … action/package" phrasing must not steal repository lifecycle prompts
+  // ("may use an unsupported action") from offing. Positive status words
+  // like "maintained" still appear when picking a package to add, so they stay allowed.
+  const lifecycleInvestigation = [
+    ...deprecationTerms,
+    /\bend[ -]of[ -](?:life|support)\b/,
+    /\beol\b/,
+    /\bout[ -]of[ -](?:support|maintenance)\b/,
+    /\bunsupported\b/,
+    /\bretired?\b/,
+    /\bsunset\b/,
+    /\bobsolete\b/,
+    /\bno longer (?:supported|maintained|updated)\b/,
+    /\bmaintenance (?:has )?ended\b/,
+    /\bend of maintenance\b/,
+    /\bpast (?:its )?(?:support|end[ -]of[ -]life)\b/,
+    /\blifecycle status\b/,
+  ];
+  if (matchesAny(normalized, lifecycleInvestigation)) {
+    return false;
+  }
+  return addVerb.test(normalized) && dependencyNoun.test(normalized.replace(/package\.json/g, ""));
+}
+
+export function calculateMetrics(
+  cases: SkillEvalCase[],
+  classify: (prompt: string) => boolean = classifySkillTrigger,
+): SkillTriggerMetrics {
+  const predictions = cases.map((item) => ({
+    expected: item.shouldTrigger,
+    actual: classify(item.prompt),
+  }));
+  const expectedTriggers = predictions.filter((item) => item.expected).length;
+  const expectedNonTriggers = predictions.length - expectedTriggers;
+  const truePositives = predictions.filter((item) => item.expected && item.actual).length;
+  const falsePositives = predictions.filter((item) => !item.expected && item.actual).length;
+
+  return {
+    cases: predictions.length,
+    expectedTriggers,
+    expectedNonTriggers,
+    truePositives,
+    falsePositives,
+    recall: expectedTriggers === 0 ? 0 : truePositives / expectedTriggers,
+    falseTriggerRate: expectedNonTriggers === 0 ? 0 : falsePositives / expectedNonTriggers,
+  };
+}
+
+export async function loadSkillEvalCorpus(): Promise<SkillEvalCorpus> {
+  return JSON.parse(
+    await readFile(resolve("skills/offing/evals/cases.json"), "utf8"),
+  ) as SkillEvalCorpus;
+}
+
+export async function loadDependencyEvalCorpus(): Promise<DependencyEvalCorpus> {
+  return JSON.parse(
+    await readFile(resolve("skills/offing-check-before-add/evals/cases.json"), "utf8"),
+  ) as DependencyEvalCorpus;
+}
+
+export interface UpgradeRuntimeActionEvalCorpus {
+  schemaVersion: "offing.upgrade-runtime-action-evals.v1";
+  cases: SkillEvalCase[];
+}
+
+const upgradeIntent = /\b(?:upgrade|bump|update|raise|migrate|move|replace)\b/;
+const runtimeUpgradeTarget =
+  /\b(?:runtimes?|node(?:\.js|js)?|python|interpreter|engines(?:\.node)?|(?:\.?nvmrc)|requires-python|(?:\.?python-version)|(?:dockerfile|container(?: image)?|base image))\b/;
+const actionUpgradeTarget =
+  /\bgithub actions?\b|\bactions\/[\w.-]+\b|\bworkflow actions?\b|\b(?:upgrade|bump|update|migrate|replace|find)\b[^.?!]{0,40}\bactions?\b|\bactions?\b[^.?!]{0,40}\b(?:ci|workflow|workflows|pinned|sunset|retired|deprecated|end[ -]of[ -]life)\b/;
+const packageWideUpgrade =
+  /\b(?:upgrade|update|bump)\b[^.?!]*\b(?:all |every )?(?:dependencies|dependency|packages?)\b(?![^.?!]*\b(?:runtime|node|python|action|actions|workflow)\b)/;
+const packageNameBump =
+  /\b(?:upgrade|bump|update)\b[^.?!]{0,30}\b(?!node|python|runtime|actions?(?:\/|\b)|github)[@\w.-]*[a-z][@\w.\/-]*\b(?:to|for)\b/;
+
+/**
+ * Deterministic proxy for `offing-upgrade-runtime-action`: the task upgrades an already-declared
+ * runtime or GitHub Action. Additions, whole-repo lifecycle discovery without an upgrade ask, and
+ * routine package bumps stay out. Encodes the skill description concepts, not case IDs.
+ */
+export function classifyRuntimeActionUpgrade(prompt: string): boolean {
+  const normalized = prompt.toLowerCase().replaceAll("’", "'");
+  if (classifyDependencyAddition(normalized)) {
+    return false;
+  }
+  if (
+    packageWideUpgrade.test(normalized) &&
+    !runtimeUpgradeTarget.test(normalized) &&
+    !actionUpgradeTarget.test(normalized)
+  ) {
+    return false;
+  }
+  if (
+    packageNameBump.test(normalized) &&
+    !runtimeUpgradeTarget.test(normalized) &&
+    !actionUpgradeTarget.test(normalized)
+  ) {
+    return false;
+  }
+  if (!upgradeIntent.test(normalized)) {
+    return false;
+  }
+  return runtimeUpgradeTarget.test(normalized) || actionUpgradeTarget.test(normalized);
+}
+
+export async function loadUpgradeRuntimeActionEvalCorpus(): Promise<UpgradeRuntimeActionEvalCorpus> {
+  return JSON.parse(
+    await readFile(resolve("skills/offing-upgrade-runtime-action/evals/cases.json"), "utf8"),
+  ) as UpgradeRuntimeActionEvalCorpus;
+}
+
+/** Share of upgrade-job positives that `offing` already covers (decision threshold: 80%). */
+export function deprecationCoverageOnUpgradeJob(cases: SkillEvalCase[]): {
+  cases: number;
+  covered: number;
+  rate: number;
+  misses: string[];
+} {
+  const positives = cases.filter((item) => item.shouldTrigger);
+  const misses = positives.filter((item) => !classifySkillTrigger(item.prompt)).map((item) => item.id);
+  const covered = positives.length - misses.length;
+  return {
+    cases: positives.length,
+    covered,
+    rate: positives.length === 0 ? 0 : covered / positives.length,
+    misses,
+  };
+}
+
+async function run(): Promise<void> {
+  const corpus = await loadSkillEvalCorpus();
+  const overall = calculateMetrics(corpus.cases);
+  const byHost = Object.fromEntries(
+    skillEvalHosts.map((host) => [host, calculateMetrics(corpus.cases.filter((item) => item.host === host))]),
+  );
+  const failures = corpus.cases
+    .filter((item) => classifySkillTrigger(item.prompt) !== item.shouldTrigger)
+    .map((item) => item.id);
+  const guardrail = await loadDependencyEvalCorpus();
+  const guardrailOverall = calculateMetrics(guardrail.cases, classifyDependencyAddition);
+  const guardrailByHost = Object.fromEntries(
+    skillEvalHosts.map((host) => [
+      host,
+      calculateMetrics(
+        guardrail.cases.filter((item) => item.host === host),
+        classifyDependencyAddition,
+      ),
+    ]),
+  );
+  const guardrailFailures = guardrail.cases
+    .filter((item) => classifyDependencyAddition(item.prompt) !== item.shouldTrigger)
+    .map((item) => item.id);
+  const upgradeJob = await loadUpgradeRuntimeActionEvalCorpus();
+  const upgradeOverall = calculateMetrics(upgradeJob.cases, classifyRuntimeActionUpgrade);
+  const upgradeByHost = Object.fromEntries(
+    skillEvalHosts.map((host) => [
+      host,
+      calculateMetrics(
+        upgradeJob.cases.filter((item) => item.host === host),
+        classifyRuntimeActionUpgrade,
+      ),
+    ]),
+  );
+  const upgradeFailures = upgradeJob.cases
+    .filter((item) => classifyRuntimeActionUpgrade(item.prompt) !== item.shouldTrigger)
+    .map((item) => item.id);
+  const deprecationOnUpgradeJob = deprecationCoverageOnUpgradeJob(upgradeJob.cases);
+  const lifecycleOnAddPrompts = guardrail.cases.filter((item) => item.shouldTrigger);
+  const addOnLifecyclePrompts = corpus.cases.filter((item) => item.shouldTrigger);
+  const lifecycleFalseOnAdd = lifecycleOnAddPrompts.filter((item) => classifySkillTrigger(item.prompt));
+  const addFalseOnLifecycle = addOnLifecyclePrompts.filter((item) => classifyDependencyAddition(item.prompt));
+  const upgradeOnAdd = lifecycleOnAddPrompts.filter((item) => classifyRuntimeActionUpgrade(item.prompt));
+  const addOnUpgrade = upgradeJob.cases.filter((item) => item.shouldTrigger && classifyDependencyAddition(item.prompt));
+  const result = {
+    schemaVersion: corpus.schemaVersion,
+    skill: "offing",
+    overall,
+    byHost,
+    failures,
+    dependencyGuard: {
+      schemaVersion: guardrail.schemaVersion,
+      skill: "offing-check-before-add",
+      overall: guardrailOverall,
+      byHost: guardrailByHost,
+      failures: guardrailFailures,
+    },
+    upgradeRuntimeAction: {
+      schemaVersion: upgradeJob.schemaVersion,
+      skill: "offing-upgrade-runtime-action",
+      overall: upgradeOverall,
+      byHost: upgradeByHost,
+      failures: upgradeFailures,
+      deprecationCoverage: {
+        threshold: 0.8,
+        ...deprecationOnUpgradeJob,
+        decision:
+          deprecationOnUpgradeJob.rate < 0.8
+            ? "added-offing-upgrade-runtime-action"
+            : "kept-offing-only",
+      },
+    },
+    separation: {
+      lifecycleFalseTriggersOnAddPrompts: lifecycleFalseOnAdd.map((item) => item.id),
+      checkBeforeAddFalseTriggersOnLifecyclePrompts: addFalseOnLifecycle.map((item) => item.id),
+      upgradeFalseTriggersOnAddPrompts: upgradeOnAdd.map((item) => item.id),
+      checkBeforeAddFalseTriggersOnUpgradePrompts: addOnUpgrade.map((item) => item.id),
+    },
+  };
+
+  console.log(JSON.stringify(result, null, 2));
+  if (
+    corpus.cases.length < 50 ||
+    overall.recall < 0.9 ||
+    overall.falseTriggerRate >= 0.05 ||
+    Object.values(byHost).some((metrics) => metrics.recall < 0.9 || metrics.falseTriggerRate >= 0.05) ||
+    guardrail.cases.length < 40 ||
+    guardrailOverall.recall < 0.9 ||
+    guardrailOverall.falseTriggerRate >= 0.05 ||
+    Object.values(guardrailByHost).some((metrics) => metrics.recall < 0.9 || metrics.falseTriggerRate >= 0.05) ||
+    upgradeJob.cases.length < 40 ||
+    upgradeOverall.recall < 0.9 ||
+    upgradeOverall.falseTriggerRate >= 0.05 ||
+    Object.values(upgradeByHost).some((metrics) => metrics.recall < 0.9 || metrics.falseTriggerRate >= 0.05) ||
+    lifecycleFalseOnAdd.length > 0 ||
+    addFalseOnLifecycle.length > 0 ||
+    upgradeOnAdd.length > 0 ||
+    addOnUpgrade.length > 0
+  ) {
+    process.exitCode = 1;
+  }
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  await run();
+}

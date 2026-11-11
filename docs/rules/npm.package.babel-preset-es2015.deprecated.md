@@ -1,0 +1,158 @@
+---
+title: "babel-preset-es2015 is deprecated — dates, impact, migration"
+description: "npm recommends babel-preset-env instead of babel-preset-es2015."
+layout: doc
+permalink: "/rules/npm.package.babel-preset-es2015.deprecated.html"
+canonical_url: "https://velella.sh/offing/rules/npm.package.babel-preset-es2015.deprecated.html"
+image: "/assets/og/npm.package.babel-preset-es2015.deprecated.svg"
+review_date: "2026-10-16"
+last_modified_at: "2026-10-16"
+json_twin: "/rules/npm.package.babel-preset-es2015.deprecated.json"
+---
+
+# babel-preset-es2015 is deprecated
+
+**Deprecated.** The source gives no day. Replacement: @babel/preset-env. Source: [babel-preset-es2015 package deprecation notice](https://www.npmjs.com/package/babel-preset-es2015).
+
+Check a version:
+
+```bash
+offing check pkg:npm/babel-preset-es2015
+```
+
+npm recommends babel-preset-env instead of babel-preset-es2015.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `npm` |
+| Component | `pkg:npm/babel-preset-es2015` |
+| Affected versions | `vers:npm/*` |
+| Date from the source | The source gives no day |
+| Replacement | @babel/preset-env |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi, drafted by the `npm-deprecated` importer |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `npm.package.babel-preset-es2015.deprecated` |
+
+## Sources
+
+- [babel-preset-es2015 package deprecation notice](https://www.npmjs.com/package/babel-preset-es2015) (accessed 2026-10-16)
+- [babel-preset-es2015 registry metadata](https://registry.npmjs.org/babel-preset-es2015/latest) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve the JavaScript syntax targets and emitted runtime behavior required by supported environments.
+
+**Steps**
+
+1. **Replace the Babel preset.** Replace babel-preset-es2015 with @babel/preset-env and update Babel configuration to use @babel/preset-env.
+2. **Configure supported targets.** Set explicit target environments so the replacement emits only the transforms and polyfill behavior the project requires.
+
+**Verification**
+
+- `npm run build --if-present`: Build the project and verify the replacement Babel output.
+
+## Detected by
+
+The `npm` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [abab is deprecated](npm.package.abab.deprecated.html)
+- [@angular/core v18 and older are no longer supported](npm.package.angular.core.v18-and-older.end-of-support.html)
+- [@angular/core v19 is no longer supported](npm.package.angular.core.v19.end-of-support.html)
+- [@angular/core v20 reaches end of life on 2026-11-28](npm.package.angular.core.v20.scheduled-end-of-life.html)
+- [@angular/core v21 reaches end of life on 2027-06-30](npm.package.angular.core.v21.scheduled-end-of-life.html)
+- [@angular/core v22 reaches end of life on 2028-06-30](npm.package.angular.core.v22.scheduled-end-of-life.html)
+- [are-we-there-yet is no longer supported](npm.package.are-we-there-yet.eol.html)
+- [babel-eslint is deprecated](npm.package.babel-eslint.deprecated.html)
+
+
+## Data
+
+This page is generated from [`registry/npm.json`](https://github.com/velella-sh/offing/blob/main/registry/npm.json), rule `npm.package.babel-preset-es2015.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/npm.package.babel-preset-es2015.deprecated.html",
+      "url": "https://velella.sh/offing/rules/npm.package.babel-preset-es2015.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/npm.package.babel-preset-es2015.deprecated.html",
+      "headline": "babel-preset-es2015 is deprecated — dates, impact, migration",
+      "description": "npm recommends babel-preset-env instead of babel-preset-es2015.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "deprecated",
+        "npm",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "babel-preset-es2015 is deprecated",
+        "identifier": "pkg:npm/babel-preset-es2015"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "babel-preset-es2015 package deprecation notice",
+          "url": "https://www.npmjs.com/package/babel-preset-es2015"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "babel-preset-es2015 registry metadata",
+          "url": "https://registry.npmjs.org/babel-preset-es2015/latest"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/npm.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/npm.package.babel-preset-es2015.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/npm.package.babel-preset-es2015.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:npm/babel-preset-es2015?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:npm/*. Source: babel-preset-es2015 package deprecation notice (https://www.npmjs.com/package/babel-preset-es2015)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:npm/babel-preset-es2015?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "@babel/preset-env"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:npm/babel-preset-es2015?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:npm/babel-preset-es2015."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

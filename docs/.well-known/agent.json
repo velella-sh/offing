@@ -1,0 +1,88 @@
+{
+  "protocolVersion": "0.2.5",
+  "name": "Offing",
+  "description": "Local-first deprecation intelligence for software repositories. Finds end-of-life and deprecated runtimes, packages, and GitHub Actions at exact file locations, with authoritative sources and migration context. Runs on your machine as a stdio MCP server; scans never use the network.",
+  "version": "0.1.0",
+  "url": "https://velella.sh/offing/",
+  "documentationUrl": "https://velella.sh/offing/MCP.html",
+  "iconUrl": "https://velella.sh/offing/assets/brand/offing-mark-adaptive.svg",
+  "provider": {
+    "organization": "arminazimi",
+    "url": "https://github.com/velella-sh/offing"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["application/json", "text/plain"],
+  "skills": [
+    {
+      "id": "scan_repository",
+      "name": "Scan repository",
+      "description": "Run all built-in Offing detectors against a local repository and return the complete versioned scan result.",
+      "tags": ["deprecation", "end-of-life", "scan", "mcp"]
+    },
+    {
+      "id": "list_deprecations",
+      "name": "List deprecations",
+      "description": "Run a fresh local scan and return a compact, versioned list of lifecycle findings.",
+      "tags": ["deprecation", "end-of-life", "list", "mcp"]
+    },
+    {
+      "id": "explain_deprecation",
+      "name": "Explain deprecation",
+      "description": "Run a fresh local scan and return one complete evidence-backed finding by ID.",
+      "tags": ["deprecation", "evidence", "explain", "mcp"]
+    },
+    {
+      "id": "create_migration_context",
+      "name": "Create migration context",
+      "description": "Create a validated, rule-specific migration packet for one finding from a fresh local scan.",
+      "tags": ["migration", "context", "mcp"]
+    },
+    {
+      "id": "verify_migration",
+      "name": "Verify migration",
+      "description": "Re-scan locally and check whether a finding observed earlier in this MCP session is gone.",
+      "tags": ["migration", "verify", "mcp"]
+    },
+    {
+      "id": "check_dependency",
+      "name": "Check dependency",
+      "description": "Check one package against Offing's lifecycle rules before adding it. no-data means no rule exists, not that the package is safe.",
+      "tags": ["dependency", "check", "guardrail", "mcp"]
+    },
+    {
+      "id": "check_upgrade",
+      "name": "Check upgrade",
+      "description": "Answer from repository files whether a project can move to a target runtime, with exact evidence. unknown means no evidence, not safety.",
+      "tags": ["upgrade", "runtime", "readiness", "mcp"]
+    },
+    {
+      "id": "check_snippet",
+      "name": "Check snippet",
+      "description": "Check one file snippet before writing it: run all built-in detectors against the intended path and content in an isolated temporary directory, and return the findings.",
+      "tags": ["snippet", "check", "guardrail", "mcp"]
+    },
+    {
+      "id": "forecast_repository",
+      "name": "Forecast repository",
+      "description": "List dated end-of-life events in the next months that affect findings in this repository.",
+      "tags": ["forecast", "end-of-life", "mcp"]
+    },
+    {
+      "id": "plan_migrations",
+      "name": "Plan migrations",
+      "description": "Return a migration plan with waves of independent tasks a coordinating agent can hand out.",
+      "tags": ["plan", "migration", "waves", "mcp"]
+    },
+    {
+      "id": "recommend_version",
+      "name": "Recommend version",
+      "description": "Say which release line of a runtime, image, action, or package to write today, from bundled lifecycle data only.",
+      "tags": ["recommend", "version", "lifecycle", "mcp"]
+    }
+  ]
+}

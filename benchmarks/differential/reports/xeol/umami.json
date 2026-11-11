@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "offing.differential.xeol.v1",
+  "repository": "umami-software/umami",
+  "summary": {
+    "agree": 1,
+    "offing-only": 4,
+    "xeol-only": 1
+  },
+  "comparisons": [
+    {
+      "product": "next",
+      "offing": ["npm.package.next.13.support-end"],
+      "xeol": [
+        {
+          "cycle": "13",
+          "version": "13.2.4",
+          "eol": "2024-12-21",
+          "path": "yarn.lock"
+        }
+      ],
+      "outcome": "agree",
+      "note": "Both report a release of this product as past end of life."
+    },
+    {
+      "product": "nodejs",
+      "offing": ["container.node.eol-21-and-older"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "postgresql",
+      "offing": ["container.postgres.eol-13-and-older"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "react-beautiful-dnd",
+      "offing": ["npm.package.react-beautiful-dnd.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "rollup-plugin-terser",
+      "offing": ["npm.package.rollup-plugin-terser.deprecated"],
+      "xeol": [],
+      "outcome": "offing-only",
+      "note": "xeol reports nothing for this product; it did not read the file Offing read, or its database has no entry."
+    },
+    {
+      "product": "vue",
+      "offing": [],
+      "xeol": [
+        {
+          "cycle": "3.2",
+          "version": "3.2.36",
+          "eol": "2023-05-11",
+          "path": "yarn.lock"
+        }
+      ],
+      "outcome": "xeol-only",
+      "note": "xeol reports a release of this product as past end of life; Offing has no rule for it."
+    }
+  ],
+  "notComparable": ["database.postgresql", "github-actions.checkout", "github-actions.setup-node"]
+}

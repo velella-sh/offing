@@ -1,0 +1,157 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+
+import {
+  badgeSnippet,
+  badgeState,
+  badgeStyles,
+  contrastRatio,
+  readableTextColor,
+  renderBadgeSvg,
+  repositoryFromRemote,
+} from "../src/badge.js";
+import { severityValues } from "../src/domain.js";
+import type { Finding, Severity } from "../src/domain.js";
+import { EXIT_CODES, type CommandContext, type FailureClass } from "../src/commands/types.js";
+import { runCli } from "./cli-runner.js";
+
+const finding = (severity: Severity) => ({ severity }) as unknown as Finding;
+const at = (findings: Finding[], stale = false) =>
+  ({ findings, data: { stale } }) as unknown as Parameters<typeof badgeState>[0];
+
+const samples = [
+  { name: "clean", result: at([]), expired: false },
+  { name: "stale", result: at([], true), expired: false },
+  ...severityValues.map((severity) => ({ name: severity, result: at([finding(severity)]), expired: false })),
+  { name: "expired", result: at([finding("high")]), expired: true },
+];
+
+test("every badge state keeps its message text at WCAG AA contrast", () => {
+  for (const sample of samples) {
+    const background = badgeState(sample.result, sample.expired).color;
+    const ratio = contrastRatio(background, readableTextColor(background));
+    assert.ok(ratio >= 4.5, `${sample.name}: ${ratio.toFixed(2)}:1 is below WCAG AA`);
+  }
+  assert.ok(contrastRatio("#0C1110", "#FFFFFF") >= 4.5, "the label area keeps white text readable");
+});
+
+test("every style renders a deterministic, self-contained SVG for every state", () => {
+  for (const style of badgeStyles) {
+    for (const sample of samples) {
+      const svg = renderBadgeSvg(sample.result, sample.expired, style);
+      assert.match(svg, /^<svg [^>]*role="img" aria-label="[^"]+">/);
+      assert.match(svg, /<title>[^<]+<\/title>/);
+      assert.match(svg, /<\/svg>$/);
+      assert.doesNotMatch(svg, /<script|<image|\b(?:href|src)=|url\(http/i, "no script or external reference");
+      assert.equal(
+        renderBadgeSvg(sample.result, sample.expired, style),
+        svg,
+        `${style}/${sample.name} is not deterministic`,
+      );
+    }
+  }
+});
+
+test("flat and flat-square differ only in the corner radius", () => {
+  const result = at([finding("medium")]);
+  const flat = renderBadgeSvg(result, false, "flat");
+  const square = renderBadgeSvg(result, false, "flat-square");
+  assert.match(flat, /height="20"/);
+  assert.match(flat, /rx="3"/);
+  assert.match(square, /height="20"/);
+  assert.match(square, /rx="0"/);
+  assert.doesNotMatch(square, /rx="3"/);
+  assert.equal(flat, square.replace(/rx="0"/, 'rx="3"'));
+});
+
+test("for-the-badge is larger and uppercases the label and message", () => {
+  const svg = renderBadgeSvg(at([finding("high")]), false, "for-the-badge");
+  assert.match(svg, /height="28"/);
+  assert.match(svg, />OFFING<\/text>/);
+  assert.match(svg, />1 HIGH<\/text>/);
+  assert.match(svg, /aria-label="offing: 1 high"/, "the accessible name keeps the original wording");
+});
+
+test("prints README markup for every snippet format", () => {
+  const image = "https://raw.githubusercontent.com/velella-sh/offing/offing-badge/offing-badge.svg";
+  const target = "https://github.com/velella-sh/offing";
+  assert.equal(badgeSnippet("velella-sh/offing", "markdown"), `[![offing](${image})](${target})`);
+  assert.equal(
+    badgeSnippet("velella-sh/offing", "html"),
+    `<a href="${target}"><img alt="offing" src="${image}"></a>`,
+  );
+  assert.equal(
+    badgeSnippet("velella-sh/offing", "rst"),
+    `.. image:: ${image}\n   :target: ${target}\n   :alt: offing`,
+  );
+  assert.match(
+    badgeSnippet("velella-sh/offing", "markdown", "badges/offing"),
+    /\/badges\/offing\/offing-badge\.svg/,
+  );
+});
+
+test("escapes a hostile repository name instead of emitting it into the markup", () => {
+  const html = badgeSnippet('bad"name/rep<o', "html");
+  assert.ok(html.includes("bad%22name/rep%3Co"), html);
+  assert.equal(html.includes("<script"), false);
+  assert.equal(html.includes('<img alt="offing" src="https://raw.githubusercontent.com/bad"'), false);
+  assert.throws(() => badgeSnippet("owner/repo/extra", "markdown"), /expected owner\/name/);
+  assert.throws(() => badgeSnippet("owner/", "markdown"), /expected owner\/name/);
+});
+
+test("reads owner and name from a GitHub remote URL", () => {
+  assert.equal(repositoryFromRemote("https://github.com/velella-sh/offing.git"), "velella-sh/offing");
+  assert.equal(repositoryFromRemote("git@github.com:velella-sh/offing.git\n"), "velella-sh/offing");
+  assert.equal(repositoryFromRemote("ssh://git@github.com/velella-sh/offing"), "velella-sh/offing");
+  assert.equal(repositoryFromRemote("https://gitlab.com/velella-sh/offing.git"), undefined);
+  assert.equal(repositoryFromRemote("not a url"), undefined);
+});
+
+test("the CLI prints the snippet it was asked for", async () => {
+  const printed = await runCli(["badge", "--repo", "velella-sh/offing", "--snippet", "markdown"]);
+  assert.equal(printed.code, 0);
+  assert.equal(printed.stdout.trim(), badgeSnippet("velella-sh/offing", "markdown"));
+  assert.equal((await runCli(["badge", "--repo", "velella-sh/offing", "--snippet", "asciidoc"])).code, 2);
+});
+
+// Calling the handler directly keeps flag-parsing coverage on the command module itself.
+test("the badge handler reads --repo and --branch in-process", async () => {
+  const { command } = await import("../src/commands/badge.js");
+  const failures: string[] = [];
+  const ctx = {
+    jsonErrors: false,
+    debug: false,
+    help: "",
+    exitCodes: EXIT_CODES,
+    fail: (_kind: FailureClass, message: string) => {
+      failures.push(message);
+      return EXIT_CODES.usage;
+    },
+    failActionable: () => EXIT_CODES.usage,
+  } as unknown as CommandContext;
+
+  const written: string[] = [];
+  const write = process.stdout.write;
+  process.stdout.write = ((chunk: string | Uint8Array) => {
+    written.push(String(chunk));
+    return true;
+  }) as typeof process.stdout.write;
+  let code: number;
+  try {
+    code = await command.run(
+      ["--repo", "velella-sh/offing", "--snippet", "markdown", "--branch", "badges/offing"],
+      ctx,
+    );
+  } finally {
+    process.stdout.write = write;
+  }
+  assert.equal(code, 0);
+  assert.deepEqual(failures, []);
+  assert.equal(written.join("").trim(), badgeSnippet("velella-sh/offing", "markdown", "badges/offing"));
+
+  assert.equal(
+    await command.run(["--repo", "velella-sh/offing", "--snippet", "markdown", "--branch"], ctx),
+    EXIT_CODES.usage,
+  );
+  assert.match(failures[0]!, /Usage: offing badge/);
+});

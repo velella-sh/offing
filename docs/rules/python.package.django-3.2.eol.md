@@ -1,0 +1,183 @@
+---
+title: "Django 3.2 LTS is end-of-life — dates, impact, migration"
+description: "The Django project lists the 3.2 release series as unsupported: it no longer receives security updates or bug fixes, and its end of extended support was April 1, 2024."
+layout: doc
+permalink: "/rules/python.package.django-3.2.eol.html"
+canonical_url: "https://velella.sh/offing/rules/python.package.django-3.2.eol.html"
+image: "/assets/og/python.package.django-3.2.eol.svg"
+review_date: "2026-10-21"
+last_modified_at: "2026-10-21"
+json_twin: "/rules/python.package.django-3.2.eol.json"
+---
+
+# Django 3.2 LTS is end-of-life
+
+**End of life** as of 2024-04-01. Replacement: Django 5.2 LTS or a newer supported release. Source: [Django supported versions](https://www.djangoproject.com/download/#supported-versions).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/django
+```
+
+The Django project lists the 3.2 release series as unsupported: it no longer receives security updates or bug fixes, and its end of extended support was April 1, 2024.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of life |
+| Severity | high |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/django` |
+| Affected versions | `vers:pypi/>=3.2\|<4.0.dev0` |
+| Date from the source | 2024-04-01 |
+| Replacement | Django 5.2 LTS or a newer supported release |
+| Evidence last seen | 2026-10-21 |
+| Reviewed | 2026-10-21 by arminazimi |
+| Review due | 2027-10-21 (365 days after the last review) |
+| Rule ID | `python.package.django-3.2.eol` |
+
+## Sources
+
+- [Django supported versions](https://www.djangoproject.com/download/#supported-versions) (accessed 2026-10-21)
+- [Django 3.2 release notes (3.2.25)](https://docs.djangoproject.com/en/3.2/releases/3.2.25/) (accessed 2026-10-21)
+- [Django upgrade guide](https://docs.djangoproject.com/en/5.2/howto/upgrade-version/) (accessed 2026-10-21)
+
+## Migration
+
+**Constraints**
+
+- Preserve models, migrations, settings, URL configuration, templates, and deployment configuration while changing the Django release series.
+- Upgrade one feature release at a time, using the latest patch release of each series, as the Django upgrade guide recommends.
+- Confirm the target Django series supports the Python release in use and that third-party packages support both Django and Python.
+
+**Steps**
+
+1. **Raise the Django requirement.** Change the reported Django pin or requirement from 3.2 to the next release series on the upgrade path, ending at a supported series such as 5.2 LTS, then regenerate lock files.
+2. **Apply the release notes.** For each series crossed, read its release notes for backwards-incompatible changes and deprecations, resolve deprecation warnings, and update code that uses removed APIs.
+
+**Verification**
+
+- `python manage.py check`: Run Django's system checks against the upgraded project.
+- `python -Wa manage.py test`: Run the project's test suite with deprecation warnings shown.
+- `python -m pip check`: Confirm the installed distributions have no broken requirements.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Other versions of this product
+
+- [Django 1.10 is end-of-life](python.package.django-1.10.eol.html)
+- [Django 1.11 LTS is end-of-life](python.package.django-1.11.eol.html)
+- [Django 1.3 is end-of-life](python.package.django-1.3.eol.html)
+- [Django 1.4 LTS is end-of-life](python.package.django-1.4.eol.html)
+- [Django 1.5 is end-of-life](python.package.django-1.5.eol.html)
+- [Django 1.6 is end-of-life](python.package.django-1.6.eol.html)
+- [Django 1.7 is end-of-life](python.package.django-1.7.eol.html)
+- [Django 1.8 LTS is end-of-life](python.package.django-1.8.eol.html)
+- [Django 1.9 is end-of-life](python.package.django-1.9.eol.html)
+- [Django 2.0 is end-of-life](python.package.django-2.0.eol.html)
+- [Django 2.1 is end-of-life](python.package.django-2.1.eol.html)
+- [Django 2.2 LTS is end-of-life](python.package.django-2.2.eol.html)
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.django-3.2.eol`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.django-3.2.eol.html",
+      "url": "https://velella.sh/offing/rules/python.package.django-3.2.eol.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.django-3.2.eol.html",
+      "headline": "Django 3.2 LTS is end-of-life — dates, impact, migration",
+      "description": "The Django project lists the 3.2 release series as unsupported: it no longer receives security updates or bug fixes, and its end of extended support was April 1, 2024.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-21",
+      "keywords": [
+        "end-of-life",
+        "python",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "Django 3.2 LTS is end-of-life",
+        "identifier": "pkg:pypi/django"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Django supported versions",
+          "url": "https://www.djangoproject.com/download/#supported-versions"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Django 3.2 release notes (3.2.25)",
+          "url": "https://docs.djangoproject.com/en/3.2/releases/3.2.25/"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Django upgrade guide",
+          "url": "https://docs.djangoproject.com/en/5.2/howto/upgrade-version/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.django-3.2.eol.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.django-3.2.eol.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/django?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of life as of 2024-04-01. Affected versions: vers:pypi/>=3.2|\u003c4.0.dev0. Source: Django supported versions (https://www.djangoproject.com/download/#supported-versions)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:pypi/django?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Django 5.2 LTS or a newer supported release"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/django?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/django."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

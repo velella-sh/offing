@@ -1,0 +1,151 @@
+---
+title: "asyncio-requests is retired — dates, impact, migration"
+description: "The maintainer states that asyncio-requests is retired and that development continues under the asyncio-gateway name."
+layout: doc
+permalink: "/rules/python.package.asyncio-requests.deprecated.html"
+canonical_url: "https://velella.sh/offing/rules/python.package.asyncio-requests.deprecated.html"
+image: "/assets/og/python.package.asyncio-requests.deprecated.svg"
+review_date: "2026-10-16"
+last_modified_at: "2026-10-16"
+json_twin: "/rules/python.package.asyncio-requests.deprecated.json"
+---
+
+# asyncio-requests is retired
+
+**Deprecated.** The source gives no day. Replacement: asyncio-gateway. Source: [asyncio-gateway migration notice](https://pypi.org/project/asyncio-gateway/).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/asyncio-requests
+```
+
+The maintainer states that asyncio-requests is retired and that development continues under the asyncio-gateway name.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | high |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/asyncio-requests` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Replacement | asyncio-gateway |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `python.package.asyncio-requests.deprecated` |
+
+## Sources
+
+- [asyncio-gateway migration notice](https://pypi.org/project/asyncio-gateway/) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve HTTP, SOAP, FTP, and SFTP behavior, TLS verification, retries, processors, response envelopes, and error handling.
+
+**Steps**
+
+1. **Replace asyncio-requests.** Replace the distribution and asyncio_requests imports with asyncio-gateway interfaces, then review the documented breaking and security changes.
+
+**Verification**
+
+- `python -m pytest`: Run protocol, TLS, response, and repository tests.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.asyncio-requests.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.asyncio-requests.deprecated.html",
+      "url": "https://velella.sh/offing/rules/python.package.asyncio-requests.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.asyncio-requests.deprecated.html",
+      "headline": "asyncio-requests is retired — dates, impact, migration",
+      "description": "The maintainer states that asyncio-requests is retired and that development continues under the asyncio-gateway name.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "deprecated",
+        "python",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "asyncio-requests is retired",
+        "identifier": "pkg:pypi/asyncio-requests"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "asyncio-gateway migration notice",
+          "url": "https://pypi.org/project/asyncio-gateway/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.asyncio-requests.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.asyncio-requests.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/asyncio-requests?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:pypi/*. Source: asyncio-gateway migration notice (https://pypi.org/project/asyncio-gateway/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:pypi/asyncio-requests?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "asyncio-gateway"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/asyncio-requests?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/asyncio-requests."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

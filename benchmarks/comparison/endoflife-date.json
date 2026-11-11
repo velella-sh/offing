@@ -1,0 +1,2645 @@
+{
+  "schemaVersion": "offing.comparison.endoflife-date.v1",
+  "snapshot": {
+    "retrievedAt": "2026-11-06",
+    "source": {
+      "homepage": "https://endoflife.date",
+      "catalog": "https://endoflife.date/api/all.json",
+      "cycles": "https://endoflife.date/api/{product}.json",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/endoflife-date/endoflife.date/blob/master/LICENSE",
+      "note": "A projection of the public API: cycle, eol, and support are kept; every other field is dropped."
+    },
+    "products": 44,
+    "cycles": 835
+  },
+  "offing": {
+    "registryRules": 752,
+    "productFamilies": 415,
+    "groundTruthRepositories": 1618,
+    "groundTruthRecords": 10482,
+    "groundTruthRules": 246
+  },
+  "coverage": {
+    "endoflifeProducts": 489,
+    "endoflifeOnlyProducts": [
+      "adonisjs",
+      "akeneo-pim",
+      "alibaba-ack",
+      "alibaba-dragonwell",
+      "almalinux",
+      "amazon-aurora-mysql",
+      "amazon-cdk",
+      "amazon-corretto",
+      "amazon-documentdb",
+      "amazon-elasticsearch",
+      "amazon-glue",
+      "amazon-mq-activemq",
+      "amazon-mq-rabbitmq",
+      "amazon-msk",
+      "amazon-neptune",
+      "amazon-opensearch",
+      "amazon-rds-mariadb",
+      "android",
+      "angular",
+      "angularjs",
+      "ansible",
+      "ansible-core",
+      "ant",
+      "antix",
+      "apache-activemq",
+      "apache-airflow",
+      "apache-apisix",
+      "apache-artemis",
+      "apache-camel",
+      "apache-cassandra",
+      "apache-celeborn",
+      "apache-flink",
+      "apache-groovy",
+      "apache-hadoop",
+      "apache-hop",
+      "apache-http-server",
+      "apache-kafka",
+      "apache-lucene",
+      "apache-maven",
+      "apache-nifi",
+      "apache-pulsar",
+      "apache-spark",
+      "apache-struts",
+      "apache-subversion",
+      "api-platform",
+      "apple-watch",
+      "arangodb",
+      "argo-cd",
+      "argo-workflows",
+      "artifactory",
+      "authentik",
+      "azul-zulu",
+      "azure-devops-server",
+      "azure-kubernetes-service",
+      "backdrop",
+      "bamboo",
+      "bazel",
+      "beats",
+      "behat",
+      "bellsoft-liberica",
+      "big-ip",
+      "bigbluebutton",
+      "bind-9",
+      "bitbucket",
+      "bitcoin-core",
+      "blender",
+      "bootstrap",
+      "boundary",
+      "cachet",
+      "cakephp",
+      "calico",
+      "centos-stream",
+      "centreon",
+      "ceph",
+      "cert-manager",
+      "cfengine",
+      "checkmk",
+      "chef-infra-client",
+      "chef-infra-server",
+      "chef-inspec",
+      "chef-supermarket",
+      "chef-workstation",
+      "chrome",
+      "chromecast",
+      "cilium",
+      "cisco-ios-xe",
+      "citrix-vad",
+      "ckeditor",
+      "clamav",
+      "claude",
+      "clear-linux",
+      "cloud-sql-auth-proxy",
+      "cnspec",
+      "cockroachdb",
+      "coder",
+      "coldfusion",
+      "commvault",
+      "composer",
+      "concrete-cms",
+      "confluence",
+      "consul",
+      "containerd",
+      "contao",
+      "contour",
+      "controlm",
+      "cortex-xdr",
+      "cos",
+      "craft-cms",
+      "dapr",
+      "dbt-core",
+      "dce",
+      "dependency-track",
+      "devuan",
+      "discourse",
+      "django",
+      "docker-engine",
+      "dotnetfx",
+      "dovecot",
+      "dropwizard",
+      "drush",
+      "duckdb",
+      "eclipse-jetty",
+      "eclipse-temurin",
+      "elasticsearch",
+      "electron",
+      "emberjs",
+      "envoy",
+      "eslint",
+      "esxi",
+      "etcd",
+      "eurolinux",
+      "exim",
+      "express",
+      "external-dns",
+      "fairphone",
+      "fedora",
+      "ffmpeg",
+      "filemaker",
+      "firefox",
+      "fluent-bit",
+      "flux",
+      "font-awesome",
+      "foreman",
+      "forgejo",
+      "fortios",
+      "foundationdb",
+      "freebsd",
+      "freedesktop-sdk",
+      "gatekeeper",
+      "geoserver",
+      "gerrit",
+      "ghc",
+      "git",
+      "github-actions-runner-images",
+      "gitlab",
+      "gitlab-runner",
+      "gleam",
+      "goaccess",
+      "godot",
+      "google-kubernetes-engine",
+      "google-nexus",
+      "gorilla",
+      "graalvm-ce",
+      "gradle",
+      "grafana",
+      "grafana-loki",
+      "grails",
+      "graylog",
+      "greenlight",
+      "grumphp",
+      "grunt",
+      "gstreamer",
+      "guzzle",
+      "haproxy",
+      "haproxy-ingress",
+      "harbor",
+      "hashicorp-packer",
+      "hashicorp-vault",
+      "hbase",
+      "heroku-postgres",
+      "hibernate-orm",
+      "horizon",
+      "ibm-aix",
+      "ibm-db2",
+      "ibm-i",
+      "ibm-mq",
+      "ibm-semeru-runtime",
+      "icinga",
+      "icinga-web",
+      "idl",
+      "influxdb",
+      "intel-processors",
+      "internet-explorer",
+      "ionic",
+      "ios",
+      "ipad",
+      "ipados",
+      "iphone",
+      "isc-dhcp",
+      "istio",
+      "jaeger",
+      "jekyll",
+      "jenkins",
+      "jfrog-xray",
+      "jhipster",
+      "jira-service-management",
+      "jira-software",
+      "joomla",
+      "jquery",
+      "jquery-ui",
+      "jreleaser",
+      "jruby",
+      "julia",
+      "karpenter",
+      "kde-plasma",
+      "keda",
+      "keycloak",
+      "kiali",
+      "kibana",
+      "kindle",
+      "kirby",
+      "knative",
+      "kong-gateway",
+      "kotlin",
+      "kubernetes-csi-node-driver-registrar",
+      "kubernetes-node-feature-discovery",
+      "kuma",
+      "kyverno",
+      "laravel",
+      "ldap-account-manager",
+      "libreoffice",
+      "lineageos",
+      "linux",
+      "linuxmint",
+      "liquibase",
+      "liquibase-secure",
+      "livewire",
+      "log4j",
+      "logstash",
+      "longhorn",
+      "looker",
+      "lua",
+      "macos",
+      "mageia",
+      "magento",
+      "mandrel",
+      "mastodon",
+      "matomo",
+      "mattermost",
+      "mautic",
+      "mediawiki",
+      "meilisearch",
+      "memcached",
+      "metabase",
+      "metallb",
+      "micronaut",
+      "microsoft-build-of-openjdk",
+      "mongodb",
+      "moodle",
+      "motorola-mobility",
+      "msexchange",
+      "mssqlserver",
+      "mulesoft-runtime",
+      "mxlinux",
+      "neo4j",
+      "neos",
+      "nestjs",
+      "netapp-ontap",
+      "netbackup-appliance-os",
+      "netbsd",
+      "nextcloud",
+      "nextjs",
+      "nexus",
+      "nginx",
+      "nix",
+      "nixos",
+      "nokia",
+      "nomad",
+      "notepad-plus-plus",
+      "numpy",
+      "nura",
+      "nutanix-aos",
+      "nutanix-files",
+      "nutanix-prism",
+      "nuxt",
+      "nvidia",
+      "nvidia-gpu",
+      "nvm",
+      "office",
+      "oneplus",
+      "oniguruma",
+      "openai-api-models",
+      "openbao",
+      "openbsd",
+      "openjdk-builds-from-oracle",
+      "opensearch",
+      "openssl",
+      "opensuse",
+      "opentofu",
+      "openvpn",
+      "openwrt",
+      "openzfs",
+      "opnsense",
+      "oracle-apex",
+      "oracle-database",
+      "oracle-graalvm",
+      "oracle-jdk",
+      "oracle-linux",
+      "oracle-solaris",
+      "otobo",
+      "ovirt",
+      "pangp",
+      "panos",
+      "pci-dss",
+      "perl",
+      "pgadmin",
+      "phoenix-framework",
+      "photon",
+      "phpbb",
+      "pigeonhole",
+      "pixel",
+      "pixel-watch",
+      "plesk",
+      "plone",
+      "pnpm",
+      "podman",
+      "pop-os",
+      "postfix",
+      "postmarketos",
+      "privatebin",
+      "proftpd",
+      "prometheus",
+      "protractor",
+      "proxmox-backup-server",
+      "proxmox-datacenter-manager",
+      "proxmox-mail-gateway",
+      "proxmox-ve",
+      "puppet",
+      "qt",
+      "quarkus-framework",
+      "quasar",
+      "rabbitmq",
+      "rails",
+      "rancher",
+      "raspberry-pi",
+      "react",
+      "react-native",
+      "red-hat-ansible-automation-platform",
+      "red-hat-openshift",
+      "redhat-build-of-openjdk",
+      "redhat-jboss-eap",
+      "redhat-satellite",
+      "redmine",
+      "renovate",
+      "robo",
+      "rocket-chat",
+      "rocky-linux",
+      "ros",
+      "ros-2",
+      "roundcube",
+      "routeros",
+      "rtpengine",
+      "salt",
+      "samba",
+      "samsung-galaxy-tab",
+      "samsung-galaxy-watch",
+      "samsung-mobile",
+      "sapmachine",
+      "sharepoint",
+      "shopware",
+      "silverstripe",
+      "slackware",
+      "sns-firmware",
+      "sns-hardware",
+      "sns-smc",
+      "solr",
+      "sonarqube-community",
+      "sonarqube-server",
+      "sony-xperia",
+      "sourcegraph",
+      "splunk",
+      "spring-boot",
+      "spring-cloud",
+      "spring-framework",
+      "spring-security",
+      "sqlite",
+      "squid",
+      "statamic",
+      "steamos",
+      "strapi",
+      "surface",
+      "suse-linux-micro",
+      "suse-manager",
+      "svelte",
+      "sylius",
+      "symfony",
+      "tails",
+      "tailwind-css",
+      "tarantool",
+      "tarteaucitron",
+      "telegraf",
+      "teleport",
+      "thumbor",
+      "tls",
+      "tomcat",
+      "truenas",
+      "tvos",
+      "twig",
+      "typo3",
+      "umbraco",
+      "unity",
+      "unrealircd",
+      "valkey",
+      "vcenter",
+      "veeam-backup-and-replication",
+      "veeam-backup-for-microsoft-365",
+      "veeam-one",
+      "vinyl-cache",
+      "virtualbox",
+      "visionos",
+      "visual-cobol",
+      "visual-studio",
+      "vitess",
+      "vmware-cloud-foundation",
+      "vmware-harbor-registry",
+      "vmware-srm",
+      "vue",
+      "vuetify",
+      "wagtail",
+      "watchos",
+      "weakforced",
+      "weechat",
+      "windows",
+      "windows-embedded",
+      "windows-nano-server",
+      "windows-powershell",
+      "windows-server",
+      "windows-server-core",
+      "wireshark",
+      "wordpress",
+      "xcp-ng",
+      "yarn",
+      "yocto",
+      "youtrack",
+      "zabbix",
+      "zentyal",
+      "zerto"
+    ],
+    "offingRules": 752,
+    "offingProductFamilies": 415,
+    "sharedProducts": [
+      "alpine-linux",
+      "amazon-aurora-postgresql",
+      "amazon-eks",
+      "amazon-elasticache-redis",
+      "amazon-linux",
+      "amazon-rds-mysql",
+      "amazon-rds-postgresql",
+      "apache-couchdb",
+      "aws-lambda",
+      "azure-database-for-mysql",
+      "azure-database-for-postgresql",
+      "bun",
+      "caddy",
+      "centos",
+      "clickhouse",
+      "couchbase-server",
+      "debian",
+      "deno",
+      "dotnet",
+      "drupal",
+      "elixir",
+      "erlang",
+      "go",
+      "kubernetes",
+      "mariadb",
+      "mysql",
+      "nodejs",
+      "php",
+      "phpmyadmin",
+      "postgresql",
+      "powershell",
+      "python",
+      "redis",
+      "rhel",
+      "ruby",
+      "rust",
+      "scala",
+      "sles",
+      "terraform",
+      "traefik",
+      "ubuntu",
+      "zookeeper"
+    ],
+    "mappedProductFamilies": 103,
+    "notComparableFamilies": [
+      {
+        "code": "package-level",
+        "description": "The rule is a per-package deprecation or support claim. endoflife.date publishes some framework cycles, but not a per-package deprecation date, so this comparison scores release-cycle products only.",
+        "families": 142,
+        "rules": 175,
+        "examples": [
+          "pkg:cargo/ansi_term",
+          "pkg:cargo/atty",
+          "pkg:cargo/failure",
+          "pkg:cargo/tempdir",
+          "pkg:composer/doctrine/cache"
+        ]
+      },
+      {
+        "code": "managed-runtime",
+        "description": "The rule is a managed platform's runtime policy with no matching endoflife.date product.",
+        "families": 75,
+        "rules": 86,
+        "examples": [
+          "pkg:generic/azure-app-service/dotnet",
+          "pkg:generic/azure-app-service/dotnet-isolated",
+          "pkg:generic/azure-app-service/java",
+          "pkg:generic/azure-app-service/node",
+          "pkg:generic/azure-app-service/php"
+        ]
+      },
+      {
+        "code": "api-retirement",
+        "description": "The rule retires a Kubernetes API version or a Helm repository, not a release cycle of a product.",
+        "families": 44,
+        "rules": 52,
+        "examples": [
+          "pkg:generic/helm-repository/incubator",
+          "pkg:generic/helm-repository/stable",
+          "pkg:generic/kubernetes/admissionregistration.k8s.io/MutatingWebhookConfiguration",
+          "pkg:generic/kubernetes/admissionregistration.k8s.io/ValidatingWebhookConfiguration",
+          "pkg:generic/kubernetes/apiextensions.k8s.io/CustomResourceDefinition"
+        ]
+      },
+      {
+        "code": "github-actions",
+        "description": "endoflife.date publishes no GitHub Actions product; the rule is about an action's runtime.",
+        "families": 29,
+        "rules": 29,
+        "examples": [
+          "pkg:generic/github-actions/add-path",
+          "pkg:generic/github-actions/save-state",
+          "pkg:generic/github-actions/set-env",
+          "pkg:generic/github-actions/set-output",
+          "pkg:github/actions/cache"
+        ]
+      },
+      {
+        "code": "different-support-model",
+        "description": "Offing records the end of extended or LTS support for this managed service; endoflife.date publishes the standard-support boundary, so the dates describe different events.",
+        "families": 4,
+        "rules": 23,
+        "examples": [
+          "pkg:generic/azure-aks",
+          "pkg:generic/azure-kubernetes-service",
+          "pkg:generic/google-gke",
+          "pkg:generic/google-kubernetes-engine"
+        ]
+      },
+      {
+        "code": "no-product",
+        "description": "endoflife.date publishes no product with a release cycle for this purl.",
+        "families": 5,
+        "rules": 23,
+        "examples": [
+          "pkg:generic/dart",
+          "pkg:generic/google-cloud-sql-mysql",
+          "pkg:generic/google-cloud-sql-postgresql",
+          "pkg:generic/java",
+          "pkg:generic/sbt"
+        ]
+      },
+      {
+        "code": "store-policy",
+        "description": "The rule is a mobile store or billing policy with no endoflife.date release cycle.",
+        "families": 2,
+        "rules": 6,
+        "examples": [
+          "pkg:generic/android/targetSdk",
+          "pkg:maven/com.android.billingclient/billing"
+        ]
+      },
+      {
+        "code": "ci-image-retirement",
+        "description": "The rule retires a hosted CI image, which endoflife.date does not publish as a product cycle.",
+        "families": 3,
+        "rules": 5,
+        "examples": [
+          "pkg:generic/azure-pipelines/macos-image",
+          "pkg:generic/azure-pipelines/ubuntu-image",
+          "pkg:generic/azure-pipelines/windows-image"
+        ]
+      },
+      {
+        "code": "toolchain-policy",
+        "description": "The rule is a CMake policy or generator deprecation, not a CMake release cycle.",
+        "families": 4,
+        "rules": 5,
+        "examples": [
+          "pkg:generic/cmake",
+          "pkg:generic/cmake-generator/visual-studio-12-2013",
+          "pkg:generic/cmake-module/cmake-find-frameworks",
+          "pkg:generic/cmake-module/find-gdal"
+        ]
+      },
+      {
+        "code": "app-store-policy",
+        "description": "The rule is an App Store submission policy for Xcode or an iOS deployment target.",
+        "families": 2,
+        "rules": 3,
+        "examples": [
+          "pkg:generic/ios",
+          "pkg:generic/xcode"
+        ]
+      },
+      {
+        "code": "different-cycle-model",
+        "description": "endoflife.date publishes Aurora engine versions where Offing records MySQL compatibility versions, so the two cannot be compared cycle by cycle.",
+        "families": 1,
+        "rules": 2,
+        "examples": [
+          "pkg:generic/aws-aurora/mysql"
+        ]
+      },
+      {
+        "code": "dockerfile-format",
+        "description": "The rule is a Dockerfile syntax deprecation, not a release cycle.",
+        "families": 1,
+        "rules": 2,
+        "examples": [
+          "pkg:generic/dockerfile"
+        ]
+      }
+    ]
+  },
+  "agreement": {
+    "all": {
+      "rules": 752,
+      "measured": 184,
+      "agree": 176,
+      "disagree": 8,
+      "notComparable": 411,
+      "notLifecycleEvent": 142,
+      "noSnapshot": 0,
+      "noCycle": 2,
+      "noRuleDate": 9,
+      "noEndoflifeDate": 4
+    },
+    "groundTruth": {
+      "rules": 246,
+      "measured": 92,
+      "agree": 85,
+      "disagree": 7,
+      "notComparable": 144,
+      "notLifecycleEvent": 2,
+      "noSnapshot": 0,
+      "noCycle": 1,
+      "noRuleDate": 3,
+      "noEndoflifeDate": 4
+    }
+  },
+  "correctness": {
+    "sample": 11,
+    "offingMatches": 11,
+    "endoflifeMatches": 11,
+    "rows": [
+      {
+        "ruleId": "database.postgresql.end-of-life-13",
+        "product": "postgresql",
+        "offingDate": "2025-11-13",
+        "endoflifeDate": "2025-11-13",
+        "vendorDate": "2025-11-13",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-3.1",
+        "product": "dotnet",
+        "offingDate": "2022-12-13",
+        "endoflifeDate": "2022-12-13",
+        "vendorDate": "2022-12-13",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.25",
+        "product": "go",
+        "offingDate": "2026-08-19",
+        "endoflifeDate": "2026-08-19",
+        "vendorDate": "2026-08-19",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "product": "nodejs",
+        "offingDate": "2025-04-30",
+        "endoflifeDate": "2025-04-30",
+        "vendorDate": "2025-04-30",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "php.runtime.eol-7.4",
+        "product": "php",
+        "offingDate": "2022-11-28",
+        "endoflifeDate": "2022-11-28",
+        "vendorDate": "2022-11-28",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "product": "python",
+        "offingDate": "2026-10-01",
+        "endoflifeDate": "2026-10-01",
+        "vendorDate": "2026-10-01",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "python.runtime.eol-3.9-and-older",
+        "product": "python",
+        "offingDate": "2025-10-31",
+        "endoflifeDate": "2025-10-31",
+        "vendorDate": "2025-10-31",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.0",
+        "product": "ruby",
+        "offingDate": "2024-04-23",
+        "endoflifeDate": "2024-04-23",
+        "vendorDate": "2024-04-23",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "serverless.aws-lambda.python3.8",
+        "product": "aws-lambda",
+        "offingDate": "2024-10-14",
+        "endoflifeDate": "2024-10-14",
+        "vendorDate": "2024-10-14",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.1",
+        "product": "powershell",
+        "offingDate": "2022-05-08",
+        "endoflifeDate": "2022-05-08",
+        "vendorDate": "2022-05-08",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.13",
+        "product": "terraform",
+        "offingDate": "2026-04-29",
+        "endoflifeDate": "2026-04-29",
+        "vendorDate": "2026-04-29",
+        "offingMatches": true,
+        "endoflifeMatches": true
+      }
+    ]
+  },
+  "products": [
+    {
+      "product": "alpine-linux",
+      "offingRules": 3,
+      "offingFamilies": 2,
+      "endoflifeCycles": 32,
+      "measured": 3,
+      "agree": 3,
+      "disagree": 0
+    },
+    {
+      "product": "amazon-aurora-postgresql",
+      "offingRules": 4,
+      "offingFamilies": 1,
+      "endoflifeCycles": 8,
+      "measured": 4,
+      "agree": 4,
+      "disagree": 0
+    },
+    {
+      "product": "amazon-eks",
+      "offingRules": 11,
+      "offingFamilies": 1,
+      "endoflifeCycles": 20,
+      "measured": 9,
+      "agree": 9,
+      "disagree": 0
+    },
+    {
+      "product": "amazon-elasticache-redis",
+      "offingRules": 3,
+      "offingFamilies": 1,
+      "endoflifeCycles": 4,
+      "measured": 3,
+      "agree": 3,
+      "disagree": 0
+    },
+    {
+      "product": "amazon-linux",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 17,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "amazon-rds-mysql",
+      "offingRules": 2,
+      "offingFamilies": 1,
+      "endoflifeCycles": 18,
+      "measured": 2,
+      "agree": 2,
+      "disagree": 0
+    },
+    {
+      "product": "amazon-rds-postgresql",
+      "offingRules": 6,
+      "offingFamilies": 1,
+      "endoflifeCycles": 10,
+      "measured": 5,
+      "agree": 5,
+      "disagree": 0
+    },
+    {
+      "product": "apache-couchdb",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 4,
+      "measured": 0,
+      "agree": 0,
+      "disagree": 0
+    },
+    {
+      "product": "aws-lambda",
+      "offingRules": 52,
+      "offingFamilies": 52,
+      "endoflifeCycles": 52,
+      "measured": 52,
+      "agree": 52,
+      "disagree": 0
+    },
+    {
+      "product": "azure-database-for-mysql",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 3,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "azure-database-for-postgresql",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 8,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "bun",
+      "offingRules": 2,
+      "offingFamilies": 1,
+      "endoflifeCycles": 1,
+      "measured": 0,
+      "agree": 0,
+      "disagree": 0
+    },
+    {
+      "product": "caddy",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 2,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "centos",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 4,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "clickhouse",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 22,
+      "measured": 0,
+      "agree": 0,
+      "disagree": 0
+    },
+    {
+      "product": "couchbase-server",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 22,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "debian",
+      "offingRules": 2,
+      "offingFamilies": 2,
+      "endoflifeCycles": 18,
+      "measured": 2,
+      "agree": 2,
+      "disagree": 0
+    },
+    {
+      "product": "deno",
+      "offingRules": 2,
+      "offingFamilies": 1,
+      "endoflifeCycles": 11,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "dotnet",
+      "offingRules": 12,
+      "offingFamilies": 1,
+      "endoflifeCycles": 13,
+      "measured": 12,
+      "agree": 12,
+      "disagree": 0
+    },
+    {
+      "product": "drupal",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 21,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "elixir",
+      "offingRules": 2,
+      "offingFamilies": 1,
+      "endoflifeCycles": 17,
+      "measured": 2,
+      "agree": 2,
+      "disagree": 0
+    },
+    {
+      "product": "erlang",
+      "offingRules": 2,
+      "offingFamilies": 1,
+      "endoflifeCycles": 13,
+      "measured": 2,
+      "agree": 0,
+      "disagree": 2
+    },
+    {
+      "product": "go",
+      "offingRules": 7,
+      "offingFamilies": 2,
+      "endoflifeCycles": 18,
+      "measured": 7,
+      "agree": 7,
+      "disagree": 0
+    },
+    {
+      "product": "kubernetes",
+      "offingRules": 9,
+      "offingFamilies": 1,
+      "endoflifeCycles": 22,
+      "measured": 8,
+      "agree": 8,
+      "disagree": 0
+    },
+    {
+      "product": "mariadb",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 30,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "mysql",
+      "offingRules": 3,
+      "offingFamilies": 2,
+      "endoflifeCycles": 23,
+      "measured": 3,
+      "agree": 2,
+      "disagree": 1
+    },
+    {
+      "product": "nodejs",
+      "offingRules": 82,
+      "offingFamilies": 2,
+      "endoflifeCycles": 26,
+      "measured": 8,
+      "agree": 8,
+      "disagree": 0
+    },
+    {
+      "product": "php",
+      "offingRules": 7,
+      "offingFamilies": 1,
+      "endoflifeCycles": 23,
+      "measured": 7,
+      "agree": 7,
+      "disagree": 0
+    },
+    {
+      "product": "phpmyadmin",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 13,
+      "measured": 0,
+      "agree": 0,
+      "disagree": 0
+    },
+    {
+      "product": "postgresql",
+      "offingRules": 7,
+      "offingFamilies": 2,
+      "endoflifeCycles": 32,
+      "measured": 6,
+      "agree": 6,
+      "disagree": 0
+    },
+    {
+      "product": "powershell",
+      "offingRules": 5,
+      "offingFamilies": 1,
+      "endoflifeCycles": 10,
+      "measured": 5,
+      "agree": 5,
+      "disagree": 0
+    },
+    {
+      "product": "python",
+      "offingRules": 72,
+      "offingFamilies": 2,
+      "endoflifeCycles": 18,
+      "measured": 4,
+      "agree": 4,
+      "disagree": 0
+    },
+    {
+      "product": "redis",
+      "offingRules": 3,
+      "offingFamilies": 2,
+      "endoflifeCycles": 12,
+      "measured": 3,
+      "agree": 3,
+      "disagree": 0
+    },
+    {
+      "product": "rhel",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 7,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "ruby",
+      "offingRules": 14,
+      "offingFamilies": 2,
+      "endoflifeCycles": 15,
+      "measured": 14,
+      "agree": 10,
+      "disagree": 4
+    },
+    {
+      "product": "rust",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 71,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "scala",
+      "offingRules": 2,
+      "offingFamilies": 1,
+      "endoflifeCycles": 15,
+      "measured": 0,
+      "agree": 0,
+      "disagree": 0
+    },
+    {
+      "product": "sles",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 25,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    },
+    {
+      "product": "terraform",
+      "offingRules": 8,
+      "offingFamilies": 1,
+      "endoflifeCycles": 18,
+      "measured": 6,
+      "agree": 6,
+      "disagree": 0
+    },
+    {
+      "product": "traefik",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 21,
+      "measured": 1,
+      "agree": 0,
+      "disagree": 1
+    },
+    {
+      "product": "ubuntu",
+      "offingRules": 3,
+      "offingFamilies": 2,
+      "endoflifeCycles": 45,
+      "measured": 3,
+      "agree": 3,
+      "disagree": 0
+    },
+    {
+      "product": "zookeeper",
+      "offingRules": 1,
+      "offingFamilies": 1,
+      "endoflifeCycles": 6,
+      "measured": 1,
+      "agree": 1,
+      "disagree": 0
+    }
+  ],
+  "disagreements": [
+    {
+      "ruleId": "container.mysql.eol-8.0-and-older",
+      "ecosystem": "container",
+      "product": "mysql",
+      "cycles": [
+        "3.23",
+        "4.0",
+        "4.1",
+        "5.0",
+        "5.1",
+        "5.5",
+        "5.6",
+        "5.7",
+        "8.0"
+      ],
+      "offingDate": "2026-04-21",
+      "endoflifeDate": "2026-04-30",
+      "differenceDays": -9,
+      "inGroundTruth": true,
+      "references": [
+        {
+          "repository": "nestjsx/crud",
+          "commit": "d6d3c4ebd844d543ab71b494d424660c448a9d42",
+          "path": "docker-compose.yml",
+          "line": 21,
+          "url": "https://github.com/nestjsx/crud/blob/d6d3c4ebd844d543ab71b494d424660c448a9d42/docker-compose.yml#L21"
+        },
+        {
+          "repository": "weltraumpirat/hexagonal_ddd",
+          "commit": "a1bbdc5da7406f047269d270969ed9750bb92fa8",
+          "path": "docker/docker-compose.yml",
+          "line": 4,
+          "url": "https://github.com/weltraumpirat/hexagonal_ddd/blob/a1bbdc5da7406f047269d270969ed9750bb92fa8/docker/docker-compose.yml#L4"
+        },
+        {
+          "repository": "axe-api/axe-api",
+          "commit": "81deacdf696dfe3fc022cb9ce85c0bf0013c2f8a",
+          "path": "packages/integrations/composes/docker-compose.mysql57.yml",
+          "line": 5,
+          "url": "https://github.com/axe-api/axe-api/blob/81deacdf696dfe3fc022cb9ce85c0bf0013c2f8a/packages/integrations/composes/docker-compose.mysql57.yml#L5"
+        },
+        {
+          "repository": "EleTeam/UniShopX",
+          "commit": "10a26416904304206a109d60baa143cb293a47d7",
+          "path": "docker-compose.yml",
+          "line": 26,
+          "url": "https://github.com/EleTeam/UniShopX/blob/10a26416904304206a109d60baa143cb293a47d7/docker-compose.yml#L26"
+        }
+      ],
+      "sources": {
+        "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/container.mysql.eol-8.0-and-older.md",
+        "endoflife": "https://endoflife.date/mysql"
+      }
+    },
+    {
+      "ruleId": "container.ruby.eol-3.2-and-older",
+      "ecosystem": "container",
+      "product": "ruby",
+      "cycles": [
+        "1.9.3",
+        "2.0.0",
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "3.0",
+        "3.1",
+        "3.2"
+      ],
+      "offingDate": "2026-04-01",
+      "endoflifeDate": "2026-03-31",
+      "differenceDays": 1,
+      "inGroundTruth": true,
+      "references": [
+        {
+          "repository": "HariSekhon/Dockerfiles",
+          "commit": "b38ac95de8be22e481385ae220ea2949fe24ba51",
+          "path": "fakes3/Dockerfile",
+          "line": 15,
+          "url": "https://github.com/HariSekhon/Dockerfiles/blob/b38ac95de8be22e481385ae220ea2949fe24ba51/fakes3/Dockerfile#L15"
+        },
+        {
+          "repository": "dvmonroe/sanity-ruby",
+          "commit": "76100a8d56ed97fb7e445fb70df25078859a2422",
+          "path": "Dockerfile-2.6",
+          "line": 1,
+          "url": "https://github.com/dvmonroe/sanity-ruby/blob/76100a8d56ed97fb7e445fb70df25078859a2422/Dockerfile-2.6#L1"
+        },
+        {
+          "repository": "dvmonroe/sanity-ruby",
+          "commit": "76100a8d56ed97fb7e445fb70df25078859a2422",
+          "path": "Dockerfile-2.7",
+          "line": 1,
+          "url": "https://github.com/dvmonroe/sanity-ruby/blob/76100a8d56ed97fb7e445fb70df25078859a2422/Dockerfile-2.7#L1"
+        },
+        {
+          "repository": "dvmonroe/sanity-ruby",
+          "commit": "76100a8d56ed97fb7e445fb70df25078859a2422",
+          "path": "Dockerfile-3.0",
+          "line": 1,
+          "url": "https://github.com/dvmonroe/sanity-ruby/blob/76100a8d56ed97fb7e445fb70df25078859a2422/Dockerfile-3.0#L1"
+        },
+        {
+          "repository": "chrishenry/deltanyc-heatseek",
+          "commit": "258e225efa89e46e92e9676864f8c07976b4ccf2",
+          "path": "angular-rails-app/Dockerfile",
+          "line": 1,
+          "url": "https://github.com/chrishenry/deltanyc-heatseek/blob/258e225efa89e46e92e9676864f8c07976b4ccf2/angular-rails-app/Dockerfile#L1"
+        },
+        {
+          "repository": "mislav/hub",
+          "commit": "5c547ed804368763064e51f3990851e267e88edd",
+          "path": "Dockerfile",
+          "line": 1,
+          "url": "https://github.com/mislav/hub/blob/5c547ed804368763064e51f3990851e267e88edd/Dockerfile#L1"
+        },
+        {
+          "repository": "HomeBusProjects/HomeBus",
+          "commit": "15681fbaf24f3c54b16c9526cdde983a34f96d21",
+          "path": "Dockerfile",
+          "line": 1,
+          "url": "https://github.com/HomeBusProjects/HomeBus/blob/15681fbaf24f3c54b16c9526cdde983a34f96d21/Dockerfile#L1"
+        },
+        {
+          "repository": "nmacawile/rails-chat-api",
+          "commit": "b39beefb1427ba1d4e382aed090391bfab9bb826",
+          "path": "Dockerfile",
+          "line": 1,
+          "url": "https://github.com/nmacawile/rails-chat-api/blob/b39beefb1427ba1d4e382aed090391bfab9bb826/Dockerfile#L1"
+        },
+        {
+          "repository": "nmacawile/rails-chat-api",
+          "commit": "b39beefb1427ba1d4e382aed090391bfab9bb826",
+          "path": "Dockerfile",
+          "line": 10,
+          "url": "https://github.com/nmacawile/rails-chat-api/blob/b39beefb1427ba1d4e382aed090391bfab9bb826/Dockerfile#L10"
+        },
+        {
+          "repository": "snibox/snibox",
+          "commit": "c756dfffbf2cda8a33a66c2bc4d7da0584fcbcbe",
+          "path": "Dockerfile",
+          "line": 1,
+          "url": "https://github.com/snibox/snibox/blob/c756dfffbf2cda8a33a66c2bc4d7da0584fcbcbe/Dockerfile#L1"
+        },
+        {
+          "repository": "htty/htty",
+          "commit": "8db7a36d5dffcd6eef66580f052a86bcf1f3636b",
+          "path": "Dockerfile",
+          "line": 1,
+          "url": "https://github.com/htty/htty/blob/8db7a36d5dffcd6eef66580f052a86bcf1f3636b/Dockerfile#L1"
+        },
+        {
+          "repository": "Terrastories/terrastories",
+          "commit": "f6f033a17bd4a4c600ffea8bc2e773d243f88f72",
+          "path": "e2e/Dockerfile",
+          "line": 1,
+          "url": "https://github.com/Terrastories/terrastories/blob/f6f033a17bd4a4c600ffea8bc2e773d243f88f72/e2e/Dockerfile#L1"
+        },
+        {
+          "repository": "Terrastories/terrastories",
+          "commit": "f6f033a17bd4a4c600ffea8bc2e773d243f88f72",
+          "path": "rails/Dockerfile",
+          "line": 11,
+          "url": "https://github.com/Terrastories/terrastories/blob/f6f033a17bd4a4c600ffea8bc2e773d243f88f72/rails/Dockerfile#L11"
+        },
+        {
+          "repository": "Terrastories/terrastories",
+          "commit": "f6f033a17bd4a4c600ffea8bc2e773d243f88f72",
+          "path": "rails/Dockerfile",
+          "line": 54,
+          "url": "https://github.com/Terrastories/terrastories/blob/f6f033a17bd4a4c600ffea8bc2e773d243f88f72/rails/Dockerfile#L54"
+        },
+        {
+          "repository": "GoogleCloudPlatform/cloud-builders-community",
+          "commit": "e210dd2d9b8dd1c2a11b6bcb64e47922c0b016f8",
+          "path": "fastlane/Dockerfile",
+          "line": 1,
+          "url": "https://github.com/GoogleCloudPlatform/cloud-builders-community/blob/e210dd2d9b8dd1c2a11b6bcb64e47922c0b016f8/fastlane/Dockerfile#L1"
+        }
+      ],
+      "sources": {
+        "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/container.ruby.eol-3.2-and-older.md",
+        "endoflife": "https://endoflife.date/ruby"
+      }
+    },
+    {
+      "ruleId": "container.traefik.eol-3.6-and-older",
+      "ecosystem": "container",
+      "product": "traefik",
+      "cycles": [
+        "1.7",
+        "2.0",
+        "2.1",
+        "2.10",
+        "2.11",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "3.0",
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5",
+        "3.6"
+      ],
+      "offingDate": "2026-08-16",
+      "endoflifeDate": "2026-09-07",
+      "differenceDays": -22,
+      "inGroundTruth": false,
+      "references": [],
+      "sources": {
+        "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/container.traefik.eol-3.6-and-older.md",
+        "endoflife": "https://endoflife.date/traefik"
+      }
+    },
+    {
+      "ruleId": "elixir.erlang.eol-25",
+      "ecosystem": "elixir",
+      "product": "erlang",
+      "cycles": [
+        "25"
+      ],
+      "offingDate": "2025-05-21",
+      "endoflifeDate": "2025-05-17",
+      "differenceDays": 4,
+      "inGroundTruth": true,
+      "references": [
+        {
+          "repository": "collegeimprovements/dotfiles_old",
+          "commit": "32b95bf94089418c980349a6f9aa5a5bcc9b76d5",
+          "path": ".config/nvim/.tool-versions",
+          "line": 1,
+          "url": "https://github.com/collegeimprovements/dotfiles_old/blob/32b95bf94089418c980349a6f9aa5a5bcc9b76d5/.config/nvim/.tool-versions#L1"
+        },
+        {
+          "repository": "smpallen99/coherence",
+          "commit": "ede75598de6b01ce896d6ec67f0aeac6047ddbd9",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/smpallen99/coherence/blob/ede75598de6b01ce896d6ec67f0aeac6047ddbd9/.tool-versions#L2"
+        },
+        {
+          "repository": "emqx/MQTT-Client-Examples",
+          "commit": "b9378547037bdb851f6e5648976573398546dcb5",
+          "path": "mqtt-client-Elixir/.tool-versions",
+          "line": 1,
+          "url": "https://github.com/emqx/MQTT-Client-Examples/blob/b9378547037bdb851f6e5648976573398546dcb5/mqtt-client-Elixir/.tool-versions#L1"
+        },
+        {
+          "repository": "emqx/MQTT-Client-Examples",
+          "commit": "b9378547037bdb851f6e5648976573398546dcb5",
+          "path": "mqtt-client-Elixir/.tool-versions",
+          "line": 2,
+          "url": "https://github.com/emqx/MQTT-Client-Examples/blob/b9378547037bdb851f6e5648976573398546dcb5/mqtt-client-Elixir/.tool-versions#L2"
+        },
+        {
+          "repository": "bitcrowd/chromic_pdf",
+          "commit": "0e87984bc07b9e32fb20bf42eedc864d36d30b4c",
+          "path": ".tool-versions",
+          "line": 3,
+          "url": "https://github.com/bitcrowd/chromic_pdf/blob/0e87984bc07b9e32fb20bf42eedc864d36d30b4c/.tool-versions#L3"
+        },
+        {
+          "repository": "peek-travel/cocktail",
+          "commit": "80b7c9372e30d97ca6bee3f036fc0d9cf8b81ffc",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/peek-travel/cocktail/blob/80b7c9372e30d97ca6bee3f036fc0d9cf8b81ffc/.tool-versions#L1"
+        },
+        {
+          "repository": "peek-travel/cocktail",
+          "commit": "80b7c9372e30d97ca6bee3f036fc0d9cf8b81ffc",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/peek-travel/cocktail/blob/80b7c9372e30d97ca6bee3f036fc0d9cf8b81ffc/.tool-versions#L2"
+        },
+        {
+          "repository": "supabase/libcluster_postgres",
+          "commit": "01f0e03f7238f90713c55a8964f1cdea645f713e",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/supabase/libcluster_postgres/blob/01f0e03f7238f90713c55a8964f1cdea645f713e/.tool-versions#L1"
+        },
+        {
+          "repository": "supabase/libcluster_postgres",
+          "commit": "01f0e03f7238f90713c55a8964f1cdea645f713e",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/supabase/libcluster_postgres/blob/01f0e03f7238f90713c55a8964f1cdea645f713e/.tool-versions#L2"
+        },
+        {
+          "repository": "TheAlgorithms/Elixir",
+          "commit": "6212e7e905ec2d2687e7f6e9e4b07b7fabb40f19",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/TheAlgorithms/Elixir/blob/6212e7e905ec2d2687e7f6e9e4b07b7fabb40f19/.tool-versions#L1"
+        },
+        {
+          "repository": "TheAlgorithms/Elixir",
+          "commit": "6212e7e905ec2d2687e7f6e9e4b07b7fabb40f19",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/TheAlgorithms/Elixir/blob/6212e7e905ec2d2687e7f6e9e4b07b7fabb40f19/.tool-versions#L2"
+        },
+        {
+          "repository": "nimblehq/elixir-templates",
+          "commit": "3c3ac262c404f6d3ed4379914da19d04cdaf08b3",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/nimblehq/elixir-templates/blob/3c3ac262c404f6d3ed4379914da19d04cdaf08b3/.tool-versions#L1"
+        },
+        {
+          "repository": "nimblehq/elixir-templates",
+          "commit": "3c3ac262c404f6d3ed4379914da19d04cdaf08b3",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/nimblehq/elixir-templates/blob/3c3ac262c404f6d3ed4379914da19d04cdaf08b3/.tool-versions#L2"
+        },
+        {
+          "repository": "implicitly-awesome/exop",
+          "commit": "e4f16357f4aaf3b7cdd802836daba5c7bb56aaab",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/implicitly-awesome/exop/blob/e4f16357f4aaf3b7cdd802836daba5c7bb56aaab/.tool-versions#L2"
+        },
+        {
+          "repository": "benvp/live_motion",
+          "commit": "a955c559555c0f86aa6e310d937676c98b1c8455",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/benvp/live_motion/blob/a955c559555c0f86aa6e310d937676c98b1c8455/.tool-versions#L1"
+        },
+        {
+          "repository": "benvp/live_motion",
+          "commit": "a955c559555c0f86aa6e310d937676c98b1c8455",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/benvp/live_motion/blob/a955c559555c0f86aa6e310d937676c98b1c8455/.tool-versions#L2"
+        },
+        {
+          "repository": "davydog187/timescale",
+          "commit": "b06c008258db189db266de6bc38378502678a342",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/davydog187/timescale/blob/b06c008258db189db266de6bc38378502678a342/.tool-versions#L1"
+        },
+        {
+          "repository": "davydog187/timescale",
+          "commit": "b06c008258db189db266de6bc38378502678a342",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/davydog187/timescale/blob/b06c008258db189db266de6bc38378502678a342/.tool-versions#L2"
+        },
+        {
+          "repository": "revelrylabs/text_chunker_ex",
+          "commit": "e1781097d47a1dc741f441f3b89f7f12705995c0",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/revelrylabs/text_chunker_ex/blob/e1781097d47a1dc741f441f3b89f7f12705995c0/.tool-versions#L1"
+        },
+        {
+          "repository": "revelrylabs/text_chunker_ex",
+          "commit": "e1781097d47a1dc741f441f3b89f7f12705995c0",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/revelrylabs/text_chunker_ex/blob/e1781097d47a1dc741f441f3b89f7f12705995c0/.tool-versions#L2"
+        },
+        {
+          "repository": "commanded/commanded-ecto-projections",
+          "commit": "34e7660e2f195f44bb6e1b1948fb9f09502f8355",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/commanded/commanded-ecto-projections/blob/34e7660e2f195f44bb6e1b1948fb9f09502f8355/.tool-versions#L1"
+        },
+        {
+          "repository": "aviacommerce/avia",
+          "commit": "8eb0c6707886ef404194a1cef47600c020604967",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/aviacommerce/avia/blob/8eb0c6707886ef404194a1cef47600c020604967/.tool-versions#L1"
+        },
+        {
+          "repository": "aviacommerce/avia",
+          "commit": "8eb0c6707886ef404194a1cef47600c020604967",
+          "path": ".tool-versions",
+          "line": 3,
+          "url": "https://github.com/aviacommerce/avia/blob/8eb0c6707886ef404194a1cef47600c020604967/.tool-versions#L3"
+        },
+        {
+          "repository": "Hubs-Foundation/reticulum",
+          "commit": "10364b17b50a6801ebceaf760188182e753860ec",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/Hubs-Foundation/reticulum/blob/10364b17b50a6801ebceaf760188182e753860ec/.tool-versions#L1"
+        },
+        {
+          "repository": "esl/gradient",
+          "commit": "33e13fbe1ff60a49abdc638d76b77effddf3cc45",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/esl/gradient/blob/33e13fbe1ff60a49abdc638d76b77effddf3cc45/.tool-versions#L1"
+        },
+        {
+          "repository": "esl/gradient",
+          "commit": "33e13fbe1ff60a49abdc638d76b77effddf3cc45",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/esl/gradient/blob/33e13fbe1ff60a49abdc638d76b77effddf3cc45/.tool-versions#L2"
+        },
+        {
+          "repository": "revelrylabs/ecto_soft_delete",
+          "commit": "03395d3f66b7844e12d1b4be5518fe868f0a868d",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/revelrylabs/ecto_soft_delete/blob/03395d3f66b7844e12d1b4be5518fe868f0a868d/.tool-versions#L1"
+        }
+      ],
+      "sources": {
+        "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/elixir.erlang.eol-25.md",
+        "endoflife": "https://endoflife.date/erlang"
+      }
+    },
+    {
+      "ruleId": "elixir.erlang.eol-26",
+      "ecosystem": "elixir",
+      "product": "erlang",
+      "cycles": [
+        "26"
+      ],
+      "offingDate": "2026-05-13",
+      "endoflifeDate": "2026-05-26",
+      "differenceDays": -13,
+      "inGroundTruth": true,
+      "references": [
+        {
+          "repository": "inoas/gleam-elixir-phoenix-liveview-counter",
+          "commit": "5dd4eed72ac0a7c39eccbc90884cbf6b830db427",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/inoas/gleam-elixir-phoenix-liveview-counter/blob/5dd4eed72ac0a7c39eccbc90884cbf6b830db427/.tool-versions#L1"
+        },
+        {
+          "repository": "inoas/gleam-elixir-phoenix-liveview-counter",
+          "commit": "5dd4eed72ac0a7c39eccbc90884cbf6b830db427",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/inoas/gleam-elixir-phoenix-liveview-counter/blob/5dd4eed72ac0a7c39eccbc90884cbf6b830db427/.tool-versions#L2"
+        },
+        {
+          "repository": "collegeimprovements/dotfiles_old",
+          "commit": "32b95bf94089418c980349a6f9aa5a5bcc9b76d5",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/collegeimprovements/dotfiles_old/blob/32b95bf94089418c980349a6f9aa5a5bcc9b76d5/.tool-versions#L1"
+        },
+        {
+          "repository": "collegeimprovements/dotfiles_old",
+          "commit": "32b95bf94089418c980349a6f9aa5a5bcc9b76d5",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/collegeimprovements/dotfiles_old/blob/32b95bf94089418c980349a6f9aa5a5bcc9b76d5/.tool-versions#L2"
+        },
+        {
+          "repository": "courier-new/dotfiles",
+          "commit": "bb2f95ac0147e53e00d67a485535d3ffd310ba5d",
+          "path": ".tool-versions",
+          "line": 10,
+          "url": "https://github.com/courier-new/dotfiles/blob/bb2f95ac0147e53e00d67a485535d3ffd310ba5d/.tool-versions#L10"
+        },
+        {
+          "repository": "courier-new/dotfiles",
+          "commit": "bb2f95ac0147e53e00d67a485535d3ffd310ba5d",
+          "path": ".tool-versions",
+          "line": 9,
+          "url": "https://github.com/courier-new/dotfiles/blob/bb2f95ac0147e53e00d67a485535d3ffd310ba5d/.tool-versions#L9"
+        },
+        {
+          "repository": "nshafer/pax_demo.old",
+          "commit": "ce26798ddab340962284eb854cbc40f94f09ccfa",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/nshafer/pax_demo.old/blob/ce26798ddab340962284eb854cbc40f94f09ccfa/.tool-versions#L1"
+        },
+        {
+          "repository": "nshafer/pax_demo.old",
+          "commit": "ce26798ddab340962284eb854cbc40f94f09ccfa",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/nshafer/pax_demo.old/blob/ce26798ddab340962284eb854cbc40f94f09ccfa/.tool-versions#L2"
+        },
+        {
+          "repository": "sasa1977/elixir-in-action",
+          "commit": "4e9067ab5a98959bf5198b2b340a89af429e15c5",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/sasa1977/elixir-in-action/blob/4e9067ab5a98959bf5198b2b340a89af429e15c5/.tool-versions#L1"
+        },
+        {
+          "repository": "sasa1977/elixir-in-action",
+          "commit": "4e9067ab5a98959bf5198b2b340a89af429e15c5",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/sasa1977/elixir-in-action/blob/4e9067ab5a98959bf5198b2b340a89af429e15c5/.tool-versions#L2"
+        },
+        {
+          "repository": "sasa1977/boundary",
+          "commit": "f53ad7d88068a8019842974191c5c5039a0902f6",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/sasa1977/boundary/blob/f53ad7d88068a8019842974191c5c5039a0902f6/.tool-versions#L1"
+        },
+        {
+          "repository": "sasa1977/boundary",
+          "commit": "f53ad7d88068a8019842974191c5c5039a0902f6",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/sasa1977/boundary/blob/f53ad7d88068a8019842974191c5c5039a0902f6/.tool-versions#L2"
+        },
+        {
+          "repository": "standard-webhooks/standard-webhooks",
+          "commit": "ab6844147ce9cdb0d2dbf2e60d1ea85001fd2554",
+          "path": "libraries/elixir/.tool-versions",
+          "line": 1,
+          "url": "https://github.com/standard-webhooks/standard-webhooks/blob/ab6844147ce9cdb0d2dbf2e60d1ea85001fd2554/libraries/elixir/.tool-versions#L1"
+        },
+        {
+          "repository": "standard-webhooks/standard-webhooks",
+          "commit": "ab6844147ce9cdb0d2dbf2e60d1ea85001fd2554",
+          "path": "libraries/elixir/.tool-versions",
+          "line": 2,
+          "url": "https://github.com/standard-webhooks/standard-webhooks/blob/ab6844147ce9cdb0d2dbf2e60d1ea85001fd2554/libraries/elixir/.tool-versions#L2"
+        },
+        {
+          "repository": "coingaming/moon",
+          "commit": "7b2881ef1a4b8e0d0d297f92df7085e6461e4d77",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/coingaming/moon/blob/7b2881ef1a4b8e0d0d297f92df7085e6461e4d77/.tool-versions#L1"
+        },
+        {
+          "repository": "coingaming/moon",
+          "commit": "7b2881ef1a4b8e0d0d297f92df7085e6461e4d77",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/coingaming/moon/blob/7b2881ef1a4b8e0d0d297f92df7085e6461e4d77/.tool-versions#L2"
+        },
+        {
+          "repository": "danielberkompas/elasticsearch-elixir",
+          "commit": "fba3359904cf13a03a799f9a2e4efd2f7a5ee0e1",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/danielberkompas/elasticsearch-elixir/blob/fba3359904cf13a03a799f9a2e4efd2f7a5ee0e1/.tool-versions#L1"
+        },
+        {
+          "repository": "danielberkompas/elasticsearch-elixir",
+          "commit": "fba3359904cf13a03a799f9a2e4efd2f7a5ee0e1",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/danielberkompas/elasticsearch-elixir/blob/fba3359904cf13a03a799f9a2e4efd2f7a5ee0e1/.tool-versions#L2"
+        },
+        {
+          "repository": "fredwu/opq",
+          "commit": "86c8ad4376b962f288d72b9dacc21951838326a1",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/fredwu/opq/blob/86c8ad4376b962f288d72b9dacc21951838326a1/.tool-versions#L1"
+        },
+        {
+          "repository": "crertel/graphmath",
+          "commit": "c94613367bb963a2cdcff4299b31ff9f36476d53",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/crertel/graphmath/blob/c94613367bb963a2cdcff4299b31ff9f36476d53/.tool-versions#L1"
+        },
+        {
+          "repository": "crertel/graphmath",
+          "commit": "c94613367bb963a2cdcff4299b31ff9f36476d53",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/crertel/graphmath/blob/c94613367bb963a2cdcff4299b31ff9f36476d53/.tool-versions#L2"
+        },
+        {
+          "repository": "navinpeiris/geoip",
+          "commit": "444b82a2c88566348fc563a7b1c40087961c6e93",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/navinpeiris/geoip/blob/444b82a2c88566348fc563a7b1c40087961c6e93/.tool-versions#L1"
+        },
+        {
+          "repository": "navinpeiris/geoip",
+          "commit": "444b82a2c88566348fc563a7b1c40087961c6e93",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/navinpeiris/geoip/blob/444b82a2c88566348fc563a7b1c40087961c6e93/.tool-versions#L2"
+        },
+        {
+          "repository": "dvcrn/chatgpt-ui",
+          "commit": "8aaf0cd2e14395f44a95a1ab58f4d2339b9f7c44",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/dvcrn/chatgpt-ui/blob/8aaf0cd2e14395f44a95a1ab58f4d2339b9f7c44/.tool-versions#L1"
+        },
+        {
+          "repository": "dvcrn/chatgpt-ui",
+          "commit": "8aaf0cd2e14395f44a95a1ab58f4d2339b9f7c44",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/dvcrn/chatgpt-ui/blob/8aaf0cd2e14395f44a95a1ab58f4d2339b9f7c44/.tool-versions#L2"
+        },
+        {
+          "repository": "elixir-desktop/desktop",
+          "commit": "f736ff479e415f1da0cc36de7d1e26e8e3b5b976",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/elixir-desktop/desktop/blob/f736ff479e415f1da0cc36de7d1e26e8e3b5b976/.tool-versions#L2"
+        },
+        {
+          "repository": "fredwu/crawler",
+          "commit": "4f44d337d7d7d056c12ef14915f770c149c69218",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/fredwu/crawler/blob/4f44d337d7d7d056c12ef14915f770c149c69218/.tool-versions#L1"
+        },
+        {
+          "repository": "fredwu/crawler",
+          "commit": "4f44d337d7d7d056c12ef14915f770c149c69218",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/fredwu/crawler/blob/4f44d337d7d7d056c12ef14915f770c149c69218/.tool-versions#L2"
+        },
+        {
+          "repository": "petalframework/petal_components",
+          "commit": "9f61e26713e886a0564f50035bf3da1d4a175366",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/petalframework/petal_components/blob/9f61e26713e886a0564f50035bf3da1d4a175366/.tool-versions#L1"
+        },
+        {
+          "repository": "sasa1977/con_cache",
+          "commit": "6cb17c945d0c12964df85531e9f30a5964c7c01f",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/sasa1977/con_cache/blob/6cb17c945d0c12964df85531e9f30a5964c7c01f/.tool-versions#L1"
+        },
+        {
+          "repository": "sasa1977/con_cache",
+          "commit": "6cb17c945d0c12964df85531e9f30a5964c7c01f",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/sasa1977/con_cache/blob/6cb17c945d0c12964df85531e9f30a5964c7c01f/.tool-versions#L2"
+        }
+      ],
+      "sources": {
+        "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/elixir.erlang.eol-26.md",
+        "endoflife": "https://endoflife.date/erlang"
+      }
+    },
+    {
+      "ruleId": "ruby.runtime.eol-2.5",
+      "ecosystem": "ruby",
+      "product": "ruby",
+      "cycles": [
+        "2.5"
+      ],
+      "offingDate": "2021-04-05",
+      "endoflifeDate": "2021-03-31",
+      "differenceDays": 5,
+      "inGroundTruth": true,
+      "references": [
+        {
+          "repository": "ryanto/acts_as_votable",
+          "commit": "5ac261bac166bce37d046527f9b26425da4dc5b2",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/ryanto/acts_as_votable/blob/5ac261bac166bce37d046527f9b26425da4dc5b2/.ruby-version#L1"
+        },
+        {
+          "repository": "RailsApps/rails_apps_composer",
+          "commit": "b4165ab87cebe5985bc7fa44bf4240fd1ad680f8",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/RailsApps/rails_apps_composer/blob/b4165ab87cebe5985bc7fa44bf4240fd1ad680f8/.ruby-version#L1"
+        },
+        {
+          "repository": "hyperstack-org/hyperstack",
+          "commit": "52a06b26d3ab81520bd9c5667367e880dbe90e99",
+          "path": "ruby/examples/tutorials/todos/.ruby-version",
+          "line": 1,
+          "url": "https://github.com/hyperstack-org/hyperstack/blob/52a06b26d3ab81520bd9c5667367e880dbe90e99/ruby/examples/tutorials/todos/.ruby-version#L1"
+        },
+        {
+          "repository": "hyperstack-org/hyperstack",
+          "commit": "52a06b26d3ab81520bd9c5667367e880dbe90e99",
+          "path": "ruby/examples/tutorials/todos/Gemfile.lock",
+          "line": 338,
+          "url": "https://github.com/hyperstack-org/hyperstack/blob/52a06b26d3ab81520bd9c5667367e880dbe90e99/ruby/examples/tutorials/todos/Gemfile.lock#L338"
+        },
+        {
+          "repository": "hyperstack-org/hyperstack",
+          "commit": "52a06b26d3ab81520bd9c5667367e880dbe90e99",
+          "path": "ruby/examples/tutorials/todos/Gemfile",
+          "line": 4,
+          "url": "https://github.com/hyperstack-org/hyperstack/blob/52a06b26d3ab81520bd9c5667367e880dbe90e99/ruby/examples/tutorials/todos/Gemfile#L4"
+        },
+        {
+          "repository": "Terrastories/terrastories",
+          "commit": "f6f033a17bd4a4c600ffea8bc2e773d243f88f72",
+          "path": "e2e/.ruby-version",
+          "line": 1,
+          "url": "https://github.com/Terrastories/terrastories/blob/f6f033a17bd4a4c600ffea8bc2e773d243f88f72/e2e/.ruby-version#L1"
+        },
+        {
+          "repository": "Terrastories/terrastories",
+          "commit": "f6f033a17bd4a4c600ffea8bc2e773d243f88f72",
+          "path": "e2e/Gemfile",
+          "line": 4,
+          "url": "https://github.com/Terrastories/terrastories/blob/f6f033a17bd4a4c600ffea8bc2e773d243f88f72/e2e/Gemfile#L4"
+        },
+        {
+          "repository": "n8chur/AdvancediOS",
+          "commit": "1bcf78bac211c5b29af699a8c98b9b190791cbd7",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/n8chur/AdvancediOS/blob/1bcf78bac211c5b29af699a8c98b9b190791cbd7/.ruby-version#L1"
+        },
+        {
+          "repository": "n8chur/AdvancediOS",
+          "commit": "1bcf78bac211c5b29af699a8c98b9b190791cbd7",
+          "path": "Gemfile.lock",
+          "line": 159,
+          "url": "https://github.com/n8chur/AdvancediOS/blob/1bcf78bac211c5b29af699a8c98b9b190791cbd7/Gemfile.lock#L159"
+        },
+        {
+          "repository": "crsantos/stravaapiclient-swift",
+          "commit": "2a9c8d7864c082f076d516f04588f9aa5a9fa6cb",
+          "path": "Gemfile.lock",
+          "line": 263,
+          "url": "https://github.com/crsantos/stravaapiclient-swift/blob/2a9c8d7864c082f076d516f04588f9aa5a9fa6cb/Gemfile.lock#L263"
+        }
+      ],
+      "sources": {
+        "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/ruby.runtime.eol-2.5.md",
+        "endoflife": "https://endoflife.date/ruby"
+      }
+    },
+    {
+      "ruleId": "ruby.runtime.eol-2.6",
+      "ecosystem": "ruby",
+      "product": "ruby",
+      "cycles": [
+        "2.6"
+      ],
+      "offingDate": "2022-04-12",
+      "endoflifeDate": "2022-03-31",
+      "differenceDays": 12,
+      "inGroundTruth": true,
+      "references": [
+        {
+          "repository": "alabsi91/reanimated-color-picker",
+          "commit": "bae423b0319422bc357f1f11f8188c1b8130b28c",
+          "path": "ExampleLatest/Gemfile.lock",
+          "line": 114,
+          "url": "https://github.com/alabsi91/reanimated-color-picker/blob/bae423b0319422bc357f1f11f8188c1b8130b28c/ExampleLatest/Gemfile.lock#L114"
+        },
+        {
+          "repository": "alabsi91/reanimated-color-picker",
+          "commit": "bae423b0319422bc357f1f11f8188c1b8130b28c",
+          "path": "ExampleOldArch/Gemfile.lock",
+          "line": 117,
+          "url": "https://github.com/alabsi91/reanimated-color-picker/blob/bae423b0319422bc357f1f11f8188c1b8130b28c/ExampleOldArch/Gemfile.lock#L117"
+        },
+        {
+          "repository": "HomeBusProjects/HomeBus",
+          "commit": "15681fbaf24f3c54b16c9526cdde983a34f96d21",
+          "path": "deploy/.ruby-version",
+          "line": 1,
+          "url": "https://github.com/HomeBusProjects/HomeBus/blob/15681fbaf24f3c54b16c9526cdde983a34f96d21/deploy/.ruby-version#L1"
+        },
+        {
+          "repository": "snibox/snibox",
+          "commit": "c756dfffbf2cda8a33a66c2bc4d7da0584fcbcbe",
+          "path": "Gemfile.lock",
+          "line": 294,
+          "url": "https://github.com/snibox/snibox/blob/c756dfffbf2cda8a33a66c2bc4d7da0584fcbcbe/Gemfile.lock#L294"
+        },
+        {
+          "repository": "snibox/snibox",
+          "commit": "c756dfffbf2cda8a33a66c2bc4d7da0584fcbcbe",
+          "path": "Gemfile",
+          "line": 8,
+          "url": "https://github.com/snibox/snibox/blob/c756dfffbf2cda8a33a66c2bc4d7da0584fcbcbe/Gemfile#L8"
+        },
+        {
+          "repository": "hiteshchoudhary/React-native-projects",
+          "commit": "4fe66bbe38b135573d797298b1a8b038fe73df7c",
+          "path": "appwriteauth11/Gemfile.lock",
+          "line": 97,
+          "url": "https://github.com/hiteshchoudhary/React-native-projects/blob/4fe66bbe38b135573d797298b1a8b038fe73df7c/appwriteauth11/Gemfile.lock#L97"
+        },
+        {
+          "repository": "hiteshchoudhary/React-native-projects",
+          "commit": "4fe66bbe38b135573d797298b1a8b038fe73df7c",
+          "path": "natigationexplore09/Gemfile.lock",
+          "line": 97,
+          "url": "https://github.com/hiteshchoudhary/React-native-projects/blob/4fe66bbe38b135573d797298b1a8b038fe73df7c/natigationexplore09/Gemfile.lock#L97"
+        },
+        {
+          "repository": "hiteshchoudhary/React-native-projects",
+          "commit": "4fe66bbe38b135573d797298b1a8b038fe73df7c",
+          "path": "shopping10/Gemfile.lock",
+          "line": 97,
+          "url": "https://github.com/hiteshchoudhary/React-native-projects/blob/4fe66bbe38b135573d797298b1a8b038fe73df7c/shopping10/Gemfile.lock#L97"
+        },
+        {
+          "repository": "hiteshchoudhary/React-native-projects",
+          "commit": "4fe66bbe38b135573d797298b1a8b038fe73df7c",
+          "path": "spotifymusic08/Gemfile.lock",
+          "line": 97,
+          "url": "https://github.com/hiteshchoudhary/React-native-projects/blob/4fe66bbe38b135573d797298b1a8b038fe73df7c/spotifymusic08/Gemfile.lock#L97"
+        },
+        {
+          "repository": "hiteshchoudhary/React-native-projects",
+          "commit": "4fe66bbe38b135573d797298b1a8b038fe73df7c",
+          "path": "tictactoe07/Gemfile.lock",
+          "line": 97,
+          "url": "https://github.com/hiteshchoudhary/React-native-projects/blob/4fe66bbe38b135573d797298b1a8b038fe73df7c/tictactoe07/Gemfile.lock#L97"
+        },
+        {
+          "repository": "railwayapp/nixpacks",
+          "commit": "144b4f9ab1c3943af4dfe76d3c79d91263f5b465",
+          "path": "examples/ruby-2/.ruby-version",
+          "line": 1,
+          "url": "https://github.com/railwayapp/nixpacks/blob/144b4f9ab1c3943af4dfe76d3c79d91263f5b465/examples/ruby-2/.ruby-version#L1"
+        },
+        {
+          "repository": "crsantos/stravaapiclient-swift",
+          "commit": "2a9c8d7864c082f076d516f04588f9aa5a9fa6cb",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/crsantos/stravaapiclient-swift/blob/2a9c8d7864c082f076d516f04588f9aa5a9fa6cb/.ruby-version#L1"
+        },
+        {
+          "repository": "crsantos/stravaapiclient-swift",
+          "commit": "2a9c8d7864c082f076d516f04588f9aa5a9fa6cb",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/crsantos/stravaapiclient-swift/blob/2a9c8d7864c082f076d516f04588f9aa5a9fa6cb/.tool-versions#L1"
+        },
+        {
+          "repository": "Arime9/XCFramework-Sample",
+          "commit": "6784f12b1959bf95f688c6b24df20ede30854578",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/Arime9/XCFramework-Sample/blob/6784f12b1959bf95f688c6b24df20ede30854578/.ruby-version#L1"
+        }
+      ],
+      "sources": {
+        "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/ruby.runtime.eol-2.6.md",
+        "endoflife": "https://endoflife.date/ruby"
+      }
+    },
+    {
+      "ruleId": "ruby.runtime.eol-3.2",
+      "ecosystem": "ruby",
+      "product": "ruby",
+      "cycles": [
+        "3.2"
+      ],
+      "offingDate": "2026-04-01",
+      "endoflifeDate": "2026-03-31",
+      "differenceDays": 1,
+      "inGroundTruth": true,
+      "references": [
+        {
+          "repository": "imaNNeo/fl_chart",
+          "commit": "ecada9478275e987dbac53c2d16b4fb3f2bcb78e",
+          "path": "example/.ruby-version",
+          "line": 1,
+          "url": "https://github.com/imaNNeo/fl_chart/blob/ecada9478275e987dbac53c2d16b4fb3f2bcb78e/example/.ruby-version#L1"
+        },
+        {
+          "repository": "kidpollo/fullstack-kitchen-sink-2024",
+          "commit": "38dddf111e171af5c7126249aee48ce8edf06ba7",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/kidpollo/fullstack-kitchen-sink-2024/blob/38dddf111e171af5c7126249aee48ce8edf06ba7/.tool-versions#L2"
+        },
+        {
+          "repository": "stadacone/orenda",
+          "commit": "feaa6ce97ecebc1bde639624391c2d70e524c680",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/stadacone/orenda/blob/feaa6ce97ecebc1bde639624391c2d70e524c680/.ruby-version#L1"
+        },
+        {
+          "repository": "stadacone/orenda",
+          "commit": "feaa6ce97ecebc1bde639624391c2d70e524c680",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/stadacone/orenda/blob/feaa6ce97ecebc1bde639624391c2d70e524c680/.tool-versions#L1"
+        },
+        {
+          "repository": "stadacone/orenda",
+          "commit": "feaa6ce97ecebc1bde639624391c2d70e524c680",
+          "path": "Gemfile",
+          "line": 5,
+          "url": "https://github.com/stadacone/orenda/blob/feaa6ce97ecebc1bde639624391c2d70e524c680/Gemfile#L5"
+        },
+        {
+          "repository": "stadacone/orenda",
+          "commit": "feaa6ce97ecebc1bde639624391c2d70e524c680",
+          "path": "Gemfile.lock",
+          "line": 403,
+          "url": "https://github.com/stadacone/orenda/blob/feaa6ce97ecebc1bde639624391c2d70e524c680/Gemfile.lock#L403"
+        },
+        {
+          "repository": "bazuka5801/dotfiles-macos",
+          "commit": "b02409347d9b69bbc739602632d6f01539ac5dc1",
+          "path": ".tool-versions",
+          "line": 2,
+          "url": "https://github.com/bazuka5801/dotfiles-macos/blob/b02409347d9b69bbc739602632d6f01539ac5dc1/.tool-versions#L2"
+        },
+        {
+          "repository": "azirbel/npoint",
+          "commit": "f6c8c20f213a6f3e210ee935427e010d9d642cad",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/azirbel/npoint/blob/f6c8c20f213a6f3e210ee935427e010d9d642cad/.ruby-version#L1"
+        },
+        {
+          "repository": "azirbel/npoint",
+          "commit": "f6c8c20f213a6f3e210ee935427e010d9d642cad",
+          "path": "Gemfile",
+          "line": 3,
+          "url": "https://github.com/azirbel/npoint/blob/f6c8c20f213a6f3e210ee935427e010d9d642cad/Gemfile#L3"
+        },
+        {
+          "repository": "azirbel/npoint",
+          "commit": "f6c8c20f213a6f3e210ee935427e010d9d642cad",
+          "path": "Gemfile.lock",
+          "line": 438,
+          "url": "https://github.com/azirbel/npoint/blob/f6c8c20f213a6f3e210ee935427e010d9d642cad/Gemfile.lock#L438"
+        },
+        {
+          "repository": "thoughtbot/suspenders",
+          "commit": "484729486cc986af84ab43b1ffd20793ded7537a",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/thoughtbot/suspenders/blob/484729486cc986af84ab43b1ffd20793ded7537a/.ruby-version#L1"
+        },
+        {
+          "repository": "puma/puma",
+          "commit": "d53529399bc250915374eebe3ae54dd9fd9a6cb0",
+          "path": "benchmarks/local/sinatra/Gemfile",
+          "line": 4,
+          "url": "https://github.com/puma/puma/blob/d53529399bc250915374eebe3ae54dd9fd9a6cb0/benchmarks/local/sinatra/Gemfile#L4"
+        },
+        {
+          "repository": "bootstrap-ruby/bootstrap_form",
+          "commit": "bf07f588054378805f37381a40f55faf6f181c09",
+          "path": "demo/.ruby-version",
+          "line": 1,
+          "url": "https://github.com/bootstrap-ruby/bootstrap_form/blob/bf07f588054378805f37381a40f55faf6f181c09/demo/.ruby-version#L1"
+        },
+        {
+          "repository": "objectbox/objectbox-swift",
+          "commit": "a6af20a3babc9fa5f4a48d552b296902412d44dd",
+          "path": "Source/.ruby-version",
+          "line": 1,
+          "url": "https://github.com/objectbox/objectbox-swift/blob/a6af20a3babc9fa5f4a48d552b296902412d44dd/Source/.ruby-version#L1"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch01/Gemfile.lock",
+          "line": 416,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch01/Gemfile.lock#L416"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch01/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch01/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch02/Gemfile.lock",
+          "line": 416,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch02/Gemfile.lock#L416"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch02/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch02/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch03/Gemfile.lock",
+          "line": 416,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch03/Gemfile.lock#L416"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch03/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch03/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch04/Gemfile.lock",
+          "line": 416,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch04/Gemfile.lock#L416"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch04/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch04/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch05/Gemfile.lock",
+          "line": 423,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch05/Gemfile.lock#L423"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch05/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch05/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch06/Gemfile.lock",
+          "line": 425,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch06/Gemfile.lock#L425"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch06/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch06/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch07/Gemfile.lock",
+          "line": 425,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch07/Gemfile.lock#L425"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch07/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch07/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch08/Gemfile.lock",
+          "line": 425,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch08/Gemfile.lock#L425"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch08/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch08/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch09/Gemfile.lock",
+          "line": 425,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch09/Gemfile.lock#L425"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch09/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch09/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch10/Gemfile.lock",
+          "line": 433,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch10/Gemfile.lock#L433"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch10/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch10/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch11/Gemfile.lock",
+          "line": 433,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch11/Gemfile.lock#L433"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch11/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch11/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch12/Gemfile.lock",
+          "line": 433,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch12/Gemfile.lock#L433"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch12/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch12/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch13/Gemfile.lock",
+          "line": 467,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch13/Gemfile.lock#L467"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch13/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch13/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch14/Gemfile.lock",
+          "line": 467,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch14/Gemfile.lock#L467"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "7_0/ch14/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/7_0/ch14/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch01/Gemfile.lock",
+          "line": 454,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch01/Gemfile.lock#L454"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch01/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch01/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch02/Gemfile.lock",
+          "line": 454,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch02/Gemfile.lock#L454"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch02/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch02/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch03/Gemfile.lock",
+          "line": 454,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch03/Gemfile.lock#L454"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch03/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch03/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch04/Gemfile.lock",
+          "line": 454,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch04/Gemfile.lock#L454"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch04/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch04/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch05/Gemfile.lock",
+          "line": 461,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch05/Gemfile.lock#L461"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch05/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch05/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch06/Gemfile.lock",
+          "line": 463,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch06/Gemfile.lock#L463"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch06/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch06/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch07/Gemfile.lock",
+          "line": 463,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch07/Gemfile.lock#L463"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch07/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch07/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch08/Gemfile.lock",
+          "line": 463,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch08/Gemfile.lock#L463"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch08/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch08/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch09/Gemfile.lock",
+          "line": 463,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch09/Gemfile.lock#L463"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch09/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch09/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch10/Gemfile.lock",
+          "line": 471,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch10/Gemfile.lock#L471"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch10/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch10/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch11/Gemfile.lock",
+          "line": 487,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch11/Gemfile.lock#L487"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch11/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch11/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch12/Gemfile.lock",
+          "line": 487,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch12/Gemfile.lock#L487"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch12/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch12/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch13/Gemfile.lock",
+          "line": 502,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch13/Gemfile.lock#L502"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch13/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch13/Gemfile#L4"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch14/Gemfile.lock",
+          "line": 502,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch14/Gemfile.lock#L502"
+        },
+        {
+          "repository": "yasslab/sample_apps",
+          "commit": "857807bbcec4bf7dc3ae76c2b864800673a01d5f",
+          "path": "8_0/ch14/Gemfile",
+          "line": 4,
+          "url": "https://github.com/yasslab/sample_apps/blob/857807bbcec4bf7dc3ae76c2b864800673a01d5f/8_0/ch14/Gemfile#L4"
+        },
+        {
+          "repository": "railwayapp/nixpacks",
+          "commit": "144b4f9ab1c3943af4dfe76d3c79d91263f5b465",
+          "path": "examples/ruby-3/.ruby-version",
+          "line": 1,
+          "url": "https://github.com/railwayapp/nixpacks/blob/144b4f9ab1c3943af4dfe76d3c79d91263f5b465/examples/ruby-3/.ruby-version#L1"
+        },
+        {
+          "repository": "railwayapp/nixpacks",
+          "commit": "144b4f9ab1c3943af4dfe76d3c79d91263f5b465",
+          "path": "examples/ruby-rails-postgres/.ruby-version",
+          "line": 1,
+          "url": "https://github.com/railwayapp/nixpacks/blob/144b4f9ab1c3943af4dfe76d3c79d91263f5b465/examples/ruby-rails-postgres/.ruby-version#L1"
+        },
+        {
+          "repository": "railwayapp/nixpacks",
+          "commit": "144b4f9ab1c3943af4dfe76d3c79d91263f5b465",
+          "path": "examples/ruby-rails-postgres/Gemfile",
+          "line": 4,
+          "url": "https://github.com/railwayapp/nixpacks/blob/144b4f9ab1c3943af4dfe76d3c79d91263f5b465/examples/ruby-rails-postgres/Gemfile#L4"
+        },
+        {
+          "repository": "railwayapp/nixpacks",
+          "commit": "144b4f9ab1c3943af4dfe76d3c79d91263f5b465",
+          "path": "examples/ruby-rails-postgres/Gemfile.lock",
+          "line": 246,
+          "url": "https://github.com/railwayapp/nixpacks/blob/144b4f9ab1c3943af4dfe76d3c79d91263f5b465/examples/ruby-rails-postgres/Gemfile.lock#L246"
+        },
+        {
+          "repository": "micahflee/TM-SGNL-iOS",
+          "commit": "dde0620dafe32c0a10d93aee2a19b406a5aeb015",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/micahflee/TM-SGNL-iOS/blob/dde0620dafe32c0a10d93aee2a19b406a5aeb015/.ruby-version#L1"
+        },
+        {
+          "repository": "sarthak-behl/Signal-iOS",
+          "commit": "daf9814c8a340fb603acb8137557e9458d1aa2c4",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/sarthak-behl/Signal-iOS/blob/daf9814c8a340fb603acb8137557e9458d1aa2c4/.ruby-version#L1"
+        },
+        {
+          "repository": "palak-ios-play/SecureChat-iOS",
+          "commit": "2e53db22e39f959744c68f5c425e8fc69e01cc02",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/palak-ios-play/SecureChat-iOS/blob/2e53db22e39f959744c68f5c425e8fc69e01cc02/.ruby-version#L1"
+        },
+        {
+          "repository": "tiktok/sparkling",
+          "commit": "0939eb4f04d391cd78a9e472788bdf876a15b802",
+          "path": "Gemfile.lock",
+          "line": 116,
+          "url": "https://github.com/tiktok/sparkling/blob/0939eb4f04d391cd78a9e472788bdf876a15b802/Gemfile.lock#L116"
+        },
+        {
+          "repository": "tiktok/sparkling",
+          "commit": "0939eb4f04d391cd78a9e472788bdf876a15b802",
+          "path": "packages/playground/ios/Gemfile.lock",
+          "line": 115,
+          "url": "https://github.com/tiktok/sparkling/blob/0939eb4f04d391cd78a9e472788bdf876a15b802/packages/playground/ios/Gemfile.lock#L115"
+        },
+        {
+          "repository": "tiktok/sparkling",
+          "commit": "0939eb4f04d391cd78a9e472788bdf876a15b802",
+          "path": "template/sparkling-app-template/ios/Gemfile.lock",
+          "line": 119,
+          "url": "https://github.com/tiktok/sparkling/blob/0939eb4f04d391cd78a9e472788bdf876a15b802/template/sparkling-app-template/ios/Gemfile.lock#L119"
+        },
+        {
+          "repository": "tuist/SwiftyRipgrep",
+          "commit": "80617b53a0eace7a5f46f651727c29fd2acc1d1b",
+          "path": ".tool-versions",
+          "line": 1,
+          "url": "https://github.com/tuist/SwiftyRipgrep/blob/80617b53a0eace7a5f46f651727c29fd2acc1d1b/.tool-versions#L1"
+        },
+        {
+          "repository": "jihoonahn/DaySquare",
+          "commit": "1fb51aafb5609693d1b21c105a5d75fa02001bd5",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/jihoonahn/DaySquare/blob/1fb51aafb5609693d1b21c105a5d75fa02001bd5/.ruby-version#L1"
+        },
+        {
+          "repository": "binishmaharjan/Hamro-Sahakarya",
+          "commit": "d51052e31cec01474c8b18fe7af14ba28a078de1",
+          "path": ".ruby-version",
+          "line": 1,
+          "url": "https://github.com/binishmaharjan/Hamro-Sahakarya/blob/d51052e31cec01474c8b18fe7af14ba28a078de1/.ruby-version#L1"
+        }
+      ],
+      "sources": {
+        "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/ruby.runtime.eol-3.2.md",
+        "endoflife": "https://endoflife.date/ruby"
+      }
+    }
+  ]
+}

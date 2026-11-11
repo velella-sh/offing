@@ -1,0 +1,167 @@
+import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { after, test } from "node:test";
+import { promisify } from "node:util";
+
+const execute = promisify(execFile);
+const cli = resolve("dist/src/cli.js");
+
+interface Outcome {
+  code: number;
+  stdout: string;
+  stderr: string;
+}
+
+const roots: string[] = [];
+
+after(async () => {
+  await Promise.all(roots.map((root) => rm(root, { recursive: true, force: true })));
+});
+
+async function run(args: string[]): Promise<Outcome> {
+  try {
+    const { stdout, stderr } = await execute(process.execPath, [cli, ...args]);
+    return { code: 0, stdout, stderr };
+  } catch (error) {
+    const failure = error as Outcome;
+    return { code: failure.code, stdout: failure.stdout, stderr: failure.stderr };
+  }
+}
+
+async function emptyRepository(): Promise<string> {
+  const root = await mkdtemp(join(tmpdir(), "offing-exit-codes-"));
+  roots.push(root);
+  return root;
+}
+
+function errorDocument(outcome: Outcome): {
+  schemaVersion: string;
+  error: { code: string; reason: string; exitCode: number; message: string };
+} {
+  return JSON.parse(outcome.stdout) as ReturnType<typeof errorDocument>;
+}
+
+test("success exits 0 and writes no error document", async () => {
+  const result = await run(["check", "pkg:npm/express", "--json"]);
+  assert.equal(result.code, 0);
+  assert.equal((JSON.parse(result.stdout) as { schemaVersion: string }).schemaVersion, "offing.check.v1");
+});
+
+test("usage failures exit 2 with the code usage", async () => {
+  const unknown = await run(["frobnicate", "--json"]);
+  assert.equal(unknown.code, 2);
+  assert.deepEqual(errorDocument(unknown).error.code, "usage");
+  assert.equal(errorDocument(unknown).error.exitCode, 2);
+  assert.equal(errorDocument(unknown).error.reason, "unknown-command");
+  assert.equal(errorDocument(unknown).schemaVersion, "offing.error.v1");
+  assert.match(unknown.stderr, /Unknown command: frobnicate/);
+  assert.doesNotMatch(
+    errorDocument(unknown).error.message,
+    /Usage:/,
+    "the JSON message is the reason, not the help text",
+  );
+
+  const format = await run(["scan", ".", "--format", "yaml"]);
+  assert.equal(format.code, 2);
+  assert.equal(format.stdout, "", "text mode writes no JSON on stdout");
+
+  const missingPurl = await run(["check", "--json"]);
+  assert.equal(missingPurl.code, 2);
+  assert.equal(errorDocument(missingPurl).error.code, "usage");
+
+  const malformedPin = await run(["check", "pkg:npm/request", "--data-version", "latest", "--json"]);
+  assert.equal(malformedPin.code, 2);
+  assert.equal(errorDocument(malformedPin).error.code, "usage");
+  assert.equal(errorDocument(malformedPin).error.reason, "invalid-data-version");
+});
+
+test("data failures exit 3 with the code data", async () => {
+  const root = await emptyRepository();
+  const missing = await run(["explain", "no-such-finding", root, "--json"]);
+  assert.equal(missing.code, 3);
+  assert.equal(errorDocument(missing).error.code, "data");
+  assert.equal(errorDocument(missing).error.reason, "finding-not-found");
+  assert.match(errorDocument(missing).error.message, /Finding not found: no-such-finding/);
+  assert.match(missing.stderr, /Finding not found/);
+
+  const context = await run(["context", "no-such-finding", root, "--json"]);
+  assert.equal(context.code, 3);
+  assert.equal(errorDocument(context).error.code, "data");
+
+  const pin = await run(["check", "pkg:npm/request", "--data-version", "2999.01.01", "--json"]);
+  assert.equal(pin.code, 3);
+  assert.equal(errorDocument(pin).error.code, "data");
+});
+
+test("parse failures exit 4 with the code parse", async () => {
+  const invalid = await run(["check", "request", "--json"]);
+  assert.equal(invalid.code, 4);
+  assert.equal(errorDocument(invalid).error.code, "parse");
+  assert.equal(errorDocument(invalid).error.exitCode, 4);
+
+  const root = await emptyRepository();
+  const baseline = join(root, "baseline.json");
+  await writeFile(baseline, "{ not json");
+  const unreadable = await run(["scan", root, "--baseline", baseline, "--json"]);
+  assert.equal(unreadable.code, 4);
+  assert.equal(errorDocument(unreadable).error.code, "parse");
+
+  await writeFile(baseline, JSON.stringify({ schemaVersion: "something.else" }));
+  const unsupported = await run(["scan", root, "--baseline", baseline]);
+  assert.equal(unsupported.code, 4);
+  assert.equal(unsupported.stdout, "");
+  assert.match(unsupported.stderr, /Unsupported Offing baseline/);
+});
+
+test("policy failures exit 1 and keep stdout a single result document", async () => {
+  const result = await run(["check", "pkg:npm/request@2.88.2", "--json"]);
+  assert.equal(result.code, 1);
+  const document = JSON.parse(result.stdout) as { schemaVersion: string; status: string };
+  assert.equal(document.schemaVersion, "offing.check.v1");
+  assert.equal(document.status, "affected");
+});
+
+test("internal failures exit 5 with the code internal", async () => {
+  const root = await emptyRepository();
+  await writeFile(join(root, "Dockerfile"), "FROM node:14\n");
+  const scan = JSON.parse((await run(["scan", root, "--json"])).stdout) as { findings: Array<{ id: string }> };
+  const output = join(root, "report.md");
+  await mkdir(output);
+  const result = await run(["report-issue", scan.findings[0]!.id, root, "--output", output, "--json"]);
+  assert.equal(result.code, 5);
+  const { error } = errorDocument(result);
+  assert.equal(error.code, "internal");
+  assert.equal(error.exitCode, 5);
+  assert.match(result.stderr, /Offing failed unexpectedly/);
+  assert.match(result.stderr, /Re-run with --debug/);
+  assert.doesNotMatch(error.message, /at /, "the JSON message has no stack trace without --debug");
+});
+
+test("the exit-code table in docs/CAPABILITIES.md cannot drift from the code", async () => {
+  const documentation = await readFile(resolve("docs", "CAPABILITIES.md"), "utf8");
+  const documented = new Map<string, number>();
+  for (const match of documentation.matchAll(/\| `([a-z]+)` \| (\d+) \|/g)) {
+    const code = match[1]!;
+    const exitCode = Number(match[2]!);
+    assert.equal(documented.has(code), false, `the table lists ${code} twice`);
+    documented.set(code, exitCode);
+  }
+  assert.ok(documented.size > 0, "the table was not found");
+
+  const source = await readFile(resolve("dist/src/offing-error.js"), "utf8");
+  const codes = source.match(/EXIT_CODES = \{([^}]*)\}/);
+  assert.ok(codes, "EXIT_CODES was not found in the compiled CLI");
+  const implemented = new Map(
+    [...codes[1]!.matchAll(/([a-z]+): (\d+)/g)].map(([, code, exitCode]) => [code!, Number(exitCode!)]),
+  );
+
+  for (const [code, exitCode] of implemented) {
+    assert.equal(documented.get(code), exitCode, `${code} appeared in the code without its table row`);
+  }
+  for (const code of documented.keys()) {
+    assert.ok(implemented.has(code), `${code} appeared in the table without a class in the code`);
+  }
+});

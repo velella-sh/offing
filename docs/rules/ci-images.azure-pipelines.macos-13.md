@@ -1,0 +1,158 @@
+---
+title: "Azure Pipelines macOS 13 Ventura hosted image is retired — dates, impact, migration"
+description: "The macOS 13 Ventura hosted image was retired on 2025-12-04. The Microsoft-hosted agents page states that date, and the Azure DevOps blog lists the same full retiral date."
+layout: doc
+permalink: "/rules/ci-images.azure-pipelines.macos-13.html"
+canonical_url: "https://velella.sh/offing/rules/ci-images.azure-pipelines.macos-13.html"
+image: "/assets/og/ci-images.azure-pipelines.macos-13.svg"
+review_date: "2026-11-07"
+last_modified_at: "2026-11-07"
+json_twin: "/rules/ci-images.azure-pipelines.macos-13.json"
+---
+
+# Azure Pipelines macOS 13 Ventura hosted image is retired
+
+**Removed** as of 2025-12-04. Replacement: macos-14, macos-15, or macos-latest. Source: [Microsoft-hosted agents for Azure Pipelines](https://learn.microsoft.com/azure/devops/pipelines/agents/hosted).
+
+Check a version:
+
+```bash
+offing check pkg:generic/azure-pipelines/macos-image
+```
+
+The macOS 13 Ventura hosted image was retired on 2025-12-04. The Microsoft-hosted agents page states that date, and the Azure DevOps blog lists the same full retiral date.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Removed |
+| Severity | high |
+| Ecosystem | `ci-images` |
+| Component | `pkg:generic/azure-pipelines/macos-image` |
+| Affected versions | `vers:intdot/13` |
+| Date from the source | 2025-12-04 |
+| Replacement | macos-14, macos-15, or macos-latest |
+| Evidence last seen | 2026-11-07 |
+| Reviewed | 2026-11-07 by arminazimi |
+| Review due | 2027-11-07 (365 days after the last review) |
+| Rule ID | `ci-images.azure-pipelines.macos-13` |
+
+## Sources
+
+- [Microsoft-hosted agents for Azure Pipelines](https://learn.microsoft.com/azure/devops/pipelines/agents/hosted) (accessed 2026-11-07)
+- [Upcoming Updates for Azure Pipelines Agents Images](https://devblogs.microsoft.com/devops/upcoming-updates-for-azure-pipelines-agents-images/) (accessed 2026-11-07)
+
+## Migration
+
+**Constraints**
+
+- Change only Microsoft-hosted pool.vmImage labels. This retirement does not apply to self-hosted agents, Managed DevOps Pools, or VM scale sets.
+- The macOS 13 notice names macos-14, macos-15, or macos-latest. macos-14 has its own scheduled removal on 2026-11-23, so prefer macos-15 or macos-latest when the workload allows it.
+
+**Steps**
+
+1. **Retarget the hosted image.** Change the reported pool.vmImage from macos-13 to macos-15 or macos-latest (the notice also allows macos-14; see the replacement).
+2. **Align other Azure Pipelines pools.** Update every other azure-pipelines.yml pool, including stage and job pools, that still pins macos-13. Leave self-hosted pool names unchanged.
+
+**Verification**
+
+- `gitlab-ci-lint || circleci config validate`: Lint .gitlab-ci.yml with gitlab-ci-lint, or .circleci/config.yml with circleci config validate, when the repository has that file. Azure Pipelines has no equivalent local validator: queue the pipeline and confirm the job uses the replacement vmImage.
+
+## Detected by
+
+The `ci-images` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Other versions of this product
+
+- [Azure Pipelines macOS 14 Sonoma hosted image is scheduled for removal on 2026-11-23](ci-images.azure-pipelines.macos-14.html)
+
+### Same ecosystem
+
+- [Azure Pipelines Ubuntu 20.04 hosted image is retired](ci-images.azure-pipelines.ubuntu-20.04.html)
+- [Azure Pipelines Ubuntu 22.04 hosted image is scheduled for removal](ci-images.azure-pipelines.ubuntu-22.04.html)
+- [Azure Pipelines Windows Server 2019 hosted image is retired](ci-images.azure-pipelines.windows-2019.html)
+
+
+## Data
+
+This page is generated from [`registry/ci-images.json`](https://github.com/velella-sh/offing/blob/main/registry/ci-images.json), rule `ci-images.azure-pipelines.macos-13`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/ci-images.azure-pipelines.macos-13.html",
+      "url": "https://velella.sh/offing/rules/ci-images.azure-pipelines.macos-13.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/ci-images.azure-pipelines.macos-13.html",
+      "headline": "Azure Pipelines macOS 13 Ventura hosted image is retired — dates, impact, migration",
+      "description": "The macOS 13 Ventura hosted image was retired on 2025-12-04. The Microsoft-hosted agents page states that date, and the Azure DevOps blog lists the same full retiral date.",
+      "inLanguage": "en",
+      "dateModified": "2026-11-07",
+      "keywords": [
+        "removed",
+        "ci-images",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "Azure Pipelines macOS 13 Ventura hosted image is retired",
+        "identifier": "pkg:generic/azure-pipelines/macos-image"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Microsoft-hosted agents for Azure Pipelines",
+          "url": "https://learn.microsoft.com/azure/devops/pipelines/agents/hosted"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Upcoming Updates for Azure Pipelines Agents Images",
+          "url": "https://devblogs.microsoft.com/devops/upcoming-updates-for-azure-pipelines-agents-images/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/ci-images.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/ci-images.azure-pipelines.macos-13.html#faq",
+      "url": "https://velella.sh/offing/rules/ci-images.azure-pipelines.macos-13.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/azure-pipelines/macos-image?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Removed as of 2025-12-04. Affected versions: vers:intdot/13. Source: Microsoft-hosted agents for Azure Pipelines (https://learn.microsoft.com/azure/devops/pipelines/agents/hosted)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/azure-pipelines/macos-image?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "macos-14, macos-15, or macos-latest"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/azure-pipelines/macos-image?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/azure-pipelines/macos-image."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

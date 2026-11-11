@@ -1,0 +1,151 @@
+---
+title: "cmip_ref was renamed and is no longer maintained — dates, impact, migration"
+description: "The maintainers state that cmip_ref is deprecated, no longer maintained, and renamed to climate-ref."
+layout: doc
+permalink: "/rules/python.package.cmip-ref.eol.html"
+canonical_url: "https://velella.sh/offing/rules/python.package.cmip-ref.eol.html"
+image: "/assets/og/python.package.cmip-ref.eol.svg"
+review_date: "2026-10-16"
+last_modified_at: "2026-10-16"
+json_twin: "/rules/python.package.cmip-ref.eol.json"
+---
+
+# cmip_ref was renamed and is no longer maintained
+
+**End of life.** The source gives no day. Replacement: climate-ref. Source: [cmip_ref rename and maintenance notice](https://pypi.org/project/cmip-ref/).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/cmip-ref
+```
+
+The maintainers state that cmip_ref is deprecated, no longer maintained, and renamed to climate-ref.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of life |
+| Severity | high |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/cmip-ref` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Replacement | climate-ref |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `python.package.cmip-ref.eol` |
+
+## Sources
+
+- [cmip_ref rename and maintenance notice](https://pypi.org/project/cmip-ref/) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve configuration, climate data inputs, diagnostics, output formats, provenance, and command behavior.
+
+**Steps**
+
+1. **Move to climate-ref.** Replace cmip_ref with climate-ref, update imports from cmip_ref to climate_ref, and translate any changed configuration or commands.
+
+**Verification**
+
+- `python -m pytest`: Run climate data, diagnostics, output, command, and project tests when defined.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.cmip-ref.eol`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.cmip-ref.eol.html",
+      "url": "https://velella.sh/offing/rules/python.package.cmip-ref.eol.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.cmip-ref.eol.html",
+      "headline": "cmip_ref was renamed and is no longer maintained — dates, impact, migration",
+      "description": "The maintainers state that cmip_ref is deprecated, no longer maintained, and renamed to climate-ref.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "end-of-life",
+        "python",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "cmip_ref was renamed and is no longer maintained",
+        "identifier": "pkg:pypi/cmip-ref"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "cmip_ref rename and maintenance notice",
+          "url": "https://pypi.org/project/cmip-ref/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.cmip-ref.eol.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.cmip-ref.eol.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/cmip-ref?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of life. The source gives no day. Affected versions: vers:pypi/*. Source: cmip_ref rename and maintenance notice (https://pypi.org/project/cmip-ref/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:pypi/cmip-ref?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "climate-ref"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/cmip-ref?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/cmip-ref."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

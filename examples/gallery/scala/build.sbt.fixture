@@ -1,0 +1,8 @@
+ThisBuild / organization := "com.example"
+ThisBuild / version := "0.1.0"
+
+lazy val root = (project in file("."))
+  .settings(
+    name := "offing-scala-positive",
+    scalaVersion := "2.11.12"
+  )

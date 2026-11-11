@@ -1,0 +1,24 @@
+# Test fixtures
+
+Each subdirectory is a small untrusted repository (or a set of them) that detectors and tests scan without executing. Prefer the layout in [Detector authoring](../../docs/DETECTORS.md#start-a-new-detector-in-this-repository): a README table, then `positive/`, `negative/`, `zero/`, and `malformed/` cases as needed.
+
+Files a dependency scanner reads by name, such as a lockfile or a manifest that pins versions, are committed with a `.fixture` suffix (`package-lock.json.fixture`, `Package.resolved.fixture`). `copyFixtureTree` in [`tests/fixture-copies.ts`](../fixture-copies.ts) restores the real names in a temporary directory, so tests still scan real names while the committed tree holds nothing scanner-shaped. `Dockerfile` names follow the separate rule in [container/README.md](container/README.md). See [decision 0027](../../docs/decisions/0027-fixtures-invisible-to-scanners.md).
+
+## Edge-case fixture issues
+
+False-positive boundaries that maintainers have already triaged become small `good first issue` tasks so newcomers can lock them into on-disk fixtures. Open ones from this batch (#1320):
+
+| Issue | Edge case | Source of triage |
+| --- | --- | --- |
+| [#1686](https://github.com/velella-sh/offing/issues/1686) | npm `@types/*` stub deprecations | [#822](https://github.com/velella-sh/offing/issues/822) |
+| [#1687](https://github.com/velella-sh/offing/issues/1687) | Swift library `Package.swift` platforms vs App Store rules | [#808](https://github.com/velella-sh/offing/issues/808) |
+| [#1688](https://github.com/velella-sh/offing/issues/1688) | Node.js `engines.node` pins | [Held-out set](../../docs/VALIDATION.md#the-held-out-set) |
+| [#1689](https://github.com/velella-sh/offing/issues/1689) | GitHub Actions `strategy.matrix` Node.js entries | [Held-out set](../../docs/VALIDATION.md#the-held-out-set) |
+| [#1690](https://github.com/velella-sh/offing/issues/1690) | PHP dynamic `require` / `include` stay unclassified | [COMPATIBILITY.md](../../docs/COMPATIBILITY.md#known-limits-and-false-positive-boundaries) |
+
+Browse every open fixture task: [type: fixture is:open](https://github.com/velella-sh/offing/issues?q=is%3Aopen+label%3A%22type%3A+fixture%22).
+
+`npm run check` rejects tracked paths under this directory whose basename a dependency scanner recognizes,
+including any case-insensitive occurrence of `dockerfile`. The guard and copy helper share the name rule in
+[`src/fixture-names.ts`](../../src/fixture-names.ts). Stage new fixtures before running the check; parser-only
+tests can read the stored `.fixture` bytes directly, while scans must use a temporary materialized copy.

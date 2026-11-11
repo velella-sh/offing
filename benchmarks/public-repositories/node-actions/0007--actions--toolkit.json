@@ -1,0 +1,35 @@
+{
+  "repository": "actions/toolkit",
+  "commit": "7e25f67e8fd17369aa21e6e816ac99654106e0dc",
+  "ecosystem": "node-actions",
+  "selection": "targeted",
+  "expected": [
+    {
+      "ruleId": "github-actions.github-script.node20",
+      "path": ".github/workflows/update-github.yaml",
+      "line": 33,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 33 of .github/workflows/update-github.yaml reads uses: actions/github-script@v6, a release below the supported major. Vendor-checked by AI agent (Claude Code) under maintainer direction on 2026-11-03 against the primary vendor page https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/: Node.js 20 became unavailable as an Actions runtime on 2026-09-23. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-20",
+      "path": ".github/workflows/unit-tests.yml",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read .github/workflows/unit-tests.yml:23 at this commit: `node-version: [20.x, 24.x]`; the setup-node version (read directly or from the matrix key it names) is a Node.js release line past end of life."
+      }
+    },
+    {
+      "ruleId": "github-actions.workflow-command.set-output",
+      "path": ".github/workflows/update-github.yaml",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Inspected actions/toolkit@7e25f67e8fd17369aa21e6e816ac99654106e0dc, .github/workflows/update-github.yaml:23 directly on 2026-11-05: `echo \"::set-output name=createPR::true\"` emits the deprecated set-output command from a run step. GitHub independently documents this stdout command and the GITHUB_OUTPUT replacement at https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/. This expectation was checked against the pinned source and vendor notice, not inferred from scanner output."
+      }
+    }
+  ]
+}

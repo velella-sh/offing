@@ -1,0 +1,199 @@
+name: Release
+
+# One release chain: verify → build → publish each channel (npm first) → binaries and SBOM → notes and smoke.
+# A version tag runs it; `dry_run` exercises every stage and publishes nothing. npm trusted publishing matches this filename.
+# Every channel's provenance is checked with slsa-verifier, so a missing or mismatched attestation fails the run.
+# See docs/RELEASING.md for the full chain and the dry_run/release_tag manual runs.
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-*"
+  workflow_dispatch:
+    inputs:
+      from:
+        description: Tag or commit to start from (default is the latest tag)
+        required: false
+      release_tag:
+        description: Dry run of the major Action tag for this release tag (for example v1.4.2). Pushes nothing.
+        required: false
+        default: ""
+      dry_run:
+        description: Exercise every release stage without publishing
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  # The npm publish lives here, not in a reusable stage: Scorecard's Packaging check needs a publish in a workflow with its own runs.
+  npm-publish:
+    if: ${{ (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write # the npm trusted-publishing exchange and the provenance attestation; nothing else
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: npm ci
+      - name: The tag must match package.json and point at a release branch tip that adds the Action bundle
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        run: bash .github/scripts/check-release-tip.sh
+      - name: Publish (prepack runs npm run check)
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        env:
+          OFFING_VERIFY_ACTION_BUNDLE: "1"
+        run: |
+          case "$GITHUB_REF_NAME" in
+            *-*) npm publish --provenance --access public --tag next ;;
+            *)   npm publish --provenance --access public ;;
+          esac
+      - name: Record dry-run stage
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "Publish stage (npm) dry run; nothing was published." >> "$GITHUB_STEP_SUMMARY"
+
+  publish-npm:
+    needs: [npm-publish]
+    if: ${{ (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+    uses: ./.github/workflows/publish.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+
+  verify:
+    needs: [publish-npm]
+    if: >-
+      always() && !cancelled() && (needs.publish-npm.result == 'success' || needs.publish-npm.result == 'skipped') &&
+      (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')))
+    uses: ./.github/workflows/release-verify.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+      from: ${{ inputs.from || '' }}
+      release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
+      run_notes: ${{ github.event_name == 'workflow_dispatch' }}
+      run_reproducible: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) }}
+
+  build-action:
+    if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+    uses: ./.github/workflows/release-build-action.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    permissions:
+      contents: write
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+
+  build-binaries:
+    needs: [publish-npm]
+    if: >-
+      always() && !cancelled() && needs.publish-npm.result == 'success' &&
+      ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+       (github.event_name == 'workflow_dispatch' && inputs.dry_run))
+    uses: ./.github/workflows/release-build-binaries.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+      release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
+
+  publish-tags:
+    needs: [publish-npm]
+    if: >-
+      always() && !cancelled() &&
+      (
+        (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && needs.publish-npm.result == 'success') ||
+        (github.event_name == 'workflow_dispatch' && inputs.dry_run && needs.publish-npm.result == 'success') ||
+        (github.event_name == 'workflow_dispatch' && inputs.release_tag != '' && needs.publish-npm.result == 'skipped')
+      )
+    uses: ./.github/workflows/release-publish-tags.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    permissions:
+      contents: write
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+      release_tag: ${{ inputs.release_tag || '' }}
+      release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
+
+  publish-container:
+    needs: [publish-npm]
+    if: >-
+      always() && !cancelled() && needs.publish-npm.result == 'success' &&
+      ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+       (github.event_name == 'workflow_dispatch' && inputs.dry_run))
+    uses: ./.github/workflows/release-publish-container.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+      release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
+
+  publish-homebrew:
+    needs: [publish-npm]
+    if: >-
+      always() && !cancelled() && needs.publish-npm.result == 'success' &&
+      ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+       (github.event_name == 'workflow_dispatch' && inputs.dry_run))
+    uses: ./.github/workflows/release-publish-homebrew.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    secrets:
+      HOMEBREW_TAP_DEPLOY_KEY: ${{ secrets.HOMEBREW_TAP_DEPLOY_KEY }}
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+      release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
+
+  publish-binaries:
+    needs: [publish-npm, build-binaries]
+    if: >-
+      always() && !cancelled() && needs.publish-npm.result == 'success' &&
+      needs.build-binaries.result == 'success' &&
+      ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+       (github.event_name == 'workflow_dispatch' && inputs.dry_run))
+    uses: ./.github/workflows/release-publish-binaries.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+      actions: read
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+      release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
+
+  sbom:
+    needs: [publish-binaries]
+    if: ${{ always() && !cancelled() && needs.publish-binaries.result == 'success' }}
+    uses: ./.github/workflows/release-sbom.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    permissions:
+      contents: write
+      id-token: write
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+
+  release-notes:
+    needs: [publish-binaries]
+    if: ${{ always() && !cancelled() && needs.publish-binaries.result == 'success' }}
+    uses: ./.github/workflows/release-notes.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    permissions:
+      contents: write
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+      release_tag: ${{ github.event_name == 'push' && github.ref_name || '' }}
+
+  smoke:
+    needs: [publish-npm]
+    if: >-
+      always() && !cancelled() && needs.publish-npm.result == 'success' &&
+      ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+       (github.event_name == 'workflow_dispatch' && inputs.dry_run))
+    uses: ./.github/workflows/release-smoke.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    with:
+      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
+      release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}

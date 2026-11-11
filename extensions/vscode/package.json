@@ -1,0 +1,83 @@
+{
+  "name": "offing-vscode",
+  "displayName": "Offing",
+  "description": "Show Offing lifecycle findings as inline diagnostics using the local CLI.",
+  "version": "0.1.0",
+  "publisher": "arminazimi",
+  "license": "Apache-2.0",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/velella-sh/offing.git",
+    "directory": "extensions/vscode"
+  },
+  "homepage": "https://github.com/velella-sh/offing/tree/main/extensions/vscode",
+  "bugs": {
+    "url": "https://github.com/velella-sh/offing/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "deprecation",
+    "end-of-life",
+    "offing",
+    "lifecycle"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "offing.scan",
+        "title": "Offing: Scan workspace"
+      },
+      {
+        "command": "offing.explainFinding",
+        "title": "Offing: explain this finding"
+      }
+    ],
+    "configuration": {
+      "title": "Offing",
+      "properties": {
+        "offing.executablePath": {
+          "type": "string",
+          "default": "offing",
+          "description": "Path to the Offing CLI. The default uses `offing` from PATH."
+        },
+        "offing.runOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scan the workspace folder when a file is saved."
+        }
+      }
+    }
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited"
+    },
+    "virtualWorkspaces": false
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "npm run build && node --test \"out/test/**/*.test.js\"",
+    "package": "vsce package --no-dependencies",
+    "vscode:prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@vscode/vsce": "^4.0.0",
+    "@types/vscode": "1.85.0",
+    "typescript": "^5.9.0"
+  },
+  "overrides": {
+    "minimatch": "^11.0.4"
+  }
+}

@@ -1,0 +1,81 @@
+spec:
+  inputs:
+    stage:
+      description: Pipeline stage the job runs in.
+      default: test
+    path:
+      description: Repository root or subdirectory to scan. Defaults to the checked-out repository.
+      default: .
+    baseline:
+      description: Optional baseline path relative to the project directory. Leave empty to report every finding.
+      default: ""
+    baseline_warn_days:
+      description: Warn when a suppression in the baseline expires within this many days (0 to 365).
+      default: "14"
+    on_expired:
+      description: >-
+        What a baseline suppression does after its expires date: resurface (its finding is reported again) or
+        fail (also fail the job).
+      default: resurface
+      options: [resurface, fail]
+    min_support_days:
+      description: >-
+        Warn (medium severity) on lines whose support ends within this many days. Leave empty to report only
+        what the data already marks.
+      default: ""
+    fail_on_severity:
+      description: Lowest severity that fails the job (none, info, low, medium, high, or critical).
+      default: high
+      options: [none, info, low, medium, high, critical]
+    report_name:
+      description: File name of the JSON report that is kept as a job artifact.
+      default: offing-report.json
+    code_quality_report_name:
+      description: File name of the GitLab Code Quality report that shows findings in merge requests.
+      default: gl-code-quality-report.json
+    version:
+      description: Version of the offing npm package to run.
+      default: 0.1.0
+    image:
+      description: Node.js 22 or newer image the job runs in.
+      default: node:24-trixie-slim
+---
+offing:
+  stage: $[[ inputs.stage ]]
+  image: $[[ inputs.image ]]
+  variables:
+    GIT_DEPTH: "1"
+    OFFING_PATH: $[[ inputs.path ]]
+    OFFING_BASELINE: $[[ inputs.baseline ]]
+    OFFING_BASELINE_WARN_DAYS: $[[ inputs.baseline_warn_days ]]
+    OFFING_ON_EXPIRED: $[[ inputs.on_expired ]]
+    OFFING_MIN_SUPPORT_DAYS: $[[ inputs.min_support_days ]]
+    OFFING_FAIL_ON_SEVERITY: $[[ inputs.fail_on_severity ]]
+    OFFING_REPORT: $[[ inputs.report_name ]]
+    OFFING_CODE_QUALITY_REPORT: $[[ inputs.code_quality_report_name ]]
+  script:
+    - |
+      set -u
+      set -- "$OFFING_PATH"
+      if [ -n "$OFFING_BASELINE" ]; then
+        set -- "$@" --baseline "$OFFING_PATH/$OFFING_BASELINE" --baseline-warn-days "$OFFING_BASELINE_WARN_DAYS" --on-expired "$OFFING_ON_EXPIRED"
+      fi
+      if [ -n "$OFFING_MIN_SUPPORT_DAYS" ]; then
+        set -- "$@" --min-support-days "$OFFING_MIN_SUPPORT_DAYS"
+      fi
+      offing() { npx --yes "offing@$[[ inputs.version ]]" "$@"; }
+      # The report is written before the gate is applied, so it is kept even when the job fails.
+      set +e
+      offing scan "$@" --json --fail-on "$OFFING_FAIL_ON_SEVERITY" > "$OFFING_REPORT"
+      status=$?
+      set -e
+      offing scan "$@" --format codequality > "$OFFING_CODE_QUALITY_REPORT" || true
+      offing scan "$@" || true
+      exit "$status"
+  artifacts:
+    when: always
+    paths:
+      - $[[ inputs.report_name ]]
+    reports:
+      codequality: $[[ inputs.code_quality_report_name ]]
+    expire_in: 14 days

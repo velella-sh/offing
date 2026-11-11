@@ -1,0 +1,52 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "offing",
+  "version": "0.1.0",
+  "description": "Find, explain, migrate, and verify evidence-backed software lifecycle risks.",
+  "author": {
+    "name": "Offing",
+    "url": "https://github.com/velella-sh/offing"
+  },
+  "homepage": "https://velella.sh/offing/",
+  "repository": "https://github.com/velella-sh/offing",
+  "license": "Apache-2.0",
+  "keywords": [
+    "deprecation",
+    "lifecycle",
+    "mcp",
+    "developer-tools"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Offing",
+        "shortDescription": "Find lifecycle risks early",
+        "longDescription": "Scan repositories for supported lifecycle risks, inspect evidence, build migration context, and verify the result locally.",
+        "developerName": "Offing",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read"
+        ],
+        "websiteURL": "https://velella.sh/offing/",
+        "supportURL": "https://velella.sh/offing/SUPPORT.html",
+        "privacyPolicyURL": "https://velella.sh/offing/PRIVACY.html",
+        "termsOfServiceURL": "https://velella.sh/offing/TERMS.html",
+        "defaultPrompt": [
+          "Scan this repository for supported lifecycle risks.",
+          "Explain the highest-severity Offing finding.",
+          "Create migration context for this deprecation."
+        ],
+        "brandColor": "#23423A",
+        "brandColorDark": "#9AC7B6",
+        "composerIcon": "./assets/offing-mark-light.svg",
+        "composerIconDark": "./assets/offing-mark-dark.svg",
+        "logo": "./assets/offing-mark-light.svg",
+        "logoDark": "./assets/offing-mark-dark.svg",
+        "screenshots": [
+          "./assets/review-walkthrough.svg"
+        ]
+      },
+      "requires_local_executor": true
+    }
+  }
+}

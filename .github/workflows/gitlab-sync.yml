@@ -1,0 +1,56 @@
+name: GitLab sync
+
+# Copies a release to the GitLab project that hosts the CI/CD Catalog resource: the tagged commit becomes
+# main there and the v* tags follow. It runs on release tags only, never on ordinary merges. GitLab's free
+# tier cannot pull-mirror, so this pushes instead. See docs/GITLAB_CATALOG.md.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gitlab-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'velella-sh/offing'
+    runs-on: ubuntu-latest
+    # The wait below is bounded at 20 minutes (120 polls × 10s), longer than the ~7 minutes npm needed to
+    # serve the new version after `npm publish` and shorter than this timeout, so the wait step prints its
+    # own error instead of the job being cancelled. tests/gitlab-sync-workflow.test.ts keeps them in step.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Wait for the release on npm
+        if: github.ref_type == 'tag'
+        env:
+          POLL_ATTEMPTS: "120"
+          POLL_INTERVAL_SECONDS: "10"
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          for _ in $(seq 1 "$POLL_ATTEMPTS"); do
+            if [ "$(npm view "offing@${version}" version 2>/dev/null)" = "$version" ]; then exit 0; fi
+            sleep "$POLL_INTERVAL_SECONDS"
+          done
+          minutes=$((POLL_ATTEMPTS * POLL_INTERVAL_SECONDS / 60))
+          echo "offing@${version} is not on npm after ${minutes} minutes; the component's pinned package would not install." >&2
+          exit 1
+      - name: Push to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_SYNC_TOKEN }}
+        run: |
+          git remote add gitlab "https://oauth2:${GITLAB_TOKEN}@gitlab.com/velella-sh/offing.git"
+          # GitLab is a mirror and GitHub is the source of truth, so history rewritten here (squash merges) must win.
+          git push --force gitlab "${GITHUB_SHA}:refs/heads/main"
+          # GitLab starts no pipelines when several refs arrive in one push, so the release tag goes alone.
+          if [ "$GITHUB_REF_TYPE" = tag ]; then
+            git push --force gitlab "refs/tags/${GITHUB_REF_NAME}"
+          fi

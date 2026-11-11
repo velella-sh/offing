@@ -1,0 +1,161 @@
+---
+title: "CronJob batch/v1beta1 is no longer served — dates, impact, migration"
+description: "The Kubernetes Deprecated API Migration Guide states that the batch/v1beta1 API version of CronJob is no longer served as of v1.25, which was released on 2022-08-23."
+layout: doc
+permalink: "/rules/kubernetes.batch.cronjob.v1beta1.removed.html"
+canonical_url: "https://velella.sh/offing/rules/kubernetes.batch.cronjob.v1beta1.removed.html"
+image: "/assets/og/kubernetes.batch.cronjob.v1beta1.removed.svg"
+review_date: "2026-10-17"
+last_modified_at: "2026-10-17"
+json_twin: "/rules/kubernetes.batch.cronjob.v1beta1.removed.json"
+---
+
+# CronJob batch/v1beta1 is no longer served
+
+**Removed** as of 2022-08-23. Replacement: batch/v1 CronJob, available since v1.21. Source: [Kubernetes Deprecated API Migration Guide](https://kubernetes.io/docs/reference/using-api/deprecation-guide/).
+
+Check a version:
+
+```bash
+offing check pkg:generic/kubernetes/batch/CronJob
+```
+
+The Kubernetes Deprecated API Migration Guide states that the batch/v1beta1 API version of CronJob is no longer served as of v1.25, which was released on 2022-08-23.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Removed |
+| Severity | high |
+| Ecosystem | `kubernetes` |
+| Component | `pkg:generic/kubernetes/batch/CronJob` |
+| Affected versions | `vers:semver/1.0.0-beta.1` |
+| Date from the source | 2022-08-23 |
+| Replacement | batch/v1 CronJob, available since v1.21 |
+| Evidence last seen | 2026-10-17 |
+| Reviewed | 2026-10-17 by arminazimi |
+| Review due | 2027-10-17 (365 days after the last review) |
+| Rule ID | `kubernetes.batch.cronjob.v1beta1.removed` |
+
+## Sources
+
+- [Kubernetes Deprecated API Migration Guide](https://kubernetes.io/docs/reference/using-api/deprecation-guide/) (accessed 2026-10-17)
+- [Kubernetes v1.25: Combiner (release announcement, 2022-08-23)](https://kubernetes.io/blog/2022/08/23/kubernetes-v1-25-release/) (accessed 2026-10-17)
+
+## Migration
+
+**Constraints**
+
+- Keep the schedule, job template, and concurrency and history settings unchanged.
+- The migration guide lists no notable changes between batch/v1beta1 and batch/v1 for CronJob.
+
+**Steps**
+
+1. **Change the CronJob apiVersion.** Change the reported `apiVersion` to `batch/v1` and adjust the fields below that differ between the two versions.
+2. **Align other CronJob declarations.** Update every other manifest, Helm template, and kustomize patch or target that names the old API version of CronJob, so the repository agrees.
+
+**Verification**
+
+- `kubeconform -strict -summary <manifest-paths>`: Validate the migrated manifests against the schemas of the target Kubernetes version.
+- `kubectl apply --dry-run=server -f <manifest-path>`: Ask a cluster on the target version to accept the migrated manifest without applying it.
+- `helm template <chart-path> | kubeconform -strict -`: For a Helm chart, render it and validate the output.
+
+## Detected by
+
+The [`kubernetes`](../detectors/kubernetes.md) detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [MutatingWebhookConfiguration admissionregistration.k8s.io/v1beta1 is no longer served](kubernetes.admissionregistration-k8s-io.mutatingwebhookconfiguration.v1beta1.removed.html)
+- [ValidatingWebhookConfiguration admissionregistration.k8s.io/v1beta1 is no longer served](kubernetes.admissionregistration-k8s-io.validatingwebhookconfiguration.v1beta1.removed.html)
+- [EKS 1.30 and earlier clusters are past end of extended support](kubernetes.amazon-eks.1-30-and-older.html)
+- [EKS 1.31 cluster is past end of standard support](kubernetes.amazon-eks.1-31.html)
+- [EKS 1.32 cluster is past end of standard support](kubernetes.amazon-eks.1-32.html)
+- [EKS 1.33 cluster is past end of standard support](kubernetes.amazon-eks.1-33.html)
+- [EKS 1.34 cluster is scheduled to leave standard support](kubernetes.amazon-eks.1-34.html)
+- [EKS 1.35 cluster is scheduled to leave standard support](kubernetes.amazon-eks.1-35.html)
+
+
+## Data
+
+This page is generated from [`registry/kubernetes.json`](https://github.com/velella-sh/offing/blob/main/registry/kubernetes.json), rule `kubernetes.batch.cronjob.v1beta1.removed`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/kubernetes.batch.cronjob.v1beta1.removed.html",
+      "url": "https://velella.sh/offing/rules/kubernetes.batch.cronjob.v1beta1.removed.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/kubernetes.batch.cronjob.v1beta1.removed.html",
+      "headline": "CronJob batch/v1beta1 is no longer served — dates, impact, migration",
+      "description": "The Kubernetes Deprecated API Migration Guide states that the batch/v1beta1 API version of CronJob is no longer served as of v1.25, which was released on 2022-08-23.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-17",
+      "keywords": [
+        "removed",
+        "kubernetes",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "CronJob batch/v1beta1 is no longer served",
+        "identifier": "pkg:generic/kubernetes/batch/CronJob"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Kubernetes Deprecated API Migration Guide",
+          "url": "https://kubernetes.io/docs/reference/using-api/deprecation-guide/"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Kubernetes v1.25: Combiner (release announcement, 2022-08-23)",
+          "url": "https://kubernetes.io/blog/2022/08/23/kubernetes-v1-25-release/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/kubernetes.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/kubernetes.batch.cronjob.v1beta1.removed.html#faq",
+      "url": "https://velella.sh/offing/rules/kubernetes.batch.cronjob.v1beta1.removed.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/kubernetes/batch/CronJob?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Removed as of 2022-08-23. Affected versions: vers:semver/1.0.0-beta.1. Source: Kubernetes Deprecated API Migration Guide (https://kubernetes.io/docs/reference/using-api/deprecation-guide/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/kubernetes/batch/CronJob?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "batch/v1 CronJob, available since v1.21"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/kubernetes/batch/CronJob?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/kubernetes/batch/CronJob."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

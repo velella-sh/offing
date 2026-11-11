@@ -1,0 +1,87 @@
+{
+  "name": "io.github.velella-sh/offing",
+  "title": "Offing",
+  "description": "Evidence-backed deprecation and end-of-life checks for dependencies, runtimes, and Actions.",
+  "version": "0.1.0",
+  "websiteUrl": "https://velella.sh/offing/",
+  "documentationUrl": "https://velella.sh/offing/MCP.html",
+  "repository": {
+    "url": "https://github.com/velella-sh/offing",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@velella/offing",
+      "version": "0.1.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "mcp"
+        }
+      ]
+    }
+  ],
+  "transport": {
+    "type": "stdio"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": true
+  },
+  "tools": [
+    {
+      "name": "scan_repository",
+      "description": "Run all built-in Offing detectors against a local repository and return the complete versioned scan result."
+    },
+    {
+      "name": "list_deprecations",
+      "description": "Run a fresh local scan and return a compact, versioned list of lifecycle findings."
+    },
+    {
+      "name": "explain_deprecation",
+      "description": "Run a fresh local scan and return one complete evidence-backed finding by ID."
+    },
+    {
+      "name": "create_migration_context",
+      "description": "Create a validated, rule-specific migration packet for one finding from a fresh local scan."
+    },
+    {
+      "name": "verify_migration",
+      "description": "Re-scan locally and check whether a finding observed earlier in this MCP session is gone. Suggested project commands are returned but never executed."
+    },
+    {
+      "name": "check_dependency",
+      "description": "Check one package, and optionally one version, against Offing's lifecycle rules before adding it. Pass a Package URL such as pkg:npm/request@2.88.2. no-data means Offing has no rule for the package, not that it is safe."
+    },
+    {
+      "name": "check_upgrade",
+      "description": "Answer from repository files whether a project can move to a target runtime. An unknown verdict means no evidence was found, not that the upgrade is safe."
+    },
+    {
+      "name": "check_snippet",
+      "description": "Check one file snippet before writing it: run all built-in detectors against the intended path and content in an isolated temporary directory, and return the findings."
+    },
+    {
+      "name": "forecast_repository",
+      "description": "Run a fresh local scan and list what reaches a dated end of life in the next months, grouped by month. Only events that carry an authoritative date are listed."
+    },
+    {
+      "name": "plan_migrations",
+      "description": "Run a fresh local scan and return a migration plan: waves of independent tasks a coordinating agent can hand to other agents."
+    },
+    {
+      "name": "recommend_version",
+      "description": "Say which release line of a runtime, image, GitHub Action, or package to write today, from Offing's bundled lifecycle data only. Never says latest and reads no network."
+    }
+  ],
+  "authentication": {
+    "required": false
+  }
+}

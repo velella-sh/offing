@@ -1,0 +1,152 @@
+---
+title: "ipaddr is superseded — dates, impact, migration"
+description: "The project states that ipaddr was superseded by the Python standard-library ipaddress module and its Python 2 backport."
+layout: doc
+permalink: "/rules/python.package.ipaddr.deprecated.html"
+canonical_url: "https://velella.sh/offing/rules/python.package.ipaddr.deprecated.html"
+image: "/assets/og/python.package.ipaddr.deprecated.svg"
+review_date: "2026-10-16"
+last_modified_at: "2026-10-16"
+json_twin: "/rules/python.package.ipaddr.deprecated.json"
+---
+
+# ipaddr is superseded
+
+**Deprecated.** The source gives no day. Replacement: ipaddress. Source: [ipaddr supersession notice](https://pypi.org/project/ipaddr/).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/ipaddr
+```
+
+The project states that ipaddr was superseded by the Python standard-library ipaddress module and its Python 2 backport.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | Deprecated |
+| Severity | medium |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/ipaddr` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Replacement | ipaddress |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `python.package.ipaddr.deprecated` |
+
+## Sources
+
+- [ipaddr supersession notice](https://pypi.org/project/ipaddr/) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve IPv4 and IPv6 parsing, strictness, network boundaries, address ordering, exception behavior, and text formatting.
+
+**Steps**
+
+1. **Replace ipaddr.** Replace the dependency and translate IPAddress, IPNetwork, and related usages to the standard-library ipaddress API.
+2. **Verify address behavior.** Test IPv4, IPv6, malformed input, host bits, networks, containment, and serialization used by the application.
+
+**Verification**
+
+- `python -m pytest`: Run networking edge cases and repository tests.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.ipaddr.deprecated`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.ipaddr.deprecated.html",
+      "url": "https://velella.sh/offing/rules/python.package.ipaddr.deprecated.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.ipaddr.deprecated.html",
+      "headline": "ipaddr is superseded — dates, impact, migration",
+      "description": "The project states that ipaddr was superseded by the Python standard-library ipaddress module and its Python 2 backport.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "deprecated",
+        "python",
+        "medium"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "ipaddr is superseded",
+        "identifier": "pkg:pypi/ipaddr"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "ipaddr supersession notice",
+          "url": "https://pypi.org/project/ipaddr/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.ipaddr.deprecated.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.ipaddr.deprecated.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/ipaddr?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deprecated. The source gives no day. Affected versions: vers:pypi/*. Source: ipaddr supersession notice (https://pypi.org/project/ipaddr/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:pypi/ipaddr?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ipaddress"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/ipaddr?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/ipaddr."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

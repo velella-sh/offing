@@ -1,0 +1,151 @@
+---
+title: "mondobrain is no longer maintained — dates, impact, migration"
+description: "The maintainer yanked mondobrain releases because the project is no longer maintained and recommends datawhys."
+layout: doc
+permalink: "/rules/python.package.mondobrain.eol.html"
+canonical_url: "https://velella.sh/offing/rules/python.package.mondobrain.eol.html"
+image: "/assets/og/python.package.mondobrain.eol.svg"
+review_date: "2026-10-16"
+last_modified_at: "2026-10-16"
+json_twin: "/rules/python.package.mondobrain.eol.json"
+---
+
+# mondobrain is no longer maintained
+
+**End of life.** The source gives no day. Replacement: datawhys. Source: [mondobrain maintenance and replacement notice](https://pypi.org/project/mondobrain/).
+
+Check a version:
+
+```bash
+offing check pkg:pypi/mondobrain
+```
+
+The maintainer yanked mondobrain releases because the project is no longer maintained and recommends datawhys.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of life |
+| Severity | high |
+| Ecosystem | `python` |
+| Component | `pkg:pypi/mondobrain` |
+| Affected versions | `vers:pypi/*` |
+| Date from the source | The source gives no day |
+| Replacement | datawhys |
+| Evidence last seen | 2026-10-16 |
+| Reviewed | 2026-10-16 by arminazimi |
+| Review due | 2027-10-16 (365 days after the last review) |
+| Rule ID | `python.package.mondobrain.eol` |
+
+## Sources
+
+- [mondobrain maintenance and replacement notice](https://pypi.org/project/mondobrain/) (accessed 2026-10-16)
+
+## Migration
+
+**Constraints**
+
+- Preserve data loading, analysis workflows, notebook integration, model behavior, and serialized artifacts relied on by users.
+
+**Steps**
+
+1. **Move to datawhys.** Replace the distribution and translate mondobrain imports and workflows to datawhys equivalents.
+
+**Verification**
+
+- `python -m pytest`: Run affected data workflow and project tests when defined.
+
+## Detected by
+
+The `python` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Same ecosystem
+
+- [The aifc module was removed in Python 3.13](python.module.aifc.removed.html)
+- [The asynchat module was removed in Python 3.12](python.module.asynchat.removed.html)
+- [The asyncore module was removed in Python 3.12](python.module.asyncore.removed.html)
+- [The audioop module was removed in Python 3.13](python.module.audioop.removed.html)
+- [The cgi module was removed in Python 3.13](python.module.cgi.removed.html)
+- [The cgitb module was removed in Python 3.13](python.module.cgitb.removed.html)
+- [The chunk module was removed in Python 3.13](python.module.chunk.removed.html)
+- [The crypt module was removed in Python 3.13](python.module.crypt.removed.html)
+
+
+## Data
+
+This page is generated from [`registry/python.json`](https://github.com/velella-sh/offing/blob/main/registry/python.json), rule `python.package.mondobrain.eol`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/python.package.mondobrain.eol.html",
+      "url": "https://velella.sh/offing/rules/python.package.mondobrain.eol.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/python.package.mondobrain.eol.html",
+      "headline": "mondobrain is no longer maintained — dates, impact, migration",
+      "description": "The maintainer yanked mondobrain releases because the project is no longer maintained and recommends datawhys.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-16",
+      "keywords": [
+        "end-of-life",
+        "python",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "mondobrain is no longer maintained",
+        "identifier": "pkg:pypi/mondobrain"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "mondobrain maintenance and replacement notice",
+          "url": "https://pypi.org/project/mondobrain/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/python.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/python.package.mondobrain.eol.html#faq",
+      "url": "https://velella.sh/offing/rules/python.package.mondobrain.eol.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:pypi/mondobrain?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of life. The source gives no day. Affected versions: vers:pypi/*. Source: mondobrain maintenance and replacement notice (https://pypi.org/project/mondobrain/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:pypi/mondobrain?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "datawhys"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:pypi/mondobrain?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:pypi/mondobrain."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

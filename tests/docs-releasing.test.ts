@@ -1,0 +1,149 @@
+import assert from "node:assert/strict";
+import { access, readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { test } from "node:test";
+
+const read = (path: string) => readFile(resolve(path), "utf8");
+
+test("docs/RELEASING.md only names npm scripts that exist", async () => {
+  const text = await read("docs/RELEASING.md");
+  const { scripts } = JSON.parse(await read("package.json")) as { scripts: Record<string, string> };
+  const named = new Set([...text.matchAll(/npm run ([a-z][a-z:-]*)/g)].map((match) => match[1]!));
+  assert.ok(named.size >= 6);
+  for (const script of named) assert.ok(scripts[script], `npm run ${script} does not exist`);
+});
+
+test("docs/RELEASING.md links to files and workflows that exist", async () => {
+  const text = await read("docs/RELEASING.md");
+  for (const link of new Set([...text.matchAll(/\]\(([A-Za-z0-9_./-]+\.md)\)/g)].map((match) => match[1]!))) {
+    await access(resolve("docs", link));
+  }
+  for (const path of ["CHANGELOG.md", "benchmarks/thresholds.json", ".github/workflows/release.yml"]) {
+    assert.ok(text.includes(path), `${path} should be covered`);
+    await access(resolve(path));
+  }
+});
+
+test("the publish workflow uses trusted publishing with least privilege and guards the tag", async () => {
+  const { parse } = await import("yaml");
+  const text = await read(".github/workflows/publish.yml");
+  const releaseText = await read(".github/workflows/release.yml");
+  const workflow = parse(text) as {
+    on: { workflow_call: { inputs: Record<string, { type?: string }> } };
+    permissions: unknown;
+    jobs: {
+      smoke: unknown;
+    };
+  };
+  const release = parse(releaseText) as {
+    on: { push?: { tags?: string[] } };
+    jobs: Record<
+      string,
+      {
+        uses?: string;
+        permissions?: Record<string, string>;
+        steps?: Array<{ uses?: string; run?: string; with?: Record<string, unknown> }>;
+      }
+    >;
+  };
+  // The publish step is in release.yml itself so OpenSSF Scorecard's Packaging check can see it.
+  const publishJob = release.jobs["npm-publish"]!;
+  // The Release orchestrator owns the version-tag trigger and calls this stage.
+  assert.ok(release.on.push?.tags?.every((tag) => tag.startsWith("v")));
+  assert.equal(release.jobs["publish-npm"]?.uses, "./.github/workflows/publish.yml");
+  assert.deepEqual(release.jobs["publish-npm"]?.permissions, { contents: "read", "id-token": "write" });
+  assert.equal(workflow.on.workflow_call.inputs.dry_run?.type, "boolean");
+  assert.deepEqual(workflow.permissions, {});
+  assert.deepEqual(publishJob.permissions, { contents: "read", "id-token": "write" });
+  // No stored npm credential, npm new enough for trusted publishing, and a provenance attestation.
+  assert.doesNotMatch(text + JSON.stringify(publishJob), /NPM_TOKEN|NODE_AUTH_TOKEN|secrets\./);
+  const node = publishJob.steps?.find((step) => step.uses?.startsWith("actions/setup-node@"));
+  assert.ok(Number(node?.with?.["node-version"]) >= 24, "Node 24 ships npm 11.5.1 or newer");
+  assert.equal(node?.with?.["registry-url"], "https://registry.npmjs.org", "Scorecard's Packaging check needs it");
+  assert.match(releaseText, /uses: actions\/setup-node@[0-9a-f]{40}/, "setup-node is pinned");
+  const run = (publishJob.steps ?? []).map((step) => step.run ?? "").join("\n");
+  assert.match(run, /npm publish --provenance --access public --tag next/);
+  assert.match(run, /\*\)\s+npm publish --provenance --access public ;;/);
+  // It refuses a tag that disagrees with package.json and a commit that is not on main.
+  const guard = await read(".github/scripts/check-release-tip.sh");
+  assert.match(guard, /GITHUB_REF_NAME/);
+  assert.match(guard, /merge-base --is-ancestor/);
+  // The docs name the calling workflow npm matches for trusted publishing.
+  const docs = await read("docs/RELEASING.md");
+  assert.match(docs, /workflow filename `release\.yml`/);
+  await access(resolve(".github/workflows/publish.yml"));
+});
+
+test("the registry job publishes server.json with a pinned, checksum-verified mcp-publisher", async () => {
+  const { parse } = await import("yaml");
+  const text = await read(".github/workflows/publish.yml");
+  const workflow = parse(text) as {
+    jobs: {
+      registry?: {
+        needs?: string | string[];
+        if?: string;
+        permissions: Record<string, string>;
+        steps: Array<{ uses?: string; run?: string }>;
+      };
+    };
+  };
+  const job = workflow.jobs.registry;
+  assert.ok(job, "publish.yml needs a registry job");
+  // It only runs after smoke, never for pre-release tags, and can only read code and mint the OIDC token.
+  assert.ok([job.needs ?? []].flat().includes("smoke"), "the registry job waits for smoke");
+  assert.match(job.if ?? "", /!contains\(github\.ref_name, '-'\)/, "pre-release tags must not move the registry entry");
+  assert.deepEqual(job.permissions, { contents: "read", "id-token": "write" });
+  const run = job.steps.map((step) => step.run ?? "").join("\n");
+  assert.doesNotMatch(text, /secrets\./, "no stored secret");
+  assert.doesNotMatch(run, /latest/, "the binary is never fetched as 'latest'");
+  // The binary is pinned to an exact release and verified against the release's checksums before it runs.
+  assert.match(run, /releases\/download\/v1\.8\.6\/mcp-publisher_linux_amd64\.tar\.gz/);
+  assert.match(run, /sha256sum --check -/);
+  assert.match(
+    run,
+    /echo "[a-f0-9]{64} {2}mcp-publisher\.tar\.gz" \| sha256sum --check -/,
+    "pinned to the exact SHA-256 of the tarball",
+  );
+  // It refuses a tag that disagrees with server.json, then publishes through the OIDC login.
+  assert.match(run, /GITHUB_REF_NAME/);
+  assert.match(run, /mcp-publisher login github-oidc/);
+  assert.match(run, /mcp-publisher publish/);
+});
+
+test("the release steps include publishing to the MCP Registry, after npm", async () => {
+  const docs = await read("docs/RELEASING.md");
+  const npmStep = docs.indexOf("**Publish to npm.**");
+  const registryStep = docs.indexOf("**Publish to the MCP Registry.**");
+  assert.ok(npmStep !== -1 && registryStep > npmStep, "registry step comes after the npm step");
+  assert.match(docs, /mcp-publisher login github/);
+  assert.match(docs, /mcp-publisher publish/);
+});
+
+test("every place that carries the release version agrees with package.json", async () => {
+  const version = (JSON.parse(await read("package.json")) as { version: string }).version;
+  const { VERSION } = await import("../src/version.js");
+  assert.equal(VERSION, version, "src/version.ts");
+  const server = JSON.parse(await read("server.json")) as { version: string; packages: Array<{ version: string }> };
+  assert.equal(server.version, version, "server.json version");
+  for (const entry of server.packages) assert.equal(entry.version, version, "server.json package version");
+  const pins = [
+    "examples/agents/kilo/kilo.jsonc",
+    "examples/agents/gemini/settings.json",
+    "examples/agents/gemini/gemini-extension.json",
+    "examples/agents/copilot/.vscode/mcp.json",
+    "examples/agents/cursor/.cursor/mcp.json",
+    "examples/agents/copilot/coding-agent-mcp.json",
+    "integrations/cline/cline_mcp_settings.json",
+    "integrations/claude-code/pre-install-guard.mjs",
+  ];
+  for (const path of pins)
+    assert.match(
+      await read(path),
+      new RegExp(`offing@${version.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),
+      path,
+    );
+  assert.match(
+    await read("README.md"),
+    new RegExp(`velella-sh/offing@v${version.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),
+  );
+});

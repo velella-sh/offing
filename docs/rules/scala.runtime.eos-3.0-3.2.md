@@ -1,0 +1,158 @@
+---
+title: "Scala 3.0–3.2 no longer receive patches — dates, impact, migration"
+description: "The Scala project's development guarantees page states that a non-LTS Scala 3 minor receives patches only until the next minor ships."
+layout: doc
+permalink: "/rules/scala.runtime.eos-3.0-3.2.html"
+canonical_url: "https://velella.sh/offing/rules/scala.runtime.eos-3.0-3.2.html"
+image: "/assets/og/scala.runtime.eos-3.0-3.2.svg"
+review_date: "2026-10-27"
+last_modified_at: "2026-10-27"
+json_twin: "/rules/scala.runtime.eos-3.0-3.2.json"
+---
+
+# Scala 3.0–3.2 no longer receive patches
+
+**End of support.** The source gives no day. Replacement: Scala 3.3 LTS or a current Scala Next / LTS line. Source: [Scala development guarantees — Scala 3 LTS](https://scala-lang.org/development/).
+
+Check a version:
+
+```bash
+offing check pkg:generic/scala
+```
+
+The Scala project's development guarantees page states that a non-LTS Scala 3 minor receives patches only until the next minor ships. Scala 3.0, 3.1, and 3.2 are frozen on their last patches; later fixes landed only in 3.3 LTS and newer lines.
+
+[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+
+| | |
+| --- | --- |
+| Status | End of support |
+| Severity | high |
+| Ecosystem | `scala` |
+| Component | `pkg:generic/scala` |
+| Affected versions | `vers:semver/>=3.0.0\|<3.3.0` |
+| Date from the source | The source gives no day |
+| Replacement | Scala 3.3 LTS or a current Scala Next / LTS line |
+| Evidence last seen | 2026-10-27 |
+| Reviewed | 2026-10-27 by arminazimi |
+| Review due | 2027-01-25 (90 days after the last review) |
+| Rule ID | `scala.runtime.eos-3.0-3.2` |
+
+## Sources
+
+- [Scala development guarantees — Scala 3 LTS](https://scala-lang.org/development/) (accessed 2026-10-27)
+- [Scala 3.9 LTS released](https://scala-lang.org/news/3.9/) (accessed 2026-10-27)
+
+## Migration
+
+**Constraints**
+
+- Keep .scala-version, build.sbt scalaVersion, CI matrices, and container images on one supported Scala 3 LTS or Next line.
+- Confirm dependencies publish for the target Scala 3 line and re-resolve with sbt after changing the runtime.
+
+**Steps**
+
+1. **Raise the Scala version.** Change the reported declaration from Scala 3.0–3.2 to a supported release (see the replacement).
+2. **Align other Scala version surfaces.** Update .scala-version, build.sbt scalaVersion, CI matrices, and Dockerfile Scala images so they agree.
+
+**Verification**
+
+- `scala -version`: Confirm the active Scala runtime is the intended release.
+- `sbt -Dsbt.supershell=false compile`: Compile the project on the new Scala.
+- `sbt -Dsbt.supershell=false test`: Run the sbt test suite on the new Scala.
+
+## Detected by
+
+The `scala` detector. See [Detectors](../DETECTORS.md) and [Compatibility](../COMPATIBILITY.md).
+
+## Related
+
+### Other versions of this product
+
+- [Scala 2.11 reached end of life](scala.runtime.eol-2.11.html)
+
+### Same ecosystem
+
+- [sbt 0.13 reached end of life](scala.sbt.eol-0.13.html)
+
+
+## Data
+
+This page is generated from [`registry/scala.json`](https://github.com/velella-sh/offing/blob/main/registry/scala.json), rule `scala.runtime.eos-3.0-3.2`, in the `ebb.registry.v2` format ([how rules are written](../RULES.md)). A CLE (ECMA-428) export is not published yet. The same facts are embedded in this page as schema.org structured data.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://velella.sh/offing/rules/scala.runtime.eos-3.0-3.2.html",
+      "url": "https://velella.sh/offing/rules/scala.runtime.eos-3.0-3.2.html",
+      "mainEntityOfPage": "https://velella.sh/offing/rules/scala.runtime.eos-3.0-3.2.html",
+      "headline": "Scala 3.0–3.2 no longer receive patches — dates, impact, migration",
+      "description": "The Scala project's development guarantees page states that a non-LTS Scala 3 minor receives patches only until the next minor ships.",
+      "inLanguage": "en",
+      "dateModified": "2026-10-27",
+      "keywords": [
+        "end-of-support",
+        "scala",
+        "high"
+      ],
+      "about": {
+        "@type": "Thing",
+        "name": "Scala 3.0–3.2 no longer receive patches",
+        "identifier": "pkg:generic/scala"
+      },
+      "citation": [
+        {
+          "@type": "CreativeWork",
+          "name": "Scala development guarantees — Scala 3 LTS",
+          "url": "https://scala-lang.org/development/"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Scala 3.9 LTS released",
+          "url": "https://scala-lang.org/news/3.9/"
+        }
+      ],
+      "isBasedOn": "https://github.com/velella-sh/offing/blob/main/registry/scala.json",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Offing",
+        "url": "https://velella.sh/offing"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://velella.sh/offing/rules/scala.runtime.eos-3.0-3.2.html#faq",
+      "url": "https://velella.sh/offing/rules/scala.runtime.eos-3.0-3.2.html",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the lifecycle status of pkg:generic/scala?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "End of support. The source gives no day. Affected versions: vers:semver/>=3.0.0|\u003c3.3.0. Source: Scala development guarantees — Scala 3 LTS (https://scala-lang.org/development/)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces pkg:generic/scala?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Scala 3.3 LTS or a current Scala Next / LTS line"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check pkg:generic/scala?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run offing check pkg:generic/scala."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

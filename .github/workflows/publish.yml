@@ -1,0 +1,133 @@
+name: Publish to npm
+
+# Smoke test, provenance verification, and MCP Registry stages that follow the npm publish.
+# release.yml calls this on a version tag and on a dry-run dispatch, after its own npm-publish job:
+# the publish itself lives in release.yml because OpenSSF Scorecard only recognises a publish step
+# in a workflow file that has runs of its own (see docs/RELEASING.md). A failed later stage in the
+# same Release run is safe to re-run: successful jobs are not re-executed, so a completed publish is
+# not repeated.
+#
+# One-time setup on npmjs.com (package -> Settings -> Trusted publisher -> GitHub Actions):
+#   organization or user: arminazimi    repository: offing    workflow filename: release.yml
+# See docs/RELEASING.md.
+on:
+  workflow_call:
+    inputs:
+      dry_run:
+        description: Validate the tag shape only; do not publish to npm or the MCP Registry
+        type: boolean
+        required: true
+
+permissions: {}
+
+jobs:
+  # Runs on a fresh machine against what is on the registry, not against this checkout, so a package that
+  # installs but does not work (like 0.1.0, which shipped no `offing` bin) fails the release.
+  smoke:
+    if: ${{ !inputs.dry_run }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          package-manager-cache: false
+          install: false
+      - name: Wait for the registry to serve the new version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          # npm says a new version "may take a few minutes to become available"; 0.2.0 took longer than the
+          # first ten-attempt wait of 2.5 minutes, so wait up to ten minutes.
+          for attempt in $(seq 1 40); do
+            if npm view "offing@$version" version >/dev/null 2>&1; then exit 0; fi
+            echo "Attempt $attempt: $version is not visible yet."
+            sleep 15
+          done
+          echo "offing@$version never appeared on the registry." >&2
+          exit 1
+      - name: Run the published package on a small fixture
+        # Run from a temporary directory: inside the checkout, npx would resolve this repository's own bin.
+        working-directory: ${{ runner.temp }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          mkdir -p "$RUNNER_TEMP/offing-smoke"
+          cp "$GITHUB_WORKSPACE/tests/fixtures/smoke/package.json.fixture" "$RUNNER_TEMP/offing-smoke/package.json"
+          node "$GITHUB_WORKSPACE/.github/scripts/smoke.mjs" "$RUNNER_TEMP/offing-smoke" -- npx --yes "offing@$version"
+
+  # The release fails if the npm attestation is missing or does not match the published tarball.
+  # npm generates it during trusted publishing on a GitHub-hosted runner, so the builder identity
+  # is that runner rather than a SLSA generator job (Build L2; see docs/RELEASING.md).
+  verify-provenance:
+    needs: smoke
+    if: ${{ !inputs.dry_run }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/slsa-verifier
+      - name: Download the published tarball and attestations
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="${TAG#v}"
+          curl -fsSL --retry 3 -o package.tgz "$(npm view "offing@$version" dist.tarball)"
+          url="$(npm view "offing@$version" --json | jq -r '.dist.attestations.url')"
+          if [ -z "$url" ] || [ "$url" = "null" ]; then
+            echo "offing@$version has no npm provenance attestation." >&2
+            exit 1
+          fi
+          curl -fsSL --retry 3 -o attestations.json "$url"
+      - name: Verify the npm provenance
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="${TAG#v}"
+          SLSA_VERIFIER_EXPERIMENTAL=1 slsa-verifier verify-npm-package package.tgz \
+            --attestations-path attestations.json \
+            --builder-id "https://github.com/actions/runner/github-hosted" \
+            --package-name @velella/offing \
+            --package-version "$version" \
+            --source-uri "github.com/${{ github.repository }}"
+
+  # Publishes server.json to the MCP Registry through a GitHub OIDC login, so no secret is stored and the
+  # name io.github.velella-sh/offing is authenticated against this repository's GitHub account. It runs
+  # after smoke so the npm package the entry points at already exists. The mcp-publisher binary is pinned
+  # to an exact release; 1.8.6 must be downloaded from the release's checksums.txt and reviewed by a
+  # maintainer before this pin is ever moved.
+  registry:
+    needs: smoke
+    # Pre-release tags publish npm versions under `next` and must not move the registry entry.
+    if: ${{ !inputs.dry_run && needs.smoke.result == 'success' && !contains(github.ref_name, '-') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write # the mcp-publisher OIDC exchange; nothing else
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: server.json must match the tag
+        run: |
+          expected="v$(jq -r .version server.json)"
+          if [ "$GITHUB_REF_NAME" != "$expected" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match server.json version $expected." >&2
+            exit 1
+          fi
+      - name: Download and verify mcp-publisher 1.8.6
+        run: |
+          curl -fsSL --retry 3 -o mcp-publisher.tar.gz https://github.com/modelcontextprotocol/registry/releases/download/v1.8.6/mcp-publisher_linux_amd64.tar.gz
+          echo "1fbe93fc0783c2394d8012c8d6e50a59e98cb2cc2d216264cc69f405d0e21340  mcp-publisher.tar.gz" | sha256sum --check -
+          tar -xzf mcp-publisher.tar.gz mcp-publisher
+      - name: Publish server.json
+        run: |
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
