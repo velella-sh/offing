@@ -33,6 +33,7 @@ import { command as receipt } from "./receipt.js";
 import { command as recommend } from "./recommend.js";
 import { command as renovatePreset } from "./renovate-preset.js";
 import { command as reportIssue } from "./report-issue.js";
+import { command as rollbackReadiness } from "./rollback-readiness.js";
 import { command as rollup } from "./rollup.js";
 import { command as rules } from "./rules.js";
 import { command as sbom } from "./sbom.js";
@@ -80,6 +81,7 @@ export const commands: readonly CliCommand[] = [
   recommend,
   renovatePreset,
   reportIssue,
+  rollbackReadiness,
   rollup,
   rules,
   sbom,

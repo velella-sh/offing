@@ -73,6 +73,8 @@ Usage:
   offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one agent host; docs/HOOKS.md lists them
   offing prompt [path] [--format <text|json>] [--symbol <s>]   # shell prompt segment such as ⏳2, read from the scan cache only
   offing recommend <product|purl> [--min-days <n>] [--as-of <date>] [--json]   # which release line to write today (default 180 days of support)
+  offing rollback-readiness <release-ref> --candidate <tag> [--within-days <days>] [--json]
+    Repeat --candidate 1 to 3 times. --within-days defaults to 30. Comparison is not yet available.
   offing timelapse [path] [--from <YYYY-MM>] [--to <YYYY-MM>] [--svg <file>] [--json]   # month-by-month aging: files turn red as deadlines pass
   offing verify [path]   # check the installed release's files against its manifest and say what it cannot check offline
   offing watch --board [--json]   # ranked risk board across watched projects, with trend arrows
@@ -124,6 +126,7 @@ Examples:
   offing lsp
   offing prompt --symbol EOL:
   offing recommend node
+  offing rollback-readiness v2.0.0 --candidate v1.9.0
   offing timelapse . --from 2026-11 --to 2028-10
   offing verify
   offing wrapped . --year 2025
