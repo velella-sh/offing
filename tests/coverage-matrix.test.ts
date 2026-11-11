@@ -293,7 +293,7 @@ test("only the bytes between the README markers are replaced", () => {
     replaceReadmeCoverageTable(document, "new\ntable"),
     `before\n${README_START_MARKER}\nnew\ntable\n${README_END_MARKER}\nafter\n`,
   );
-  assert.throws(() => replaceReadmeCoverageTable("no markers", "table"), /README\.md must contain/);
+  assert.throws(() => replaceReadmeCoverageTable("no markers", "table"), /docs\/ECOSYSTEMS\.md must contain/);
 });
 
 test("the README data file uses the documented schema and describes the committed table", async () => {

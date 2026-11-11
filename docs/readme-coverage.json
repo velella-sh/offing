@@ -7,7 +7,7 @@
       ],
       "name": "Container base images",
       "reads": "`Dockerfile`, `*.Dockerfile`, `Containerfile`, `compose.yaml`, `docker-compose.yml`: base images of official `node`, `python`, `postgres`, `mysql`, and `ruby`",
-      "reports": "Image release lines that are end of life. Variables, `latest`, and floating tags are listed as unclassified, never guessed. See [Container base images](docs/detectors/container.md)"
+      "reports": "Image release lines that are end of life. Variables, `latest`, and floating tags are listed as unclassified, never guessed. See [Container base images](detectors/container.md)"
     },
     {
       "ecosystems": [
@@ -15,7 +15,7 @@
       ],
       "name": ".NET",
       "reads": "`global.json`, `*.csproj`/`*.fsproj`/`*.vbproj`, `Directory.Build.props`, `Directory.Packages.props`, `packages.lock.json`: the pinned SDK, target frameworks, and direct NuGet packages",
-      "reports": ".NET release lines past end of support, and direct packages their publisher deprecated, with the C# files that use them. .NET Framework, `netstandard`, MSBuild properties, floating versions, and ranges are not judged. See [.NET](docs/detectors/dotnet.md)"
+      "reports": ".NET release lines past end of support, and direct packages their publisher deprecated, with the C# files that use them. .NET Framework, `netstandard`, MSBuild properties, floating versions, and ranges are not judged. See [.NET](detectors/dotnet.md)"
     },
     {
       "ecosystems": [
@@ -23,7 +23,7 @@
       ],
       "name": "Go",
       "reads": "`go.mod` and `go.work`: `go` and `toolchain` directives, and direct `require` entries",
-      "reports": "Go release lines that no longer receive fixes, and direct modules with a lifecycle rule. Versions Offing cannot read are listed as unclassified. See [Go](docs/detectors/go.md)"
+      "reports": "Go release lines that no longer receive fixes, and direct modules with a lifecycle rule. Versions Offing cannot read are listed as unclassified. See [Go](detectors/go.md)"
     },
     {
       "ecosystems": [
@@ -39,7 +39,7 @@
       ],
       "name": "C and C++",
       "reads": "`CMakeLists.txt`, `conanfile.txt`, `conanfile.py`, and `vcpkg.json`",
-      "reports": "CMake policy compatibility removals and deprecations, at the exact declaration. Other declarations require a matching reviewed rule. See [C and C++](docs/detectors/cpp.md)"
+      "reports": "CMake policy compatibility removals and deprecations, at the exact declaration. Other declarations require a matching reviewed rule. See [C and C++](detectors/cpp.md)"
     },
     {
       "ecosystems": [
@@ -47,14 +47,14 @@
       ],
       "name": "CI runner images",
       "reads": "`.gitlab-ci.yml` `image` and `services`, `.circleci/config.yml` `docker.image`, `machine.image`, and orbs, and `azure-pipelines.yml` `pool.vmImage`",
-      "reports": "Azure hosted-image labels a reviewed rule covers, at the exact line. GitLab images and CircleCI orbs, variables, and floating aliases are unclassified. A literal CircleCI image is not judged. See [CI runner images](docs/COMPATIBILITY.md#ci-runner-images-detector)"
+      "reports": "Azure hosted-image labels a reviewed rule covers, at the exact line. GitLab images and CircleCI orbs, variables, and floating aliases are unclassified. A literal CircleCI image is not judged. See [CI runner images](COMPATIBILITY.md#ci-runner-images-detector)"
     },
     {
       "ecosystems": [
         "java"
       ],
       "name": "Java and Kotlin (JVM)",
-      "reads": "`pom.xml`, `build.gradle`, `build.gradle.kts`, `.java-version`, `.sdkmanrc`, `.tool-versions`: the JDK a project pins or targets, and direct Maven dependencies. See [Java and Kotlin](docs/detectors/java.md)",
+      "reads": "`pom.xml`, `build.gradle`, `build.gradle.kts`, `.java-version`, `.sdkmanrc`, `.tool-versions`: the JDK a project pins or targets, and direct Maven dependencies. See [Java and Kotlin](detectors/java.md)",
       "reports": "JDK feature releases that are out of support, and dependencies whose POM says they moved. Property references and expressions are listed as unclassified"
     },
     {
@@ -62,7 +62,7 @@
         "kubernetes"
       ],
       "name": "Kubernetes APIs",
-      "reads": "`*.yaml`, `*.yml` manifests, Helm chart `templates/`, and `kustomization.yaml`: the literal `apiVersion` and `kind`, and kustomize patches. See [Kubernetes APIs](docs/detectors/kubernetes.md)",
+      "reads": "`*.yaml`, `*.yml` manifests, Helm chart `templates/`, and `kustomization.yaml`: the literal `apiVersion` and `kind`, and kustomize patches. See [Kubernetes APIs](detectors/kubernetes.md)",
       "reports": "API versions the Kubernetes project says are no longer served. Helm values, cluster-guarded templates, and anything it cannot read literally are skipped"
     },
     {
@@ -88,7 +88,7 @@
       ],
       "name": "Deno and Bun",
       "reads": "`deno.json`, `deno.jsonc`, `bunfig.toml`, `.bun-version`, `.tool-versions`: exact runtime pins",
-      "reports": "Deno and Bun release lines past end of life. Version ranges, floating aliases, and environment variables are not matched. See [Deno and Bun](docs/detectors/deno.md)"
+      "reports": "Deno and Bun release lines past end of life. Version ranges, floating aliases, and environment variables are not matched. See [Deno and Bun](detectors/deno.md)"
     },
     {
       "ecosystems": [
@@ -104,7 +104,7 @@
       ],
       "name": "Dart and Flutter",
       "reads": "`pubspec.yaml`, `pubspec.lock`, `.fvmrc`, `.fvm/fvm_config.json`: SDK constraints, direct dependencies, resolved packages, and the pinned Flutter version",
-      "reports": "Dart SDK releases that no longer receive security updates when pinned exactly, and discontinued pub packages with the files that use them. Constraint ranges such as `>=3.8.0 <4.0.0` are not judged. See [Dart and Flutter](docs/detectors/dart.md)"
+      "reports": "Dart SDK releases that no longer receive security updates when pinned exactly, and discontinued pub packages with the files that use them. Constraint ranges such as `>=3.8.0 <4.0.0` are not judged. See [Dart and Flutter](detectors/dart.md)"
     },
     {
       "ecosystems": [
@@ -112,7 +112,7 @@
       ],
       "name": "Elixir and Mix",
       "reads": "`.tool-versions`, `mix.exs`, `mix.lock`: pinned Elixir and Erlang/OTP versions, the project `elixir:` constraint, direct Hex dependencies, and resolved packages",
-      "reports": "Elixir and OTP release lines past end of support and retired Hex packages. See [Elixir and Mix](docs/detectors/elixir.md)"
+      "reports": "Elixir and OTP release lines past end of support and retired Hex packages. See [Elixir and Mix](detectors/elixir.md)"
     },
     {
       "ecosystems": [
@@ -120,7 +120,7 @@
       ],
       "name": "Scala and sbt",
       "reads": "`.scala-version`, `build.sbt`, `project/build.properties`: pinned Scala versions, literal `scalaVersion` settings, and the sbt version",
-      "reports": "Scala 2.11, frozen Scala 3.0–3.2 lines, and sbt 0.13. See [Scala and sbt](docs/detectors/scala.md)"
+      "reports": "Scala 2.11, frozen Scala 3.0–3.2 lines, and sbt 0.13. See [Scala and sbt](detectors/scala.md)"
     },
     {
       "ecosystems": [
@@ -128,7 +128,7 @@
       ],
       "name": "Database runtimes",
       "reads": "`compose.yaml` / `docker-compose.yml` image tags (`postgres`, `mysql`, `mariadb`, `redis`, `mongo`) and `engine_version` on AWS managed database resources in `*.tf`",
-      "reports": "PostgreSQL 11–13 and MySQL 5.7 and 8.0 past end of life. Floating tags, variables, module blocks, and Compose files with YAML aliases are not judged. See [Database runtimes](docs/detectors/database.md)"
+      "reports": "PostgreSQL 11–13 and MySQL 5.7 and 8.0 past end of life. Floating tags, variables, module blocks, and Compose files with YAML aliases are not judged. See [Database runtimes](detectors/database.md)"
     },
     {
       "ecosystems": [
@@ -136,7 +136,7 @@
       ],
       "name": "Shell and PowerShell",
       "reads": "`#Requires -Version` in `*.ps1` / `*.psm1`, `PowerShellVersion` in `*.psd1`, and pinned `mcr.microsoft.com/powershell` image tags in `.github/workflows`",
-      "reports": "PowerShell 6.x and 7.0–7.3 past end of support. Windows PowerShell 5.1, shell names, Bash images, dynamic values, and directives with extra options are not judged. See [Shell and PowerShell](docs/detectors/shell.md)"
+      "reports": "PowerShell 6.x and 7.0–7.3 past end of support. Windows PowerShell 5.1, shell names, Bash images, dynamic values, and directives with extra options are not judged. See [Shell and PowerShell](detectors/shell.md)"
     },
     {
       "ecosystems": [
@@ -144,7 +144,7 @@
       ],
       "name": "Terraform",
       "reads": "`*.tf` (`required_version`, `required_providers`), `.terraform.lock.hcl`, `.terraform-version`, `.tool-versions`: constraints, locked providers, and the pinned Terraform CLI",
-      "reports": "Terraform CLI release lines that no longer receive support when pinned exactly or by a `~> X.Y.Z` constraint. Ranges such as `>= 1.5` are not judged. See [Terraform](docs/detectors/terraform.md)"
+      "reports": "Terraform CLI release lines that no longer receive support when pinned exactly or by a `~> X.Y.Z` constraint. Ranges such as `>= 1.5` are not judged. See [Terraform](detectors/terraform.md)"
     },
     {
       "ecosystems": [
@@ -152,7 +152,7 @@
       ],
       "name": "Rust",
       "reads": "`Cargo.toml`, `Cargo.lock`, `rust-toolchain(.toml)`: the pinned toolchain and direct crate dependencies",
-      "reports": "Toolchains older than the newest stable release, and direct dependencies on unmaintained crates with the files that use them. `edition`, `rust-version`, `stable`, and anything it cannot read literally are not judged. See [Rust](docs/detectors/rust.md)"
+      "reports": "Toolchains older than the newest stable release, and direct dependencies on unmaintained crates with the files that use them. `edition`, `rust-version`, `stable`, and anything it cannot read literally are not judged. See [Rust](detectors/rust.md)"
     },
     {
       "ecosystems": [
@@ -160,7 +160,7 @@
       ],
       "name": "Swift",
       "reads": "`.swift-version`, `.xcode-version`, `Package.swift`, `Package.resolved`, and the application-target `IPHONEOS_DEPLOYMENT_TARGET` in `project.pbxproj`",
-      "reports": "Xcode and iOS releases App Store Connect no longer accepts, Swift toolchain lines with a lifecycle rule, and packages with a rule. Libraries and `platforms:` minimums are not judged. See [Swift](docs/detectors/swift.md)"
+      "reports": "Xcode and iOS releases App Store Connect no longer accepts, Swift toolchain lines with a lifecycle rule, and packages with a rule. Libraries and `platforms:` minimums are not judged. See [Swift](detectors/swift.md)"
     },
     {
       "ecosystems": [
@@ -168,7 +168,7 @@
       ],
       "name": "Serverless runtimes",
       "reads": "`Runtime` in AWS SAM and CloudFormation templates, `provider.runtime` and `runtime` in `serverless.yml`, and `runtime` in Terraform `aws_lambda_function`, Google Cloud Functions, and Azure function apps",
-      "reports": "Lambda and Cloud Functions runtimes their vendor lists as end of life. See [Serverless runtimes](docs/detectors/serverless.md)"
+      "reports": "Lambda and Cloud Functions runtimes their vendor lists as end of life. See [Serverless runtimes](detectors/serverless.md)"
     },
     {
       "ecosystems": [
@@ -176,7 +176,7 @@
       ],
       "name": "Ruby",
       "reads": "`.ruby-version`, `.tool-versions`, `Gemfile`, `Gemfile.lock`",
-      "reports": "Ruby release lines past end of support and yanked gems, with the Ruby files that use a gem. See [Compatibility](docs/COMPATIBILITY.md#ruby-detector)"
+      "reports": "Ruby release lines past end of support and yanked gems, with the Ruby files that use a gem. See [Compatibility](COMPATIBILITY.md#ruby-detector)"
     },
     {
       "ecosystems": [
@@ -184,7 +184,7 @@
       ],
       "name": "PHP",
       "reads": "`.php-version`, `.tool-versions`, `composer.json`, `composer.lock`",
-      "reports": "PHP release lines past end of support and abandoned Composer packages. See [Compatibility](docs/COMPATIBILITY.md#php-detector)"
+      "reports": "PHP release lines past end of support and abandoned Composer packages. See [Compatibility](COMPATIBILITY.md#php-detector)"
     },
     {
       "ecosystems": [
@@ -192,7 +192,7 @@
       ],
       "name": "Android",
       "reads": "`build.gradle(.kts)`, `settings.gradle(.kts)`, `libs.versions.toml`: SDK levels, Android Gradle Plugin, Kotlin plugin, and Maven dependencies",
-      "reports": "Declarations that a reviewed rule names, such as Google Play Billing Library majors 5 through 9. See [Compatibility](docs/COMPATIBILITY.md#android-detector)"
+      "reports": "Declarations that a reviewed rule names, such as Google Play Billing Library majors 5 through 9. See [Compatibility](COMPATIBILITY.md#android-detector)"
     }
   ]
 }

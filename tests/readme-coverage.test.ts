@@ -116,17 +116,24 @@ test("each ecosystem in the README rows has a registry with rules", async () => 
   }
 });
 
-test("the README links resolve and its commands exist", async () => {
-  for (const link of new Set(
-    [...readme.matchAll(/\]\((?!https?:|#)([^)#\s]+)(?:#[^)]*)?\)/g)].map((match) => match[1]!),
-  ))
-    await access(resolve(link));
+test("the README and the coverage page link only to files that exist, and their commands exist", async () => {
+  const rootReadme = await read("README.md");
+  for (const [document, base] of [
+    [readme, "docs"],
+    [rootReadme, "."],
+  ] as const)
+    for (const link of new Set(
+      [...document.matchAll(/\]\((?!https?:|#)([^)#\s]+)(?:#[^)]*)?\)/g)].map((match) => match[1]!),
+    ))
+      await access(resolve(base, link));
   assert.ok(manifest.bin["offing"], "every `npx @velella/offing …` command in the README needs a bin of that name");
-  const mentioned = [...readme.matchAll(/npx @velella\/offing ([a-z-]+)/g)].map((match) => match[1]!);
+  const mentioned = [...(readme + rootReadme).matchAll(/npx (?:--yes )?@velella\/offing ([a-z-]+)/g)].map(
+    (match) => match[1]!,
+  );
   const registered = new Set(registeredCommands.map((command) => command.name));
   for (const command of new Set(mentioned))
     assert.ok(registered.has(command), `the README uses \`${command}\`, which the CLI does not implement`);
-  assert.ok(readme.includes("https://velella.sh/offing/llms.txt"));
+  assert.ok(rootReadme.includes("https://velella.sh/offing/llms.txt"));
 });
 
 test("the npm description and keywords are specific, unique, and within bounds", () => {
