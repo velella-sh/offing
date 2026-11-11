@@ -28,5 +28,5 @@ Type "clear" Enter
 Show
 
 Type 'node dist/src/cli.js check pkg:npm/request@2.88.2 ; echo "exit $?"' Enter
-Wait@30s /exit \d/
+Wait+Screen@30s /exit 1/
 Sleep 4
