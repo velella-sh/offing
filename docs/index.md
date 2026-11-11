@@ -137,7 +137,7 @@ For coding agents, install the Agent Skill with one command. It teaches your age
 npx skills add velella-sh/offing
 ```
 
-Node.js 22 or newer. Start with [Install](INSTALL.md) (npm, Action, MCP, plugins, Docker, Homebrew), then the [90-second demo](DEMO.md) on a deliberately outdated project:
+Node.js 22 or newer. Start with [Install](INSTALL.md) (npm, Action, MCP, plugins, Docker), then the [90-second demo](DEMO.md) on a deliberately outdated project:
 
 ```text
 Found 5 lifecycle risks. The most urgent:

@@ -137,19 +137,6 @@ jobs:
       dry_run: ${{ github.event_name == 'workflow_dispatch' }}
       release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
 
-  publish-homebrew:
-    needs: [publish-npm]
-    if: >-
-      always() && !cancelled() && needs.publish-npm.result == 'success' &&
-      ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
-       (github.event_name == 'workflow_dispatch' && inputs.dry_run))
-    uses: ./.github/workflows/release-publish-homebrew.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
-    secrets:
-      HOMEBREW_TAP_DEPLOY_KEY: ${{ secrets.HOMEBREW_TAP_DEPLOY_KEY }}
-    with:
-      dry_run: ${{ github.event_name == 'workflow_dispatch' }}
-      release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
-
   publish-binaries:
     needs: [publish-npm, build-binaries]
     if: >-
