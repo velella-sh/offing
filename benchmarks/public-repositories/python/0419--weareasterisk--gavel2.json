@@ -57,6 +57,15 @@
         "kind": "maintainer-review",
         "note": "Read docker-compose.yml:5 at this commit: `image: postgres:10.8-alpine`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "database.redis.end-of-life-5.0",
+      "path": "docker-compose.yml",
+      "line": 16,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 16 of docker-compose.yml reads `image: redis:5.0-alpine`, which pins Redis 5.0. The rule data (Ebb 0.1.1) lists Redis 5.0 as retired: it reached end of life on 2022-04-27 (https://redis.io/docs/latest/operate/oss_and_stack/install/version-mgmt/). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
     }
   ]
 }

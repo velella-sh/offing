@@ -290,7 +290,7 @@ Measured on 557 pinned repositories at commit `dcc9f320` on 2026-11-06. Regenera
 | rust | Supported | 63 | 0 | 0 | 1.000 | 1.000 |
 | scala | Supported | 2 | 0 | 0 | 1.000 | 1.000 |
 | serverless | Supported | 168 | 0 | 0 | 1.000 | 1.000 |
-| shell | Supported | 12 | 0 | 0 | 1.000 | 1.000 |
+| shell | Beta | 12 | 0 | 0 | 1.000 | 1.000 |
 | swift | Supported | 20 | 0 | 0 | 1.000 | 1.000 |
 | terraform | Experimental | 66 | 0 | 0 | 1.000 | 1.000 |
 <!-- accuracy-tables:end -->

@@ -3,5 +3,564 @@
   "commit": "c2ae31d04b78d83b653b4d08e4a23b51252007fe",
   "ecosystem": "shell",
   "selection": "blind",
-  "expected": []
+  "expected": [
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "WindowsMize.mini.ps1",
+      "line": 16,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 16 of WindowsMize.mini.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "WindowsMize.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of WindowsMize.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_management/debloat.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_management/debloat.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_management/install.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_management/install.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_settings/Acrobat_Reader.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_settings/Acrobat_Reader.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_settings/Brave_VLC_Others.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_settings/Brave_VLC_Others.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_settings/MS_Office.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_settings/MS_Office.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_settings/MS_Paint.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_settings/MS_Paint.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_settings/MS_Store_OneDrive_Edge.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_settings/MS_Store_OneDrive_Edge.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_settings/Windows_Notepad.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_settings/Windows_Notepad.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_settings/Windows_Photos.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_settings/Windows_Photos.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_settings/Windows_Snipping_Tool.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_settings/Windows_Snipping_Tool.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/apps_settings/Windows_Terminal.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/apps_settings/Windows_Terminal.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/network_&_internet/firewall.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/network_&_internet/firewall.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/network_&_internet/network_&_internet.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/network_&_internet/network_&_internet.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/network_&_internet/protocol.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/network_&_internet/protocol.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/system_&_tweaks/file_explorer.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/system_&_tweaks/file_explorer.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/system_&_tweaks/power_&_battery.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/system_&_tweaks/power_&_battery.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/system_&_tweaks/ramdisk.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/system_&_tweaks/ramdisk.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/system_&_tweaks/services_and_scheduled_tasks.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/system_&_tweaks/services_and_scheduled_tasks.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/system_&_tweaks/system_properties.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/system_&_tweaks/system_properties.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/system_&_tweaks/tweaks.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/system_&_tweaks/tweaks.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/telemetry_&_annoyances/defender_security_center.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/telemetry_&_annoyances/defender_security_center.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/telemetry_&_annoyances/notifications.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/telemetry_&_annoyances/notifications.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/telemetry_&_annoyances/privacy_&_security.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/telemetry_&_annoyances/privacy_&_security.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/telemetry_&_annoyances/start_&_taskbar.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/telemetry_&_annoyances/start_&_taskbar.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/telemetry_&_annoyances/telemetry.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/telemetry_&_annoyances/telemetry.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/win_settings_app/accessibility.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/win_settings_app/accessibility.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/win_settings_app/accounts.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/win_settings_app/accounts.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/win_settings_app/apps.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/win_settings_app/apps.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/win_settings_app/bluetooth_&_devices.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/win_settings_app/bluetooth_&_devices.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/win_settings_app/gaming.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/win_settings_app/gaming.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/win_settings_app/personnalization.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/win_settings_app/personnalization.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/win_settings_app/system.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/win_settings_app/system.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/win_settings_app/time_&_language.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/win_settings_app/time_&_language.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/win_settings_app/windows_update.ps1",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of scripts/win_settings_app/windows_update.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/applications/management/management.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/applications/management/management.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/applications/settings/settings.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/applications/settings/settings.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/file_explorer/file_explorer.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/file_explorer/file_explorer.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/helper_functions/general/general.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/helper_functions/general/general.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/helper_functions/logged_on_user_info/logged_on_user_info.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/helper_functions/logged_on_user_info/logged_on_user_info.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/network/network.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/network/network.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/power_options/power_options.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/power_options/power_options.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/ramdisk/ramdisk.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/ramdisk/ramdisk.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/scheduled_tasks/scheduled_tasks.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/scheduled_tasks/scheduled_tasks.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/services/services.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/services/services.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/accessibility/accessibility.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/accessibility/accessibility.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/accounts/accounts.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/accounts/accounts.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/apps/apps.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/apps/apps.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/bluetooth_&_devices/bluetooth_&_devices.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/bluetooth_&_devices/bluetooth_&_devices.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/defender_security_center/defender_security_center.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/defender_security_center/defender_security_center.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/gaming/gaming.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/gaming/gaming.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/network_&_internet/network_&_internet.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/network_&_internet/network_&_internet.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/optional_features/optional_features.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/optional_features/optional_features.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/personnalization/personnalization.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/personnalization/personnalization.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/privacy_&_security/privacy_&_security.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/privacy_&_security/privacy_&_security.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/system/system.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/system/system.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/time_&_language/time_&_language.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/time_&_language/time_&_language.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/settings_app/windows_update/windows_update.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/settings_app/windows_update/windows_update.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/system_properties/system_properties.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/system_properties/system_properties.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/telemetry/telemetry.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/telemetry/telemetry.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "src/modules/tweaks/tweaks.psd1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/modules/tweaks/tweaks.psd1 reads `PowerShellVersion = '7.5'`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    }
+  ]
 }

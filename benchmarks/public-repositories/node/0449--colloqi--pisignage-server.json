@@ -84,6 +84,24 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 7 of package.json reads `\"node\": \">=8.0\"`. Legacy Node.js runtime is end-of-life. This Node.js release line is end-of-life and no longer receives security or bug fixes. Source: https://nodejs.org/en/about/eol. The pinned file was re-fetched at the recorded commit and the cited line matches. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "database.mongodb.end-of-life-4.4",
+      "path": "docker-compose.prod.yml",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 4 of docker-compose.prod.yml reads `image: mongo:4.4`, which pins MongoDB Server 4.4. The rule data (Ebb 0.1.1) lists MongoDB Server 4.4 as retired: it reached end of life on 2024-02-29 (https://www.mongodb.com/legal/support-policy). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "database.mongodb.end-of-life-5.0",
+      "path": "docker-compose.yml",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 4 of docker-compose.yml reads `image: mongo:5.0`, which pins MongoDB Server 5.0. The rule data (Ebb 0.1.1) lists MongoDB Server 5.0 as retired: it reached end of life on 2024-10-31 (https://www.mongodb.com/legal/support-policy). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
     }
   ]
 }

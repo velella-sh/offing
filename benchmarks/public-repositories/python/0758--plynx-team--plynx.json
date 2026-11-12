@@ -147,6 +147,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: read kubernetes/workers-deployment.yaml:1, which holds `apiVersion: extensions/v1beta1`; it matches the declared range of registry rule kubernetes.extensions.deployment.v1beta1.removed, whose sources are cited in the registry. Checked by AI agent (Claude Code) under maintainer direction on 2026-11-07 by reading the cited line in the pinned checkout. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "database.mongodb.end-of-life-4.2",
+      "path": "docker-compose.yml",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 4 of docker-compose.yml reads `image: mongo:4.2.8`, which pins MongoDB Server 4.2. The rule data (Ebb 0.1.1) lists MongoDB Server 4.2 as retired: it reached end of life on 2023-04-30 (https://www.mongodb.com/legal/support-policy). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
     }
   ]
 }

@@ -3,5 +3,60 @@
   "commit": "6efc382c3f31c45387c3bb3e0571a0c2650134d1",
   "ecosystem": "shell",
   "selection": "blind",
-  "expected": []
+  "expected": [
+    {
+      "ruleId": "shell.powershell.end-of-life-7.4",
+      "path": "scripts/Build.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of scripts/Build.ps1 reads `#Requires -Version 7.4`, which pins PowerShell 7.4. The rule data (Ebb 0.1.1) lists PowerShell 7.4 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.4",
+      "path": "scripts/Clean.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of scripts/Clean.ps1 reads `#Requires -Version 7.4`, which pins PowerShell 7.4. The rule data (Ebb 0.1.1) lists PowerShell 7.4 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.4",
+      "path": "scripts/InstallGitHooks.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of scripts/InstallGitHooks.ps1 reads `#Requires -Version 7.4`, which pins PowerShell 7.4. The rule data (Ebb 0.1.1) lists PowerShell 7.4 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.4",
+      "path": "scripts/Release.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of scripts/Release.ps1 reads `#Requires -Version 7.4`, which pins PowerShell 7.4. The rule data (Ebb 0.1.1) lists PowerShell 7.4 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.4",
+      "path": "scripts/ScriptSupport.psm1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of scripts/ScriptSupport.psm1 reads `#Requires -Version 7.4`, which pins PowerShell 7.4. The rule data (Ebb 0.1.1) lists PowerShell 7.4 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.4",
+      "path": "scripts/Test-LocalWinGetManifest.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of scripts/Test-LocalWinGetManifest.ps1 reads `#Requires -Version 7.4`, which pins PowerShell 7.4. The rule data (Ebb 0.1.1) lists PowerShell 7.4 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    }
+  ]
 }

@@ -3,5 +3,33 @@
   "commit": "d6c956049e31b64f194ecbd4a8164e3f6e75b4a3",
   "ecosystem": "shell",
   "selection": "blind",
-  "expected": []
+  "expected": [
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/Invoke-IndexNow.ps1",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of scripts/Invoke-IndexNow.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/Invoke-Lint.ps1",
+      "line": 7,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 7 of scripts/Invoke-Lint.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.5",
+      "path": "scripts/Update-LicenseHeader.ps1",
+      "line": 7,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 7 of scripts/Update-LicenseHeader.ps1 reads `#Requires -Version 7.5`, which pins PowerShell 7.5. The rule data (Ebb 0.1.1) lists PowerShell 7.5 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    }
+  ]
 }
