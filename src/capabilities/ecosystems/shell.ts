@@ -3,7 +3,7 @@ import type { ManifestEcosystem } from "../schema.js";
 const shell: ManifestEcosystem = {
   id: "shell",
   status: "supported",
-  maturity: "stable",
+  maturity: "beta",
   detectorIds: ["shell"],
 };
 
