@@ -93,6 +93,24 @@
         "kind": "maintainer-review",
         "note": "Read tools/InvokeBuild.ps1:4 at this commit: `#Requires -Version 7.2`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.4",
+      "path": "module/PSWSMan.psd1",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 38 of module/PSWSMan.psd1 reads `PowerShellVersion = '7.4'`, which pins PowerShell 7.4. The rule data (Ebb 0.1.1) lists PowerShell 7.4 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.4",
+      "path": "tools/UpdateDocs.ps1",
+      "line": 2,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 2 of tools/UpdateDocs.ps1 reads `#Requires -Version 7.4`, which pins PowerShell 7.4. The rule data (Ebb 0.1.1) lists PowerShell 7.4 as retired: support ended on 2026-11-10 (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
     }
   ]
 }

@@ -43,6 +43,15 @@
         "url": "https://devguide.python.org/versions/",
         "note": "Reviewed at this commit: line 2 of .tool-versions reads `python 3.10.15`. Python 3.10 and older are end-of-life (https://devguide.python.org/versions/)."
       }
+    },
+    {
+      "ruleId": "terraform.cli.end-of-support-1.6",
+      "path": ".tool-versions",
+      "line": 14,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 14 of .tool-versions reads `terraform 1.6.6`, which pins Terraform CLI 1.6. The rule data (Ebb 0.1.1) lists Terraform CLI 1.6 as retired: it stopped being a supported release line when Terraform 1.8 was released (2024-04-10) (https://github.com/hashicorp/terraform/releases/tag/v1.8.0). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
     }
   ]
 }

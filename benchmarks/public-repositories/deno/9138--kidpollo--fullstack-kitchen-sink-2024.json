@@ -53,6 +53,60 @@
         "url": "https://github.com/hashicorp/terraform/releases/tag/v0.12.14",
         "note": "Reviewed at this commit: line 18 of infra/modules/ts-package/main.tf reads `ts_code_path = \"${var.ts_code_path}\"`. Interpolation-only strings are deprecated (https://github.com/hashicorp/terraform/releases/tag/v0.12.14)."
       }
+    },
+    {
+      "ruleId": "terraform.cli.end-of-support-1.6",
+      "path": ".tool-versions",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 3 of .tool-versions reads `terraform 1.6.6`, which pins Terraform CLI 1.6. The rule data (Ebb 0.1.1) lists Terraform CLI 1.6 as retired: it stopped being a supported release line when Terraform 1.8 was released (2024-04-10) (https://github.com/hashicorp/terraform/releases/tag/v1.8.0). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "terraform.cli.end-of-support-1.6",
+      "path": "infra/modules/common-lambda/main.tf",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 6 of infra/modules/common-lambda/main.tf reads `required_version = \"= 1.6.6\"`, which pins Terraform CLI 1.6. The rule data (Ebb 0.1.1) lists Terraform CLI 1.6 as retired: it stopped being a supported release line when Terraform 1.8 was released (2024-04-10) (https://github.com/hashicorp/terraform/releases/tag/v1.8.0). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "terraform.cli.end-of-support-1.6",
+      "path": "infra/modules/python-package/main.tf",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 6 of infra/modules/python-package/main.tf reads `required_version = \"= 1.6.6\"`, which pins Terraform CLI 1.6. The rule data (Ebb 0.1.1) lists Terraform CLI 1.6 as retired: it stopped being a supported release line when Terraform 1.8 was released (2024-04-10) (https://github.com/hashicorp/terraform/releases/tag/v1.8.0). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "terraform.cli.end-of-support-1.6",
+      "path": "infra/modules/todo-api/main.tf",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 3 of infra/modules/todo-api/main.tf reads `required_version = \"= 1.6.6\"`, which pins Terraform CLI 1.6. The rule data (Ebb 0.1.1) lists Terraform CLI 1.6 as retired: it stopped being a supported release line when Terraform 1.8 was released (2024-04-10) (https://github.com/hashicorp/terraform/releases/tag/v1.8.0). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "terraform.cli.end-of-support-1.6",
+      "path": "infra/modules/todo-table-stream/main.tf",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 3 of infra/modules/todo-table-stream/main.tf reads `required_version = \"= 1.6.6\"`, which pins Terraform CLI 1.6. The rule data (Ebb 0.1.1) lists Terraform CLI 1.6 as retired: it stopped being a supported release line when Terraform 1.8 was released (2024-04-10) (https://github.com/hashicorp/terraform/releases/tag/v1.8.0). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
+    },
+    {
+      "ruleId": "terraform.cli.end-of-support-1.6",
+      "path": "infra/modules/ts-package/main.tf",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 6 of infra/modules/ts-package/main.tf reads `required_version = \"= 1.6.6\"`, which pins Terraform CLI 1.6. The rule data (Ebb 0.1.1) lists Terraform CLI 1.6 as retired: it stopped being a supported release line when Terraform 1.8 was released (2024-04-10) (https://github.com/hashicorp/terraform/releases/tag/v1.8.0). Reviewed by AI agent (Claude Code) under maintainer direction on 2026-11-12 against the file at this commit and the rule's recorded source; the source page itself was not re-fetched. Outcome: confirmed."
+      }
     }
   ]
 }
