@@ -37,11 +37,11 @@ jobs:
         run: |
           version="${GITHUB_REF_NAME#v}"
           for _ in $(seq 1 "$POLL_ATTEMPTS"); do
-            if [ "$(npm view "offing@${version}" version 2>/dev/null)" = "$version" ]; then exit 0; fi
+            if [ "$(npm view "@velella/offing@${version}" version 2>/dev/null)" = "$version" ]; then exit 0; fi
             sleep "$POLL_INTERVAL_SECONDS"
           done
           minutes=$((POLL_ATTEMPTS * POLL_INTERVAL_SECONDS / 60))
-          echo "offing@${version} is not on npm after ${minutes} minutes; the component's pinned package would not install." >&2
+          echo "@velella/offing@${version} is not on npm after ${minutes} minutes; the component's pinned package would not install." >&2
           exit 1
       - name: Push to GitLab
         env:

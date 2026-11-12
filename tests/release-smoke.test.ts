@@ -70,7 +70,7 @@ test("the release workflow compares the published package with the build after a
   const job = smoke.jobs["published-scan"]!;
   assert.match(job.if!, /!inputs\.dry_run/);
   const commands = job.steps.map((step) => step.run ?? "").join("\n");
-  assert.match(commands, /npx --yes "offing@\$VERSION" scan/);
+  assert.match(commands, /npx --yes "@velella\/offing@\$VERSION" scan/);
   assert.match(commands, /dist\/src\/cli\.js scan/);
   assert.match(commands, /release-smoke\.mjs/);
   assert.equal(job.permissions, undefined, "inherits the read-only workflow permissions");

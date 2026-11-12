@@ -18,7 +18,7 @@ if ((mode !== "--published" && mode !== "--local") || !target) {
 
 const windows = process.platform === "win32";
 const command =
-  mode === "--published" ? ["npx", "--yes", `offing@${target}`] : ["node", target];
+  mode === "--published" ? ["npx", "--yes", `@velella/offing@${target}`] : ["node", target];
 
 function run(args) {
   const [program, ...rest] = command;

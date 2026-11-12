@@ -56,7 +56,7 @@ test("the publish workflow runs the smoke script on a fresh job after publishing
   assert.deepEqual(smokeJob.permissions, { contents: "read" });
   const step = smokeJob.steps.find((item) => item.run?.includes("smoke.mjs"));
   assert.ok(step, "a step runs smoke.mjs");
-  assert.match(step.run!, /npx --yes "offing@\$version"/);
+  assert.match(step.run!, /npx --yes "@velella\/offing@\$version"/);
   assert.match(
     step["working-directory"] ?? "",
     /runner\.temp/,

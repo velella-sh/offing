@@ -43,11 +43,11 @@ jobs:
           # npm says a new version "may take a few minutes to become available"; 0.2.0 took longer than the
           # first ten-attempt wait of 2.5 minutes, so wait up to ten minutes.
           for attempt in $(seq 1 40); do
-            if npm view "offing@$version" version >/dev/null 2>&1; then exit 0; fi
+            if npm view "@velella/offing@$version" version >/dev/null 2>&1; then exit 0; fi
             echo "Attempt $attempt: $version is not visible yet."
             sleep 15
           done
-          echo "offing@$version never appeared on the registry." >&2
+          echo "@velella/offing@$version never appeared on the registry." >&2
           exit 1
       - name: Run the published package on a small fixture
         # Run from a temporary directory: inside the checkout, npx would resolve this repository's own bin.
@@ -56,7 +56,7 @@ jobs:
           version="${GITHUB_REF_NAME#v}"
           mkdir -p "$RUNNER_TEMP/offing-smoke"
           cp "$GITHUB_WORKSPACE/tests/fixtures/smoke/package.json.fixture" "$RUNNER_TEMP/offing-smoke/package.json"
-          node "$GITHUB_WORKSPACE/.github/scripts/smoke.mjs" "$RUNNER_TEMP/offing-smoke" -- npx --yes "offing@$version"
+          node "$GITHUB_WORKSPACE/.github/scripts/smoke.mjs" "$RUNNER_TEMP/offing-smoke" -- npx --yes "@velella/offing@$version"
 
   # The release fails if the npm attestation is missing or does not match the published tarball.
   # npm generates it during trusted publishing on a GitHub-hosted runner, so the builder identity
@@ -78,10 +78,10 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           version="${TAG#v}"
-          curl -fsSL --retry 3 -o package.tgz "$(npm view "offing@$version" dist.tarball)"
-          url="$(npm view "offing@$version" --json | jq -r '.dist.attestations.url')"
+          curl -fsSL --retry 3 -o package.tgz "$(npm view "@velella/offing@$version" dist.tarball)"
+          url="$(npm view "@velella/offing@$version" --json | jq -r '.dist.attestations.url')"
           if [ -z "$url" ] || [ "$url" = "null" ]; then
-            echo "offing@$version has no npm provenance attestation." >&2
+            echo "@velella/offing@$version has no npm provenance attestation." >&2
             exit 1
           fi
           curl -fsSL --retry 3 -o attestations.json "$url"
