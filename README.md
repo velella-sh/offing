@@ -19,7 +19,6 @@
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/github/license/velella-sh/offing?labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Offing" src="https://raw.githubusercontent.com/velella-sh/offing/badges/offing-badge.svg"></a>
   <a href="https://securityscorecards.dev/viewer/?uri=github.com/velella-sh/offing"><img alt="OpenSSF Scorecard" src="https://img.shields.io/ossf-scorecard/github.com/velella-sh/offing?label=openssf%20scorecard&labelColor=1F1F28&color=6A5590&style=flat"></a>
-  <a href="https://skills.sh/velella-sh/offing/offing"><img alt="skills.sh" src="https://skills.sh/b/velella-sh/offing"></a>
 </p>
 
 Offing finds **end-of-life and deprecated** runtimes, packages, and GitHub Actions in your repository, at the exact file and line, each with an authoritative source, a replacement, and migration steps. It is deterministic, offline, and needs no account.
