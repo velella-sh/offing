@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: velella-sh/offing@v0.1.0
+      - uses: velella-sh/offing@v0.1.1
         with:
           baseline: .offing-baseline.json
           fail-on-severity: high
@@ -334,7 +334,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: velella-sh/offing@v0.1.0
+      - uses: velella-sh/offing@v0.1.1
         with:
           tracking-issue: "true"
           fail-on-severity: none # the issue is the signal; do not fail the schedule
@@ -413,7 +413,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: velella-sh/offing@v0.1.0
+      - uses: velella-sh/offing@v0.1.1
         with:
           fix-pr: "true"
           fail-on-severity: none
@@ -539,7 +539,7 @@ permissions:
 
 steps:
   - uses: actions/checkout@v7
-  - uses: velella-sh/offing@v0.1.0
+  - uses: velella-sh/offing@v0.1.1
     with:
       upload-sarif: true
 ```

@@ -65,7 +65,7 @@ An empty baseline (as in the kit) fails CI on any high or critical finding. Add 
 
 So coding agents check before they add a package, Action, or runtime, copy the Cursor files from [`examples/starters/nextjs/.cursor/`](https://github.com/velella-sh/offing/tree/main/examples/starters/nextjs/.cursor):
 
-1. `.cursor/mcp.json` — local MCP server for `@velella/offing@0.1.0`
+1. `.cursor/mcp.json` — local MCP server for `@velella/offing@0.1.1`
 2. `.cursor/rules/offing.mdc` — always-on rule that calls `check_dependency` first
 
 Restart Cursor and enable the `offing` server under Settings → MCP. Other hosts use the same instruction text under [`examples/agents/`](https://github.com/velella-sh/offing/tree/main/examples/agents); see [AGENT_SKILLS.md](../AGENT_SKILLS.md).

@@ -22,7 +22,7 @@ export const SMOKE_FIXTURE_CONTENT = JSON.stringify(
 
 export interface FirstRunBenchmarkOptions {
   /**
-   * Package spec to run via npx (e.g. "@velella/offing@0.1.0" or "@velella/offing").
+   * Package spec to run via npx (e.g. "@velella/offing@0.1.1" or "@velella/offing").
    * If omitted or undefined, runs the local built CLI unless useNpx is true.
    */
   packageSpec?: string | undefined;

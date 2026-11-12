@@ -97,7 +97,7 @@ Every report has a machine-readable form. The docs are also published as [`llms.
 ```yaml
 steps:
   - uses: actions/checkout@v7
-  - uses: velella-sh/offing@v0.1.0
+  - uses: velella-sh/offing@v0.1.1
     with:
       fail-on-severity: high
 ```

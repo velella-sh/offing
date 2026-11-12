@@ -52,7 +52,7 @@ commands:
       version:
         description: Version of the offing npm package to run.
         type: string
-        default: 0.1.0
+        default: 0.1.1
     steps:
       - run:
           name: Offing scan (offing@<< parameters.version >>)
@@ -126,7 +126,7 @@ jobs:
       version:
         description: Version of the offing npm package to run.
         type: string
-        default: 0.1.0
+        default: 0.1.1
     docker:
       - image: << parameters.image >>
     steps:
