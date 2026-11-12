@@ -16,8 +16,6 @@ WORKDIR /app
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist/src ./dist/src
 COPY package.json ./
-COPY registry ./registry
-COPY data ./data
 COPY schemas ./schemas
 WORKDIR /workspace
 ENTRYPOINT ["/nodejs/bin/node", "/app/dist/src/cli.js"]

@@ -1,0 +1,1 @@
+- Build the container image without the removed `registry` and `data` directories, so the release publishes it.
