@@ -5,7 +5,7 @@ A start-to-finish guide for running Offing in GitHub Actions: add the Action to 
 ## Before you start
 
 - Confirm your workflow runs on a runner that still has the Node.js and action runtimes you use. Offing flags those too, so a workflow that installs an end-of-life runtime shows up in its own scan.
-- Pick a version tag, such as `velella-sh/offing@v0.1.0`, and read the inputs table in [GITHUB_ACTION.md](../GITHUB_ACTION.md#inputs-and-outputs). Every input is optional; the defaults gate on `high` and upload the JSON report.
+- Pick a version tag, such as `velella-sh/offing@v0.1.1`, and read the inputs table in [GITHUB_ACTION.md](../GITHUB_ACTION.md#inputs-and-outputs). Every input is optional; the defaults gate on `high` and upload the JSON report.
 - Decide what the team accepts before the first run. Existing findings should go into a committed baseline, not into a gate that is switched off.
 - Work on a branch. Run the Action on a pull request first, read the annotations, then make it required.
 
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: velella-sh/offing@v0.1.0
+      - uses: velella-sh/offing@v0.1.1
         with:
           baseline: .offing-baseline.json
           fail-on-severity: high
