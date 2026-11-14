@@ -1,107 +1,148 @@
-# Data audit and corrections
+---
+title: Data audit
+description: Sources, freshness, disagreements, ground-truth results, and known gaps — each number linked to the committed file that holds it.
+---
 
-Offing's findings come from reviewed lifecycle rules (`registry/`). A rule is data, not code, and its authority is the source it cites. When that data is wrong or missing, it should be easy to report, quick to answer, and visible once fixed. This page is that process: what to report, what evidence a report needs, who changes the rule, the gate the change runs through, the response target, and the public record.
+# Data audit
 
-- Reporting a lifecycle **software bug** (a crash, bad output, a detector that errors): use the Bug report form, not this one.
-- Reporting a **vulnerability**: use the private channel in [SECURITY.md](../SECURITY.md), never a public issue.
-- Everything below is about the **data**: the date, versions, event, severity, replacement, or source a rule carries, and rules that should or should not exist.
+This page is the public index of Offing's data quality. Every number below is taken from a
+committed file in this repository (or from the lifecycle-rule documentation that names the
+policy). None is estimated. Open the linked file to inspect or reproduce the figure.
 
-## What counts as a data problem
+For measured tool comparisons that include where Offing loses, see the committed results under
+[`benchmarks/comparison/`](../benchmarks/comparison/) and the method in
+[Comparison method](COMPARISON_METHOD.md). For how accuracy is scored, see
+[Validation](VALIDATION.md).
 
-A correction is any of these about a shipped rule or a gap in coverage:
+## Sources
 
-- A wrong **effective date or deadline**, **affected version range**, **lifecycle event**, **severity**, **replacement or migration**, or a **source** that does not state the claim.
-- A rule that **should not exist** — the product is not actually deprecated, end-of-life, or removed.
-- A **false positive** — the rule matches code it should not (its `usage` matcher fires where it should not).
-- A **false negative** — a real, source-backed lifecycle risk Offing does not report.
+Lifecycle rules live in the [`@velella/ebb`](https://github.com/velella-sh/ebb) data package.
+Every rule must carry at least one authoritative `sources[]` entry (`title`, `https` URL, and
+`accessedAt`), enforced when a registry loads — see [Lifecycle rules](RULES.md) and
+[Lifecycle data](DATA.md).
 
-The last two are read against the same [evidence policy](../CONTRIBUTING.md#evidence-policy) as any rule: the claim needs an authoritative, versioned source.
+| Measure | Value | File |
+| --- | ---: | --- |
+| Registry rules in the endoflife.date comparison pin | [752](../benchmarks/comparison/reproduce.json) | [`reproduce.json`](../benchmarks/comparison/reproduce.json) (`inputs.registryRules`) |
+| Product families those rules cover | [415](../benchmarks/comparison/endoflife-date.json) | [`endoflife-date.json`](../benchmarks/comparison/endoflife-date.json) (`offing.productFamilies`) |
+| Distinct rules exercised by ground-truth findings | [246](../benchmarks/comparison/endoflife-date.json) | same file (`offing.groundTruthRules`) |
 
-## Filing a correction
+The comparison pin is the reviewed snapshot used by
+[`npm run comparison:reproduce`](../benchmarks/comparison/reproduce.json); a later data release
+may ship more rules. Rule pages under [`docs/rules/`](rules/) cite the same sources a finding
+prints.
 
-Open the [Data correction form](https://github.com/velella-sh/offing/issues/new?template=correction.yml). It asks for six things, and you can fill them in under a minute:
+## Freshness
 
-1. **What is wrong** — one pick from the list above.
-2. **Rule id or affected item** — the id on the finding's `Rule:` line (for example `npm.package.request.deprecated`), or the package and version for a missing rule.
-3. **Authoritative source URL** — the maintainer or platform page that states the correct fact, with the version or date visible on it.
-4. **Date you checked the source** — today's date; a merged correction records it as the rule's `sources[].accessedAt`.
-5. **What Offing claims now** — paste the finding output or the rule's current text.
-6. **What the source says it should be** — one or two sentences, quoting the source.
+Scans never check freshness and never use the network, so results stay deterministic. Freshness
+is visible in two places: the age of the active data bundle, and the review window on each
+registry file.
 
-You do not need to write code or open a pull request to file one. A scan command (`offing scan`), the finding, and the source page are enough.
+| Policy | Value | File |
+| --- | ---: | --- |
+| Bundle age that triggers a stale warning | [30 days](DATA.md) | [`DATA.md`](DATA.md) |
+| Default rule review window (`freshness.maxReviewAgeDays`) | [365 days](RULES.md) | [`RULES.md`](RULES.md#freshness-and-sources) |
+| Weekly source check (URL moved, title changed, unreachable, past review window) | [sources.yml](https://github.com/velella-sh/ebb/blob/main/.github/workflows/sources.yml) | Ebb workflow; corrections land in Ebb |
 
-## The evidence a correction cites
+`offing data status` reports `ageDays`, `staleAfterDays`, and `stale` for the active bundle
+([schema](../schemas/data-status.v1.schema.json)). A pin that is merely old is not an error; it is
+flagged stale after the 30-day window above.
 
-So a report lines up with what the registry actually stores, these are the real fields a rule carries and the rules the validator (`src/registry.ts`) enforces on them. A correction that names the field is the fastest to act on.
+## Disagreements
 
-| Field | What it holds | Constraint the validator applies |
-|---|---|---|
-| `id` | The stable rule id, e.g. `npm.package.request.deprecated`. | Lowercase letters, digits, dots and hyphens (`/^[a-z0-9]+(?:[.-][a-z0-9]+)*$/`), unique across all files (`src/registry.ts:65`, `:111`, `:242`). |
-| `purl` | The Package URL of the thing the rule is about. | Canonical and **version-less**, no qualifiers or subpath (`src/registry.ts:147`–`159`). |
-| `vers` | The affected version range. | The `vers:<scheme>/<ranges>` form; the scheme must be supported and fit the PURL type, e.g. a `npm` scheme for `pkg:npm` (`src/registry.ts:161`–`175`; example `registry/npm.json`, first rule `"vers": "vers:npm/*"`). |
-| `event` | The lifecycle event. | One of `deprecated`, `end-of-support`, `end-of-life`, `removed`, `scheduled-end-of-life` (`src/registry.ts:13`, `:128`). |
-| `severity` | How urgent the finding is. | One of `info`, `low`, `medium`, `high`, `critical` (`src/domain.ts:1`, enforced at `src/registry.ts:127`). |
-| `deadline` | The date the change takes effect. | Optional, but a real `YYYY-MM-DD` calendar date; a `scheduled-end-of-life` rule must carry it and be `severity: low` (`src/registry.ts:140`–`145`). |
-| `sources[]` | The pages the claim rests on. | At least one; each has a non-empty `title`, an `https` `url`, and an `accessedAt` that must be a `YYYY-MM-DD` date (`src/registry.ts:223`–`234`). |
-| `provenance` | Who checked it and when. | `observedAt` and `reviewedAt` are both real dates, `reviewedAt` must not precede `observedAt`, `reviewer` is required, and `importer` is optional (`src/registry.ts:191`–`204`). |
-| `freshness` | The review window for the registry file. | Rules reviewed longer ago than `freshness.maxReviewAgeDays` are stale; the default window is 365 days (`src/registry.ts:11`, `:264`–`275`). |
+A disagreement is published as its own row with both sides' evidence. Aggregate claims without
+the row table are rejected ([Comparison method](COMPARISON_METHOD.md)).
 
-## Who fixes it, and how
+### Date differences with endoflife.date
 
-A correction **issue** does not edit `registry/*.json` on its own. The registry is reviewed data with a maintainer code owner (see [`.github/CODEOWNERS`](../.github/CODEOWNERS)), so the change lands as a rule change that a maintainer merges. The reporter, a contributor, or the maintainer can open that pull request; whoever opens it does not have to be whoever filed the correction.
+| Sample | Measured | Agree | Disagree | File |
+| --- | ---: | ---: | ---: | --- |
+| All comparable rules | [184](../benchmarks/comparison/reproduce.json) | [176](../benchmarks/comparison/reproduce.json) | [8](../benchmarks/comparison/endoflife-date.md#where-the-data-differs) | [`reproduce.json`](../benchmarks/comparison/reproduce.json) / [`endoflife-date.md`](../benchmarks/comparison/endoflife-date.md#where-the-data-differs) |
+| Ground-truth rules only | [92](../benchmarks/comparison/reproduce.json) | [85](../benchmarks/comparison/reproduce.json) | [7](../benchmarks/comparison/reproduce.json) | same |
 
-A rule fix follows the same path as adding a rule ([Lifecycle rules](RULES.md#from-a-source-to-a-merged-pull-request)):
+The eight date-difference rows (product, Offing date, endoflife.date date, Δ days) are in
+[Where the data differs](../benchmarks/comparison/endoflife-date.md#where-the-data-differs),
+backed by [`endoflife-date.json`](../benchmarks/comparison/endoflife-date.json) (`disagreements`).
 
-1. Edit the named fields of that rule in `registry/<ecosystem>.json` — correct the date, range, event, severity, replacement, or source, add a missing rule, or remove one that should not exist.
-2. Set the provenance to who checked and when: update `sources[].accessedAt`, and set `provenance.reviewedAt` to the review date with `provenance.reviewer` named. `reviewedAt` must not precede `observedAt`.
-3. Keep both fixtures honest: `tests/fixtures/<rule-id>/match/` must still report the rule and `clean/` must still not.
-4. Run `offing rules lint registry/<file>.json`, then `offing rules test <rule-id>`, then `npm run check`.
+### Finding-level comparison with Renovate
 
-Do **not** hand-edit the generated pages that read from the registry (`docs/rules/`, `docs/sitemap.xml`, `docs/api/v1/`, `docs/dashboard/data.json`); they are regenerated from `registry/*.json` at build time — see [AGENTS.md](../AGENTS.md#generated-files--do-not-edit-by-hand).
+| Selection | Agree | Offing only | Renovate only | File |
+| --- | ---: | ---: | ---: | --- |
+| Blind | [1085](../benchmarks/comparison/reproduce.json) | [1095](../benchmarks/comparison/reproduce.json) | [232](../benchmarks/comparison/renovate/renovate.md) | [`reproduce.json`](../benchmarks/comparison/reproduce.json) / [`renovate.md`](../benchmarks/comparison/renovate/renovate.md) |
+| Continuity set (5 repos) | [70](differential-report.md) | [8](differential-report.md) | [19](differential-report.md) | [`differential-report.md`](differential-report.md) |
 
-## The gate a correction runs through
+Every Renovate-only and Offing-only row links to the declaration at the pinned commit. The
+continuity set is also in [`differential-report.json`](differential-report.json).
 
-Every rule a pull request touches is checked before merge by the **"Rules (changed)"** job ([`.github/workflows/rules.yml`](../.github/workflows/rules.yml)). After `npm run build` it runs:
+## Ground truth results
 
-```bash
-node dist/tools/changed-rules.js --base <sha> --summary "$GITHUB_STEP_SUMMARY"
-```
+Ground truth is independent of Offing's own output: migration commits, vendor lifecycle pages, or
+a maintainer's written check of the cited line ([decision 0013](decisions/0013-detector-maturity.md)).
 
-That tool (`tools/changed-rules.ts`) lints each changed `registry/*.json` and runs the fixture harness for every rule id the diff added or changed. A rule with no fixtures fails: the harness (`src/rule-test.ts`) needs **both** `tests/fixtures/<rule-id>/match/` and `tests/fixtures/<rule-id>/clean/`, and reports `missing fixture` when either is absent. The same checks run locally and offline with `offing rules lint` and `offing rules test <rule-id>`.
+| Measure | Value | File |
+| --- | ---: | --- |
+| Pinned corpus repositories (comparison pin) | [1618](../benchmarks/comparison/reproduce.json) | [`reproduce.json`](../benchmarks/comparison/reproduce.json) (`inputs.corpusRepositories`) |
+| Expected findings in that pin | [10482](../benchmarks/comparison/endoflife-date.json) | [`endoflife-date.json`](../benchmarks/comparison/endoflife-date.json) (`offing.groundTruthRecords`) |
+| Held-out repositories | [15](../benchmarks/held-out-result.json) | [`held-out-result.json`](../benchmarks/held-out-result.json) |
+| Held-out precision / recall | [0.9605](../benchmarks/held-out-result.json) / [1](../benchmarks/held-out-result.json) | same (`summary`) |
+| Held-out true / false positives, false negatives | [73](../benchmarks/held-out-result.json) / [3](../benchmarks/held-out-result.json) / [0](../benchmarks/held-out-result.json) | same |
+| Vendor-checked date sample (Offing and endoflife.date both match) | [11](../benchmarks/comparison/reproduce.json) / [11](../benchmarks/comparison/reproduce.json) | [`reproduce.json`](../benchmarks/comparison/reproduce.json) (`known.vendorChecked`) |
 
-## Response target
+Per-detector precision and recall from the last recorded full corpus run are the generated table
+in [Accuracy by detector](VALIDATION.md#accuracy-by-detector). That table is rebuilt with
+`npm run build:coverage` after `npm run record:corpus-run`; do not copy its counts here.
 
-Deadlines are calendar days counted from the day the correction issue is opened, the same way [security triage](SECURITY_TRIAGE.md) counts alert deadlines. Reading the report, triaging it, or asking for more evidence does not stop the clock. "Fixed" means the merged rule change landed; an open follow-up is a record, not a resolution.
+Corpus entries live under [`benchmarks/public-repositories/`](../benchmarks/public-repositories/).
+Evidence counts per detector for the snapshot used by coverage tooling are in
+[`benchmarks/corpus-snapshot.json`](../benchmarks/corpus-snapshot.json).
+
+## Known gaps
+
+These are declared limits and measured misses, not soft goals. Each links to the file that states
+it.
+
+| Gap | Value | File |
+| --- | ---: | --- |
+| endoflife.date products with no Offing rule | [447](../benchmarks/comparison/endoflife-date.md#product-coverage) of [489](../benchmarks/comparison/endoflife-date.md#product-coverage) | [`endoflife-date.md`](../benchmarks/comparison/endoflife-date.md#product-coverage) |
+| Renovate-only npm deprecations (blind) | [232](../benchmarks/comparison/renovate/renovate.md) | [`renovate.md`](../benchmarks/comparison/renovate/renovate.md) |
+| Corpus growth target per bucket | [200](../benchmarks/corpus-targets.json) | [`corpus-targets.json`](../benchmarks/corpus-targets.json) (`target`); minima are the floor CI enforces today |
+| Dependabot head-to-head on a pinned commit | not measured | [Comparison method §7](COMPARISON_METHOD.md#7-what-cannot-be-measured-stated-in-advance) |
+| Runtime / API findings vs Renovate and xeol | not comparable | same section |
+| Main corpus circularity (labels reviewed against the same commits) | stated | [Held-out set](validation/corpus.md#the-held-out-set) |
+| Unreviewed scan-output labels (not precision evidence) | separate tree | [`benchmarks/unreviewed-repositories/`](../benchmarks/unreviewed-repositories/) / [Unreviewed expected findings](validation/corpus.md#unreviewed-expected-findings) |
+
+Capability pages that are not measurements live under [`docs/compare/`](compare/). Losses that
+are measurements are published in the result pages under
+[`benchmarks/comparison/`](../benchmarks/comparison/) (for example
+[Where Offing loses on product breadth](../benchmarks/comparison/endoflife-date.md#product-coverage)
+and [Renovate-only rows](../benchmarks/comparison/renovate/renovate.md)).
+
+## Corrections
+
+When a shipped rule is wrong or missing, open the
+[Data correction form](https://github.com/velella-sh/offing/issues/new?template=correction.yml).
+For a software bug use the Bug report form; for a vulnerability use
+[SECURITY.md](../SECURITY.md).
 
 | Correction | First response | Resolved or explained |
-|---|---|---|
+| --- | --- | --- |
 | Wrong date, version range, event, severity, replacement, or source of a live rule | 3 working days | 14 days |
 | Rule should not exist, or a clear false positive | 3 working days | 14 days |
 | Missing sourced rule (false negative) | 3 working days | 30 days |
 | Claim disputed, evidence ambiguous | 3 working days | until the source settles, with the reason on the issue |
 
-- **The clock starts** when the issue is opened. A **first response** is a maintainer's written reply on the issue: a question, a triage decision, or a link to the pull request that fixes it. Labels and bots do not count.
-- A correction past its deadline is **open and overdue**, not dismissed. Absence of bandwidth is not a resolution reason; an unfixed correction stays visible until a change or a written rejection closes it.
-- If a target is missed, comment on the issue to nudge the maintainer. A missed target is the project's problem, not the reporter's, and does not mean the correction is unwelcome.
-
-Corrections are one input to keeping the data honest; the other is the proactive weekly **freshness and source** check ([`.github/workflows/sources.yml`](https://github.com/velella-sh/ebb/blob/main/.github/workflows/sources.yml), `tools/check-sources.ts`), which flags rules past their review window and sources whose URL or title has moved or gone dark.
-
-## Public record of corrections
-
-Every accepted correction is recorded in two places, so the ledger and the data agree:
-
-- In the rule itself — the change updates that rule's `sources[].accessedAt` and `provenance.reviewedAt` / `reviewer`, which is the per-rule audit trail a scan can point back to.
-- In the log below — a human-readable ledger of what was wrong and what fixed it, added when the correction pull request merges.
+A correction changes the rule in Ebb (with fixtures and `npm run check`), not this page. The
+evidence fields a report should name are documented in [Lifecycle rules](RULES.md). Accepted
+fixes update the rule's `sources[].accessedAt` and `provenance.reviewedAt` / `reviewer`.
 
 | Date | Rule | What was wrong | Source | Outcome | By |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | _No corrections recorded yet._ | | | | | |
-
-To add a row when a correction merges: the date of the merge, the rule id, a one-line description of the error, the authoritative source URL, the pull request or release that fixed it, and the reviewer named in the new `provenance.reviewer`. Corrections that are rejected or found duplicate close with a written reason on the issue and do **not** get a row; the log records the data that changed, not every report.
 
 ## Related
 
-- [Lifecycle rules](RULES.md) — the rule format, the fields above, and how to write or fix one.
-- [Lifecycle data](DATA.md) — how rules are signed, distributed, and trusted.
-- [Validation](VALIDATION.md) — the public corpus and measured precision, the other way accuracy is checked.
-- [Evidence policy](../CONTRIBUTING.md#evidence-policy) and [SECURITY.md](../SECURITY.md) — what a source must be, and how to report a vulnerability instead.
+- [Comparison method](COMPARISON_METHOD.md) — how comparisons are run and what cannot be measured
+- [`benchmarks/comparison/`](../benchmarks/comparison/) — Renovate, Dependabot surface, and endoflife.date results
+- [Validation](VALIDATION.md) — corpus method and accuracy table
+- [Lifecycle data](DATA.md) — signing, pinning, and trust
+- [Evidence policy](../CONTRIBUTING.md#evidence-policy) — what counts as a source
