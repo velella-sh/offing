@@ -49,7 +49,8 @@ jobs:
           mkdir -p "$out"
           # prepack runs the full check; build already ran, so pack the built tree only.
           npm pack --ignore-scripts --pack-destination "$out"
-          tarball="$(ls "$out"/offing-*.tgz)"
+          # Scoped package name @velella/offing packs as velella-offing-*.tgz, not offing-*.tgz.
+          tarball="$(ls "$out"/*.tgz)"
           install_dir="$out/npm-install"
           node dist/tools/prepare-package-smoke.js "$tarball" "$install_dir"
           (
