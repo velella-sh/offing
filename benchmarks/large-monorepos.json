@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "offing.large-monorepos.v1",
+  "description": "The five largest public JS/TS monorepos that fit a nightly Actions checkout (by GitHub repository size), pinned by commit. Checkout happens in the workflow; scans stay offline.",
+  "repositories": [
+    {
+      "id": "microsoft-typescript",
+      "repository": "microsoft/TypeScript",
+      "commit": "6bdcb54d23f41bc7098c1f3488ac599c75b852ca"
+    },
+    {
+      "id": "vercel-next-js",
+      "repository": "vercel/next.js",
+      "commit": "8d1f4ed9c010edc763ee763942aac39b7d4ecfbd"
+    },
+    {
+      "id": "microsoft-vscode",
+      "repository": "microsoft/vscode",
+      "commit": "ff9acdc74d3fbc338a6e50da2c31695eb0176a33"
+    },
+    {
+      "id": "storybookjs-storybook",
+      "repository": "storybookjs/storybook",
+      "commit": "7c89155f3fae776c903876ecf9b2bc7b25c0f3a4"
+    },
+    {
+      "id": "facebook-react",
+      "repository": "facebook/react",
+      "commit": "df6aa4ec76cff5b3adde531c6fe8c36099e0469b"
+    }
+  ]
+}
