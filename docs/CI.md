@@ -23,7 +23,7 @@ every needed job succeeded or was skipped. Keep individual jobs, the public corp
 fuzz, mutation, and package smoke **out** of the required list so the matrix can change without
 editing repository settings.
 
-How to turn the check and the merge queue on: [MAINTAINERS.md](../MAINTAINERS.md#branch-protection-and-the-merge-queue).
+The ruleset and the merge queue are on; details and the (absent) release-bot exception: [MAINTAINERS.md](../MAINTAINERS.md#branch-protection-and-the-merge-queue).
 Contributor-facing note: [CONTRIBUTING.md](../CONTRIBUTING.md#quality-standards).
 
 ## Lanes at a glance
@@ -135,24 +135,25 @@ the site instead.
 **Rules.**
 
 - Never cancel a `merge_group` run for a newer push.
-- The merge queue is the only path to `main` once #2029 is done; until then, treat a green queue
-  run as the intended proof even if direct merges still exist.
+- The merge queue is the only path to `main` (repository ruleset; see
+  [MAINTAINERS.md](../MAINTAINERS.md#branch-protection-and-the-merge-queue)).
 - Do not put corpus, mutation, or Scorecard into the queue budget.
 
 ## Main (15 minutes)
 
-**Goal.** After the merge queue is the only path, do not re-prove the same gate on every push.
+**Goal.** The merge queue is the only path, so do not re-prove the same gate on every push.
 
-**Target (after #2029 and #2030).**
+**Target.**
 
 - Badge publish to the `badges` branch.
-- Pages deploy **once per merge batch**, not once per commit (#2031).
+- Pages deploy **once per merge batch**, not once per commit.
 - Any remaining release-branch Action bundle build the release chain still starts from `main`.
 - Do not cancel a `main` run that is the only verification left for a commit. Report cancelled
   share; keep it under 5%.
 
-**Until the queue is enforced.** Keep the full `ci.yml` gate on `push` to `main` so history stays
-covered. That transitional cost is accepted; removing it is #2030's job after #2029.
+**Today.** The full `ci.yml` gate still runs on `push` to `main` as a belt-and-suspenders check
+while post-merge jobs (badges, Pages) share that workflow. Thinning `main` to side effects only
+stays a follow-up; the queue is already the landing proof.
 
 ## Nightly and scheduled (60 minutes per workflow)
 
