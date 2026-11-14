@@ -103,6 +103,7 @@
     "benchmark:monorepo": "npm run build --silent && node dist/benchmarks/monorepo.js",
     "benchmark:detector-cost": "npm run build --silent && node dist/benchmarks/detector-cost.js",
     "benchmark:first-run": "npm run build --silent && node dist/benchmarks/first-run.js",
+    "benchmark:scan-cache": "npm run build --silent && node dist/benchmarks/scan-cache-speed.js",
     "bench:staleness:run": "npm run build --silent && node dist/benchmarks/agent-staleness/run.js",
     "bench:staleness:score": "npm run build --silent && node dist/benchmarks/agent-staleness/score.js",
     "eval:skill-triggers": "npm run build --silent && node dist/benchmarks/skill-trigger-eval.js",

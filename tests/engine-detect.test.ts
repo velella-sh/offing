@@ -11,6 +11,7 @@ import {
   scanRepository,
   shouldDisableCacheForDetector,
 } from "../src/engine/index.js";
+import { buildRepoFileIndex } from "../src/engine/detect.js";
 import { nodeFileSystem } from "../src/node-file-system.js";
 import { computeFileHash, ScanCache } from "../src/scan-cache.js";
 import type { DetectorManifest } from "../src/scan-cache.js";
@@ -28,6 +29,14 @@ import {
 after(cleanupScratch);
 beforeEach(() => configureActiveData({ pinnedVersion: "bundled" }));
 afterEach(() => configureActiveData());
+
+test("buildRepoFileIndex indexes basenames and extensions for O(1) input lookup", () => {
+  const index = buildRepoFileIndex(["src/App.TS", "package.json", "lib/util.js"]);
+  assert.deepEqual(index.byBaseName.get("package.json"), ["package.json"]);
+  assert.deepEqual(index.byExtension.get(".ts"), ["src/App.TS"]);
+  assert.deepEqual(index.byExtension.get(".js"), ["lib/util.js"]);
+  assert.equal(index.all.length, 3);
+});
 
 test("a detector directory with a long run of slashes is checked in linear time", () => {
   const attack = `node_modules${"/".repeat(100_000)}x`;
