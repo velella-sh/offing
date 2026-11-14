@@ -3,6 +3,12 @@ name: pages
 # Builds the documentation site once, verifies that build with
 # Lighthouse, and deploys the same artifact to GitHub Pages. Repository Settings
 # → Pages → Source must be "GitHub Actions" (not the legacy /docs folder).
+#
+# Push bursts on main (a merge-queue batch, or several merges a few seconds
+# apart) each fire this workflow. A shared concurrency group would cancel the
+# pending middle runs; instead a short settle wait keeps only the tip of main
+# building and deploying, and superseded commits exit successfully. The deploy
+# job still serializes so two tips never race the Pages backend.
 on:
   push:
     branches: [main]
@@ -10,13 +16,49 @@ on:
 
 permissions: {}
 
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
+  tip:
+    name: batch tip
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      deploy: ${{ steps.gate.outputs.deploy }}
+    steps:
+      - name: Deploy only the tip of main after a merge batch
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SHA: ${{ github.sha }}
+          REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" != "push" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Wait so a merge-queue batch (several pushes within a few seconds)
+          # settles on one tip; then only that tip builds and deploys.
+          sleep 60
+          tip="$(gh api "repos/${REPOSITORY}/commits/main" --jq .sha)"
+          if [ -z "$tip" ]; then
+            echo "Could not read the tip of main" >&2
+            exit 1
+          fi
+          if [ "$SHA" = "$tip" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+            echo "This commit is the tip of main; continuing."
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            echo "Superseded by ${tip}; skipping Pages for this commit."
+          fi
+
   build:
     name: build site
+    needs: tip
+    if: needs.tip.outputs.deploy == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -97,6 +139,9 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     needs: build
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
