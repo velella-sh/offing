@@ -1,5 +1,9 @@
 name: CI
 
+# The repository ruleset on main requires the merge queue and the ci-ok check from this
+# workflow. merge_group is the landing proof; pull_request is feedback; push to main is
+# post-merge (and still re-runs the gate until a follow-up thins it). See MAINTAINERS.md.
+
 on:
   pull_request:
   push:

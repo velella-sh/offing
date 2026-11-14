@@ -46,7 +46,7 @@ Three causes, 8 conflicting tasks. `examples/capabilities.json` is an assembled 
 ## What this does not show
 
 - The tasks are replayed from history, not started fresh from one base, so some conflicts are really dependencies (the later task was written on top of the earlier one). The causes above are the shared paths either way.
-- The merge queue is not on (#2029 is open), so the merges were local `git merge` runs, not queue runs.
+- When this experiment ran, the merge queue was not yet on, so the merges were local `git merge` runs, not queue runs. The queue is now the only path to `main` (see [MAINTAINERS.md](../MAINTAINERS.md#branch-protection-and-the-merge-queue)).
 - Rerun this experiment after each cause is fixed. The goal stays zero textual conflicts.
 
 ## After the fix for hard-coded counts (#2581)
