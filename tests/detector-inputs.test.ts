@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve, win32 } from "node:path";
 import { after, test } from "node:test";
 
-import { declaresInput } from "../src/detector-inputs.js";
+import { declaresInput, trimTrailingSlashes } from "../src/detector-inputs.js";
 import { declaredInputsCheck } from "../src/conformance/checks/inputs.js";
 import { relativeInsideRoot, traceReads } from "../src/conformance/trace-reads.js";
 import { ConformanceError, runDetectorConformance } from "../src/conformance/index.js";
@@ -35,6 +35,17 @@ async function tree(files: Record<string, string>): Promise<string> {
   }
   return root;
 }
+
+test("trimTrailingSlashes strips only trailing slashes in linear time", () => {
+  assert.equal(trimTrailingSlashes("vendor"), "vendor");
+  assert.equal(trimTrailingSlashes("vendor/"), "vendor");
+  assert.equal(trimTrailingSlashes("vendor///"), "vendor");
+  assert.equal(trimTrailingSlashes("a/b/"), "a/b");
+  const attack = `vendor/${"/".repeat(100_000)}`;
+  const started = performance.now();
+  assert.equal(trimTrailingSlashes(attack), "vendor");
+  assert.ok(performance.now() - started < 100, "100k trailing slashes must stay linear");
+});
 
 test("declaresInput matches names, wildcards, extensions, source extensions, and directories", () => {
   const inputs = {

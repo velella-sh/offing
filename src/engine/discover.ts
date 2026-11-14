@@ -3,13 +3,15 @@
 
 import { join, resolve } from "node:path";
 
-import { declaresInput } from "../detector-inputs.js";
+import { declaresInput, trimTrailingSlashes } from "../detector-inputs.js";
 import { COVERAGE_WALK_LIMIT } from "../domain.js";
 import type { ScanCoverage } from "../domain.js";
 import type { ScanFileSystem } from "../file-system.js";
 import { nodeFileSystem } from "../node-file-system.js";
 import { childPosixPath } from "../paths.js";
 import type { Detector, DetectorInputs } from "../sdk.js";
+
+export { trimTrailingSlashes };
 
 /** Matches `CLE_FILE_NAME` in cle-ingest without importing that module into the engine. */
 const CLE_COVERAGE_FILE = "cle.json";
@@ -55,17 +57,6 @@ const SCAN_SKIPPED_DIRECTORIES = new Set([
 
 /** Directory errors the coverage walk skips so an unreadable tree cannot fail the scan. */
 const COVERAGE_SKIP_READ_CODES = new Set(["EACCES", "ENOENT", "ENOTDIR"]);
-
-/**
- * Drops a declared directory's trailing `/` characters. Directory names come from detectors,
- * including third-party ones, so they are untrusted: a loop stays linear where `/\/+$/` backtracks
- * quadratically on a long run of slashes (`js/polynomial-redos`).
- */
-export function trimTrailingSlashes(value: string): string {
-  let end = value.length;
-  while (end > 0 && value.charCodeAt(end - 1) === 0x2f) end -= 1;
-  return end === value.length ? value : value.slice(0, end);
-}
 
 /** True when a repository listing skips this directory name. */
 export function isSkippedScanDirectory(name: string): boolean {

@@ -89,14 +89,44 @@ export interface DetectOptions {
   readonly dataVersion: string;
   readonly noCache: boolean;
   readonly getFileHash: (relPath: string) => Promise<string>;
+  /** Per-scan basename/extension index; built once in `detectAll` so warm hits skip O(files×detectors) filters. */
+  readonly fileIndex?: RepoFileIndex;
+}
+
+/** Basename and extension lookup built once per scan from the repository file list. */
+export interface RepoFileIndex {
+  readonly byBaseName: ReadonlyMap<string, readonly string[]>;
+  readonly byExtension: ReadonlyMap<string, readonly string[]>;
+  readonly all: readonly string[];
 }
 
 /** Files hashed or looked up per batch: bounds the promises and cache entries in flight on a huge tree. */
 const fileBatchSize = 256;
 
+/** Builds basename and extension indexes so each detector can resolve its inputs without scanning every path. */
+export function buildRepoFileIndex(repoFiles: readonly string[]): RepoFileIndex {
+  const byBaseName = new Map<string, string[]>();
+  const byExtension = new Map<string, string[]>();
+  for (const path of repoFiles) {
+    const normalized = path.split("\\").join("/");
+    const base = normalized.slice(normalized.lastIndexOf("/") + 1).toLowerCase();
+    const bases = byBaseName.get(base);
+    if (bases) bases.push(normalized);
+    else byBaseName.set(base, [normalized]);
+    const dot = base.lastIndexOf(".");
+    if (dot <= 0) continue;
+    const extension = base.slice(dot);
+    const paths = byExtension.get(extension);
+    if (paths) paths.push(normalized);
+    else byExtension.set(extension, [normalized]);
+  }
+  return { byBaseName, byExtension, all: repoFiles };
+}
+
 /** Runs every detector; results come back in the order the detectors were given. */
 export async function detectAll(detectors: readonly Detector[], options: DetectOptions): Promise<DetectorResult[]> {
-  return Promise.all(detectors.map(async (detector) => detectOne(detector, options)));
+  const withIndex = options.fileIndex ? options : { ...options, fileIndex: buildRepoFileIndex(options.repoFiles) };
+  return Promise.all(detectors.map(async (detector) => detectOne(detector, withIndex)));
 }
 
 async function detectOne(detector: Detector, options: DetectOptions): Promise<DetectorResult> {
@@ -104,12 +134,16 @@ async function detectOne(detector: Detector, options: DetectOptions): Promise<De
   if (options.noCache || shouldDisableCacheForDetector(detector)) {
     return analyzeDetector(detector, options.context);
   }
-  const files = inputFiles(detector, options.repoFiles);
+  const files = inputFiles(detector, options);
   if (detector.inputs !== undefined && files.length === 0) return { findings: [], unclassified: [] };
-  const descriptors = await describeFiles(files, options.getFileHash);
   const version = detectorVersion(detector);
   const manifest = await options.cache.getDetectorManifest(options.root, detector.id, version, options.dataVersion);
-  if (manifest !== undefined && manifestMatches(manifest, descriptors)) {
+  // Warm path: size+mtime match the recorded fingerprints → reuse without reading file bytes.
+  if (manifest !== undefined && (await fingerprintsMatch(manifest, files, options))) {
+    return { findings: [...manifest.findings], unclassified: [...manifest.unclassified] };
+  }
+  const descriptors = await describeFiles(files, options);
+  if (manifest !== undefined && contentHashesMatch(manifest, descriptors)) {
     return { findings: [...manifest.findings], unclassified: [...manifest.unclassified] };
   }
   return CROSS_FILE_DETECTORS.has(detector.id)
@@ -117,34 +151,139 @@ async function detectOne(detector: Detector, options: DetectOptions): Promise<De
     : detectPerFile(detector, options, descriptors, version);
 }
 
-/** The detector's input files, sorted so cache keys stay deterministic. */
-function inputFiles(detector: Detector, repoFiles: readonly string[]): string[] {
-  const inputs = detector.inputs;
-  const relevant = inputs === undefined ? repoFiles : repoFiles.filter((path) => declaresInput(inputs, path));
-  return [...relevant].sort((left, right) => left.localeCompare(right));
+/** Adds paths whose basename matches a declared `fileNames` entry (exact or wildcard). */
+function collectNamedInputs(names: readonly string[], index: RepoFileIndex, matched: Set<string>): void {
+  for (const name of names) {
+    if (name.includes("*")) {
+      for (const path of index.all) {
+        if (declaresInput({ fileNames: [name] }, path)) matched.add(path);
+      }
+      continue;
+    }
+    for (const path of index.byBaseName.get(name.toLowerCase()) ?? []) matched.add(path);
+  }
 }
 
-async function describeFiles(
+/** Adds paths whose extension is in the detector's `extensions` or `sourceExtensions`. */
+function collectExtensionInputs(extensions: readonly string[], index: RepoFileIndex, matched: Set<string>): void {
+  for (const extension of extensions) {
+    for (const path of index.byExtension.get(extension.toLowerCase()) ?? []) matched.add(path);
+  }
+}
+
+/** Adds paths that lie under any declared detector directory. */
+function collectDirectoryInputs(directories: readonly string[], index: RepoFileIndex, matched: Set<string>): void {
+  for (const directory of directories) {
+    for (const path of index.all) {
+      if (declaresInput({ directories: [directory] }, path)) matched.add(path);
+    }
+  }
+}
+
+/** Adds every path matching `inputs` into `matched`, using the per-scan file index when possible. */
+function collectInputPaths(inputs: NonNullable<Detector["inputs"]>, index: RepoFileIndex, matched: Set<string>): void {
+  collectNamedInputs(inputs.fileNames ?? [], index, matched);
+  collectExtensionInputs([...(inputs.extensions ?? []), ...(inputs.sourceExtensions ?? [])], index, matched);
+  collectDirectoryInputs(inputs.directories ?? [], index, matched);
+}
+
+/** The detector's input files, sorted so cache keys stay deterministic. */
+function inputFiles(detector: Detector, options: DetectOptions): string[] {
+  const index = options.fileIndex ?? buildRepoFileIndex(options.repoFiles);
+  if (detector.inputs === undefined) return [...index.all].sort((left, right) => left.localeCompare(right));
+  const matched = new Set<string>();
+  collectInputPaths(detector.inputs, index, matched);
+  return [...matched].sort((left, right) => left.localeCompare(right));
+}
+
+/** Stats each input path: used for the warm-path fingerprint check before any content hash. */
+async function describeFingerprints(
   files: readonly string[],
-  getFileHash: (relPath: string) => Promise<string>,
-): Promise<DetectorFileDescriptor[]> {
+  options: DetectOptions,
+): Promise<Array<{ path: string; size: number; mtimeMs: number } | undefined>> {
+  const fingerprints: Array<{ path: string; size: number; mtimeMs: number } | undefined> = [];
+  for (let start = 0; start < files.length; start += fileBatchSize) {
+    const batch = files.slice(start, start + fileBatchSize);
+    fingerprints.push(
+      ...(await Promise.all(
+        batch.map(async (path) => {
+          try {
+            const info = await options.fileSystem.stat(join(options.root, path));
+            return { path, size: info.size, mtimeMs: info.mtimeMs };
+          } catch {
+            return undefined;
+          }
+        }),
+      )),
+    );
+  }
+  return fingerprints;
+}
+
+/** True when recorded size/mtime fingerprints still match the live tree (order and length included). */
+export function fingerprintsEqual(
+  recorded: readonly { path: string; size?: number; mtimeMs?: number }[],
+  live: readonly ({ path: string; size: number; mtimeMs: number } | undefined)[],
+): boolean {
+  if (recorded.length !== live.length) return false;
+  if (!recorded.every((file) => Number.isFinite(file.size) && Number.isFinite(file.mtimeMs))) return false;
+  return recorded.every((file, index) => {
+    const current = live[index];
+    return (
+      current !== undefined &&
+      file.path === current.path &&
+      file.size === current.size &&
+      file.mtimeMs === current.mtimeMs
+    );
+  });
+}
+
+/** True when every recorded fingerprint still matches size and mtime (and nothing was added or removed). */
+async function fingerprintsMatch(
+  manifest: DetectorManifest,
+  files: readonly string[],
+  options: DetectOptions,
+): Promise<boolean> {
+  return fingerprintsEqual(manifest.files, await describeFingerprints(files, options));
+}
+
+/** Hashes and stats each input file so a later warm scan can skip the hash work. */
+async function describeFiles(files: readonly string[], options: DetectOptions): Promise<DetectorFileDescriptor[]> {
   const descriptors: DetectorFileDescriptor[] = [];
   // Hash in batches: `Promise.all` over a 100k-file tree would allocate one promise per file at once.
   for (let start = 0; start < files.length; start += fileBatchSize) {
     const batch = files.slice(start, start + fileBatchSize);
-    descriptors.push(...(await Promise.all(batch.map(async (path) => ({ path, hash: await getFileHash(path) })))));
+    descriptors.push(
+      ...(await Promise.all(
+        batch.map(async (path) => {
+          const [hash, info] = await Promise.all([
+            options.getFileHash(path),
+            options.fileSystem.stat(join(options.root, path)).catch(() => ({ size: -1, mtimeMs: -1 })),
+          ]);
+          return { path, hash, size: info.size, mtimeMs: info.mtimeMs };
+        }),
+      )),
+    );
   }
   return descriptors;
 }
 
-function manifestMatches(manifest: DetectorManifest, descriptors: readonly DetectorFileDescriptor[]): boolean {
+/** True when every recorded content hash still matches (fallback when mtime moved without a content change). */
+export function contentHashesEqual(
+  recorded: readonly { path: string; hash: string }[],
+  live: readonly { path: string; hash: string }[],
+): boolean {
   return (
-    manifest.files.length === descriptors.length &&
-    manifest.files.every((file, index) => {
-      const current = descriptors[index];
+    recorded.length === live.length &&
+    recorded.every((file, index) => {
+      const current = live[index];
       return current !== undefined && file.path === current.path && file.hash === current.hash;
     })
   );
+}
+
+function contentHashesMatch(manifest: DetectorManifest, descriptors: readonly DetectorFileDescriptor[]): boolean {
+  return contentHashesEqual(manifest.files, descriptors);
 }
 
 /** Runs a detector (analyze when present, scan otherwise) and attributes its output to it. */

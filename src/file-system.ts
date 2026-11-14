@@ -11,6 +11,12 @@ export interface DirectoryEntry {
   isFile(): boolean;
 }
 
+/** Size and modification time for a path; the scan cache uses both to skip content hashing on warm hits. */
+export interface FileStat {
+  readonly size: number;
+  readonly mtimeMs: number;
+}
+
 export interface ScanFileSystem {
   /** The entries of a directory. Rejects with an error carrying a Node-style `code` when it cannot be read. */
   readDirectory(path: string): Promise<DirectoryEntry[]>;
@@ -18,6 +24,8 @@ export interface ScanFileSystem {
   readText(path: string): Promise<string>;
   /** Size in bytes. Rejects when the path does not exist. */
   size(path: string): Promise<number>;
+  /** Size and modification time. Rejects when the path does not exist. */
+  stat(path: string): Promise<FileStat>;
   exists(path: string): Promise<boolean>;
   /** Writes `content` to `path`, creating parent directories first. */
   writeText(path: string, content: string): Promise<void>;

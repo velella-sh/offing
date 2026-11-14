@@ -24,7 +24,7 @@ Every command runs locally. Scans read repository files and bundled lifecycle da
 offing scan [path...] [--json | --format <format>]
 ```
 
-Finds lifecycle risks in a repository and prints each one with its severity, exact file and line, replacement, and evidence source. Results are cached locally; the scan itself is read-only.
+Finds lifecycle risks in a repository and prints each one with its severity, exact file and line, replacement, and evidence source. Results are cached locally by file content hash, detector version, and data version; an unchanged re-scan reuses those results after a size and mtime check and skips re-reading file bytes. The scan itself is read-only.
 
 | Flag | What it does |
 | --- | --- |

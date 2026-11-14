@@ -30,6 +30,7 @@ function memoryFileSystem(files: Record<string, string>): ScanFileSystem {
     readBytes: () => Promise.resolve(unsupported()),
     readText: (path) => Promise.resolve(files[path] ?? ""),
     size: (path) => Promise.resolve((files[path] ?? "").length),
+    stat: (path) => Promise.resolve({ size: (files[path] ?? "").length, mtimeMs: 0 }),
     exists: (path) => Promise.resolve(path in files),
     writeText: () => Promise.resolve(unsupported()),
     writeTextAtomically: () => Promise.resolve(unsupported()),

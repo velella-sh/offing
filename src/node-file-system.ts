@@ -10,6 +10,10 @@ export const nodeFileSystem: ScanFileSystem = {
   readBytes: (path) => readFile(path),
   readText: (path) => readFile(path, "utf8"),
   size: async (path) => (await stat(path)).size,
+  stat: async (path) => {
+    const info = await stat(path);
+    return { size: info.size, mtimeMs: info.mtimeMs };
+  },
   exists: (path) =>
     stat(path).then(
       () => true,

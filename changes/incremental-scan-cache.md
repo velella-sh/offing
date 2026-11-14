@@ -1,0 +1,1 @@
+- Speed up unchanged re-scans by reusing results keyed on file fingerprints, detector version, and data version; a warm hit skips content hashing when size and mtime still match.

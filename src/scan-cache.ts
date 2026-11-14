@@ -28,6 +28,10 @@ export interface ScanCacheEntry {
 export interface DetectorFileDescriptor {
   readonly path: string;
   readonly hash: string;
+  /** Byte length when the entry was recorded; with `mtimeMs`, lets a warm scan skip content hashing. */
+  readonly size?: number;
+  /** Modification time in milliseconds when the entry was recorded. */
+  readonly mtimeMs?: number;
 }
 
 export interface DetectorManifest {
