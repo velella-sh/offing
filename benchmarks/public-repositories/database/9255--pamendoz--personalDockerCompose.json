@@ -1,0 +1,44 @@
+{
+  "repository": "pamendoz/personalDockerCompose",
+  "commit": "918fa3a5c1a3cfe4a12035883c151104927252d8",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 64,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 64 of docker-compose.yml reads `image: postgres:12.1`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 64,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 64 of docker-compose.yml reads `image: postgres:12.1`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "container.redis.eol-6.0-and-older",
+      "path": "docker-compose.yml",
+      "line": 77,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 77 of docker-compose.yml reads `image: redis:5.0`. These Redis release lines no longer receive fixes from the vendor. (Redis release policy (vendor), https://redis.io/docs/latest/operate/oss_and_stack/install/version-mgmt/)."
+      }
+    },
+    {
+      "ruleId": "database.redis.end-of-life-5.0",
+      "path": "docker-compose.yml",
+      "line": 77,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 77 of docker-compose.yml reads `image: redis:5.0`. Redis 5.0 reached end of life on 2022-04-27 and no longer receives fixes from the vendor. (Redis support policy (vendor), https://redis.io/docs/latest/operate/oss_and_stack/install/version-mgmt/)."
+      }
+    }
+  ]
+}

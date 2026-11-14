@@ -1,0 +1,53 @@
+{
+  "repository": "tfd-ed/tfd-nest-boilerplate",
+  "commit": "d7a6cc969d673faa1cfb910521c7d2f1c04eadaa",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 29,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 29 of docker-compose.yml reads `image: postgres:12`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 29,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 29 of docker-compose.yml reads `image: postgres:12`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "container.redis.eol-6.0-and-older",
+      "path": "docker-compose.yml",
+      "line": 40,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 40 of docker-compose.yml reads `image: redis:5`. These Redis release lines no longer receive fixes from the vendor. (Redis release policy (vendor), https://redis.io/docs/latest/operate/oss_and_stack/install/version-mgmt/)."
+      }
+    },
+    {
+      "ruleId": "container.node.eol-21-and-older",
+      "path": "Dockerfile",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of Dockerfile reads `FROM node:15.14.0`. These Node.js release lines no longer receive security or bug fixes, so images tagged with them are built on an unsupported runtime. (Node.js end-of-life releases, https://nodejs.org/en/about/eol)."
+      }
+    },
+    {
+      "ruleId": "container.dockerfile.legacy-env-format",
+      "path": "Dockerfile",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 4 of Dockerfile reads `ENV NODE_ENV development`. Docker's LegacyKeyValueFormat build check flags the space-separated ENV form and recommends writing each assignment as key=value. (Docker build check: LegacyKeyValueFormat, https://docs.docker.com/reference/build-checks/legacy-key-value-format/)."
+      }
+    }
+  ]
+}
