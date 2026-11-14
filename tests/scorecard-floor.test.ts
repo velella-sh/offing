@@ -9,7 +9,8 @@ import { pathToFileURL } from "node:url";
 import { parse } from "yaml";
 
 const toolPath = resolve("tools/scorecard-floor.mjs");
-const fixturePath = resolve("tests/fixtures/scorecard/published-2026-11-01.json");
+const fixturePath = resolve("tests/fixtures/scorecard/published-2026-11-14.json");
+const baseline2011Path = resolve("tests/fixtures/scorecard/published-2026-11-01.json");
 const workflowPath = resolve(".github/workflows/scorecard.yml");
 
 const tool = (await import(pathToFileURL(toolPath).href)) as {
@@ -30,6 +31,9 @@ const tool = (await import(pathToFileURL(toolPath).href)) as {
 };
 
 const baseline = JSON.parse(readFileSync(fixturePath, "utf8")) as {
+  checks: { name: string; score: number }[];
+};
+const baseline2011 = JSON.parse(readFileSync(baseline2011Path, "utf8")) as {
   checks: { name: string; score: number }[];
 };
 
@@ -63,8 +67,10 @@ test("the recorded table is valid and every floor carries a written reason", () 
 test("parseScores maps the measured checks to their scores", () => {
   const scores = tool.parseScores(baseline);
   assert.equal(scores.size, baseline.checks.length);
-  assert.equal(scores.get("Pinned-Dependencies"), 3);
-  assert.equal(scores.get("Branch-Protection"), -1);
+  assert.equal(scores.get("Pinned-Dependencies"), 9);
+  assert.equal(scores.get("Branch-Protection"), 8);
+  const historical = tool.parseScores(baseline2011);
+  assert.equal(historical.get("Branch-Protection"), -1);
 });
 
 test("parseScores refuses documents without a usable checks array", () => {
@@ -112,7 +118,7 @@ test("findViolations flags a missing result and treats the -1 error floor as a r
   );
 });
 
-test("the command passes the measured baseline fixture from the 2026-11-01 run", () => {
+test("the command passes the measured baseline fixture from the 2026-11-14 run", () => {
   const run = runTool(fixturePath);
   assert.equal(run.status, 0, run.stderr);
   assert.match(run.stdout, new RegExp(`All ${tool.RECORDED_TARGETS.length} recorded Scorecard targets met\\.`));
@@ -127,6 +133,7 @@ test("a lowered score fails the command with the check's name", () => {
   assert.equal(run.status, 1);
   assert.match(run.stdout, /BELOW TARGET: Pinned-Dependencies scored 1, its recorded target is 3/);
   assert.match(run.stdout, /1 Scorecard check\(s\) below their recorded target/);
+  assert.doesNotMatch(run.stdout, /Branch-Protection/);
 });
 
 test("a missing check fails the command with the check's name", () => {
