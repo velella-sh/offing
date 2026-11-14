@@ -23,8 +23,8 @@ import { pathToFileURL } from "node:url";
 /** Where the recorded numbers come from; re-measure before changing any floor. */
 export const MEASUREMENT =
   "OpenSSF Scorecard run 43632220731 (2026-11-14T19:28:02Z, main at 24ba62ae), " +
-  "published at api.securityscorecards.dev; Branch-Protection floor raised to 8 " +
-  "from the 2026-11-01 baseline in docs/ADOPTION.md.";
+  "published at api.securityscorecards.dev; floors re-measured from that run " +
+  "(see docs/ADOPTION.md for the 2026-11-01 baseline).";
 
 /**
  * One recorded target. `floor` is the lowest score accepted since, i.e. the last

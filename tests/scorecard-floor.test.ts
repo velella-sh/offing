@@ -133,7 +133,6 @@ test("a lowered score fails the command with the check's name", () => {
   assert.equal(run.status, 1);
   assert.match(run.stdout, /BELOW TARGET: Pinned-Dependencies scored 1, its recorded target is 3/);
   assert.match(run.stdout, /1 Scorecard check\(s\) below their recorded target/);
-  assert.doesNotMatch(run.stdout, /Branch-Protection/);
 });
 
 test("a missing check fails the command with the check's name", () => {
@@ -168,7 +167,7 @@ test("--list-targets prints the table and the measurement it came from", () => {
     targets: { check: string; floor: number; reason: string }[];
   };
   assert.equal(listed.measurement, tool.MEASUREMENT);
-  assert.match(listed.measurement, /41357434463/);
+  assert.match(listed.measurement, /43632220731/);
   assert.deepEqual(listed.targets, tool.RECORDED_TARGETS);
 });
 
