@@ -1,0 +1,107 @@
+{
+  "repository": "grupyrn/jararaca",
+  "commit": "18c7741ff6cc75dfafd937049c8b9dabdbaab0f0",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/darker.yml",
+      "line": 15,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 15 of .github/workflows/darker.yml reads `- uses: actions/checkout@v4`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-python.node20",
+      "path": ".github/workflows/darker.yml",
+      "line": 18,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 18 of .github/workflows/darker.yml reads `- uses: actions/setup-python@v4`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/django.yml",
+      "line": 15,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 15 of .github/workflows/django.yml reads `uses: actions/checkout@v4`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-python.node20",
+      "path": ".github/workflows/django.yml",
+      "line": 20,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 20 of .github/workflows/django.yml reads `uses: actions/setup-python@v4`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 17 of docker-compose.yml reads `image: postgres:12.2-alpine`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 17 of docker-compose.yml reads `image: postgres:12.2-alpine`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "container.python.eol-3.11-and-older",
+      "path": "Dockerfile",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of Dockerfile reads `FROM python:3.11-slim-bullseye`. Python 3.11 is scheduled to stop receiving security fixes from the Python core team on 2027-10-31, so images tagged with it will then be built on an unsupported runtime. (Status of Python versions, https://devguide.python.org/versions/)."
+      }
+    },
+    {
+      "ruleId": "container.python.eol-3.11-and-older",
+      "path": "Dockerfile.node",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of Dockerfile.node reads `FROM python:3.11`. Python 3.11 is scheduled to stop receiving security fixes from the Python core team on 2027-10-31, so images tagged with it will then be built on an unsupported runtime. (Status of Python versions, https://devguide.python.org/versions/)."
+      }
+    },
+    {
+      "ruleId": "container.python.eol-3.11-and-older",
+      "path": "Dockerfile.python",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of Dockerfile.python reads `FROM python:3.11-alpine`. Python 3.11 is scheduled to stop receiving security fixes from the Python core team on 2027-10-31, so images tagged with it will then be built on an unsupported runtime. (Status of Python versions, https://devguide.python.org/versions/)."
+      }
+    },
+    {
+      "ruleId": "nodejs.runtime.legacy",
+      "path": "package.json",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 6 of package.json reads `\"node\": \"16.x\"`. This Node.js release line is end-of-life and no longer receives security or bug fixes. (Node.js end-of-life releases, https://nodejs.org/en/about/eol)."
+      }
+    },
+    {
+      "ruleId": "python.package.django-4.2.eol",
+      "path": "requirements.txt",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 6 of requirements.txt reads `Django==4.2.11`. The Django project lists the 4.2 release series as unsupported: it no longer receives security updates or bug fixes, and its end of extended support was April 7, 2026. (Django supported versions, https://www.djangoproject.com/download/#supported-versions)."
+      }
+    }
+  ]
+}

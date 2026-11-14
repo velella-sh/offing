@@ -1,0 +1,62 @@
+{
+  "repository": "jdrouet/jolimail",
+  "commit": "28f5ac8e746777cfb7ce0a1f4815e5d281bb2a3d",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.dev.yml",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of docker-compose.dev.yml reads `image: postgres:12-alpine`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.dev.yml",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of docker-compose.dev.yml reads `image: postgres:12-alpine`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of docker-compose.yml reads `image: postgres:12-alpine`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of docker-compose.yml reads `image: postgres:12-alpine`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "container.debian.eol-11-and-older",
+      "path": "Dockerfile",
+      "line": 30,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 30 of Dockerfile reads `FROM debian:buster-slim`. These Debian releases no longer receive LTS security updates from the vendor. (Debian LTS, https://wiki.debian.org/LTS)."
+      }
+    },
+    {
+      "ruleId": "container.debian.eol-11-and-older",
+      "path": "multiarch.Dockerfile",
+      "line": 42,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 42 of multiarch.Dockerfile reads `FROM debian:buster-slim`. These Debian releases no longer receive LTS security updates from the vendor. (Debian LTS, https://wiki.debian.org/LTS)."
+      }
+    }
+  ]
+}

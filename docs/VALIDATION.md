@@ -274,7 +274,7 @@ Measured on 557 pinned repositories at commit `dcc9f320` on 2026-11-06. Regenera
 | container | Supported | 368 | 0 | 0 | 1.000 | 1.000 |
 | cpp | Supported | 19 | 0 | 0 | 1.000 | 1.000 |
 | dart | Supported | 8 | 0 | 0 | 1.000 | 1.000 |
-| database | Experimental | 20 | 0 | 0 | 1.000 | 1.000 |
+| database | Supported | 20 | 0 | 0 | 1.000 | 1.000 |
 | deno | Supported | 0 | 0 | 0 | n/a | n/a |
 | dotnet | Supported | 304 | 0 | 0 | 1.000 | 1.000 |
 | elixir | Supported | 0 | 0 | 0 | n/a | n/a |
@@ -292,7 +292,7 @@ Measured on 557 pinned repositories at commit `dcc9f320` on 2026-11-06. Regenera
 | serverless | Supported | 168 | 0 | 0 | 1.000 | 1.000 |
 | shell | Beta | 12 | 0 | 0 | 1.000 | 1.000 |
 | swift | Supported | 20 | 0 | 0 | 1.000 | 1.000 |
-| terraform | Experimental | 66 | 0 | 0 | 1.000 | 1.000 |
+| terraform | Supported | 66 | 0 | 0 | 1.000 | 1.000 |
 <!-- accuracy-tables:end -->
 
 ## Mutation testing baseline

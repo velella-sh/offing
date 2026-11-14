@@ -1,0 +1,62 @@
+{
+  "repository": "Zaid-Ajaj/Npgsql.FSharp.Analyzer",
+  "commit": "798ab4fe989690688d61ed1196ca79bb4e1aca37",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of docker-compose.yml reads `image: postgres:12`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of docker-compose.yml reads `image: postgres:12`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-5.0",
+      "path": "src/NpgsqlFSharpAnalyzer/NpgsqlFSharpAnalyzer.fsproj",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/NpgsqlFSharpAnalyzer/NpgsqlFSharpAnalyzer.fsproj reads `<TargetFramework>net5.0</TargetFramework>`. .NET 5 (Standard Term Support) reached the end of its support on 2022-05-10. Microsoft no longer ships security or quality fixes for it. The same line applies to the SDK that carries it, so a global.json pinning an SDK 5.0.x is reported too. (.NET and .NET Core official support policy, https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-5.0",
+      "path": "src/Ubik/Ubik.fsproj",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of src/Ubik/Ubik.fsproj reads `<TargetFramework>net5.0</TargetFramework>`. .NET 5 (Standard Term Support) reached the end of its support on 2022-05-10. Microsoft no longer ships security or quality fixes for it. The same line applies to the SDK that carries it, so a global.json pinning an SDK 5.0.x is reported too. (.NET and .NET Core official support policy, https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-2.0",
+      "path": "tests/examples/hashing/examples.fsproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 4 of tests/examples/hashing/examples.fsproj reads `<TargetFramework>netcoreapp2.0</TargetFramework>`. .NET Core 2.0 (Standard Term Support) reached the end of its support on 2018-10-01. Microsoft no longer ships security or quality fixes for it. The same line applies to the SDK that carries it, so a global.json pinning an SDK 2.0.x is reported too. (.NET and .NET Core official support policy, https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-5.0",
+      "path": "tests/NpgsqlFSharpAnalyzer.Tests/NpgsqlFSharpAnalyzer.Tests.fsproj",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of tests/NpgsqlFSharpAnalyzer.Tests/NpgsqlFSharpAnalyzer.Tests.fsproj reads `<TargetFramework>net5.0</TargetFramework>`. .NET 5 (Standard Term Support) reached the end of its support on 2022-05-10. Microsoft no longer ships security or quality fixes for it. The same line applies to the SDK that carries it, so a global.json pinning an SDK 5.0.x is reported too. (.NET and .NET Core official support policy, https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    }
+  ]
+}

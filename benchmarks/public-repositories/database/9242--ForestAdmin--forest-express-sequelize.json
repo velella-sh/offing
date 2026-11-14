@@ -1,0 +1,107 @@
+{
+  "repository": "ForestAdmin/forest-express-sequelize",
+  "commit": "2f254a4b2bc598719fc6a82b0af7de15e0dad5cb",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "github-actions.upload-artifact.retired",
+      "path": ".github/workflows/build.yml",
+      "line": 65,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 65 of .github/workflows/build.yml reads `uses: actions/upload-artifact@v4`. This release uses a retired artifact service or JavaScript runtime. Version 7 runs on Node.js 24. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.download-artifact.retired",
+      "path": ".github/workflows/build.yml",
+      "line": 89,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 89 of .github/workflows/build.yml reads `uses: actions/download-artifact@v4`. This release uses a retired artifact service or JavaScript runtime. Version 7 runs on Node.js 24. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 4 of docker-compose.yml reads `image: postgres:12.19`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 4 of docker-compose.yml reads `image: postgres:12.19`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "container.mysql.eol-8.0-and-older",
+      "path": "docker-compose.yml",
+      "line": 14,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 14 of docker-compose.yml reads `image: mysql:5.6`. Oracle lists MySQL 8.0 and 5.7 as covered only by Sustaining Support, which means no new fixes. The mysql.com end-of-life notice refuses automated requests (HTTP 403), so it can only be reviewed by hand. (MySQL end-of-life notice, https://www.mysql.com/support/eol-notice.html)."
+      }
+    },
+    {
+      "ruleId": "container.mysql.eol-8.0-and-older",
+      "path": "docker-compose.yml",
+      "line": 25,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 25 of docker-compose.yml reads `image: mysql:8.0`. Oracle lists MySQL 8.0 and 5.7 as covered only by Sustaining Support, which means no new fixes. The mysql.com end-of-life notice refuses automated requests (HTTP 403), so it can only be reviewed by hand. (MySQL end-of-life notice, https://www.mysql.com/support/eol-notice.html)."
+      }
+    },
+    {
+      "ruleId": "database.mysql.end-of-life-8.0",
+      "path": "docker-compose.yml",
+      "line": 25,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 25 of docker-compose.yml reads `image: mysql:8.0`. MySQL 8.0 reached end of life on 2026-04-30 and no longer receives security or bug fixes from Oracle. The mysql.com lifecycle page could not be read when this rule was reviewed (it refuses automated requests), so the date is taken from the endoflife.date record for MySQL. (MySQL supported platforms and lifecycle, https://www.mysql.com/support/supportedplatforms/database.html)."
+      }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-18",
+      "path": "package.json",
+      "line": 27,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 27 of package.json reads `\"node\": \">=16\"`. Node.js 18 no longer receives security or bug fixes. (Node.js Release Working Group schedule, https://github.com/nodejs/Release/blob/main/schedule.json)."
+      }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-19",
+      "path": "package.json",
+      "line": 27,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 27 of package.json reads `\"node\": \">=16\"`. Node.js 19 no longer receives security or bug fixes. (Node.js Release Working Group schedule, https://github.com/nodejs/Release/blob/main/schedule.json)."
+      }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-20",
+      "path": "package.json",
+      "line": 27,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 27 of package.json reads `\"node\": \">=16\"`. Node.js 20 no longer receives security or bug fixes. (Node.js Release Working Group schedule, https://github.com/nodejs/Release/blob/main/schedule.json)."
+      }
+    },
+    {
+      "ruleId": "nodejs.runtime.legacy",
+      "path": "package.json",
+      "line": 27,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 27 of package.json reads `\"node\": \">=16\"`. This Node.js release line is end-of-life and no longer receives security or bug fixes. (Node.js end-of-life releases, https://nodejs.org/en/about/eol)."
+      }
+    }
+  ]
+}

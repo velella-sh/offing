@@ -1,0 +1,1 @@
+- Promote the Terraform and database detectors to stable.

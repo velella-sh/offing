@@ -2,8 +2,8 @@ import type { ManifestEcosystem } from "../schema.js";
 
 const database: ManifestEcosystem = {
   id: "database",
-  status: "experimental",
-  maturity: "experimental",
+  status: "supported",
+  maturity: "stable",
   detectorIds: ["database"],
 };
 

@@ -1,0 +1,44 @@
+{
+  "repository": "docker-taiga/taiga",
+  "commit": "fe67589919f0a01bb2e06f500434dbac3c165189",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "container.alpine.eol-3.20-and-older",
+      "path": "back/Dockerfile",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of back/Dockerfile reads `FROM alpine:3.15`. These Alpine Linux releases no longer receive security updates from the vendor. (Alpine Linux releases, https://alpinelinux.org/releases/)."
+      }
+    },
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 42,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 42 of docker-compose.yml reads `image: postgres:12-alpine`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 42,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 42 of docker-compose.yml reads `image: postgres:12-alpine`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "container.node.eol-21-and-older",
+      "path": "events/Dockerfile",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of events/Dockerfile reads `FROM node:12-alpine`. These Node.js release lines no longer receive security or bug fixes, so images tagged with them are built on an unsupported runtime. (Node.js end-of-life releases, https://nodejs.org/en/about/eol)."
+      }
+    }
+  ]
+}

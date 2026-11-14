@@ -1,0 +1,107 @@
+{
+  "repository": "thenewboston-blockchain/Website-API",
+  "commit": "e74d202a41533c7622acbe12c793d047d44012ad",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/development-deploy.yml",
+      "line": 13,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 13 of .github/workflows/development-deploy.yml reads `uses: actions/checkout@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/main.yml",
+      "line": 36,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 36 of .github/workflows/main.yml reads `- uses: actions/checkout@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/production-deploy.yml",
+      "line": 13,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 13 of .github/workflows/production-deploy.yml reads `uses: actions/checkout@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 8,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 8 of docker-compose.yml reads `image: postgres:12-alpine`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 8,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 8 of docker-compose.yml reads `image: postgres:12-alpine`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "container.python.eol-3.10-and-older",
+      "path": "Dockerfile",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of Dockerfile reads `FROM python:3.8-alpine3.13`. These Python release lines no longer receive security or bug fixes from the Python core team. (Status of Python versions, https://devguide.python.org/versions/)."
+      }
+    },
+    {
+      "ruleId": "container.dockerfile.legacy-env-format",
+      "path": "Dockerfile",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of Dockerfile reads `ENV PYTHONDONTWRITEBYTECODE 1`. Docker's LegacyKeyValueFormat build check flags the space-separated ENV form and recommends writing each assignment as key=value. (Docker build check: LegacyKeyValueFormat, https://docs.docker.com/reference/build-checks/legacy-key-value-format/)."
+      }
+    },
+    {
+      "ruleId": "container.dockerfile.legacy-env-format",
+      "path": "Dockerfile",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 6 of Dockerfile reads `ENV PYTHONUNBUFFERED 1`. Docker's LegacyKeyValueFormat build check flags the space-separated ENV form and recommends writing each assignment as key=value. (Docker build check: LegacyKeyValueFormat, https://docs.docker.com/reference/build-checks/legacy-key-value-format/)."
+      }
+    },
+    {
+      "ruleId": "container.python.eol-3.10-and-older",
+      "path": "Dockerfile_dev",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of Dockerfile_dev reads `FROM python:3.8-alpine`. These Python release lines no longer receive security or bug fixes from the Python core team. (Status of Python versions, https://devguide.python.org/versions/)."
+      }
+    },
+    {
+      "ruleId": "container.dockerfile.legacy-env-format",
+      "path": "Dockerfile_dev",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 5 of Dockerfile_dev reads `ENV PYTHONDONTWRITEBYTECODE 1`. Docker's LegacyKeyValueFormat build check flags the space-separated ENV form and recommends writing each assignment as key=value. (Docker build check: LegacyKeyValueFormat, https://docs.docker.com/reference/build-checks/legacy-key-value-format/)."
+      }
+    },
+    {
+      "ruleId": "container.dockerfile.legacy-env-format",
+      "path": "Dockerfile_dev",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 6 of Dockerfile_dev reads `ENV PYTHONUNBUFFERED 1`. Docker's LegacyKeyValueFormat build check flags the space-separated ENV form and recommends writing each assignment as key=value. (Docker build check: LegacyKeyValueFormat, https://docs.docker.com/reference/build-checks/legacy-key-value-format/)."
+      }
+    }
+  ]
+}

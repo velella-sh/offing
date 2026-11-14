@@ -1,6 +1,6 @@
 # Database runtimes
 
-The `database` detector reports database server versions that are past end of life, as declared in Compose files and in Terraform managed-database resources on AWS, Azure, and Google Cloud. It is **experimental**: it is not yet held to the precision floor that stable detectors are (see [Decision 0013](../decisions/0013-detector-maturity.md)). Its lifecycle rules are in `registry/database.json` and ship in the [data bundle](../DATA.md).
+The `database` detector reports database server versions that are past end of life, as declared in Compose files and in Terraform managed-database resources on AWS, Azure, and Google Cloud. It is **supported**: its level is recorded as `stable` in `benchmarks/thresholds.json`, and the precision floor is enforced on the [public corpus](../validation/ecosystems.md#database-corpus) (see [Decision 0013](../decisions/0013-detector-maturity.md)). Its lifecycle rules are in `registry/database.json` and ship in the [data bundle](../DATA.md).
 
 ## What it reads
 
@@ -57,4 +57,4 @@ Each finding carries its rule's sources, replacement, migration steps, and verif
 
 ## Evidence
 
-Five public repositories are pinned in `benchmarks/public-repositories/` under the `database` ecosystem: four targeted repositories with Compose or Terraform declarations and one blind, zero-finding repository. Their ground truth cites the vendors' lifecycle sources, not Offing output. Precision on this corpus does not establish coverage of the unsupported forms above.
+Thirty public repositories are pinned under the `database` ecosystem. Twenty-six were chosen blind, including fifteen Compose repositories added on 2026-11-14 that carry end-of-life PostgreSQL 11–13 or MySQL 5.7/8.0 declarations, and four repositories with an empty `expected` list. Corpus-wide `countEvidence` for `database` on that date: 39 repositories with findings, 61 expected findings, 4 zero-finding repositories, and 26 of 30 database-ecosystem repositories blind. An offline run of `npm run validate:public-repos -- --offline --ecosystem database` reported precision 1 and recall 1 for `database` (40 true positives in the database bucket, no false positives, no false negatives). Ground truth cites the vendors' lifecycle sources, not Offing output. Precision on this corpus does not establish coverage of the unsupported forms above.

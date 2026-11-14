@@ -188,3 +188,43 @@ Issue #1894 promoted the `android` detector to stable. The corpus holds 84 pinne
 
 Ground truth: every finding was read at its pinned line. Play Billing deprecation dates come from the [Billing Library deprecation FAQ](https://developer.android.com/google/play/billing/deprecation-faq); the targetSdk floor comes from [Google Play's target API level requirement](https://developer.android.com/google/play/requirements/target-sdk).
 
+## Terraform corpus
+
+Twelve public repositories were already pinned under `benchmarks/public-repositories/terraform/` before 2026-11-14 (seven blind, five targeted), with one empty `expected` list. Corpus-wide `countEvidence` for `terraform` already had at least 20 repositories with findings and at least 60 expected `terraform.*` findings. The stable gap was zero-finding Terraform-ecosystem repositories (need 4) and a blind share of at least two thirds. The selection rules below were fixed on 2026-11-14 **before** Offing ran on these additions. The zero-finding walk on 2026-11-14 kept three blind repositories, which brings the Terraform ecosystem to four empty `expected` lists and a blind share of 10/15. No further finding repository was pinned: corpus-wide `terraform.*` findings already met the stable rows, and these three empty lists close the zero-finding and blind-share gaps. Kept, in walk order: `RJPearson94/terraform-aws-open-next-examples` (first hit of `terraform aws module example`), `kung-foo/multiregion-terraform` (first empty result of the `terraform aws example` continuation), and `nicksantamaria/example-terraform-aws-vpc-peering`. `BabyJ723/blast-ON` was the second hit of the four-word query and scanned empty, and was skipped because its default branch contains only `LICENSE` and no Terraform file. The continuation walk skipped repositories larger than 50,000 KB and stopped at the third empty list. Because the corpus scans every detector, every finding in a kept repository is recorded, not only the Terraform ones. Each expected finding was checked by reading its line at the pinned commit, and its `groundTruthSource` is a `maintainer-review` note naming the path and line. Terraform CLI dates come from the [HashiCorp Terraform support policy](https://support.hashicorp.com/hc/en-us/articles/360021185113) and the [Terraform releases](https://github.com/hashicorp/terraform/releases); EKS, GKE, and AKS dates come from each vendor's Kubernetes version page, not from these repositories.
+
+## Terraform blind selection (2026-11-14)
+
+Blind finding rule, fixed on 2026-11-14 before Offing ran: `gh search code --limit 40` for each of the following, in this order:
+
+1. `required_version` with `--extension tf`
+2. `cluster_version` with `--extension tf`
+3. `min_master_version` with `--extension tf`
+4. `kubernetes_version` with `--extension tf`
+5. filename `.terraform-version`
+
+Walk each result list in order. Keep a repository when it is unique across the walk, not a fork, not archived, not larger than 50,000 KB on GitHub, and not already in the corpus (any ecosystem). Pin each kept repository at its default-branch HEAD that day. The queries return different results on another day, so the ordered candidate lists recorded with this change, and the pins under `benchmarks/public-repositories/terraform/`, are the record.
+
+Blind zero-finding rule, fixed the same day before Offing ran: GitHub repository search for small modern Terraform examples (`terraform aws module example`, stars 10..2000, not archived). Walk results in order. Skip forks, archives, repositories already in the corpus or chosen by an earlier query, and repositories larger than 50,000 KB. Warm the checkout and scan offline. Keep a repository only when every detector reports nothing. Stop once the Terraform ecosystem has at least four empty `expected` lists. An empty list is ground truth only after the offline scan reports nothing and the checkout was read for declarations the detectors judge. The four-word query returned two repositories (`RJPearson94/terraform-aws-open-next-examples`, `BabyJ723/blast-ON`) and was exhausted before four empty lists, so the same-day walk continued, still before Offing ran, on `terraform aws example` with the same star range, archived filter, and size cap, in best-match order.
+
+## Database corpus
+
+Twelve public repositories were already pinned under `benchmarks/public-repositories/database/` before 2026-11-14 (eight blind, four targeted), with one empty `expected` list. Corpus-wide `countEvidence` for `database` already had at least 20 repositories with findings and a blind share of at least two thirds. The stable gap was expected `database.*` findings (need 60) and zero-finding database-ecosystem repositories (need 4). The selection rules below were fixed on 2026-11-14 **before** Offing ran on these additions. The finding walk on 2026-11-14 kept the first repositories under 12,000 KB (inside the 50,000 KB cap) whose offline scan reported at least one `database.*` finding, and stopped once those pins added 25 expected `database.*` findings: `jimpil/duratom`, `ForestAdmin/forest-express-sequelize`, `souramoo/commentoplusplus`, `docker-taiga/taiga`, `Zaid-Ajaj/Npgsql.FSharp.Analyzer`, `tlandeka/authentication-microservice-with-domain-driven-design`, `thenewboston-blockchain/Website-API`, `jdrouet/jolimail`, `dandoh/web-haskell-graphql-postgres-boilerplate`, `govindasamyarun/c2-cloud`, `grupyrn/jararaca`, `opendoor/pggen`, `tfd-ed/tfd-nest-boilerplate`, `Vizzuality/GeoCAT`, and `pamendoz/personalDockerCompose`. Code search for `engine_version` with `"5.7`, `"12.`, and `"13.` and `--extension tf` returned no hits. `POSTGRES_12` and `MYSQL_5_7` were searched and were not needed after the Compose walk had already added 25 findings. The zero-finding walk kept the first three repositories under 8,000 KB whose offline scan reported nothing: `J-Schoepplenberg/royce` (`postgres:16`), `alex-kosarev/sc24` (`postgres:16`), and `fuma-nama/fuma` (`postgres:16.4`). Because the corpus scans every detector, every finding in a kept repository is recorded, not only the database ones. Each expected finding was checked by reading its line at the pinned commit, and its `groundTruthSource` is a `maintainer-review` note naming the path and line. PostgreSQL dates come from the [PostgreSQL versioning policy](https://www.postgresql.org/support/versioning/); MySQL dates from the [MySQL lifecycle page](https://www.mysql.com/support/supportedplatforms/database.html) and [endoflife.date/mysql](https://endoflife.date/mysql); Azure dates from the [PostgreSQL](https://learn.microsoft.com/azure/postgresql/flexible-server/concepts-version-policy) and [MySQL](https://learn.microsoft.com/azure/mysql/flexible-server/concepts-supported-versions) version policies; Cloud SQL dates from the [PostgreSQL](https://cloud.google.com/sql/docs/postgres/db-versions) and [MySQL](https://cloud.google.com/sql/docs/mysql/db-versions) version policies.
+
+## Database blind selection (2026-11-14)
+
+Blind finding rule, fixed on 2026-11-14 before Offing ran: `gh search code --limit 40` for each of the following, in this order:
+
+1. `postgres:12` in Compose filenames (`docker-compose.yml`, `docker-compose.yaml`, `compose.yaml`, `compose.yml`)
+2. `postgres:13` in those Compose filenames
+3. `postgres:11` in those Compose filenames
+4. `mysql:5.7` in those Compose filenames
+5. `engine_version` together with `"5.7` and `--extension tf`
+6. `engine_version` together with `"12.` and `--extension tf`
+7. `engine_version` together with `"13.` and `--extension tf`
+8. `POSTGRES_12` with `--extension tf`
+9. `MYSQL_5_7` with `--extension tf`
+
+Walk each result list in order. Keep a repository when it is unique across the walk, not a fork, not archived, not larger than 50,000 KB on GitHub, and not already in the corpus. Pin each kept repository at its default-branch HEAD that day. Keep enough finding repositories to add at least 24 expected `database.*` findings while the database ecosystem's blind share stays at or above two thirds. The queries return different results on another day, so the ordered candidate lists recorded with this change, and the pins under `benchmarks/public-repositories/database/`, are the record.
+
+Blind zero-finding rule, fixed the same day before Offing ran: walk Compose repositories that declare current images (`postgres:16`, `postgres:17`, `mysql:8.4`) in the same Compose filenames. Skip forks, archives, repositories already in the corpus or chosen by an earlier query, and repositories larger than 50,000 KB. Warm the checkout and scan offline. Keep a repository only when every detector reports nothing. Stop once the database ecosystem has at least four empty `expected` lists.
+

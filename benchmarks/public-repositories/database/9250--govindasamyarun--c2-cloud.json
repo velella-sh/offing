@@ -1,0 +1,53 @@
+{
+  "repository": "govindasamyarun/c2-cloud",
+  "commit": "3bee700ea927a2219c9028c7164856823a04cb35",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "container.python.eol-3.10-and-older",
+      "path": "c2-api/Dockerfile",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 1 of c2-api/Dockerfile reads `FROM python:3.9.1`. These Python release lines no longer receive security or bug fixes from the Python core team. (Status of Python versions, https://devguide.python.org/versions/)."
+      }
+    },
+    {
+      "ruleId": "container.python.eol-3.10-and-older",
+      "path": "c2-telegram/Dockerfile",
+      "line": 2,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 2 of c2-telegram/Dockerfile reads `FROM python:3.9.1`. These Python release lines no longer receive security or bug fixes from the Python core team. (Status of Python versions, https://devguide.python.org/versions/)."
+      }
+    },
+    {
+      "ruleId": "container.python.eol-3.10-and-older",
+      "path": "c2-ws/Dockerfile",
+      "line": 2,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 2 of c2-ws/Dockerfile reads `FROM python:3.9.1`. These Python release lines no longer receive security or bug fixes from the Python core team. (Status of Python versions, https://devguide.python.org/versions/)."
+      }
+    },
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 24,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 24 of docker-compose.yml reads `image: postgres:12.12`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 24,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 24 of docker-compose.yml reads `image: postgres:12.12`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    }
+  ]
+}

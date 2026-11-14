@@ -1,0 +1,197 @@
+{
+  "repository": "souramoo/commentoplusplus",
+  "commit": "106d7b42d56c4e0a1304c800d758e26cdb3be97f",
+  "ecosystem": "database",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/build.yml",
+      "line": 14,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 14 of .github/workflows/build.yml reads `uses: actions/checkout@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-node.node20",
+      "path": ".github/workflows/build.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 17 of .github/workflows/build.yml reads `uses: actions/setup-node@v3`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/build.yml",
+      "line": 33,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 33 of .github/workflows/build.yml reads `uses: actions/checkout@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-go.node20",
+      "path": ".github/workflows/build.yml",
+      "line": 36,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 36 of .github/workflows/build.yml reads `uses: actions/setup-go@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. Version 6.0.0 and 6.1.0 still declare node20; version 6.2.0 and later declare node24. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/docker-image.yml",
+      "line": 13,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 13 of .github/workflows/docker-image.yml reads `- uses: actions/checkout@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-qemu-action.node20",
+      "path": ".github/workflows/docker-image.yml",
+      "line": 18,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 18 of .github/workflows/docker-image.yml reads `uses: docker/setup-qemu-action@v1`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-buildx-action.node20",
+      "path": ".github/workflows/docker-image.yml",
+      "line": 21,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 21 of .github/workflows/docker-image.yml reads `uses: docker/setup-buildx-action@v1`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.login-action.node20",
+      "path": ".github/workflows/docker-image.yml",
+      "line": 24,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 24 of .github/workflows/docker-image.yml reads `uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.login-action.node20",
+      "path": ".github/workflows/docker-image.yml",
+      "line": 30,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 30 of .github/workflows/docker-image.yml reads `uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.build-push-action.node20",
+      "path": ".github/workflows/docker-image.yml",
+      "line": 43,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 43 of .github/workflows/docker-image.yml reads `uses: docker/build-push-action@v3`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/release.yml",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 12 of .github/workflows/release.yml reads `- uses: actions/checkout@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-node.node20",
+      "path": ".github/workflows/release.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 17 of .github/workflows/release.yml reads `uses: actions/setup-node@v3`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/test.yml",
+      "line": 29,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 29 of .github/workflows/test.yml reads `uses: actions/checkout@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-go.node20",
+      "path": ".github/workflows/test.yml",
+      "line": 32,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 32 of .github/workflows/test.yml reads `uses: actions/setup-go@v2`. This release predates the action's Node.js 24 runtime. GitHub no longer provides Node.js 20 on Actions runners. Version 6.0.0 and 6.1.0 still declare node20; version 6.2.0 and later declare node24. (Node 20 is no longer available in GitHub Actions, https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/)."
+      }
+    },
+    {
+      "ruleId": "go.runtime.end-of-support-1.20-and-older",
+      "path": "api/go.mod",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 3 of api/go.mod reads `go 1.15`. The Go release policy supports a major release until two newer major releases exist. Go 1.20 support ended when Go 1.22 was released, and every older release lost support before that. (Go release history and support policy, https://go.dev/doc/devel/release)."
+      }
+    },
+    {
+      "ruleId": "container.postgres.eol-13-and-older",
+      "path": "docker-compose.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 17 of docker-compose.yml reads `image: postgres:12`. The PostgreSQL project no longer releases fixes for these major versions. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "database.postgresql.end-of-life-12",
+      "path": "docker-compose.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 17 of docker-compose.yml reads `image: postgres:12`. The PostgreSQL Global Development Group lists 12 as unsupported: its final release was on November 21, 2024, so it receives no further bug or security fixes. A database image tag or managed engine_version on this line runs unsupported software. (PostgreSQL versioning policy, https://www.postgresql.org/support/versioning/)."
+      }
+    },
+    {
+      "ruleId": "container.golang.eol-1.25-and-older",
+      "path": "Dockerfile.heroku",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 6 of Dockerfile.heroku reads `FROM golang:1.15-alpine AS api-build`. These Go release lines no longer receive fixes from the vendor. (Go release policy (vendor), https://go.dev/doc/devel/release#policy)."
+      }
+    },
+    {
+      "ruleId": "container.node.eol-21-and-older",
+      "path": "Dockerfile.heroku",
+      "line": 16,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 16 of Dockerfile.heroku reads `FROM node:12-alpine AS frontend-build`. These Node.js release lines no longer receive security or bug fixes, so images tagged with them are built on an unsupported runtime. (Node.js end-of-life releases, https://nodejs.org/en/about/eol)."
+      }
+    },
+    {
+      "ruleId": "container.alpine.eol-3.20-and-older",
+      "path": "Dockerfile.heroku",
+      "line": 25,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 25 of Dockerfile.heroku reads `FROM alpine:3.12 AS templates-db-build`. These Alpine Linux releases no longer receive security updates from the vendor. (Alpine Linux releases, https://alpinelinux.org/releases/)."
+      }
+    },
+    {
+      "ruleId": "container.alpine.eol-3.20-and-older",
+      "path": "Dockerfile.heroku",
+      "line": 39,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 39 of Dockerfile.heroku reads `FROM alpine:3.12`. These Alpine Linux releases no longer receive security updates from the vendor. (Alpine Linux releases, https://alpinelinux.org/releases/)."
+      }
+    }
+  ]
+}

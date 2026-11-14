@@ -1,6 +1,6 @@
 # Terraform
 
-The `terraform` detector reports Terraform CLI release lines that are no longer supported, as declared in `*.tf`, `.terraform-version`, `.tool-versions`, and `terraform show -json` plan JSON files, reads locked provider versions from `.terraform.lock.hcl`, and judges managed Kubernetes control-plane versions on Amazon EKS, Google Kubernetes Engine, and Azure Kubernetes Service. It is **experimental**: it is not yet held to the precision floor that stable detectors are (see [Decision 0013](../decisions/0013-detector-maturity.md)). Its lifecycle rules are in `registry/terraform.json` and ship in the [data bundle](../DATA.md).
+The `terraform` detector reports Terraform CLI release lines that are no longer supported, as declared in `*.tf`, `.terraform-version`, `.tool-versions`, and `terraform show -json` plan JSON files, reads locked provider versions from `.terraform.lock.hcl`, and judges managed Kubernetes control-plane versions on Amazon EKS, Google Kubernetes Engine, and Azure Kubernetes Service. It is **supported**: its level is recorded as `stable` in `benchmarks/thresholds.json`, and the precision floor is enforced on the [public corpus](../validation/ecosystems.md#terraform-corpus) (see [Decision 0013](../decisions/0013-detector-maturity.md)). Its lifecycle rules are in `registry/terraform.json` and ship in the [data bundle](../DATA.md).
 
 ## What it reads
 
@@ -64,3 +64,7 @@ Each finding carries its rule's sources, replacement, migration steps, and verif
 - HashiCorp's own end-of-support wording is not machine-readable. The release-date logic is reproduced by the `terraform-1` importer, which drafts rules from GitHub releases for review. The `terraform-2` importer reads the aws, azurerm, and google major upgrade guides but drafts no provider rule: those guides describe resource changes, not how long a provider version is supported.
 - Every `*.tf` file is read on its own: `required_version` in different directories can differ, and findings in `examples/` or module directories are reported like any other.
 - A repository with more than 500 matching files is read only up to that limit, in sorted path order.
+
+## Evidence
+
+Fifteen public repositories are pinned under the `terraform` ecosystem. Ten were chosen blind. Four have an empty `expected` list, three of them added on 2026-11-14 (`RJPearson94/terraform-aws-open-next-examples`, `kung-foo/multiregion-terraform`, and `nicksantamaria/example-terraform-aws-vpc-peering`). Corpus-wide `countEvidence` for `terraform` on that date: 20 repositories with findings, 498 expected findings, 4 zero-finding repositories, and 10 of 15 Terraform-ecosystem repositories blind. An offline run of `npm run validate:public-repos -- --offline --ecosystem terraform` reported precision 1 and recall 1 for `terraform` (14 true positives in the Terraform bucket, no false positives, no false negatives). Ground truth was read from each pinned line. Most expected Terraform findings sit on pins in other ecosystems.
