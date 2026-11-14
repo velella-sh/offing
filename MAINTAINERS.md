@@ -12,17 +12,19 @@ Library maintainers who ship CLE lifecycle declarations for *their* packages: se
 
 ## Branch protection and the merge queue
 
-`main` accepts commits only through the merge queue. The repository ruleset named `main` (Settings → Rules → Rulesets) requires:
+`main` accepts commits only through the merge queue. The repository ruleset named `main` (Settings → Rules → Rulesets), mirrored by classic branch protection, requires:
 
 1. A pull request (no direct pushes).
-2. The single status check **`ci-ok`**.
-3. The merge queue (squash; up to five entries built and merged together; 45-minute check timeout; `ALLGREEN`).
+2. One approving review, including approval of the most recent push; stale approvals are dismissed on new commits; administrators are included.
+3. The single status check **`ci-ok`**, with the branch required to be up to date before merge.
+4. Resolved review conversations.
+5. The merge queue (squash; up to five entries built and merged together; 45-minute check timeout; `ALLGREEN`).
 
 `ci-ok` is reported by [`.github/workflows/ci.yml`](.github/workflows/ci.yml) after every other job in that workflow. It passes when each needed job succeeded or was skipped, and fails when any of them failed or was cancelled. Keep the individual jobs, and the public-corpus run, out of the required list so the matrix can change without editing the ruleset. The `merge_group` trigger in that workflow is what gives a queued pull request its `ci-ok`; without it a queued pull request waits forever.
 
 ### Release-bot exception
 
-There is none. The ruleset has an empty `bypass_actors` list, so no actor (including admins and GitHub Actions) may push past the queue onto `main`. Release workflows do not need a bypass: they push to `release/<tag>` (Action bundle), floating major tags, and the `badges` branch — never to `main`. A release commit reaches `main` the same way as any other change: through a pull request and the merge queue.
+There is none. The ruleset has an empty `bypass_actors` list, so no actor (including admins and GitHub Actions) may push past the queue onto `main`. Release workflows do not need a bypass: they push to `release/<tag>` (Action bundle), floating major tags, and the `badges` branch — never to `main`. A release commit reaches `main` the same way as any other change: through a pull request, an approving review, and the merge queue.
 
 ## Detector owners
 

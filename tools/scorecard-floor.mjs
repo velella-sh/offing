@@ -13,9 +13,8 @@
 //   - Raising a number is a plain improvement. Lowering one means rewriting that entry's
 //     reason with the written justification — pull request review enforces the text.
 //
-// A floor of -1 records a check that errored at baseline (Branch-Protection needs an
-// admin token this workflow does not store; accepted in SECURITY.md). -1 is Scorecard's
-// error value, not a score, so any later numeric result — even 0 — counts as a rise.
+// A floor of -1 records a check that errored at baseline. -1 is Scorecard's error
+// value, not a score, so any later numeric result — even 0 — counts as a rise.
 
 import { readFileSync } from "node:fs";
 import process from "node:process";
@@ -45,9 +44,9 @@ export const RECORDED_TARGETS = Object.freeze([
   },
   {
     check: "Branch-Protection",
-    floor: -1,
+    floor: 8,
     reason:
-      "Baseline 2026-11-01: -1 (error) because admin-only fields need a PAT this workflow does not store; accepted in SECURITY.md.",
+      "Raised 2026-11-14 after SCORECARD_TOKEN plus Tier-2/3 protection (one required review, last-push approval, up-to-date, status checks); Scorecard run 43632220731 scored 8.",
   },
   {
     check: "CI-Tests",
@@ -63,7 +62,7 @@ export const RECORDED_TARGETS = Object.freeze([
     check: "Code-Review",
     floor: 0,
     reason:
-      "Baseline 2026-11-01: approving reviews are deliberately not a merge gate (SECURITY.md); floor 0 only catches a check regression.",
+      "Baseline 2026-11-01 was 0; protection now requires one approval (2026-11-14) but the Scorecard window still samples older unapproved merges — raise this floor once a measured run reports higher.",
   },
   {
     check: "Contributors",
