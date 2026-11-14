@@ -31,14 +31,24 @@ beforeEach(() => configureActiveData({ pinnedVersion: "bundled" }));
 afterEach(() => configureActiveData());
 
 test("buildRepoFileIndex indexes basenames and extensions for O(1) input lookup", () => {
-  const index = buildRepoFileIndex(["src/App.TS", "package.json", "lib/util.js", "Makefile", ".env", "a.b.c"]);
-  assert.deepEqual(index.byBaseName.get("package.json"), ["package.json"]);
+  const index = buildRepoFileIndex([
+    "src/App.TS",
+    "package.json",
+    "lib/util.js",
+    "Makefile",
+    ".env",
+    "a.b.c",
+    "packages\\api\\package.json",
+    "nested/util.js",
+  ]);
+  assert.deepEqual(index.byBaseName.get("package.json"), ["package.json", "packages/api/package.json"]);
   assert.deepEqual(index.byExtension.get(".ts"), ["src/App.TS"]);
-  assert.deepEqual(index.byExtension.get(".js"), ["lib/util.js"]);
+  assert.deepEqual(index.byExtension.get(".js"), ["lib/util.js", "nested/util.js"]);
   assert.deepEqual(index.byExtension.get(".c"), ["a.b.c"]);
   assert.equal(index.byExtension.has(".env"), false, "dotfiles are not treated as extensions");
   assert.equal(index.byExtension.has("makefile"), false);
-  assert.equal(index.all.length, 6);
+  assert.equal(index.byBaseName.get("app.ts")?.length, 1);
+  assert.equal(index.all.length, 8);
 });
 
 test("fingerprintsEqual requires matching length, path, size, and mtime", () => {
@@ -565,6 +575,38 @@ test("wildcard and directory input declarations resolve through the file index",
   });
   await scanRepository(root, [detector], { noCache: true });
   assert.ok(seen.some((name) => name.includes("app.config.json") || name.includes("ci.yml")));
+});
+
+test("a fingerprint warm hit returns cached unclassified without re-running the detector", async () => {
+  const root = await scratch("fingerprint-unclassified");
+  const cacheDir = await scratch("fingerprint-unclassified-cache");
+  await writeFile(join(root, "note.json"), "{}\n");
+  let runs = 0;
+  const detector = detectorOf("fixture", {
+    inputs: { fileNames: ["note.json"] },
+    async analyze() {
+      runs += 1;
+      return {
+        findings: [],
+        unclassified: [
+          {
+            component: "note",
+            reference: "note.json",
+            reason: "fixture",
+            location: { path: "note.json", line: 1 },
+          },
+        ],
+      };
+    },
+  });
+  const options = { cacheDirectory: cacheDir, dataVersion: "test-data", scannedAt: "2026-01-01T00:00:00.000Z" };
+  const first = await scanRepository(root, [detector], options);
+  assert.equal(runs, 1);
+  assert.equal(first.unclassified?.count, 1);
+  const second = await scanRepository(root, [detector], options);
+  assert.equal(runs, 1, "fingerprint hit must not re-run analyze");
+  assert.equal(second.unclassified?.count, 1);
+  assert.equal(second.unclassified?.references[0]?.reason, "fixture");
 });
 
 test("adding a file invalidates the fingerprint warm path and re-runs the detector", async () => {
