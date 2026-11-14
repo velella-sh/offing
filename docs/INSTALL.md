@@ -1,6 +1,6 @@
 ---
 title: Install
-description: One page for every Offing install channel — npm, Action, MCP, plugins, and Docker.
+description: One page for every Offing install channel — npm, Action, onboarding GitHub App, MCP, plugins, and Docker.
 ---
 
 # Install
@@ -42,6 +42,10 @@ Add the Action to a pull-request workflow:
 ```
 
 **Verify.** Open a pull request that changes a dependency. The job runs, writes annotations for findings, and exits non-zero when a finding meets the severity gate. Details: [GitHub Action](GITHUB_ACTION.md).
+
+## Onboarding GitHub App
+
+Prefer a reviewed pull request that adds the Action for you? The Offing GitHub App opens one `offing/onboarding` pull request per selected repository (workflow, config, and optional README badge). Read what it asks for and how to remove it before you install: [Onboarding GitHub App](ONBOARDING_APP.md).
 
 ## MCP
 
