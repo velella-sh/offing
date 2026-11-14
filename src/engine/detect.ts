@@ -220,17 +220,15 @@ async function describeFingerprints(
   return fingerprints;
 }
 
-/** True when every recorded fingerprint still matches size and mtime (and nothing was added or removed). */
-async function fingerprintsMatch(
-  manifest: DetectorManifest,
-  files: readonly string[],
-  options: DetectOptions,
-): Promise<boolean> {
-  if (manifest.files.length !== files.length) return false;
-  if (!manifest.files.every((file) => Number.isFinite(file.size) && Number.isFinite(file.mtimeMs))) return false;
-  const fingerprints = await describeFingerprints(files, options);
-  return manifest.files.every((file, index) => {
-    const current = fingerprints[index];
+/** True when recorded size/mtime fingerprints still match the live tree (order and length included). */
+export function fingerprintsEqual(
+  recorded: readonly { path: string; size?: number; mtimeMs?: number }[],
+  live: readonly ({ path: string; size: number; mtimeMs: number } | undefined)[],
+): boolean {
+  if (recorded.length !== live.length) return false;
+  if (!recorded.every((file) => Number.isFinite(file.size) && Number.isFinite(file.mtimeMs))) return false;
+  return recorded.every((file, index) => {
+    const current = live[index];
     return (
       current !== undefined &&
       file.path === current.path &&
@@ -238,6 +236,15 @@ async function fingerprintsMatch(
       file.mtimeMs === current.mtimeMs
     );
   });
+}
+
+/** True when every recorded fingerprint still matches size and mtime (and nothing was added or removed). */
+async function fingerprintsMatch(
+  manifest: DetectorManifest,
+  files: readonly string[],
+  options: DetectOptions,
+): Promise<boolean> {
+  return fingerprintsEqual(manifest.files, await describeFingerprints(files, options));
 }
 
 /** Hashes and stats each input file so a later warm scan can skip the hash work. */
@@ -262,14 +269,21 @@ async function describeFiles(files: readonly string[], options: DetectOptions): 
 }
 
 /** True when every recorded content hash still matches (fallback when mtime moved without a content change). */
-function contentHashesMatch(manifest: DetectorManifest, descriptors: readonly DetectorFileDescriptor[]): boolean {
+export function contentHashesEqual(
+  recorded: readonly { path: string; hash: string }[],
+  live: readonly { path: string; hash: string }[],
+): boolean {
   return (
-    manifest.files.length === descriptors.length &&
-    manifest.files.every((file, index) => {
-      const current = descriptors[index];
+    recorded.length === live.length &&
+    recorded.every((file, index) => {
+      const current = live[index];
       return current !== undefined && file.path === current.path && file.hash === current.hash;
     })
   );
+}
+
+function contentHashesMatch(manifest: DetectorManifest, descriptors: readonly DetectorFileDescriptor[]): boolean {
+  return contentHashesEqual(manifest.files, descriptors);
 }
 
 /** Runs a detector (analyze when present, scan otherwise) and attributes its output to it. */

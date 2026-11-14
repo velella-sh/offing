@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { after, afterEach, beforeEach, test } from "node:test";
 
@@ -11,7 +11,7 @@ import {
   scanRepository,
   shouldDisableCacheForDetector,
 } from "../src/engine/index.js";
-import { buildRepoFileIndex } from "../src/engine/detect.js";
+import { buildRepoFileIndex, contentHashesEqual, fingerprintsEqual } from "../src/engine/detect.js";
 import { nodeFileSystem } from "../src/node-file-system.js";
 import { computeFileHash, ScanCache } from "../src/scan-cache.js";
 import type { DetectorManifest } from "../src/scan-cache.js";
@@ -31,11 +31,44 @@ beforeEach(() => configureActiveData({ pinnedVersion: "bundled" }));
 afterEach(() => configureActiveData());
 
 test("buildRepoFileIndex indexes basenames and extensions for O(1) input lookup", () => {
-  const index = buildRepoFileIndex(["src/App.TS", "package.json", "lib/util.js"]);
+  const index = buildRepoFileIndex(["src/App.TS", "package.json", "lib/util.js", "Makefile", ".env", "a.b.c"]);
   assert.deepEqual(index.byBaseName.get("package.json"), ["package.json"]);
   assert.deepEqual(index.byExtension.get(".ts"), ["src/App.TS"]);
   assert.deepEqual(index.byExtension.get(".js"), ["lib/util.js"]);
-  assert.equal(index.all.length, 3);
+  assert.deepEqual(index.byExtension.get(".c"), ["a.b.c"]);
+  assert.equal(index.byExtension.has(".env"), false, "dotfiles are not treated as extensions");
+  assert.equal(index.byExtension.has("makefile"), false);
+  assert.equal(index.all.length, 6);
+});
+
+test("fingerprintsEqual requires matching length, path, size, and mtime", () => {
+  const live = [{ path: "a.json", size: 1, mtimeMs: 10 }];
+  assert.equal(fingerprintsEqual([{ path: "a.json", size: 1, mtimeMs: 10 }], live), true);
+  assert.equal(fingerprintsEqual([], live), false);
+  assert.equal(
+    fingerprintsEqual(
+      [
+        { path: "a.json", size: 1, mtimeMs: 10 },
+        { path: "b.json", size: 1, mtimeMs: 10 },
+      ],
+      live,
+    ),
+    false,
+  );
+  assert.equal(fingerprintsEqual([{ path: "b.json", size: 1, mtimeMs: 10 }], live), false);
+  assert.equal(fingerprintsEqual([{ path: "a.json", size: 2, mtimeMs: 10 }], live), false);
+  assert.equal(fingerprintsEqual([{ path: "a.json", size: 1, mtimeMs: 11 }], live), false);
+  assert.equal(fingerprintsEqual([{ path: "a.json" }], live), false);
+  assert.equal(fingerprintsEqual([{ path: "a.json", size: Number.NaN, mtimeMs: 10 }], live), false);
+  assert.equal(fingerprintsEqual([{ path: "a.json", size: 1, mtimeMs: 10 }], [undefined]), false);
+});
+
+test("contentHashesEqual requires matching length, path, and hash", () => {
+  const live = [{ path: "a.json", hash: "abc" }];
+  assert.equal(contentHashesEqual([{ path: "a.json", hash: "abc" }], live), true);
+  assert.equal(contentHashesEqual([], live), false);
+  assert.equal(contentHashesEqual([{ path: "b.json", hash: "abc" }], live), false);
+  assert.equal(contentHashesEqual([{ path: "a.json", hash: "zzz" }], live), false);
 });
 
 test("a detector directory with a long run of slashes is checked in linear time", () => {
@@ -515,6 +548,45 @@ test("a cross-file detector re-runs against the repository root when one of its 
       id,
     );
   }
+});
+
+test("wildcard and directory input declarations resolve through the file index", async () => {
+  const root = await scratch("input-index");
+  await writeFile(join(root, "app.config.json"), "{}\n");
+  await mkdir(join(root, "workflows"), { recursive: true });
+  await writeFile(join(root, "workflows", "ci.yml"), "name: ci\n");
+  let seen: string[] = [];
+  const detector = detectorOf("fixture", {
+    inputs: { fileNames: ["*.config.json"], directories: ["workflows"] },
+    async scan({ root: scanRoot }) {
+      seen = (await readdir(scanRoot, { recursive: true })).map(String).filter((name) => name.includes("."));
+      return [];
+    },
+  });
+  await scanRepository(root, [detector], { noCache: true });
+  assert.ok(seen.some((name) => name.includes("app.config.json") || name.includes("ci.yml")));
+});
+
+test("adding a file invalidates the fingerprint warm path and re-runs the detector", async () => {
+  const root = await scratch("fingerprint-add");
+  const cacheDir = await scratch("fingerprint-add-cache");
+  await writeFile(join(root, "one.json"), JSON.stringify({ v: 1 }));
+  let runs = 0;
+  const detector = detectorOf("fixture", {
+    inputs: { fileNames: ["one.json", "two.json"] },
+    async scan() {
+      runs += 1;
+      return [];
+    },
+  });
+  const options = { cacheDirectory: cacheDir, dataVersion: "test-data", scannedAt: "2026-01-01T00:00:00.000Z" };
+  await scanRepository(root, [detector], options);
+  assert.equal(runs, 1);
+  await scanRepository(root, [detector], options);
+  assert.equal(runs, 1, "unchanged tree must reuse the fingerprint hit");
+  await writeFile(join(root, "two.json"), JSON.stringify({ v: 2 }));
+  await scanRepository(root, [detector], options);
+  assert.equal(runs, 2, "a newly declared input file must invalidate the fingerprint");
 });
 
 test("the scan hash cache reuses a hash and evicts the oldest entry", async () => {

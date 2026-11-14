@@ -11,6 +11,16 @@ function wildcard(pattern: string): RegExp {
   return compiled;
 }
 
+/**
+ * Drops trailing `/` characters in linear time. Directory names are untrusted detector input, so a
+ * loop is used instead of `/\/+$/` which backtracks on a long run of slashes (`js/polynomial-redos`).
+ */
+export function trimTrailingSlashes(value: string): string {
+  let end = value.length;
+  while (end > 0 && value.charCodeAt(end - 1) === 0x2f) end -= 1;
+  return end === value.length ? value : value.slice(0, end);
+}
+
 /** Lowercased extensions derived once per `inputs` object. Directory prefixes stay lazy — they can be huge. */
 interface CompiledInputs {
   readonly namePatterns: readonly RegExp[];
@@ -35,7 +45,7 @@ function compileInputs(inputs: DetectorInputs): CompiledInputs {
 
 function directoryPrefixes(inputs: DetectorInputs, compiled: CompiledInputs): readonly string[] {
   if (compiled.directoryPrefixes) return compiled.directoryPrefixes;
-  const prefixes = (inputs.directories ?? []).map((directory) => `${directory.replace(/\/+$/, "")}/`);
+  const prefixes = (inputs.directories ?? []).map((directory) => `${trimTrailingSlashes(directory)}/`);
   compiled.directoryPrefixes = prefixes;
   return prefixes;
 }
