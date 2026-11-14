@@ -35,9 +35,12 @@ jobs:
         with:
           results_file: results.sarif
           results_format: sarif
+          # Fine-grained PAT (Administration: Read-only) so Branch-Protection can read
+          # classic rules. Maintainer stores it as SCORECARD_TOKEN; see SECURITY.md.
+          # Fall back to github.token when SCORECARD_TOKEN is unset so an empty
+          # secret does not override the action default and break the run.
+          repo_token: ${{ secrets.SCORECARD_TOKEN || github.token }}
           # Public repositories: publish to the OpenSSF API for consumers and the badge.
-          # Branch-Protection details that need admin scope stay partial without a PAT;
-          # see SECURITY.md.
           publish_results: true
 
       - name: Upload artifact
@@ -59,6 +62,7 @@ jobs:
         with:
           results_file: results.json
           results_format: json
+          repo_token: ${{ secrets.SCORECARD_TOKEN || github.token }}
           publish_results: false
 
       - name: Upload the result for the floor gate

@@ -179,8 +179,11 @@ test("scorecard.yml keeps its Scorecard job to actions and runs the floor gate s
   const jsonIndex = steps.findIndex((step) => isScorecard(step) && step.with?.["results_format"] === "json");
   assert.ok(sarifIndex >= 0, "the SARIF analysis is missing from scorecard.yml");
   assert.ok(jsonIndex > sarifIndex, "the JSON analysis is missing from scorecard.yml");
+  const sarifStep = steps[sarifIndex];
   const jsonStep = steps[jsonIndex];
+  assert.equal(sarifStep?.with?.["repo_token"], "${{ secrets.SCORECARD_TOKEN || github.token }}");
   assert.equal(jsonStep?.with?.["results_file"], "results.json");
+  assert.equal(jsonStep?.with?.["repo_token"], "${{ secrets.SCORECARD_TOKEN || github.token }}");
   assert.equal(jsonStep?.with?.["publish_results"], false);
   assert.equal(workflow.jobs.analysis["timeout-minutes"], 20);
 

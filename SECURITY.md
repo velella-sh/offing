@@ -28,7 +28,7 @@ The published package can read the filesystem, read environment variables, spawn
 
 ## OpenSSF Scorecard
 
-[`.github/workflows/scorecard.yml`](.github/workflows/scorecard.yml) runs OpenSSF Scorecard weekly, on every push to `main`, and on branch-protection changes. It publishes results to the Scorecard API and uploads SARIF to GitHub code scanning. Actions in that workflow are pinned to full commit SHAs, and the job uses the minimum token permissions Scorecard needs (`contents: read`, `security-events: write`, `id-token: write`).
+[`.github/workflows/scorecard.yml`](.github/workflows/scorecard.yml) runs OpenSSF Scorecard weekly, on demand, and on branch-protection changes. It publishes results to the Scorecard API and uploads SARIF to GitHub code scanning. Actions in that workflow are pinned to full commit SHAs, and the job uses the minimum token permissions Scorecard needs (`contents: read`, `security-events: write`, `id-token: write`). For the Branch-Protection check it also accepts an optional repository secret `SCORECARD_TOKEN`: a fine-grained PAT with **Administration: Read-only** (and Metadata read, set automatically), passed as `repo_token` per the [Scorecard fine-grained auth docs](https://github.com/ossf/scorecard-action/blob/main/docs/authentication/fine-grained-auth-token.md). Without that secret the check stays at `-1` ("some github tokens can't read" classic rules).
 
 [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml) runs CodeQL static analysis on every pull request and push to `main`, as well as every week and on demand, covering the JavaScript and TypeScript source that makes up the package, CLI, MCP server, and Action. It uploads SARIF to GitHub code scanning alongside the Scorecard and Offing results, with the same SHA-pinned actions and a job-level `security-events: write` permission.
 
@@ -38,7 +38,7 @@ Existing workflows already declare top-level read permissions (or empty permissi
 
 | Check | Why it is not raised further |
 |---|---|
-| Branch-Protection | `main` requires the `ci-ok` status check and conversation resolution. Required approving reviews stay at zero so agent and maintainer pull requests can merge after green checks; code-owner review is configured in `.github/CODEOWNERS` but not enforced as a hard gate. Admin-only Scorecard fields need a PAT the workflow does not store. |
+| Branch-Protection | `main` requires the `ci-ok` status check; force pushes and deletions are disabled. Required approving reviews stay at zero so agent and maintainer pull requests can merge after green checks; code-owner review is configured in `.github/CODEOWNERS` but not enforced as a hard gate. Reading classic protection rules needs the optional `SCORECARD_TOKEN` secret (Administration: Read-only); until a maintainer creates and stores that PAT, Scorecard reports `-1` for this check. |
 | Code-Review | Same as Branch-Protection: human review is expected for lifecycle evidence and public contracts via CODEOWNERS, but a required review count is not enforced on every merge. |
 | Pinned-Dependencies | GitHub Actions and Docker steps used in CI are SHA-pinned. The SLSA reusable workflow in `release.yml` stays on the upstream `v2.1.0` tag because that is how [`slsa-framework/slsa-github-generator`](https://github.com/slsa-framework/slsa-github-generator) documents calling it. |
 | Token-Permissions | Workflows use read-only (or empty) top-level permissions and grant write only on the jobs that need it. |
