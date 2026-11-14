@@ -2,7 +2,7 @@ FROM node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
-COPY tsconfig.json ./
+COPY tsconfig.base.json tsconfig.json ./
 COPY src ./src
 COPY tools ./tools
 COPY examples ./examples
