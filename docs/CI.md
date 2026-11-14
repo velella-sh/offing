@@ -163,6 +163,7 @@ covered. That transitional cost is accepted; removing it is #2030's job after #2
 | Mutation testing | `mutation.yml` | Nightly |
 | Parser fuzz (scheduled) | `fuzz.yml` | Nightly (+ optional PR path filter) |
 | Package smoke (scheduled) | `package-smoke.yml` | Nightly |
+| Large public monorepo scan times | `large-monorepos.yml` | Nightly |
 | CI health / quarantine | `ci-health.yml` | Nightly + weekly |
 | Full public corpus | `corpus.yml` (`full`) | Weekly |
 | Record full corpus | `corpus.yml` (`record`) | Twice monthly |
@@ -608,6 +609,7 @@ just because a later task will fold it.
 | `labels.yml` | Main / nightly | `pull_request` / `push` on label paths; weekly schedule; `workflow_dispatch` | Sync `.github/labels.yml` and check good-first-issue briefs |
 | `release.yml` | Main / release | `push` to `main`; version `v*` tags; `workflow_dispatch` | One release chain: Action bundle on `release/<tag>`, npm via the `npm-publish` job, binaries, provenance, channels, smoke |
 | `package-smoke.yml` | Merge queue / nightly | `merge_group`; nightly schedule; `workflow_dispatch` | Prove npm tarball, Docker image, and local Action scan the same fixture |
+| `large-monorepos.yml` | Nightly | Nightly schedule; `workflow_dispatch` | Check out the five pinned large public monorepos, record scan wall time and peak RSS, publish the summary artifact |
 | `ci-health.yml` | Nightly | `workflow_run` of CI on `main`; schedules; `workflow_dispatch` | Open/close devops issues on main failures, measure CI duration, quarantine flaky tests |
 | `mutation.yml` | Nightly | Nightly schedule; `workflow_dispatch` | Mutation testing matrix (too slow for the merge gate) |
 | `corpus.yml` | Pull request / main / nightly | `pull_request` / `push` on detector paths; weekly + twice-monthly schedules; `workflow_dispatch` with `mode` (`affected` / `full` / `record`) | Affected-ecosystem signal; full public corpus validate in eight shards plus a merge job; recorded full-run PR |

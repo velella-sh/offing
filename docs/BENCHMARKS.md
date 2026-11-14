@@ -289,3 +289,25 @@ npm run benchmark:monorepo -- --files 5000 --runs 1 --warmup 0
 npm run benchmark:monorepo -- --check --simulate-leak-mb 1500   # a deliberate leak must fail the gate
 npm run benchmark:monorepo -- --path /path/to/local/monorepo --json
 ```
+
+### Five largest public monorepos (nightly)
+
+The observational suite in [`benchmarks/large-monorepos.json`](../benchmarks/large-monorepos.json) pins five very large public JS/TS monorepos by commit, chosen by GitHub repository size among checkouts that fit a nightly Actions runner (kibana-scale trees are excluded). `vercel/next.js` is always included. The harness (`benchmarks/large-monorepos.ts`) never fetches: the [Large monorepos](../.github/workflows/large-monorepos.yml) workflow checks out each pin, runs one offline `noCache` scan per repository, records mean wall-clock time and peak resident set size, merges the five rows, and publishes the Markdown table to the job summary plus a `large-monorepos-<run_id>` artifact. This is not a required status check and does not replace the synthetic / `babel/babel` CI gate above.
+
+| Id | Repository |
+| --- | --- |
+| `microsoft-typescript` | [`microsoft/TypeScript`](https://github.com/microsoft/TypeScript) |
+| `vercel-next-js` | [`vercel/next.js`](https://github.com/vercel/next.js) |
+| `microsoft-vscode` | [`microsoft/vscode`](https://github.com/microsoft/vscode) |
+| `storybookjs-storybook` | [`storybookjs/storybook`](https://github.com/storybookjs/storybook) |
+| `facebook-react` | [`facebook/react`](https://github.com/facebook/react) |
+
+Bump a pin deliberately in `benchmarks/large-monorepos.json` (40-character lowercase SHA). Unit tests cover suite shape, local measurement, merge order, and Markdown; they do not clone the public trees.
+
+```bash
+# List the pins (offline).
+npm run benchmark:large-monorepos -- --list
+
+# After checking each pin out under targets/<id> at the pinned commit:
+npm run benchmark:large-monorepos -- --root targets --json --output artifacts/large-monorepos.json
+```

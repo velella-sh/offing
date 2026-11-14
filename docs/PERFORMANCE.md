@@ -29,9 +29,8 @@ Treat every duration as a reference point, not a cross-machine guarantee. CI enf
 | Smoke fixture | `tests/fixtures/smoke` (known deprecated npm package and Node.js runtime) | committed fixture; timed by `benchmarks/perf-budget.ts` |
 | Synthetic monorepo | Temporary ~100k-file npm workspaces tree built offline | `benchmarks/monorepo.ts` (not a public repository) |
 | Real monorepo (CI gate) | [`babel/babel`](https://github.com/babel/babel) at commit `992afd97a0535c1fa8a3d9eb33e8b5fde4ad2c55` | `.github/workflows/ci.yml` (`perf-budget` job); wall clock is gated, not published as a reference row here |
+| Five largest public monorepos | [`microsoft/TypeScript`](https://github.com/microsoft/TypeScript), [`vercel/next.js`](https://github.com/vercel/next.js), [`microsoft/vscode`](https://github.com/microsoft/vscode), [`storybookjs/storybook`](https://github.com/storybookjs/storybook), [`facebook/react`](https://github.com/facebook/react) at the commits in [`benchmarks/large-monorepos.json`](../benchmarks/large-monorepos.json) | Nightly [Large monorepos](../.github/workflows/large-monorepos.yml) workflow; wall time and peak RSS published in the job summary and artifact |
 | Source-usage corpus | 200 generated TypeScript files, plus this repository's `src/**/*.ts` for the engine comparison | `benchmarks/source-usage.ts` |
-
-Adding more large public monorepos to the suite is tracked separately ([#51](https://github.com/velella-sh/offing/issues/51)).
 
 ## Results
 
