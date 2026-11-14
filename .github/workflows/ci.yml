@@ -10,9 +10,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  # A newer push to main supersedes an older one; a merge-queue run is never cancelled.
-  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
+  # Pull requests share one group per number so a newer push supersedes the older run.
+  # Push and merge_group key on the commit SHA so a burst of merges never cancels (or
+  # replaces while pending) another commit's verification — the only proof that commit has.
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   # Classifies the change set so pull requests and the merge queue run only what they need.
