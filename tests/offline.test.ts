@@ -71,18 +71,14 @@ test("only the update command, the CLI entry point, and the Action's GitHub API 
 });
 
 test("the signature verification libraries contain no network code", async () => {
-  for (const name of ["verify", "bundle", "core", "protobuf-specs"]) {
-    const directory = resolve("node_modules/@sigstore", name, "dist");
-    const files = (await readdir(directory, { recursive: true })).filter((file) => file.endsWith(".js"));
-    assert.ok(files.length > 0, name);
-    for (const file of files) {
-      const text = await readFile(join(directory, file), "utf8");
-      assert.doesNotMatch(
-        text,
-        /require\(["'](?:node:)?(?:https?|net|tls|dns|dgram|http2)["']\)|\bfetch\(/,
-        `@sigstore/${name}/${file}`,
-      );
-    }
+  const directory = resolve("node_modules/@velella/ebb/dist/src");
+  for (const name of ["data-signature.js", "verify.js"]) {
+    const text = await readFile(join(directory, name), "utf8");
+    assert.doesNotMatch(
+      text,
+      /require\(["'](?:node:)?(?:https?|net|tls|dns|dgram|http2)["']\)|\bfetch\(/,
+      `@velella/ebb/${name}`,
+    );
   }
 });
 

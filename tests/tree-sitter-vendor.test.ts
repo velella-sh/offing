@@ -122,7 +122,11 @@ test("an installed package scans source usage offline from the base64 payloads",
   );
   // Offing depends on Ebb, which an install puts beside it.
   const ebbDirectory = join(root, "node_modules", "@velella", "ebb");
-  await cp(resolve("node_modules/@velella/ebb"), ebbDirectory, { recursive: true, dereference: true });
+  await cp(resolve("node_modules/@velella/ebb"), ebbDirectory, {
+    recursive: true,
+    dereference: true,
+    filter: (source) => !/[/\\]packages([/\\]|$)/.test(source),
+  });
 
   // An installed package ships the base64 payloads only; drop any stale build output before importing.
   const vendor = join(packageDirectory, "dist", "src", "usage", "vendor", "tree-sitter");

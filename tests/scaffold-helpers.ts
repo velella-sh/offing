@@ -51,6 +51,7 @@ export async function compileCheckout(roots: string[]): Promise<string> {
   await cp(resolve("node_modules/@velella/ebb"), join(root, "node_modules/@velella/ebb"), {
     recursive: true,
     dereference: true,
+    filter: (source) => !/[/\\]packages([/\\]|$)/.test(source),
   });
   return root;
 }
