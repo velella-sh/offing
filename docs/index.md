@@ -10,8 +10,8 @@ actions:
   - label: Install
     url: INSTALL/
     primary: true
-  - label: 90-second demo
-    url: DEMO/
+  - label: View on GitHub
+    url: https://github.com/velella-sh/offing
 sections:
   - title: Get started
     url: INSTALL/
@@ -78,20 +78,6 @@ sections:
         url: COMPARISON/
       - title: "Compared with Renovate and Dependabot"
         url: compare/
-  - title: Project
-    url: ROADMAP/
-    description: Where Offing is going and how to help.
-    icon: "M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"
-    links:
-      - title: "Roadmap"
-        url: ROADMAP/
-      - title: "Decision records"
-        url: decisions/
-      - title: "Changelog"
-        url: CHANGELOG/
-      - title: "Start contributing"
-        url: CONTRIBUTE/
-
 ---
 
 The rules behind every finding are in [Lifecycle rules](RULES.md).
