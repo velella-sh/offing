@@ -24,6 +24,8 @@
 
 Offing finds **end-of-life and deprecated** runtimes, packages, and GitHub Actions in your repository, at the exact file and line, each with an authoritative source, a replacement, and migration steps. It is deterministic, offline, and needs no account.
 
+**Built for the AI era:** coding agents happily add packages and runtimes that are already deprecated. Offing gives them a check to run before they add one (`offing check`, MCP, or the Agent Skill), so an ending dependency is caught before it lands.
+
 ```bash
 npx @velella/offing scan .
 ```
@@ -43,12 +45,12 @@ That is `scan --format compact` on the bundled demo project (`examples/demo`). A
 npx @velella/offing check pkg:npm/request@2.88.2   # exits 1: deprecated, with the replacement and its source
 ```
 
-Requirements: Node.js 22 or newer. Read this in: **English** · [فارسی](docs/i18n/fa/README.md).
+Requirements: Node.js 22 or newer.
 
 ## What you get
 
-- **Exact location, real source.** Every finding names the file and line, links the authoritative source for the rule, and gives the replacement and migration steps. Nothing is guessed: a package with no rule reports `no-data`, never "safe".
 - **Check before you add.** `check pkg:npm/request@2.88.2` answers for one dependency without scanning anything, and exits `1` when a rule at or above `--fail-on` applies.
+- **Exact location, real source.** Every finding names the file and line, links the authoritative source for the rule, and gives the replacement and migration steps. Nothing is guessed: a package with no rule reports `no-data`, never "safe".
 - **Only new problems.** `baseline` records accepted findings; `scan --baseline` then reports only regressions, so a legacy repository can adopt Offing on day one.
 - **Migration packets.** `context '<finding-id>' --json` hands a person or a coding agent the constraints, the affected files and usages, the sources, and suggested verification commands. Offing never runs them for you.
 - **Usage, not just declarations.** For npm and Ruby it finds the imports and calls that use a deprecated package, so you see what a migration has to touch.
@@ -101,8 +103,6 @@ steps:
     with:
       fail-on-severity: high
 ```
-
-![Offing pull request comment showing severity counts and the top lifecycle findings with file locations](https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/screenshots/pr-comment.webp)
 
 Offing annotates the pull request at the exact line, posts one summary comment with the evidence, suppresses accepted findings with a baseline, fails on the severity you choose, and uploads the complete JSON report or SARIF. Scans run on the runner, so repository contents never leave it. Pin a full commit SHA instead of a tag when you need an immutable reference. Setup, inputs, permissions and artifacts are in the [GitHub Action guide](docs/GITHUB_ACTION.md). The [onboarding GitHub App](docs/ONBOARDING_APP.md) can open that workflow as one reviewed pull request per repository.
 
