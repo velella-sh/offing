@@ -125,7 +125,7 @@ test("an installed package scans source usage offline from the base64 payloads",
   await cp(resolve("node_modules/@velella/ebb"), ebbDirectory, {
     recursive: true,
     dereference: true,
-    filter: (source) => !source.includes("/packages"),
+    filter: (source) => !/[/\\]packages([/\\]|$)/.test(source),
   });
 
   // An installed package ships the base64 payloads only; drop any stale build output before importing.
