@@ -145,7 +145,10 @@ Each failure also carries one stable reason code, written as `error.reason` in t
 | `finding-not-observed` | `data` | A finding ID was not observed earlier in this MCP session. |
 | `data-unavailable` | `data` | A pinned data version or bundle is not available or does not verify. |
 | `data-update-failed` | `data` | `offing data update` could not finish. |
+| `package-file-not-found` | `data` | A packaged lifecycle or data asset is missing. |
 | `invalid-purl` | `parse` | A Package URL is invalid. |
+| `invalid-version` | `parse` | A component version or VERS range is invalid. |
+| `invalid-date` | `parse` | A date is not in YYYY-MM-DD format. |
 | `invalid-agent-file` | `parse` | An `AGENTS.md` section is damaged. |
 | `invalid-sbom` | `parse` | An SBOM is not valid CycloneDX or SPDX. |
 | `invalid-input` | `parse` | Another input could not be parsed. |
