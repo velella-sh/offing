@@ -7,16 +7,16 @@ Every release is listed below, newest first. Each heading has a stable anchor, s
 
 <a id="unreleased"></a>
 
-## Unreleased
+## Unreleased {#unreleased}
 
 <a id="v0.1.1"></a>
 
-## 0.1.1 - 2026-11-12
+## 0.1.1 - 2026-11-12 {#v0.1.1}
 
 - Release the Offing package and Action with the post-publish checks fixed to use the `@velella/offing` package name. The package contents are the same as 0.1.0.
 
 <a id="v0.1.0"></a>
 
-## 0.1.0 - 2026-11-11
+## 0.1.0 - 2026-11-11 {#v0.1.0}
 
 - First release of Offing.

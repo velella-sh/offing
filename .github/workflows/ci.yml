@@ -508,7 +508,7 @@ jobs:
           cp .github/site-tools/package.json .github/site-tools/package-lock.json "$RUNNER_TEMP/site-tools/"
           npm ci --prefix "$RUNNER_TEMP/site-tools" --no-audit --no-fund
       - name: Build the documentation site
-        run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out "$RUNNER_TEMP/site"'
+        run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out "$RUNNER_TEMP/site" --workers auto'
 
   # The merge queue ignores `paths`, so `changes.site` decides whether the site jobs run. On a pull
   # request each workflow runs on its own `paths` filter instead; on main, pages.yml verifies the
