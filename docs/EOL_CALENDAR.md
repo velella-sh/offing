@@ -1,3 +1,8 @@
+---
+title: "Lifecycle calendar"
+description: "Subscribe to upcoming and recent lifecycle dates as a Markdown table, an .ics file, or an RSS or Atom feed."
+---
+
 # Lifecycle calendar
 
 Offing can list the lifecycle dates in its registry that are coming up, or that just passed, as a Markdown table, an `.ics` file, and RSS and Atom feeds you can subscribe to. It reads `registry/*.json` or a data release bundle, and never uses the network.

@@ -1,3 +1,8 @@
+---
+title: "Standards support"
+description: "Offing keys every rule by Package URL (PURL) and VERS, exports and ingests CLE, enriches CycloneDX SBOMs, and emits SARIF."
+---
+
 # Standards support
 
 Offing keys every lifecycle rule by [Package URL](https://github.com/package-url/purl-spec) (PURL) and [VERS](https://github.com/package-url/purl-spec/blob/master/VERSION-RANGE-SPEC.rst). It exports and ingests CLE, enriches CycloneDX SBOMs, and emits SARIF. CycloneDX and SPDX **input** checking exists only as an internal library API today — no CLI, GitHub Action, MCP tool, or detector exposes it. Scans stay offline: they read repository files and bundled (or pinned) data only.

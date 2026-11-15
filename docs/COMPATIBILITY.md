@@ -1,3 +1,8 @@
+---
+title: "Environment doctor and compatibility matrix"
+description: "Inspect Offing's execution environment without scanning source files, and read the compatibility matrix."
+---
+
 # Environment doctor and compatibility matrix
 
 Offing can inspect its execution environment without scanning source files:

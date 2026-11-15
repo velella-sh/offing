@@ -1,70 +1,100 @@
 main:
-  - title: Start here
+  - title: Get started
     children:
+      - title: "Install"
+        url: /INSTALL/
+      - title: "Five-step quickstart"
+        url: /QUICKSTART/
       - title: "90-second demo"
         url: /DEMO/
       - title: "CLI reference"
         url: /CLI/
+      - title: "Upgrade check"
+        url: /UPGRADE_CHECK/
       - title: "Runtime drift"
         url: /DRIFT/
-      - title: "v0.1 validation results"
-        url: /VALIDATION/
-      - title: "Environment doctor and compatibility matrix"
+      - title: "Environment doctor and compatibility"
         url: /COMPATIBILITY/
-      - title: "Capability manifest and auto-discovery contract"
-        url: /CAPABILITIES/
-      - title: "Lifecycle rules"
-        url: /RULES/
-      - title: "Maintainer CLE declarations"
-        url: /MAINTAINERS/
-      - title: "Lifecycle importers"
-        url: /IMPORTERS/
-      - title: "Migration packets"
-        url: /MIGRATION_PACKETS/
-      - title: "Runtime drift"
-        url: /DRIFT/
-      - title: "Local MCP server"
-        url: /MCP/
-      - title: "Agent Skill"
-        url: /AGENT_SKILLS/
-      - title: "Codex and Claude plugin packaging"
-        url: /PLUGIN_PACKAGING/
-      - title: "Codex plugin installation and management"
-        url: /CODEX_PLUGIN/
-      - title: "Claude plugin installation and distribution"
-        url: /CLAUDE_PLUGIN/
-      - title: "Codex plugin submission"
-        url: /CODEX_SUBMISSION/
-      - title: "Privacy"
-        url: /PRIVACY/
-      - title: "Support"
-        url: /SUPPORT/
-      - title: "Terms"
-        url: /TERMS/
-      - title: "Cross-host plugin evaluation and security boundaries"
-        url: /PLUGIN_EVALS/
+  - title: Run in CI
+    children:
       - title: "GitHub Action"
         url: /GITHUB_ACTION/
+      - title: "GitLab CI/CD component"
+        url: /GITLAB/
+      - title: "Continuous integration"
+        url: /CI/
+      - title: "Hooks"
+        url: /HOOKS/
       - title: "Organization rollout"
         url: /ORG_ROLLOUT/
+      - title: "Privacy"
+        url: /PRIVACY/
+  - title: Use with agents
+    children:
+      - title: "Agent Skill"
+        url: /AGENT_SKILLS/
+      - title: "Local MCP server"
+        url: /MCP/
+      - title: "Migration packets"
+        url: /MIGRATION_PACKETS/
+      - title: "Migration plans"
+        url: /PLAN/
+      - title: "Capability manifest"
+        url: /CAPABILITIES/
+      - title: "Claude plugin"
+        url: /CLAUDE_PLUGIN/
+      - title: "Codex plugin"
+        url: /CODEX_PLUGIN/
+      - title: "Plugin packaging"
+        url: /PLUGIN_PACKAGING/
+      - title: "Plugin evaluation and security"
+        url: /PLUGIN_EVALS/
+  - title: Reference
+    children:
+      - title: "Lifecycle rules"
+        url: /RULES/
+      - title: "Lifecycle data"
+        url: /DATA/
+      - title: "Lifecycle importers"
+        url: /IMPORTERS/
+      - title: "Maintainer CLE declarations"
+        url: /MAINTAINERS/
       - title: "Detector SDK"
         url: /DETECTORS/
       - title: "Architecture and trust boundaries"
         url: /ARCHITECTURE/
       - title: "Runtime dependencies"
         url: /DEPENDENCIES/
-      - title: "Decision records"
-        url: /decisions/
+      - title: "Threat model"
+        url: /THREAT_MODEL/
+  - title: Evidence
+    children:
+      - title: "Validation results"
+        url: /VALIDATION/
+      - title: "Benchmarks"
+        url: /BENCHMARKS/
+      - title: "Measured comparison"
+        url: /COMPARISON/
+      - title: "State of EOL"
+        url: /state-of-eol/
+      - title: "Compared with other tools"
+        url: /compare/
+  - title: Project
+    children:
       - title: "Roadmap"
         url: /ROADMAP/
-      - title: "Post-launch notes and next roadmap"
+      - title: "Post-launch notes"
         url: /NEXT/
-      - title: "Brand files"
-        url: https://github.com/velella-sh/offing/blob/main/brand/README.md
-      - title: "Brand asset terms"
-        url: https://github.com/velella-sh/offing/blob/main/brand/LICENSE
-      - title: "Distribution brand checklist"
-        url: /DISTRIBUTION_BRAND/
+      - title: "Decision records"
+        url: /decisions/
+      - title: "Changelog"
+        url: /CHANGELOG/
+      - title: "Start contributing"
+        url: /CONTRIBUTE/
+      - title: "Support"
+        url: /SUPPORT/
+      - title: "Terms"
+        url: /TERMS/
   - title: Detectors
     children:
       - title: "Detector reference"

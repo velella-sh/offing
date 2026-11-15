@@ -1,3 +1,8 @@
+---
+title: "Shell prompt segment"
+description: "Print a short lifecycle-finding segment, such as ⏳2, in your shell prompt."
+---
+
 # Shell prompt segment
 
 `offing prompt` prints a short segment for your shell prompt, such as `⏳2`, when the repository you are in has lifecycle findings. It prints nothing otherwise.

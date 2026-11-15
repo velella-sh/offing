@@ -1,3 +1,8 @@
+---
+title: "Ecosystem coverage"
+description: "What Offing reads in each ecosystem and what it reports."
+---
+
 # Ecosystem coverage
 
 What Offing reads in each ecosystem and what it reports. The table is generated from the capability manifest (`npm run build:coverage`); the maturity level of every detector is in the [coverage matrix](COMPATIBILITY.md#ecosystem-coverage).

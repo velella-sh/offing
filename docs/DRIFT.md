@@ -1,3 +1,8 @@
+---
+title: "Runtime drift"
+description: "Check runtime drift from repository files alone: drift checks never run a runtime, execute tools, or use the network."
+---
+
 # Runtime drift
 
 `offing drift` finds every place a repository states a runtime version — version files, manifests, container images, and CI configuration — and reports, with exact locations, when the values disagree. A Dockerfile on Node.js 18, CI on 20, and `.nvmrc` on 22 is one line of output instead of three files to compare by hand.

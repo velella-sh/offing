@@ -1,3 +1,8 @@
+---
+title: "Security triage"
+description: "How dependency alerts for this repository are read and handled."
+---
+
 # Security triage
 
 How dependency alerts for this repository are read and handled. The policy for reporting vulnerabilities lives in [`SECURITY.md`](../SECURITY.md). Automated update PRs are configured in [`.github/dependabot.yml`](../.github/dependabot.yml).

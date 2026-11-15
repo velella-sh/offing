@@ -1,3 +1,8 @@
+---
+title: "Benchmarks"
+description: "The agent migration benchmark: does a coding agent resolve a real lifecycle finding, and does the migration packet change that outcome?"
+---
+
 # Benchmarks
 
 ## Agent migration benchmark

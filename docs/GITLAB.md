@@ -1,3 +1,8 @@
+---
+title: "GitLab"
+description: "Run Offing in GitLab pipelines with the CI/CD component published in the CI/CD Catalog."
+---
+
 # GitLab
 
 Offing ships a GitLab CI/CD component, [`templates/offing.yml`](../templates/offing.yml). It is published in the [CI/CD Catalog](https://gitlab.com/explore/catalog/velella-sh/offing). It adds one job that scans the checked-out repository, keeps the JSON report as a job artifact, and fails the pipeline at a severity gate. Its inputs mirror the [GitHub Action](GITHUB_ACTION.md): `path`, `baseline`, `baseline_warn_days`, `on_expired`, `min_support_days`, and `fail_on_severity` have the same meanings and defaults.
@@ -8,7 +13,7 @@ On GitLab.com, include the Catalog release. Pin the component to a plain semver 
 
 ```yaml
 include:
-  - component: $CI_SERVER_FQDN/velella-sh/offing/offing@0.7.1
+  - component: $CI_SERVER_FQDN/velella-sh/offing/offing@0.1.1
     inputs:
       fail_on_severity: high
 ```

@@ -1,3 +1,8 @@
+---
+title: "Offing v0.1.0"
+description: "Offing v0.1 is the first public, end-to-end release of local-first deprecation intelligence for repositories and coding agents."
+---
+
 # Offing v0.1.0
 
 Offing v0.1 is the first public, end-to-end release of local-first deprecation intelligence for repositories and coding agents.

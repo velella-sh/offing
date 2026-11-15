@@ -23,12 +23,24 @@ npx @velella/offing scan .
 
 To keep a pinned version on your `PATH`:
 
+:::code-tabs{id="install-global" labels='["npm","pnpm","yarn"]'}
 ```bash
-npm install -g offing
+npm install -g @velella/offing
 offing scan .
 ```
 
-**Verify.** `npx @velella/offing --version` prints the published version (currently `0.7.1`). `npx @velella/offing demo` reports findings for the demo project.
+```bash
+pnpm add -g @velella/offing
+offing scan .
+```
+
+```bash
+yarn global add @velella/offing
+offing scan .
+```
+:::
+
+**Verify.** `npx @velella/offing --version` prints the published version (currently `0.1.1`). `npx @velella/offing demo` reports findings for the demo project.
 
 ## GitHub Action
 
@@ -36,7 +48,7 @@ Add the Action to a pull-request workflow:
 
 ```yaml
 - uses: actions/checkout@v7
-- uses: velella-sh/offing@v0.7.1
+- uses: velella-sh/offing@v0.1.1
   with:
     fail-on-severity: high
 ```

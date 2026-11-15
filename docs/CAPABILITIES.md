@@ -1,3 +1,8 @@
+---
+title: "Capability manifest and auto-discovery contract"
+description: "The deterministic capability manifest that humans, agents, and integrations read to discover what Offing can do."
+---
+
 # Capability manifest and auto-discovery contract
 
 Offing publishes one deterministic capability manifest for humans, agents, and

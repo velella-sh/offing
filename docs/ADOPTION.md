@@ -1,3 +1,8 @@
+---
+title: "Measuring adoption"
+description: "How Offing measures adoption without any telemetry."
+---
+
 # Measuring adoption
 
 Offing has no telemetry and never will: a scan does not phone home, and nothing about how people use it is collected. Adoption is measured only from public data that anyone can look up, with one exception: the Search Console landing pages, which only the verified site owner can see and the maintainer enters by hand. Every other number can be reproduced, and none of it comes from users.

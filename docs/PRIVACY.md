@@ -1,3 +1,8 @@
+---
+title: "Offing privacy"
+description: "Offing has no telemetry: a scan does not phone home, and nothing about how people use it is collected."
+---
+
 # Offing privacy
 
 Offing analyzes software repositories on the user's computer. The Codex and Claude plugins start a local stdio MCP server and do not send repository contents to an Offing-operated service. Offing does not require an Offing account, collect analytics, use advertising identifiers, or sell personal data.

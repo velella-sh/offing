@@ -1,3 +1,8 @@
+---
+title: "Offing terms"
+description: "Offing's source code is provided under the Apache License 2.0 and without warranties or conditions beyond those stated in that license."
+---
+
 # Offing terms
 
 Offing's source code is provided under the Apache License 2.0 and without warranties or conditions beyond those stated in that license. The lifecycle dataset published as the `offing-data` package is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) with the attribution notice it ships; see [Lifecycle data](DATA.md#license-and-attribution). The Offing name and visual identity are covered separately by the [brand asset terms](https://github.com/velella-sh/offing/blob/main/brand/LICENSE.md).

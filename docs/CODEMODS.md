@@ -1,3 +1,8 @@
+---
+title: "Codemods"
+description: "The dockerfile-legacy fixer repairs the container.dockerfile.maintainer and container.dockerfile.legacy-env-format findings."
+---
+
 # Codemods
 
 `offing fix` plans deterministic repairs for findings whose change is mechanical, and prints them as unified diffs that `git apply` accepts. It never writes a file or runs a command. A codemod applies only while the text it rewrites still matches the finding, and every finding it declines is reported as a refusal with the reason.

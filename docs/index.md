@@ -13,119 +13,88 @@ actions:
   - label: 90-second demo
     url: DEMO/
 sections:
-  - title: Try it
+  - title: Get started
     url: INSTALL/
-    description: Install, scan, and read the first findings.
+    description: Install, scan, and read your first findings.
     icon: "M5 4h10l4 4v12H5zM14 4v5h5M9 13h6M9 17h6"
     links:
-      - title: Install
+      - title: "Install"
         url: INSTALL/
-      - title: Five-step quickstart
+      - title: "Five-step quickstart"
         url: QUICKSTART/
-      - title: 90-second demo
+      - title: "90-second demo"
         url: DEMO/
-      - title: CLI reference
+      - title: "CLI reference"
         url: CLI/
-      - title: "Playbook: manual CLI checks"
-        url: playbooks/cli/
-      - title: Runtime drift
-        url: DRIFT/
-      - title: Upgrade check
-        url: UPGRADE_CHECK/
-      - title: Local MCP server
-        url: MCP/
-      - title: Environment doctor and compatibility
-        url: COMPATIBILITY/
-  - title: Set up CI
+  - title: Run in CI
     url: GITHUB_ACTION/
     description: Pull request comments, SARIF, gates, and hooks.
     icon: "M4 12a8 8 0 1 0 3-6.2M4 4v4h4"
     links:
-      - title: GitHub Action
+      - title: "GitHub Action"
         url: GITHUB_ACTION/
-      - title: "Playbook: GitHub Actions"
-        url: playbooks/github/
-      - title: GitLab CI/CD component
+      - title: "GitLab CI/CD component"
         url: GITLAB/
-      - title: "Playbook: GitLab pipelines"
-        url: playbooks/gitlab/
-      - title: Organization rollout
+      - title: "Organization rollout"
         url: ORG_ROLLOUT/
-      - title: Hooks
+      - title: "Hooks"
         url: HOOKS/
-      - title: Privacy
-        url: PRIVACY/
   - title: Use with agents
     url: AGENT_SKILLS/
-    description: The Agent Skill, MCP server, plugins, and migration packets.
+    description: "Guardrails for AI coding agents: Skill, MCP, plugins."
     icon: "M12 3v3M12 18v3M3 12h3M18 12h3M7 7l2 2M15 15l2 2M17 7l-2 2M9 15l-2 2"
     links:
-      - title: Agent Skill
+      - title: "Agent Skill"
         url: AGENT_SKILLS/
-      - title: "Playbook: agent-driven migrations"
-        url: playbooks/agent/
-      - title: Migration packets
+      - title: "Local MCP server"
+        url: MCP/
+      - title: "Migration packets"
         url: MIGRATION_PACKETS/
-      - title: Migration plans
-        url: PLAN/
-      - title: Capability manifest
-        url: CAPABILITIES/
-      - title: Claude plugin
-        url: CLAUDE_PLUGIN/
-      - title: Codex plugin
-        url: CODEX_PLUGIN/
-      - title: Codex and Claude plugin packaging
+      - title: "Claude and Codex plugins"
         url: PLUGIN_PACKAGING/
-      - title: Cross-host plugin evaluation and security boundaries
-        url: PLUGIN_EVALS/
   - title: Reference
     url: RULES/
-    description: Rules, data, detectors, trust, and project records.
+    description: Rules, data, detectors, and how Offing is built.
     icon: "M4 5h7a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4zM20 5h-6a3 3 0 0 0-3 3v11a2 2 0 0 1 2-2h7z"
     links:
-      - title: Lifecycle rules
+      - title: "Lifecycle rules"
         url: RULES/
-      - title: Lifecycle data
-        url: DATA/
-      - title: Detector reference
+      - title: "Detector reference"
         url: detectors/
-      - title: Detector SDK
-        url: DETECTORS/
-      - title: Lifecycle importers
-        url: IMPORTERS/
-      - title: Maintainer CLE declarations
-        url: MAINTAINERS/
-      - title: Architecture and trust boundaries
+      - title: "Architecture"
         url: ARCHITECTURE/
-      - title: Threat model
+      - title: "Threat model"
         url: THREAT_MODEL/
-      - title: Validation results
+  - title: Evidence
+    url: VALIDATION/
+    description: Measured results, including where Offing loses.
+    icon: "M4 20V10M10 20V4M16 20v-7M22 20H2"
+    links:
+      - title: "Validation results"
         url: VALIDATION/
-      - title: Benchmarks
+      - title: "Benchmarks"
         url: BENCHMARKS/
-      - title: State of EOL
-        url: state-of-eol/
-      - title: Offing compared with Renovate, Dependabot, and endoflife.date
+      - title: "Measured comparison"
+        url: COMPARISON/
+      - title: "Compared with Renovate and Dependabot"
         url: compare/
-      - title: Decision records
-        url: decisions/
-      - title: Roadmap
+  - title: Project
+    url: ROADMAP/
+    description: Where Offing is going and how to help.
+    icon: "M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"
+    links:
+      - title: "Roadmap"
         url: ROADMAP/
-      - title: Post-launch notes and next roadmap
-        url: NEXT/
-      - title: Changelog
+      - title: "Decision records"
+        url: decisions/
+      - title: "Changelog"
         url: CHANGELOG/
-      - title: Start contributing
+      - title: "Start contributing"
         url: CONTRIBUTE/
-      - title: Codex plugin submission
-        url: CODEX_SUBMISSION/
-      - title: Persian (فارسی)
-        url: fa/
+
 ---
 
 The rules behind every finding are in [Lifecycle rules](RULES.md).
-
-Read this in: **English** · [فارسی](i18n/fa/README.md).
 
 ```bash
 npx @velella/offing scan .

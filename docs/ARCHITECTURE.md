@@ -1,3 +1,8 @@
+---
+title: "Architecture"
+description: "Offing is one TypeScript package with seven layers; each module belongs to exactly one layer."
+---
+
 # Architecture
 
 ## Shape

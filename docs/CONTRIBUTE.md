@@ -1,3 +1,8 @@
+---
+title: "Start contributing"
+description: "Offing's work is split into small issues, each sized for one pull request. Start here to find one."
+---
+
 # Start contributing
 
 Offing's work is split into small issues, each sized for one pull request. You do not need to know the codebase first: every issue in the `lane: free-agent` lane carries a brief with the files to touch, the steps, and the command that proves it is done.

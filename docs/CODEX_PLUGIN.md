@@ -1,3 +1,8 @@
+---
+title: "Codex plugin installation and management"
+description: "Install and manage the Offing plugin for Codex, which bundles the Skill and a read-only local MCP server."
+---
+
 # Codex plugin installation and management
 
 Offing ships as a portable Agent Plugins package with a Codex compatibility manifest. It bundles the canonical Offing Skill and a local, read-only stdio MCP server. No Offing account or hosted Offing service is required.
