@@ -1,3 +1,8 @@
+---
+title: "Using Offing"
+description: "The full command walkthrough. For a five-step path from the first scan to CI, start with the quickstart."
+---
+
 # Using Offing
 
 The full command walkthrough, moved out of the README. For a five-step path from the first scan to CI, start with the [quickstart](QUICKSTART.md); every flag is in the [CLI reference](CLI.md).

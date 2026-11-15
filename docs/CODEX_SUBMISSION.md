@@ -1,3 +1,8 @@
+---
+title: "Offing Codex plugin submission"
+description: "Build and submit the desktop-only Codex plugin: a local, read-only MCP server with no account required."
+---
+
 # Offing Codex plugin submission
 
 Offing is prepared as a desktop-only Codex plugin because its MCP server runs locally over stdio. Repository data remains on the user's computer, the tools are read-only, and no Offing account is required.

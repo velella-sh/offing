@@ -1,3 +1,8 @@
+---
+title: "Upgrade check"
+description: "Offline, from repository files: can this project move to a target runtime? Lists each blocker, warning, and unknown."
+---
+
 # Upgrade check
 
 `offing upgrade-check --to <runtime@version> [path] [--json]` answers, offline and from files already in the repository, whether a project can move to a target runtime. It lists each blocker, warning, and unknown with the exact lockfile or manifest entry behind it. Agents get the same answer through the `check_upgrade` MCP tool.

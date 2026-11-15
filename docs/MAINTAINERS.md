@@ -1,3 +1,8 @@
+---
+title: "Declaring lifecycle for your package"
+description: "Package maintainers can ship a CLE (ECMA-428) document inside their published package to declare lifecycle for it."
+---
+
 # Declaring lifecycle for your package
 
 Package maintainers can ship a [CLE (ECMA-428)](https://ecma-international.org/publications-and-standards/standards/ecma-428/) document inside their published package. Offing reads that file offline from installed dependencies and reports matching lifecycle events as findings, with the CLE document as evidence.

@@ -1,3 +1,8 @@
+---
+title: "MCP directory listings"
+description: "Where the Offing MCP server appears in public directories, how each listing stays current, and which account owns it."
+---
+
 # MCP directory listings
 
 Where the Offing MCP server appears in public directories, how each listing stays current, and which account owns it. The weekly workflow [`.github/workflows/mcp-listings.yml`](../.github/workflows/mcp-listings.yml) fetches every checkable listing and compares the shown version to [`server.json`](../server.json). Scans never use these URLs.

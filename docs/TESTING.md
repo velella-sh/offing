@@ -1,3 +1,8 @@
+---
+title: "Testing"
+description: "A good test here fails when the behavior it names breaks, passes for the reason it claims, and runs the same way on every platform and every machine."
+---
+
 # Testing
 
 A good test here fails when the behavior it names breaks, passes for the reason it claims, and runs the same way on every platform and every machine. This guide names each kind of test in the repository, when to use it, and a real example to copy. The rules that apply to every change are in [AGENTS.md](../AGENTS.md) and [CONTRIBUTING.md](../CONTRIBUTING.md#quality-standards).

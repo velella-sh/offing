@@ -1,3 +1,8 @@
+---
+title: "GitLab CI/CD Catalog"
+description: "Maintainer runbook for publishing the GitLab component to the CI/CD Catalog."
+---
+
 # GitLab CI/CD Catalog
 
 Maintainer runbook for publishing the [GitLab component](GITLAB.md) to the CI/CD Catalog. The root `.gitlab-ci.yml` tests the component on every pipeline and publishes a catalog release when a `vX.Y.Z` tag is pushed.

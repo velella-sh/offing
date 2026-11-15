@@ -1,3 +1,8 @@
+---
+title: "Roadmap"
+description: "What Offing works on next, in order, and why: its engineering is ahead of its data and its evidence."
+---
+
 # Roadmap
 
 **Offing H1 — Coverage & Proof** · 2026-10-15 → 2027-04-15 · 21 phases, each its own milestone, run in order · [project board](https://github.com/users/arminazimi/projects/3)

@@ -1,3 +1,8 @@
+---
+title: "Migration packets"
+description: "Built-in registry rules carry reviewed migration guidance next to their lifecycle evidence, packaged for coding agents."
+---
+
 # Migration packets
 
 `offing context <finding-id>` converts one scan finding into a portable plan for a human or coding agent. Add `--json` for the versioned `offing.context.v1` representation.

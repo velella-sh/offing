@@ -1,3 +1,8 @@
+---
+title: "Developer portals"
+description: "Show Offing lifecycle risk in Backstage, Grafana, Port, or Cortex next to the rest of your service catalog."
+---
+
 # Developer portals
 
 Platform teams that already run Backstage, Grafana, Port, or Cortex can show Offing lifecycle risk next to the rest of their service catalog. Every path starts from the same offline export; only the step that publishes or pushes the catalog talks to the network. Scans themselves never leave the machine.

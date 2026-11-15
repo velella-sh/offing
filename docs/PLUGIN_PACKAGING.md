@@ -1,3 +1,8 @@
+---
+title: "Plugin packaging architecture"
+description: "How one workflow is published as two host adapters, the Codex and Claude plugins."
+---
+
 # Plugin packaging architecture
 
 Offing publishes two host adapters over one workflow. The canonical Skill remains `skills/offing/SKILL.md`; the executable source of truth remains the `offing` npm package and its local stdio MCP server. Generated plugins contain no detector, migration, or verification implementation.

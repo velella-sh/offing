@@ -1,3 +1,8 @@
+---
+title: "Offing plugin for Claude"
+description: "Install and manage the Offing plugin for Claude: the lifecycle Skill with a version-pinned local MCP server."
+---
+
 # Offing plugin for Claude
 
 Offing's Claude plugin packages the canonical lifecycle Skill with the same version-pinned local MCP server used by the Codex adapter. It does not fork detectors, migration logic, or verification behavior.

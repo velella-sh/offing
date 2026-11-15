@@ -1,3 +1,8 @@
+---
+title: "Lifecycle rules"
+description: "Every lifecycle claim Offing makes comes from a rule in Ebb, the open lifecycle dataset Offing reads through @velella/ebb."
+---
+
 # Lifecycle rules
 
 Every lifecycle claim Offing makes comes from a rule in [Ebb](https://github.com/velella-sh/ebb), the open lifecycle dataset Offing reads through the `@velella/ebb` package. A rule says which component is affected, in which versions, what happened to it, who says so, and when that was last checked. This page is the reference for writing one and for the fixtures that prove a detector reports it.

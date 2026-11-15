@@ -1,3 +1,8 @@
+---
+title: "Cross-host plugin evaluation"
+description: "One release gate for the Codex and Claude adapters: the same task corpus, Skill instructions, MCP definition, and workflow."
+---
+
 # Cross-host plugin evaluation
 
 Offing applies one release gate to its Codex and Claude adapters. Both hosts receive the same task corpus, byte-identical Skill instructions, the same pinned local MCP definition, and the same executable workflow. Host manifests contain discovery and presentation metadata only.

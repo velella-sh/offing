@@ -1,3 +1,8 @@
+---
+title: "Offing support"
+description: "For installation problems, unexpected findings, compatibility questions, or feature requests, open a GitHub issue."
+---
+
 # Offing support
 
 For installation problems, unexpected findings, compatibility questions, or feature requests, open a [GitHub issue](https://github.com/velella-sh/offing/issues). Include the Offing version, host, operating system, relevant manifest type, and a minimal reproduction that contains no secrets.

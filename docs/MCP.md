@@ -1,3 +1,8 @@
+---
+title: "Local MCP server"
+description: "A local Model Context Protocol server that exposes Offing's deterministic analysis to coding agents."
+---
+
 # Local MCP server
 
 Offing exposes its deterministic analysis to coding agents through a local Model Context Protocol server. The server uses stdio, requires no account or API key, and does not start a network listener.

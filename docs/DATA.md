@@ -1,3 +1,8 @@
+---
+title: "Lifecycle data: updates, signing, and trust"
+description: "Lifecycle rules ship with each release and can be updated between releases with signed data. Scans never use the network."
+---
+
 # Lifecycle data: updates, signing, and trust
 
 Offing's findings come from lifecycle rules (`registry/`). The rules that ship inside each release are always available. Between releases you can fetch newer rules, which are signed so that Offing can tell they came from the project's release workflow. This page explains how that works, what is checked, and what Offing promises.

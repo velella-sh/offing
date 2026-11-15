@@ -1,3 +1,8 @@
+---
+title: "Product brief"
+description: "Dependency update tools say a new version exists. Offing says which future removal affects your repository, where, and how to migrate safely."
+---
+
 # Product brief
 
 ## Problem

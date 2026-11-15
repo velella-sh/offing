@@ -1,3 +1,8 @@
+---
+title: "Organization rollout"
+description: "Take an unconfigured organization to a weekly lifecycle report for every repository, step by step."
+---
+
 # Organization rollout
 
 This guide takes one person from an unconfigured organization to a weekly lifecycle report for every repository in it. It is written to be followed in order:
@@ -210,7 +215,7 @@ jobs:
 Or pass the same inputs on the Action step directly:
 
 ```yaml
-- uses: velella-sh/offing@v0.8.0
+- uses: velella-sh/offing@v0.1.1
   with:
     baseline: .offing-baseline.json
     fail-on-severity: high
@@ -443,7 +448,7 @@ For every target repository (non-archived, not a fork, with a default branch) it
 The generated workflow runs the scan on pull requests, on a weekly schedule (`--schedule`, default `0 4 * * 1`), and on demand via `workflow_dispatch`. It needs no configuration: read-only permissions, no secrets, findings as annotations, and a `high` severity gate. To accept existing findings, commit the baseline from [step 3](#3-accept-existing-findings-with-a-baseline) and add the `baseline` input to the generated workflow in the same pull request:
 
 ```yaml
-- uses: velella-sh/offing@v0.8.0
+- uses: velella-sh/offing@v0.1.1
   with:
     baseline: .offing-baseline.json
     fail-on-severity: high

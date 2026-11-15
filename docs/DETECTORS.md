@@ -1,3 +1,8 @@
+---
+title: "Detector authoring"
+description: "Write a detector: an adapter at the detector SDK seam that finds dependencies in a new file format."
+---
+
 # Detector authoring
 
 Offing detectors are adapters at the detector SDK seam. They inspect a repository and return lifecycle findings; the scan engine handles detector attribution, sorting, reporting, and composition.

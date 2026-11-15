@@ -1,3 +1,8 @@
+---
+title: "Generated files"
+description: "This page lists every committed file that a tool produces, what produces it, who reads it, and where it should live."
+---
+
 # Generated files
 
 This page lists every committed file that a tool produces, what produces it, who reads it, and where it should live. It is the inventory to check before moving any of them. The rules for editing them are in [AGENTS.md](../AGENTS.md#generated-files--do-not-edit-by-hand).

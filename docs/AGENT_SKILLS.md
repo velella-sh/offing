@@ -1,3 +1,8 @@
+---
+title: "Offing Agent Skills"
+description: "The portable Offing Agent Skill, built on the open Agent Skills format."
+---
+
 # Offing Agent Skills
 
 Offing ships one portable Skill under `skills/offing/`. It follows the open Agent Skills directory format: standard YAML frontmatter plus Markdown instructions. There is no vendor-specific manifest, invocation policy, tool allowlist, script, or generated prompt.

@@ -1,3 +1,8 @@
+---
+title: "GitHub Action"
+description: "A reusable Action that scans the checked-out repository locally, annotates findings, compares against a baseline, and enforces a severity gate."
+---
+
 # GitHub Action
 
 Offing's reusable Action scans the checked-out repository locally, emits GitHub annotations for findings, compares against an optional baseline, enforces a severity gate, and uploads the versioned JSON result.

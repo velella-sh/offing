@@ -1,3 +1,8 @@
+---
+title: "CLI reference"
+description: "Every command runs locally. Scans read repository files and bundled lifecycle data, and no scan uses the network."
+---
+
 # CLI reference
 
 `offing --help` prints every command with an example. This page is the readable version of the same reference: what each command does, which flags it takes, and the exit codes a script or agent can rely on. Passing `--help` anywhere prints the command list again.

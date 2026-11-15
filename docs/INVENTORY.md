@@ -1,3 +1,8 @@
+---
+title: "Inventory"
+description: "Scan a cloud or cluster export with Offing. Offing never calls a cloud or cluster API; you run the export and give it the file."
+---
+
 # Inventory
 
 `offing inventory` reads the JSON or text exports that cloud and cluster tools already produce and reports what they say is deployed: end-of-life runtimes, images, engines, cluster versions, and operating systems. Each result carries the importer, the file, and the exact place in the file the claim rests on, as an RFC 6901 JSON Pointer.

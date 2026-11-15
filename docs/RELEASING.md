@@ -1,3 +1,8 @@
+---
+title: "Releasing Offing"
+description: "Any maintainer can cut a release by following this page."
+---
+
 # Releasing Offing
 
 Any maintainer can cut a release by following this page. A release publishes four things that must agree on one version: the npm package `offing`, the GitHub Action (`velella-sh/offing@vX.Y.Z`), the generated Claude and Codex plugin packages, and the bundled lifecycle registries inside the package. Publishing needs maintainer accounts, so releases are `lane: maintainer` work.

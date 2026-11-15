@@ -171,7 +171,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - run: npx --yes @velella/offing@0.8.0 forecast . --svg --animate > docs/forecast.svg
+      - run: npx --yes @velella/offing@0.1.1 forecast . --svg --animate > docs/forecast.svg
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

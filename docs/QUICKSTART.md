@@ -1,6 +1,14 @@
+---
+title: "Quickstart"
+description: "Five copy-paste steps, from the first scan to a baseline in CI. You need Node.js 22 or newer and a repository to scan. Every command runs locally; nothing is uploaded."
+---
+
 # Quickstart
 
 Five copy-paste steps, from the first scan to a baseline in CI. You need Node.js 22 or newer and a repository to scan. Every command runs locally; nothing is uploaded.
+
+> [!NOTE]
+> Every command on this page runs locally. Nothing is uploaded.
 
 ## 1. Run the first scan
 
@@ -61,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: velella-sh/offing@v0.7.1
+      - uses: velella-sh/offing@v0.1.1
         with:
           fail-on-severity: high
 ```
