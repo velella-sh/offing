@@ -7,9 +7,9 @@
   "continuity": false,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 112,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 104,
     "findings": [
       {
         "ruleId": "android.target-sdk.existing.default-below-35",
@@ -60,7 +60,7 @@
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 71892,
+    "durationMs": 83757,
     "status": "ok",
     "dependencies": [
       {
@@ -70,7 +70,7 @@
         "currentValue": "3.11",
         "deprecated": false,
         "majorUpdate": false,
-        "anyUpdate": false
+        "anyUpdate": true
       },
       {
         "manager": "dockerfile",
@@ -79,7 +79,7 @@
         "currentValue": "3.11",
         "deprecated": false,
         "majorUpdate": false,
-        "anyUpdate": false
+        "anyUpdate": true
       },
       {
         "manager": "dockerfile",
@@ -249,8 +249,8 @@
         "name": "ubuntu",
         "currentValue": "22.04",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "dockerfile",
@@ -294,8 +294,8 @@
         "name": "ubuntu",
         "currentValue": "22.04",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "dockerfile",
@@ -303,8 +303,8 @@
         "name": "ubuntu",
         "currentValue": "22.04",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "dockerfile",
@@ -375,8 +375,8 @@
         "name": "ubuntu",
         "currentValue": "22.04",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -393,8 +393,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -402,8 +402,8 @@
         "name": "actions/setup-java",
         "currentValue": "v5",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -429,14 +429,131 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
         "path": ".github/workflows/desktop_artifacts.yml",
         "name": "actions/setup-node",
         "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/attest",
+        "currentValue": "v4.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/attest",
+        "currentValue": "v4.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
         "deprecated": false,
         "majorUpdate": false,
         "anyUpdate": false
@@ -446,6 +563,87 @@
         "path": ".github/workflows/desktop_artifacts.yml",
         "name": "actions/attest",
         "currentValue": "v4.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/attest",
+        "currentValue": "v4.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/attest",
+        "currentValue": "v4.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/attest",
+        "currentValue": "v4.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/desktop_artifacts.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
         "deprecated": false,
         "majorUpdate": false,
         "anyUpdate": false
@@ -483,206 +681,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/setup-node",
-        "currentValue": "v6",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/attest",
-        "currentValue": "v4.1.0",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/checkout",
-        "currentValue": "v6",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/setup-node",
-        "currentValue": "v6",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/attest",
-        "currentValue": "v4.1.0",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/attest",
-        "currentValue": "v4.1.0",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/checkout",
-        "currentValue": "v6",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/setup-node",
-        "currentValue": "v6",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/attest",
-        "currentValue": "v4.1.0",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/attest",
-        "currentValue": "v4.1.0",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/upload-artifact",
-        "currentValue": "v7",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/desktop_artifacts.yml",
-        "name": "actions/checkout",
-        "currentValue": "v6",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -780,8 +780,8 @@
         "name": "actions/setup-node",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -861,8 +861,8 @@
         "name": "ubuntu",
         "currentValue": "20.04",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -915,8 +915,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -961,8 +961,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -970,8 +970,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -980,7 +980,7 @@
         "currentValue": "v2.9.1",
         "deprecated": false,
         "majorUpdate": false,
-        "anyUpdate": false
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -988,8 +988,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -997,8 +997,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1006,8 +1006,8 @@
         "name": "actions/setup-node",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1033,8 +1033,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1042,8 +1042,8 @@
         "name": "actions/setup-node",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1051,8 +1051,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1060,8 +1060,8 @@
         "name": "actions/setup-java",
         "currentValue": "v5",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1087,16 +1087,7 @@
         "name": "actions/cache",
         "currentValue": "v5",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/ringrtc.yml",
-        "name": "reactivecircus/android-emulator-runner",
-        "currentValue": "v2.37.0",
-        "deprecated": false,
-        "majorUpdate": false,
+        "majorUpdate": true,
         "anyUpdate": true
       },
       {
@@ -1111,11 +1102,11 @@
       {
         "manager": "github-actions",
         "path": ".github/workflows/ringrtc.yml",
-        "name": "actions/checkout",
-        "currentValue": "v6",
+        "name": "reactivecircus/android-emulator-runner",
+        "currentValue": "v2.37.0",
         "deprecated": false,
         "majorUpdate": false,
-        "anyUpdate": false
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1123,8 +1114,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1132,8 +1123,17 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ringrtc.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1186,8 +1186,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1195,8 +1195,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1204,8 +1204,8 @@
         "name": "actions/github-script",
         "currentValue": "v7",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1213,8 +1213,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1250,8 +1250,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1277,8 +1277,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1304,44 +1304,8 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/webrtc_artifacts.yml",
-        "name": "google-github-actions/auth",
-        "currentValue": "v3",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/webrtc_artifacts.yml",
-        "name": "google-github-actions/upload-cloud-storage",
-        "currentValue": "v3",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/webrtc_artifacts.yml",
-        "name": "google-github-actions/upload-cloud-storage",
-        "currentValue": "v3",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "github-actions",
-        "path": ".github/workflows/webrtc_artifacts.yml",
-        "name": "actions/checkout",
-        "currentValue": "v6",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1376,8 +1340,44 @@
         "name": "actions/checkout",
         "currentValue": "v6",
         "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/webrtc_artifacts.yml",
+        "name": "google-github-actions/auth",
+        "currentValue": "v3",
+        "deprecated": false,
         "majorUpdate": false,
         "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/webrtc_artifacts.yml",
+        "name": "google-github-actions/upload-cloud-storage",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/webrtc_artifacts.yml",
+        "name": "google-github-actions/upload-cloud-storage",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/webrtc_artifacts.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -1459,7 +1459,7 @@
         "currentValue": "7.5.22",
         "deprecated": false,
         "majorUpdate": false,
-        "anyUpdate": false
+        "anyUpdate": true
       },
       {
         "manager": "npm",

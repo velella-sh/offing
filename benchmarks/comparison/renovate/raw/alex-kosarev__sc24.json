@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "alex-kosarev/sc24",
+  "commit": "4da01915a1939c2e4e2aa281e0bd592fe62db5a4",
+  "ecosystem": "database",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 99,
+    "findings": []
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 185166,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "compose.yaml",
+        "name": "quay.io/keycloak/keycloak",
+        "currentValue": "23.0.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "compose.yaml",
+        "name": "grafana/tempo",
+        "currentValue": "2.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "compose.yaml",
+        "name": "grafana/loki",
+        "currentValue": "2.9.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "compose.yaml",
+        "name": "grafana/grafana",
+        "currentValue": "10.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "compose.yaml",
+        "name": "victoriametrics/victoria-metrics",
+        "currentValue": "v1.93.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "compose.yaml",
+        "name": "postgres",
+        "currentValue": "16",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "compose.yaml",
+        "name": "mongo",
+        "currentValue": "7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "eclipse-temurin",
+        "currentValue": "21.0.2_13-jdk-jammy",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "eclipse-temurin",
+        "currentValue": "21.0.2_13-jdk-jammy",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

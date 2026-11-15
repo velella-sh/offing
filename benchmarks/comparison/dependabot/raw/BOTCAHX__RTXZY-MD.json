@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "BOTCAHX/RTXZY-MD",
+  "commit": "b3c0702649e199132403dfc6d38600dfb77b98f8",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 29,
+    "findings": [
+      {
+        "ruleId": "container.node.eol-22-and-older",
+        "path": "Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

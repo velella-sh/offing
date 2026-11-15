@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "govindasamyarun/c2-cloud",
+  "commit": "3bee700ea927a2219c9028c7164856823a04cb35",
+  "ecosystem": "database",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 18,
+    "findings": [
+      {
+        "ruleId": "container.postgres.eol-13-and-older",
+        "path": "docker-compose.yml",
+        "line": 24
+      },
+      {
+        "ruleId": "container.python.eol-3.10-and-older",
+        "path": "c2-api/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.python.eol-3.10-and-older",
+        "path": "c2-telegram/Dockerfile",
+        "line": 2
+      },
+      {
+        "ruleId": "container.python.eol-3.10-and-older",
+        "path": "c2-ws/Dockerfile",
+        "line": 2
+      },
+      {
+        "ruleId": "database.postgresql.end-of-life-12",
+        "path": "docker-compose.yml",
+        "line": 24
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 12540,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "postgres",
+        "currentValue": "12.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "redis",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "c2-api/Dockerfile",
+        "name": "python",
+        "currentValue": "3.9.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "c2-api/Dockerfile",
+        "name": "netcat",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "c2-proxy/Dockerfile",
+        "name": "nginx",
+        "currentValue": "1.19.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "c2-telegram/Dockerfile",
+        "name": "python",
+        "currentValue": "3.9.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "c2-telegram/Dockerfile",
+        "name": "netcat",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "c2-ws/Dockerfile",
+        "name": "python",
+        "currentValue": "3.9.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "c2-ws/Dockerfile",
+        "name": "netcat",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

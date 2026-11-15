@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "kinsta/hello-world-scala",
+  "commit": "ad96512bdc0b7ece594267bba388ba45d5e5c367",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 9,
+    "findings": [
+      {
+        "ruleId": "scala.runtime.eos-3.0-3.2",
+        "path": "build.sbt",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 8057,
+    "status": "ok",
+    "dependencies": []
+  }
+}

@@ -7,10 +7,15 @@
   "continuity": true,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 592,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 419,
     "findings": [
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile-tilt",
+        "line": 2
+      },
       {
         "ruleId": "container.node.eol-22-and-older",
         "path": "Dockerfile",
@@ -25,7 +30,7 @@
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 18236,
+    "durationMs": 28218,
     "status": "ok",
     "dependencies": [
       {
@@ -557,7 +562,7 @@
         "currentValue": "v7",
         "deprecated": false,
         "majorUpdate": false,
-        "anyUpdate": false
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -566,7 +571,7 @@
         "currentValue": "v7",
         "deprecated": false,
         "majorUpdate": false,
-        "anyUpdate": false
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",

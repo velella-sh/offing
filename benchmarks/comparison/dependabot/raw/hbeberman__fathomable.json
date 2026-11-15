@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "hbeberman/fathomable",
+  "commit": "63d9709f7afa06e481990ce60c522ad8862e94f0",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 84,
+    "findings": []
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "pip",
+        "directory": "/scripts/configs",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

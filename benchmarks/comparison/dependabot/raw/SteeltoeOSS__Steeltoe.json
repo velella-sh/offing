@@ -6,9 +6,9 @@
   "selection": "blind",
   "continuity": false,
   "offing": {
-    "version": "0.7.3",
-    "commit": "7cdd0e5f7541ba9828452df5ec9dbb22fb18ae14",
-    "durationMs": 309,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 216,
     "findings": [
       {
         "ruleId": "dotnet.runtime.end-of-support-8.0",
@@ -716,6 +716,12 @@
         "ruleId": "dotnet.runtime.end-of-support-9.0",
         "path": "src/Tools/test/ConfigurationSchemaGenerator.Tests/ConfigurationSchemaGenerator.Tests.csproj",
         "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "cleanupcode.ps1",
+        "line": 1,
         "dependabot": null
       }
     ]

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "nathankot/dotfiles",
+  "commit": "a7f04f90a8cd465412a5de70c91d82432d7745fc",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 12,
+    "findings": [
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": "home/.tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.20-and-older",
+        "path": "go.mod",
+        "line": 3
+      },
+      {
+        "ruleId": "python.runtime.eol-3.9-and-older",
+        "path": ".python-version",
+        "line": 1
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.1",
+        "path": "home/.tool-versions",
+        "line": 3
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 10729,
+    "status": "ok",
+    "dependencies": []
+  }
+}

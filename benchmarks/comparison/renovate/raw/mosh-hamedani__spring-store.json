@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "mosh-hamedani/spring-store",
+  "commit": "d640769fe544944df61d827aa0692826cb7bd2b2",
+  "ecosystem": "java",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 16,
+    "findings": [
+      {
+        "ruleId": "java.jdk.end-of-support-22-24",
+        "path": "pom.xml",
+        "line": 30
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 3238,
+    "status": "ok",
+    "dependencies": []
+  }
+}

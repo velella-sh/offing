@@ -1,0 +1,613 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "4lejandrito/creepyface",
+  "commit": "fe488b5a3acfcf79ba1d1f3347b0fd73e073ea1d",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 53,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 37,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile",
+        "line": 17,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 9,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": ".github/workflows/build.yml",
+        "line": 12,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": ".nvmrc",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.abab.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 36,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.are-we-there-yet.eol",
+        "path": "package.json",
+        "line": 16,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.are-we-there-yet.eol",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.are-we-there-yet.eol",
+        "path": "packages/creepyface-site/package.json",
+        "line": 21,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.are-we-there-yet.eol",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.domexception.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 36,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.figgy-pudding.eol",
+        "path": "package.json",
+        "line": 16,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.figgy-pudding.eol",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.figgy-pudding.eol",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.gauge.eol",
+        "path": "package.json",
+        "line": 16,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.gauge.eol",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.gauge.eol",
+        "path": "packages/creepyface-site/package.json",
+        "line": 21,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.gauge.eol",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.har-validator.deprecated",
+        "path": "packages/creepyface-site/package.json",
+        "line": 48,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "packages/creepyface-site/package.json",
+        "line": 95,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 34,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "packages/creepyface-site/package.json",
+        "line": 95,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 34,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 16,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 29,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/creepyface-dance/package.json",
+        "line": 35,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-dance"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/creepyface-firefly/package.json",
+        "line": 34,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-firefly"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/creepyface-site/package.json",
+        "line": 17,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/creepyface-tilt/package.json",
+        "line": 37,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-tilt"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 27,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.next.12.support-end",
+        "path": "packages/creepyface-site/package.json",
+        "line": 43,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.npmcli-move-file.deprecated",
+        "path": "package.json",
+        "line": 16,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.npmcli-move-file.deprecated",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.npmcli-move-file.deprecated",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.npmlog.eol",
+        "path": "package.json",
+        "line": 16,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.npmlog.eol",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.npmlog.eol",
+        "path": "packages/creepyface-site/package.json",
+        "line": 21,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.npmlog.eol",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.q.deprecated",
+        "path": "package.json",
+        "line": 16,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.querystring.deprecated",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.querystring.deprecated",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.read-package-json.eol",
+        "path": "package.json",
+        "line": 16,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.request-promise.deprecated",
+        "path": "packages/creepyface-site/package.json",
+        "line": 48,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.request.deprecated",
+        "path": "packages/creepyface-site/package.json",
+        "line": 48,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.resolve-url.deprecated",
+        "path": "package.json",
+        "line": 17,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.resolve-url.deprecated",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.resolve-url.deprecated",
+        "path": "packages/creepyface-site/package.json",
+        "line": 97,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.resolve-url.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.resolve-url.deprecated",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.source-map-url.deprecated",
+        "path": "package.json",
+        "line": 17,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.source-map-url.deprecated",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.source-map-url.deprecated",
+        "path": "packages/creepyface-site/package.json",
+        "line": 97,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.source-map-url.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.source-map-url.deprecated",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.sourcemap-codec.deprecated",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 29,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.sourcemap-codec.deprecated",
+        "path": "packages/creepyface-dance/package.json",
+        "line": 35,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-dance"
+        }
+      },
+      {
+        "ruleId": "npm.package.sourcemap-codec.deprecated",
+        "path": "packages/creepyface-firefly/package.json",
+        "line": 34,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-firefly"
+        }
+      },
+      {
+        "ruleId": "npm.package.sourcemap-codec.deprecated",
+        "path": "packages/creepyface-site/package.json",
+        "line": 57,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-site"
+        }
+      },
+      {
+        "ruleId": "npm.package.sourcemap-codec.deprecated",
+        "path": "packages/creepyface-tilt/package.json",
+        "line": 37,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-tilt"
+        }
+      },
+      {
+        "ruleId": "npm.package.sourcemap-codec.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 27,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.stable.deprecated",
+        "path": "packages/creepyface-custom-element/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface-custom-element"
+        }
+      },
+      {
+        "ruleId": "npm.package.stable.deprecated",
+        "path": "packages/react-creepyface/package.json",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/react-creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.tslint.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 47,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      },
+      {
+        "ruleId": "npm.package.w3c-hr-time.deprecated",
+        "path": "packages/creepyface/package.json",
+        "line": 36,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/creepyface"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

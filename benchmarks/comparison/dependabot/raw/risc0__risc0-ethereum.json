@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "risc0/risc0-ethereum",
+  "commit": "fe5adc304262eec32986246a29e46c9a250cd7e9",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 21,
+    "findings": [
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 2,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

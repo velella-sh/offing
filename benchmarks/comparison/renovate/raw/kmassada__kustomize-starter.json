@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "kmassada/kustomize-starter",
+  "commit": "e92d3b4a8377bb7f017ff9eea86fa8599c75ceb2",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 11,
+    "findings": [
+      {
+        "ruleId": "kubernetes.extensions.deployment.v1beta1.removed",
+        "path": "base/deployment.yaml",
+        "line": 1
+      },
+      {
+        "ruleId": "kubernetes.extensions.deployment.v1beta1.removed",
+        "path": "kustomization.yaml",
+        "line": 9
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 3345,
+    "status": "ok",
+    "dependencies": []
+  }
+}

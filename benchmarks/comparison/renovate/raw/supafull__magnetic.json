@@ -1,0 +1,601 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "supafull/magnetic",
+  "commit": "13669d27f54ef392dca674f7b8aff6efeea6f99d",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 102,
+    "findings": [
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "frontend/Dockerfile",
+        "line": 2
+      },
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 20306,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "frontend/Dockerfile",
+        "name": "node",
+        "currentValue": "20-slim",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "frontend/Dockerfile",
+        "name": "nginx",
+        "currentValue": "stable-alpine",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "functions/Dockerfile",
+        "name": "supabase/edge-runtime",
+        "currentValue": "v1.53.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@electric-sql/pglite",
+        "currentValue": "^0.1.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@hello-pangea/dnd",
+        "currentValue": "^16.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@mui/icons-material",
+        "currentValue": "^5.15.20",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@mui/material",
+        "currentValue": "^5.15.20",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@nivo/bar",
+        "currentValue": "^0.87.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@supabase/supabase-js",
+        "currentValue": "^2.43.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@uppy/core",
+        "currentValue": "^3.12.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@uppy/dashboard",
+        "currentValue": "^3.8.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@uppy/drag-drop",
+        "currentValue": "^3.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@uppy/file-input",
+        "currentValue": "^3.1.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@uppy/golden-retriever",
+        "currentValue": "^3.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@uppy/progress-bar",
+        "currentValue": "^3.1.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@uppy/react",
+        "currentValue": "^3.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@uppy/tus",
+        "currentValue": "^3.5.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "date-fns",
+        "currentValue": "^3.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "electric-sql",
+        "currentValue": "0.12.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "lodash-es",
+        "currentValue": "^4.17.21",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "prisma",
+        "currentValue": "^4.8.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "ra-i18n-polyglot",
+        "currentValue": "^4.16.17",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "ra-language-english",
+        "currentValue": "^4.16.17",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "ra-supabase",
+        "currentValue": "^2.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "react",
+        "currentValue": "^18.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "react-admin",
+        "currentValue": "^4.16.18",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "react-dom",
+        "currentValue": "^18.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "react-error-boundary",
+        "currentValue": "^4.0.13",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "react-hook-form",
+        "currentValue": "^7.52.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "react-query",
+        "currentValue": "^3.39.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "react-router",
+        "currentValue": "^6.23.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "react-router-dom",
+        "currentValue": "^6.23.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "vite-plugin-wasm",
+        "currentValue": "^3.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "wa-sqlite",
+        "currentValue": "^0.9.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "zod",
+        "currentValue": "^3.23.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@electric-sql/prisma-generator",
+        "currentValue": "^1.1.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@prisma/client",
+        "currentValue": "^4.8.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@types/lodash-es",
+        "currentValue": "^4.17.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@types/react",
+        "currentValue": "^18.3.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@types/react-dom",
+        "currentValue": "^18.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@typescript-eslint/eslint-plugin",
+        "currentValue": "^7.13.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@typescript-eslint/parser",
+        "currentValue": "^7.13.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "@vitejs/plugin-react-swc",
+        "currentValue": "^3.7.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "eslint",
+        "currentValue": "^8.57.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "eslint-plugin-react-hooks",
+        "currentValue": "^4.6.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "eslint-plugin-react-refresh",
+        "currentValue": "^0.4.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "supabase",
+        "currentValue": "^1.176.10",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "typescript",
+        "currentValue": "^5.4.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "vite",
+        "currentValue": "^5.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "frontend/package.json",
+        "name": "pnpm",
+        "currentValue": "9.3.0+sha512.ee7b93e0c2bd11409c6424f92b866f31d3ea1bef5fbe47d3c7500cdc3c9668833d2e55681ad66df5b640c61fa9dc25d546efa54d76d7f8bf54b13614ac293631",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "@databases/pg",
+        "currentValue": "^5.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "@databases/pg-migrations",
+        "currentValue": "^5.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "@faker-js/faker",
+        "currentValue": "^8.4.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "pg-migration",
+        "currentValue": "^3.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "uuid",
+        "currentValue": "^9.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "@supabase/supabase-js",
+        "currentValue": "^2.43.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "@types/uuid",
+        "currentValue": "^9.0.8",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "date-fns",
+        "currentValue": "^3.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "dotenv",
+        "currentValue": "^16.4.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "dotenv-flow",
+        "currentValue": "^4.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "react-admin",
+        "currentValue": "^4.16.18",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "tsx",
+        "currentValue": "^4.15.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "setup/package.json",
+        "name": "pnpm",
+        "currentValue": "9.3.0+sha512.ee7b93e0c2bd11409c6424f92b866f31d3ea1bef5fbe47d3c7500cdc3c9668833d2e55681ad66df5b640c61fa9dc25d546efa54d76d7f8bf54b13614ac293631",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,1273 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "daddykev/ddex-suite",
+  "commit": "3529ae5eb8bb48ffa3891aa76d125bc4c5f85907",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 131,
+    "findings": [
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "packages/ddex-parser/bindings/node/Dockerfile.build",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 91051,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "packages/ddex-parser/bindings/node/Dockerfile.build",
+        "name": "node",
+        "currentValue": "20-bullseye",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "packages/ddex-parser/bindings/node/Dockerfile.build",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "packages/ddex-parser/bindings/node/Dockerfile.build",
+        "name": "pkg-config",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "benchmark-suite/nodejs/package.json",
+        "name": "ddex-parser",
+        "currentValue": "0.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "benchmark-suite/nodejs/package.json",
+        "name": "ddex-builder",
+        "currentValue": "0.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "benchmark-suite/nodejs/package.json",
+        "name": "node",
+        "currentValue": ">=16.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "ddex-builder",
+        "currentValue": "^0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "ddex-parser",
+        "currentValue": "^0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "^2.18.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "@types/node",
+        "currentValue": "^20.19.13",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "typescript",
+        "currentValue": "^5.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "typedoc",
+        "currentValue": "^0.26.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "ddex-builder-win32-x64-msvc",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "ddex-builder-darwin-x64",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "ddex-builder-linux-x64-gnu",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "ddex-builder-linux-x64-musl",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "ddex-builder-linux-arm64-gnu",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "ddex-builder-darwin-arm64",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "ddex-builder-android-arm64",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "ddex-builder-android-arm-eabi",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "ddex-builder-linux-arm-gnueabihf",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/docs/assets/custom.css/package.json",
+        "name": "node",
+        "currentValue": ">=14.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "^2.18.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "@types/node",
+        "currentValue": "^20.19.13",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "typescript",
+        "currentValue": "^5.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "typedoc",
+        "currentValue": "^0.26.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "ddex-builder-win32-x64-msvc",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "ddex-builder-darwin-x64",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "ddex-builder-linux-x64-gnu",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "ddex-builder-linux-x64-musl",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "ddex-builder-linux-arm64-gnu",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "ddex-builder-darwin-arm64",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "ddex-builder-android-arm64",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "ddex-builder-android-arm-eabi",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "ddex-builder-linux-arm-gnueabihf",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/node/package.json",
+        "name": "node",
+        "currentValue": ">=14.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "react",
+        "currentValue": "^18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "react-dom",
+        "currentValue": "^18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "ddex-builder-wasm",
+        "currentValue": "file:../../pkg",
+        "skipReason": "file",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "@types/react",
+        "currentValue": "^18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "@types/react-dom",
+        "currentValue": "^18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "@vitejs/plugin-react",
+        "currentValue": "^4.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "typescript",
+        "currentValue": "^5.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "vite",
+        "currentValue": "^4.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "vite-plugin-wasm",
+        "currentValue": "^3.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/examples/react-app/package.json",
+        "name": "vite-plugin-top-level-await",
+        "currentValue": "^1.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/package.json",
+        "name": "jsdom",
+        "currentValue": "^22.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/package.json",
+        "name": "@types/jest",
+        "currentValue": "^29.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/package.json",
+        "name": "jest",
+        "currentValue": "^29.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-builder/bindings/wasm/package.json",
+        "name": "ts-jest",
+        "currentValue": "^29.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "^2.18.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "@types/node",
+        "currentValue": "^20.19.13",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "typescript",
+        "currentValue": "^5.9.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "ddex-parser-win32-x64-msvc",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "ddex-parser-darwin-x64",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "ddex-parser-linux-x64-gnu",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "ddex-parser-linux-x64-musl",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "ddex-parser-linux-arm64-gnu",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "ddex-parser-darwin-arm64",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "ddex-parser-android-arm64",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "ddex-parser-android-arm-eabi",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "ddex-parser-linux-arm-gnueabihf",
+        "currentValue": "0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/ddex-parser/bindings/node/package.json",
+        "name": "node",
+        "currentValue": ">=18.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/api/package.json",
+        "name": "express",
+        "currentValue": "^4.18.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/api/package.json",
+        "name": "cors",
+        "currentValue": "^2.8.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/api/package.json",
+        "name": "ddex-parser",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/api/package.json",
+        "name": "ddex-builder",
+        "currentValue": "0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/api/package.json",
+        "name": "node",
+        "currentValue": ">=16.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/functions/package.json",
+        "name": "cors",
+        "currentValue": "^2.8.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/functions/package.json",
+        "name": "ddex-builder",
+        "currentValue": "^0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/functions/package.json",
+        "name": "ddex-parser",
+        "currentValue": "^0.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/functions/package.json",
+        "name": "firebase-admin",
+        "currentValue": "^12.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/functions/package.json",
+        "name": "firebase-functions",
+        "currentValue": "^6.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/functions/package.json",
+        "name": "firebase-functions-test",
+        "currentValue": "^3.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/functions/package.json",
+        "name": "node",
+        "currentValue": "22",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "^2.18.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "typescript",
+        "currentValue": "^5.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "ddex-builder-win32-x64-msvc",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "ddex-builder-darwin-x64",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "ddex-builder-linux-x64-gnu",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "ddex-builder-linux-x64-musl",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "ddex-builder-linux-arm64-gnu",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "ddex-builder-darwin-arm64",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "ddex-builder-android-arm64",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "ddex-builder-android-arm-eabi",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "ddex-builder-linux-arm-gnueabihf",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.0/package.json",
+        "name": "node",
+        "currentValue": ">=14.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "^2.18.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "typescript",
+        "currentValue": "^5.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "ddex-builder-win32-x64-msvc",
+        "currentValue": "0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "ddex-builder-darwin-x64",
+        "currentValue": "0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "ddex-builder-linux-x64-gnu",
+        "currentValue": "0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "ddex-builder-linux-x64-musl",
+        "currentValue": "0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "ddex-builder-linux-arm64-gnu",
+        "currentValue": "0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "ddex-builder-darwin-arm64",
+        "currentValue": "0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "ddex-builder-android-arm64",
+        "currentValue": "0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "ddex-builder-android-arm-eabi",
+        "currentValue": "0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "ddex-builder-linux-arm-gnueabihf",
+        "currentValue": "0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-builder-0.3.5/package.json",
+        "name": "node",
+        "currentValue": ">=14.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-parser-0.3.0/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "^2.18.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-parser-0.3.0/package.json",
+        "name": "@types/node",
+        "currentValue": "^20.19.13",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-parser-0.3.0/package.json",
+        "name": "typescript",
+        "currentValue": "^5.9.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-parser-0.3.0/package.json",
+        "name": "node",
+        "currentValue": ">=18.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-parser-0.3.5/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "^2.18.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-parser-0.3.5/package.json",
+        "name": "@types/node",
+        "currentValue": "^20.19.13",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-parser-0.3.5/package.json",
+        "name": "typescript",
+        "currentValue": "^5.9.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package-inspection/ddex-parser-0.3.5/package.json",
+        "name": "node",
+        "currentValue": ">=18.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package.json",
+        "name": "ddex-builder",
+        "currentValue": "^0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/npm-test/package.json",
+        "name": "ddex-parser",
+        "currentValue": "^0.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@docusaurus/core",
+        "currentValue": "3.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@docusaurus/plugin-google-gtag",
+        "currentValue": "^3.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@docusaurus/preset-classic",
+        "currentValue": "3.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@fortawesome/fontawesome-svg-core",
+        "currentValue": "^7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@fortawesome/free-brands-svg-icons",
+        "currentValue": "^7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@fortawesome/free-regular-svg-icons",
+        "currentValue": "^7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@fortawesome/free-solid-svg-icons",
+        "currentValue": "^7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@fortawesome/react-fontawesome",
+        "currentValue": "^3.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@mdx-js/react",
+        "currentValue": "^3.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@monaco-editor/react",
+        "currentValue": "^4.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "allotment",
+        "currentValue": "^1.20.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "clsx",
+        "currentValue": "^2.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "ddex-builder",
+        "currentValue": "^0.4.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "ddex-builder-wasm",
+        "currentValue": "file:../packages/ddex-builder/bindings/wasm/pkg",
+        "skipReason": "file",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "ddex-parser",
+        "currentValue": "^0.4.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "ddex-parser-wasm",
+        "currentValue": "file:../packages/ddex-parser/bindings/wasm/pkg",
+        "skipReason": "file",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "firebase",
+        "currentValue": "^12.2.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "prism-react-renderer",
+        "currentValue": "^2.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "react",
+        "currentValue": "^19.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "react-dom",
+        "currentValue": "^19.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "rehype-katex",
+        "currentValue": "^7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "remark-math",
+        "currentValue": "^6.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@docusaurus/module-type-aliases",
+        "currentValue": "3.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@docusaurus/tsconfig",
+        "currentValue": "3.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "@docusaurus/types",
+        "currentValue": "3.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "cors",
+        "currentValue": "^2.8.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "express",
+        "currentValue": "^5.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "typescript",
+        "currentValue": "~5.6.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "website/package.json",
+        "name": "node",
+        "currentValue": ">=18.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

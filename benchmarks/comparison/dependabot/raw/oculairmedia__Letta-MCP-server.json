@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "oculairmedia/Letta-MCP-server",
+  "commit": "622bffadc074a1fa5cc4e0faa48deac94a8573c2",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 130,
+    "findings": []
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/",
+        "ignore": true,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "docker",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "npm",
+        "directory": "/npm/letta-mcp-server",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "kidpollo/fullstack-kitchen-sink-2024",
+  "commit": "38dddf111e171af5c7126249aee48ce8edf06ba7",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 26,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.2",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": ".tool-versions",
+        "line": 3
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/common-lambda/main.tf",
+        "line": 6
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/python-package/main.tf",
+        "line": 6
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/todo-api/main.tf",
+        "line": 3
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/todo-table-stream/main.tf",
+        "line": 3
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/ts-package/main.tf",
+        "line": 6
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "infra/modules/python-package/main.tf",
+        "line": 18
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "infra/modules/todo-table-stream/main.tf",
+        "line": 60
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "infra/modules/ts-package/main.tf",
+        "line": 18
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 35985,
+    "status": "ok",
+    "dependencies": []
+  }
+}

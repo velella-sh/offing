@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "c410-f3r/wtx",
+  "commit": "20d7f68d96d13cc97c5acea14911f97106e68f2e",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 130,
+    "findings": [
+      {
+        "ruleId": "github-actions.configure-pages.node20",
+        "path": ".github/workflows/docs.yaml",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.deploy-pages.node20",
+        "path": ".github/workflows/docs.yaml",
+        "line": 40,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/",
+        "ignore": true,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": true,
+        "allow": false
+      }
+    ]
+  }
+}

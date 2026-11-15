@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "Protocol-Lattice/thunder",
+  "commit": "e4d5f09d999b85e1d81332bd7c66fd3ebb75b8cc",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 17,
+    "findings": [
+      {
+        "ruleId": "container.golang.eol-1.25-and-older",
+        "path": "Dockerfile",
+        "line": 2,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-go.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 36,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/ci.yml",
+        "line": 63,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.22",
+        "path": "cmd/go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.22",
+        "path": "pkg/middlewares/go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.22",
+        "path": "pkg/routes/go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.23",
+        "path": "cmd/app/client/go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.23",
+        "path": "pkg/db/go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.23",
+        "path": "pkg/services/go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.23",
+        "path": "pkg/services/go.mod",
+        "line": 5,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.24",
+        "path": "cmd/app/server/go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.24",
+        "path": "cmd/app/server/go.mod",
+        "line": 5,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.24",
+        "path": "go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.24",
+        "path": "go.mod",
+        "line": 5,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.24",
+        "path": "go.work",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.24",
+        "path": "pkg/helpers/go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.24",
+        "path": "pkg/services/generated/go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.24",
+        "path": "pkg/services/generated/go.mod",
+        "line": 5,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

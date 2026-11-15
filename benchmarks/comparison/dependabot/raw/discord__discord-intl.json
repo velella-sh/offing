@@ -1,0 +1,496 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "discord/discord-intl",
+  "commit": "69d08f0ecf7461534ee2bece19bcf3720689b55d",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 89,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": ".github/docker/linux.Dockerfile",
+        "line": 20,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": ".github/docker/linux.Dockerfile",
+        "line": 4,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/.github/docker"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-arm64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-x64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-arm64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-x64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-arm64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-x64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "line": 33,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/darwin-arm64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/darwin-x64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-musl/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-musl/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/win32-arm64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/win32-ia32-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/win32-x64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/package.json",
+        "line": 38,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-arm64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-x64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-arm64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-x64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-arm64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-x64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "line": 33,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/darwin-arm64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/darwin-x64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-musl/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-musl/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/win32-arm64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/win32-ia32-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/win32-x64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/package.json",
+        "line": 38,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-arm64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-x64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-arm64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-x64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-arm64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-x64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "line": 33,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/darwin-arm64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/darwin-x64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-musl/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-musl/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/win32-arm64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/win32-ia32-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/win32-x64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/package.json",
+        "line": 38,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-arm64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-x64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-arm64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-x64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-arm64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-x64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "line": 33,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/darwin-arm64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/darwin-x64/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-musl/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-gnu/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-musl/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/win32-arm64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/win32-ia32-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/win32-x64-msvc/package.json",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/package.json",
+        "line": 38,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "package.json",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/eslint-plugin-discord-intl"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "package.json",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/eslint-plugin-discord-intl"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/eslint-plugin-discord-intl"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

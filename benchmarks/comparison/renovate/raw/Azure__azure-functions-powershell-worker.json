@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "Azure/azure-functions-powershell-worker",
+  "commit": "2debea0f983f5016d3c54302c749e8f7e4690544",
+  "ecosystem": "shell",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 161,
+    "findings": [
+      {
+        "ruleId": "dotnet.package.windowsazure-storage.deprecated",
+        "path": "test/E2E/Azure.Functions.PowerShellWorker.E2E/Azure.Functions.PowerShellWorker.E2E/Azure.Functions.PowerShellWorker.E2E.csproj",
+        "line": 16
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-6.0",
+        "path": "test/E2E/TestFunctionApp/extensions.csproj",
+        "line": 3
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/codeQL.yml",
+        "line": 52
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-6",
+        "path": "src/Modules/Microsoft.Azure.Functions.PowerShellWorker/Microsoft.Azure.Functions.PowerShellWorker.psd1",
+        "line": 30
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": "build.ps1",
+        "line": 34
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 69204,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "test/E2E/Emulators/eventhubs/docker-compose.yml",
+        "name": "mcr.microsoft.com/azure-messaging/eventhubs-emulator",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "test/E2E/Emulators/eventhubs/docker-compose.yml",
+        "name": "mcr.microsoft.com/azure-storage/azurite",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Dockerfile",
+        "name": "mcr.microsoft.com/azure-functions/powershell",
+        "currentValue": "3.0-powershell7-core-tools",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeQL.yml",
+        "name": "github/codeql-action",
+        "currentValue": "v3.37.9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeQL.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3.7.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeQL.yml",
+        "name": "github/codeql-action",
+        "currentValue": "v3.37.9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeQL.yml",
+        "name": "windows",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

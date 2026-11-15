@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "stadacone/orenda",
+  "commit": "feaa6ce97ecebc1bde639624391c2d70e524c680",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 25,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 2,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/fly.yml",
+        "line": 11,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/rubyonrails.yml",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/rubyonrails.yml",
+        "line": 36,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.2",
+        "path": ".ruby-version",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.2",
+        "path": ".tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.2",
+        "path": "Gemfile",
+        "line": 5,
+        "dependabot": null
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.2",
+        "path": "Gemfile.lock",
+        "line": 403,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

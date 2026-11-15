@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "Zaid-Ajaj/Npgsql.FSharp.Analyzer",
+  "commit": "798ab4fe989690688d61ed1196ca79bb4e1aca37",
+  "ecosystem": "database",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 27,
+    "findings": [
+      {
+        "ruleId": "container.postgres.eol-13-and-older",
+        "path": "docker-compose.yml",
+        "line": 5,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "database.postgresql.end-of-life-12",
+        "path": "docker-compose.yml",
+        "line": 5,
+        "dependabot": null
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-2.0",
+        "path": "tests/examples/hashing/examples.fsproj",
+        "line": 4,
+        "dependabot": null
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-5.0",
+        "path": "src/NpgsqlFSharpAnalyzer/NpgsqlFSharpAnalyzer.fsproj",
+        "line": 5,
+        "dependabot": null
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-5.0",
+        "path": "src/Ubik/Ubik.fsproj",
+        "line": 5,
+        "dependabot": null
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-5.0",
+        "path": "tests/NpgsqlFSharpAnalyzer.Tests/NpgsqlFSharpAnalyzer.Tests.fsproj",
+        "line": 5,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

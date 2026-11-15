@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "hcoona/cxx-for-java-developers",
+  "commit": "d6c956049e31b64f194ecbd4a8164e3f6e75b4a3",
+  "ecosystem": "shell",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 10,
+    "findings": [
+      {
+        "ruleId": "shell.powershell.end-of-life-7.5",
+        "path": "scripts/Invoke-IndexNow.ps1",
+        "line": 5
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.5",
+        "path": "scripts/Invoke-Lint.ps1",
+        "line": 7
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.5",
+        "path": "scripts/Update-LicenseHeader.ps1",
+        "line": 7
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 18623,
+    "status": "ok",
+    "dependencies": []
+  }
+}

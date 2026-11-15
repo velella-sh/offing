@@ -7,9 +7,9 @@
   "continuity": false,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 135,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 125,
     "findings": [
       {
         "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
@@ -20,7 +20,7 @@
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 34479,
+    "durationMs": 48504,
     "status": "ok",
     "dependencies": [
       {
@@ -38,8 +38,8 @@
         "name": "node",
         "currentValue": "24.22.1-slim",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "dockerfile",
@@ -47,8 +47,8 @@
         "name": "node",
         "currentValue": "24.22.1-alpine",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "dockerfile",
@@ -93,7 +93,7 @@
         "currentValue": "1.98.1-alpine",
         "deprecated": false,
         "majorUpdate": false,
-        "anyUpdate": false
+        "anyUpdate": true
       },
       {
         "manager": "dockerfile",
@@ -263,8 +263,8 @@
         "name": "super-linter/super-linter",
         "currentValue": "v8.7.0",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -439,8 +439,8 @@
         "name": "node",
         "currentValue": "24.22.1",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -458,8 +458,8 @@
         "name": "node",
         "currentValue": "24.22.1",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "npm",

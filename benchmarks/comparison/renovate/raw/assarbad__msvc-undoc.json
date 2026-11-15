@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "assarbad/msvc-undoc",
+  "commit": "5423c9f0390e770b8b6c667209aacaa33970643f",
+  "ecosystem": "shell",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 8,
+    "findings": [
+      {
+        "ruleId": "shell.powershell.end-of-life-6",
+        "path": "tools/helpers/get-help-output.ps1",
+        "line": 13
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 12014,
+    "status": "ok",
+    "dependencies": []
+  }
+}

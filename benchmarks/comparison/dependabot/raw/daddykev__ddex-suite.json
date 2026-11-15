@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "daddykev/ddex-suite",
+  "commit": "3529ae5eb8bb48ffa3891aa76d125bc4c5f85907",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 111,
+    "findings": [
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "packages/ddex-parser/bindings/node/Dockerfile.build",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/packages/ddex-parser/bindings/node"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

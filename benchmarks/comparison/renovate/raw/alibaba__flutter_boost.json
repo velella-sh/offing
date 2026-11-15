@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "alibaba/flutter_boost",
+  "commit": "6df80cc1ea425cde1bac7d0265407977221061df",
+  "ecosystem": "dart",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 65,
+    "findings": [
+      {
+        "ruleId": "dart.sdk.end-of-support-2-and-older",
+        "path": "example_new_for_ios/pubspec.yaml",
+        "line": 21
+      },
+      {
+        "ruleId": "dart.sdk.end-of-support-2-and-older",
+        "path": "example/pubspec.yaml",
+        "line": 13
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 12478,
+    "status": "ok",
+    "dependencies": []
+  }
+}

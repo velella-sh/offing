@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "kidpollo/fullstack-kitchen-sink-2024",
+  "commit": "38dddf111e171af5c7126249aee48ce8edf06ba7",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 25,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.2",
+        "path": ".tool-versions",
+        "line": 2,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": ".tool-versions",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/common-lambda/main.tf",
+        "line": 6,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/python-package/main.tf",
+        "line": 6,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/todo-api/main.tf",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/todo-table-stream/main.tf",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": "infra/modules/ts-package/main.tf",
+        "line": 6,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "infra/modules/python-package/main.tf",
+        "line": 18,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "infra/modules/todo-table-stream/main.tf",
+        "line": 60,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "infra/modules/ts-package/main.tf",
+        "line": 18,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

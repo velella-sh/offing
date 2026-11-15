@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "amplab/shark",
+  "commit": "662d5ba1c03275d265760fad236d9ab7ca1d70a8",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 16,
+    "findings": [
+      {
+        "ruleId": "scala.sbt.eol-0.13",
+        "path": "project/build.properties",
+        "line": 17
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 6500,
+    "status": "ok",
+    "dependencies": []
+  }
+}

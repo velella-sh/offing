@@ -5,19 +5,19 @@
 This page applies the protocol in [the comparison method](../docs/COMPARISON_METHOD.md) to the endoflife.date product data. It compares product coverage and the lifecycle dates both sides publish, using the pinned corpus as the sample. Results are published as they are, including where Offing loses.
 
 * Snapshot: 2026-11-06, 44 products with 835 release cycles.
-* Offing: 752 registry rules across 415 product families.
-* Ground truth: 1618 repositories, 10482 expected findings, 246 distinct rules.
+* Offing: 782 registry rules across 416 product families.
+* Ground truth: 1638 repositories, 10680 expected findings, 255 distinct rules.
 
 ## Product coverage
 
 | Measure | Value |
 | --- | ---: |
 | endoflife.date products in the snapshot | 489 |
-| Offing registry rules | 752 |
-| Offing product families (distinct purls) | 415 |
-| Families mapped to an endoflife.date product | 103 |
-| endoflife.date products with at least one Offing rule | 42 |
-| endoflife.date products with no Offing rule | 447 |
+| Offing registry rules | 782 |
+| Offing product families (distinct purls) | 416 |
+| Families mapped to an endoflife.date product | 104 |
+| endoflife.date products with at least one Offing rule | 43 |
+| endoflife.date products with no Offing rule | 446 |
 
 The coverage gap runs both ways: endoflife.date is broader across products, while Offing covers families endoflife.date does not model. The families below are not a win or a loss; they are outside the comparison because the other side publishes no release cycle for them.
 
@@ -65,20 +65,21 @@ The coverage gap runs both ways: endoflife.date is broader across products, whil
 | go | 7 | 2 | 18 | 7 | 7 | 0 |
 | kubernetes | 9 | 1 | 22 | 8 | 8 | 0 |
 | mariadb | 1 | 1 | 30 | 1 | 1 | 0 |
+| mongodb | 16 | 1 | 33 | 16 | 16 | 0 |
 | mysql | 3 | 2 | 23 | 3 | 2 | 1 |
 | nodejs | 82 | 2 | 26 | 8 | 8 | 0 |
 | php | 7 | 1 | 23 | 7 | 7 | 0 |
 | phpmyadmin | 1 | 1 | 13 | 0 | 0 | 0 |
 | postgresql | 7 | 2 | 32 | 6 | 6 | 0 |
-| powershell | 5 | 1 | 10 | 5 | 5 | 0 |
+| powershell | 7 | 1 | 10 | 7 | 7 | 0 |
 | python | 72 | 2 | 18 | 4 | 4 | 0 |
-| redis | 3 | 2 | 12 | 3 | 3 | 0 |
+| redis | 5 | 2 | 12 | 5 | 5 | 0 |
 | rhel | 1 | 1 | 7 | 1 | 1 | 0 |
 | ruby | 14 | 2 | 15 | 14 | 10 | 4 |
 | rust | 1 | 1 | 71 | 1 | 1 | 0 |
 | scala | 2 | 1 | 15 | 0 | 0 | 0 |
 | sles | 1 | 1 | 25 | 1 | 1 | 0 |
-| terraform | 8 | 1 | 18 | 6 | 6 | 0 |
+| terraform | 18 | 1 | 18 | 16 | 15 | 1 |
 | traefik | 1 | 1 | 21 | 1 | 0 | 1 |
 | ubuntu | 3 | 2 | 45 | 3 | 3 | 0 |
 | zookeeper | 1 | 1 | 6 | 1 | 1 | 0 |
@@ -89,8 +90,8 @@ A cycle is measured only when endoflife.date publishes an end date for every cyc
 
 | Sample | Measured | Agree | Disagree | Agreement |
 | --- | ---: | ---: | ---: | ---: |
-| All 752 registry rules | 184 | 176 | 8 | 95.7% |
-| Ground-truth set (246 distinct rules) | 92 | 85 | 7 | 92.4% |
+| All 782 registry rules | 214 | 205 | 9 | 95.8% |
+| Ground-truth set (255 distinct rules) | 101 | 94 | 7 | 93.1% |
 
 | Bucket | All registry rules | Ground-truth set |
 | --- | ---: | ---: |
@@ -115,13 +116,14 @@ A disagreement is a date difference, not a verdict. Both sides' sources are link
 | ruby.runtime.eol-2.5 | ruby / 2.5 | 2021-04-05 | 2021-03-31 | 5 | yes |
 | ruby.runtime.eol-2.6 | ruby / 2.6 | 2022-04-12 | 2022-03-31 | 12 | yes |
 | ruby.runtime.eol-3.2 | ruby / 3.2 | 2026-04-01 | 2026-03-31 | 1 | yes |
+| terraform.cli.end-of-support-1.8 | terraform / 1.8 | 2024-11-27 | 2024-11-26 | 1 | no |
 
 ### container.mysql.eol-8.0-and-older
 
 - [Offing rule](https://github.com/velella-sh/offing/blob/main/docs/rules/container.mysql.eol-8.0-and-older.md) · [endoflife.date](https://endoflife.date/mysql)
 - [nestjsx/crud docker-compose.yml:21](https://github.com/nestjsx/crud/blob/d6d3c4ebd844d543ab71b494d424660c448a9d42/docker-compose.yml#L21)
-- [weltraumpirat/hexagonal_ddd docker/docker-compose.yml:4](https://github.com/weltraumpirat/hexagonal_ddd/blob/a1bbdc5da7406f047269d270969ed9750bb92fa8/docker/docker-compose.yml#L4)
-- [axe-api/axe-api packages/integrations/composes/docker-compose.mysql57.yml:5](https://github.com/axe-api/axe-api/blob/81deacdf696dfe3fc022cb9ce85c0bf0013c2f8a/packages/integrations/composes/docker-compose.mysql57.yml#L5)
+- [ForestAdmin/forest-express-sequelize docker-compose.yml:14](https://github.com/ForestAdmin/forest-express-sequelize/blob/2f254a4b2bc598719fc6a82b0af7de15e0dad5cb/docker-compose.yml#L14)
+- [ForestAdmin/forest-express-sequelize docker-compose.yml:25](https://github.com/ForestAdmin/forest-express-sequelize/blob/2f254a4b2bc598719fc6a82b0af7de15e0dad5cb/docker-compose.yml#L25)
 
 ### container.ruby.eol-3.2-and-older
 
@@ -169,6 +171,11 @@ A disagreement is a date difference, not a verdict. Both sides' sources are link
 - [imaNNeo/fl_chart example/.ruby-version:1](https://github.com/imaNNeo/fl_chart/blob/ecada9478275e987dbac53c2d16b4fb3f2bcb78e/example/.ruby-version#L1)
 - [kidpollo/fullstack-kitchen-sink-2024 .tool-versions:2](https://github.com/kidpollo/fullstack-kitchen-sink-2024/blob/38dddf111e171af5c7126249aee48ce8edf06ba7/.tool-versions#L2)
 - [stadacone/orenda .ruby-version:1](https://github.com/stadacone/orenda/blob/feaa6ce97ecebc1bde639624391c2d70e524c680/.ruby-version#L1)
+
+### terraform.cli.end-of-support-1.8
+
+- [Offing rule](https://github.com/velella-sh/offing/blob/main/docs/rules/terraform.cli.end-of-support-1.8.md) · [endoflife.date](https://endoflife.date/terraform)
+- No pinned corpus repository exercises this rule; it is outside the ground-truth sample.
 
 ## Vendor-checked correctness
 

@@ -1,0 +1,1140 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "sasasavic82/roborover",
+  "commit": "c41223fbcaaee26a845cc0a05b3fcda6ee2d3811",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 21,
+    "findings": [
+      {
+        "ruleId": "serverless.aws-lambda.nodejs14.x",
+        "path": "basestation/serverless.yml",
+        "line": 14
+      },
+      {
+        "ruleId": "serverless.aws-lambda.nodejs14.x",
+        "path": "infrastructure/serverless.yml",
+        "line": 11
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 16155,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "npm",
+        "path": "basestation/package.json",
+        "name": "serverless-s3-sync",
+        "currentValue": "^3.2.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "@apollo/react-hooks",
+        "currentValue": "^3.1.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "@fortawesome/fontawesome-svg-core",
+        "currentValue": "^1.2.28",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "@fortawesome/free-solid-svg-icons",
+        "currentValue": "^5.13.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "@fortawesome/react-fontawesome",
+        "currentValue": "^0.1.9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "@rehooks/local-storage",
+        "currentValue": "^2.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "amazon-cognito-identity-js",
+        "currentValue": "^4.2.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "antd",
+        "currentValue": "^4.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "apexcharts",
+        "currentValue": "^3.7.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "apollo-cache-inmemory",
+        "currentValue": "^1.6.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "apollo-client",
+        "currentValue": "2.6.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "apollo-link-context",
+        "currentValue": "^1.0.20",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "apollo-link-error",
+        "currentValue": "^1.1.13",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "apollo-link-retry",
+        "currentValue": "^2.2.16",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "apollo-upload-client",
+        "currentValue": "^13.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "axios",
+        "currentValue": "^0.19.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "bson-objectid",
+        "currentValue": "^1.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "chart.js",
+        "currentValue": "2.7.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "chroma-js",
+        "currentValue": "^1.4.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "clone-deep",
+        "currentValue": "^4.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "firebase",
+        "currentValue": "^5.7.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "formik",
+        "currentValue": "^1.5.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "graphql",
+        "currentValue": "^14.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "graphql-tag",
+        "currentValue": "^2.10.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "handlebars",
+        "currentValue": "^4.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "history",
+        "currentValue": "4.7.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "immutability-helper",
+        "currentValue": "2.7.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "joi",
+        "currentValue": "^13.7.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "joi-validation-strategy",
+        "currentValue": "^0.3.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "lodash",
+        "currentValue": "^4.17.15",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "moment",
+        "currentValue": "^2.23.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "namor",
+        "currentValue": "^1.1.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "node-sass",
+        "currentValue": "^4.13.1",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "omit-deep",
+        "currentValue": "^0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "query-string",
+        "currentValue": "^6.13.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react",
+        "currentValue": "^16.9.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-alert",
+        "currentValue": "^7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-alert-template-basic",
+        "currentValue": "^1.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-apexcharts",
+        "currentValue": "^1.3.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-apollo",
+        "currentValue": "^2.5.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-autocomplete-input",
+        "currentValue": "^1.0.14",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-big-calendar",
+        "currentValue": "0.19.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-bootstrap-sweetalert",
+        "currentValue": "^4.4.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-bootstrap-switch",
+        "currentValue": "^15.5.3",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-bootstrap-table",
+        "currentValue": "^4.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-bootstrap-typeahead",
+        "currentValue": "^5.1.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-bootstrap-wizard",
+        "currentValue": "0.0.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-c3-component",
+        "currentValue": "^1.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-c3js",
+        "currentValue": "^0.1.20",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-chartjs-2",
+        "currentValue": "^2.7.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-currency-input",
+        "currentValue": "^1.3.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-datetime",
+        "currentValue": "^2.16.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-dom",
+        "currentValue": "^16.9.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-dropzone",
+        "currentValue": "^11.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-file-icon",
+        "currentValue": "^1.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-floating-button-menu",
+        "currentValue": "^2.0.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-hook-form",
+        "currentValue": "^6.0.6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-hooks-paginator",
+        "currentValue": "^0.4.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-iframe",
+        "currentValue": "^1.8.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-input-files",
+        "currentValue": "^1.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-jvectormap",
+        "currentValue": "0.0.3",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-loading",
+        "currentValue": "^2.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-loading-skeleton",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-multi-email",
+        "currentValue": "^0.5.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-overlays",
+        "currentValue": "^4.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-perfect-scrollbar",
+        "currentValue": "1.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-router-dom",
+        "currentValue": "^5.1.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-scripts",
+        "currentValue": "^3.1.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-search-input",
+        "currentValue": "^0.11.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-select",
+        "currentValue": "^3.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-sparklines",
+        "currentValue": "^1.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-stepzilla",
+        "currentValue": "^6.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-table",
+        "currentValue": "^6.8.6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-tabulator",
+        "currentValue": "^0.12.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-tagsinput",
+        "currentValue": "^3.19.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-validation",
+        "currentValue": "^3.0.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-validation-mixin",
+        "currentValue": "^5.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "reactstrap",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "redux",
+        "currentValue": "^4.0.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "rxjs",
+        "currentValue": "^6.3.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "semantic-ui-css",
+        "currentValue": "^2.4.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "semantic-ui-react",
+        "currentValue": "^0.88.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "tabulator-tables",
+        "currentValue": "^4.6.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "tslib",
+        "currentValue": "^1.11.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "uuid",
+        "currentValue": "^7.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "validator",
+        "currentValue": "^10.10.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "yup",
+        "currentValue": "^0.27.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "@babel/preset-env",
+        "currentValue": "^7.10.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "@babel/preset-react",
+        "currentValue": "^7.10.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "babel-eslint",
+        "currentValue": "^10.1.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "babel-jest",
+        "currentValue": "^24.9.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "dotenv",
+        "currentValue": "^8.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "env-cmd",
+        "currentValue": "^10.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "eslint",
+        "currentValue": "^6.8.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "eslint-config-airbnb",
+        "currentValue": "^18.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "eslint-config-prettier",
+        "currentValue": "^6.10.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "eslint-plugin-flowtype",
+        "currentValue": "^4.7.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "eslint-plugin-import",
+        "currentValue": "^2.20.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "eslint-plugin-jest",
+        "currentValue": "^23.8.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "eslint-plugin-json",
+        "currentValue": "^2.1.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "eslint-plugin-prettier",
+        "currentValue": "^3.1.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "eslint-plugin-react",
+        "currentValue": "^7.19.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "jest",
+        "currentValue": "^24.9.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "lodash",
+        "currentValue": "^4.17.15",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "mixin-deep",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "node",
+        "currentValue": "^8.15.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "prettier",
+        "currentValue": "2.0.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "basestation/static/package.json",
+        "name": "react-test-renderer",
+        "currentValue": "^16.13.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "infrastructure/package.json",
+        "name": "aws-sdk",
+        "currentValue": "^2.471.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "infrastructure/package.json",
+        "name": "dynamoose",
+        "currentValue": "^1.7.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "infrastructure/package.json",
+        "name": "lodash",
+        "currentValue": "^4.17.11",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "infrastructure/package.json",
+        "name": "serverless-iam-roles-per-function",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "infrastructure/package.json",
+        "name": "serverless-offline",
+        "currentValue": "^5.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "infrastructure/package.json",
+        "name": "serverless",
+        "currentValue": "^3.38.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "infrastructure/package.json",
+        "name": "uuid",
+        "currentValue": "^3.3.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "infrastructure/package.json",
+        "name": "atob",
+        "currentValue": "^2.1.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "roveros/package.json",
+        "name": "aws-iot-device-sdk",
+        "currentValue": "^2.2.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "roveros/package.json",
+        "name": "lodash",
+        "currentValue": "^4.17.11",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "roveros/package.json",
+        "name": "commander",
+        "currentValue": "^2.20.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "roveros/package.json",
+        "name": "pi-camera",
+        "currentValue": "^1.2.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "roveros/package.json",
+        "name": "node-gopigo3",
+        "currentValue": "^0.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "roveros/package.json",
+        "name": "request",
+        "currentValue": "^2.88.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "roveros/package.json",
+        "name": "di-sensors",
+        "currentValue": "^0.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

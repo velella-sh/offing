@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "ais-one/novex-kit",
+  "commit": "c095604ab38fc5b9ef7b92237fa88d4e6d368260",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 157,
+    "findings": [
+      {
+        "ruleId": "npm.package.querystring.deprecated",
+        "path": "scripts/service-mocks/package.json",
+        "line": 19,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/scripts/service-mocks"
+        }
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "docs/cloud/cloudflare/cf_workers.tf",
+        "line": 40,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "docs/cloud/cloudflare/cf_workers.tf",
+        "line": 40,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "npm",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": ".github/actions/*",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

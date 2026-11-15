@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "medson10/dotfiles",
+  "commit": "dc943f750428fa15e3f933f401e20bd9cc0f5e80",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 6,
+    "findings": [
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 43,
+        "dependabot": null
+      },
+      {
+        "ruleId": "python.runtime.eol-3.9-and-older",
+        "path": ".tool-versions",
+        "line": 6,
+        "dependabot": null
+      },
+      {
+        "ruleId": "python.runtime.eol-3.9-and-older",
+        "path": ".tool-versions",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "ruby.runtime.eol-2.7",
+        "path": ".tool-versions",
+        "line": 14,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

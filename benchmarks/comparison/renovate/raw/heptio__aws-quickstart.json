@@ -1,0 +1,224 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "heptio/aws-quickstart",
+  "commit": "3c6f6e4240cfc05447876fc08e27f24e67b1a126",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 13,
+    "findings": [
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "ci/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "kubernetes.apps.deployment.v1beta2.removed",
+        "path": "scripts/dashboard.yaml",
+        "line": 100
+      },
+      {
+        "ruleId": "kubernetes.extensions.daemonset.v1beta1.removed",
+        "path": "scripts/calico.yaml",
+        "line": 146
+      },
+      {
+        "ruleId": "kubernetes.extensions.daemonset.v1beta1.removed",
+        "path": "scripts/calico.yaml",
+        "line": 59
+      },
+      {
+        "ruleId": "kubernetes.extensions.daemonset.v1beta1.removed",
+        "path": "scripts/weave.yaml",
+        "line": 140
+      },
+      {
+        "ruleId": "kubernetes.extensions.deployment.v1beta1.removed",
+        "path": "scripts/calico.yaml",
+        "line": 326
+      },
+      {
+        "ruleId": "kubernetes.rbac-authorization-k8s-io.clusterrole.v1beta1.removed",
+        "path": "scripts/calico.yaml",
+        "line": 398
+      },
+      {
+        "ruleId": "kubernetes.rbac-authorization-k8s-io.clusterrole.v1beta1.removed",
+        "path": "scripts/calico.yaml",
+        "line": 435
+      },
+      {
+        "ruleId": "kubernetes.rbac-authorization-k8s-io.clusterrole.v1beta1.removed",
+        "path": "scripts/weave.yaml",
+        "line": 20
+      },
+      {
+        "ruleId": "kubernetes.rbac-authorization-k8s-io.clusterrolebinding.v1beta1.removed",
+        "path": "scripts/calico.yaml",
+        "line": 382
+      },
+      {
+        "ruleId": "kubernetes.rbac-authorization-k8s-io.clusterrolebinding.v1beta1.removed",
+        "path": "scripts/calico.yaml",
+        "line": 419
+      },
+      {
+        "ruleId": "kubernetes.rbac-authorization-k8s-io.clusterrolebinding.v1beta1.removed",
+        "path": "scripts/weave.yaml",
+        "line": 61
+      },
+      {
+        "ruleId": "kubernetes.rbac-authorization-k8s-io.role.v1beta1.removed",
+        "path": "scripts/weave.yaml",
+        "line": 84
+      },
+      {
+        "ruleId": "kubernetes.rbac-authorization-k8s-io.rolebinding.v1beta1.removed",
+        "path": "scripts/weave.yaml",
+        "line": 116
+      },
+      {
+        "ruleId": "kubernetes.storage-k8s-io.storageclass.v1beta1.removed",
+        "path": "scripts/default.storageclass.yaml",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 9267,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "alpine",
+        "currentValue": "3.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "bash",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "groff",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "less",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "python3",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "py3-pip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "py3-yaml",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "openssh-client",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "jq",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "bind-tools",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ci/Dockerfile",
+        "name": "tar",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

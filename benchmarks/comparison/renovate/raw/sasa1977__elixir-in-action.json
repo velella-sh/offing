@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "sasa1977/elixir-in-action",
+  "commit": "4e9067ab5a98959bf5198b2b340a89af429e15c5",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 17,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "code_samples/ch13/todo_release/Dockerfile",
+        "line": 32
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "code_samples/ch13/todo_release/Dockerfile",
+        "line": 33
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "code_samples/ch13/todo_release/Dockerfile",
+        "line": 34
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.15",
+        "path": ".tool-versions",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 12584,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "code_samples/ch13/todo_release/Dockerfile",
+        "name": "debian",
+        "currentValue": "bookworm-20230612-slim",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "code_samples/ch13/todo_release/Dockerfile",
+        "name": "openssl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "code_samples/ch13/todo_release/Dockerfile",
+        "name": "locales",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

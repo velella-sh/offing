@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "aselab/scala-activerecord",
+  "commit": "cce43fdde25e4db25fa7c35a81180c97bb24c6e8",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 7,
+    "findings": [
+      {
+        "ruleId": "scala.runtime.eol-2.11",
+        "path": "scalatraSbt/src/sbt-test/generator/simple/build.sbt",
+        "line": 5
+      },
+      {
+        "ruleId": "scala.sbt.eol-0.13",
+        "path": "scalatraSbt/src/sbt-test/generator/simple/project/build.properties",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 10183,
+    "status": "ok",
+    "dependencies": []
+  }
+}

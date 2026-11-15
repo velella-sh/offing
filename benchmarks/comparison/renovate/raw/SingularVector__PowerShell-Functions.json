@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "SingularVector/PowerShell-Functions",
+  "commit": "d4ad7ee8a4d0ba1e70564136d1a664359b61bd5d",
+  "ecosystem": "shell",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 23,
+    "findings": [
+      {
+        "ruleId": "shell.powershell.end-of-life-7.1",
+        "path": "New-LogEntry/New-LogEntry.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Convert-EmlFile.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Export-Registry.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Get-ElapsedTime.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Get-UniqueUPN.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "New-ApiRequest.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "New-StringConversion.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "scripts/Install-EmlDependency.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Test-IsEmail.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Test-IsGuid.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Test-IsRegistryKey.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Test-IsValidDn.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Test-IsValidUpn.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "Test-UpnExist.ps1",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 2991,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/eml.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/guid.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/new-api-request.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/new-logentry.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/registry.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/toolbox-alignment.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/upn.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

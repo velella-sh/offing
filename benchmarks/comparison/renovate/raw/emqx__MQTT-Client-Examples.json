@@ -1,0 +1,1363 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "emqx/MQTT-Client-Examples",
+  "commit": "b9378547037bdb851f6e5648976573398546dcb5",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 155,
+    "findings": [
+      {
+        "ruleId": "android.target-sdk.existing.default-below-35",
+        "path": "mqtt-client-Android-Kotlin/app/build.gradle",
+        "line": 13
+      },
+      {
+        "ruleId": "cpp.cmake.policy-below-3.5.removed",
+        "path": "mqtt-client-C-nng/CMakeLists.txt",
+        "line": 7
+      },
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": "mqtt-client-Elixir/.tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": "mqtt-client-Elixir/.tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.14",
+        "path": "mqtt-client-Elixir/.tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.25",
+        "path": "mqtt-client-Go/file-transfer/go.mod",
+        "line": 3
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.25",
+        "path": "mqtt-client-Go/one_way-tls/go.mod",
+        "line": 3
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.25",
+        "path": "mqtt-client-Go/pubsub/go.mod",
+        "line": 3
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.25",
+        "path": "mqtt-client-Go/two_way-tls/go.mod",
+        "line": 3
+      },
+      {
+        "ruleId": "ruby.runtime.eol-2.7",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/.ruby-version",
+        "line": 1
+      },
+      {
+        "ruleId": "ruby.runtime.eol-2.7",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/Gemfile",
+        "line": 4
+      },
+      {
+        "ruleId": "ruby.runtime.eol-2.7",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/Gemfile.lock",
+        "line": 97
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 54275,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "mqtt-client-ESP32/esp32_DS18B20_temp_chart/web/Dockerfile",
+        "name": "python",
+        "currentValue": "3.12-slim",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "paho.mqtt.android-kotlin/test/tls-testing/Dockerfile",
+        "name": "eclipse-mosquitto",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/issue-translator.yaml",
+        "name": "emqx/translate-issue-action",
+        "currentValue": "v1.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/issue-translator.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular-builders/custom-webpack",
+        "currentValue": "^17.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/animations",
+        "currentValue": "^17.3.12",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/cdk",
+        "currentValue": "^17.3.10",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/common",
+        "currentValue": "^17.3.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/compiler",
+        "currentValue": "^17.3.6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/core",
+        "currentValue": "^17.3.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/forms",
+        "currentValue": "^17.3.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/material",
+        "currentValue": "^17.3.10",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/platform-browser",
+        "currentValue": "^17.3.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/platform-browser-dynamic",
+        "currentValue": "^17.3.12",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/router",
+        "currentValue": "^17.3.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "ngx-mqtt",
+        "currentValue": "^17.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "rxjs",
+        "currentValue": "~7.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "tslib",
+        "currentValue": "^2.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "zone.js",
+        "currentValue": "~0.14.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular-devkit/build-angular",
+        "currentValue": "^17.3.17",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/cli",
+        "currentValue": "~17.3.6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@angular/compiler-cli",
+        "currentValue": "^17.3.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@types/jasmine",
+        "currentValue": "~4.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "@types/node",
+        "currentValue": "^20.12.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "jasmine-core",
+        "currentValue": "~4.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "karma",
+        "currentValue": "~6.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "karma-chrome-launcher",
+        "currentValue": "~3.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "karma-coverage",
+        "currentValue": "~2.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "karma-jasmine",
+        "currentValue": "~5.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "karma-jasmine-html-reporter",
+        "currentValue": "~2.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/Angular17/package.json",
+        "name": "typescript",
+        "currentValue": "~5.4.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular-builders/custom-webpack",
+        "currentValue": "^14.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/animations",
+        "currentValue": "^14.1.0",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/cdk",
+        "currentValue": "^14.1.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/common",
+        "currentValue": "^14.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/compiler",
+        "currentValue": "^14.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/core",
+        "currentValue": "^14.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/forms",
+        "currentValue": "^14.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/material",
+        "currentValue": "^14.1.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/platform-browser",
+        "currentValue": "^14.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/platform-browser-dynamic",
+        "currentValue": "^14.1.0",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/router",
+        "currentValue": "^14.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "ngx-mqtt",
+        "currentValue": "^9.0.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "rxjs",
+        "currentValue": "~7.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "tslib",
+        "currentValue": "^2.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "zone.js",
+        "currentValue": "~0.11.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular-devkit/build-angular",
+        "currentValue": "^14.1.2",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/cli",
+        "currentValue": "~14.1.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@angular/compiler-cli",
+        "currentValue": "^14.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "@types/jasmine",
+        "currentValue": "~4.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "jasmine-core",
+        "currentValue": "~4.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "karma",
+        "currentValue": "~6.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "karma-chrome-launcher",
+        "currentValue": "~3.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "karma-coverage",
+        "currentValue": "~2.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "karma-jasmine",
+        "currentValue": "~5.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "karma-jasmine-html-reporter",
+        "currentValue": "~2.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Angular.js/package.json",
+        "name": "typescript",
+        "currentValue": "~4.7.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Electron/package.json",
+        "name": "bulma",
+        "currentValue": "^1.0.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Electron/package.json",
+        "name": "mqtt",
+        "currentValue": "^5.15.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Electron/package.json",
+        "name": "electron",
+        "currentValue": "^43.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-JavaScript/package.json",
+        "name": "mqtt",
+        "currentValue": "^5.15.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Node.js/package.json",
+        "name": "mqtt",
+        "currentValue": "^5.15.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "@expo/vector-icons",
+        "currentValue": "^14.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "@react-navigation/native",
+        "currentValue": "^6.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "expo",
+        "currentValue": "~51.0.28",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "expo-constants",
+        "currentValue": "~16.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "expo-font",
+        "currentValue": "~12.0.9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "expo-linking",
+        "currentValue": "~6.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "expo-router",
+        "currentValue": "~3.5.23",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "expo-splash-screen",
+        "currentValue": "~0.27.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "expo-status-bar",
+        "currentValue": "~1.12.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "expo-system-ui",
+        "currentValue": "~3.0.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "expo-web-browser",
+        "currentValue": "~13.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "mqtt",
+        "currentValue": "^5.10.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "react",
+        "currentValue": "18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "react-dom",
+        "currentValue": "18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "react-native",
+        "currentValue": "0.74.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "react-native-gesture-handler",
+        "currentValue": "~2.16.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "react-native-reanimated",
+        "currentValue": "~3.10.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "react-native-safe-area-context",
+        "currentValue": "4.10.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "react-native-screens",
+        "currentValue": "3.31.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "react-native-web",
+        "currentValue": "~0.19.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "url",
+        "currentValue": "^0.11.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "@babel/core",
+        "currentValue": "^7.20.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "@types/jest",
+        "currentValue": "^29.5.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "@types/react",
+        "currentValue": "~18.2.45",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "@types/react-test-renderer",
+        "currentValue": "^18.0.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "jest",
+        "currentValue": "^29.2.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "jest-expo",
+        "currentValue": "~51.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "react-test-renderer",
+        "currentValue": "18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native-Expo/package.json",
+        "name": "typescript",
+        "currentValue": "~5.3.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "@react-native-async-storage/async-storage",
+        "currentValue": "^1.17.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "@rneui/base",
+        "currentValue": "^4.0.0-rc.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "@rneui/themed",
+        "currentValue": "^4.0.0-rc.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "react",
+        "currentValue": "17.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "react_native_mqtt",
+        "currentValue": "^1.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "react-native",
+        "currentValue": "0.68.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "@babel/core",
+        "currentValue": "^7.12.9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "@babel/runtime",
+        "currentValue": "^7.12.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "@react-native-community/eslint-config",
+        "currentValue": "^2.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "babel-jest",
+        "currentValue": "^26.6.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "eslint",
+        "currentValue": "^7.32.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "jest",
+        "currentValue": "^26.6.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "metro-react-native-babel-preset",
+        "currentValue": "^0.67.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React-Native/RNMQTTDemo/package.json",
+        "name": "react-test-renderer",
+        "currentValue": "17.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React/package.json",
+        "name": "@testing-library/jest-dom",
+        "currentValue": "^4.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React/package.json",
+        "name": "@testing-library/react",
+        "currentValue": "^9.3.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React/package.json",
+        "name": "@testing-library/user-event",
+        "currentValue": "^7.1.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React/package.json",
+        "name": "antd",
+        "currentValue": "^4.7.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React/package.json",
+        "name": "mqtt",
+        "currentValue": "^4.3.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React/package.json",
+        "name": "react",
+        "currentValue": "^18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React/package.json",
+        "name": "react-dom",
+        "currentValue": "^18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-React/package.json",
+        "name": "react-scripts",
+        "currentValue": "3.4.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "core-js",
+        "currentValue": "^3.6.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "element-ui",
+        "currentValue": "^2.13.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "mqtt",
+        "currentValue": "^4.3.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "vue",
+        "currentValue": "^2.6.11",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "@vue/cli-plugin-babel",
+        "currentValue": "~4.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "@vue/cli-plugin-eslint",
+        "currentValue": "~4.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "@vue/cli-plugin-router",
+        "currentValue": "~4.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "@vue/cli-plugin-vuex",
+        "currentValue": "~4.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "@vue/cli-service",
+        "currentValue": "~4.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "@vue/eslint-config-prettier",
+        "currentValue": "^6.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "babel-eslint",
+        "currentValue": "^10.1.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "eslint",
+        "currentValue": "^6.7.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "eslint-config-prettier",
+        "currentValue": "^6.11.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "eslint-plugin-prettier",
+        "currentValue": "^3.1.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "eslint-plugin-vue",
+        "currentValue": "^6.2.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "prettier",
+        "currentValue": "^1.19.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "sass",
+        "currentValue": "^1.26.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "sass-loader",
+        "currentValue": "^8.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue.js/package.json",
+        "name": "vue-template-compiler",
+        "currentValue": "^2.6.11",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "element-plus",
+        "currentValue": "^2.3.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "mqtt",
+        "currentValue": "^4.3.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "vue",
+        "currentValue": "^3.2.47",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "@types/node",
+        "currentValue": "^26.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "@vitejs/plugin-vue",
+        "currentValue": "^5.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "npm-run-all",
+        "currentValue": "^4.1.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "playwright",
+        "currentValue": "^1.62.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "typescript",
+        "currentValue": "^7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "vite",
+        "currentValue": "^5.4.21",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "mqtt-client-Vue3.js/package.json",
+        "name": "vue-tsc",
+        "currentValue": "^3.3.9",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

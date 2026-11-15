@@ -7,9 +7,9 @@
   "continuity": false,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 57,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 48,
     "findings": [
       {
         "ruleId": "dotnet.runtime.end-of-support-8.0",
@@ -40,12 +40,22 @@
         "ruleId": "shell.powershell.end-of-life-6",
         "path": "tools/releaseTools.psm1",
         "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "build.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "PSReadLine/PSReadLine.psd1",
+        "line": 10
       }
     ]
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 9338,
+    "durationMs": 18185,
     "status": "ok",
     "dependencies": [
       {

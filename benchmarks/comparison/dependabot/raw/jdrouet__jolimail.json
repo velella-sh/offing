@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "jdrouet/jolimail",
+  "commit": "28f5ac8e746777cfb7ce0a1f4815e5d281bb2a3d",
+  "ecosystem": "database",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 69,
+    "findings": [
+      {
+        "ruleId": "container.debian.eol-11-and-older",
+        "path": "Dockerfile",
+        "line": 30,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.debian.eol-11-and-older",
+        "path": "multiarch.Dockerfile",
+        "line": 42,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.postgres.eol-13-and-older",
+        "path": "docker-compose.dev.yml",
+        "line": 5,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.postgres.eol-13-and-older",
+        "path": "docker-compose.yml",
+        "line": 5,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "database.postgresql.end-of-life-12",
+        "path": "docker-compose.dev.yml",
+        "line": 5,
+        "dependabot": null
+      },
+      {
+        "ruleId": "database.postgresql.end-of-life-12",
+        "path": "docker-compose.yml",
+        "line": 5,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "npm",
+        "directory": "/client",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/server",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

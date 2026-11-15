@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "scottyab/rootbeer",
+  "commit": "de7bc7b4b09c9db148b62b331b4a44076b2eb480",
+  "ecosystem": "android",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 14,
+    "findings": [
+      {
+        "ruleId": "cpp.cmake.policy-below-3.5.removed",
+        "path": "rootbeerlib/src/main/cpp/CMakeLists.txt",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 11008,
+    "status": "ok",
+    "dependencies": []
+  }
+}

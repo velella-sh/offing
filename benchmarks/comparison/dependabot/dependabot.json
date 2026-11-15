@@ -6,34 +6,34 @@
     "reason": "Dependabot runs inside GitHub's service against a default branch and this repository has no runner, so no head-to-head run exists (docs/COMPARISON_METHOD.md section 7)."
   },
   "offingVersions": [
-    "0.7.3"
+    "0.1.1"
   ],
   "offingCommits": [
-    "7cdd0e5f7541ba9828452df5ec9dbb22fb18ae14"
+    "945a32e98abbf9bb0fc9313704a7f318fa1a47d0"
   ],
   "groups": [
     {
       "selection": "blind",
-      "repositories": 991,
-      "repositoriesWithConfig": 116,
-      "repositoriesWithoutConfig": 875,
-      "configEntries": 251,
-      "filteredConfigEntries": 44,
-      "offingFindings": 6429,
+      "repositories": 1361,
+      "repositoriesWithConfig": 189,
+      "repositoriesWithoutConfig": 1172,
+      "configEntries": 394,
+      "filteredConfigEntries": 70,
+      "offingFindings": 9397,
       "outcomes": {
-        "covered": 265,
-        "uncovered": 3500,
-        "filtered": 32,
-        "not-comparable": 2632
+        "covered": 399,
+        "uncovered": 5294,
+        "filtered": 46,
+        "not-comparable": 3658
       },
-      "uncoveredWithoutConfig": 3187,
-      "uncoveredWithConfig": 313,
+      "uncoveredWithoutConfig": 4802,
+      "uncoveredWithConfig": 492,
       "byEcosystem": [
         {
           "packageEcosystem": "cargo",
           "counts": {
-            "covered": 0,
-            "uncovered": 26,
+            "covered": 1,
+            "uncovered": 31,
             "filtered": 0
           }
         },
@@ -49,16 +49,16 @@
           "packageEcosystem": "docker",
           "counts": {
             "covered": 2,
-            "uncovered": 196,
-            "filtered": 0
+            "uncovered": 375,
+            "filtered": 1
           }
         },
         {
           "packageEcosystem": "github-actions",
           "counts": {
-            "covered": 251,
-            "uncovered": 2268,
-            "filtered": 22
+            "covered": 372,
+            "uncovered": 3490,
+            "filtered": 28
           }
         },
         {
@@ -73,7 +73,7 @@
           "packageEcosystem": "gradle",
           "counts": {
             "covered": 0,
-            "uncovered": 18,
+            "uncovered": 22,
             "filtered": 0
           }
         },
@@ -88,9 +88,9 @@
         {
           "packageEcosystem": "npm",
           "counts": {
-            "covered": 10,
-            "uncovered": 886,
-            "filtered": 10
+            "covered": 22,
+            "uncovered": 1269,
+            "filtered": 17
           }
         },
         {
@@ -105,63 +105,71 @@
           "packageEcosystem": "pip",
           "counts": {
             "covered": 0,
-            "uncovered": 8,
+            "uncovered": 9,
             "filtered": 0
           }
         }
       ],
       "notComparableRules": [
         {
-          "family": "dotnet.runtime",
-          "findings": 528
+          "family": "nodejs.runtime",
+          "findings": 629
         },
         {
-          "family": "terraform.syntax",
-          "findings": 375
+          "family": "dotnet.runtime",
+          "findings": 533
         },
         {
           "family": "container.dockerfile",
-          "findings": 309
+          "findings": 450
         },
         {
-          "family": "nodejs.runtime",
-          "findings": 236
-        },
-        {
-          "family": "python.runtime",
-          "findings": 188
-        },
-        {
-          "family": "serverless.aws-lambda",
-          "findings": 150
-        },
-        {
-          "family": "dart.sdk",
-          "findings": 95
-        },
-        {
-          "family": "go.runtime",
-          "findings": 94
+          "family": "terraform.syntax",
+          "findings": 384
         },
         {
           "family": "shell.powershell",
-          "findings": 93
+          "findings": 199
+        },
+        {
+          "family": "python.runtime",
+          "findings": 198
+        },
+        {
+          "family": "serverless.aws-lambda",
+          "findings": 173
+        },
+        {
+          "family": "go.runtime",
+          "findings": 131
+        },
+        {
+          "family": "dart.sdk",
+          "findings": 98
         },
         {
           "family": "ruby.runtime",
-          "findings": 78
+          "findings": 98
         },
         {
           "family": "terraform.function",
           "findings": 73
         },
         {
-          "family": "elixir.erlang",
-          "findings": 49
+          "family": "github-actions.workflow-command",
+          "findings": 63
         },
         {
-          "family": "github-actions.workflow-command",
-          "findings": 47
+          "family": "rust.toolchain",
+          "findings": 62
+        },
+        {
+          "family": "elixir.erlang",
+          "findings": 58
+        },
+        {
+          "family": "kubernetes.extensions",
+          "findings": 50
         },
         {
           "family": "scala.sbt",
@@ -172,8 +180,16 @@
           "findings": 47
         },
         {
-          "family": "kubernetes.extensions",
-          "findings": 39
+          "family": "deno.runtime",
+          "findings": 36
+        },
+        {
+          "family": "deno.bun",
+          "findings": 35
+        },
+        {
+          "family": "database.postgresql",
+          "findings": 34
         },
         {
           "family": "scala.runtime",
@@ -185,78 +201,82 @@
         },
         {
           "family": "elixir.runtime",
-          "findings": 24
+          "findings": 28
+        },
+        {
+          "family": "kubernetes.rbac-authorization-k8s-io",
+          "findings": 28
         },
         {
           "family": "ci-images.azure-pipelines",
-          "findings": 19
+          "findings": 20
         },
         {
           "family": "swift.app-store",
           "findings": 17
         },
         {
+          "family": "kubernetes.policy",
+          "findings": 16
+        },
+        {
+          "family": "kubernetes.apps",
+          "findings": 13
+        },
+        {
+          "family": "kubernetes.batch",
+          "findings": 13
+        },
+        {
           "family": "php.runtime",
           "findings": 12
         },
         {
-          "family": "rust.toolchain",
-          "findings": 12
-        },
-        {
-          "family": "kubernetes.apps",
+          "family": "kubernetes.helm",
           "findings": 11
         },
         {
-          "family": "database.postgresql",
-          "findings": 7
-        },
-        {
           "family": "database.mysql",
-          "findings": 6
+          "findings": 8
         },
         {
-          "family": "kubernetes.batch",
-          "findings": 4
-        },
-        {
-          "family": "database.redis",
-          "findings": 2
-        },
-        {
-          "family": "kubernetes.apiextensions-k8s-io",
-          "findings": 2
+          "family": "terraform.cli",
+          "findings": 8
         },
         {
           "family": "kubernetes.autoscaling",
-          "findings": 2
+          "findings": 6
         },
         {
-          "family": "kubernetes.storage-k8s-io",
-          "findings": 2
+          "family": "database.redis",
+          "findings": 5
         },
         {
-          "family": "deno.bun",
-          "findings": 1
+          "family": "database.mongodb",
+          "findings": 3
         },
         {
-          "family": "deno.runtime",
-          "findings": 1
-        },
-        {
-          "family": "java.jdk",
-          "findings": 1
+          "family": "kubernetes.apiextensions-k8s-io",
+          "findings": 3
         },
         {
           "family": "kubernetes.networking-k8s-io",
-          "findings": 1
+          "findings": 3
         },
         {
-          "family": "kubernetes.policy",
-          "findings": 1
+          "family": "kubernetes.storage-k8s-io",
+          "findings": 3
         },
         {
-          "family": "kubernetes.rbac-authorization-k8s-io",
+          "family": "java.jdk",
+          "findings": 2
+        },
+        {
+          "family": "kubernetes.apiregistration-k8s-io",
+          "findings": 2
+        },
+        {
+          "family": "serverless.azure-app-service",
           "findings": 1
         }
       ]
@@ -268,21 +288,21 @@
       "repositoriesWithoutConfig": 2,
       "configEntries": 5,
       "filteredConfigEntries": 1,
-      "offingFindings": 165,
+      "offingFindings": 166,
       "outcomes": {
         "covered": 0,
-        "uncovered": 113,
+        "uncovered": 114,
         "filtered": 16,
         "not-comparable": 36
       },
       "uncoveredWithoutConfig": 52,
-      "uncoveredWithConfig": 61,
+      "uncoveredWithConfig": 62,
       "byEcosystem": [
         {
           "packageEcosystem": "docker",
           "counts": {
             "covered": 0,
-            "uncovered": 15,
+            "uncovered": 16,
             "filtered": 0
           }
         },
@@ -336,6 +356,30 @@
   ],
   "configuredRepositories": [
     {
+      "repository": "8go/matrix-commander-rs",
+      "commit": "9f3a44cdcf36664b206936de28d2e598af1f7c13",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "a-kenji/tui-term",
+      "commit": "f0ffe97fb984c96ec9490ba8174fd26a01b994cf",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
       "repository": "aarongarrett/inspyred",
       "commit": "fb29ba3b9d9e582dabe72f278458ed0e6932eb7c",
       "selection": "blind",
@@ -346,6 +390,18 @@
       "uncovered": 0,
       "filtered": 0,
       "notComparable": 3
+    },
+    {
+      "repository": "aaronsb/obsidian-mcp-plugin",
+      "commit": "103ee962ff879f5f062a89145969c8225f09b38c",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
     },
     {
       "repository": "acolomba/blackvuesync",
@@ -372,6 +428,18 @@
       "notComparable": 2
     },
     {
+      "repository": "aeria-org/aeria",
+      "commit": "500099fcd90f3e63a3a00e283fbcc4c9355f58ba",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 8,
+      "covered": 0,
+      "uncovered": 4,
+      "filtered": 0,
+      "notComparable": 4
+    },
+    {
       "repository": "ain-soph/trojanzoo",
       "commit": "45d680c4d3bc7810a0a7a5b6fa939f87d5e6c551",
       "selection": "blind",
@@ -396,6 +464,30 @@
       "notComparable": 1
     },
     {
+      "repository": "ais-one/novex-kit",
+      "commit": "c095604ab38fc5b9ef7b92237fa88d4e6d368260",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 3,
+      "findings": 3,
+      "covered": 0,
+      "uncovered": 1,
+      "filtered": 0,
+      "notComparable": 2
+    },
+    {
+      "repository": "AlbertHernandez/nestjs-service-template",
+      "commit": "74daaf0f42430483d9c47afcb31b9a596d22aa21",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 23,
+      "covered": 20,
+      "uncovered": 1,
+      "filtered": 0,
+      "notComparable": 2
+    },
+    {
       "repository": "alexandregpereira/Monster-Compendium",
       "commit": "8d7225ff3454c8e546d09bcc4791f3cdb9f8bdd3",
       "selection": "blind",
@@ -404,6 +496,18 @@
       "findings": 14,
       "covered": 0,
       "uncovered": 14,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "alexhaberl/VaultLink",
+      "commit": "fddf07eccedb7abb414c9205ab83486b23f23872",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 4,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
       "filtered": 0,
       "notComparable": 0
     },
@@ -418,6 +522,30 @@
       "uncovered": 0,
       "filtered": 0,
       "notComparable": 8
+    },
+    {
+      "repository": "allgpt-co/QuickVoice",
+      "commit": "b4197d79af5d3fc94efb3ef2b251bcab8de8d34c",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 5,
+      "findings": 41,
+      "covered": 41,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "Androz2091/discord-backup",
+      "commit": "472cb7c8eb3d899cd4348ac7381b6d695e068404",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 5,
+      "covered": 0,
+      "uncovered": 2,
+      "filtered": 2,
+      "notComparable": 1
     },
     {
       "repository": "ardalis/GuardClauses",
@@ -468,6 +596,18 @@
       "notComparable": 5
     },
     {
+      "repository": "Automattic/wordpress-rs",
+      "commit": "7ee25d1aafe8c20b4f3be2aedf0f442bac9dbcab",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 5,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
       "repository": "aws-cloudformation/cloudformation-cli",
       "commit": "232d2983fcba15ff8f7da026c116efa51f5ae486",
       "selection": "blind",
@@ -492,6 +632,18 @@
       "notComparable": 6
     },
     {
+      "repository": "aws/graph-explorer",
+      "commit": "2ff4ceabe1c7b4b1e786344decb184362b320306",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 3,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
       "repository": "awslabs/aws-config-rdklib",
       "commit": "dd90eb67422b4c2d91a4dd79ec3e970d6f051b2a",
       "selection": "blind",
@@ -504,6 +656,18 @@
       "notComparable": 1
     },
     {
+      "repository": "axe-api/axe-api",
+      "commit": "81deacdf696dfe3fc022cb9ce85c0bf0013c2f8a",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 35,
+      "covered": 1,
+      "uncovered": 26,
+      "filtered": 0,
+      "notComparable": 8
+    },
+    {
       "repository": "Azure/azure-functions-powershell-worker",
       "commit": "2debea0f983f5016d3c54302c749e8f7e4690544",
       "selection": "blind",
@@ -514,6 +678,90 @@
       "uncovered": 1,
       "filtered": 0,
       "notComparable": 3
+    },
+    {
+      "repository": "backpack-exchange/bpx-api-client",
+      "commit": "c1e31336b18dc91027451cd3caf918bfc56a994f",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "bcomnes/npm-run-all2",
+      "commit": "42aeadd27c352024a54c06b2b311703be52edf44",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "bcyran/timewall",
+      "commit": "c7c8a19163c871a5412c143418e9ae5b3b1e7572",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 4,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 4
+    },
+    {
+      "repository": "bee-browser/bee",
+      "commit": "faef7663a0027eb1cae50361f1cd6848d8c6a193",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "BenoitZugmeyer/eslint-plugin-html",
+      "commit": "4cec5bff2686e014191c2281867d8c291cd8e7ca",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 7,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 7
+    },
+    {
+      "repository": "bjankord/stylelint-config-sass-guidelines",
+      "commit": "873156ec38b5e7e1e0f7bf4a17929bbf2fbce93a",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 5,
+      "covered": 0,
+      "uncovered": 2,
+      "filtered": 0,
+      "notComparable": 3
+    },
+    {
+      "repository": "blazejkustra/react-compiler-marker",
+      "commit": "896da66c3f6f68c2472974cca6e154104736a993",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 14,
+      "covered": 0,
+      "uncovered": 14,
+      "filtered": 0,
+      "notComparable": 0
     },
     {
       "repository": "BranchMetrics/android-branch-deep-linking-attribution",
@@ -540,6 +788,30 @@
       "notComparable": 1
     },
     {
+      "repository": "c410-f3r/wtx",
+      "commit": "20d7f68d96d13cc97c5acea14911f97106e68f2e",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 2,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 2,
+      "notComparable": 0
+    },
+    {
+      "repository": "camshaft/bolero",
+      "commit": "7642943b6c1f8a9b5e824dd1cd29b7c8e56068b8",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 2,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 2
+    },
+    {
       "repository": "cfug/dio",
       "commit": "f1bef462289b40992d625d4eb2a2f42321217573",
       "selection": "blind",
@@ -552,11 +824,71 @@
       "notComparable": 0
     },
     {
+      "repository": "chaibuilder/core",
+      "commit": "56a002fec825020467fef0f6709cfc028c079b51",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 2,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 2
+    },
+    {
       "repository": "charmbracelet/wish",
       "commit": "2af05484795152f53d9ad10b5be5748a4bec3c95",
       "selection": "blind",
       "configPath": ".github/dependabot.yml",
       "entries": 4,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "cinar/indicatorts",
+      "commit": "c6bfb623b2ccbac2c536d60740e8c458e4efa7cd",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 5,
+      "covered": 3,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 2
+    },
+    {
+      "repository": "clavia-labs/tardigrade",
+      "commit": "6a8e2250f2efc091cb10e97127b11bce98dfac55",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "clearloop/leetcode-cli",
+      "commit": "fba4448961b779ebb3ba6d3b45dccc4d11deea1b",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "CloudNationHQ/terraform-azure-func",
+      "commit": "f3caae4c2184bfc1968fc64953d9a6558cab2575",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
       "findings": 0,
       "covered": 0,
       "uncovered": 0,
@@ -576,6 +908,30 @@
       "notComparable": 1
     },
     {
+      "repository": "cockpit-project/cockpit-machines",
+      "commit": "a759311b08871c32db4779d40df83ba4bfb4f24f",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "codama-idl/codama",
+      "commit": "f2cb3d0b99e7b53d467c18fd6f9fa1e2ed388204",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 3,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 3
+    },
+    {
       "repository": "coingaming/moon",
       "commit": "7b2881ef1a4b8e0d0d297f92df7085e6461e4d77",
       "selection": "blind",
@@ -586,6 +942,54 @@
       "uncovered": 10,
       "filtered": 0,
       "notComparable": 3
+    },
+    {
+      "repository": "couetilc/react-social-icons",
+      "commit": "3a02ba70dc892a94bac805e90b10984da5db8bd3",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 9,
+      "covered": 5,
+      "uncovered": 0,
+      "filtered": 3,
+      "notComparable": 1
+    },
+    {
+      "repository": "cunarist/rinf",
+      "commit": "da30454e5bfeb89d6e273d29bb0c09458818d36d",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yaml",
+      "entries": 1,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "damianeickhoff/HaCasa",
+      "commit": "70795463b4da5bb652f3b2081269c8c53177c82c",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "darkroomengineering/aniso",
+      "commit": "59d0aa139b6964de2ba4c042f04505677aed4cd8",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 2,
+      "covered": 1,
+      "uncovered": 1,
+      "filtered": 0,
+      "notComparable": 0
     },
     {
       "repository": "DarrenOfficial/dpaste",
@@ -610,6 +1014,54 @@
       "uncovered": 0,
       "filtered": 0,
       "notComparable": 3
+    },
+    {
+      "repository": "darwinia-network/darwinia",
+      "commit": "6719d526c59cc223152fd4de7bb891abb4e4073f",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 20,
+      "covered": 16,
+      "uncovered": 2,
+      "filtered": 0,
+      "notComparable": 2
+    },
+    {
+      "repository": "datafusion-contrib/datafusion-tracing",
+      "commit": "d3d6d83cc3d65d9832772d74dd6c2bc0aac5d59c",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 3,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 2,
+      "notComparable": 1
+    },
+    {
+      "repository": "davidpob99/nasa-wallpaper",
+      "commit": "457c3eadce775423fe1399eeada78a29c95698ae",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 6,
+      "covered": 0,
+      "uncovered": 6,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "DesignLiquido/delegua",
+      "commit": "94b319548996d03278b2029ded8d087136f5d317",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 8,
+      "covered": 1,
+      "uncovered": 7,
+      "filtered": 0,
+      "notComparable": 0
     },
     {
       "repository": "django-haystack/celery-haystack",
@@ -744,6 +1196,30 @@
       "notComparable": 1
     },
     {
+      "repository": "edera-dev/sprout",
+      "commit": "45e8dcf597a17181d323250ff96b3f42e96d990b",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 3,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "EdJoPaTo/website-stalker",
+      "commit": "fe4fd4f27c66344d93b4f87c946f06282ee81545",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
       "repository": "ente/ente",
       "commit": "3ffa9616868b80ac05ca377dcfffc007d645962c",
       "selection": "blind",
@@ -752,6 +1228,42 @@
       "findings": 0,
       "covered": 0,
       "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "eser/deno-boilerplate-console",
+      "commit": "99420bc23f36be4b0f037e7729dc536685f21c7a",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 3,
+      "covered": 2,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "ethereum/c-kzg-4844",
+      "commit": "a751e2d92abcd63b01d1400789789f5ea289a8b0",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 3,
+      "covered": 0,
+      "uncovered": 1,
+      "filtered": 0,
+      "notComparable": 2
+    },
+    {
+      "repository": "fe-lang/sonatina",
+      "commit": "c704ab11f6facf329ba91fe00e0ade5ec7a30ffb",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 11,
+      "covered": 0,
+      "uncovered": 11,
       "filtered": 0,
       "notComparable": 0
     },
@@ -792,6 +1304,18 @@
       "notComparable": 0
     },
     {
+      "repository": "flex-analytics/flexviz",
+      "commit": "b8fe166eba7fbd39de8bb298ee924a29d5baedcf",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
       "repository": "flutter/samples",
       "commit": "9df2cac15cc3d28a51aace018ad822387d30ac72",
       "selection": "blind",
@@ -802,6 +1326,30 @@
       "uncovered": 0,
       "filtered": 0,
       "notComparable": 3
+    },
+    {
+      "repository": "fluvio-community/fluvio",
+      "commit": "52673942c1c7364f36f2e05da972436f761243cd",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 6,
+      "covered": 0,
+      "uncovered": 1,
+      "filtered": 2,
+      "notComparable": 3
+    },
+    {
+      "repository": "ForestAdmin/forest-express-sequelize",
+      "commit": "2f254a4b2bc598719fc6a82b0af7de15e0dad5cb",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 13,
+      "covered": 0,
+      "uncovered": 5,
+      "filtered": 2,
+      "notComparable": 6
     },
     {
       "repository": "Foxlider/FASTER",
@@ -821,11 +1369,23 @@
       "selection": "targeted",
       "configPath": ".github/dependabot.yml",
       "entries": 2,
-      "findings": 2,
+      "findings": 3,
       "covered": 0,
-      "uncovered": 2,
+      "uncovered": 3,
       "filtered": 0,
       "notComparable": 0
+    },
+    {
+      "repository": "ggwpez/zepter",
+      "commit": "5884aca1faa716ffc3a0cabff588aa2b0aefc428",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 13,
+      "covered": 0,
+      "uncovered": 12,
+      "filtered": 0,
+      "notComparable": 1
     },
     {
       "repository": "globus/django-globus-portal-framework",
@@ -833,6 +1393,30 @@
       "selection": "blind",
       "configPath": ".github/dependabot.yaml",
       "entries": 1,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "hasura/ndc-postgres",
+      "commit": "1493dc2f92e96d6a8442b2304edabcd62b0865b5",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 3,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "hbeberman/fathomable",
+      "commit": "63d9709f7afa06e481990ce60c522ad8862e94f0",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 3,
       "findings": 0,
       "covered": 0,
       "uncovered": 0,
@@ -900,6 +1484,18 @@
       "notComparable": 1
     },
     {
+      "repository": "horvathandris/dime",
+      "commit": "7c6b0b70fd36f580b2543acacbd3af438ec519e9",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
       "repository": "huggingface/hf_transfer",
       "commit": "dd35eb2e0ee11c8d0ee266634eb450038e6f97b4",
       "selection": "blind",
@@ -912,6 +1508,18 @@
       "notComparable": 1
     },
     {
+      "repository": "iloveitaly/openbook",
+      "commit": "b26f05dc3cd4daff612cde6acb99429da23e9b5a",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 6,
+      "covered": 4,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 2
+    },
+    {
       "repository": "imaNNeo/fl_chart",
       "commit": "ecada9478275e987dbac53c2d16b4fb3f2bcb78e",
       "selection": "blind",
@@ -922,6 +1530,54 @@
       "uncovered": 0,
       "filtered": 0,
       "notComparable": 2
+    },
+    {
+      "repository": "initializ/forge",
+      "commit": "7b29e9de7ce51c43cc7beebfd6415ebf29fc7c83",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 5,
+      "findings": 24,
+      "covered": 0,
+      "uncovered": 24,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "Inner-Heaven/libzetta-rs",
+      "commit": "54f50ab3d6de23f946dfae4b8a8b2b2d0926598c",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 2,
+      "covered": 1,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "iotaledger/starfish",
+      "commit": "4f6d149ceb69cdce6f0be3cde2d3e053b9db0f52",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 25,
+      "covered": 25,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "iqlusioninc/abscissa",
+      "commit": "721fb340417578c00b3838098bb7990b7bd0f400",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
     },
     {
       "repository": "Jackett/Jackett",
@@ -948,6 +1604,54 @@
       "notComparable": 0
     },
     {
+      "repository": "jdrouet/jolimail",
+      "commit": "28f5ac8e746777cfb7ce0a1f4815e5d281bb2a3d",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 6,
+      "covered": 0,
+      "uncovered": 4,
+      "filtered": 0,
+      "notComparable": 2
+    },
+    {
+      "repository": "jthegedus/asdf-firebase",
+      "commit": "0fcfd62975045a313a840253adf0cf327f8ea8d9",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 4,
+      "covered": 3,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "jthegedus/asdf-gcloud",
+      "commit": "00cdf065aaf10f07ff3da8eba59746526e6a93c4",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 6,
+      "covered": 5,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "jthegedus/asdf-v",
+      "commit": "17bcf55aca038017c111e182b4a715e0a3f001b9",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 4,
+      "covered": 3,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
       "repository": "jugglerchris/rust-html2text",
       "commit": "3164eb0d303b63fe66848bd7842e93ac31078ae5",
       "selection": "blind",
@@ -965,11 +1669,11 @@
       "selection": "blind",
       "configPath": ".github/dependabot.yml",
       "entries": 1,
-      "findings": 0,
+      "findings": 2,
       "covered": 0,
       "uncovered": 0,
       "filtered": 0,
-      "notComparable": 0
+      "notComparable": 2
     },
     {
       "repository": "Kimeur/duology",
@@ -994,6 +1698,54 @@
       "uncovered": 0,
       "filtered": 0,
       "notComparable": 9
+    },
+    {
+      "repository": "lichess-org/leroyjenkins",
+      "commit": "b7271a24ad484341dcc510061244cbb89e135ed1",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 2,
+      "covered": 2,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
+      "repository": "lingui/swc-plugin",
+      "commit": "aa21c44c932e79da08fb3b2f85e5f27feba2973d",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 3,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 3
+    },
+    {
+      "repository": "linuztx/alter-zero",
+      "commit": "24f7f4ba539b4763a610a8a45d0b3265ebd6ee28",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "lloydsmart/chd2iso-fuse",
+      "commit": "ee62c8bcd61ef24a050ab100758c8a01d7d49bef",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
     },
     {
       "repository": "localsend/localsend",
@@ -1056,6 +1808,18 @@
       "notComparable": 0
     },
     {
+      "repository": "mattermost/mattermost-helm",
+      "commit": "07025cf61b2fd7f656d08723acdba53de238454e",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 6,
+      "covered": 0,
+      "uncovered": 1,
+      "filtered": 0,
+      "notComparable": 5
+    },
+    {
       "repository": "mckenziearts/laravel-notify",
       "commit": "f57094aae5d336046ced7a5e1fd1eeb37c0219d4",
       "selection": "blind",
@@ -1080,16 +1844,28 @@
       "notComparable": 5
     },
     {
+      "repository": "microscaler/BRRTRouter",
+      "commit": "4f10fbb2f3b56522cce906fe3d648e733a7e1283",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 3,
+      "findings": 3,
+      "covered": 0,
+      "uncovered": 2,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
       "repository": "microsoft/azure-redcap-paas",
       "commit": "616a73de969f04a0a57b65e989758a568bea0ef8",
       "selection": "blind",
       "configPath": ".github/dependabot.yml",
       "entries": 1,
-      "findings": 0,
+      "findings": 1,
       "covered": 0,
       "uncovered": 0,
       "filtered": 0,
-      "notComparable": 0
+      "notComparable": 1
     },
     {
       "repository": "microsoft/BCQuality",
@@ -1097,11 +1873,11 @@
       "selection": "blind",
       "configPath": ".github/dependabot.yml",
       "entries": 1,
-      "findings": 5,
+      "findings": 7,
       "covered": 0,
       "uncovered": 0,
       "filtered": 0,
-      "notComparable": 5
+      "notComparable": 7
     },
     {
       "repository": "microsoft/FASTER",
@@ -1272,6 +2048,30 @@
       "notComparable": 0
     },
     {
+      "repository": "obbyworld/obby",
+      "commit": "67a31887dd2fb93414461577cacc1e17b6af1453",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 4,
+      "findings": 6,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 1,
+      "notComparable": 5
+    },
+    {
+      "repository": "oculairmedia/Letta-MCP-server",
+      "commit": "622bffadc074a1fa5cc4e0faa48deac94a8573c2",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 4,
+      "findings": 0,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 0
+    },
+    {
       "repository": "ossf/package-analysis",
       "commit": "c5c45008da694036d701ba76fe9567fc8a5b9675",
       "selection": "blind",
@@ -1368,16 +2168,40 @@
       "notComparable": 2
     },
     {
+      "repository": "phip1611/noto-sans-mono-bitmap-rs",
+      "commit": "d9c813ad50fdaf0d9cdefa22f9b7675292cefb58",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "podusowski/walkers",
+      "commit": "1308f4131543f37f26f3cd020e52bdb26ae96a0d",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 9,
+      "covered": 0,
+      "uncovered": 8,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
       "repository": "PowerShell/PSReadLine",
       "commit": "a2d143f78904f8a954f8d4b055e55ceca6939bfc",
       "selection": "blind",
       "configPath": ".github/dependabot.yml",
       "entries": 1,
-      "findings": 6,
+      "findings": 8,
       "covered": 1,
       "uncovered": 0,
       "filtered": 0,
-      "notComparable": 5
+      "notComparable": 7
     },
     {
       "repository": "pyiron/pyiron",
@@ -1390,6 +2214,18 @@
       "uncovered": 7,
       "filtered": 0,
       "notComparable": 0
+    },
+    {
+      "repository": "QuipNetwork/hashsigs-rs",
+      "commit": "a45c4f250ec70213713de31eede652ea820fd314",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 2,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 2
     },
     {
       "repository": "railwayapp/nixpacks",
@@ -1476,6 +2312,18 @@
       "notComparable": 3
     },
     {
+      "repository": "rlane/oort3",
+      "commit": "05a0528dfc185838b3186ccd8d1a9d92b241d16e",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 2,
+      "findings": 10,
+      "covered": 0,
+      "uncovered": 5,
+      "filtered": 0,
+      "notComparable": 5
+    },
+    {
       "repository": "rrousselGit/riverpod",
       "commit": "7a02bedc149ef35311d856993e5bb76e528dd036",
       "selection": "blind",
@@ -1486,6 +2334,30 @@
       "uncovered": 14,
       "filtered": 0,
       "notComparable": 0
+    },
+    {
+      "repository": "Rve27/RvSystem-Monitor",
+      "commit": "b07fe27598555e49084bbcc40be558803286b9ef",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 3,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
+      "repository": "sapio-lang/sapio",
+      "commit": "4b4ace2efce0b67763c853c33cb9691d8600b65b",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 3,
+      "findings": 3,
+      "covered": 1,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 2
     },
     {
       "repository": "sestoft/C5",
@@ -1680,6 +2552,18 @@
       "notComparable": 0
     },
     {
+      "repository": "thetonus/website",
+      "commit": "7fe004afa05df1e39ec35e2562c0f4ffef2f7098",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 1,
+      "findings": 1,
+      "covered": 0,
+      "uncovered": 0,
+      "filtered": 0,
+      "notComparable": 1
+    },
+    {
       "repository": "timveil/leaves-of-blocks",
       "commit": "c410830654fa0e275aef687254e7c1a3d9377ec6",
       "selection": "blind",
@@ -1738,6 +2622,18 @@
       "uncovered": 0,
       "filtered": 0,
       "notComparable": 0
+    },
+    {
+      "repository": "webrecorder/browsertrix",
+      "commit": "3462ea73b1d13be62ea0ab49c2cccea4e603f176",
+      "selection": "blind",
+      "configPath": ".github/dependabot.yml",
+      "entries": 3,
+      "findings": 44,
+      "covered": 0,
+      "uncovered": 39,
+      "filtered": 0,
+      "notComparable": 5
     },
     {
       "repository": "Yubico/yubioath-flutter",

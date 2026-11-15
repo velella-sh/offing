@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "benvp/live_motion",
+  "commit": "a955c559555c0f86aa6e310d937676c98b1c8455",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 10,
+    "findings": [
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.14",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": ".gitpod.Dockerfile",
+        "line": 22
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 98831,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": ".gitpod.Dockerfile",
+        "name": "gitpod/workspace-full",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "motion",
+        "currentValue": "^10.14.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "phoenix_live_view",
+        "currentValue": "file:../deps/phoenix_live_view",
+        "skipReason": "file",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "typescript",
+        "currentValue": "^4.6.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

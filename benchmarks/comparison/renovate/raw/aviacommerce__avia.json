@@ -1,0 +1,951 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "aviacommerce/avia",
+  "commit": "8eb0c6707886ef404194a1cef47600c020604967",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 27,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 10
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 11
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 12
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 13
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 14
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 15
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 16
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 17
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 18
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 19
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 20
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 21
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 22
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "line": 23
+      },
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": ".tool-versions",
+        "line": 3
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 161744,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "config/docker/dev/docker-compose-dev.yml",
+        "name": "postgres",
+        "currentValue": "10",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "config/docker/dev/docker-compose-dev.yml",
+        "name": "docker.elastic.co/elasticsearch/elasticsearch",
+        "currentValue": "6.3.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "config/docker/dev/docker-compose-dev.yml",
+        "name": "docker.elastic.co/kibana/kibana",
+        "currentValue": "6.3.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "elixir",
+        "currentValue": "1.13.4-slim",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "apt-utils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "apt-transport-https",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "make",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "inotify-tools",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "gnupg",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "nodejs",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "yarn",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "tar",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "file",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "xz-utils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "cron",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "python-certbot-nginx",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "imagemagick",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "wkhtmltopdf",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/dev/Dockerfile-dev",
+        "name": "xvfb",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "elixir",
+        "currentValue": "1.13.4-slim",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "apt-utils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "apt-transport-https",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "make",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "inotify-tools",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "gnupg",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "nodejs",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "yarn",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "staticfloat/nginx-certbot",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "tar",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "file",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "xz-utils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "cron",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "python-certbot-nginx",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "imagemagick",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "wkhtmltopdf",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "config/docker/prod/Dockerfile",
+        "name": "xvfb",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@babel/polyfill",
+        "currentValue": "^7.2.5",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@types/jquery",
+        "currentValue": "^3.3.29",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@types/prop-types",
+        "currentValue": "^15.5.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@types/react",
+        "currentValue": "^16.8.6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@types/react-dom",
+        "currentValue": "^16.8.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@types/react-router-dom",
+        "currentValue": "^4.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "antd",
+        "currentValue": "^3.13.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "bootstrap",
+        "currentValue": "^4.1.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "date-fns",
+        "currentValue": "^1.30.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "fetch",
+        "currentValue": "^1.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "font-awesome",
+        "currentValue": "^4.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "jquery",
+        "currentValue": "^3.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "moment",
+        "currentValue": "^2.24.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "phoenix",
+        "currentValue": "file:../../../deps/phoenix",
+        "skipReason": "file",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "phoenix_html",
+        "currentValue": "file:../../../deps/phoenix_html",
+        "skipReason": "file",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "react",
+        "currentValue": "^16.7.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "react-dom",
+        "currentValue": "^16.7.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "react-router",
+        "currentValue": "^4.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "react-router-dom",
+        "currentValue": "^4.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "sass-brunch",
+        "currentValue": "^2.10.7",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "select2",
+        "currentValue": "^4.0.6-rc.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "style-loader",
+        "currentValue": "^0.23.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "tether",
+        "currentValue": "^1.4.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@babel/core",
+        "currentValue": "^7.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@babel/preset-env",
+        "currentValue": "^7.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@babel/preset-react",
+        "currentValue": "^7.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@types/date-fns",
+        "currentValue": "^2.6.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "@types/moment",
+        "currentValue": "^2.13.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "awesome-typescript-loader",
+        "currentValue": "^5.2.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "babel-loader",
+        "currentValue": "^8.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "babel-plugin-import",
+        "currentValue": "^1.11.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "copy-webpack-plugin",
+        "currentValue": "^4.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "css-loader",
+        "currentValue": "^2.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "cssnano",
+        "currentValue": "^4.1.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "eslint",
+        "currentValue": "^5.14.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "eslint-config-airbnb-base",
+        "currentValue": "^13.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "eslint-plugin-import",
+        "currentValue": "^2.16.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "file-loader",
+        "currentValue": "^3.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "mini-css-extract-plugin",
+        "currentValue": "^0.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "optimize-css-assets-webpack-plugin",
+        "currentValue": "^4.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "popper.js",
+        "currentValue": "^1.14.3",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "postcss-loader",
+        "currentValue": "^3.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "prettier",
+        "currentValue": "^1.16.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "sass-loader",
+        "currentValue": "^7.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "typescript",
+        "currentValue": "^3.2.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "uglifyjs-webpack-plugin",
+        "currentValue": "^1.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "url-loader",
+        "currentValue": "^1.1.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "webpack",
+        "currentValue": "4.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "apps/admin_app/assets/package.json",
+        "name": "webpack-cli",
+        "currentValue": "^2.0.10",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

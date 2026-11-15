@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "inoas/gleam-elixir-phoenix-liveview-counter",
+  "commit": "5dd4eed72ac0a7c39eccbc90884cbf6b830db427",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 15,
+    "findings": [
+      {
+        "ruleId": "container.redis.eol-6.2-and-older",
+        "path": ".devcontainer/docker-compose.yml",
+        "line": 16
+      },
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 4
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.15",
+        "path": ".tool-versions",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 23376,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": ".devcontainer/docker-compose.yml",
+        "name": "postgres",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": ".devcontainer/docker-compose.yml",
+        "name": "redis",
+        "currentValue": "6.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "docs/slides/slidev/package.json",
+        "name": "@slidev/cli",
+        "currentValue": "^0.31.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "docs/slides/slidev/package.json",
+        "name": "@slidev/theme-default",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "docs/slides/slidev/package.json",
+        "name": "@slidev/theme-seriph",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "docs/slides/slidev/package.json",
+        "name": "slidev-theme-unicorn",
+        "currentValue": "^1.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "docs/slides/slidev/package.json",
+        "name": "@iconify-json/mdi",
+        "currentValue": "^1.1.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "docs/slides/slidev/package.json",
+        "name": "playwright-chromium",
+        "currentValue": "^1.22.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

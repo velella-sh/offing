@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "rlane/oort3",
+  "commit": "05a0528dfc185838b3186ccd8d1a9d92b241d16e",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 38,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "services/backend/Dockerfile",
+        "line": 24,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "services/backend/Dockerfile",
+        "line": 25,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "services/compiler/Dockerfile",
+        "line": 34,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "services/compiler/Dockerfile",
+        "line": 35,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/check.yml",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/check.yml",
+        "line": 22,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "rust.crate.tempdir.unmaintained",
+        "path": "shared/builtin_ai/Cargo.toml",
+        "line": 22,
+        "dependabot": {
+          "packageEcosystem": "cargo",
+          "directory": "/shared/builtin_ai"
+        }
+      },
+      {
+        "ruleId": "rust.crate.tempdir.unmaintained",
+        "path": "shared/compiler/Cargo.toml",
+        "line": 9,
+        "dependabot": {
+          "packageEcosystem": "cargo",
+          "directory": "/shared/compiler"
+        }
+      },
+      {
+        "ruleId": "rust.crate.tempdir.unmaintained",
+        "path": "tools/Cargo.toml",
+        "line": 40,
+        "dependabot": {
+          "packageEcosystem": "cargo",
+          "directory": "/tools"
+        }
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 2,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/frontend",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

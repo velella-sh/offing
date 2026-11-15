@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "alibaba/fish-redux",
+  "commit": "40b853bfa0843e5bbe23e9217bae7598bb08bcf7",
+  "ecosystem": "dart",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 45,
+    "findings": [
+      {
+        "ruleId": "dart.sdk.end-of-support-2-and-older",
+        "path": "example/pubspec.yaml",
+        "line": 13
+      },
+      {
+        "ruleId": "dart.sdk.end-of-support-2-and-older",
+        "path": "pubspec.yaml",
+        "line": 8
+      },
+      {
+        "ruleId": "dart.sdk.end-of-support-2-and-older",
+        "path": "test/pubspec.yaml",
+        "line": 8
+      },
+      {
+        "ruleId": "dart.sdk.end-of-support-2-and-older",
+        "path": "test/test_widgets/pubspec.yaml",
+        "line": 5
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 6951,
+    "status": "ok",
+    "dependencies": []
+  }
+}

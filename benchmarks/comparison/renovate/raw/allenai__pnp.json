@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "allenai/pnp",
+  "commit": "d67bce256309855bdb5547d779c995e93bf70db5",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 7,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "src/main/docker/Dockerfile",
+        "line": 24
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "src/main/docker/Dockerfile",
+        "line": 31
+      },
+      {
+        "ruleId": "scala.runtime.eol-2.11",
+        "path": "build.sbt",
+        "line": 11
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 4824,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "src/main/docker/Dockerfile",
+        "name": "allenai-docker-private-docker.bintray.io/org.allenai/pnp-dependencies",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

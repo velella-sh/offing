@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "workleap/wl-leap-local-dev",
+  "commit": "0ba5837e0adf466183e6d13e362f65582ecdd67d",
+  "ecosystem": "shell",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 106,
+    "findings": [
+      {
+        "ruleId": "dotnet.runtime.end-of-support-8.0",
+        "path": ".github/workflows/ci.yml",
+        "line": 113
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-8.0",
+        "path": ".github/workflows/ci.yml",
+        "line": 35
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-8.0",
+        "path": ".github/workflows/ci.yml",
+        "line": 75
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-8.0",
+        "path": ".github/workflows/publish.yml",
+        "line": 37
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-8.0",
+        "path": "src/Leap.Cli.Tests/Leap.Cli.Tests.csproj",
+        "line": 3
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-8.0",
+        "path": "src/Leap.Cli/Leap.Cli.csproj",
+        "line": 6
+      },
+      {
+        "ruleId": "dotnet.runtime.end-of-support-8.0",
+        "path": "src/Leap.Testing/Leap.Testing.csproj",
+        "line": 4
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": ".github/workflows/scripts/leap-run-linux.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": ".github/workflows/scripts/leap-run-macos.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": ".github/workflows/scripts/leap-run-windows.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": ".github/workflows/scripts/shared.psm1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": "Build.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": "BuildAndInstall.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": "Install.ps1",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 2245,
+    "status": "ok",
+    "dependencies": []
+  }
+}

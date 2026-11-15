@@ -199,7 +199,7 @@ of every generated file:
 | Renovate | `44.164.10`, printed per run and recorded in `renovateVersions` |
 | Dependabot | not run, as section 7 states; recorded as `dependabot: "not-run"` |
 | endoflife.date snapshot | retrieved 2026-11-06, recorded with its SHA-256 |
-| Offing | `0.7.3` at the commit each run recorded in `offingCommits` |
+| Offing | `0.1.1` at the commit each run recorded in `offingCommits` |
 
 **Amended 2026-11-08, after the first results:** sections 3 and 7 stand; this amendment adds the
 reproduction command, the known result, and the pins the finished runs used. The corpus has grown
