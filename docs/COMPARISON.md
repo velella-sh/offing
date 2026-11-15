@@ -11,6 +11,12 @@ This page publishes the measured results of the protocol in
 not measurements live in [Offing compared with other tools](compare/index.md). Losses are published
 with the same detail as wins.
 
+**A note on version numbers.** The runs below were recorded before the first public release, under the
+internal development version `0.7.3`. The public package restarted its numbering at `0.1.0`, so
+`0.7.3` and the commit hashes recorded in the results (for example `8dd8580a`) do not appear in this
+repository's history. The recorded inputs and counts are unchanged; reproduction uses the committed
+files, not those commits.
+
 Reproduce every table from the committed inputs (no network, no clock):
 
 ```bash
