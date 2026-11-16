@@ -206,6 +206,14 @@ jobs:
           # Set on pull requests only; the merge queue and main run the whole suite.
           OFFING_AFFECTED_FILES: "${{ github.event_name == 'pull_request' && format('{0}/offing-changed-files.txt', runner.temp) || '' }}"
         run: npm run check
+      - name: Check forecast web size and browser privacy
+        if: matrix.node == 24 && matrix.shard == 0
+        env:
+          OFFING_FORECAST_BROWSER: "1"
+        run: |
+          npm run build:forecast-web
+          npx --no-install playwright install --with-deps chromium
+          npm run test:forecast-web
       - name: Guard the quality gate against main
         # A pull request must not raise an allowlist ceiling, add an entry, or loosen TARGETS — even by editing the checker.
         if: (github.event_name == 'pull_request' || github.event_name == 'merge_group') && runner.os == 'Linux' && matrix.node == 24 && matrix.shard == 0

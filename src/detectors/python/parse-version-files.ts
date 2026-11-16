@@ -1,7 +1,7 @@
 import { resolve } from "node:path";
 
 import type { Declaration } from "./types.js";
-import { readOptional } from "./shared.js";
+import { readOptional } from "../read-optional.js";
 
 export async function collectVersionFiles(root: string): Promise<Declaration[]> {
   const declarations: Declaration[] = [];

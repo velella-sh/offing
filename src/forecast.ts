@@ -1,24 +1,22 @@
 import { resolve } from "node:path";
 
 import { bundledRules } from "@velella/ebb/bundled-rules";
-import { buildForecast } from "@velella/ebb/forecast";
-import type { Forecast, ForecastEvent } from "@velella/ebb/forecast";
 import { purlIdentity } from "@velella/ebb/purl";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 import { declaredDependencies, parsePackageManifest } from "./detectors/npm/manifest.js";
 import type { PackageManifest } from "./detectors/npm/manifest.js";
-import type { ScanResult, SourceLocation, UnclassifiedReference } from "./domain.js";
+import type { ScanResult, UnclassifiedReference } from "./domain.js";
 import type { ScanOptions } from "./engine/index.js";
 import { sortReferences } from "./engine/resolve.js";
-import { forecastBuckets } from "./forecast-timeline.js";
 import { readBoundedFile } from "./package-files.js";
 import { childPosixPath } from "./paths.js";
 import { discoverNpmWorkspaces } from "./workspaces.js";
 
-/** The versioned Ebb forecast with the repository references that lack lifecycle coverage. */
-export interface RepositoryForecast extends Forecast {
-  noData: UnclassifiedReference[];
-}
+import { buildForecastReport } from "./forecast-core.js";
+import type { RepositoryForecast } from "./forecast-core.js";
+
+export { renderForecastText } from "./forecast-core.js";
+export type { RepositoryForecast } from "./forecast-core.js";
 
 /** Replay detectors against the forecast's reference day without replacing the live scan cache. */
 export function replayScanOptions(asOf: string): ScanOptions {
@@ -77,55 +75,11 @@ async function noDataComponents(
 /** Add coverage information to the existing dated forecast without recomputing any events. */
 export async function buildRepositoryForecast(result: ScanResult, months: number): Promise<RepositoryForecast> {
   const rules = await bundledRules();
-  return {
-    ...buildForecast(result, rules, result.scannedAt.slice(0, 10), months),
-    noData: await noDataComponents(result, rules),
-  };
-}
-
-function weather(events: readonly ForecastEvent[], hasNoData: boolean): "clear" | "cloudy" | "storm" {
-  if (events.some(({ severity }) => severity === "high" || severity === "critical")) return "storm";
-  return events.length > 0 || hasNoData ? "cloudy" : "clear";
-}
-
-/** Keep each data value on one terminal line, even when a repository supplies control characters. */
-function singleLine(text: string): string {
-  return text.replace(
-    /\p{Cc}|\p{Zl}|\p{Zp}/gu,
-    (character) => `\\u${character.charCodeAt(0).toString(16).padStart(4, "0")}`,
+  return buildForecastReport(
+    result,
+    rules,
+    result.scannedAt.slice(0, 10),
+    months,
+    await noDataComponents(result, rules),
   );
-}
-
-function locationText({ path, line }: SourceLocation): string {
-  return line === undefined ? singleLine(path) : `${singleLine(path)}:${line}`;
-}
-
-/** Render the affected events by horizon with the original locations and explicit data gaps. */
-export function renderForecastText(forecast: RepositoryForecast): string {
-  const buckets = forecastBuckets(forecast);
-  const affecting = buckets.map((bucket) => bucket.events.filter((event) => event.findings.length > 0));
-  const lines = [
-    `Weather: ${weather(affecting[0] ?? [], forecast.noData.length > 0)}`,
-    `Forecast from ${forecast.today} to ${forecast.until} (${forecast.months} month${forecast.months === 1 ? "" : "s"})`,
-  ];
-
-  for (const [index, bucket] of buckets.entries()) {
-    const events = affecting[index] ?? [];
-    const other = bucket.events.length - events.length;
-    lines.push("", bucket.label, `  ${events.length} affecting this repository, ${other} elsewhere`);
-    for (const event of events) {
-      lines.push(`  ${event.date}  ${singleLine(event.title)} [${event.severity}] (${singleLine(event.ruleId)})`);
-      for (const finding of event.findings) lines.push(`    ${locationText(finding)}`);
-    }
-  }
-
-  if (forecast.noData.length > 0) {
-    lines.push("", "No data");
-    for (const { component, reference, reason, location } of forecast.noData) {
-      lines.push(
-        `  ${singleLine(component)} (${singleLine(reference)}) at ${locationText(location)}: ${singleLine(reason)}`,
-      );
-    }
-  }
-  return lines.join("\n");
 }

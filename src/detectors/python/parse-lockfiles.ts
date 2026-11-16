@@ -1,7 +1,8 @@
 import { resolve } from "node:path";
 
 import type { ResolvedVersions, UnknownRecord } from "./types.js";
-import { addResolved, asRecord, parseTomlDocument, readOptional } from "./shared.js";
+import { addResolved, asRecord, parseTomlDocument } from "./shared.js";
+import { readOptional } from "../read-optional.js";
 
 function collectTomlLock(contents: string, target: ResolvedVersions): void {
   const document = parseTomlDocument(contents);

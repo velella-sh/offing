@@ -14,7 +14,7 @@ import { discoverNpmWorkspaces } from "../../workspaces.js";
 import { collectLockData } from "./lockfiles/index.js";
 import { binaryBunLockReference, loadNpmProject } from "./project.js";
 import type { NpmProject } from "./project.js";
-import { readOptional } from "./read-optional.js";
+import { readOptional } from "../read-optional.js";
 import { loadNodeRules, loadPackageRules, matchPackageRules, matchedRuleFinding } from "./rules.js";
 import type { MatchedPackageRule } from "./rules.js";
 import { runtimeFindings, runtimeRuleContext } from "./runtime.js";

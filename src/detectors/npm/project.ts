@@ -7,7 +7,7 @@ import { emptyLockData, mergeLockData } from "./lockfiles/shared.js";
 import type { DependencyGraph, LockData, ResolvedVersions } from "./lockfiles/shared.js";
 import { parsePackageManifest } from "./manifest.js";
 import type { PackageManifest } from "./manifest.js";
-import { readOptional } from "./read-optional.js";
+import { readOptional } from "../read-optional.js";
 
 export interface NpmProject {
   directory: string;
