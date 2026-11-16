@@ -2,7 +2,7 @@
 
 import { appendFile, readFile, stat } from "node:fs/promises";
 import process from "node:process";
-import { relative, resolve } from "node:path";
+import { dirname, relative, resolve } from "node:path";
 
 import { publishFixPullRequest } from "./action-fix-pr.js";
 import type { DataInfo, Finding, ScanResult, SuppressionState } from "./domain.js";
@@ -11,6 +11,7 @@ import {
   highestSeverity,
   nextEndOfLife,
   parsePathsInput,
+  PR_COMMENT_MARKER,
   renderFindingsJson,
   renderComment,
   renderFailure,
@@ -20,6 +21,7 @@ import {
   runGitHubAction,
   suggestionComment,
 } from "./github-action.js";
+import { prepareForecast, readForecastMonths } from "./github-action/forecast.js";
 import { trackingIssueEventAllowed, upsertTrackingIssue } from "./action-tracking-issue.js";
 import { upsertFixSuggestionsReview, upsertPullRequestComment } from "./pr-comment.js";
 import type { GitHubActionOutcome, GitHubAnnotation, SeverityGate, UnannotatedFindings } from "./github-action.js";
@@ -108,6 +110,7 @@ async function writeSummary(
   packages?: GitHubActionOutcome["packages"],
   unannotated?: UnannotatedFindings,
   proposal?: { path: string; count: number },
+  forecast?: string,
 ): Promise<void> {
   const summary = process.env.GITHUB_STEP_SUMMARY;
   if (!summary) return;
@@ -121,7 +124,7 @@ async function writeSummary(
     : "";
   await appendFile(
     summary,
-    `${renderSummary(findings, failed, gate, data, attribution, suppressions, diff, packages, unannotated)}${note}${proposalNote}`,
+    `${renderSummary(findings, failed, gate, data, attribution, suppressions, diff, packages, unannotated)}${note}${proposalNote}${forecast ? `\n${forecast}` : ""}`,
     "utf8",
   );
 }
@@ -175,16 +178,48 @@ function isForkPullRequest(event: PullRequestEvent): boolean {
   );
 }
 
-/** Posts or updates the one summary comment. A comment that cannot be posted (a fork's read-only token) warns; it never fails the scan. */
+function scanCommentBody(
+  outcome: GitHubActionOutcome,
+  unannotated: UnannotatedFindings | undefined,
+  proposal: { path: string; baseline: Baseline } | undefined,
+): string {
+  const { result, gateFailed, gate, expiredFailure, diff, packages, agent } = outcome;
+  const body = renderComment(
+    result.findings,
+    gateFailed,
+    gate,
+    result.data,
+    process.env.INPUT_ATTRIBUTION !== "false",
+    result.suppressions,
+    diff,
+    packages,
+    unannotated,
+    agent,
+  );
+  const note = expiredFailure
+    ? "\n> **Failed:** a baseline suppression has expired and `on-expired` is set to `fail`.\n"
+    : "";
+  const proposalNote = proposal ? `\n${renderBaselineProposal(proposal.path, proposal.baseline)}` : "";
+  return `${body}${note}${proposalNote}`;
+}
+
+/** Posts or updates the one summary comment. A comment that cannot be posted warns without failing the scan. */
 async function postComment(
-  outcome: Awaited<ReturnType<typeof runGitHubAction>>,
+  outcome: GitHubActionOutcome,
   event: PullRequestEvent,
   unannotated?: UnannotatedFindings,
   proposal?: { path: string; baseline: Baseline },
+  forecast?: string,
 ): Promise<void> {
-  // The onboarding baseline proposal is the one comment posted without `pr-comment`: it is the only
-  // way the first run can record today's findings, and the run itself never pushes.
-  if (process.env["INPUT_PR-COMMENT"] !== "true" && !proposal) return;
+  // Onboarding records its first baseline in the comment even without pr-comment.
+  const includeFindings = process.env["INPUT_PR-COMMENT"] === "true" || proposal !== undefined;
+  if (!includeFindings && !forecast) return;
+  if (forecast && isForkPullRequest(event)) {
+    console.log(
+      "::notice title=Offing forecast comment skipped::Pull requests from forks typically have a read-only token.",
+    );
+    return;
+  }
   try {
     const pullRequest = event.pull_request?.number;
     const token = process.env["INPUT_GITHUB-TOKEN"];
@@ -195,26 +230,11 @@ async function postComment(
       );
       return;
     }
-    const { result, gateFailed, gate, expiredFailure, diff, packages, agent } = outcome;
-    const body = renderComment(
-      result.findings,
-      gateFailed,
-      gate,
-      result.data,
-      process.env.INPUT_ATTRIBUTION !== "false",
-      result.suppressions,
-      diff,
-      packages,
-      unannotated,
-      agent,
-    );
-    const note = expiredFailure
-      ? "\n> **Failed:** a baseline suppression has expired and `on-expired` is set to `fail`.\n"
-      : "";
-    const proposalNote = proposal ? `\n${renderBaselineProposal(proposal.path, proposal.baseline)}` : "";
+    const body = includeFindings ? scanCommentBody(outcome, unannotated, proposal) : PR_COMMENT_MARKER;
+    const forecastNote = forecast ? `\n\n${forecast}` : "";
     const done = await upsertPullRequestComment(
       { apiUrl: process.env.GITHUB_API_URL ?? "https://api.github.com", repository, pullRequest, token },
-      `${body}${note}${proposalNote}`,
+      `${body}${forecastNote}`,
     );
     console.log(`Offing ${done} its pull request comment.`);
   } catch (error) {
@@ -627,12 +647,14 @@ async function reportOutcome(
   outcome: GitHubActionOutcome,
   ctx: RunContext,
   proposeBaselinePath: string | undefined,
+  forecastMonths: number | undefined,
 ): Promise<void> {
   const proposal = proposeBaselinePath === undefined ? undefined : proposedBaselineFor(outcome, proposeBaselinePath);
   for (const annotation of outcome.annotations) console.log(annotationCommand(annotation));
   warnAboutSuppressions(outcome);
   await publishOutputs(outcome);
   const unannotated = unannotatedNote(outcome);
+  const forecast = await publishForecast(outcome, ctx, forecastMonths);
   await writeSummary(
     outcome.result.findings,
     outcome.gateFailed,
@@ -644,14 +666,29 @@ async function reportOutcome(
     outcome.packages,
     unannotated,
     proposal ? { path: proposal.path, count: proposal.baseline.findings.length } : undefined,
+    forecast,
   );
-  await postComment(outcome, ctx.event, unannotated, proposal);
+  await postComment(outcome, ctx.event, unannotated, proposal, ctx.event.pull_request ? forecast : undefined);
   await postFixSuggestions(outcome, ctx.event);
   await publishFixes(outcome.result);
   await updateTrackingIssue(outcome);
   warnAboutStaleData(outcome);
   console.log(runSummary(outcome, ctx.diff, ctx.scanPaths?.length, proposal));
   reportGateFailure(outcome);
+}
+
+async function publishForecast(outcome: RunOutcome, ctx: RunContext, months?: number): Promise<string | undefined> {
+  if (months === undefined) return undefined;
+  const pr = ctx.event.pull_request;
+  const forecast = await prepareForecast(
+    resolve(ctx.workspace, ctx.root),
+    dirname(outcome.reportPath),
+    outcome.result.scannedAt.slice(0, 10),
+    months,
+    pr ? { base: pr.base?.sha, head: pr.head?.sha } : undefined,
+  );
+  if (forecast?.calendarPath) await setOutput("forecast-calendar-path", forecast.calendarPath);
+  return forecast?.summary;
 }
 
 async function main(): Promise<void> {
@@ -661,6 +698,7 @@ async function main(): Promise<void> {
     const root = env.INPUT_PATH || workspace;
     if (await answerCommentRun(env, root)) return;
 
+    const months = env.INPUT_FORECAST === "true" ? readForecastMonths(env["INPUT_FORECAST-MONTHS"]) : undefined;
     const { ctx, proposeBaselinePath } = await prepareRun(env, root, workspace);
     const outcome = await runGitHubAction({
       root: ctx.scanPaths ? resolve(workspace, root) : root,
@@ -668,7 +706,7 @@ async function main(): Promise<void> {
       ...scanOptionsFor(ctx),
       ...policyOptionsFor(ctx),
     });
-    await reportOutcome(outcome, ctx, proposeBaselinePath);
+    await reportOutcome(outcome, ctx, proposeBaselinePath, months);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.log(`::error title=Offing failed::${commandValue(message)}`);

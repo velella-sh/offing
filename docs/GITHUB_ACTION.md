@@ -181,13 +181,15 @@ does not provide a `with` entry.
 | `upload-report` | `true` | Upload the JSON report as an Actions artifact. `false` keeps the generated report only on the runner. |
 | `upload-sarif` | `false` | Set to `true` to upload the findings to GitHub code scanning as SARIF. Needs `security-events: write`. |
 | `upload-badge` | `false` | Generate a Shields.io endpoint JSON and a branded SVG badge, and upload both as the `offing-badge` artifact (14 days). |
+| `forecast` | `false` | Publish the lifecycle forecast in the job summary, the pull request comment, and a calendar artifact. See [lifecycle forecast](forecast-action.md). |
+| `forecast-months` | `6` | Forecast horizon in whole months, from 1 to 36. |
 | `pr-comment` | `false` | Set to `true` to post one summary comment on pull requests (counts and the top findings). Re-runs update the same comment. Needs `pull-requests: write`. |
 | `agent-authors` | `Copilot, google-labs-jules[bot], devin-ai-integration[bot], chatgpt-codex-connector[bot], claude[bot]` | Comma-separated logins treated as coding agents. In diff mode, when the pull request author matches, the comment adds the **Stale choices this agent introduced** section. Set to `none` to turn it off. Matching ignores case and a leading `@`. |
 | `suggest-fixes` | `false` | In diff mode, post one review whose `suggestion` blocks apply the deterministic fixes for findings on lines the pull request changed. Re-runs update the same review. Needs `pull-requests: write`; pull requests from forks are skipped. |
 | `commands` | `false` | Set to `true` to answer `/offing explain` and `/offing ignore` comments when the workflow runs on `issue_comment`. Replies only to owners, members, and collaborators. Needs `pull-requests: write`. |
 | `fix-pr` | `false` | Set to `true` to open or update one pull request on `offing/fixes` with every deterministic fix, and close it when nothing is left to fix. Runs only on `schedule` and `workflow_dispatch` events. Needs `contents: write` and `pull-requests: write`. See [scheduled fix pull request](#scheduled-fix-pull-request). |
 | `tracking-issue` | `false` | Set to `true` in a scheduled workflow to keep one issue listing findings by end-of-life date. Re-runs update the same issue; it closes when nothing is left and reopens when findings return. Needs `issues: write`. |
-| `github-token` | `${{ github.token }}` | Token used to post the comment, command reply, or fix suggestions when `pr-comment`, `commands`, or `suggest-fixes` is `true`, to open, update, or close the fix pull request when `fix-pr` is `true`, and to update the tracking issue when `tracking-issue` is `true`. |
+| `github-token` | `${{ github.token }}` | Token used for PR comments (including the forecast), command replies, fix suggestions, fix pull requests, and the tracking issue. |
 | `attribution` | `true` | Adds one line to the job summary saying the scan was done by Offing, with a link. Set to `false` to leave it out. |
 
 | Output | Availability | Meaning |
