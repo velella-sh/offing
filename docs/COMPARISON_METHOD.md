@@ -12,8 +12,8 @@ outcome. [#2173](https://github.com/velella-sh/offing/issues/2173),
 [#2175](https://github.com/velella-sh/offing/issues/2175) run it; this page decides in advance
 what those runs may report.
 
-**Published before results:** 2026-11-03, written against `origin/main` at `9d81af78`
-(Offing `0.7.3`). At that commit `benchmarks/comparison/` — where the runs write their results —
+**Published before results:** 2026-11-03, written before any comparison result existed.
+At that point `benchmarks/comparison/` — where the runs write their results —
 does not exist, and neither does `docs/COMPARISON.md`. Every number below is read from a file in the
 repository, named beside it; none is estimated. Where something is not measurable yet this page says
 so instead of guessing.
