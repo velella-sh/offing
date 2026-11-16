@@ -1,0 +1,28 @@
+# Copy to .github/workflows/forecast.yml after Offing v0.2.0 is published.
+name: Offing lifecycle forecast
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: offing-forecast-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  forecast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: velella-sh/offing@v0.2.0
+        with:
+          forecast: "true"
+          forecast-months: "6"
+          fail-on-severity: none
+          upload-report: "false"

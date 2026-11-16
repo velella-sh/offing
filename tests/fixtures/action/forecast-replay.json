@@ -1,0 +1,18 @@
+{
+  "event": {
+    "pull_request": {
+      "number": 7,
+      "base": { "repo": { "full_name": "example/project" } },
+      "head": { "repo": { "full_name": "example/project", "fork": false } }
+    }
+  },
+  "responses": [
+    { "method": "GET", "path": "/repos/example/project/issues/7/comments?per_page=100&page=1", "status": 200, "body": [] },
+    { "method": "POST", "path": "/repos/example/project/issues/7/comments", "status": 201, "body": { "id": 42 } },
+    {
+      "method": "GET", "path": "/repos/example/project/issues/7/comments?per_page=100&page=1", "status": 200,
+      "body": [{ "id": 42, "body": "<!-- offing-pr-comment -->\nOld forecast" }]
+    },
+    { "method": "PATCH", "path": "/repos/example/project/issues/comments/42", "status": 200, "body": { "id": 42 } }
+  ]
+}
