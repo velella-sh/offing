@@ -9,6 +9,8 @@ Cursor's `afterFileEdit` hook runs after the Agent edits a file. Offing reads `f
 1. Writes an always-applied instruction in `.cursor/rules/offing.mdc` only through `init` (never at hook time), so the agent still knows to check lifecycle status before adding a dependency.
 2. Keeps the hook as an audit log on stderr and exits `0`. A scan with no findings exits `0` without output. Missing lifecycle data emits a warning and lets the session continue.
 
+Offing's `preToolUse` hook checks proposed writes. A finding at the configured severity gate blocks the write and sends its replacement to the agent. See [Check a snippet before writing](../check-snippet.md#agent-hooks).
+
 ## Install
 
 Install Offing on the `PATH` that Cursor uses to run hooks. A global install is one way to make the command available. From the project root, preview the proposed changes and then apply the setup.
@@ -20,7 +22,7 @@ offing init --hooks-for cursor --dry-run
 offing init --hooks-for cursor
 ```
 
-The command writes only the project-level file Cursor documents, `<repo>/.cursor/hooks.json` — never anything in your home directory — keeps every existing key and hook, appends one `afterFileEdit` entry, and keeps (or creates) `.cursor/rules/offing.mdc`. Running it again changes nothing:
+The command writes only the project-level file Cursor documents, `<repo>/.cursor/hooks.json` — never anything in your home directory — keeps every existing key and hook, adds `preToolUse` and `afterFileEdit` entries, and keeps (or creates) `.cursor/rules/offing.mdc`. Running it again changes nothing:
 
 ```json
 {
@@ -30,6 +32,13 @@ The command writes only the project-level file Cursor documents, `<repo>/.cursor
       {
         "command": "offing hook cursor",
         "timeout": 60
+      }
+    ],
+    "preToolUse": [
+      {
+        "command": "offing hook cursor",
+        "timeout": 60,
+        "matcher": "Write|Edit|StrReplace"
       }
     ]
   }
@@ -42,7 +51,7 @@ The command writes only the project-level file Cursor documents, `<repo>/.cursor
 offing init --hooks --remove --hooks-for cursor
 ```
 
-Offing removes its edit hook entry and keeps the config file and other settings. Cursor keeps the shared project rule at `.cursor/rules/offing.mdc`. Use Cursor’s Rules settings to manage it.
+Offing removes its edit hook entries and keeps the config file and other settings. Cursor keeps the shared project rule at `.cursor/rules/offing.mdc`. Use Cursor’s Rules settings to manage it.
 
 ## Troubleshooting
 

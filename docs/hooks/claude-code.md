@@ -6,6 +6,8 @@ title: Claude Code edit hook
 
 Claude Code's `PostToolUse` hook runs after a tool finishes. Offing registers it for `Write`, `Edit`, and `MultiEdit`, reads `tool_input.file_path`, and answers in the protocol documented for Claude Code 2.1.316 (current stable, 2026-11-01) at <https://code.claude.com/docs/en/hooks>: `PostToolUse` cannot block a tool that already ran, and exit code `2` shows the hook's stderr to Claude so it can correct the file in the same turn. A scan with no findings exits `0` without output. Missing lifecycle data emits a warning and lets the session continue.
 
+Offing's `PreToolUse` hook checks the proposed contents before Claude Code writes. A finding at the configured severity gate blocks the tool and shows its replacement. See [Check a snippet before writing](../check-snippet.md#agent-hooks).
+
 ## Install
 
 Install Offing on the `PATH` that Claude Code uses to run hooks. A global install is one way to make the command available. From the project root, preview the proposed changes and then apply the setup.
@@ -17,12 +19,24 @@ offing init --hooks-for claude-code --dry-run
 offing init --hooks-for claude-code
 ```
 
-The command keeps every existing setting and hook — including the pre-install guard below — and adds one entry. Running it again changes nothing:
+The command keeps every existing setting and hook — including the pre-install guard below — and adds `PreToolUse` and `PostToolUse` entries. Running it again changes nothing:
 
 ```json
 {
   "hooks": {
     "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "offing hook claude-code",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
@@ -46,7 +60,7 @@ The hook scans offline and has a ten-second scan budget.
 offing init --hooks --remove --hooks-for claude-code
 ```
 
-Offing removes its edit hook entry and keeps the config file and other settings.
+Offing removes its edit hook entries and keeps the config file and other settings.
 
 ## Troubleshooting
 

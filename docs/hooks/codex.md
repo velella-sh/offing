@@ -6,6 +6,8 @@ title: Codex CLI edit hook
 
 Codex CLI's `PostToolUse` hook runs after a tool finishes and matches the patch tool as `apply_patch` (the same tool is also matched as `Edit` or `Write`). Offing reads the patch in `tool_input.command`, scans every file it adds or updates, and answers with the JSON documented for the current stable Codex CLI rust-v0.166.0 (2026-10-29) at <https://developers.openai.com/codex/hooks> (redirects to <https://learn.chatgpt.com/docs/hooks>): `hookSpecificOutput.additionalContext` is added to the model's context, `systemMessage` is surfaced as a warning, and the hook exits `0` — the patch has already applied, so this is feedback the model acts on in the next request, never an error. A scan with no findings exits `0` without output. Missing lifecycle data emits a warning and lets the session continue.
 
+Offing's `PreToolUse` hook previews the proposed patch. A finding at the configured severity gate blocks `apply_patch` and shows its replacement. See [Check a snippet before writing](../check-snippet.md#agent-hooks).
+
 ## Install
 
 Install Offing on the `PATH` that Codex uses to run hooks. A global install is one way to make the command available. From the project root, preview the proposed changes and then apply the setup.
@@ -17,12 +19,24 @@ offing init --hooks-for codex --dry-run
 offing init --hooks-for codex
 ```
 
-The command writes only the project-level file Codex documents, `<repo>/.codex/hooks.json` — never anything in your home directory — keeps every existing key and hook, and appends one entry. Running it again changes nothing:
+The command writes only the project-level file Codex documents, `<repo>/.codex/hooks.json` — never anything in your home directory — keeps every existing key and hook, and adds `PreToolUse` and `PostToolUse` entries. Running it again changes nothing:
 
 ```json
 {
   "hooks": {
     "PostToolUse": [
+      {
+        "matcher": "apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "offing hook codex",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
       {
         "matcher": "apply_patch",
         "hooks": [
@@ -44,7 +58,7 @@ The command writes only the project-level file Codex documents, `<repo>/.codex/h
 offing init --hooks --remove --hooks-for codex
 ```
 
-Offing removes its edit hook entry and keeps the config file and other settings.
+Offing removes its edit hook entries and keeps the config file and other settings.
 
 ## Troubleshooting
 

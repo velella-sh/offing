@@ -73,18 +73,21 @@ export function findingsAtGate(
   return findingsForEdit(findings, edit).filter((finding) => severityRank[finding.severity] >= minimum);
 }
 
-function scanWithTimeout(
-  scan: NonNullable<HookOptions["scan"]>,
-  root: string,
-  timeoutMs: number,
-): Promise<Pick<ScanResult, "findings"> | undefined> {
+function withTimeout<T>(operation: Promise<T>, timeoutMs: number): Promise<T | undefined> {
   let timer: NodeJS.Timeout | undefined;
   const budget = new Promise<undefined>((resolvePromise) => {
     timer = setTimeout(() => resolvePromise(undefined), timeoutMs);
   });
-  return Promise.race([scan(root, builtInDetectors), budget]).finally(() => {
+  return Promise.race([operation, budget]).finally(() => {
     if (timer !== undefined) clearTimeout(timer);
   });
+}
+
+function isPreWrite(host: string, payload: unknown): boolean {
+  if (typeof payload !== "object" || payload === null || !("hook_event_name" in payload)) return false;
+  const event = payload.hook_event_name;
+  if (host === "cursor") return event === "preToolUse";
+  return (host === "claude-code" || host === "codex") && event === "PreToolUse";
 }
 
 function missingDataResponse(host: string): HookResponse {
@@ -113,14 +116,22 @@ export async function hookResponse(
     const adapters = options.adapters ?? (await builtInHostHooks()).map((hook) => hook.adapter);
     const adapter = adapters.find((candidate) => candidate.id === args.host);
     if (adapter === undefined) return failOpen;
-    const edit = adapter.parse(JSON.parse(stdin), options.env ?? process.env);
-    if (edit === undefined) return failOpen;
+    const payload: unknown = JSON.parse(stdin);
+    const env = options.env ?? process.env;
+    const timeout = options.timeoutMs ?? HOOK_TIMEOUT_MS;
     if (args.gate === "none") return failOpen;
-    const scanned = await scanWithTimeout(
-      options.scan ?? scanRepositoryFindings,
-      edit.root,
-      options.timeoutMs ?? HOOK_TIMEOUT_MS,
-    );
+    const minimum = severityRank[args.gate];
+    if (isPreWrite(args.host, payload)) {
+      const { preWriteResponse } = await import("./pre-write.js");
+      const check = preWriteResponse(args.host, payload, env, (findings) =>
+        findings.filter((finding) => severityRank[finding.severity] >= minimum),
+      );
+      return (await withTimeout(check, timeout)) ?? failOpen;
+    }
+    const edit = adapter.parse(payload, env);
+    if (!edit) return failOpen;
+    const scan = options.scan ?? scanRepositoryFindings;
+    const scanned = await withTimeout(scan(edit.root, builtInDetectors), timeout);
     if (scanned === undefined) return failOpen;
     return adapter.respond(findingsAtGate(scanned.findings, args.gate, edit));
   } catch (error) {

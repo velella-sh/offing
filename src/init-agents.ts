@@ -1,3 +1,4 @@
+import { isDeepStrictEqual } from "node:util";
 import { lstat, mkdir, readFile, realpath, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve, sep } from "node:path";
 
@@ -142,16 +143,34 @@ function initJsonHook(
   file: string,
   spec: HookJson,
   merge: HookMerge,
+  beforeWrite?: HookJson,
 ): Promise<InitClaudeHooksResult> {
   return hookFileResult(options, file, (before) => {
     if (before === undefined && options.remove) return undefined;
     const text = before ?? "{}\n";
     const result = merge(parseHooksJson(text, file));
-    if (options.remove) return removeHook(text, spec);
-    if (result.change === "unchanged") return before;
-    if (before === undefined) return `${JSON.stringify(result.settings ?? result.hooks ?? result.document, null, 2)}\n`;
-    return insertHook(text, spec);
+    if (options.remove) return removeHook(beforeWrite ? removeHook(text, beforeWrite) : text, spec);
+    const post =
+      before === undefined
+        ? `${JSON.stringify(result.settings ?? result.hooks ?? result.document, null, 2)}\n`
+        : result.change === "unchanged"
+          ? before
+          : insertHook(before, spec);
+    if (!beforeWrite) return post;
+    const updated = withPreWriteHook(post, file, beforeWrite);
+    return before === undefined ? `${JSON.stringify(parseHooksJson(updated, file), null, 2)}\n` : updated;
   });
+}
+
+function withPreWriteHook(text: string, file: string, spec: HookJson): string {
+  const document = parseHooksJson(text, file);
+  const hooks = isRecord(document) && isRecord(document.hooks) ? document.hooks : {};
+  const entries = hooks[spec.event];
+  if (entries !== undefined && !Array.isArray(entries)) {
+    throw new AgentFileError(`${file} has a "hooks.${spec.event}" value that is not an array, so it was not changed.`);
+  }
+  if (entries?.some((entry) => isDeepStrictEqual(entry, spec.entry))) return text;
+  return insertHook(text, spec);
 }
 
 /** Recognizes a hook this command wrote, however its launcher is spelled (`npx … offing`, a global bin, a path). */
@@ -212,7 +231,10 @@ export function withClaudeCodePostToolUse(settings: unknown): {
 
 /** Writes or merges the Claude Code post-edit hook into `.claude/settings.json`, preserving the user's hooks. */
 export async function initClaudeHooks(options: InitClaudeHooksOptions): Promise<InitClaudeHooksResult> {
-  return initJsonHook(options, CLAUDE_CODE_SETTINGS_FILE, CLAUDE_HOOK_SPEC, withClaudeCodePostToolUse);
+  return initJsonHook(options, CLAUDE_CODE_SETTINGS_FILE, CLAUDE_HOOK_SPEC, withClaudeCodePostToolUse, {
+    ...CLAUDE_HOOK_SPEC,
+    event: "PreToolUse",
+  });
 }
 
 export const CODEX_HOOKS_FILE = ".codex/hooks.json";
@@ -274,7 +296,10 @@ export function withCodexPostToolUse(hooks: unknown): {
  * (<https://learn.chatgpt.com/docs/hooks>), preserving the user's hooks. The home directory is never touched.
  */
 export async function initCodexHooks(options: InitCodexHooksOptions): Promise<InitCodexHooksResult> {
-  return initJsonHook(options, CODEX_HOOKS_FILE, CODEX_HOOK_SPEC, withCodexPostToolUse);
+  return initJsonHook(options, CODEX_HOOKS_FILE, CODEX_HOOK_SPEC, withCodexPostToolUse, {
+    ...CODEX_HOOK_SPEC,
+    event: "PreToolUse",
+  });
 }
 
 export const CURSOR_HOOKS_FILE = ".cursor/hooks.json";
@@ -347,7 +372,10 @@ export function withCursorAfterFileEdit(document: unknown): {
  * the hook itself only audits to stderr. The home directory is never touched.
  */
 export async function initCursorHooks(options: InitCursorHooksOptions): Promise<InitCursorHooksResult> {
-  const hooks = await initJsonHook(options, CURSOR_HOOKS_FILE, CURSOR_HOOK_SPEC, withCursorAfterFileEdit);
+  const hooks = await initJsonHook(options, CURSOR_HOOKS_FILE, CURSOR_HOOK_SPEC, withCursorAfterFileEdit, {
+    event: "preToolUse",
+    entry: { ...CURSOR_HOOK_SPEC.entry, matcher: "Write|Edit|StrReplace" },
+  });
   const rule = options.remove
     ? { file: CURSOR_RULES_FILE, change: "unchanged" as const, written: false, diff: "" }
     : await updateAgentFile(resolve(options.root), CURSOR_RULES_FILE, {

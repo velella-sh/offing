@@ -3,9 +3,12 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
 import { builtInDetectors } from "./detectors/index.js";
-import type { Finding } from "./domain.js";
+import type { EvidenceSource, Finding } from "./domain.js";
 import { scanRepository } from "./engine/index.js";
 import { OffingError } from "./offing-error.js";
+import { sortFindings } from "./engine/resolve.js";
+import { required } from "./required.js";
+import { snippetSymbolFindings } from "./snippet-symbols.js";
 
 export const CHECK_SNIPPET_SCHEMA_VERSION = "offing.check-snippet.v1" as const;
 
@@ -17,12 +20,18 @@ export const MAX_SNIPPET_CONTENT_BYTES = 1_000_000;
 /** The message a clean snippet carries, so a caller can show why nothing was flagged. */
 export const NO_FINDINGS_MESSAGE = "No lifecycle findings in this snippet. Offing only checks what its rules cover.";
 
+export type SnippetFinding = Omit<Finding, "replacement"> & {
+  code: string;
+  replacement: string | null;
+  source: EvidenceSource;
+};
+
 export interface SnippetCheck {
   schemaVersion: typeof CHECK_SNIPPET_SCHEMA_VERSION;
   /** The repository-relative path the snippet was checked as. */
   path: string;
-  /** The same finding shape `scan_repository` returns, with paths and lines relative to the snippet. */
-  findings: Finding[];
+  /** Lifecycle findings with snippet-relative locations and replacement guidance. */
+  findings: SnippetFinding[];
   /** One sentence a person or an agent can show as is. */
   message: string;
 }
@@ -52,6 +61,16 @@ export function snippetInputProblem(path: string, content: string): string | und
   return undefined;
 }
 
+function describeFindings(findings: readonly Finding[], content: string): SnippetFinding[] {
+  const lines = content.split(/\r?\n/);
+  return sortFindings(findings).map((finding) => ({
+    ...finding,
+    code: (lines[(finding.location.line ?? 1) - 1] ?? "").trim().slice(0, 240),
+    replacement: finding.replacement ?? null,
+    source: required(finding.sources[0], "finding evidence"),
+  }));
+}
+
 /**
  * Checks one file snippet in isolation: the content is written as the only file of a temporary
  * directory, at the intended repository-relative path, and every built-in detector reads it there.
@@ -72,7 +91,8 @@ export async function checkSnippet(
     await mkdir(dirname(join(directory, path)), { recursive: true });
     await writeFile(join(directory, path), content, "utf8");
     const result = await scan(directory, builtInDetectors);
-    const findings = result.findings;
+    const symbols = options.scan ? [] : await snippetSymbolFindings(path, content);
+    const findings = describeFindings([...result.findings, ...symbols], content);
     return {
       schemaVersion: CHECK_SNIPPET_SCHEMA_VERSION,
       path,

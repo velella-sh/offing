@@ -42,3 +42,34 @@ test("an unavailable pinned bundle allows the edit and emits one host-facing war
     assert.equal(host === "cursor" ? result.stdout : result.stderr, "");
   }
 });
+
+for (const { host } of cases) {
+  test(`installed ${host} pre-write hook blocks new Buffer and passes its replacement`, async (t) => {
+    const hook = await installedHook(t, host);
+    const codex = host === "codex";
+    const run = (code: string, path = "test.js") =>
+      codex
+        ? hook.beforeWrite("apply_patch", {
+            command: `*** Begin Patch\n*** Add File: ${path}\n+${code}\n*** End Patch`,
+          })
+        : hook.beforeWrite("Write", { file_path: path, content: code });
+
+    const blocked = run("const value = new Buffer(9);");
+    if (host === "cursor") {
+      assert.equal(blocked.status, 0, blocked.stderr);
+      const decision = JSON.parse(blocked.stdout);
+      assert.equal(decision.permission, "deny");
+      assert.match(decision.agent_message, /test\.js:1[\s\S]*Buffer\.alloc/);
+    } else {
+      assert.equal(blocked.status, 2, blocked.stderr);
+      assert.match(blocked.stderr, /test\.js:1[\s\S]*Buffer\.alloc/);
+    }
+    const { existsSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    assert.equal(existsSync(join(hook.root, "test.js")), false);
+    const clean = run("const value = Buffer.alloc(9);");
+    assert.deepEqual([clean.status, clean.stdout, clean.stderr], [0, "", ""]);
+    const outside = run("const value = new Buffer(9);", "../outside.js");
+    assert.deepEqual([outside.status, outside.stdout, outside.stderr], [0, "", ""]);
+  });
+}

@@ -10,6 +10,8 @@ Offing ships a Git pre-push hook that scans before you push, edit hooks for seve
 
 `offing hook <host>` is how an agent host asks Offing about a file it just wrote. The host sends its own hook payload as JSON on stdin; Offing runs one offline scan of the repository, keeps the findings in that file at or above the severity gate (default `medium`, or `--fail-on none` to report nothing), and answers in the protocol the host understands. A hook only prints and exits: it never edits files.
 
+The stable Claude Code, Codex, and Cursor integrations also [check proposed file contents](check-snippet.md#agent-hooks) before the write.
+
 A hook lets the agent continue when the payload is malformed, the event is unrelated, the scan fails, or the scan exceeds ten seconds. If lifecycle data is unavailable, it exits `0` and emits one warning. Cursor writes warnings to its hook log.
 
 ```bash

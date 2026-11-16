@@ -2,18 +2,104 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/velella-sh/offing/schemas/check-snippet.v1.schema.json",
   "title": "Offing snippet check v1",
-  "description": "What Offing flags in one file snippet, checked in isolation before it is written to a repository. The findings have the same shape as a scan result's, with paths and lines relative to the snippet.",
+  "description": "What Offing flags in one file snippet, with snippet-relative paths, lines, and replacement guidance.",
   "type": "object",
-  "required": ["schemaVersion", "path", "findings", "message"],
+  "required": [
+    "schemaVersion",
+    "path",
+    "findings",
+    "message"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schemaVersion": { "const": "offing.check-snippet.v1" },
+    "schemaVersion": {
+      "const": "offing.check-snippet.v1"
+    },
     "path": {
       "type": "string",
       "minLength": 1,
       "description": "The repository-relative path the snippet was checked as, for example Dockerfile."
     },
-    "findings": { "$ref": "scan.v1.schema.json#/properties/findings" },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "ruleId",
+          "detector",
+          "title",
+          "summary",
+          "severity",
+          "location",
+          "sources",
+          "code",
+          "replacement",
+          "source"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/id"
+          },
+          "ruleId": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/ruleId"
+          },
+          "detector": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/detector"
+          },
+          "title": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/title"
+          },
+          "summary": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/summary"
+          },
+          "severity": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/severity"
+          },
+          "confidence": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/confidence"
+          },
+          "location": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/location"
+          },
+          "replacement": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dependencyPath": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/dependencyPath"
+          },
+          "deadline": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/deadline"
+          },
+          "sources": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/sources"
+          },
+          "advisoryIds": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/advisoryIds"
+          },
+          "usages": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/usages"
+          },
+          "impact": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/impact"
+          },
+          "migration": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/migration"
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 240
+          },
+          "source": {
+            "$ref": "scan.v1.schema.json#/properties/findings/items/properties/sources/items"
+          }
+        }
+      }
+    },
     "message": {
       "type": "string",
       "minLength": 1,

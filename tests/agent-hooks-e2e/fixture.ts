@@ -20,9 +20,9 @@ interface InstalledEntry {
   readonly hooks?: readonly { readonly command: string }[];
 }
 
-function configuredCommand(text: string, host: StableHost): string {
+function configuredCommand(text: string, host: StableHost, event: string): string {
   const document = JSON.parse(text) as { hooks: Record<string, readonly InstalledEntry[]> };
-  const entry = document.hooks[host === "cursor" ? "afterFileEdit" : "PostToolUse"]?.[0];
+  const entry = document.hooks[event]?.[0];
   const command = entry?.command ?? entry?.hooks?.[0]?.command;
   assert.equal(command, `offing hook ${host}`);
   return command;
@@ -40,7 +40,10 @@ export async function installedHook(t: TestContext, host: StableHost) {
 
   const install = await runCli(["init", "--hooks-for", host, root]);
   assert.equal(install.code, 0, install.stderr);
-  const command = configuredCommand(await readFile(join(root, configFiles[host]), "utf8"), host);
+  const config = await readFile(join(root, configFiles[host]), "utf8");
+  const command = configuredCommand(config, host, host === "cursor" ? "afterFileEdit" : "PostToolUse");
+  const preEvent = host === "cursor" ? "preToolUse" : "PreToolUse";
+  const preCommand = configuredCommand(config, host, preEvent);
   const bin = join(directory, "bin");
   await mkdir(bin);
   const cli = resolve("dist/src/cli.js");
@@ -61,7 +64,16 @@ export async function installedHook(t: TestContext, host: StableHost) {
     OFFING_NO_CACHE: "0",
   };
   return {
+    root,
     dockerfile,
+    beforeWrite: (tool: string, args: Record<string, unknown>) =>
+      spawnSync(preCommand, {
+        cwd: root,
+        input: JSON.stringify({ cwd: root, hook_event_name: preEvent, tool_name: tool, tool_input: args }),
+        env,
+        encoding: "utf8",
+        shell: true,
+      }),
     run: (overrides: NodeJS.ProcessEnv = {}) =>
       spawnSync(command, { cwd: root, input, env: { ...env, ...overrides }, encoding: "utf8", shell: true }),
   };

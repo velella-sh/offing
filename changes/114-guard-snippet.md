@@ -1,0 +1,1 @@
+- Catch deprecated and removed APIs in snippets and block supported agent writes before they reach disk.
