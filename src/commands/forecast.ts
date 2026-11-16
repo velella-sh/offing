@@ -92,7 +92,7 @@ async function writeCalendar(file: string, calendar: string, force: boolean, ctx
     else await link(temporary, file);
     return 0;
   } catch (error) {
-    if (error instanceof Error && "code" in error && error.code === "EEXIST") {
+    if (!force && error instanceof Error && "code" in error && error.code === "EEXIST") {
       return ctx.fail("usage", "Calendar file already exists: " + file + ". Use --force to replace it.");
     }
     throw error;

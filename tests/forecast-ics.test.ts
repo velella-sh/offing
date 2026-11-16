@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -48,4 +48,22 @@ test("--ics exports the same calendar to stdout and to a file, with explicit ove
   const forceWithoutFile = await runCli([...args, "--force"], options);
   assert.equal(forceWithoutFile.code, 2);
   assert.match(forceWithoutFile.stderr, /--force needs --ics <file>/);
+});
+
+test("--ics cleans up a staged calendar when the destination cannot be replaced", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "offing-forecast-ics-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const destination = join(root, "forecast.ics");
+  await mkdir(destination);
+  await writeFile(join(destination, "keep.txt"), "existing content");
+
+  const result = await runCli(
+    ["forecast", "--as-of", "2026-10-25", "--data-version", "bundled", "--ics", destination, "--force"],
+    { cwd: root },
+  );
+  assert.equal(result.code, 5);
+  assert.equal(result.stdout, "");
+  assert.match(result.stderr, /forecast\.ics/);
+  assert.equal(await readFile(join(destination, "keep.txt"), "utf8"), "existing content");
+  assert.ok((await readdir(root)).every((name) => !name.startsWith(".offing-calendar-")));
 });
