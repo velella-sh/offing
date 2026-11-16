@@ -4,7 +4,7 @@ import { test } from "node:test";
 import { installedHook } from "./agent-hooks-e2e/fixture.js";
 
 test("the installed edit hook responds in under 200 ms at p95 with a warm cache", {
-  skip: process.execArgv.includes("--experimental-test-coverage"),
+  skip: process.env.NODE_V8_COVERAGE ? "latency is measured without coverage instrumentation" : false,
 }, async (t) => {
   const { run } = await installedHook(t, "claude-code");
   assert.equal(run().status, 2, "warm-up must scan and report the fixture");
