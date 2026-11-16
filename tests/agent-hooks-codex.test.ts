@@ -199,6 +199,7 @@ test("a new hooks file is created, and a second run changes nothing", async () =
   const written = JSON.parse(await readFile(join(root, CODEX_HOOKS_FILE), "utf8")) as {
     hooks: Record<string, Array<{ matcher: string }>>;
   };
+  assert.deepEqual(written.hooks.PreToolUse, written.hooks.PostToolUse);
   assert.equal(written.hooks.PostToolUse!.length, 1);
   assert.equal(written.hooks.PostToolUse![0]!.matcher, CODEX_HOOK_MATCHER);
 
@@ -214,7 +215,7 @@ test("merging into an existing hooks file keeps every existing entry", async () 
   const written = JSON.parse(await readFile(join(root, CODEX_HOOKS_FILE), "utf8")) as {
     hooks: Record<string, unknown[]>;
   };
-  assert.equal(written.hooks.PreToolUse!.length, 1);
+  assert.equal(written.hooks.PreToolUse!.length, 2);
   assert.equal(written.hooks.PostToolUse!.length, 2);
   assert.match(result.diff, /^--- a\/\.codex\/hooks\.json\n\+\+\+ b\/\.codex\/hooks\.json/);
 });

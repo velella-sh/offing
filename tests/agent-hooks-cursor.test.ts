@@ -139,6 +139,7 @@ test("a new hooks file is created with the rule, and a second run changes nothin
     hooks: Record<string, Array<{ command: string }>>;
   };
   assert.equal(written.version, 1);
+  assert.equal(written.hooks.preToolUse?.[0]?.command, CURSOR_HOOK_COMMAND);
   assert.equal(written.hooks.afterFileEdit!.length, 1);
   assert.equal(written.hooks.afterFileEdit![0]!.command, CURSOR_HOOK_COMMAND);
   assert.match(await readFile(join(root, CURSOR_RULES_FILE), "utf8"), /alwaysApply: true/);
@@ -244,13 +245,13 @@ test("the init command merges hooks and prints added and updated rule results", 
     encoding: "utf8",
   });
   assert.equal(updateDry.status, 0, updateDry.stderr);
-  assert.match(updateDry.stdout, /\.cursor\/hooks\.json already has the current Offing post-edit hook/);
+  assert.match(updateDry.stdout, /Would update \.cursor\/hooks\.json:/);
   assert.match(updateDry.stdout, /Would update \.cursor\/rules\/offing\.mdc:/);
   const updated = spawnSync(process.execPath, [cli, "init", "--hooks-for", "cursor", updateRoot], {
     encoding: "utf8",
   });
   assert.equal(updated.status, 0, updated.stderr);
-  assert.match(updated.stdout, /\.cursor\/hooks\.json already has the current Offing post-edit hook/);
+  assert.match(updated.stdout, /Updated \.cursor\/hooks\.json/);
   assert.match(updated.stdout, /Updated the Offing section in \.cursor\/rules\/offing\.mdc/);
   assert.match(await readFile(join(updateRoot, CURSOR_RULES_FILE), "utf8"), /check_dependency/);
 });

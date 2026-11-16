@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+// Run snippet timing in the existing isolated CI latency step.
+import "./check-snippet-perf.test.js";
 import { installedHook } from "./agent-hooks-e2e/fixture.js";
 
 test("the installed edit hook responds in under 200 ms at p95 with a warm cache", {

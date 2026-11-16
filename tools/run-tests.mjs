@@ -385,7 +385,11 @@ export function spawnTest(nodeArgs, options = {}) {
 async function listDistTests() {
   const files = [];
   for await (const file of glob("dist/tests/**/*.test.js", { cwd: ROOT })) {
-    if (resolve(ROOT, file) !== resolve(ROOT, HOOK_LATENCY_TEST)) files.push(resolve(ROOT, file));
+    // Both latency tests run through the dedicated hook-latency test entry point.
+    const path = resolve(ROOT, file);
+    if (path === resolve(ROOT, HOOK_LATENCY_TEST) || path === resolve(ROOT, "dist/tests/check-snippet-perf.test.js"))
+      continue;
+    files.push(path);
   }
   return files.sort();
 }

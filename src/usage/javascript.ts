@@ -142,6 +142,23 @@ const calleeFieldByParent = new Map([
   ["new_expression", "constructor"],
 ]);
 
+function parameterBinds(parameter: Node | null, name: string): boolean {
+  if (!parameter) return false;
+  if (parameter.type === "identifier") return parameter.text === name;
+  const binding = parameter.childForFieldName("pattern") ?? parameter.childForFieldName("left");
+  return binding?.type === "identifier" && binding.text === name;
+}
+
+function shadowedByParameter(head: Node): boolean {
+  const name = head.text;
+  for (let scope = head.parent; scope; scope = scope.parent) {
+    if (parameterBinds(scope.childForFieldName("parameter"), name)) return true;
+    const parameters = scope.childForFieldName("parameters");
+    if (parameters?.namedChildren.some((parameter) => parameterBinds(parameter, name))) return true;
+  }
+  return false;
+}
+
 /**
  * Every call, construction, and (when `wantsReferences`) bare name in the file, as the symbol matchers read them.
  * A callee is reported once as a call; a name is reported as a reference only where it is not a declaration and
@@ -157,7 +174,7 @@ export function javaScriptOccurrences(
   for (const callee of callees) {
     const chain = chainOf(callee);
     const call = callee.parent;
-    if (!chain || !call) continue;
+    if (!chain || !call || shadowedByParameter(chain.head)) continue;
     used.add(callee.id);
     const args = call.childForFieldName("arguments");
     occurrences.push({
@@ -171,7 +188,7 @@ export function javaScriptOccurrences(
   for (const node of root.descendantsOfType(["identifier", "member_expression"])) {
     if (!node || used.has(node.id) || namesADeclaration(node) || isCalleeOrReceiver(node)) continue;
     const chain = chainOf(node);
-    if (chain)
+    if (chain && !shadowedByParameter(chain.head))
       occurrences.push({
         head: chain.head,
         path: chain.path,
@@ -354,7 +371,7 @@ function contractUsages(contract: SourceUsageContract, scope: JavaScriptScope): 
  * `queries/javascript.scm`. Returns undefined when the file cannot be parsed (too large or over budget),
  * so the caller can fall back to the regex scanner.
  *
- * Bindings are tracked by name for the whole file; shadowing by a nested scope is not modelled.
+ * Imports are tracked by name for the whole file. Symbol matches also account for named parameters.
  */
 export async function analyzeJavaScriptFile(
   file: JavaScriptSourceFile,

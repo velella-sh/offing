@@ -2780,7 +2780,7 @@
   {
     "name": "check_snippet",
     "title": "Check snippet",
-    "description": "Check one file snippet before writing it: pass the intended repository-relative path and the exact content, and Offing runs all built-in detectors against that one file in an isolated temporary directory. Call this before writing or editing package manifests, Dockerfiles, CI workflows, and Kubernetes manifests. Returns the same findings as scan_repository, with paths and lines relative to the snippet. The real repository is never read or written.",
+    "description": "Check proposed file contents for lifecycle issues before writing them. Pass the intended repository-relative path and the exact content. Supports Node.js and Python API usage, GitHub Actions, Kubernetes, and other built-in detectors that can read one file in isolation. Findings include the snippet location, evidence, and the reviewed replacement when available.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -2811,7 +2811,7 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://github.com/velella-sh/offing/schemas/check-snippet.v1.schema.json",
       "title": "Offing snippet check v1",
-      "description": "What Offing flags in one file snippet, checked in isolation before it is written to a repository. The findings have the same shape as a scan result's, with paths and lines relative to the snippet.",
+      "description": "What Offing flags in one file snippet, with snippet-relative paths, lines, and replacement guidance.",
       "type": "object",
       "required": [
         "schemaVersion",
@@ -2841,7 +2841,10 @@
               "summary",
               "severity",
               "location",
-              "sources"
+              "sources",
+              "code",
+              "replacement",
+              "source"
             ],
             "additionalProperties": false,
             "properties": {
@@ -2897,7 +2900,10 @@
                 }
               },
               "replacement": {
-                "type": "string"
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "dependencyPath": {
                 "type": "array",
@@ -3110,6 +3116,31 @@
                         }
                       }
                     }
+                  }
+                }
+              },
+              "code": {
+                "type": "string",
+                "maxLength": 240
+              },
+              "source": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "url"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "accessedAt": {
+                    "type": "string",
+                    "format": "date"
                   }
                 }
               }

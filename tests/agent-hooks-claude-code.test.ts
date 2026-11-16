@@ -152,6 +152,7 @@ test("a new settings file is created, and a second run changes nothing", async (
   const written = JSON.parse(await readFile(join(root, CLAUDE_CODE_SETTINGS_FILE), "utf8")) as {
     hooks: Record<string, Array<{ matcher: string }>>;
   };
+  assert.deepEqual(written.hooks.PreToolUse, written.hooks.PostToolUse);
   assert.equal(written.hooks.PostToolUse!.length, 1);
   assert.equal(written.hooks.PostToolUse![0]!.matcher, CLAUDE_CODE_HOOK_MATCHER);
 
@@ -167,7 +168,7 @@ test("merging into an existing settings file keeps every existing entry", async 
   const written = JSON.parse(await readFile(join(root, CLAUDE_CODE_SETTINGS_FILE), "utf8")) as {
     hooks: Record<string, unknown[]>;
   };
-  assert.equal(written.hooks.PreToolUse!.length, 1);
+  assert.equal(written.hooks.PreToolUse!.length, 2);
   assert.equal(written.hooks.PostToolUse!.length, 2);
   assert.match(result.diff, /^--- a\/\.claude\/settings\.json\n\+\+\+ b\/\.claude\/settings\.json/);
 });

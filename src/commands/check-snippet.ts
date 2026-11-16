@@ -66,7 +66,12 @@ export const command: CliCommand = {
         const check = await checkSnippet({ path: snippetPath, content: await readStream(process.stdin) });
         const text = state.json
           ? JSON.stringify(check, null, 2)
-          : [check.message, ...check.findings.map(renderFindingText)].join("\n\n");
+          : [
+              check.message,
+              ...check.findings.map(({ replacement, ...finding }) =>
+                renderFindingText(replacement === null ? finding : { ...finding, replacement }),
+              ),
+            ].join("\n\n");
         process.stdout.write(`${text}\n`);
         return 0;
       } catch (error) {
