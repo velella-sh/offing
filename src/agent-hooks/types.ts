@@ -32,6 +32,9 @@ export interface HostAdapter {
 export interface HostHook {
   /** Serves `offing hook <id>`; `id` must equal the module's file name. */
   adapter: HostAdapter;
+  readonly stability: "stable" | "beta";
+  readonly markers: readonly string[];
+  readonly binaries: readonly string[];
   /** Writes (or, with `dryRun`, previews) the host's configuration for `offing init --hooks-for <id>`; returns the text to print. */
-  setup(options: { root: string; dryRun: boolean }): Promise<string>;
+  setup(options: { root: string; dryRun: boolean; remove?: boolean }): Promise<string>;
 }

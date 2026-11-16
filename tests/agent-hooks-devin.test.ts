@@ -204,6 +204,7 @@ test("invalid JSON or an unexpected hooks shape is refused with the file untouch
 
 test("the init command writes the hook and honors --dry-run", async () => {
   const root = await repository();
+  await mkdir(join(root, ".devin"), { recursive: true });
   const cli = resolve("dist/src/cli.js");
   const dry = spawnSync(process.execPath, [cli, "init", "--hooks-for", "devin", root, "--dry-run"], {
     encoding: "utf8",

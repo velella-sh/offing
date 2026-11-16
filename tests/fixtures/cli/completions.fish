@@ -154,6 +154,8 @@ complete -c offing -n '__fish_seen_subcommand_from init' -l agents
 complete -c offing -n '__fish_seen_subcommand_from init' -l hooks
 complete -c offing -n '__fish_seen_subcommand_from init' -l personal
 complete -c offing -n '__fish_seen_subcommand_from init' -l hooks-for
+complete -c offing -n '__fish_seen_subcommand_from init' -l list
+complete -c offing -n '__fish_seen_subcommand_from init' -l remove
 complete -c offing -n '__fish_seen_subcommand_from init' -l file
 complete -c offing -n '__fish_seen_subcommand_from init' -l fail-on
 complete -c offing -n '__fish_seen_subcommand_from init' -l yes

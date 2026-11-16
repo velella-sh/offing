@@ -183,6 +183,7 @@ test("invalid JSON or an unexpected hooks shape is refused with the file untouch
 
 test("the init command writes the hook and rule and honors --dry-run", async () => {
   const root = await repository();
+  await mkdir(join(root, ".cursor"), { recursive: true });
   const cli = resolve("dist/src/cli.js");
   const dry = spawnSync(process.execPath, [cli, "init", "--hooks-for", "cursor", root, "--dry-run"], {
     encoding: "utf8",
@@ -196,7 +197,7 @@ test("the init command writes the hook and rule and honors --dry-run", async () 
   assert.equal(written.status, 0, written.stderr);
   assert.match(written.stdout, /Cursor now runs Offing afterFileEdit/);
   assert.match(written.stdout, /Created \.cursor\/rules\/offing\.mdc/);
-  assert.match(await readFile(join(root, CURSOR_HOOKS_FILE), "utf8"), /npx --no-install offing hook cursor/);
+  assert.match(await readFile(join(root, CURSOR_HOOKS_FILE), "utf8"), /offing hook cursor/);
 
   const again = spawnSync(process.execPath, [cli, "init", "--hooks-for", "cursor", root], { encoding: "utf8" });
   assert.equal(again.status, 0, again.stderr);

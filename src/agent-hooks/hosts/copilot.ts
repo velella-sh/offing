@@ -5,10 +5,15 @@ import type { HostHook } from "../types.js";
 
 export const hostHook: HostHook = {
   adapter: copilotAdapter,
-  async setup({ root, dryRun }) {
+  stability: "beta",
+  markers: [".copilot", ".github/hooks", ".github/copilot-instructions.md"],
+  binaries: ["copilot"],
+  async setup(options) {
+    const { dryRun, remove } = options;
     return hooksFileReport(
-      await initCopilotHooks({ root, dryRun }),
+      await initCopilotHooks(options),
       dryRun,
+      remove,
       "GitHub Copilot now runs Offing after create and edit.",
     );
   },

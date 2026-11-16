@@ -1,0 +1,1 @@
+- Stabilize the Claude Code, Codex, and Cursor edit hooks with host detection, installation reports, safe removal, and a warning when lifecycle data is unavailable.

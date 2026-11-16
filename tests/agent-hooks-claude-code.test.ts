@@ -191,6 +191,7 @@ test("invalid JSON or an unexpected hooks shape is refused with the file untouch
 
 test("the init command writes the hook and honors --dry-run", async () => {
   const root = await repository();
+  await mkdir(join(root, ".claude"), { recursive: true });
   const cli = resolve("dist/src/cli.js");
   const dry = spawnSync(process.execPath, [cli, "init", "--hooks-for", "claude-code", root, "--dry-run"], {
     encoding: "utf8",
@@ -202,10 +203,7 @@ test("the init command writes the hook and honors --dry-run", async () => {
   const written = spawnSync(process.execPath, [cli, "init", "--hooks-for", "claude-code", root], { encoding: "utf8" });
   assert.equal(written.status, 0, written.stderr);
   assert.match(written.stdout, /Claude Code now runs Offing after Write, Edit, and MultiEdit/);
-  assert.match(
-    await readFile(join(root, CLAUDE_CODE_SETTINGS_FILE), "utf8"),
-    /npx --no-install offing hook claude-code/,
-  );
+  assert.match(await readFile(join(root, CLAUDE_CODE_SETTINGS_FILE), "utf8"), /offing hook claude-code/);
 
   const unknown = spawnSync(process.execPath, [cli, "init", "--hooks-for", "gitlab", root], { encoding: "utf8" });
   assert.equal(unknown.status, 2);

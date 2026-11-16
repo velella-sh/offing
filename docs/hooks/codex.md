@@ -4,11 +4,17 @@ title: Codex CLI edit hook
 
 # Codex CLI edit hook
 
-Codex CLI's `PostToolUse` hook runs after a tool finishes and matches the patch tool as `apply_patch` (the same tool is also matched as `Edit` or `Write`). Offing reads the patch in `tool_input.command`, scans every file it adds or updates, and answers with the JSON documented for the current stable Codex CLI rust-v0.166.0 (2026-10-29) at <https://developers.openai.com/codex/hooks> (redirects to <https://learn.chatgpt.com/docs/hooks>): `hookSpecificOutput.additionalContext` is added to the model's context, `systemMessage` is surfaced as a warning, and the hook exits `0` — the patch has already applied, so this is feedback the model acts on in the next request, never an error. No findings, or any hook failure, prints nothing and exits `0`.
+Codex CLI's `PostToolUse` hook runs after a tool finishes and matches the patch tool as `apply_patch` (the same tool is also matched as `Edit` or `Write`). Offing reads the patch in `tool_input.command`, scans every file it adds or updates, and answers with the JSON documented for the current stable Codex CLI rust-v0.166.0 (2026-10-29) at <https://developers.openai.com/codex/hooks> (redirects to <https://learn.chatgpt.com/docs/hooks>): `hookSpecificOutput.additionalContext` is added to the model's context, `systemMessage` is surfaced as a warning, and the hook exits `0` — the patch has already applied, so this is feedback the model acts on in the next request, never an error. A scan with no findings exits `0` without output. Missing lifecycle data emits a warning and lets the session continue.
+
+## Install
+
+Install Offing on the `PATH` that Codex uses to run hooks. A global install is one way to make the command available. From the project root, preview the proposed changes and then apply the setup.
 
 ```bash
-npx @velella/offing init --hooks-for codex --dry-run   # show the diff first
-npx @velella/offing init --hooks-for codex             # merge into .codex/hooks.json
+npm install --global @velella/offing
+offing init --hooks --list
+offing init --hooks-for codex --dry-run
+offing init --hooks-for codex
 ```
 
 The command writes only the project-level file Codex documents, `<repo>/.codex/hooks.json` — never anything in your home directory — keeps every existing key and hook, and appends one entry. Running it again changes nothing:
@@ -22,7 +28,7 @@ The command writes only the project-level file Codex documents, `<repo>/.codex/h
         "hooks": [
           {
             "type": "command",
-            "command": "npx --no-install offing hook codex",
+            "command": "offing hook codex",
             "timeout": 60
           }
         ]
@@ -32,7 +38,23 @@ The command writes only the project-level file Codex documents, `<repo>/.codex/h
 }
 ```
 
-If the workspace already has a `hooks.json`, the entry is merged into its `hooks.PostToolUse` list. To turn it off, delete that entry, or remove the whole `.codex/hooks.json` if Offing wrote it.
+## Remove
+
+```bash
+offing init --hooks --remove --hooks-for codex
+```
+
+Offing removes its edit hook entry and keeps the config file and other settings.
+
+## Troubleshooting
+
+If setup cannot detect Codex, open the host so it creates its home configuration, or make its CLI available on `PATH`, then run `offing init --hooks --list` from the project root.
+
+If the host cannot start the hook, check that `offing --version` works with the host's `PATH`. An existing Offing hook using the older `npx` launcher can be refreshed by removing and reinstalling it.
+
+Start Codex in the project and approve the registration in `/hooks` if it is pending. The project must be trusted for Codex to load `.codex/hooks.json`. An `apply_patch` edit with findings adds context to the session.
+
+If Offing warns that lifecycle data is unavailable, check the installation and any `OFFING_DATA_VERSION` pin. Run `offing data status` to inspect the data selection.
 
 The transcript below is real output from the built CLI on 2026-11-04, against a repository holding the fixture Dockerfile from `tests/fixtures/agent-hooks/codex/repo` with the `PostToolUse` payload in `patch-update.json` (its `cwd` pointed at that repository):
 

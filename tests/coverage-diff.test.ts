@@ -168,11 +168,14 @@ test("the CI workflow shards checks and collects coverage in one unsharded run",
     false,
   );
 
+  const latency = checkNamed(/^Check warm agent hook latency$/);
+  assert.ok(latency);
+  assert.equal(latency.if, "matrix.node == 24 && matrix.shard == 0");
+  assert.ok(checkSteps.indexOf(latency) < checkSteps.indexOf(check));
+  assert.equal(checkEnv.OFFING_HOOK_LATENCY, "0");
   const suiteRuns = checkSteps.filter((step) => /test:coverage|run-tests\.mjs|--test\b/.test(String(step.run ?? "")));
-  assert.deepEqual(
-    suiteRuns.map((step) => String(step.run)),
-    [],
-  );
+  assert.deepEqual(suiteRuns, [latency]);
+  assert.match(String(latency.run), /node tools\/run-tests\.mjs dist\/tests\/agent-hooks-latency\.test\.js/);
 
   assert.equal(workflow.jobs.coverage.name, "coverage");
   const coverageSteps = workflow.jobs.coverage.steps;

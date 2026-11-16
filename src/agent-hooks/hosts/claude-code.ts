@@ -5,10 +5,15 @@ import type { HostHook } from "../types.js";
 
 export const hostHook: HostHook = {
   adapter: claudeCodeAdapter,
-  async setup({ root, dryRun }) {
+  stability: "stable",
+  markers: [".claude"],
+  binaries: ["claude"],
+  async setup(options) {
+    const { dryRun, remove } = options;
     return hooksFileReport(
-      await initClaudeHooks({ root, dryRun }),
+      await initClaudeHooks(options),
       dryRun,
+      remove,
       "Claude Code now runs Offing after Write, Edit, and MultiEdit.",
     );
   },

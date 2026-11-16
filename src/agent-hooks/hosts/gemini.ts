@@ -5,10 +5,15 @@ import type { HostHook } from "../types.js";
 
 export const hostHook: HostHook = {
   adapter: geminiAdapter,
-  async setup({ root, dryRun }) {
+  stability: "beta",
+  markers: [".gemini"],
+  binaries: ["gemini"],
+  async setup(options) {
+    const { dryRun, remove } = options;
     return hooksFileReport(
-      await initGeminiHooks({ root, dryRun }),
+      await initGeminiHooks(options),
       dryRun,
+      remove,
       "Gemini CLI now runs Offing after write_file and replace.",
     );
   },

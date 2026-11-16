@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readdir, writeFile } from "node:fs/promises";
+import { mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -23,11 +23,21 @@ test("every module under hosts/ is a host whose adapter id is its file name", as
   assert.equal(new Set(files).size, files.length);
 });
 
+test("the stability table matches the registry", async () => {
+  const hooks = await builtInHostHooks();
+  const docs = await readFile("docs/HOOKS.md", "utf8");
+  const rows = [...docs.matchAll(/^\| \[.*?\]\(hooks\/(.*?)\.md\) \| (Stable|Beta) \|$/gm)];
+  assert.deepEqual(
+    Object.fromEntries(rows.map(([, id, status]) => [id, status?.toLowerCase()])),
+    Object.fromEntries(hooks.map(({ adapter, stability }) => [adapter.id, stability])),
+  );
+});
+
 test("a host dropped into the directory is discovered without editing any list", async () => {
   const directory = await mkdtemp(join(tmpdir(), "offing-hosts-"));
   await writeFile(
     join(directory, "zed.js"),
-    'export const hostHook = { adapter: { id: "zed", parse: () => undefined, respond: () => ({ stdout: "", stderr: "", exitCode: 0 }) }, setup: async () => "ok\\n" };\n',
+    'export const hostHook = { stability: "beta", markers: [], binaries: [], adapter: { id: "zed", parse: () => undefined, respond: () => ({ stdout: "", stderr: "", exitCode: 0 }) }, setup: async () => "ok\\n" };\n',
   );
   const hooks = await loadHostHooks(pathToFileURL(`${directory}/`));
   assert.deepEqual(

@@ -5,7 +5,13 @@ import type { HostHook } from "./types.js";
 const hostsDirectory = new URL("./hosts/", import.meta.url);
 
 function isHostModule(value: unknown): value is { hostHook: HostHook } {
-  return typeof value === "object" && value !== null && "hostHook" in value && value.hostHook !== undefined;
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "hostHook" in value &&
+    typeof value.hostHook === "object" &&
+    value.hostHook !== null
+  );
 }
 
 let builtIn: Promise<HostHook[]> | undefined;
@@ -20,7 +26,10 @@ export async function loadHostHooks(directory: URL = hostsDirectory): Promise<Ho
   for (const file of files) {
     const module: unknown = await import(new URL(file, directory).href);
     if (!isHostModule(module)) throw new Error(`${file} does not export hostHook.`);
-    hooks.push(module.hostHook);
+    const { hostHook } = module;
+    if (hostHook.stability !== "stable" && hostHook.stability !== "beta")
+      throw new Error(`${file} must declare stable or beta hook support.`);
+    hooks.push(hostHook);
   }
   return hooks;
 }

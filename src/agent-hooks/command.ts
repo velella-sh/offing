@@ -1,9 +1,12 @@
 import process from "node:process";
 
+import { configureActiveData } from "@velella/ebb/data-source";
+
 import { builtInDetectors } from "../detectors/index.js";
 import type { Detector } from "../sdk.js";
 import { severityValues, type Finding, type ScanResult, type Severity } from "../domain.js";
-import { scanRepository } from "../engine/index.js";
+import { classifyError } from "../offing-error.js";
+import { scanRepositoryFindings } from "../engine/index.js";
 import { failOpen, findingsForEdit } from "./index.js";
 import { builtInHostHooks } from "./registry.js";
 import type { HookResponse, HostAdapter } from "./types.js";
@@ -27,7 +30,7 @@ export type HookGate = Severity | "none";
 export interface HookOptions {
   /** Host adapters to translate with; the built-in list by default. */
   readonly adapters?: readonly HostAdapter[];
-  /** Runs the scan; `scanRepository` with the built-in detectors by default. */
+  /** Runs the scan; `scanRepositoryFindings` with the built-in detectors by default. */
   readonly scan?: (root: string, detectors: readonly Detector[]) => Promise<Pick<ScanResult, "findings">>;
   /** Overall budget in milliseconds; `HOOK_TIMEOUT_MS` by default. */
   readonly timeoutMs?: number;
@@ -84,10 +87,19 @@ function scanWithTimeout(
   });
 }
 
+function missingDataResponse(host: string): HookResponse {
+  const warning = "Offing warning: lifecycle data is unavailable; this edit was not checked.";
+  if (host === "claude-code" || host === "codex") {
+    const output = { hookSpecificOutput: { hookEventName: "PostToolUse", additionalContext: warning } };
+    return { ...failOpen, stdout: `${JSON.stringify(output)}\n` };
+  }
+  return { ...failOpen, stderr: `${warning}\n` };
+}
+
 /**
  * Turns one host payload into the response the host understands. Every failure — an unknown host, a malformed
- * payload, an event that is not an edit, a scan error, or a timeout — is a silent success, because a hook must
- * never break the agent's session.
+ * payload, an event that is not an edit, a scan error, or a timeout — lets the agent continue.
+ * Missing lifecycle data also returns one host-facing warning.
  */
 export async function hookResponse(
   argv: readonly string[],
@@ -105,14 +117,15 @@ export async function hookResponse(
     if (edit === undefined) return failOpen;
     if (args.gate === "none") return failOpen;
     const scanned = await scanWithTimeout(
-      options.scan ?? ((root, detectors) => scanRepository(root, detectors)),
+      options.scan ?? scanRepositoryFindings,
       edit.root,
       options.timeoutMs ?? HOOK_TIMEOUT_MS,
     );
     if (scanned === undefined) return failOpen;
     return adapter.respond(findingsAtGate(scanned.findings, args.gate, edit));
-  } catch {
-    return failOpen;
+  } catch (error) {
+    const { code } = classifyError(error);
+    return code === "data-unavailable" || code === "package-file-not-found" ? missingDataResponse(args.host) : failOpen;
   }
 }
 
@@ -128,6 +141,8 @@ export async function runHook(
   argv: readonly string[],
   options: HookOptions & { readonly stdin?: () => Promise<string> } = {},
 ): Promise<number> {
+  const pin = (options.env ?? process.env).OFFING_DATA_VERSION;
+  if (pin) configureActiveData({ pinnedVersion: pin });
   const read = options.stdin ?? readStdin;
   const response = await hookResponse(argv, await read().catch(() => ""), options);
   if (response.stdout !== "") process.stdout.write(response.stdout);

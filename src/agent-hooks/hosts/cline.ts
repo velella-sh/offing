@@ -5,10 +5,15 @@ import type { HostHook } from "../types.js";
 
 export const hostHook: HostHook = {
   adapter: clineAdapter,
-  async setup({ root, dryRun }) {
+  stability: "beta",
+  markers: [".cline", ".clinerules"],
+  binaries: ["cline"],
+  async setup(options) {
+    const { dryRun, remove } = options;
     return hooksFileReport(
-      await initClineHooks({ root, dryRun }),
+      await initClineHooks(options),
       dryRun,
+      remove,
       "Cline now runs Offing after write_to_file and replace_in_file; turn on Hooks in Cline's feature settings.",
     );
   },

@@ -6,7 +6,7 @@ import { severityValues } from "../domain.js";
 import { builtInHostHooks } from "../agent-hooks/registry.js";
 import { initAgents } from "../init-agents.js";
 import type { AgentFileName } from "../init-agents.js";
-import { initHooks } from "../init-hooks.js";
+import { detectedHookHosts, initHooks } from "../init-hooks.js";
 import type { InitHooksResult } from "../init-hooks.js";
 import { initPersonal } from "../init-personal.js";
 import { planInitSetup, applyInitSetup, hasWritables, initAgent, planSummary, siteSuggestion } from "../init.js";
@@ -16,7 +16,18 @@ import type { CliCommand, CommandContext } from "./types.js";
 /** `init` with no flags asks what to set up (guided); `init --agents`, `--hooks`, and `--personal` do one thing without asking. */
 export const command: CliCommand = {
   name: "init",
-  flags: ["--agents", "--hooks", "--personal", "--hooks-for", "--file", "--fail-on", "--yes", "--dry-run"],
+  flags: [
+    "--agents",
+    "--hooks",
+    "--personal",
+    "--hooks-for",
+    "--list",
+    "--remove",
+    "--file",
+    "--fail-on",
+    "--yes",
+    "--dry-run",
+  ],
   example: "offing init --hooks --dry-run",
   usage: [
     "  offing init [path] [--file AGENTS.md|CLAUDE.md] [--fail-on <severity>] [--yes] [--dry-run]   # ask what to set up; apply the defaults for CI, the pre-push hook, and agents",
@@ -24,7 +35,7 @@ export const command: CliCommand = {
     "  offing init --agents [path] [--file AGENTS.md|CLAUDE.md] [--dry-run]",
     "  offing init --hooks [path] [--fail-on <severity>] [--dry-run]   # git pre-push hook; combine with --agents",
     "  offing init --personal [--fail-on <severity>] [--yes] [--dry-run]   # global config and pre-push hook for every repository",
-    "  offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one agent host; docs/HOOKS.md lists them",
+    "  offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one detected agent host\n  offing init --hooks --list [path]   # show agent hook stability and availability\n  offing init --hooks --remove [--hooks-for <host>] [path] [--dry-run]   # remove managed agent hooks",
   ],
   usageSlots: [49, 50, 51, 52, 53],
   run(args, ctx) {
@@ -48,7 +59,7 @@ async function confirmOnTerminal(summary: string, defaultYes = false): Promise<b
 }
 
 const initUsage =
-  "Usage: offing init [agent] [--agents] [--hooks] [--personal] [--hooks-for <host>] [path] [--file AGENTS.md|CLAUDE.md] [--fail-on <severity>] [--yes] [--dry-run]\n";
+  "Usage: offing init [agent] [--agents] [--hooks] [--personal] [--hooks-for <host>] [--list | --remove] [path] [--file AGENTS.md|CLAUDE.md] [--fail-on <severity>] [--yes] [--dry-run]\n";
 const agentUsage = "Usage: offing init agent [path] [--file AGENTS.md|CLAUDE.md] [--dry-run]\n";
 
 /** The `init` flags that choose what to set up, and the operands and values they take. */
@@ -58,6 +69,8 @@ interface InitOptions {
   readonly personal: boolean;
   readonly hooksFor: string | undefined;
   readonly guided: boolean;
+  readonly list: boolean;
+  readonly remove: boolean;
   readonly dryRun: boolean;
   readonly yes: boolean;
   readonly root: string;
@@ -135,6 +148,8 @@ function initFlags(args: readonly string[]) {
     personal,
     hooksFor,
     hooksForIndex,
+    list: args.includes("--list"),
+    remove: args.includes("--remove"),
     guided: !agents && !hooks && !personal && !hooksFor,
   };
 }
@@ -165,6 +180,14 @@ function initCombinationProblem(flags: InitFlags, hostIds: readonly string[], ct
     return ctx.fail("usage", `--hooks-for needs a host: ${listHosts(hostIds)}.`, initUsage);
   if (flags.personal && (flags.agents || flags.hooks || flags.hooksFor))
     return ctx.fail("usage", "--personal cannot be combined with --agents, --hooks, or --hooks-for.", initUsage);
+  return agentHookCombinationProblem(flags, ctx);
+}
+
+function agentHookCombinationProblem(flags: InitFlags, ctx: CommandContext): number | undefined {
+  if (flags.list && (!flags.hooks || flags.remove || flags.hooksFor || flags.agents))
+    return ctx.fail("usage", "--list needs --hooks and cannot be combined with another setup option.", initUsage);
+  if (flags.remove && (!flags.hooks || flags.agents))
+    return ctx.fail("usage", "--remove needs --hooks and can be scoped with --hooks-for.", initUsage);
   return undefined;
 }
 
@@ -182,7 +205,8 @@ function initValueProblem(flags: InitFlags, values: InitValues, ctx: CommandCont
   }
   if (
     values.gateIndex !== -1 &&
-    ((!(flags.hooks || flags.personal) && !flags.guided) || !severityValues.includes(values.gate as Severity))
+    ((!((flags.hooks && !flags.list && !flags.remove) || flags.personal) && !flags.guided) ||
+      !severityValues.includes(values.gate as Severity))
   ) {
     return ctx.fail(
       "usage",
@@ -200,6 +224,8 @@ function initWords(args: readonly string[], flags: InitFlags, values: InitValues
     "--hooks",
     "--personal",
     "--hooks-for",
+    "--list",
+    "--remove",
     "--yes",
     "-y",
     "--dry-run",
@@ -209,8 +235,8 @@ function initWords(args: readonly string[], flags: InitFlags, values: InitValues
   const positional = args.filter(
     (argument, index) =>
       !known.has(argument) &&
-      index !== values.fileIndex + 1 &&
-      index !== values.gateIndex + 1 &&
+      (values.fileIndex === -1 || index !== values.fileIndex + 1) &&
+      (values.gateIndex === -1 || index !== values.gateIndex + 1) &&
       (flags.hooksForIndex === -1 || index !== flags.hooksForIndex + 1) &&
       !argument.startsWith("-"),
   );
@@ -235,6 +261,8 @@ function parseInitOptions(args: string[], hostIds: readonly string[], ctx: Comma
     personal: flags.personal,
     hooksFor: flags.hooksFor,
     guided: flags.guided,
+    list: flags.list,
+    remove: flags.remove,
     dryRun: args.includes("--dry-run"),
     yes: args.includes("--yes") || args.includes("-y"),
     root: positional[0] ?? ".",
@@ -287,6 +315,7 @@ function printHooksResult(result: InitHooksResult, dryRun: boolean, gate: string
 /** Runs whichever setup the parsed options ask for and prints what it changed. */
 async function applyInit(options: InitOptions, ctx: CommandContext): Promise<number> {
   try {
+    if (options.list || options.remove) return await applyAgentHooks(options, ctx);
     if (options.guided)
       return await guidedInit(ctx, {
         root: options.root,
@@ -314,8 +343,7 @@ async function applyInit(options: InitOptions, ctx: CommandContext): Promise<num
         options.dryRun,
         options.gate,
       );
-    if (options.hooksFor !== undefined) await applyHooksFor(options.hooksFor, options.root, options.dryRun);
-    return 0;
+    return options.hooksFor ? await applyAgentHooks(options, ctx) : 0;
   } catch (error) {
     if (error instanceof AgentFileError) return ctx.failError(error);
     throw error;
@@ -330,11 +358,35 @@ async function runInit(args: string[], ctx: CommandContext): Promise<number> {
   return applyInit(options, ctx);
 }
 
-/** Runs the host's post-edit hook setup and prints its result; the host's own module decides what it writes. */
-async function applyHooksFor(hooksFor: string, root: string, dryRun: boolean): Promise<void> {
-  const hook = (await builtInHostHooks()).find((candidate) => candidate.adapter.id === hooksFor);
-  if (hook === undefined) return;
-  process.stdout.write(await hook.setup({ root, dryRun }));
+async function applyAgentHooks(options: InitOptions, ctx: CommandContext): Promise<number> {
+  const hosts = await builtInHostHooks();
+  if (options.remove) {
+    let changed = false;
+    for (const host of hosts) {
+      if (options.hooksFor && host.adapter.id !== options.hooksFor) continue;
+      const report = await host.setup({ root: options.root, dryRun: options.dryRun, remove: true });
+      if (report === "") continue;
+      changed = true;
+      process.stdout.write(`${host.adapter.id}: ${report}`);
+    }
+    if (!changed) process.stdout.write("No managed Offing agent hooks found.\n");
+    return 0;
+  }
+
+  const detected = await detectedHookHosts(hosts, options.root);
+  if (options.list) {
+    for (const host of hosts) {
+      const availability = detected.includes(host) ? "detected" : "not detected";
+      process.stdout.write(`${host.adapter.id} (${host.stability}, ${availability})\n`);
+    }
+    return 0;
+  }
+  const host = detected.find((candidate) => candidate.adapter.id === options.hooksFor);
+  if (!host)
+    return ctx.fail("usage", `Agent host ${options.hooksFor} was not detected. Run offing init --hooks --list.`);
+  const report = await host.setup({ root: options.root, dryRun: options.dryRun });
+  process.stdout.write(`${host.adapter.id}: ${report}`);
+  return 0;
 }
 
 /**

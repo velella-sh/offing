@@ -27,6 +27,7 @@ import { pathToFileURL } from "node:url";
 import {
   COVERAGE_EXCLUDES,
   COVERAGE_LCOV_PATH,
+  HOOK_LATENCY_TEST,
   coverageRequested,
   testProcessArgs,
 } from "../dist/tools/check-pipeline.js";
@@ -384,7 +385,7 @@ export function spawnTest(nodeArgs, options = {}) {
 async function listDistTests() {
   const files = [];
   for await (const file of glob("dist/tests/**/*.test.js", { cwd: ROOT })) {
-    files.push(resolve(ROOT, file));
+    if (resolve(ROOT, file) !== resolve(ROOT, HOOK_LATENCY_TEST)) files.push(resolve(ROOT, file));
   }
   return files.sort();
 }
@@ -671,7 +672,9 @@ async function runSuite(options) {
     }
   }
 
-  const shard = parseShardEnv(process.env);
+  // A standalone latency run needs the normal CI flake retry, without coverage instrumentation or test sharding.
+  const latencyOnly = files.length === 1 && files[0] === resolve(ROOT, HOOK_LATENCY_TEST);
+  const shard = latencyOnly ? undefined : parseShardEnv(process.env);
   if (shard && files.length > 0) {
     const timings = await loadFileTimings();
     const assignment = selectShardFiles(files, (file) => durationMsForFile(file, timings), shard.index, shard.count);
@@ -694,7 +697,7 @@ async function runSuite(options) {
   const budget = await loadTimeBudget();
   // A shard only sees part of the suite; keep the per-file ceiling and drop the suite total.
   const effectiveBudget = shard ? { ...budget, totalMs: Number.MAX_SAFE_INTEGER } : budget;
-  const coveragePath = coverageRequested(process.env) ? resolve(ROOT, COVERAGE_LCOV_PATH) : undefined;
+  const coveragePath = !latencyOnly && coverageRequested(process.env) ? resolve(ROOT, COVERAGE_LCOV_PATH) : undefined;
   return runFilesWithRetry(files, { concurrencyArg, budget: effectiveBudget, coveragePath });
 }
 

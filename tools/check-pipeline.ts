@@ -83,6 +83,7 @@ export interface RunCheckOptions {
   evalDigestFile?: string;
   /** Skip an eval whose inputs are unchanged. Defaults to evalsMaySkip(). */
   skipEvals?: boolean;
+  hookLatency?: boolean;
   /** Where the skip is reported. Defaults to stdout. */
   log?: (line: string) => void;
   /** The ESLint CLI entry point. Defaults to the copy installed in node_modules. */
@@ -221,6 +222,9 @@ export function lintArgs(eslintCli: string): string[] {
 
 /** The compiled tests both test commands run. */
 export const TEST_FILE_GLOB = "dist/tests/**/*.test.js";
+
+/** The latency check runs by itself after the ordinary checks, so their CPU load cannot skew it. */
+export const HOOK_LATENCY_TEST = "dist/tests/agent-hooks-latency.test.js";
 
 /**
  * Files that spawn the CLI keep fixtures in their own mkdtemp directory, so more test
@@ -444,7 +448,7 @@ export async function runCheck(options: RunCheckOptions = {}): Promise<void> {
   const recorded: Record<string, string> = {};
 
   try {
-    const { failures, timings } = await runDependentSteps([
+    const steps: DependentStep[] = [
       {
         id: "check:commands",
         run: () => run(process.execPath, ["tools/generate-commands-index.mjs", "--check"]),
@@ -505,6 +509,17 @@ export async function runCheck(options: RunCheckOptions = {}): Promise<void> {
             },
           ]
         : []),
+    ];
+    const { failures, timings } = await runDependentSteps([
+      ...steps,
+      {
+        id: "test:hook-latency",
+        after: steps.map(({ id }) => id),
+        run: async () => {
+          if (options.hookLatency === false) return { reason: "measured by the reference CI job" };
+          await run(process.execPath, ["tools/run-tests.mjs", HOOK_LATENCY_TEST]);
+        },
+      },
     ]);
     if (Object.keys(recorded).length > 0) await writeDigests(evalDigestFile, { ...digests, ...recorded });
     await reportStepTiming(timings);
@@ -518,7 +533,7 @@ export async function runCheck(options: RunCheckOptions = {}): Promise<void> {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   try {
-    await runCheck();
+    await runCheck({ hookLatency: process.env.OFFING_HOOK_LATENCY !== "0" });
   } catch (error) {
     process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
     process.exitCode = 1;
