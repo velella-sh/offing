@@ -1,0 +1,1 @@
+- Add a browser lifecycle forecast for npm and Python dependency files and GitHub Actions workflows, with signed Ebb data and local calendar and text exports.

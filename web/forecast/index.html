@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+  <title>Lifecycle forecast · Offing</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a href="../../">Offing</a>
+    <a href="../">Forecast guide</a>
+  </header>
+  <main>
+    <h1>Lifecycle forecast</h1>
+    <p class="intro">See which dependencies and runtimes in your file have published lifecycle deadlines in the next 12 months.</p>
+    <noscript><p>Enable JavaScript to check a file in your browser.</p></noscript>
+    <form id="forecast-form">
+      <div id="drop-area" class="drop-area">
+        <label for="file">Drop a file here or choose one</label>
+        <input id="file" type="file" accept=".json,.txt,.toml,.yml,.yaml">
+        <p><code>package-lock.json</code>, <code>package.json</code>, <code>requirements.txt</code>, <code>pyproject.toml</code>, or a GitHub Actions workflow</p>
+      </div>
+      <label for="contents">Or paste file contents</label>
+      <textarea id="contents" rows="5" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+      <div class="form-footer">
+        <button type="submit">Run forecast</button>
+        <p>Your file stays in this browser.</p>
+      </div>
+    </form>
+    <p id="status" role="status"></p>
+    <section id="results" hidden aria-labelledby="result-title">
+      <div class="results-header">
+        <div>
+          <h2 id="result-title"></h2>
+          <p id="period"></p>
+        </div>
+        <div class="exports">
+          <button type="button" id="calendar">Download .ics</button>
+          <button type="button" id="copy">Copy summary</button>
+        </div>
+      </div>
+      <div id="buckets" class="buckets"></div>
+      <details id="unclassified" hidden>
+        <summary id="unclassified-title"></summary>
+        <ul id="unclassified-list"></ul>
+      </details>
+      <p id="export-status" role="status"></p>
+    </section>
+  </main>
+</body>
+</html>

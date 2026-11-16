@@ -1,5 +1,3 @@
-import { Buffer } from "node:buffer";
-
 import { addDays } from "@velella/ebb/forecast";
 import type { Forecast, ForecastEvent } from "@velella/ebb/forecast";
 
@@ -24,11 +22,13 @@ function escapeText(text: string): string {
   });
 }
 
+const utf8 = new TextEncoder();
+
 function foldLine(line: string): string {
   let folded = "";
   let bytes = 0;
   for (const character of line) {
-    const length = Buffer.byteLength(character);
+    const length = utf8.encode(character).byteLength;
     if (bytes + length > 75) {
       folded += "\r\n ";
       bytes = 1;

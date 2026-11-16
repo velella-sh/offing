@@ -8,7 +8,8 @@ import { collectPyprojectDependencies, collectPyprojectRuntime } from "./parse-p
 import { collectRequirementsFile, requirementFiles } from "./parse-requirements.js";
 import { collectSetupRuntime } from "./parse-setup-py.js";
 import { collectVersionFiles } from "./parse-version-files.js";
-import { parseTomlDocument, readOptional } from "./shared.js";
+import { readOptional } from "../read-optional.js";
+import { parseTomlDocument } from "./shared.js";
 
 /** Every declaration file in one project: version pins, setup.cfg, tox.ini, and setup.py. */
 async function collectDeclarations(projectRoot: string): Promise<Declaration[]> {

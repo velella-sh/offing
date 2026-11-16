@@ -1,7 +1,7 @@
 import { addEdges, addResolved } from "./shared.js";
 import type { LockData } from "./shared.js";
 
-function packageNameFromNodeModulesPath(path: string): string | undefined {
+export function packageNameFromNodeModulesPath(path: string): string | undefined {
   const marker = "node_modules/";
   const index = path.lastIndexOf(marker);
   return index === -1 ? undefined : path.slice(index + marker.length);

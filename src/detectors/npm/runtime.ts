@@ -8,7 +8,7 @@ import type { DetectorFinding } from "../../sdk.js";
 import type { PackageManifest } from "./manifest.js";
 import { propertyLine } from "./manifest.js";
 import type { NpmProject } from "./project.js";
-import { readOptional } from "./read-optional.js";
+import { readOptional } from "../read-optional.js";
 
 export interface NodeRule extends DeprecationRule {
   major?: number;

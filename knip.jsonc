@@ -5,8 +5,8 @@
   // scripts are run from dist, so they are listed here. Host modules are discovered by directory at run time.
   "workspaces": {
     ".": {
-      "entry": ["src/action.ts", "src/lsp.ts", "src/agent-hooks/hosts/*.ts", "tools/**/*.ts", "benchmarks/**/*.ts", "tests/**/*.test.ts"],
-      "project": ["src/**/*.ts", "tools/**/*.ts", "benchmarks/**/*.ts", "tests/**/*.ts"]
+      "entry": ["src/action.ts", "src/lsp.ts", "src/agent-hooks/hosts/*.ts", "tools/**/*.ts", "benchmarks/**/*.ts", "tests/**/*.test.ts", "web/forecast/{app,build}.ts"],
+      "project": ["src/**/*.ts", "tools/**/*.ts", "benchmarks/**/*.ts", "tests/**/*.ts", "web/**/*.ts"]
     }
   },
   "ignore": ["tests/fixtures/**"],

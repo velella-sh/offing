@@ -1,5 +1,3 @@
-import { readFile } from "node:fs/promises";
-
 import { parse as parseToml } from "smol-toml";
 
 import type { DirectDependency, ResolvedVersions, UnknownRecord } from "./types.js";
@@ -13,15 +11,6 @@ export function normalizePackageName(value: string): string {
     .trim()
     .toLowerCase()
     .replace(/[-_.]+/g, "-");
-}
-
-export async function readOptional(path: string): Promise<string | undefined> {
-  try {
-    return await readFile(path, "utf8");
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return undefined;
-    throw error;
-  }
 }
 
 export function lineContaining(contents: string, needle: string): number {

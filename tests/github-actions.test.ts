@@ -4,6 +4,9 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { after, test } from "node:test";
 
+import { getActiveDataSync } from "@velella/ebb/data-source";
+import { validateRegistryV2 } from "@velella/ebb/registry";
+
 import { GitHubActionsDetector } from "../src/detectors/github-actions.js";
 
 const temporaryRoots: string[] = [];
@@ -50,6 +53,8 @@ test("ignores supported, local, Docker, dynamic, and unknown SHA-pinned actions"
     steps:
       - uses: actions/checkout@v5
       - uses: actions/cache@v6
+      - uses: actions/checkout
+      - uses: actions/checkout@
       - uses: ./local-action
       - uses: docker://alpine:3.20
       - uses: owner/action@\${{ inputs.ref }}
@@ -507,4 +512,53 @@ test("finds an action reference that has trailing whitespace after the ref", asy
     findings.map((finding) => finding.location.line),
     [4, 5],
   );
+});
+
+test("rejects malformed Ebb action SHA data before scanning workflow refs", async (context) => {
+  const root = await repositoryWithWorkflow("jobs: {}\n");
+  const data = getActiveDataSync();
+  const read = data.readSync.bind(data);
+  const registry = { schemaVersion: "ebb.github-actions-shas.v1" };
+  const sha = "a".repeat(40);
+  const detector = new GitHubActionsDetector();
+  for (const [value, message] of [
+    [{ ...registry, actions: [] }, /^Invalid GitHub Actions SHA registry$/],
+    [{ ...registry, actions: { checkout: {} } }, /^Invalid GitHub Actions SHA registry entry for checkout$/],
+    [
+      { ...registry, actions: { "actions/checkout": { [sha]: "main" } } },
+      /^Invalid GitHub Actions SHA registry reference for actions\/checkout$/,
+    ],
+  ] as const) {
+    const stub = context.mock.method(data, "readSync", (path: string) =>
+      path === "registry/github-actions-shas.json" ? value : read(path),
+    );
+    try {
+      await assert.rejects(detector.analyze({ root }), { message });
+    } finally {
+      stub.mock.restore();
+    }
+  }
+});
+
+test("a floating Node.js release line is unclassified when it straddles an Ebb rule", async (context) => {
+  const data = getActiveDataSync();
+  const read = data.readSync.bind(data);
+  const path = "registry/nodejs.json";
+  const registry = validateRegistryV2(read(path));
+  const rule = registry.rules.find(({ id }) => id === "nodejs.runtime.eol-22");
+  assert.ok(rule);
+  context.mock.method(data, "readSync", (file: string) =>
+    file === path ? { ...registry, rules: [{ ...rule, vers: "vers:semver/>=22.0.0|<22.1.0" }] } : read(file),
+  );
+  const root = await repositoryWithWorkflow(setupNodeWorkflow("", "          node-version: 22"));
+  const { findings, unclassified } = await new GitHubActionsDetector().analyze({ root });
+  assert.deepEqual(findings, []);
+  assert.deepEqual(unclassified, [
+    {
+      component: "actions/setup-node",
+      reference: "node-version: 22",
+      reason: '"22" is a floating release line that spans supported and unsupported versions',
+      location: { path: ".github/workflows/ci.yml", line: 10 },
+    },
+  ]);
 });

@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
 
-import { readOptional } from "../read-optional.js";
+import { readOptional } from "../../read-optional.js";
 import { parseBunLock } from "./bun-lock.js";
 import { parsePackageLock } from "./package-lock.js";
 import { parsePnpmLock } from "./pnpm-lock.js";
