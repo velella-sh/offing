@@ -83,6 +83,7 @@ export interface RunCheckOptions {
   evalDigestFile?: string;
   /** Skip an eval whose inputs are unchanged. Defaults to evalsMaySkip(). */
   skipEvals?: boolean;
+  hookLatency?: boolean;
   /** Where the skip is reported. Defaults to stdout. */
   log?: (line: string) => void;
   /** The ESLint CLI entry point. Defaults to the copy installed in node_modules. */
@@ -515,7 +516,7 @@ export async function runCheck(options: RunCheckOptions = {}): Promise<void> {
         id: "test:hook-latency",
         after: steps.map(({ id }) => id),
         run: async () => {
-          if (process.env.OFFING_HOOK_LATENCY === "0") return { reason: "measured by the reference CI job" };
+          if (options.hookLatency === false) return { reason: "measured by the reference CI job" };
           await run(process.execPath, ["tools/run-tests.mjs", HOOK_LATENCY_TEST]);
         },
       },
@@ -532,7 +533,7 @@ export async function runCheck(options: RunCheckOptions = {}): Promise<void> {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   try {
-    await runCheck();
+    await runCheck({ hookLatency: process.env.OFFING_HOOK_LATENCY !== "0" });
   } catch (error) {
     process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
     process.exitCode = 1;

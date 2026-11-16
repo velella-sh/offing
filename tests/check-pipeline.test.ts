@@ -318,6 +318,22 @@ test("check keeps the project runner when coverage is off", async () => {
   assert.deepEqual(suiteCommands, [["tools/run-tests.mjs"], ["tools/run-tests.mjs", HOOK_LATENCY_TEST]]);
 });
 
+test("check skips the local latency probe when the workflow owns the measurement", async () => {
+  const commands: string[] = [];
+  await runCheck({
+    stagingDir: "action-staging",
+    nccCli: "ncc.js",
+    skipEvals: false,
+    verifyActionBundle: false,
+    hookLatency: false,
+    run: async (_command, args) => {
+      commands.push(stepName(args));
+    },
+  });
+  assert.ok(commands.includes("test"));
+  assert.ok(!commands.includes("test:hook-latency"));
+});
+
 test("an eval skips when its inputs are unchanged and runs again when they change", async () => {
   const root = await mkdtemp(join(tmpdir(), "offing-eval-digest-"));
   try {
