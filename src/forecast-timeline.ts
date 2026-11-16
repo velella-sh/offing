@@ -1,4 +1,27 @@
-import type { Forecast } from "@velella/ebb/forecast";
+import { addMonths } from "@velella/ebb/forecast";
+import type { Forecast, ForecastEvent } from "@velella/ebb/forecast";
+
+interface ForecastBucket {
+  label: string;
+  events: ForecastEvent[];
+}
+
+/** Split the existing events at inclusive calendar-month cutoffs, retaining any longer horizon. */
+export function forecastBuckets(forecast: Forecast): ForecastBucket[] {
+  const cutoffs = [3, 6, 12].filter((months) => months < forecast.months);
+  const ends = [...cutoffs.map((months) => addMonths(forecast.today, months)), forecast.until];
+  const buckets: ForecastBucket[] = [...cutoffs, forecast.months].map((end, index) => ({
+    label: `${cutoffs[index - 1] ?? 0}-${end} months`,
+    events: [],
+  }));
+
+  const events = forecast.groups.flatMap((group) => group.events);
+  events.sort((left, right) => left.date.localeCompare(right.date) || left.ruleId.localeCompare(right.ruleId));
+  for (const event of events) {
+    buckets[ends.findIndex((until) => event.date <= until)]?.events.push(event);
+  }
+  return buckets;
+}
 
 export interface ForecastTimelineOptions {
   /** Total width in columns. Defaults to 80. */

@@ -1,13 +1,12 @@
 import process from "node:process";
 
-import { bundledRules } from "@velella/ebb/bundled-rules";
-import { builtInDetectors } from "../detectors/index.js";
-import { scanRepository } from "../engine/index.js";
-import type { Forecast } from "@velella/ebb/forecast";
-import { buildForecast, DEFAULT_FORECAST_MONTHS, MAX_FORECAST_MONTHS, renderForecastText } from "@velella/ebb/forecast";
+import { DEFAULT_FORECAST_MONTHS, MAX_FORECAST_MONTHS } from "@velella/ebb/forecast";
+import { buildRepositoryForecast, renderForecastText, replayScanOptions } from "../forecast.js";
+import type { RepositoryForecast } from "../forecast.js";
 import { renderForecastSvg } from "../forecast-svg.js";
 import { renderForecastTimeline } from "../forecast-timeline.js";
 import { renderForecastMermaid } from "../reporters.js";
+import { scanWithBuiltIns } from "../scan-builtins.js";
 import type { Gated } from "./runtime.js";
 import { afterGates, preScanPhase, repositoryPhase } from "./runtime.js";
 import type { CliCommand, CommandContext } from "./types.js";
@@ -56,7 +55,7 @@ function forecastMonthsFailure(months: number, ctx: CommandContext): number | un
 }
 
 /** Prints the forecast in the selected mode: the SVG, the mermaid block, the timeline, JSON, or text. */
-function printForecast(forecast: Forecast, modes: ForecastModes): void {
+function printForecast(forecast: RepositoryForecast, modes: ForecastModes): void {
   if (modes.svg) {
     process.stdout.write(`${renderForecastSvg(forecast, { animate: modes.animate })}\n`);
     return;
@@ -79,8 +78,8 @@ export const command: CliCommand = {
   flags: ["--months", "--as-of", "--today", "--svg", "--animate", "--timeline", "--json", "--format", "--data-version"],
   example: "offing forecast . --months 6",
   usage: [
-    "  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--svg [--animate] | --timeline | --json | --format mermaid]   # what reaches end of life next, by month",
-    "  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--timeline | --json | --format mermaid]   # what reaches end of life next, by month",
+    "  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--svg [--animate] | --timeline | --json | --format mermaid]   # what reaches end of life next, by horizon",
+    "  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--timeline | --json | --format mermaid]   # what reaches end of life next, by horizon",
   ],
   usageSlots: [13, 14],
   run(args, ctx) {
@@ -99,16 +98,18 @@ export const command: CliCommand = {
       const modeFailure = forecastModeFailure(modes, ctx);
       if (modeFailure !== undefined) return modeFailure;
       const monthsValue = state.optionValue("--months");
-      const months = monthsValue === undefined ? DEFAULT_FORECAST_MONTHS : Number(monthsValue);
+      const months = state.args.includes("--months") ? Number(monthsValue) : DEFAULT_FORECAST_MONTHS;
       const monthsFailure = forecastMonthsFailure(months, ctx);
       if (monthsFailure !== undefined) return monthsFailure;
       const asOfValue = state.optionValue("--as-of") ?? state.optionValue("--today");
-      const forecast = buildForecast(
-        await scanRepository(state.pathArgument, builtInDetectors, { noCache: state.noCache }),
-        await bundledRules(),
-        asOfValue ?? new Date().toISOString().slice(0, 10),
-        months,
+      if (asOfValue === undefined && (state.args.includes("--as-of") || state.args.includes("--today"))) {
+        return ctx.fail("usage", "--as-of (or --today) must be a date (YYYY-MM-DD).");
+      }
+      const scan = await scanWithBuiltIns(
+        state.pathArgument,
+        asOfValue === undefined ? { noCache: state.noCache } : replayScanOptions(asOfValue),
       );
+      const forecast = await buildRepositoryForecast(scan, months);
       printForecast(forecast, modes);
       return 0;
     });

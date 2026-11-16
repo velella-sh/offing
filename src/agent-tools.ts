@@ -4,6 +4,8 @@ import { resolve } from "node:path";
 import { findingFingerprint } from "./baseline.js";
 import { bundledRules } from "@velella/ebb/bundled-rules";
 import type { DataInfo, Finding, ScanResult, Severity, SourceLocation, VerificationCommand } from "./domain.js";
+import { buildRepositoryForecast, replayScanOptions } from "./forecast.js";
+import type { RepositoryForecast } from "./forecast.js";
 import { createMigrationPacket } from "./migration-packet.js";
 import type { Receipt } from "./receipt.js";
 import { buildReceipt } from "./receipt.js";
@@ -89,6 +91,17 @@ export class OffingAgentTools {
     });
     this.remember(result);
     return result;
+  }
+
+  /** Scan once and preserve the finding references exposed by the forecast tool. */
+  async forecast(repositoryPath: string, months: number, asOf: string | undefined): Promise<RepositoryForecast> {
+    const { result } = await runScanRequest({
+      root: repositoryPath,
+      ...(asOf === undefined ? {} : { today: asOf, engine: replayScanOptions(asOf) }),
+    });
+    const forecast = await buildRepositoryForecast(result, months);
+    this.remember(result);
+    return forecast;
   }
 
   async list(repositoryPath = "."): Promise<DeprecationList> {

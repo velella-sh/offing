@@ -2,8 +2,8 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
 
 import type { OffingAgentTools } from "../../agent-tools.js";
-import { bundledRules } from "@velella/ebb/bundled-rules";
-import { buildForecast, DEFAULT_FORECAST_MONTHS, MAX_FORECAST_MONTHS } from "@velella/ebb/forecast";
+import { DEFAULT_FORECAST_MONTHS, MAX_FORECAST_MONTHS } from "@velella/ebb/forecast";
+import { isIsoDate } from "@velella/ebb/registry";
 import { failure, registerMcpTool, repositoryInput, success } from "../tool-support.js";
 
 /** Registers `forecast_repository`: what reaches a dated end of life in the coming months. */
@@ -27,16 +27,15 @@ export function registerForecastRepository(server: McpServer, tools: OffingAgent
       as_of: z
         .string()
         .regex(/^\d{4}-\d{2}-\d{2}$/, "as_of must be a date (YYYY-MM-DD).")
+        .refine(isIsoDate, "as_of must be a date (YYYY-MM-DD).")
         .optional()
         .describe("The day to start the window from, as YYYY-MM-DD. Defaults to today in UTC."),
     }),
     async handler(context, { repository_path, months, as_of }) {
       try {
-        const result = await context.tools.scan(repository_path);
+        const result = await context.tools.forecast(repository_path, months, as_of);
         context.server.sendResourceListChanged();
-        return success(
-          buildForecast(result, await bundledRules(), as_of ?? new Date().toISOString().slice(0, 10), months),
-        );
+        return success(result);
       } catch (error) {
         return failure(error);
       }
