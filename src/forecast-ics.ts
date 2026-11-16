@@ -6,11 +6,22 @@ import type { Forecast, ForecastEvent } from "@velella/ebb/forecast";
 import type { Finding } from "./domain.js";
 
 function escapeText(text: string): string {
-  return text
-    .replaceAll("\\", "\\\\")
-    .replace(/\r\n|\r|\n/gu, "\\n")
-    .replace(/[,;]/gu, "\\$&")
-    .replace(/\p{Cc}/gu, (character) => (character === "\t" ? character : "\ufffd"));
+  return text.replace(/\r\n|[\\,;]|\p{Cc}/gu, (character) => {
+    switch (character) {
+      case "\\":
+      case ",":
+      case ";":
+        return "\\" + character;
+      case "\r\n":
+      case "\r":
+      case "\n":
+        return "\\n";
+      case "\t":
+        return character;
+      default:
+        return "\ufffd";
+    }
+  });
 }
 
 function foldLine(line: string): string {

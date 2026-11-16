@@ -44,7 +44,7 @@ test("an ICS parser reads dated events and only alarms on or after the reference
 });
 
 test("folds by UTF-8 bytes and preserves text after unfolding and unescaping", () => {
-  const path = "src/" + "پوشه📅".repeat(20) + ",one;two\\three\r\nEND:VEVENT";
+  const path = "src/" + "پوشه📅".repeat(20) + ",one;two\\nthree\r\nEND:VEVENT";
   const title = "پایان پشتیبانی, نسخه; بعدی";
   const event = lifecycleEvent({
     title,
