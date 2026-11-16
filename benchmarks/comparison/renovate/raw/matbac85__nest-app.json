@@ -1,0 +1,286 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "matbac85/nest-app",
+  "commit": "0460768d21483921148827df6b4608351ab241f9",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 21,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 90
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 91
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 92
+      },
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 21359,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "nodejs",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "libstdc++6",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "openssl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "libncurses5",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "locales",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "certbot",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "@vuepic/vue-datepicker",
+        "currentValue": "^8.5.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "vue",
+        "currentValue": "^3.4.21",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "vue-router",
+        "currentValue": "^4.3.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "date-fns",
+        "currentValue": "^3.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "swiper",
+        "currentValue": "^11.1.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "tailwind-hamburgers",
+        "currentValue": "^1.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "vue-concise-slider",
+        "currentValue": "^4.2.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "@vitejs/plugin-vue",
+        "currentValue": "^5.0.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "autoprefixer",
+        "currentValue": "^10.4.19",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "postcss",
+        "currentValue": "^8.4.38",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "tailwindcss",
+        "currentValue": "^3.4.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "vite",
+        "currentValue": "^5.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "date-fns",
+        "currentValue": "^3.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "swiper",
+        "currentValue": "^11.1.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "tailwind-hamburgers",
+        "currentValue": "^1.3.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "yarn",
+        "currentValue": "^1.22.22",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "vue-concise-slider",
+        "currentValue": "^4.2.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

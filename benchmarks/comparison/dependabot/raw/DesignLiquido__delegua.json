@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "DesignLiquido/delegua",
+  "commit": "94b319548996d03278b2029ded8d087136f5d317",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 94,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/codeql.yml",
+        "line": 60,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/principal.yml",
+        "line": 18,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/principal.yml",
+        "line": 40,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.download-artifact.retired",
+        "path": ".github/workflows/comentario-cobertura.yml",
+        "line": 22,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/principal.yml",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/principal.yml",
+        "line": 42,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/principal.yml",
+        "line": 66,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 97,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "npm",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

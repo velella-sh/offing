@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "mistems/sandbox",
+  "commit": "8572d2417e6538edb6ffac6b316640d3bede113e",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 34,
+    "findings": [
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/pages.yml",
+        "line": 27,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.deploy-pages.node20",
+        "path": ".github/workflows/pages.yml",
+        "line": 63,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.github-script.node20",
+        "path": ".github/workflows/kfc.yml",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

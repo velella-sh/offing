@@ -1,0 +1,330 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "Hubs-Foundation/reticulum",
+  "commit": "10364b17b50a6801ebceaf760188182e753860ec",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 14,
+    "findings": [
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "line": 111
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "line": 122
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/lint-and-test.yml",
+        "line": 123
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/lint-and-test.yml",
+        "line": 167
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/lint-and-test.yml",
+        "line": 43
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/lint-and-test.yml",
+        "line": 114
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/lint-and-test.yml",
+        "line": 158
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/lint-and-test.yml",
+        "line": 33
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "line": 98
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 31399,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "name": "docker/setup-buildx-action",
+        "currentValue": "v3.12.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "name": "docker/login-action",
+        "currentValue": "v4.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "name": "docker/build-push-action",
+        "currentValue": "v6.19.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "name": "docker/build-push-action",
+        "currentValue": "v6.19.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/custom-docker-build-push.yml",
+        "name": "buildx",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/hc-pkgcaller.yml",
+        "name": "Hubs-Foundation/hubs-ops",
+        "currentValue": "master",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "erlef/setup-beam",
+        "currentValue": "v1.24.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "actions/cache",
+        "currentValue": "v4.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "erlef/setup-beam",
+        "currentValue": "v1.24.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "actions/cache",
+        "currentValue": "v4.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "erlef/setup-beam",
+        "currentValue": "v1.24.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "actions/cache",
+        "currentValue": "v4.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "postgres",
+        "currentValue": "10",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "erlang/otp",
+        "currentValue": "25.3.2.20",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "elixir-lang/elixir",
+        "currentValue": "1.16.3-otp-25",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "postgres",
+        "currentValue": "10",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "erlang/otp",
+        "currentValue": "${{ matrix.versions.otp }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "elixir-lang/elixir",
+        "currentValue": "${{ matrix.versions.elixir }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "ubuntu",
+        "currentValue": "24.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "erlang/otp",
+        "currentValue": "${{ matrix.versions.otp }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-and-test.yml",
+        "name": "elixir-lang/elixir",
+        "currentValue": "${{ matrix.versions.elixir }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ret-turkey.yml",
+        "name": "Hubs-Foundation/hubs-ops",
+        "currentValue": "master",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/roadmap-auto-commenter.yml",
+        "name": "Hubs-Foundation/.github",
+        "currentValue": "main",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

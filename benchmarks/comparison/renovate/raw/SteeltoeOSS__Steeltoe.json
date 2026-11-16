@@ -7,9 +7,9 @@
   "continuity": false,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 549,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 1032,
     "findings": [
       {
         "ruleId": "dotnet.runtime.end-of-support-8.0",
@@ -600,12 +600,17 @@
         "ruleId": "dotnet.runtime.end-of-support-9.0",
         "path": "src/Tools/test/ConfigurationSchemaGenerator.Tests/ConfigurationSchemaGenerator.Tests.csproj",
         "line": 3
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.4",
+        "path": "cleanupcode.ps1",
+        "line": 1
       }
     ]
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 10888,
+    "durationMs": 14209,
     "status": "ok",
     "dependencies": [
       {
@@ -889,8 +894,8 @@
         "name": "dotnet-sdk",
         "currentValue": "10.0.*",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -908,8 +913,8 @@
         "name": "dotnet-sdk",
         "currentValue": "10.0.*",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -927,8 +932,8 @@
         "name": "dotnet-sdk",
         "currentValue": "10.0.*",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",

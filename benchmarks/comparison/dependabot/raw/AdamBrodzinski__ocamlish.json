@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "AdamBrodzinski/ocamlish",
+  "commit": "1a1acab213945a4dbb86c1bd2634e07ece6ff815",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 19,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/run-tests.yml",
+        "line": 14,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

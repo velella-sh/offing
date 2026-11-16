@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "pieterlange/kube-backup",
+  "commit": "e38769a37e3c537b38b9349cb7ee12785eb36c79",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 6,
+    "findings": [
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 24
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 25
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 26
+      },
+      {
+        "ruleId": "kubernetes.batch.cronjob.v1beta1.removed",
+        "path": "cronjob-codecommit.yaml",
+        "line": 9
+      },
+      {
+        "ruleId": "kubernetes.batch.cronjob.v1beta1.removed",
+        "path": "cronjob-ssh.yaml",
+        "line": 9
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 11873,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "alpine",
+        "currentValue": "3.11",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "bash",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "easy-rsa",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "openssh-client",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "jq",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "python",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "py-yaml",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "py2-pip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "libstdc++",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "gpgme",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "git-crypt",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

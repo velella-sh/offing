@@ -7,14 +7,14 @@
   "continuity": false,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 21,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 33,
     "findings": []
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 19833,
+    "durationMs": 27101,
     "status": "ok",
     "dependencies": [
       {
@@ -32,8 +32,8 @@
         "name": "postgres",
         "currentValue": "17",
         "deprecated": false,
-        "majorUpdate": true,
-        "anyUpdate": true
+        "majorUpdate": false,
+        "anyUpdate": false
       },
       {
         "manager": "dockerfile",
@@ -114,7 +114,7 @@
         "currentValue": "master",
         "deprecated": false,
         "majorUpdate": false,
-        "anyUpdate": false
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -408,8 +408,8 @@
         "name": "postgres",
         "currentValue": "17",
         "deprecated": false,
-        "majorUpdate": true,
-        "anyUpdate": true
+        "majorUpdate": false,
+        "anyUpdate": false
       },
       {
         "manager": "github-actions",

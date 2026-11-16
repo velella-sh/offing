@@ -1,0 +1,1626 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "aws/graph-explorer",
+  "commit": "2ff4ceabe1c7b4b1e786344decb184362b320306",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 379,
+    "findings": []
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 38452,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "samples/air_routes/docker-compose.yaml",
+        "name": "public.ecr.aws/neptune/graph-explorer",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "samples/air_routes/docker-compose.yaml",
+        "name": "tinkerpop/gremlin-server",
+        "currentValue": "3.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "docker/dockerfile",
+        "currentValue": "1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "ghcr.io/voidzero-dev/vite-plus",
+        "currentValue": "1.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "public.ecr.aws/amazonlinux/amazonlinux",
+        "currentValue": "2023.12.20261102.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_docker.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_docker.yml",
+        "name": "aws-actions/configure-aws-credentials",
+        "currentValue": "v6.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_docker.yml",
+        "name": "aws-actions/amazon-ecr-login",
+        "currentValue": "v2.1.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_docker.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "voidzero-dev/setup-vp",
+        "currentValue": "v1.22.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeql-actions.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeql-actions.yml",
+        "name": "github/codeql-action",
+        "currentValue": "v4.39.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeql-actions.yml",
+        "name": "github/codeql-action",
+        "currentValue": "v4.39.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeql-actions.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeql.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeql.yml",
+        "name": "github/codeql-action",
+        "currentValue": "v4.39.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeql.yml",
+        "name": "github/codeql-action",
+        "currentValue": "v4.39.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/codeql.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/dependency-review.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/dependency-review.yml",
+        "name": "actions/dependency-review-action",
+        "currentValue": "v5.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/dependency-review.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-docs.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-docs.yml",
+        "name": "voidzero-dev/setup-vp",
+        "currentValue": "v1.22.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-docs.yml",
+        "name": "actions/upload-pages-artifact",
+        "currentValue": "v5.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-docs.yml",
+        "name": "actions/deploy-pages",
+        "currentValue": "v5.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-docs.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-docs.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/image-audit.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/image-audit.yml",
+        "name": "aquasecurity/trivy-action",
+        "currentValue": "v0.36.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/image-audit.yml",
+        "name": "github/codeql-action",
+        "currentValue": "v4.39.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/image-audit.yml",
+        "name": "aquasecurity/trivy-action",
+        "currentValue": "v0.36.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/image-audit.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/image-audit.yml",
+        "name": "aquasecurity/trivy",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/image-audit.yml",
+        "name": "aquasecurity/trivy",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/security-audit.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/security-audit.yml",
+        "name": "aquasecurity/trivy-action",
+        "currentValue": "v0.36.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/security-audit.yml",
+        "name": "github/codeql-action",
+        "currentValue": "v4.39.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/security-audit.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/security-audit.yml",
+        "name": "aquasecurity/trivy",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test_build_docker.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test_build_docker.yml",
+        "name": "aquasecurity/trivy-action",
+        "currentValue": "v0.36.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test_build_docker.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test_build_docker.yml",
+        "name": "aquasecurity/trivy",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@tanstack/eslint-plugin-query",
+        "currentValue": "5.105.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "eslint-plugin-baseline-js",
+        "currentValue": "0.7.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "eslint-plugin-es-x",
+        "currentValue": "10.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "eslint-plugin-react-hooks",
+        "currentValue": "7.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "fast-check",
+        "currentValue": "^4.10.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "typescript",
+        "currentValue": "^7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "vite-plus",
+        "currentValue": "catalog:",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "pnpm",
+        "currentValue": "12.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "@astrojs/markdown-satteri",
+        "currentValue": "0.4.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "@astrojs/starlight",
+        "currentValue": "0.42.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "@fontsource/inter",
+        "currentValue": "^5.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "@lucide/astro",
+        "currentValue": "^1.42.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "astro",
+        "currentValue": "7.4.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "astro-vtbot",
+        "currentValue": "^3.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "playwright-core",
+        "currentValue": "^1.64.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "satteri",
+        "currentValue": "0.10.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "sharp",
+        "currentValue": "0.35.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/docs/package.json",
+        "name": "vite-plus",
+        "currentValue": "catalog:",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@aws-crypto/sha256-js",
+        "currentValue": "^5.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@aws-sdk/credential-providers",
+        "currentValue": "^3.1161.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@graph-explorer/shared",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@smithy/protocol-http",
+        "currentValue": "^5.6.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@smithy/signature-v4",
+        "currentValue": "^5.7.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "body-parser",
+        "currentValue": "^2.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "compression",
+        "currentValue": "^1.8.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "cors",
+        "currentValue": "^2.8.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "date-fns",
+        "currentValue": "^4.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "dotenv",
+        "currentValue": "^18.0.9",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "express",
+        "currentValue": "^5.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "node-fetch",
+        "currentValue": "^3.3.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "pino",
+        "currentValue": "^10.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "pino-pretty",
+        "currentValue": "^13.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "zod",
+        "currentValue": "^4.6.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@types/body-parser",
+        "currentValue": "^1.19.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@types/compression",
+        "currentValue": "^1.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@types/cors",
+        "currentValue": "^2.8.19",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@types/express",
+        "currentValue": "^5.0.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@types/node",
+        "currentValue": "^24.19.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "@types/supertest",
+        "currentValue": "^7.2.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "supertest",
+        "currentValue": "^7.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer-proxy-server/package.json",
+        "name": "vite-plus",
+        "currentValue": "catalog:",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@base-ui/react",
+        "currentValue": "^1.9.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@graph-explorer/shared",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@hookform/resolvers",
+        "currentValue": "^7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@monaco-editor/react",
+        "currentValue": "^4.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@react-aria/textfield",
+        "currentValue": "3.19.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@tanstack/react-query",
+        "currentValue": "^5.105.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@tanstack/react-virtual",
+        "currentValue": "^3.14.24",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "clsx",
+        "currentValue": "^2.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "color",
+        "currentValue": "^5.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "cva",
+        "currentValue": "1.0.0-beta.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "cytoscape",
+        "currentValue": "3.34.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "cytoscape-canvas",
+        "currentValue": "^3.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "cytoscape-d3-force",
+        "currentValue": "^1.1.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "cytoscape-dagre",
+        "currentValue": "^4.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "cytoscape-fcose",
+        "currentValue": "^2.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "cytoscape-klay",
+        "currentValue": "^3.1.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "date-fns",
+        "currentValue": "^4.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "dompurify",
+        "currentValue": "^3.4.17",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "file-saver",
+        "currentValue": "^2.0.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "flat",
+        "currentValue": "^6.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "jotai",
+        "currentValue": "^3.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "jotai-family",
+        "currentValue": "^1.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "localforage",
+        "currentValue": "^1.10.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "lodash",
+        "currentValue": "^4.18.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "lucide-react",
+        "currentValue": "^1.66.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "monaco-editor",
+        "currentValue": "^0.57.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "motion",
+        "currentValue": "^14.9.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "papaparse",
+        "currentValue": "^5.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "radix-ui",
+        "currentValue": "^1.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "re-resizable",
+        "currentValue": "^6.11.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "react",
+        "currentValue": "^19.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "react-colorful",
+        "currentValue": "^5.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "react-dom",
+        "currentValue": "^19.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "react-error-boundary",
+        "currentValue": "^6.1.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "react-hook-form",
+        "currentValue": "^7.91.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "react-laag",
+        "currentValue": "^2.0.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "react-router",
+        "currentValue": "^8.5.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "react-table",
+        "currentValue": "^7.8.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "react-virtuoso",
+        "currentValue": "^4.18.20",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "sonner",
+        "currentValue": "^2.0.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "tailwind-merge",
+        "currentValue": "^3.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "use-deep-compare-effect",
+        "currentValue": "^1.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "uuid",
+        "currentValue": "^14.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "zod",
+        "currentValue": "^4.6.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "zod-validation-error",
+        "currentValue": "^5.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@babel/core",
+        "currentValue": "^7.29.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@react-types/shared",
+        "currentValue": "^3.37.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@rolldown/plugin-babel",
+        "currentValue": "0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@tailwindcss/vite",
+        "currentValue": "^4.3.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@testing-library/dom",
+        "currentValue": "^10.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@testing-library/jest-dom",
+        "currentValue": "^7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@testing-library/react",
+        "currentValue": "^16.3.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@testing-library/user-event",
+        "currentValue": "^14.6.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@types/color",
+        "currentValue": "^4.2.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@types/file-saver",
+        "currentValue": "^2.0.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@types/lodash",
+        "currentValue": "^4.17.27",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@types/node",
+        "currentValue": "^24.19.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@types/papaparse",
+        "currentValue": "^5.5.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@types/react",
+        "currentValue": "^19.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@types/react-dom",
+        "currentValue": "^19.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@types/react-table",
+        "currentValue": "^7.7.20",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@types/wicg-file-system-access",
+        "currentValue": "^2023.10.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "@vitejs/plugin-react",
+        "currentValue": "^6.1.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "babel-plugin-react-compiler",
+        "currentValue": "^1.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "browserslist",
+        "currentValue": "^4.29.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "fake-indexeddb",
+        "currentValue": "^6.2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "happy-dom",
+        "currentValue": "^21.0.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "jsdom",
+        "currentValue": "^30.1.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "rimraf",
+        "currentValue": "^6.1.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "tailwindcss",
+        "currentValue": "^4.3.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "tw-animate-css",
+        "currentValue": "^1.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "type-fest",
+        "currentValue": "^5.10.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "typescript",
+        "currentValue": "^7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "vite",
+        "currentValue": "catalog:",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/graph-explorer/package.json",
+        "name": "vite-plus",
+        "currentValue": "catalog:",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/shared/package.json",
+        "name": "vite-plus",
+        "currentValue": "catalog:",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "vite",
+        "currentValue": "1.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "vite-plus",
+        "currentValue": "1.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "semver@<7.0.0",
+        "currentValue": ">=7.7.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "@babel/core@<7.29.1",
+        "currentValue": ">=7.29.1 <8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "brace-expansion@>=5.0.0 <5.0.7",
+        "currentValue": ">=5.0.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "dompurify@<3.4.16",
+        "currentValue": ">=3.4.16",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "esbuild@>=0.17.0 <0.28.1",
+        "currentValue": ">=0.28.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "flatted@<3.4.2",
+        "currentValue": ">=3.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "form-data@>=4.0.0 <4.0.6",
+        "currentValue": ">=4.0.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "minimatch@<10.2.3",
+        "currentValue": ">=10.2.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "path-to-regexp@>=8.0.0 <8.4.0",
+        "currentValue": ">=8.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "picomatch@>=4.0.0 <4.0.4",
+        "currentValue": ">=4.0.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "yaml@>=2.0.0 <2.8.3",
+        "currentValue": ">=2.8.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "pnpm-workspace.yaml",
+        "name": "vite@*",
+        "currentValue": "catalog:",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

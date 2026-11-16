@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "amplab/spark-indexedrdd",
+  "commit": "41db72cf3c46df913cad56b5eb6ade7dd5cdecda",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 6,
+    "findings": [
+      {
+        "ruleId": "scala.runtime.eol-2.11",
+        "path": "build.sbt",
+        "line": 5
+      },
+      {
+        "ruleId": "scala.sbt.eol-0.13",
+        "path": "project/build.properties",
+        "line": 17
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 28341,
+    "status": "ok",
+    "dependencies": []
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "polytope-labs/solidity-merkle-trees",
+  "commit": "6bbc83d5ac33f85761725cf2eba4f8700164e8ba",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 5,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 111,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 19,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 64,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain",
+        "line": 2,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

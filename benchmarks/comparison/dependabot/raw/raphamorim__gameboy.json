@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "raphamorim/gameboy",
+  "commit": "7b5f5982faae78f1a4f6b413d8125eb6d5276274",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 46,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

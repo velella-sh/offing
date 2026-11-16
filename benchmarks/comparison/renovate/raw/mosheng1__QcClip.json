@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "mosheng1/QcClip",
+  "commit": "545347f3855823f5869b5d1e63d59921f2fa1a74",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 87,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 28
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 54
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/sync-gitee-releases.yml",
+        "line": 34
+      },
+      {
+        "ruleId": "github-actions.download-artifact.retired",
+        "path": ".github/workflows/release.yml",
+        "line": 156
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/release.yml",
+        "line": 137
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 2
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": "scripts/package.ps1",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 165217,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ilammy/msvc-dev-cmd",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "Swatinem/rust-cache",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ilammy/msvc-dev-cmd",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/download-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "windows",
+        "currentValue": "2022",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "windows",
+        "currentValue": "2022",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/sync-gitee-releases.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/sync-gitee-releases.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

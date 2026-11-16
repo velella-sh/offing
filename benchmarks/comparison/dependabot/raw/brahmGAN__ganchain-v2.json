@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "brahmGAN/ganchain-v2",
+  "commit": "b2964caca7ac4a51ade6763236b751f4cb388f63",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 129,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "frontier/template/Dockerfile",
+        "line": 31,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "scripts/dockerfiles/selendra/selendra_builder.Dockerfile",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/scripts/dockerfiles/selendra"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

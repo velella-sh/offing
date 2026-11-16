@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "starlink-awaken/StrategyManager",
+  "commit": "94bcd3e5639df17626362d1dc6efba8a1aa9a47e",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 208,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".bun-version",
+        "line": 1
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 19
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 72
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 4751,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "oven-sh/setup-bun",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "codecov/codecov-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "EnricoMi/publish-unit-test-result-action",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "oven-sh/setup-bun",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "bun",
+        "currentValue": "${{ matrix.bun-version }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

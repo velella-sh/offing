@@ -1,0 +1,391 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "clavia-labs/tardigrade",
+  "commit": "6a8e2250f2efc091cb10e97127b11bce98dfac55",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 342,
+    "findings": []
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 55676,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "examples/agent/Dockerfile.template",
+        "name": "debian",
+        "currentValue": "bookworm-slim",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "examples/agent/Dockerfile.template",
+        "name": "python3",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "examples/agent/Dockerfile.template",
+        "name": "ripgrep",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "examples/agent/Dockerfile.template",
+        "name": "docker.io/cloudflare/sandbox",
+        "currentValue": "1.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "packages/platform/test/fixtures/workspace/container/Dockerfile",
+        "name": "docker.io/cloudflare/sandbox",
+        "currentValue": "1.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "packages/platform/test/fixtures/workspace/container/Dockerfile",
+        "name": "debian",
+        "currentValue": "trixie-slim",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "packages/platform/test/fixtures/workspace/container/Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "packages/platform/test/fixtures/workspace/container/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "packages/platform/test/fixtures/workspace/container/Dockerfile",
+        "name": "fuse3",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "packages/platform/test/fixtures/workspace/container/Dockerfile",
+        "name": "s3fs",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "packages/platform/test/fixtures/workspace/container/Dockerfile",
+        "name": "python3",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "platform/worker-loader/test/celld/Dockerfile",
+        "name": "ghcr.io/denoland/celld",
+        "currentValue": "v0.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "platform/worker-loader/test/celld/Dockerfile",
+        "name": "docker.io/library/node",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "oven-sh/setup-bun",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "node",
+        "currentValue": "24",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "bun",
+        "currentValue": "canary",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/conventional-commits.yml",
+        "name": "ytanikin/pr-conventional-commits",
+        "currentValue": "1.5.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/conventional-commits.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-web.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-web.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-web.yml",
+        "name": "oven-sh/setup-bun",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-web.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-web.yml",
+        "name": "node",
+        "currentValue": "24",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deploy-web.yml",
+        "name": "bun",
+        "currentValue": "canary",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "googleapis/release-please-action",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "oven-sh/setup-bun",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "oven-sh/setup-bun",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "bun",
+        "currentValue": "canary",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "node",
+        "currentValue": "24",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "bun",
+        "currentValue": "canary",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yml",
+        "name": "node",
+        "currentValue": "24",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

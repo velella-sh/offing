@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "facebookincubator/reindeer",
+  "commit": "864a276e53a23b0509307f9069e75c7e0958c8c1",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 28,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build-and-test.yml",
+        "line": 14
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 100
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 37
+      },
+      {
+        "ruleId": "github-actions.download-artifact.retired",
+        "path": ".github/workflows/release.yml",
+        "line": 106
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/release.yml",
+        "line": 90
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 60374,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-and-test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-and-test.yml",
+        "name": "Swatinem/rust-cache",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-and-test.yml",
+        "name": "dtolnay/install-buck2",
+        "currentValue": "latest",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "SebRollen/toml-action",
+        "currentValue": "v1.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "dtolnay/rust-toolchain",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "Swatinem/rust-cache",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions-rs/install",
+        "currentValue": "v0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/download-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "pyTooling/Actions",
+        "currentValue": "v0.4.6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "facebook/dotslash-publish-release",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "rust",
+        "currentValue": "${{ steps.read_rust_toolchain.outputs.value }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "henrikpersson/potatis",
+  "commit": "c7ad54c42a45915497c6448208d9cadb23e1f9f6",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 22,
+    "findings": [
+      {
+        "ruleId": "android.target-sdk.existing.default-below-35",
+        "path": "nes-android/android-app/app/build.gradle",
+        "line": 13,
+        "dependabot": {
+          "packageEcosystem": "gradle",
+          "directory": "/nes-android/android-app/app"
+        }
+      },
+      {
+        "ruleId": "container.debian.eol-11-and-older",
+        "path": "nes-cloud/Dockerfile",
+        "line": 46,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/nes-cloud"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

@@ -1,0 +1,307 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "cowlingj/p2pp",
+  "commit": "2edcaefc8c958b7b95def1b47b21e0bca1baf5a9",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 10,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 30519,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "peer-server/Dockerfile",
+        "name": "peerjs/peerjs-server",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "presentation/Dockerfile",
+        "name": "webpronl/reveal-md",
+        "currentValue": "5.5.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "remix-ts-p2p/Dockerfile",
+        "name": "docker/dockerfile",
+        "currentValue": "1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "remix-ts-p2p/Dockerfile",
+        "name": "node",
+        "currentValue": "20.5.1-slim",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "remix-ts-p2p/Dockerfile",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "remix-ts-p2p/Dockerfile",
+        "name": "pkg-config",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "remix-ts-p2p/Dockerfile",
+        "name": "python-is-python3",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@emotion/react",
+        "currentValue": "^11.11.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@emotion/styled",
+        "currentValue": "^11.11.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@mui/joy",
+        "currentValue": "^5.0.0-beta.9",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@remix-run/css-bundle",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@remix-run/node",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@remix-run/react",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@remix-run/serve",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@types/uuid",
+        "currentValue": "^9.0.5",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "isbot",
+        "currentValue": "^3.6.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "lucide-react",
+        "currentValue": "^0.284.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "peerjs",
+        "currentValue": "^1.5.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "react",
+        "currentValue": "^18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "react-dom",
+        "currentValue": "^18.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "react-toastify",
+        "currentValue": "^9.1.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "unique-names-generator",
+        "currentValue": "^4.7.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "uuid",
+        "currentValue": "^9.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@flydotio/dockerfile",
+        "currentValue": "^0.4.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@remix-run/dev",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@remix-run/eslint-config",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@types/react",
+        "currentValue": "^18.2.20",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "@types/react-dom",
+        "currentValue": "^18.2.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "eslint",
+        "currentValue": "^8.38.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "typescript",
+        "currentValue": "^5.1.6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "remix-ts-p2p/package.json",
+        "name": "node",
+        "currentValue": ">=18.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

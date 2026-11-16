@@ -1,0 +1,293 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "twitter/chill",
+  "commit": "f69dfa0edce9442a1f5c0413d8b797957b8b27d7",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 42,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 18
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 37
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 56
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 8
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 10
+      },
+      {
+        "ruleId": "github-actions.setup-java.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 19
+      },
+      {
+        "ruleId": "github-actions.setup-java.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 38
+      },
+      {
+        "ruleId": "github-actions.setup-java.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 57
+      },
+      {
+        "ruleId": "github-actions.setup-java.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 9
+      },
+      {
+        "ruleId": "github-actions.setup-java.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 11
+      },
+      {
+        "ruleId": "scala.runtime.eol-2.11",
+        "path": "build.sbt",
+        "line": 22
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 7688,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/setup-java",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/setup-java",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/setup-java",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/setup-java",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "java-jdk",
+        "currentValue": "17",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "java-jdk",
+        "currentValue": "${{matrix.java}}",
+        "skipReason": "unsupported-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "java-jdk",
+        "currentValue": "${{matrix.java}}",
+        "skipReason": "unsupported-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "java-jdk",
+        "currentValue": "17",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release-drafter.yml",
+        "name": "release-drafter/release-drafter",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release-drafter.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/setup-java",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "olafurpg/setup-gpg",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "java-jdk",
+        "currentValue": "17",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

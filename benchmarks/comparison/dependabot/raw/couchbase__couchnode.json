@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "couchbase/couchnode",
+  "commit": "89fe8618df2393c3e397f75490aec060b48942ca",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 88,
+    "findings": [
+      {
+        "ruleId": "container.node.eol-22-and-older",
+        "path": "performer/Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/performer"
+        }
+      },
+      {
+        "ruleId": "container.node.eol-22-and-older",
+        "path": "performer/Dockerfile",
+        "line": 45,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/performer"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

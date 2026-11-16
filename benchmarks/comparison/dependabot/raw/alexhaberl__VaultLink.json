@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "alexhaberl/VaultLink",
+  "commit": "fddf07eccedb7abb414c9205ab83486b23f23872",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 73,
+    "findings": []
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/",
+        "ignore": false,
+        "allow": true
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "rust-toolchain",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "docker",
+        "directory": "/deploy/docker",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

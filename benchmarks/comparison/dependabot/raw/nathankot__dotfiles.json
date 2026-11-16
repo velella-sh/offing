@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "nathankot/dotfiles",
+  "commit": "a7f04f90a8cd465412a5de70c91d82432d7745fc",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 7,
+    "findings": [
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": "home/.tool-versions",
+        "line": 2,
+        "dependabot": null
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.20-and-older",
+        "path": "go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "python.runtime.eol-3.9-and-older",
+        "path": ".python-version",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.1",
+        "path": "home/.tool-versions",
+        "line": 3,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

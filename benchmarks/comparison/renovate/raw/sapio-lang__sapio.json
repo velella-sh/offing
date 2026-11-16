@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "sapio-lang/sapio",
+  "commit": "4b4ace2efce0b67763c853c33cb9691d8600b65b",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 253,
+    "findings": [
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/rust.yml",
+        "line": 175
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "evaluators/rust-toolchain.toml",
+        "line": 2
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 29863,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/learn-sapio.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/learn-sapio.yml",
+        "name": "peaceiris/actions-gh-pages",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/learn-sapio.yml",
+        "name": "ubuntu",
+        "currentValue": "24.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v7.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "ubuntu",
+        "currentValue": "24.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "ubuntu",
+        "currentValue": "24.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "ubuntu",
+        "currentValue": "24.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/rust.yml",
+        "name": "node",
+        "currentValue": "24",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

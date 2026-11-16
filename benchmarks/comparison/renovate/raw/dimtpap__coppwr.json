@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "dimtpap/coppwr",
+  "commit": "1bdf33a81c8040d712d6b10e530d99a1186d030c",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 15,
+    "findings": [
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 31
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 83
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 24
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 37
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/main.yml",
+        "line": 101
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/main.yml",
+        "line": 119
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/main.yml",
+        "line": 126
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 11208,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "ubuntu",
+        "currentValue": "22.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "LucaCanali/sparkMeasure",
+  "commit": "9ab678a4d4c58128c090c87650706be926bfbc11",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 42,
+    "findings": [
+      {
+        "ruleId": "github-actions.download-artifact.retired",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "line": 76
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "line": 92
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "line": 54
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 8449,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "sbtscala/scala-sbt",
+        "currentValue": "eclipse-temurin-alpine-17.0.15_6_1.11.3_2.13.16",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "docker.io/library/spark",
+        "currentValue": "4.0.0-scala2.13-java17-python3-ubuntu",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "actions/checkout",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "actions/setup-java",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "sbt/setup-sbt",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "actions/checkout",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "actions/download-artifact",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "actions/setup-java",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "ubuntu",
+        "currentValue": "24.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "java-jdk",
+        "currentValue": "${{ matrix.java-version }}",
+        "skipReason": "unsupported-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "ubuntu",
+        "currentValue": "24.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "python",
+        "currentValue": "${{ matrix.python-version }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+        "name": "java-jdk",
+        "currentValue": "17",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

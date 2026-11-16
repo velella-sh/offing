@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "CSSSR/helm-deno",
+  "commit": "42ee284aec92a5129c273482c6b1f6b22422159f",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 26,
+    "findings": [
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/codeql-analysis.yaml",
+        "line": 19,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/lint.yaml",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test-all.yaml",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yaml",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

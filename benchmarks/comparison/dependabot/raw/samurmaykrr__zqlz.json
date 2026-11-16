@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "samurmaykrr/zqlz",
+  "commit": "d94a6133a8dc7d0d5a20524cbb9d1aa05e726d13",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 147,
+    "findings": [
+      {
+        "ruleId": "github-actions.action-gh-release.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 189,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.action-gh-release.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 69,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 102,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 44,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 2,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

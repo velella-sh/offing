@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "rushiiMachine/aliucord-plugins",
+  "commit": "0bc1b1e365d3c52ad27e776a17016850c446535a",
+  "ecosystem": "android",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 43,
+    "findings": [
+      {
+        "ruleId": "android.target-sdk.existing.default-below-35",
+        "path": "build.gradle.kts",
+        "line": 45
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 20
+      },
+      {
+        "ruleId": "github-actions.setup-java.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 31
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 12898,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build.yml",
+        "name": "actions/checkout",
+        "currentValue": "master",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build.yml",
+        "name": "actions/setup-java",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build.yml",
+        "name": "android-actions/setup-android",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build.yml",
+        "name": "java-jdk",
+        "skipReason": "unsupported",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

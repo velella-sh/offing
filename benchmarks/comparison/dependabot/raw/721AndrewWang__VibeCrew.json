@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "721AndrewWang/VibeCrew",
+  "commit": "d320dd99b0f6686f37db70913db90efc43147580",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 52,
+    "findings": [
+      {
+        "ruleId": "github-actions.action-gh-release.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 34,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 21,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 45,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 70,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 19,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 22,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 46,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 71,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/ci.yml",
+        "line": 54,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 83,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

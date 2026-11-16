@@ -1,0 +1,255 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "spark-jobserver/spark-jobserver",
+  "commit": "f58280bbe4ecfef110bdf425f5aafccfbaa1bdba",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 23,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile.test",
+        "line": 36
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile.test",
+        "line": 37
+      },
+      {
+        "ruleId": "container.zookeeper.eol-3.7-and-older",
+        "path": "docker-setups/hdfs_with_zookeeper/docker-compose.yml",
+        "line": 26
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 21830,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/hdfs_with_zookeeper/docker-compose.yml",
+        "name": "zookeeper",
+        "currentValue": "3.5.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/hdfs_with_zookeeper/docker-compose.yml",
+        "name": "sequenceiq/hadoop-docker",
+        "currentValue": "2.7.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/hdfs_with_zookeeper/docker-compose.yml",
+        "name": "bde2020/spark-master",
+        "currentValue": "2.4.5-hadoop2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/hdfs_with_zookeeper/docker-compose.yml",
+        "name": "bde2020/spark-worker",
+        "currentValue": "2.4.5-hadoop2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/hdfs_with_zookeeper/docker-compose.yml",
+        "name": "bde2020/spark-worker",
+        "currentValue": "2.4.5-hadoop2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/minimal/docker-compose.yml",
+        "name": "bde2020/spark-master",
+        "currentValue": "2.4.5-hadoop2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/minimal/docker-compose.yml",
+        "name": "bde2020/spark-worker",
+        "currentValue": "2.4.5-hadoop2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/minimal/docker-compose.yml",
+        "name": "bde2020/spark-worker",
+        "currentValue": "2.4.5-hadoop2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/postgres/docker-compose.yml",
+        "name": "bde2020/spark-master",
+        "currentValue": "2.4.5-hadoop2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/postgres/docker-compose.yml",
+        "name": "bde2020/spark-worker",
+        "currentValue": "2.4.5-hadoop2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-setups/postgres/docker-compose.yml",
+        "name": "bde2020/spark-worker",
+        "currentValue": "2.4.5-hadoop2.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "openjdk",
+        "currentValue": "8-jdk-alpine",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "bash",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "openjdk",
+        "currentValue": "8-jdk-alpine",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "bash",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.test",
+        "name": "openjdk",
+        "currentValue": "8-jdk",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.test",
+        "name": "libssl-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.test",
+        "name": "openssl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.test",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.test",
+        "name": "zlib1g-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.test",
+        "name": "python3-pip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.test",
+        "name": "sbt",
+        "currentValue": "1.1.6",
+        "skipReason": "unknown-registry",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker-setups/postgres/Dockerfile",
+        "name": "postgres",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

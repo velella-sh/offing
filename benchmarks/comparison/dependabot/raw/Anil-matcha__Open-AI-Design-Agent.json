@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "Anil-matcha/Open-AI-Design-Agent",
+  "commit": "f029d0d708d8c581463f018cdc2b0084494ce401",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 19,
+    "findings": [
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/design-agent/package.json",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/design-agent"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

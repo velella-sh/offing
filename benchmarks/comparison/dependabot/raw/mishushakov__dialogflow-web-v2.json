@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "mishushakov/dialogflow-web-v2",
+  "commit": "9331dc77cd2d5791ae9c030d8afff641860f7fde",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 13,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/pages.yml",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "kubernetes.networking-k8s-io.ingress.v1beta1.removed",
+        "path": "k8s/Ingress.yaml",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.babel-eslint.deprecated",
+        "path": "package.json",
+        "line": 25,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.figgy-pudding.eol",
+        "path": "package.json",
+        "line": 22,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.hapi.joi.deprecated",
+        "path": "package.json",
+        "line": 19,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.har-validator.deprecated",
+        "path": "package.json",
+        "line": 19,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "package.json",
+        "line": 26,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "package.json",
+        "line": 26,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.q.deprecated",
+        "path": "package.json",
+        "line": 22,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.querystring.deprecated",
+        "path": "package.json",
+        "line": 22,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.request.deprecated",
+        "path": "package.json",
+        "line": 19,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.resolve-url.deprecated",
+        "path": "package.json",
+        "line": 19,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.source-map-url.deprecated",
+        "path": "package.json",
+        "line": 19,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.sourcemap-codec.deprecated",
+        "path": "package.json",
+        "line": 23,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.stable.deprecated",
+        "path": "package.json",
+        "line": 22,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

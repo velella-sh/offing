@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "alinGmail/LiveMock",
+  "commit": "2b480e62afcf4ea1d579d8e02be807429093428b",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 49,
+    "findings": [
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile",
+        "line": 2,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile",
+        "line": 24,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.action-gh-release.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 25,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 122,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 74,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 104,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 66,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.deploy-pages.node20",
+        "path": ".github/workflows/pages.yml",
+        "line": 65,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.download-artifact.retired",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 159,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 111,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 169,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.metadata-action.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 177,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 107,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 166,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 69,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/docker-publish.yml",
+        "line": 143,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "mcp/package.json",
+        "line": 13,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "mcp/package.json",
+        "line": 13,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "mcp/package.json",
+        "line": 13,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

@@ -1,0 +1,1276 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "codama-idl/codama",
+  "commit": "f2cb3d0b99e7b53d467c18fd6f9fa1e2ed388204",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 463,
+    "findings": [
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 32
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "packages/spec-generators/package.json",
+        "line": 27
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "packages/dynamic-client/test/programs/anchor/rust-toolchain.toml",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 24422,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/cut.yml",
+        "name": "codama-idl/release-tools",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "pnpm/action-setup",
+        "currentValue": "v6.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "pnpm/action-setup",
+        "currentValue": "v6.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "codama-idl/release-tools",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "dependabot/fetch-metadata",
+        "currentValue": "v3.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "node",
+        "currentValue": "${{ env.NODE_VERSION }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "node",
+        "currentValue": "${{ env.NODE_VERSION }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/promote.yml",
+        "name": "codama-idl/release-tools",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@changesets/changelog-github",
+        "currentValue": "^1.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@changesets/cli",
+        "currentValue": "^3.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@codama/release-tools",
+        "currentValue": "v1.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@solana-config/oxc",
+        "currentValue": "^0.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/node",
+        "currentValue": "^26",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "agadoo",
+        "currentValue": "^3.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "browserslist-to-esbuild",
+        "currentValue": "^2.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "happy-dom",
+        "currentValue": "^20.14.6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "oxfmt",
+        "currentValue": "^0.71.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "oxlint",
+        "currentValue": "^1.86.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "oxlint-tsgolint",
+        "currentValue": "^7.0.2003",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "rimraf",
+        "currentValue": "6.1.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "tsup",
+        "currentValue": "^8.5.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "turbo",
+        "currentValue": "^2.11.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "typescript",
+        "currentValue": "^7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "vitest",
+        "currentValue": "^5.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "node",
+        "currentValue": ">=20.18.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "pnpm",
+        "currentValue": "10.15.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@codama/visitors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@codama/visitors-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "commander",
+        "currentValue": "^15.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "picocolors",
+        "currentValue": "^1.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "prompts",
+        "currentValue": "^2.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@types/prompts",
+        "currentValue": "^2.4.9",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-address-resolution/package.json",
+        "name": "@codama/dynamic-codecs",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-address-resolution/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-address-resolution/package.json",
+        "name": "@solana/addresses",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-address-resolution/package.json",
+        "name": "@solana/codecs",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-address-resolution/package.json",
+        "name": "codama",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-address-resolution/package.json",
+        "name": "commander",
+        "currentValue": "^15.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-address-resolution/package.json",
+        "name": "@solana/kit",
+        "currentValue": "8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@codama/dynamic-address-resolution",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@codama/dynamic-codecs",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@codama/dynamic-instructions",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@solana/addresses",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@solana/codecs",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@solana/instructions",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "codama",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "commander",
+        "currentValue": "^15.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "superstruct",
+        "currentValue": "^2.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@codama/nodes-from-anchor",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@codama/renderers-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@metaplex-foundation/mpl-token-metadata-kit",
+        "currentValue": "^0.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@solana-program/program-metadata",
+        "currentValue": "^0.11.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@solana-program/token",
+        "currentValue": "0.18.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@solana-program/token-2022",
+        "currentValue": "^0.20.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "@solana/kit",
+        "currentValue": "8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "litesvm",
+        "currentValue": "1.6.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-client/package.json",
+        "name": "sas-lib",
+        "currentValue": "2.0.0-beta.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-codecs/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-codecs/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-codecs/package.json",
+        "name": "@codama/visitors-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-codecs/package.json",
+        "name": "@solana/codecs",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "@codama/dynamic-address-resolution",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "@codama/dynamic-codecs",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "@codama/dynamic-parsers",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "@solana/accounts",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "@solana/addresses",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "@solana/codecs",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "@solana/instructions",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "codama",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "commander",
+        "currentValue": "^15.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "superstruct",
+        "currentValue": "^2.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-instructions/package.json",
+        "name": "@solana/kit",
+        "currentValue": "8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-parsers/package.json",
+        "name": "@codama/dynamic-codecs",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-parsers/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-parsers/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-parsers/package.json",
+        "name": "@codama/visitors-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-parsers/package.json",
+        "name": "@solana/instructions",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/dynamic-parsers/package.json",
+        "name": "@solana/codecs",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/errors/package.json",
+        "name": "@codama/node-types",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/errors/package.json",
+        "name": "commander",
+        "currentValue": "^15.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/errors/package.json",
+        "name": "picocolors",
+        "currentValue": "^1.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/fragments/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/library/package.json",
+        "name": "@codama/cli",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/library/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/library/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/library/package.json",
+        "name": "@codama/validators",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/library/package.json",
+        "name": "@codama/visitors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/nodes-from-anchor/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/nodes-from-anchor/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/nodes-from-anchor/package.json",
+        "name": "@codama/visitors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/nodes-from-anchor/package.json",
+        "name": "@noble/hashes",
+        "currentValue": "^2.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/nodes-from-anchor/package.json",
+        "name": "@solana/codecs",
+        "currentValue": "^8.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/nodes/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/nodes/package.json",
+        "name": "@codama/node-types",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/renderers-core/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/renderers-core/package.json",
+        "name": "@codama/fragments",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/renderers-core/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/renderers-core/package.json",
+        "name": "@codama/visitors-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/spec-generators/package.json",
+        "name": "@codama/fragments",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/spec-generators/package.json",
+        "name": "@codama/spec",
+        "currentValue": "1.9.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/spec-generators/package.json",
+        "name": "@codama/spec-v1",
+        "currentValue": "1.9.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/spec-generators/package.json",
+        "name": "@types/node",
+        "currentValue": "^26",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/spec-generators/package.json",
+        "name": "rimraf",
+        "currentValue": "6.1.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/spec-generators/package.json",
+        "name": "tsup",
+        "currentValue": "^8.5.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/spec-generators/package.json",
+        "name": "typescript",
+        "currentValue": "^7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/spec-generators/package.json",
+        "name": "vitest",
+        "currentValue": "^5.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/spec-generators/package.json",
+        "name": "node",
+        "currentValue": ">=20.18.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/upgrade/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/upgrade/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/upgrade/package.json",
+        "name": "@codama/visitors-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/upgrade/package.json",
+        "name": "@codama/validators",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validators/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validators/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validators/package.json",
+        "name": "@codama/visitors-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/visitors-core/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/visitors-core/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/visitors-core/package.json",
+        "name": "json-stable-stringify",
+        "currentValue": "^1.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/visitors-core/package.json",
+        "name": "@types/json-stable-stringify",
+        "currentValue": "^1.2.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/visitors/package.json",
+        "name": "@codama/errors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/visitors/package.json",
+        "name": "@codama/nodes",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/visitors/package.json",
+        "name": "@codama/visitors-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

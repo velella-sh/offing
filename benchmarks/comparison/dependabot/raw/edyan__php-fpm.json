@@ -6,10 +6,379 @@
   "selection": "blind",
   "continuity": false,
   "offing": {
-    "version": "0.7.3",
-    "commit": "7cdd0e5f7541ba9828452df5ec9dbb22fb18ae14",
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
     "durationMs": 26,
     "findings": [
+      {
+        "ruleId": "container.debian.eol-11-and-older",
+        "path": "Dockerfile-7.3",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.3",
+        "line": 124,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.3",
+        "line": 125,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.3",
+        "line": 126,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.3",
+        "line": 127,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.4",
+        "line": 84,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.4",
+        "line": 85,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.4",
+        "line": 86,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.4",
+        "line": 87,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.5",
+        "line": 113,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.5",
+        "line": 114,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.5",
+        "line": 115,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.5",
+        "line": 116,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.6",
+        "line": 119,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.6",
+        "line": 120,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.6",
+        "line": 121,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.6",
+        "line": 122,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.0",
+        "line": 94,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.0",
+        "line": 95,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.0",
+        "line": 96,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.0",
+        "line": 97,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.1",
+        "line": 96,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.1",
+        "line": 97,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.1",
+        "line": 98,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.1",
+        "line": 99,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.2",
+        "line": 104,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.2",
+        "line": 105,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.2",
+        "line": 106,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.2",
+        "line": 107,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.3",
+        "line": 104,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.3",
+        "line": 105,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.3",
+        "line": 106,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.3",
+        "line": 107,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.4",
+        "line": 105,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.4",
+        "line": 106,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.4",
+        "line": 107,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.4",
+        "line": 108,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.0",
+        "line": 96,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.0",
+        "line": 97,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.0",
+        "line": 98,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.0",
+        "line": 99,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.1",
+        "line": 105,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.1",
+        "line": 106,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.1",
+        "line": 107,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.1",
+        "line": 108,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.2",
+        "line": 96,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.2",
+        "line": 97,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.2",
+        "line": 98,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.2",
+        "line": 99,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "archive/Dockerfile-5.3",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/archive"
+        }
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "archive/Dockerfile-5.5",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/archive"
+        }
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "Dockerfile-7.2",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "Dockerfile-7.4",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": "Dockerfile-7.1",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": "Dockerfile-8.0",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": "Dockerfile-8.1",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": "Dockerfile-8.2",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
       {
         "ruleId": "github-actions.checkout.node20",
         "path": ".github/workflows/build-docker-image.yml",

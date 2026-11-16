@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "crertel/graphmath",
+  "commit": "c94613367bb963a2cdcff4299b31ff9f36476d53",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 7,
+    "findings": [
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.15",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 38
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 30
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 20087,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "erlef/setup-beam",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "erlang/otp",
+        "currentValue": "${{matrix.otp}}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "elixir-lang/elixir",
+        "currentValue": "${{matrix.elixir}}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

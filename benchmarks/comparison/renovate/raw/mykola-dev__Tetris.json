@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "mykola-dev/Tetris",
+  "commit": "a61c81fad3f3a63207072cc3b300e4914189221f",
+  "ecosystem": "android",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 23,
+    "findings": [
+      {
+        "ruleId": "android.target-sdk.existing.default-below-35",
+        "path": "build.gradle.kts",
+        "line": 122
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/deployment.yml",
+        "line": 14
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 37588,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deployment.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deployment.yml",
+        "name": "JamesIves/github-pages-deploy-action",
+        "currentValue": "v4.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deployment.yml",
+        "name": "ncipollo/release-action",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deployment.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

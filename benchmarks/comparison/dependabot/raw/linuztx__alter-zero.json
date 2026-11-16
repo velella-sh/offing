@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "linuztx/alter-zero",
+  "commit": "24f7f4ba539b4763a610a8a45d0b3265ebd6ee28",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 36,
+    "findings": [
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 7,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

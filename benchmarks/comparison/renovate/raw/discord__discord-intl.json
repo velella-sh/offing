@@ -1,0 +1,1524 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "discord/discord-intl",
+  "commit": "69d08f0ecf7461534ee2bece19bcf3720689b55d",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 180,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": ".github/docker/linux.Dockerfile",
+        "line": 20
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": ".github/docker/linux.Dockerfile",
+        "line": 4
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-arm64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-x64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-arm64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-x64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-arm64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-x64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "line": 33
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/darwin-arm64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/darwin-x64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-musl/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-musl/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/win32-arm64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/win32-ia32-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/npm/win32-x64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "crates/discord_intl_message_database/package.json",
+        "line": 38
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-arm64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-x64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-arm64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-x64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-arm64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-x64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "line": 33
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/darwin-arm64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/darwin-x64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-musl/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-musl/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/win32-arm64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/win32-ia32-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/npm/win32-x64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "crates/discord_intl_message_database/package.json",
+        "line": 38
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-arm64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-x64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-arm64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-x64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-arm64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-x64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "line": 33
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/darwin-arm64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/darwin-x64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-musl/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-musl/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/win32-arm64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/win32-ia32-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/npm/win32-x64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "crates/discord_intl_message_database/package.json",
+        "line": 38
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-arm64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-x64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-arm64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-x64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-arm64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-x64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "line": 33
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/darwin-arm64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/darwin-x64/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-musl/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-gnu/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-musl/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/win32-arm64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/win32-ia32-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/npm/win32-x64-msvc/package.json",
+        "line": 16
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "crates/discord_intl_message_database/package.json",
+        "line": 38
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "package.json",
+        "line": 10
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "line": 20
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "package.json",
+        "line": 10
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "line": 20
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 10
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "line": 20
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 42016,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/linux.Dockerfile",
+        "name": "messense/cargo-zigbuild",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/linux.Dockerfile",
+        "name": "node",
+        "currentValue": "20.6.1-bookworm-slim",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/pnpm-workspace/action.yaml",
+        "name": "actions/setup-node",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/pnpm-workspace/action.yaml",
+        "name": "pnpm/action-setup",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/pnpm-workspace/action.yaml",
+        "name": "node",
+        "currentValue": "${{ inputs.node-version }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/pnpm-workspace/action.yaml",
+        "name": "pnpm",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/rustup/action.yaml",
+        "name": "dtolnay/rust-toolchain",
+        "currentValue": "master",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/rustup/action.yaml",
+        "name": "Swatinem/rust-cache",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/rustup/action.yaml",
+        "name": "rust",
+        "currentValue": "${{steps.rust-toolchain-toml.outputs.channel}}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-build-env/action.yaml",
+        "name": "goto-bus-stop/setup-zig",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-build-env/action.yaml",
+        "name": "taiki-e/install-action",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-napi-platform-package.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-napi-platform-package.yaml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-swc-intl-message-transformer.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-swc-intl-message-transformer.yaml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-swc-intl-message-transformer.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint-rust.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish-canary.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish-canary.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yaml",
+        "name": "actions/download-artifact",
+        "currentValue": "v7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yaml",
+        "name": "cargo-bins/cargo-binstall",
+        "currentValue": "v1.22.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yaml",
+        "name": "rust-lang/crates-io-auth-action",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-arm64/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/npm/darwin-x64/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-arm64-gnu/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/npm/linux-x64-gnu/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-arm64-msvc/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/npm/win32-x64-msvc/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "^2.18.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "name": "@discord/intl-flat-json-parser-darwin-arm64",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "name": "@discord/intl-flat-json-parser-darwin-x64",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "name": "@discord/intl-flat-json-parser-linux-arm64-gnu",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "name": "@discord/intl-flat-json-parser-linux-x64-gnu",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "name": "@discord/intl-flat-json-parser-win32-arm64-msvc",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "name": "@discord/intl-flat-json-parser-win32-x64-msvc",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_flat_json_parser/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/npm/darwin-arm64/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/npm/darwin-x64/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-gnu/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/npm/linux-arm64-musl/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-gnu/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/npm/linux-x64-musl/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/npm/win32-arm64-msvc/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/npm/win32-ia32-msvc/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/npm/win32-x64-msvc/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "^2.18.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-ast",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-message-database-darwin-arm64",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-message-database-darwin-x64",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-message-database-linux-arm64-gnu",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-message-database-linux-arm64-musl",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-message-database-linux-x64-gnu",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-message-database-linux-x64-musl",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-message-database-win32-arm64-msvc",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-message-database-win32-ia32-msvc",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "@discord/intl-message-database-win32-x64-msvc",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "crates/discord_intl_message_database/package.json",
+        "name": "node",
+        "currentValue": ">= 10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@discord/intl-tools",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/node",
+        "currentValue": "22.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/react",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "eslint",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "prettier",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "react",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "typescript",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "pnpm",
+        "currentValue": "9.12.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/react",
+        "currentValue": "18",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "react",
+        "currentValue": "18",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "typescript",
+        "currentValue": "5.5.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "prettier",
+        "currentValue": "3.3.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/babel-plugin-transform-discord-intl/package.json",
+        "name": "@discord/intl-loader-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/babel-plugin-transform-discord-intl/package.json",
+        "name": "@typescript-eslint/scope-manager",
+        "currentValue": "^8.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/babel-plugin-transform-discord-intl/package.json",
+        "name": "@babel/types",
+        "currentValue": "^7.24.9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/babel-plugin-transform-discord-intl/package.json",
+        "name": "@types/babel__traverse",
+        "currentValue": "7.20.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "name": "@discord/intl-message-database",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "name": "@typescript-eslint/scope-manager",
+        "currentValue": "^8.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "name": "@types/eslint",
+        "currentValue": "^8.56.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "name": "@types/estree",
+        "currentValue": "^1.0.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "name": "@typescript-eslint/parser",
+        "currentValue": "^8.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/eslint-plugin-discord-intl/package.json",
+        "name": "eslint",
+        "currentValue": "8.57.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl-ast/package.json",
+        "name": "typescript",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl-loader-core/package.json",
+        "name": "@discord/intl-message-database",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl-loader-core/package.json",
+        "name": "chokidar",
+        "currentValue": "^3.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl-loader-core/package.json",
+        "name": "debug",
+        "currentValue": "^4.3.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl-loader-core/package.json",
+        "name": "@types/debug",
+        "currentValue": "^4.1.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl-loader-core/package.json",
+        "name": "typescript",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "@discord/intl-ast",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "@formatjs/icu-skeleton-parser",
+        "currentValue": "1.8.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "@formatjs/intl",
+        "currentValue": "^2.10.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "@intrnl/xxhash64",
+        "currentValue": "^0.1.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "intl-messageformat",
+        "currentValue": "^10.5.11",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "@formatjs/intl-durationformat",
+        "currentValue": "^0.7.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "@swc/cli",
+        "currentValue": "^0.3.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "@swc/core",
+        "currentValue": "^1.4.11",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "typescript",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/intl/package.json",
+        "name": "react",
+        "currentValue": "> 16",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/jest-processor-discord-intl/package.json",
+        "name": "@discord/intl-loader-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/jest-processor-discord-intl/package.json",
+        "name": "@jest/types",
+        "currentValue": "^29.6.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/metro-intl-transformer/package.json",
+        "name": "@discord/babel-plugin-transform-discord-intl",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/metro-intl-transformer/package.json",
+        "name": "@discord/intl-loader-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/metro-intl-transformer/package.json",
+        "name": "debug",
+        "currentValue": "^4.3.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/metro-intl-transformer/package.json",
+        "name": "metro-config",
+        "currentValue": "^0.81.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/metro-intl-transformer/package.json",
+        "name": "@types/debug",
+        "currentValue": "^4.1.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/rspack-intl-loader/package.json",
+        "name": "@discord/intl-loader-core",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/rspack-intl-loader/package.json",
+        "name": "debug",
+        "currentValue": "^4.3.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/rspack-intl-loader/package.json",
+        "name": "@types/debug",
+        "currentValue": "^4.1.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/rspack-intl-loader/package.json",
+        "name": "@rspack/core",
+        "currentValue": "0.x || 1.x",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/rspack-intl-loader/package.json",
+        "name": "webpack",
+        "currentValue": "^5.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "tools/package.json",
+        "name": "@inquirer/prompts",
+        "currentValue": "^5.3.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "tools/package.json",
+        "name": "@napi-rs/cli",
+        "currentValue": "3.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "tools/package.json",
+        "name": "chokidar",
+        "currentValue": "^3.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "tools/package.json",
+        "name": "commander",
+        "currentValue": "^12.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "tools/package.json",
+        "name": "semver",
+        "currentValue": "^7.6.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "tools/package.json",
+        "name": "smol-toml",
+        "currentValue": "^1.9.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "tools/package.json",
+        "name": "zx",
+        "currentValue": "^8.1.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "tools/package.json",
+        "name": "@types/semver",
+        "currentValue": "^7.5.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

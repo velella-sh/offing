@@ -1,0 +1,474 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "fuma-nama/fuma",
+  "commit": "b29f454384a80f344611cdeb7b905cafc0288bc6",
+  "ecosystem": "database",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 84,
+    "findings": []
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 20276,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "compose.yaml",
+        "name": "postgres",
+        "currentValue": "16.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "pnpm/action-setup",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "node",
+        "currentValue": "24",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@auth/prisma-adapter",
+        "currentValue": "^2.11.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@fuma-comment/react",
+        "currentValue": "^1.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@fuma-comment/server",
+        "currentValue": "^1.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@fumari/sponsors",
+        "currentValue": "workspace:*",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@prisma/adapter-pg",
+        "currentValue": "^7.10.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@prisma/client",
+        "currentValue": "^7.10.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@radix-ui/react-scroll-area",
+        "currentValue": "^1.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@shikijs/rehype",
+        "currentValue": "^4.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "class-variance-authority",
+        "currentValue": "^0.7.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "feed",
+        "currentValue": "^6.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "fuma-content",
+        "currentValue": "^1.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "lucide-react",
+        "currentValue": "^1.61.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "next",
+        "currentValue": "16.4.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "next-auth",
+        "currentValue": "5.0.0-beta.32",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "octokit",
+        "currentValue": "^5.0.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "phenomenon",
+        "currentValue": "^1.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "react",
+        "currentValue": "^19.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "react-dom",
+        "currentValue": "^19.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "remark-gfm",
+        "currentValue": "^4.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "remark-heading-id",
+        "currentValue": "^1.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "shiki",
+        "currentValue": "^4.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "tailwind-merge",
+        "currentValue": "^3.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "zod",
+        "currentValue": "^4.6.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@fuma-content/studio",
+        "currentValue": "^2.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@tailwindcss/postcss",
+        "currentValue": "^4.3.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@tailwindcss/typography",
+        "currentValue": "^0.5.20",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/node",
+        "currentValue": "^26.6.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/react",
+        "currentValue": "^19.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/react-dom",
+        "currentValue": "^19.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/remark-heading-id",
+        "currentValue": "^1.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "dotenv-cli",
+        "currentValue": "^11.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "oxfmt",
+        "currentValue": "^0.74.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "postcss",
+        "currentValue": "^8.5.31",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "prisma",
+        "currentValue": "^7.10.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "tailwindcss",
+        "currentValue": "^4.3.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "tegami",
+        "currentValue": "^1.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "typescript",
+        "currentValue": "^7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "pnpm",
+        "currentValue": "11.1.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/sponsors/package.json",
+        "name": "@types/node",
+        "currentValue": "^26.6.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/sponsors/package.json",
+        "name": "@types/react",
+        "currentValue": "^19.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/sponsors/package.json",
+        "name": "react",
+        "currentValue": "^19.3.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/sponsors/package.json",
+        "name": "tsdown",
+        "currentValue": "^0.23.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/sponsors/package.json",
+        "name": "typescript",
+        "currentValue": "^7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/sponsors/package.json",
+        "name": "react",
+        "currentValue": "^19.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

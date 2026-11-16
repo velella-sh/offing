@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "Rve27/RvSystem-Monitor",
+  "commit": "b07fe27598555e49084bbcc40be558803286b9ef",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 68,
+    "findings": [
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 38505,
+    "status": "ok",
+    "dependencies": []
+  }
+}

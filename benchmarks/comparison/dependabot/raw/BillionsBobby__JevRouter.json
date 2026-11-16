@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "BillionsBobby/JevRouter",
+  "commit": "b1cdf80593ee530cedd99728a938f4e74ddd556b",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 26,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 11,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/pages.yml",
+        "line": 27,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.configure-pages.node20",
+        "path": ".github/workflows/pages.yml",
+        "line": 28,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.deploy-pages.node20",
+        "path": ".github/workflows/pages.yml",
+        "line": 35,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 12,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 17,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-22",
+        "path": ".github/workflows/ci.yml",
+        "line": 14,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

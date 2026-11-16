@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "bermi/bermi-SDK",
+  "commit": "57eee3bfe306e98b39518e76049cd29d658cb118",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 15,
+    "findings": [
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": ".devcontainer/Dockerfile.ubuntu",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/.devcontainer"
+        }
+      },
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.action-gh-release.node20",
+        "path": ".github/workflows/deno.yml",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/deno.yml",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/deno.yml",
+        "line": 27,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

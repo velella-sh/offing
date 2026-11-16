@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "Calvin-LL/is-even-ai",
+  "commit": "9839c1e2018f8eb41d2f4ffa10c010edb07900ef",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 29,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yaml",
+        "line": 13,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yaml",
+        "line": 31,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yaml",
+        "line": 47,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yaml",
+        "line": 12,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/release.yaml",
+        "line": 18,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/release.yaml",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/release.yaml",
+        "line": 48,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/test.yaml",
+        "line": 13,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": ".github/workflows/release.yaml",
+        "line": 20,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": ".github/workflows/release.yaml",
+        "line": 34,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": ".github/workflows/release.yaml",
+        "line": 50,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": ".github/workflows/test.yaml",
+        "line": 15,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

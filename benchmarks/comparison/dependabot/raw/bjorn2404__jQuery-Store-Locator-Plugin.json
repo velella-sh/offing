@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "bjorn2404/jQuery-Store-Locator-Plugin",
+  "commit": "f41f3b65b28d9b081001d513aa301d9001cba96d",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 19,
+    "findings": [
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": ".nvmrc",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 32,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "package.json",
+        "line": 32,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 32,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "package.json",
+        "line": 32,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 39,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.osenv.eol",
+        "path": "package.json",
+        "line": 39,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

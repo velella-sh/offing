@@ -1,0 +1,736 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "Boavizta/boaviztapi",
+  "commit": "2205dd8470cdc04a421a2151f5825db81bf70821",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 58,
+    "findings": [
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 86
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build_client_sdk_with_poetry.yml",
+        "line": 13
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/format.yml",
+        "line": 21
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/generate_requirements_for_clever_cloud.yml",
+        "line": 19
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/github_page_deploy.yml",
+        "line": 17
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/lint.yml",
+        "line": 21
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 17
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 37
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 70
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 31
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 48
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 73
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 83
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/build_client_sdk_with_poetry.yml",
+        "line": 16
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/format.yml",
+        "line": 23
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/generate_requirements_for_clever_cloud.yml",
+        "line": 22
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/github_page_deploy.yml",
+        "line": 19
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/lint.yml",
+        "line": 23
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 20
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 40
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 32
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 49
+      },
+      {
+        "ruleId": "github-actions.setup-qemu-action.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 80
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.21",
+        "path": "boaviztapi/data/utils/complete_AWS_EC2/go.mod",
+        "line": 3
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 6
+      },
+      {
+        "ruleId": "npm.package.lodash-get.deprecated",
+        "path": "package.json",
+        "line": 6
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 117854,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "compose-prod.yaml",
+        "name": "ghcr.io/boavizta/boaviztapi",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "compose-prod.yaml",
+        "name": "ghcr.io/boavizta/boaviztapi-doc",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Containerfile",
+        "name": "python",
+        "currentValue": "3.14-slim",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Containerfile",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Containerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Containerfile",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Containerfile",
+        "name": "vim",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Containerfile",
+        "name": "zsh",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "python",
+        "currentValue": "3.14-slim",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "public.ecr.aws/lambda/python",
+        "currentValue": "3.14",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "python",
+        "currentValue": "3.14-alpine",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docs/Dockerfile",
+        "name": "python",
+        "currentValue": "3.14-slim",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_client_sdk_with_poetry.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_client_sdk_with_poetry.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_client_sdk_with_poetry.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_client_sdk_with_poetry.yml",
+        "name": "python",
+        "currentValue": "3.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/check_csv_data.yml",
+        "name": "actions/checkout",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/check_csv_data.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/check_csv_data.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/check_csv_data.yml",
+        "name": "python",
+        "currentValue": "3.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/check_markdown_links.yaml",
+        "name": "actions/checkout",
+        "currentValue": "main",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/check_markdown_links.yaml",
+        "name": "byrnereese/github-action-mkdocs-link-check",
+        "currentValue": "1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/check_markdown_links.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/format.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/format.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/format.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/format.yml",
+        "name": "python",
+        "currentValue": "3.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/generate_requirements_for_clever_cloud.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/generate_requirements_for_clever_cloud.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/generate_requirements_for_clever_cloud.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/generate_requirements_for_clever_cloud.yml",
+        "name": "python",
+        "currentValue": "3.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_page_deploy.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_page_deploy.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_page_deploy.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_page_deploy.yml",
+        "name": "python",
+        "currentValue": "3.x",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint.yml",
+        "name": "python",
+        "currentValue": "3.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "docker/login-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "docker/setup-qemu-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "docker/setup-buildx-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "docker/build-push-action",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "python",
+        "currentValue": "${{ matrix.python-version }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "python",
+        "currentValue": "3.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "actions/setup-python",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "python",
+        "currentValue": "${{ matrix.version }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "python",
+        "currentValue": "3.14",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "serverless-python-requirements",
+        "currentValue": "^6.1.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "brace-expansion",
+        "currentValue": "~5.0.12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

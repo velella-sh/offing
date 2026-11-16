@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "resilio-inc/connect-scripts",
+  "commit": "ccb36fa123e75af533c01852fb89618296b34f87",
+  "ecosystem": "shell",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 23,
+    "findings": [
+      {
+        "ruleId": "shell.powershell.end-of-life-6",
+        "path": "Resilio Connect API/PowerShell/api_sample1.ps1",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 1106,
+    "status": "ok",
+    "dependencies": []
+  }
+}

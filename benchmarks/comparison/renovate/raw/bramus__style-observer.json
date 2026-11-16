@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "bramus/style-observer",
+  "commit": "f2dff73202e0a7c25eb635c6d1f4e39f0f8ca932",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 8,
+    "findings": [
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 12
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "package.json",
+        "line": 12
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 12
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 12552,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@eslint/js",
+        "currentValue": "^9.20.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "concurrently",
+        "currentValue": "^9.1.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "eslint",
+        "currentValue": "^9.20.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "eslint-config-prettier",
+        "currentValue": "^10.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "eslint-plugin-prettier",
+        "currentValue": "^5.2.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "http-server",
+        "currentValue": "^14.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "husky",
+        "currentValue": "^9.1.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "typescript",
+        "currentValue": "^5.7.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "typescript-eslint",
+        "currentValue": "^8.24.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "node",
+        "currentValue": ">=18",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

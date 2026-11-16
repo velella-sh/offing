@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "chalk/strip-ansi",
+  "commit": "622cca7b5dd4621cf85e5b517f396f94d8959d2e",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 8,
+    "findings": [
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 18
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "package.json",
+        "line": 18
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": ".github/workflows/main.yml",
+        "line": 14
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 18
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "package.json",
+        "line": 18
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 9908,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "node",
+        "currentValue": "${{ matrix.node-version }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "ansi-regex",
+        "currentValue": "^6.2.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "ava",
+        "currentValue": "^6.4.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "tsd",
+        "currentValue": "^0.33.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "xo",
+        "currentValue": "^1.2.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "node",
+        "currentValue": ">=12",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

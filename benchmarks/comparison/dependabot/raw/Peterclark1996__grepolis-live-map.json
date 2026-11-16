@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "Peterclark1996/grepolis-live-map",
+  "commit": "bd7a721739c86ddc5da2857cebd8a8517fa5b152",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 9,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 31,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 46,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-terraform.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 26,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": ".github/workflows/main.yml",
+        "line": 48,
+        "dependabot": null
+      },
+      {
+        "ruleId": "serverless.azure-app-service.node-below-18",
+        "path": "terraform/main.tf",
+        "line": 80,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

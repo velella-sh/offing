@@ -1,0 +1,1555 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "mlabouardy/pipeline-as-code-with-jenkins",
+  "commit": "e3264e037fd0152f5a2dd95b8d9acb112d5faf1b",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 165,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "chapter12/functions/movies-parser/Dockerfile.test",
+        "line": 3
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "chapter12/functions/movies-parser/Dockerfile.test",
+        "line": 4
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "chapter7/microservices/movies-parser/Dockerfile.test",
+        "line": 3
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "chapter7/microservices/movies-parser/Dockerfile.test",
+        "line": 4
+      },
+      {
+        "ruleId": "container.dockerfile.maintainer",
+        "path": "chapter14/Dockerfile",
+        "line": 2
+      },
+      {
+        "ruleId": "container.golang.eol-1.25-and-older",
+        "path": "chapter12/functions/movies-parser/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.golang.eol-1.25-and-older",
+        "path": "chapter12/functions/movies-parser/Dockerfile.test",
+        "line": 1
+      },
+      {
+        "ruleId": "container.golang.eol-1.25-and-older",
+        "path": "chapter7/microservices/movies-parser/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.golang.eol-1.25-and-older",
+        "path": "chapter7/microservices/movies-parser/Dockerfile.test",
+        "line": 1
+      },
+      {
+        "ruleId": "container.golang.eol-1.25-and-older",
+        "path": "chapter9/pipelines/movies-parser/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter12/functions/movies-marketplace/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter12/functions/movies-marketplace/Dockerfile.test",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter12/functions/movies-store/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter12/functions/movies-store/Dockerfile.test",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter7/microservices/movies-marketplace/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter7/microservices/movies-marketplace/Dockerfile.test",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter7/microservices/movies-store/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter7/microservices/movies-store/Dockerfile.test",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter9/pipelines/movies-marketplace/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "chapter9/pipelines/movies-store/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.postgres.eol-13-and-older",
+        "path": "chapter9/anchore/docker-compose.yml",
+        "line": 93
+      },
+      {
+        "ruleId": "container.python.eol-3.10-and-older",
+        "path": "chapter12/functions/movies-loader/Dockerfile.test",
+        "line": 1
+      },
+      {
+        "ruleId": "container.python.eol-3.10-and-older",
+        "path": "chapter7/microservices/movies-loader/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.python.eol-3.10-and-older",
+        "path": "chapter7/microservices/movies-loader/Dockerfile.test",
+        "line": 1
+      },
+      {
+        "ruleId": "container.python.eol-3.10-and-older",
+        "path": "chapter9/pipelines/movies-loader/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.20-and-older",
+        "path": "chapter7/microservices/movies-parser/go.mod",
+        "line": 3
+      },
+      {
+        "ruleId": "kubernetes.autoscaling.horizontalpodautoscaler.v2beta1.removed",
+        "path": "chapter11/jx/movies-store/charts/jx-movies-store/templates/hpa.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.rbac-authorization-k8s-io.clusterrolebinding.v1beta1.removed",
+        "path": "chapter11/k8s-dashboard/eks-admin.yaml",
+        "line": 7
+      },
+      {
+        "ruleId": "serverless.aws-lambda.nodejs14.x",
+        "path": "chapter7/webhook-forwarder/terraform/lambda.tf",
+        "line": 26
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "chapter6/azure/terraform/jenkins_workers.tf",
+        "line": 7
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "chapter6/digitalocean/terraform/jenkins_workers.tf",
+        "line": 6
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "chapter6/gcp/terraform/jenkins_workers.tf",
+        "line": 16
+      },
+      {
+        "ruleId": "terraform.syntax.interpolation-only",
+        "path": "chapter6/gcp/terraform/outputs.tf",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 137848,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/production/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-loader",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/production/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-parser",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/production/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-store",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/production/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-marketplace",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/production/docker-compose.yml",
+        "name": "bitnami/mongodb",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/sandbox/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-loader",
+        "currentValue": "develop",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/sandbox/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-parser",
+        "currentValue": "develop",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/sandbox/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-store",
+        "currentValue": "develop",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/sandbox/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-marketplace",
+        "currentValue": "develop",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/sandbox/docker-compose.yml",
+        "name": "bitnami/mongodb",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/staging/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-loader",
+        "currentValue": "preprod",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/staging/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-parser",
+        "currentValue": "preprod",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/staging/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-store",
+        "currentValue": "preprod",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/staging/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-marketplace",
+        "currentValue": "preprod",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter10/deployment/staging/docker-compose.yml",
+        "name": "bitnami/mongodb",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter11/deployment/kompose/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-loader",
+        "currentValue": "develop",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter11/deployment/kompose/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-parser",
+        "currentValue": "develop",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter11/deployment/kompose/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-store",
+        "currentValue": "develop",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter11/deployment/kompose/docker-compose.yml",
+        "name": "ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-marketplace",
+        "currentValue": "develop",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter11/deployment/kompose/docker-compose.yml",
+        "name": "bitnami/mongodb",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter14/docker-compose.yml",
+        "name": "docker",
+        "currentValue": "dind",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter9/anchore/docker-compose.yml",
+        "name": "anchore/anchore-engine",
+        "currentValue": "v0.7.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter9/anchore/docker-compose.yml",
+        "name": "anchore/anchore-engine",
+        "currentValue": "v0.7.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter9/anchore/docker-compose.yml",
+        "name": "anchore/anchore-engine",
+        "currentValue": "v0.7.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter9/anchore/docker-compose.yml",
+        "name": "anchore/anchore-engine",
+        "currentValue": "v0.7.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter9/anchore/docker-compose.yml",
+        "name": "anchore/anchore-engine",
+        "currentValue": "v0.7.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "chapter9/anchore/docker-compose.yml",
+        "name": "postgres",
+        "currentValue": "9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter11/jx/movies-store/Dockerfile",
+        "name": "alpine",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter12/functions/movies-loader/Dockerfile.test",
+        "name": "python",
+        "currentValue": "3.7.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter12/functions/movies-marketplace/Dockerfile",
+        "name": "node",
+        "currentValue": "14.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter12/functions/movies-marketplace/Dockerfile",
+        "name": "chromium",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter12/functions/movies-marketplace/Dockerfile.test",
+        "name": "node",
+        "currentValue": "14.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter12/functions/movies-marketplace/Dockerfile.test",
+        "name": "chromium",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter12/functions/movies-parser/Dockerfile",
+        "name": "golang",
+        "currentValue": "1.13.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter12/functions/movies-parser/Dockerfile.test",
+        "name": "golang",
+        "currentValue": "1.13.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter12/functions/movies-store/Dockerfile",
+        "name": "node",
+        "currentValue": "14.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter12/functions/movies-store/Dockerfile.test",
+        "name": "node",
+        "currentValue": "14.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter14/Dockerfile",
+        "name": "jenkins/jenkins",
+        "currentValue": "lts",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter14/Dockerfile",
+        "name": "apt-transport-https",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter14/Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter14/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter14/Dockerfile",
+        "name": "gnupg2",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter14/Dockerfile",
+        "name": "software-properties-common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter14/Dockerfile",
+        "name": "docker-ce-cli",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-loader/Dockerfile",
+        "name": "python",
+        "currentValue": "3.7.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-loader/Dockerfile.test",
+        "name": "python",
+        "currentValue": "3.7.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-marketplace/Dockerfile",
+        "name": "node",
+        "currentValue": "14.17.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-marketplace/Dockerfile",
+        "name": "chromium",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-marketplace/Dockerfile",
+        "name": "nginx",
+        "currentValue": "alpine",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-marketplace/Dockerfile.test",
+        "name": "node",
+        "currentValue": "14.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-marketplace/Dockerfile.test",
+        "name": "chromium",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-parser/Dockerfile",
+        "name": "golang",
+        "currentValue": "1.16.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-parser/Dockerfile",
+        "name": "alpine",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-parser/Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-parser/Dockerfile.test",
+        "name": "golang",
+        "currentValue": "1.13.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-store/Dockerfile",
+        "name": "node",
+        "currentValue": "14.17.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter7/microservices/movies-store/Dockerfile.test",
+        "name": "node",
+        "currentValue": "14.17.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter9/pipelines/movies-loader/Dockerfile",
+        "name": "python",
+        "currentValue": "3.7.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter9/pipelines/movies-marketplace/Dockerfile",
+        "name": "node",
+        "currentValue": "14.17.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter9/pipelines/movies-marketplace/Dockerfile",
+        "name": "chromium",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter9/pipelines/movies-marketplace/Dockerfile",
+        "name": "nginx",
+        "currentValue": "alpine",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter9/pipelines/movies-parser/Dockerfile",
+        "name": "golang",
+        "currentValue": "1.16.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter9/pipelines/movies-parser/Dockerfile",
+        "name": "alpine",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter9/pipelines/movies-parser/Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "chapter9/pipelines/movies-store/Dockerfile",
+        "name": "node",
+        "currentValue": "14.17.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/animations",
+        "currentValue": "~8.2.14",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/common",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/compiler",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/core",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/forms",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/http",
+        "currentValue": "^7.2.16",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/platform-browser",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/platform-browser-dynamic",
+        "currentValue": "~8.2.14",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/router",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@types/jquery",
+        "currentValue": "^3.3.34",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "bootstrap-notify",
+        "currentValue": "^3.1.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "rxjs",
+        "currentValue": "~6.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "tslib",
+        "currentValue": "^1.10.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "zone.js",
+        "currentValue": "~0.9.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular-devkit/build-angular",
+        "currentValue": "~0.803.19",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/cli",
+        "currentValue": "~8.3.19",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/compiler-cli",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@angular/language-service",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@types/node",
+        "currentValue": "~8.9.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@types/jasmine",
+        "currentValue": "~3.3.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "@types/jasminewd2",
+        "currentValue": "~2.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "codelyzer",
+        "currentValue": "^5.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "jasmine-core",
+        "currentValue": "~3.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "jasmine-spec-reporter",
+        "currentValue": "~4.2.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "karma",
+        "currentValue": "~6.4.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "karma-chrome-launcher",
+        "currentValue": "~2.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "karma-coverage-istanbul-reporter",
+        "currentValue": "~2.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "karma-jasmine",
+        "currentValue": "~2.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "karma-jasmine-html-reporter",
+        "currentValue": "^1.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "protractor",
+        "currentValue": "~5.4.4",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "ts-node",
+        "currentValue": "~7.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "tslint",
+        "currentValue": "~5.15.0",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-marketplace/package.json",
+        "name": "typescript",
+        "currentValue": "~3.5.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-store/package.json",
+        "name": "aws-sdk",
+        "currentValue": "^2.814.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-store/package.json",
+        "name": "aws-sdk-mock",
+        "currentValue": "^5.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-store/package.json",
+        "name": "chai",
+        "currentValue": "^4.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-store/package.json",
+        "name": "eslint",
+        "currentValue": "^6.8.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-store/package.json",
+        "name": "fs",
+        "currentValue": "0.0.1-security",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-store/package.json",
+        "name": "mocha",
+        "currentValue": "^7.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter12/functions/movies-store/package.json",
+        "name": "nyc",
+        "currentValue": "^15.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/animations",
+        "currentValue": "~8.2.14",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/common",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/compiler",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/core",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/forms",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/http",
+        "currentValue": "^7.2.16",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/platform-browser",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/platform-browser-dynamic",
+        "currentValue": "~8.2.14",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/router",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@types/jquery",
+        "currentValue": "^3.3.34",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "bootstrap-notify",
+        "currentValue": "^3.1.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "rxjs",
+        "currentValue": "~6.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "tslib",
+        "currentValue": "^1.10.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "zone.js",
+        "currentValue": "~0.9.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular-devkit/build-angular",
+        "currentValue": "~0.803.19",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/cli",
+        "currentValue": "~8.3.19",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/compiler-cli",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@angular/language-service",
+        "currentValue": "~8.2.14",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@types/node",
+        "currentValue": "~8.9.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@types/jasmine",
+        "currentValue": "~3.3.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "@types/jasminewd2",
+        "currentValue": "~2.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "codelyzer",
+        "currentValue": "^5.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "jasmine-core",
+        "currentValue": "~3.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "jasmine-spec-reporter",
+        "currentValue": "~4.2.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "karma",
+        "currentValue": "~6.4.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "karma-chrome-launcher",
+        "currentValue": "~2.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "karma-coverage-istanbul-reporter",
+        "currentValue": "~2.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "karma-jasmine",
+        "currentValue": "~2.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "karma-jasmine-html-reporter",
+        "currentValue": "^1.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "protractor",
+        "currentValue": "~5.4.4",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "ts-node",
+        "currentValue": "~7.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "tslint",
+        "currentValue": "~5.15.0",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-marketplace/package.json",
+        "name": "typescript",
+        "currentValue": "~3.5.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "body-parser",
+        "currentValue": "^1.19.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "cors",
+        "currentValue": "^2.8.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "express",
+        "currentValue": "^4.17.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "mongoose",
+        "currentValue": "^5.9.9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "chai",
+        "currentValue": "^4.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "eslint",
+        "currentValue": "^6.8.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "mocha",
+        "currentValue": "^7.1.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "mongo-unit",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "mongodb-memory-server",
+        "currentValue": "^6.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/microservices/movies-store/package.json",
+        "name": "nyc",
+        "currentValue": "^15.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "chapter7/webhook-forwarder/package.json",
+        "name": "request",
+        "currentValue": "^2.88.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

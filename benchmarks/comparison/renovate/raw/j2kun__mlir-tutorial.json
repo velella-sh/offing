@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "j2kun/mlir-tutorial",
+  "commit": "bf40cc273cfa3b7f1ebbd53af7a5536f7276c349",
+  "ecosystem": "cpp",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 17,
+    "findings": []
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 8439,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_and_test.yml",
+        "name": "actions/checkout",
+        "currentValue": "pin@v4.2.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_and_test.yml",
+        "name": "actions/cache",
+        "currentValue": "pin@v4.2.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_and_test.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_and_test_cmake.yml",
+        "name": "actions/checkout",
+        "currentValue": "pin@v4.2.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_and_test_cmake.yml",
+        "name": "seanmiddleditch/gha-setup-ninja",
+        "currentValue": "master",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_and_test_cmake.yml",
+        "name": "actions/cache",
+        "currentValue": "pin@v4.2.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_and_test_cmake.yml",
+        "name": "actions/cache",
+        "currentValue": "pin@v4.2.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_and_test_cmake.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

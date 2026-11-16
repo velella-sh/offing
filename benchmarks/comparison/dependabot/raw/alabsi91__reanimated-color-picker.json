@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "alabsi91/reanimated-color-picker",
+  "commit": "bae423b0319422bc357f1f11f8188c1b8130b28c",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 48,
+    "findings": [
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "package.json",
+        "line": 64,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "package.json",
+        "line": 64,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 67,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "ruby.runtime.eol-2.6",
+        "path": "ExampleLatest/Gemfile.lock",
+        "line": 114,
+        "dependabot": null
+      },
+      {
+        "ruleId": "ruby.runtime.eol-2.6",
+        "path": "ExampleOldArch/Gemfile.lock",
+        "line": 117,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

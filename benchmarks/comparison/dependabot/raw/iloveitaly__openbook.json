@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "iloveitaly/openbook",
+  "commit": "b26f05dc3cd4daff612cde6acb99429da23e9b5a",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 9,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 5,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 87,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-config-array.deprecated",
+        "path": "package.json",
+        "line": 44,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.humanwhocodes-object-schema.deprecated",
+        "path": "package.json",
+        "line": 44,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 52,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.lodash-isequal.deprecated",
+        "path": "package.json",
+        "line": 12,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "npm",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

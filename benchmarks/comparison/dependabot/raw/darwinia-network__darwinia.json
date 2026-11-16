@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "darwinia-network/darwinia",
+  "commit": "6719d526c59cc223152fd4de7bb891abb4e4073f",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 34,
+    "findings": [
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": ".maintain/docker/Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/.maintain/docker"
+        }
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": ".maintain/docker/ubuntu:20.04.Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/.maintain/docker"
+        }
+      },
+      {
+        "ruleId": "github-actions.action-gh-release.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 249,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 191,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 199,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/staging.yml",
+        "line": 79,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/rust.yml",
+        "line": 76,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.download-artifact.retired",
+        "path": ".github/workflows/release.yml",
+        "line": 170,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.download-artifact.retired",
+        "path": ".github/workflows/release.yml",
+        "line": 214,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.download-artifact.retired",
+        "path": ".github/workflows/rust.yml",
+        "line": 160,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.download-artifact.retired",
+        "path": ".github/workflows/staging.yml",
+        "line": 62,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 184,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/staging.yml",
+        "line": 73,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/release.yml",
+        "line": 149,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/release.yml",
+        "line": 66,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/rust.yml",
+        "line": 97,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/staging.yml",
+        "line": 48,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.upload-artifact.retired",
+        "path": ".github/workflows/try-runtime-pr.yml",
+        "line": 183,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": ".github/workflows/rust.yml",
+        "line": 172,
+        "dependabot": null
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 2,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

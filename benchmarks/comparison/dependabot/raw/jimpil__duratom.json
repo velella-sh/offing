@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "jimpil/duratom",
+  "commit": "1573d330c2ab87f9fff45f688bc2f391552ed549",
+  "ecosystem": "database",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 14,
+    "findings": [
+      {
+        "ruleId": "container.postgres.eol-13-and-older",
+        "path": "docker-compose.yml",
+        "line": 7,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "database.postgresql.end-of-life-12",
+        "path": "docker-compose.yml",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/run-tests.yml",
+        "line": 18,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-java.node20",
+        "path": ".github/workflows/run-tests.yml",
+        "line": 23,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

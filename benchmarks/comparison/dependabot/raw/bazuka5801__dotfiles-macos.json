@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "bazuka5801/dotfiles-macos",
+  "commit": "b02409347d9b69bbc739602632d6f01539ac5dc1",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 16,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 9,
+        "dependabot": null
+      },
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "ruby.runtime.eol-3.2",
+        "path": ".tool-versions",
+        "line": 2,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

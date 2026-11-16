@@ -1,0 +1,196 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "cocos/cocos-cli",
+  "commit": "4c7b89dd3188d800ac029522b245a2ead19db3e0",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 328,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/check-dts.yml",
+        "line": 13,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/daily-e2e.yml",
+        "line": 41,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/pr-test.yml",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/pr-test.yml",
+        "line": 77,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/publish-dts.yml",
+        "line": 13,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/publish.yml",
+        "line": 53,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/publish-dts.yml",
+        "line": 14,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-22",
+        "path": ".github/workflows/check-dts.yml",
+        "line": 22,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-22",
+        "path": ".github/workflows/pr-test.yml",
+        "line": 87,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-22",
+        "path": ".github/workflows/publish-dts.yml",
+        "line": 16,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-22",
+        "path": ".nvmrc",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.figgy-pudding.eol",
+        "path": "package.json",
+        "line": 121,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 122,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/asset-db/package.json",
+        "line": 24,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/asset-db"
+        }
+      },
+      {
+        "ruleId": "npm.package.resolve-url.deprecated",
+        "path": "package.json",
+        "line": 121,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.resolve-url.deprecated",
+        "path": "packages/asset-db/package.json",
+        "line": 14,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/asset-db"
+        }
+      },
+      {
+        "ruleId": "npm.package.rollup-plugin-babel.deprecated",
+        "path": "package.json",
+        "line": 129,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.rollup-plugin-terser.deprecated",
+        "path": "package.json",
+        "line": 180,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.source-map-url.deprecated",
+        "path": "package.json",
+        "line": 121,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.source-map-url.deprecated",
+        "path": "packages/asset-db/package.json",
+        "line": 14,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/packages/asset-db"
+        }
+      },
+      {
+        "ruleId": "npm.package.sourcemap-codec.deprecated",
+        "path": "package.json",
+        "line": 127,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "nshkrdotcom/DSPex",
+  "commit": "ad4f730606fb737b2b6c7629e0982fc7e5691636",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 25,
+    "findings": [
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 41,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 48,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 24,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 33,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-uv.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 38,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

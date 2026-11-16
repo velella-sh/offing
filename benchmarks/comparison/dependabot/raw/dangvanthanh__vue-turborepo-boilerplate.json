@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "dangvanthanh/vue-turborepo-boilerplate",
+  "commit": "40012115390fee77775bbca1ce14e2233e349a63",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 82,
+    "findings": [
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": "apps/api/.tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 21,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "package.json",
+        "line": 21,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 21,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.crypto-js.deprecated",
+        "path": "apps/web/package.json",
+        "line": 37,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/apps/web"
+        }
+      },
+      {
+        "ruleId": "npm.package.lodash-get.deprecated",
+        "path": "apps/web/package.json",
+        "line": 37,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/apps/web"
+        }
+      },
+      {
+        "ruleId": "npm.package.lodash-isequal.deprecated",
+        "path": "apps/web/package.json",
+        "line": 37,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/apps/web"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

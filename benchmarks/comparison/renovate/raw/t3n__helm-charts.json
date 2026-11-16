@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "t3n/helm-charts",
+  "commit": "53c584dfd364b286b6a1134112169062fe80e3d7",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 122,
+    "findings": [
+      {
+        "ruleId": "kubernetes.batch.cronjob.v1beta1.removed",
+        "path": "cronjob/templates/cronjobs.yaml",
+        "line": 1
+      },
+      {
+        "ruleId": "kubernetes.batch.cronjob.v1beta1.removed",
+        "path": "gtmetrix-bq/templates/cronjobs.yaml",
+        "line": 1
+      },
+      {
+        "ruleId": "kubernetes.batch.cronjob.v1beta1.removed",
+        "path": "matomo/templates/cronjob-archive.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.batch.cronjob.v1beta1.removed",
+        "path": "matomo/templates/cronjob-ipdb.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.batch.cronjob.v1beta1.removed",
+        "path": "postgresql-backup/templates/cronjob-backup.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.batch.cronjob.v1beta1.removed",
+        "path": "postgresql-backup/templates/cronjob-restore.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "python/Chart.yaml",
+        "line": 11
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "python/Chart.yaml",
+        "line": 7
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "unms/Chart.yaml",
+        "line": 11
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "unms/Chart.yaml",
+        "line": 14
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "unms/Chart.yaml",
+        "line": 8
+      },
+      {
+        "ruleId": "kubernetes.networking-k8s-io.ingress.v1beta1.removed",
+        "path": "matomo/templates/ingress.yaml",
+        "line": 4
+      },
+      {
+        "ruleId": "kubernetes.policy.poddisruptionbudget.v1beta1.removed",
+        "path": "dashkiosk/templates/poddisruptionbudget.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.policy.poddisruptionbudget.v1beta1.removed",
+        "path": "loki/templates/pdb.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.policy.poddisruptionbudget.v1beta1.removed",
+        "path": "matomo/templates/poddisruptionbudget.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.policy.poddisruptionbudget.v1beta1.removed",
+        "path": "python/templates/poddisruptionbudget.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.policy.poddisruptionbudget.v1beta1.removed",
+        "path": "snipeit/templates/poddisruptionbudget.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.policy.poddisruptionbudget.v1beta1.removed",
+        "path": "snowplow/templates/poddisruptionbudget.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.policy.poddisruptionbudget.v1beta1.removed",
+        "path": "unms/templates/poddisruptionbudget.yaml",
+        "line": 2
+      },
+      {
+        "ruleId": "kubernetes.policy.poddisruptionbudget.v1beta1.removed",
+        "path": "web/templates/poddisruptionbudget.yaml",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 29445,
+    "status": "ok",
+    "dependencies": []
+  }
+}

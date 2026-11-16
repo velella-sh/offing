@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "spray/spray-template",
+  "commit": "889494c41ee9465f845a93734d9a879952ee83f0",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 40,
+    "findings": [
+      {
+        "ruleId": "scala.runtime.eol-2.11",
+        "path": "build.sbt",
+        "line": 5
+      },
+      {
+        "ruleId": "scala.sbt.eol-0.13",
+        "path": "project/build.properties",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 7824,
+    "status": "ok",
+    "dependencies": []
+  }
+}

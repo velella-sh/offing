@@ -1,0 +1,241 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "simplezhli/flutter_deer",
+  "commit": "720e8d21d1452ce18ee9046cca6519a61694bc03",
+  "ecosystem": "dart",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 108,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/flutter-drive.yml",
+        "line": 50
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/flutter-drive.yml",
+        "line": 71
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/flutter-drive.yml",
+        "line": 99
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/flutter-web-deploy.yml",
+        "line": 14
+      },
+      {
+        "ruleId": "github-actions.setup-java.node20",
+        "path": ".github/workflows/flutter-drive.yml",
+        "line": 73
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 19141,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "futureware-tech/simulator-action",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "subosito/flutter-action",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "actions/setup-java",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "subosito/flutter-action",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "reactivecircus/android-emulator-runner",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "subosito/flutter-action",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "macos",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "flutter",
+        "currentValue": "3.47.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "java-jdk",
+        "skipReason": "unsupported",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "flutter",
+        "currentValue": "3.47.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "macos",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-drive.yml",
+        "name": "flutter",
+        "currentValue": "3.47.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-web-deploy.yml",
+        "name": "actions/checkout",
+        "currentValue": "v2.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-web-deploy.yml",
+        "name": "subosito/flutter-action",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-web-deploy.yml",
+        "name": "JamesIves/github-pages-deploy-action",
+        "currentValue": "4.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-web-deploy.yml",
+        "name": "macos",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/flutter-web-deploy.yml",
+        "name": "flutter",
+        "currentValue": "3.35.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

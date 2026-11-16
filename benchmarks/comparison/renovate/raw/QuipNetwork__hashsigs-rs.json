@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "QuipNetwork/hashsigs-rs",
+  "commit": "a45c4f250ec70213713de31eede652ea820fd314",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 48,
+    "findings": [
+      {
+        "ruleId": "python.runtime.eol-3.9-and-older",
+        "path": "pyproject.toml",
+        "line": 17
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 5
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 42510,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "npm",
+        "path": "ts/package.json",
+        "name": "typescript",
+        "currentValue": "^5.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ts/package.json",
+        "name": "@types/node",
+        "currentValue": "^20",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

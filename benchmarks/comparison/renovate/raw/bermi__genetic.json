@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "bermi/genetic",
+  "commit": "5e9b319a4bf8a24bf8d0a71a9a75a41c57104586",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 22,
+    "findings": [
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": ".devcontainer/Dockerfile.ubuntu",
+        "line": 1
+      },
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/deno.yml",
+        "line": 10
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 49915,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Dockerfile.ubuntu",
+        "name": "ubuntu",
+        "currentValue": "22.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Dockerfile.ubuntu",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Dockerfile.ubuntu",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Dockerfile.ubuntu",
+        "name": "unzip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".devcontainer/Dockerfile.ubuntu",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deno.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deno.yml",
+        "name": "denolib/setup-deno",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/deno.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

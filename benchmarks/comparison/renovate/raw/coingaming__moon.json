@@ -1,0 +1,518 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "coingaming/moon",
+  "commit": "7b2881ef1a4b8e0d0d297f92df7085e6461e4d77",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 44,
+    "findings": [
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "Dockerfile",
+        "line": 36
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.15",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 46
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 54
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 70
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build-and-test.yml",
+        "line": 17
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 14
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 17
+      },
+      {
+        "ruleId": "npm.package.are-we-there-yet.eol",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "npm.package.gauge.eol",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "npm.package.har-validator.deprecated",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "npm.package.npmcli-move-file.deprecated",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "npm.package.npmlog.eol",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "npm.package.q.deprecated",
+        "path": "package.json",
+        "line": 6
+      },
+      {
+        "ruleId": "npm.package.read-package-json.eol",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "npm.package.request.deprecated",
+        "path": "package.json",
+        "line": 4
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 44359,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "scripts/deploy/docker-compose.yml",
+        "name": "heathmont/moon-surface",
+        "currentValue": "v2.66.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "heathmont/elixir-ci",
+        "currentValue": "1.15.6-otp-26-alpine",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "openssh",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "inotify-tools",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "alpine",
+        "currentValue": "3.18.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "erlang-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "perl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "postgresql-client",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "openssl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "ncurses-libs",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "tini",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup_elixir/action.yml",
+        "name": "erlef/setup-elixir",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup_elixir/action.yml",
+        "name": "actions/cache",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup_elixir/action.yml",
+        "name": "actions/cache",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-and-test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-and-test.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "docker/login-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "@tailwindcss/forms",
+        "currentValue": "^0.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "autoprefixer",
+        "currentValue": "^10.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "postcss",
+        "currentValue": "^8.4.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "postcss-import",
+        "currentValue": "^14.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "tailwindcss",
+        "currentValue": "^3.3.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "@popperjs/core",
+        "currentValue": "^2.11.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "scroll-into-view-if-needed",
+        "currentValue": "^3.0.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "assets/package.json",
+        "name": "smooth-scroll-into-view-if-needed",
+        "currentValue": "^2.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "semantic-release",
+        "currentValue": "^18.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@semantic-release/changelog",
+        "currentValue": "^6.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@semantic-release/commit-analyzer",
+        "currentValue": "^9.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@semantic-release/exec",
+        "currentValue": "^6.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@semantic-release/git",
+        "currentValue": "^10.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@semantic-release/release-notes-generator",
+        "currentValue": "^10.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "scripts/typescript/package.json",
+        "name": "dotenv",
+        "currentValue": "^16.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "scripts/typescript/package.json",
+        "name": "node-fetch",
+        "currentValue": "^2.6.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "scripts/typescript/package.json",
+        "name": "@types/node",
+        "currentValue": "^14.11.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "scripts/typescript/package.json",
+        "name": "@types/node-fetch",
+        "currentValue": "^2.5.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "scripts/typescript/package.json",
+        "name": "pnpm",
+        "currentValue": "latest",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "scripts/typescript/package.json",
+        "name": "svgo",
+        "currentValue": "^2.6.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "scripts/typescript/package.json",
+        "name": "ts-node",
+        "currentValue": "latest",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "scripts/typescript/package.json",
+        "name": "typescript",
+        "currentValue": "^4.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

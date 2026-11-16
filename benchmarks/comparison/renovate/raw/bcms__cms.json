@@ -1,0 +1,1510 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "bcms/cms",
+  "commit": "d0e643d3269c27f20f57b23dfed4b45655a465fb",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 181,
+    "findings": [
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile.backend.dev",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile.ui.dev",
+        "line": 1
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "ui/Dockerfile.dev",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 39786,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "mongo",
+        "currentValue": "7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "node",
+        "currentValue": "20-slim",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "ffmpeg",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "zip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "unzip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.backend.dev",
+        "name": "node",
+        "currentValue": "20-slim",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.backend.dev",
+        "name": "ffmpeg",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.backend.dev",
+        "name": "zip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.backend.dev",
+        "name": "unzip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile.ui.dev",
+        "name": "node",
+        "currentValue": "20-slim",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "proxy.Dockerfile",
+        "name": "nginx",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "proxy/Dockerfile",
+        "name": "nginx",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "ui/Dockerfile.dev",
+        "name": "node",
+        "currentValue": "20-slim",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@fastify/cors",
+        "currentValue": "^8.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@fastify/middie",
+        "currentValue": "^8.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@fastify/mongodb",
+        "currentValue": "^8.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@fastify/multipart",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@fastify/static",
+        "currentValue": "^6.10.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@fastify/websocket",
+        "currentValue": "^10.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@types/bcryptjs",
+        "currentValue": "^2.4.2",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@types/fs-extra",
+        "currentValue": "^11.0.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@types/mime-types",
+        "currentValue": "^2.1.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@types/uuid",
+        "currentValue": "^9.0.2",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "axios",
+        "currentValue": "^1.6.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "bcryptjs",
+        "currentValue": "^2.4.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "cron",
+        "currentValue": "^3.1.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "fastify",
+        "currentValue": "^4.18.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "fs-extra",
+        "currentValue": "^11.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "image-size",
+        "currentValue": "^1.1.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "mime-types",
+        "currentValue": "^2.1.35",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "mongodb",
+        "currentValue": "^6.6.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "openapi-types",
+        "currentValue": "^12.1.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "uuid",
+        "currentValue": "^9.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@types/node",
+        "currentValue": "^20.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@typescript-eslint/eslint-plugin",
+        "currentValue": "^5.60.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "@typescript-eslint/parser",
+        "currentValue": "^5.60.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "dotenv",
+        "currentValue": "^16.3.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "eslint",
+        "currentValue": "^8.43.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "nodemon",
+        "currentValue": "^3.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "prettier",
+        "currentValue": "^2.7.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "ts-node",
+        "currentValue": "^10.9.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "tsconfig-paths",
+        "currentValue": "^4.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "backend/package.json",
+        "name": "typescript",
+        "currentValue": "^5.3.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "@paralleldrive/cuid2",
+        "currentValue": "^2.2.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "@types/inquirer",
+        "currentValue": "^9.0.7",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "axios",
+        "currentValue": "^1.6.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "inquirer",
+        "currentValue": "^9.2.22",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "@types/jest",
+        "currentValue": "^29.5.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "@types/node",
+        "currentValue": "^20.12.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "@typescript-eslint/eslint-plugin",
+        "currentValue": "^7.9.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "@typescript-eslint/parser",
+        "currentValue": "^7.9.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "eslint",
+        "currentValue": "^8.56.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "prettier",
+        "currentValue": "^3.2.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "ts-jest",
+        "currentValue": "^29.1.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "ts-node",
+        "currentValue": "^10.9.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "tsconfig-paths",
+        "currentValue": "^4.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "typescript",
+        "currentValue": "^5.4.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "cli/package.json",
+        "name": "vite-node",
+        "currentValue": "^1.6.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "@types/ws",
+        "currentValue": "^8.5.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "axios",
+        "currentValue": "^1.6.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "buffer",
+        "currentValue": "^6.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "isomorphic-ws",
+        "currentValue": "^5.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "uuid",
+        "currentValue": "^9.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "ws",
+        "currentValue": "^8.17.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "@types/jest",
+        "currentValue": "^29.5.12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "@types/node",
+        "currentValue": "^15.6.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "@types/uuid",
+        "currentValue": "^8.3.0",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "@typescript-eslint/eslint-plugin",
+        "currentValue": "^7.9.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "@typescript-eslint/parser",
+        "currentValue": "^7.9.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "env-cmd",
+        "currentValue": "^10.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "eslint",
+        "currentValue": "^8.56.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "prettier",
+        "currentValue": "^3.2.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "ts-jest",
+        "currentValue": "^29.1.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "ts-node",
+        "currentValue": "^10.9.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "tsconfig-paths",
+        "currentValue": "^4.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "typedoc",
+        "currentValue": "^0.26.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "typescript",
+        "currentValue": "^5.4.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/fs-extra",
+        "currentValue": "^11.0.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/node",
+        "currentValue": "^20.14.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "fs-extra",
+        "currentValue": "^11.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "husky",
+        "currentValue": "^8.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "prettier",
+        "currentValue": "^3.3.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "ts-node",
+        "currentValue": "^10.9.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "tsconfig-paths",
+        "currentValue": "^4.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@codemirror/commands",
+        "currentValue": "^6.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@codemirror/lang-javascript",
+        "currentValue": "^6.2.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@codemirror/state",
+        "currentValue": "^6.4.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@codemirror/theme-one-dark",
+        "currentValue": "^6.1.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@codemirror/view",
+        "currentValue": "^6.26.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@headlessui/vue",
+        "currentValue": "^1.7.14",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@popperjs/core",
+        "currentValue": "^2.11.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tailwindcss/forms",
+        "currentValue": "^0.5.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-bold",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-bubble-menu",
+        "currentValue": "^2.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-bullet-list",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-code-block",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-collaboration",
+        "currentValue": "^2.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-collaboration-cursor",
+        "currentValue": "^2.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-document",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-dropcursor",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-hard-break",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-heading",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-horizontal-rule",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-italic",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-link",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-list-item",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-ordered-list",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-paragraph",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-placeholder",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-strike",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-text",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/extension-underline",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/pm",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/suggestion",
+        "currentValue": "^2.2.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tiptap/vue-3",
+        "currentValue": "^2.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@types/ws",
+        "currentValue": "^8.5.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@vuepic/vue-datepicker",
+        "currentValue": "^7.2.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@vueuse/head",
+        "currentValue": "^1.1.26",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "axios",
+        "currentValue": "^1.6.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "buffer",
+        "currentValue": "^6.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "html-escaper",
+        "currentValue": "^3.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "isomorphic-ws",
+        "currentValue": "^5.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "lib0",
+        "currentValue": "^0.2.93",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "markdown-it",
+        "currentValue": "^14.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "spacetime",
+        "currentValue": "^7.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "three",
+        "currentValue": "^0.165.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "tippy.js",
+        "currentValue": "^6.3.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "uuid",
+        "currentValue": "^9.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "vue",
+        "currentValue": "^3.3.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "vue-codemirror",
+        "currentValue": "^6.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "vue-router",
+        "currentValue": "^4.2.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "ws",
+        "currentValue": "^8.17.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "y-protocols",
+        "currentValue": "^1.0.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "yjs",
+        "currentValue": "^13.6.14",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@fastify/static",
+        "currentValue": "^6.10.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@rushstack/eslint-patch",
+        "currentValue": "^1.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@tsconfig/node18",
+        "currentValue": "^2.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@types/html-escaper",
+        "currentValue": "^3.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@types/markdown-it",
+        "currentValue": "^13.0.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@types/mime-types",
+        "currentValue": "^2.1.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@types/node",
+        "currentValue": "^20.11.16",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@types/three",
+        "currentValue": "^0.164.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@types/uuid",
+        "currentValue": "^9.0.2",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@vitejs/plugin-vue",
+        "currentValue": "^4.2.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@vitejs/plugin-vue-jsx",
+        "currentValue": "^3.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@vue/eslint-config-prettier",
+        "currentValue": "^7.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@vue/eslint-config-typescript",
+        "currentValue": "^11.0.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "@vue/tsconfig",
+        "currentValue": "^0.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "autoprefixer",
+        "currentValue": "^10.4.14",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "eslint",
+        "currentValue": "^8.39.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "eslint-plugin-vue",
+        "currentValue": "^9.11.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "mime-types",
+        "currentValue": "^2.1.35",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "npm-run-all",
+        "currentValue": "^4.1.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "openapi-types",
+        "currentValue": "^12.1.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "postcss",
+        "currentValue": "^8.4.27",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "prettier",
+        "currentValue": "^2.8.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "sass",
+        "currentValue": "^1.63.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "tailwindcss",
+        "currentValue": "^3.3.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "tsconfig-paths",
+        "currentValue": "^4.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "typescript",
+        "currentValue": "^5.3.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "vite",
+        "currentValue": "^4.3.9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "vite-plugin-glsl",
+        "currentValue": "^1.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "ui/package.json",
+        "name": "vue-tsc",
+        "currentValue": "^1.6.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

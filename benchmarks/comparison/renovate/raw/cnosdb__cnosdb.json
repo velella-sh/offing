@@ -1,0 +1,946 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "cnosdb/cnosdb",
+  "commit": "14c13e32660d44f347462caa56a919d9a8259fc7",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 239,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "docker/Dockerfile_meta",
+        "line": 6
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "docker/Dockerfile_meta",
+        "line": 8
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "docker/Dockerfile",
+        "line": 6
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "docker/Dockerfile",
+        "line": 8
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "docker/Dockerfile.build",
+        "line": 13
+      },
+      {
+        "ruleId": "github-actions.action-gh-release.node20",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "line": 112
+      },
+      {
+        "ruleId": "github-actions.action-gh-release.node20",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "line": 74
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "line": 26
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "line": 43
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "line": 93
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "line": 10
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "line": 28
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "line": 42
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/compatibility_test.yaml",
+        "line": 11
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/compatibility_test.yaml",
+        "line": 31
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/compatibility_test.yaml",
+        "line": 51
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/github_mirror_to_gitlab_ontime.yml",
+        "line": 12
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/github_mirror_to_gitlab_pr.yml",
+        "line": 37
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/github_mirror_to_gitlab.yml",
+        "line": 10
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/makefile.yml",
+        "line": 116
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/makefile.yml",
+        "line": 19
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/makefile.yml",
+        "line": 45
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/makefile.yml",
+        "line": 55
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/makefile.yml",
+        "line": 69
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/makefile.yml",
+        "line": 83
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/makefile.yml",
+        "line": 97
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "line": 19
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "line": 41
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "line": 63
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "line": 16
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "line": 38
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "line": 60
+      },
+      {
+        "ruleId": "github-actions.setup-qemu-action.node20",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "line": 13
+      },
+      {
+        "ruleId": "github-actions.setup-qemu-action.node20",
+        "path": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "line": 35
+      },
+      {
+        "ruleId": "github-actions.setup-qemu-action.node20",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "line": 57
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "line": 54
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 2
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 175863,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile",
+        "name": "ubuntu",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile",
+        "name": "iputils-ping",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile",
+        "name": "wget",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile",
+        "name": "openssl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile",
+        "name": "unzip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile.build",
+        "name": "ubuntu",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile.build",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile.build",
+        "name": "cmake",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile.build",
+        "name": "unzip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile.build",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile.build",
+        "name": "openssl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile.build",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile.build",
+        "name": "wget",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile.build",
+        "name": "perl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile_meta",
+        "name": "ubuntu",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile_meta",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile_meta",
+        "name": "iputils-ping",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile_meta",
+        "name": "wget",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile_meta",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile_meta",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile_meta",
+        "name": "openssl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile_meta",
+        "name": "unzip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-builder/action.yaml",
+        "name": "mozilla-actions/sccache-action",
+        "currentValue": "v0.0.9",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-builder/action.yaml",
+        "name": "rui314/setup-mold",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-builder/action.yaml",
+        "name": "sccache",
+        "currentValue": "v0.10.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "name": "manyuanrong/setup-ossutil",
+        "currentValue": "v3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "name": "softprops/action-gh-release",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "name": "softprops/action-gh-release",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build_package_and_push.yml",
+        "name": "windows",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "name": "docker/setup-qemu-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "name": "docker/setup-buildx-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "name": "docker/login-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "name": "docker/build-push-action",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/cnosdb-build_docker_build_and_push.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "name": "docker/setup-qemu-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "name": "docker/setup-buildx-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "name": "docker/login-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "name": "docker/setup-qemu-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "name": "docker/setup-buildx-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "name": "docker/login-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/community-tag_docker_build_and_push.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/compatibility_test.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/compatibility_test.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/compatibility_test.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/compatibility_test.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/compatibility_test.yaml",
+        "name": "macos",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/compatibility_test.yaml",
+        "name": "windows",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_mirror_to_gitlab.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_mirror_to_gitlab.yml",
+        "name": "lutengda/gitlab-mirror-and-ci-action",
+        "currentValue": "master",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_mirror_to_gitlab.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_mirror_to_gitlab_ontime.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_mirror_to_gitlab_ontime.yml",
+        "name": "lutengda/gitlab-mirror-and-ci-action",
+        "currentValue": "master",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_mirror_to_gitlab_ontime.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_mirror_to_gitlab_pr.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_mirror_to_gitlab_pr.yml",
+        "name": "lutengda/gitlab-mirror-and-ci-action",
+        "currentValue": "master",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/github_mirror_to_gitlab_pr.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/makefile.yml",
+        "name": "windows",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

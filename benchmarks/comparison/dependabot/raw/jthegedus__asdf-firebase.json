@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "jthegedus/asdf-firebase",
+  "commit": "0fcfd62975045a313a840253adf0cf327f8ea8d9",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 11,
+    "findings": [
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 2,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/lint.yml",
+        "line": 14,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/lint.yml",
+        "line": 25,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

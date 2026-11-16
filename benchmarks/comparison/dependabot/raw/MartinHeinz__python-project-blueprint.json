@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "MartinHeinz/python-project-blueprint",
+  "commit": "8ab5e0d275d5ff2011e81f0c276c21c9c76c2f9b",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 7,
+    "findings": [
+      {
+        "ruleId": "container.debian.eol-11-and-older",
+        "path": "prod.Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.python.eol-3.10-and-older",
+        "path": "base.Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.python.eol-3.10-and-older",
+        "path": "dev.Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build-test.yml",
+        "line": 16,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build-test.yml",
+        "line": 9,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/push.yml",
+        "line": 12,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-python.node20",
+        "path": ".github/workflows/build-test.yml",
+        "line": 17,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-env",
+        "path": ".github/workflows/push.yml",
+        "line": 14,
+        "dependabot": null
+      },
+      {
+        "ruleId": "kubernetes.extensions.ingress.v1beta1.removed",
+        "path": "k8s/app.yaml",
+        "line": 64,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "aeria-org/aeria",
+  "commit": "500099fcd90f3e63a3a00e283fbcc4c9355f58ba",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 81,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 23,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/pr.yaml",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 27,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/pr.yaml",
+        "line": 24,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-23",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-25",
+        "path": ".github/workflows/ci.yaml",
+        "line": 29,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-25",
+        "path": ".github/workflows/pr.yaml",
+        "line": 26,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-25",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "npm",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "supabase/libcluster_postgres",
+  "commit": "01f0e03f7238f90713c55a8964f1cdea645f713e",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 35,
+    "findings": [
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.14",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/publish.yaml",
+        "line": 16
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/elixir.yaml",
+        "line": 44
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/publish.yaml",
+        "line": 10
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 5140,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "postgres",
+        "currentValue": "latest",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "elixir",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/elixir.yaml",
+        "name": "erlef/setup-beam",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/elixir.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/elixir.yaml",
+        "name": "postgres",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/elixir.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/elixir.yaml",
+        "name": "erlang/otp",
+        "currentValue": "${{matrix.otp}}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/elixir.yaml",
+        "name": "elixir-lang/elixir",
+        "currentValue": "${{matrix.elixir}}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yaml",
+        "name": "erlef/setup-beam",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yaml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

@@ -7,9 +7,9 @@
   "continuity": false,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 74,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 25,
     "findings": [
       {
         "ruleId": "github-actions.cache.node20",
@@ -40,7 +40,7 @@
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 27072,
+    "durationMs": 33680,
     "status": "ok",
     "dependencies": [
       {
@@ -49,8 +49,8 @@
         "name": "actions/checkout",
         "currentValue": "v2.3.1",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -68,8 +68,8 @@
         "name": "hecrj/setup-rust-action",
         "currentValue": "v1",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -77,8 +77,8 @@
         "name": "actions/checkout",
         "currentValue": "v2",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -95,8 +95,8 @@
         "name": "actions/cache",
         "currentValue": "v2",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",

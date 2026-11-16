@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "gbprod/tree-sitter-gitcommit",
+  "commit": "55a265cf763ec15d6e2d96bb206e3f5e30d82bae",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 16,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 34
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.22",
+        "path": "bindings/go/go.mod",
+        "line": 3
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.22",
+        "path": "go.mod",
+        "line": 3
+      },
+      {
+        "ruleId": "python.runtime.eol-3.9-and-older",
+        "path": "pyproject.toml",
+        "line": 17
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 12456,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "tree-sitter/setup-action",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yml",
+        "name": "tree-sitter/parser-test-action",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yaml",
+        "name": "tree-sitter/workflows",
+        "currentValue": "main",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish.yaml",
+        "name": "tree-sitter/workflows",
+        "currentValue": "main",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "node-addon-api",
+        "currentValue": "^7.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "node-gyp-build",
+        "currentValue": "^4.8.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "tree-sitter-cli",
+        "currentValue": "^0.25.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "prebuildify",
+        "currentValue": "^6.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "tree-sitter",
+        "currentValue": "^0.25.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

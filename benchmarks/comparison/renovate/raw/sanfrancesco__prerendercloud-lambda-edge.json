@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "sanfrancesco/prerendercloud-lambda-edge",
+  "commit": "b48d118030197e5231f63bf947fdaade4f732619",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 207,
+    "findings": [
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/node.js.yml",
+        "line": 26
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/node.js.yml",
+        "line": 20
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/node.js.yml",
+        "line": 21
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": ".github/workflows/node.js.yml",
+        "line": 17
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "npm.package.lodash-get.deprecated",
+        "path": "package.json",
+        "line": 6
+      },
+      {
+        "ruleId": "npm.package.querystring.deprecated",
+        "path": "package.json",
+        "line": 3
+      },
+      {
+        "ruleId": "serverless.aws-lambda.nodejs20.x",
+        "path": "serverless.yml",
+        "line": 11
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 5563,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/node.js.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/node.js.yml",
+        "name": "actions/setup-node",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/node.js.yml",
+        "name": "actions/cache",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/node.js.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/node.js.yml",
+        "name": "node",
+        "currentValue": "${{ matrix.node-version }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "prerendercloud",
+        "currentValue": "1.48.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "aws-sdk",
+        "currentValue": "^2.1120.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "jasmine",
+        "currentValue": "^4.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "nock",
+        "currentValue": "^13.5.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "serverless",
+        "currentValue": "3.39.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

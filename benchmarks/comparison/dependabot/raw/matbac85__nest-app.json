@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "matbac85/nest-app",
+  "commit": "0460768d21483921148827df6b4608351ab241f9",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 48,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 90,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 91,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 92,
+        "dependabot": null
+      },
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 2,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "braintree/braintree-web",
+  "commit": "9672fcf9dcd6100b74ca863e8691bb7bfc019dc6",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 133,
+    "findings": [
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/ci-unit-tests.yml",
+        "line": 93,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.github-script.node20",
+        "path": ".github/workflows/ci-unit-tests.yml",
+        "line": 249,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 146,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 95,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.sourcemap-codec.deprecated",
+        "path": "package.json",
+        "line": 84,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

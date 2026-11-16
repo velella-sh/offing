@@ -6,10 +6,22 @@
   "selection": "blind",
   "continuity": false,
   "offing": {
-    "version": "0.7.3",
-    "commit": "7cdd0e5f7541ba9828452df5ec9dbb22fb18ae14",
-    "durationMs": 683,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 33,
     "findings": [
+      {
+        "ruleId": "container.dockerfile.maintainer",
+        "path": "docker/Dockerfile-i686",
+        "line": 2,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.maintainer",
+        "path": "docker/Dockerfile-x86_64",
+        "line": 2,
+        "dependabot": null
+      },
       {
         "ruleId": "cpp.cmake.policy-below-3.5.removed",
         "path": "CMakeLists.txt",

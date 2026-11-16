@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "danielberkompas/elasticsearch-elixir",
+  "commit": "fba3359904cf13a03a799f9a2e4efd2f7a5ee0e1",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 6,
+    "findings": [
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.15",
+        "path": ".tool-versions",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 143647,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "postgres",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "docker.elastic.co/elasticsearch/elasticsearch",
+        "currentValue": "6.8.13",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "hexpm/elixir",
+        "currentValue": "1.15.5-erlang-26.0.2-ubuntu-focal-20230126",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "git",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "inotify-tools",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "postgresql-client",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "lsof",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

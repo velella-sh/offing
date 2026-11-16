@@ -7,10 +7,295 @@
   "continuity": false,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 13,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 15,
     "findings": [
+      {
+        "ruleId": "container.debian.eol-11-and-older",
+        "path": "Dockerfile-7.3",
+        "line": 1
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.3",
+        "line": 124
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.3",
+        "line": 125
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.3",
+        "line": 126
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.3",
+        "line": 127
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.4",
+        "line": 84
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.4",
+        "line": 85
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.4",
+        "line": 86
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.4",
+        "line": 87
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.5",
+        "line": 113
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.5",
+        "line": 114
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.5",
+        "line": 115
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.5",
+        "line": 116
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.6",
+        "line": 119
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.6",
+        "line": 120
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.6",
+        "line": 121
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "archive/Dockerfile-5.6",
+        "line": 122
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.0",
+        "line": 94
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.0",
+        "line": 95
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.0",
+        "line": 96
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.0",
+        "line": 97
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.1",
+        "line": 96
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.1",
+        "line": 97
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.1",
+        "line": 98
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.1",
+        "line": 99
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.2",
+        "line": 104
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.2",
+        "line": 105
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.2",
+        "line": 106
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.2",
+        "line": 107
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.3",
+        "line": 104
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.3",
+        "line": 105
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.3",
+        "line": 106
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.3",
+        "line": 107
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.4",
+        "line": 105
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.4",
+        "line": 106
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.4",
+        "line": 107
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-7.4",
+        "line": 108
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.0",
+        "line": 96
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.0",
+        "line": 97
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.0",
+        "line": 98
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.0",
+        "line": 99
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.1",
+        "line": 105
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.1",
+        "line": 106
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.1",
+        "line": 107
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.1",
+        "line": 108
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.2",
+        "line": 96
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.2",
+        "line": 97
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.2",
+        "line": 98
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile-8.2",
+        "line": 99
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "archive/Dockerfile-5.3",
+        "line": 1
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "archive/Dockerfile-5.5",
+        "line": 1
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "Dockerfile-7.2",
+        "line": 1
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "Dockerfile-7.4",
+        "line": 1
+      },
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": "Dockerfile-7.1",
+        "line": 1
+      },
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": "Dockerfile-8.0",
+        "line": 1
+      },
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": "Dockerfile-8.1",
+        "line": 1
+      },
+      {
+        "ruleId": "container.ubuntu.eol-22.04",
+        "path": "Dockerfile-8.2",
+        "line": 1
+      },
       {
         "ruleId": "github-actions.checkout.node20",
         "path": ".github/workflows/build-docker-image.yml",
@@ -35,7 +320,7 @@
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 7887,
+    "durationMs": 12469,
     "status": "ok",
     "dependencies": [
       {

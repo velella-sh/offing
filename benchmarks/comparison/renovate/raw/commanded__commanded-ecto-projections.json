@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "commanded/commanded-ecto-projections",
+  "commit": "34e7660e2f195f44bb6e1b1948fb9f09502f8355",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 7,
+    "findings": [
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.15",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 39
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 58
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 29
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 53865,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "actions/checkout",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "erlef/setup-beam",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "actions/cache",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "actions/cache",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "postgres",
+        "currentValue": "12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "erlang/otp",
+        "currentValue": "${{ matrix.otp }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yml",
+        "name": "elixir-lang/elixir",
+        "currentValue": "${{ matrix.elixir }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

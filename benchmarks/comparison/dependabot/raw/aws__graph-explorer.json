@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "aws/graph-explorer",
+  "commit": "2ff4ceabe1c7b4b1e786344decb184362b320306",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 339,
+    "findings": []
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "docker",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "npm",
+        "directory": "/",
+        "ignore": true,
+        "allow": false
+      }
+    ]
+  }
+}

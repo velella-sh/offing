@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "sasa1977/con_cache",
+  "commit": "6cb17c945d0c12964df85531e9f30a5964c7c01f",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 5,
+    "findings": [
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 1
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/con_cache.yaml",
+        "line": 20
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/con_cache.yaml",
+        "line": 55
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/con_cache.yaml",
+        "line": 13
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/con_cache.yaml",
+        "line": 47
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 13661,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/con_cache.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/con_cache.yaml",
+        "name": "erlef/setup-elixir",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/con_cache.yaml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/con_cache.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/con_cache.yaml",
+        "name": "erlef/setup-elixir",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/con_cache.yaml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/con_cache.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/con_cache.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

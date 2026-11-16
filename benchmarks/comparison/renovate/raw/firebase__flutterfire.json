@@ -1,0 +1,1345 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "firebase/flutterfire",
+  "commit": "d07113e3adfe128d2e4810bae22c5ca5bcbc48eb",
+  "ecosystem": "dart",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 784,
+    "findings": []
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 52145,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-flutterfire/action.yml",
+        "name": "actions/setup-node",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-flutterfire/action.yml",
+        "name": "actions/setup-java",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-flutterfire/action.yml",
+        "name": "subosito/flutter-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-flutterfire/action.yml",
+        "name": "bluefireteam/melos-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-flutterfire/action.yml",
+        "name": "node",
+        "currentValue": "${{ inputs.node-version }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-flutterfire/action.yml",
+        "name": "java-jdk",
+        "currentValue": "${{ inputs.java-version }}",
+        "skipReason": "unsupported-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/actions/setup-flutterfire/action.yml",
+        "name": "flutter",
+        "currentValue": "${{ inputs.flutter-version }}",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "actions/setup-go",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "subosito/flutter-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "subosito/flutter-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "bluefireteam/melos-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "Homebrew/actions",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "go",
+        "currentValue": "^1.13.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "macos",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "flutter",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "flutter",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/all_plugins.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/android_unit_tests.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/android_unit_tests.yaml",
+        "name": "gradle/actions",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/android_unit_tests.yaml",
+        "name": "actions/upload-artifact",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/android_unit_tests.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "ikalnytskyi/action-setup-postgres",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "gradle/actions",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "reactivecircus/android-emulator-runner",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "ikalnytskyi/action-setup-postgres",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "hendrikmuhs/ccache-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "futureware-tech/simulator-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "ikalnytskyi/action-setup-postgres",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "ikalnytskyi/action-setup-postgres",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "macos",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_fdc.yaml",
+        "name": "macos",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "gradle/actions",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "reactivecircus/android-emulator-runner",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "futureware-tech/simulator-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_pipeline.yaml",
+        "name": "macos",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "gradle/actions",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "reactivecircus/android-emulator-runner",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "gradle/actions",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "hendrikmuhs/ccache-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "futureware-tech/simulator-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "hendrikmuhs/ccache-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/e2e_tests_smoke.yaml",
+        "name": "windows",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/nightly.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/nightly.yaml",
+        "name": "subosito/flutter-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/nightly.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/nightly.yaml",
+        "name": "flutter",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ossf-scorecard.yml",
+        "name": "actions/checkout",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ossf-scorecard.yml",
+        "name": "ossf/scorecard-action",
+        "currentValue": "v2.4.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ossf-scorecard.yml",
+        "name": "actions/upload-artifact",
+        "currentValue": "v7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ossf-scorecard.yml",
+        "name": "github/codeql-action",
+        "currentValue": "v4.37.9",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ossf-scorecard.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pr_title.yaml",
+        "name": "amannn/action-semantic-pull-request",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pr_title.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_android.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_android.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_android.yaml",
+        "name": "gradle/actions",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_android.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_android.yaml",
+        "name": "reactivecircus/android-emulator-runner",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_android.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_android.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_android.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_changes.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_changes.yaml",
+        "name": "dorny/paths-filter",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_changes.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_ios.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_ios.yaml",
+        "name": "hendrikmuhs/ccache-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_ios.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_ios.yaml",
+        "name": "futureware-tech/simulator-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_ios.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_macos.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_macos.yaml",
+        "name": "hendrikmuhs/ccache-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_macos.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_macos.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_web.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_web.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_web.yaml",
+        "name": "actions/cache",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_web.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_windows.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_e2e_windows.yaml",
+        "name": "windows",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_repo_changes.yaml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_repo_changes.yaml",
+        "name": "dorny/paths-filter",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/reusable_repo_changes.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": ".github/workflows/scripts/functions/package.json",
+        "name": "firebase-admin",
+        "currentValue": "^13.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": ".github/workflows/scripts/functions/package.json",
+        "name": "firebase-functions",
+        "currentValue": "^6.3.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": ".github/workflows/scripts/functions/package.json",
+        "name": "firebase-functions-test",
+        "currentValue": "^0.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": ".github/workflows/scripts/functions/package.json",
+        "name": "typescript",
+        "currentValue": "^4.5.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": ".github/workflows/scripts/functions/package.json",
+        "name": "node",
+        "currentValue": "20",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/firebase_messaging/firebase_messaging/example/bundled-service-worker/package.json",
+        "name": "firebase",
+        "currentValue": "12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/firebase_messaging/firebase_messaging/example/bundled-service-worker/package.json",
+        "name": "esbuild",
+        "currentValue": "^0.28.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/firebase_messaging/firebase_messaging/example/scripts/package.json",
+        "name": "firebase-admin",
+        "currentValue": "^14.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

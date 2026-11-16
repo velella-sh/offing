@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "flex-analytics/flexviz",
+  "commit": "b8fe166eba7fbd39de8bb298ee924a29d5baedcf",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 12,
+    "findings": [
+      {
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "path": "pyproject.toml",
+        "line": 12,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/flexviz_polars",
+        "ignore": true,
+        "allow": false
+      }
+    ]
+  }
+}

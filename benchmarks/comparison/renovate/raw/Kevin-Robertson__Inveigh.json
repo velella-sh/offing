@@ -7,9 +7,9 @@
   "continuity": false,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 54,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 86,
     "findings": [
       {
         "ruleId": "dotnet.runtime.end-of-support-8.0",
@@ -60,7 +60,7 @@
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 11428,
+    "durationMs": 15887,
     "status": "ok",
     "dependencies": [
       {
@@ -115,8 +115,8 @@
         "name": "dotnet-sdk",
         "currentValue": "10.0.x",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       },
       {
         "manager": "github-actions",
@@ -170,8 +170,8 @@
         "name": "dotnet-sdk",
         "currentValue": "10.0.x",
         "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
+        "majorUpdate": true,
+        "anyUpdate": true
       }
     ]
   }

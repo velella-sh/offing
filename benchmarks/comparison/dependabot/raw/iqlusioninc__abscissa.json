@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "iqlusioninc/abscissa",
+  "commit": "721fb340417578c00b3838098bb7990b7bd0f400",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 68,
+    "findings": []
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/",
+        "ignore": false,
+        "allow": true
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

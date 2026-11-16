@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "harsha2010/magellan",
+  "commit": "63655a22df995f07a24b7e49daf8c294f2653d95",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 4,
+    "findings": [
+      {
+        "ruleId": "scala.runtime.eol-2.11",
+        "path": "build.sbt",
+        "line": 7
+      },
+      {
+        "ruleId": "scala.sbt.eol-0.13",
+        "path": "project/build.properties",
+        "line": 16
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 5704,
+    "status": "ok",
+    "dependencies": []
+  }
+}

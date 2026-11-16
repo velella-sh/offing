@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "cockpit-project/cockpit-machines",
+  "commit": "a759311b08871c32db4779d40df83ba4bfb4f24f",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 31,
+    "findings": []
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "npm",
+        "directory": "/",
+        "ignore": true,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": false,
+        "allow": false
+      }
+    ]
+  }
+}

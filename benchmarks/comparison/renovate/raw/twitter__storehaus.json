@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "twitter/storehaus",
+  "commit": "cb4c34714122370191b0ebcf9c0d7656f074ab53",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 4,
+    "findings": [
+      {
+        "ruleId": "scala.runtime.eol-2.11",
+        "path": "build.sbt",
+        "line": 36
+      },
+      {
+        "ruleId": "scala.sbt.eol-0.13",
+        "path": "project/build.properties",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 141303,
+    "status": "ok",
+    "dependencies": []
+  }
+}

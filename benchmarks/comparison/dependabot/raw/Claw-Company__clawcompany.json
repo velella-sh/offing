@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "Claw-Company/clawcompany",
+  "commit": "0dbde2b047d8c2830665e9f8106fa2213d4e82dd",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 26,
+    "findings": [
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "cli/package.json",
+        "line": 22,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 25,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

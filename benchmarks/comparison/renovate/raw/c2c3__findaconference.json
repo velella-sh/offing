@@ -1,0 +1,313 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "c2c3/findaconference",
+  "commit": "e09c1973e85e849413fe1ca2e4d8a45fcadebf68",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 12,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 17
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 23
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 24
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 25
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 26
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 27
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 28
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 29
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 30
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 31
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "server/Dockerfile",
+        "line": 32
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "server/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 29773,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "server/Dockerfile",
+        "name": "node",
+        "currentValue": "21-alpine",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "@auth/sveltekit",
+        "currentValue": "^0.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "mongodb",
+        "currentValue": "^6.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "@sveltejs/adapter-auto",
+        "currentValue": "^3.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "@sveltejs/adapter-node",
+        "currentValue": "^2.0.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "@sveltejs/kit",
+        "currentValue": "^2.0.6",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "@sveltejs/vite-plugin-svelte",
+        "currentValue": "^3.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "@typescript-eslint/eslint-plugin",
+        "currentValue": "^6.15.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "@typescript-eslint/parser",
+        "currentValue": "^6.15.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "autoprefixer",
+        "currentValue": "^10.4.16",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "eslint",
+        "currentValue": "^8.56.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "eslint-config-prettier",
+        "currentValue": "^9.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "eslint-plugin-svelte",
+        "currentValue": "^2.35.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "postcss",
+        "currentValue": "^8.4.32",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "prettier",
+        "currentValue": "^3.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "prettier-plugin-svelte",
+        "currentValue": "^3.1.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "svelte",
+        "currentValue": "^4.2.8",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "svelte-adapter-bun",
+        "currentValue": "^0.5.1",
+        "deprecated": true,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "svelte-check",
+        "currentValue": "^3.6.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "tailwindcss",
+        "currentValue": "^3.4.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "tslib",
+        "currentValue": "^2.6.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "typescript",
+        "currentValue": "^5.3.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "vite",
+        "currentValue": "^5.0.10",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "vitest",
+        "currentValue": "^1.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "server/package.json",
+        "name": "rollup",
+        "currentValue": "4.9.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

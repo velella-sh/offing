@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "d3/d3-array",
+  "commit": "24c015e4d894ee44af6cf6a2cc9e300b1885b0d9",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 31,
+    "findings": [
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 61,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "package.json",
+        "line": 61,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 61,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "package.json",
+        "line": 61,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.abab.deprecated",
+        "path": "package.json",
+        "line": 51,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.domexception.deprecated",
+        "path": "package.json",
+        "line": 51,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

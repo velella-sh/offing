@@ -22,7 +22,7 @@ function record(overrides: Partial<RawRecord> & Pick<RawRecord, "repository">): 
     selection: "blind",
     continuity: false,
     offing: {
-      version: "0.7.3",
+      version: "0.1.1",
       commit: "b".repeat(40),
       durationMs: 10,
       findings: [

@@ -14,11 +14,11 @@
     "cycles": 835
   },
   "offing": {
-    "registryRules": 752,
-    "productFamilies": 415,
-    "groundTruthRepositories": 1618,
-    "groundTruthRecords": 10482,
-    "groundTruthRules": 246
+    "registryRules": 782,
+    "productFamilies": 416,
+    "groundTruthRepositories": 1638,
+    "groundTruthRecords": 10680,
+    "groundTruthRules": 255
   },
   "coverage": {
     "endoflifeProducts": 489,
@@ -280,7 +280,6 @@
       "metallb",
       "micronaut",
       "microsoft-build-of-openjdk",
-      "mongodb",
       "moodle",
       "motorola-mobility",
       "msexchange",
@@ -471,8 +470,8 @@
       "zentyal",
       "zerto"
     ],
-    "offingRules": 752,
-    "offingProductFamilies": 415,
+    "offingRules": 782,
+    "offingProductFamilies": 416,
     "sharedProducts": [
       "alpine-linux",
       "amazon-aurora-postgresql",
@@ -499,6 +498,7 @@
       "go",
       "kubernetes",
       "mariadb",
+      "mongodb",
       "mysql",
       "nodejs",
       "php",
@@ -517,7 +517,7 @@
       "ubuntu",
       "zookeeper"
     ],
-    "mappedProductFamilies": 103,
+    "mappedProductFamilies": 104,
     "notComparableFamilies": [
       {
         "code": "package-level",
@@ -661,10 +661,10 @@
   },
   "agreement": {
     "all": {
-      "rules": 752,
-      "measured": 184,
-      "agree": 176,
-      "disagree": 8,
+      "rules": 782,
+      "measured": 214,
+      "agree": 205,
+      "disagree": 9,
       "notComparable": 411,
       "notLifecycleEvent": 142,
       "noSnapshot": 0,
@@ -673,9 +673,9 @@
       "noEndoflifeDate": 4
     },
     "groundTruth": {
-      "rules": 246,
-      "measured": 92,
-      "agree": 85,
+      "rules": 255,
+      "measured": 101,
+      "agree": 94,
       "disagree": 7,
       "notComparable": 144,
       "notLifecycleEvent": 2,
@@ -1018,6 +1018,15 @@
       "disagree": 0
     },
     {
+      "product": "mongodb",
+      "offingRules": 16,
+      "offingFamilies": 1,
+      "endoflifeCycles": 33,
+      "measured": 16,
+      "agree": 16,
+      "disagree": 0
+    },
+    {
       "product": "mysql",
       "offingRules": 3,
       "offingFamilies": 2,
@@ -1064,11 +1073,11 @@
     },
     {
       "product": "powershell",
-      "offingRules": 5,
+      "offingRules": 7,
       "offingFamilies": 1,
       "endoflifeCycles": 10,
-      "measured": 5,
-      "agree": 5,
+      "measured": 7,
+      "agree": 7,
       "disagree": 0
     },
     {
@@ -1082,11 +1091,11 @@
     },
     {
       "product": "redis",
-      "offingRules": 3,
+      "offingRules": 5,
       "offingFamilies": 2,
       "endoflifeCycles": 12,
-      "measured": 3,
-      "agree": 3,
+      "measured": 5,
+      "agree": 5,
       "disagree": 0
     },
     {
@@ -1136,12 +1145,12 @@
     },
     {
       "product": "terraform",
-      "offingRules": 8,
+      "offingRules": 18,
       "offingFamilies": 1,
       "endoflifeCycles": 18,
-      "measured": 6,
-      "agree": 6,
-      "disagree": 0
+      "measured": 16,
+      "agree": 15,
+      "disagree": 1
     },
     {
       "product": "traefik",
@@ -1198,6 +1207,20 @@
           "path": "docker-compose.yml",
           "line": 21,
           "url": "https://github.com/nestjsx/crud/blob/d6d3c4ebd844d543ab71b494d424660c448a9d42/docker-compose.yml#L21"
+        },
+        {
+          "repository": "ForestAdmin/forest-express-sequelize",
+          "commit": "2f254a4b2bc598719fc6a82b0af7de15e0dad5cb",
+          "path": "docker-compose.yml",
+          "line": 14,
+          "url": "https://github.com/ForestAdmin/forest-express-sequelize/blob/2f254a4b2bc598719fc6a82b0af7de15e0dad5cb/docker-compose.yml#L14"
+        },
+        {
+          "repository": "ForestAdmin/forest-express-sequelize",
+          "commit": "2f254a4b2bc598719fc6a82b0af7de15e0dad5cb",
+          "path": "docker-compose.yml",
+          "line": 25,
+          "url": "https://github.com/ForestAdmin/forest-express-sequelize/blob/2f254a4b2bc598719fc6a82b0af7de15e0dad5cb/docker-compose.yml#L25"
         },
         {
           "repository": "weltraumpirat/hexagonal_ddd",
@@ -1283,6 +1306,13 @@
           "path": "angular-rails-app/Dockerfile",
           "line": 1,
           "url": "https://github.com/chrishenry/deltanyc-heatseek/blob/258e225efa89e46e92e9676864f8c07976b4ccf2/angular-rails-app/Dockerfile#L1"
+        },
+        {
+          "repository": "Vizzuality/GeoCAT",
+          "commit": "00d6194223eda78d9e51a4225fef9a7a7c546014",
+          "path": "Dockerfile",
+          "line": 2,
+          "url": "https://github.com/Vizzuality/GeoCAT/blob/00d6194223eda78d9e51a4225fef9a7a7c546014/Dockerfile#L2"
         },
         {
           "repository": "mislav/hub",
@@ -2639,6 +2669,23 @@
       "sources": {
         "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/ruby.runtime.eol-3.2.md",
         "endoflife": "https://endoflife.date/ruby"
+      }
+    },
+    {
+      "ruleId": "terraform.cli.end-of-support-1.8",
+      "ecosystem": "terraform",
+      "product": "terraform",
+      "cycles": [
+        "1.8"
+      ],
+      "offingDate": "2024-11-27",
+      "endoflifeDate": "2024-11-26",
+      "differenceDays": 1,
+      "inGroundTruth": false,
+      "references": [],
+      "sources": {
+        "offing": "https://github.com/velella-sh/offing/blob/main/docs/rules/terraform.cli.end-of-support-1.8.md",
+        "endoflife": "https://endoflife.date/terraform"
       }
     }
   ]

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "reki2000/langs-bench-dijkstra",
+  "commit": "154df6b32a5cf95a4e222e1ffcf79b4996681a98",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 12,
+    "findings": [
+      {
+        "ruleId": "dart.sdk.end-of-support-2-and-older",
+        "path": "dart/pubspec.lock",
+        "line": 12,
+        "dependabot": null
+      },
+      {
+        "ruleId": "dart.sdk.end-of-support-2-and-older",
+        "path": "dart/pubspec.yaml",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": "js-bun/.tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "java.jdk.end-of-support-18-20",
+        "path": "kotlin/.tool-versions",
+        "line": 2,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

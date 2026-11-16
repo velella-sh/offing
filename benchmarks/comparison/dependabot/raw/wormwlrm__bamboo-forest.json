@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "wormwlrm/bamboo-forest",
+  "commit": "1b511bd061578e24bf856db94d0df29a63e76dce",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 5,
+    "findings": [
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": ".nvmrc",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 28,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "serverless.aws-lambda.nodejs14.x",
+        "path": "serverless.yml",
+        "line": 6,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

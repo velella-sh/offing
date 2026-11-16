@@ -7,9 +7,9 @@
   "continuity": false,
   "concurrency": 4,
   "offing": {
-    "version": "0.7.3",
-    "commit": "8dd8580a304d93336fdaf0b344b276e5928410e3",
-    "durationMs": 117,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 55,
     "findings": [
       {
         "ruleId": "container.python.eol-3.10-and-older",
@@ -160,100 +160,9 @@
   },
   "renovate": {
     "version": "44.164.10",
-    "durationMs": 108290,
-    "status": "ok",
-    "dependencies": [
-      {
-        "manager": "dockerfile",
-        "path": "s3-logs-extension-demo-container-image/extension/Dockerfile",
-        "name": "python",
-        "currentValue": "3.8-alpine",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": true
-      },
-      {
-        "manager": "dockerfile",
-        "path": "s3-logs-extension-demo-container-image/function/functionsrc/Dockerfile",
-        "name": "978558897928.dkr.ecr.us-east-1.amazonaws.com/log-extension-image",
-        "currentValue": "latest",
-        "skipReason": "invalid-value",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "dockerfile",
-        "path": "s3-logs-extension-demo-container-image/function/functionsrc/Dockerfile",
-        "name": "public.ecr.aws/lambda/python",
-        "currentValue": "3.8",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": true
-      },
-      {
-        "manager": "npm",
-        "path": "cache-extension-demo/SAM/DatabaseEntryCode/package.json",
-        "name": "cfn-response",
-        "currentValue": "^1.0.1",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "npm",
-        "path": "nodejs-example-extension/nodejs-example-extension/package.json",
-        "name": "node-fetch",
-        "currentValue": "^2.6.1",
-        "deprecated": false,
-        "majorUpdate": true,
-        "anyUpdate": true
-      },
-      {
-        "manager": "npm",
-        "path": "nodejs-example-lambda-runtime-api-proxy-extension/nodejs-example-lambda-runtime-api-proxy-extension/package.json",
-        "name": "express",
-        "currentValue": "^4.21.2",
-        "deprecated": false,
-        "majorUpdate": true,
-        "anyUpdate": true
-      },
-      {
-        "manager": "npm",
-        "path": "nodejs-example-logs-api-extension/nodejs-example-logs-api-extension/package.json",
-        "name": "aws-sdk",
-        "currentValue": "2.1354.0",
-        "deprecated": true,
-        "majorUpdate": false,
-        "anyUpdate": true
-      },
-      {
-        "manager": "npm",
-        "path": "nodejs-example-logs-api-extension/nodejs-example-logs-api-extension/package.json",
-        "name": "node-fetch",
-        "currentValue": "^3.1.1",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": true
-      },
-      {
-        "manager": "npm",
-        "path": "nodejs-example-telemetry-api-extension/nodejs-example-telemetry-api-extension/package.json",
-        "name": "node-fetch",
-        "currentValue": "^3.3.2",
-        "deprecated": false,
-        "majorUpdate": false,
-        "anyUpdate": false
-      },
-      {
-        "manager": "npm",
-        "path": "nodejs-example-telemetry-api-extension/nodejs-example-telemetry-api-extension/package.json",
-        "name": "express",
-        "currentValue": "^4.21.2",
-        "deprecated": false,
-        "majorUpdate": true,
-        "anyUpdate": true
-      }
-    ]
+    "durationMs": 600044,
+    "status": "timeout",
+    "detail": "killed after 10 minutes",
+    "dependencies": []
   }
 }

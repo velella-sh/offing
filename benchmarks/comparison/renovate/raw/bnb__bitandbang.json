@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "bnb/bitandbang",
+  "commit": "210e23773a41976ff23bf701a98f88184186cf56",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 5,
+    "findings": []
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 43116,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@biomejs/biome",
+        "currentValue": "1.8.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "boxen",
+        "currentValue": "^7.1.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "chalk",
+        "currentValue": "^5.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

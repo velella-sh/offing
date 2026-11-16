@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "assertible/lambda-cloudwatch-slack",
+  "commit": "833964f51364cd7d53991dbc04555a7a91e9d4d6",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 13,
+    "findings": [
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 20
+      },
+      {
+        "ruleId": "npm.package.querystring.deprecated",
+        "path": "package.json",
+        "line": 17
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 3997,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aws-sdk/client-kms",
+        "currentValue": "^3.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "https",
+        "currentValue": "^1.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "lodash",
+        "currentValue": "^4.15.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "url",
+        "currentValue": "^0.11.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "node-lambda",
+        "currentValue": "1.3.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

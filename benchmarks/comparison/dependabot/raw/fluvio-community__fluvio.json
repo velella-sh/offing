@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "fluvio-community/fluvio",
+  "commit": "52673942c1c7364f36f2e05da972436f761243cd",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 275,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "examples/docker-compose/Dockerfile",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "examples/docker-compose/Dockerfile",
+        "line": 8,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "examples/docker-compose/Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/examples/docker-compose"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/merge_queue.yaml",
+        "line": 415,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.stale.node20",
+        "path": ".github/workflows/stale.yml",
+        "line": 17,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "rust.toolchain.end-of-support-1.98-and-older",
+        "path": "rust-toolchain.toml",
+        "line": 2,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "configPath": ".github/dependabot.yml",
+    "entries": [
+      {
+        "packageEcosystem": "github-actions",
+        "directory": "/",
+        "ignore": true,
+        "allow": false
+      },
+      {
+        "packageEcosystem": "cargo",
+        "directory": "/",
+        "ignore": true,
+        "allow": false
+      }
+    ]
+  }
+}

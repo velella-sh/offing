@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "nshafer/pax_demo.old",
+  "commit": "ce26798ddab340962284eb854cbc40f94f09ccfa",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 28,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 2,
+        "dependabot": null
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.15",
+        "path": ".tool-versions",
+        "line": 1,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

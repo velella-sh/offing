@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "clab/dynet",
+  "commit": "22b44958476731af4d1fdbc553626eca3a27e808",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 28,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.maintainer",
+        "path": "docker/Dockerfile-i686",
+        "line": 2
+      },
+      {
+        "ruleId": "container.dockerfile.maintainer",
+        "path": "docker/Dockerfile-x86_64",
+        "line": 2
+      },
+      {
+        "ruleId": "cpp.cmake.policy-below-3.5.removed",
+        "path": "CMakeLists.txt",
+        "line": 2
+      },
+      {
+        "ruleId": "cpp.cmake.policy-below-3.5.removed",
+        "path": "contrib/c/CMakeLists.txt",
+        "line": 1
+      },
+      {
+        "ruleId": "cpp.cmake.policy-below-3.5.removed",
+        "path": "contrib/swig/CMakeLists.txt",
+        "line": 1
+      },
+      {
+        "ruleId": "cpp.cmake.policy-below-3.5.removed",
+        "path": "examples/CMakeLists.txt",
+        "line": 1
+      },
+      {
+        "ruleId": "cpp.cmake.policy-below-3.5.removed",
+        "path": "tutorial/CMakeLists.txt",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 219539,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile-i686",
+        "name": "quay.io/pypa/manylinux1_i686",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/Dockerfile-x86_64",
+        "name": "quay.io/pypa/manylinux1_x86_64",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

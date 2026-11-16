@@ -1,0 +1,280 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "airflow-helm/charts",
+  "commit": "732a0f0bdbeb420159807d3d5f858e614c6656ec",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 36,
+    "findings": [
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/pgbouncer/Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/images/pgbouncer"
+        }
+      },
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/pgbouncer/Dockerfile",
+        "line": 32,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/images/pgbouncer"
+        }
+      },
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "line": 10,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/images/postgresql-bitnami/11/alpine"
+        }
+      },
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "line": 141,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/images/postgresql-bitnami/11/alpine"
+        }
+      },
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "line": 46,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/images/postgresql-bitnami/11/alpine"
+        }
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 170,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 61,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 121,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 52,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 18,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 38,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/charts--release.yaml",
+        "line": 15,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "line": 15,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/sync-readme.yaml",
+        "line": 15,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/sync-readme.yaml",
+        "line": 22,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 133,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 139,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.metadata-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 147,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.metadata-action.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 50,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 130,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 46,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-qemu-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 127,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-qemu-action.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 43,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 114,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 69,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 73,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 78,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 83,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 87,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "line": 34,
+        "dependabot": null
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "charts/airflow/Chart.yaml",
+        "line": 18,
+        "dependabot": null
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "charts/airflow/Chart.yaml",
+        "line": 22,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

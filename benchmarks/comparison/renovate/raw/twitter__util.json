@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "twitter/util",
+  "commit": "8ea6954b5f8afc602fc5abe66e3987272305ec32",
+  "ecosystem": "scala",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 89,
+    "findings": [
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/continuous-integration.yml",
+        "line": 37
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/continuous-integration.yml",
+        "line": 28
+      },
+      {
+        "ruleId": "github-actions.setup-java.node20",
+        "path": ".github/workflows/continuous-integration.yml",
+        "line": 29
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 61363,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/continuous-integration.yml",
+        "name": "actions/checkout",
+        "currentValue": "v2.3.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/continuous-integration.yml",
+        "name": "actions/setup-java",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/continuous-integration.yml",
+        "name": "actions/cache",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/continuous-integration.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/continuous-integration.yml",
+        "name": "java-jdk",
+        "skipReason": "unsupported",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

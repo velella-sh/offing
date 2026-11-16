@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "bcms/cms",
+  "commit": "d0e643d3269c27f20f57b23dfed4b45655a465fb",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 116,
+    "findings": [
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile.backend.dev",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile.ui.dev",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "ui/Dockerfile.dev",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/ui"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

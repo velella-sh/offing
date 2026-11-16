@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "hack-dance/dashboard-demo",
+  "commit": "59763ca5f1b9c6853546c22fa665f5e1eb0124b5",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 22,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 3
+      },
+      {
+        "ruleId": "npm.package.next.14.support-end",
+        "path": "package.json",
+        "line": 57
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 12790,
+    "status": "ok",
+    "dependencies": []
+  }
+}

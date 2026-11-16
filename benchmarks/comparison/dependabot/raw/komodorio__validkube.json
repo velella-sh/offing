@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "komodorio/validkube",
+  "commit": "b75c7f7d1bc9743263d8b6eb635c5e7b9d809067",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 24,
+    "findings": [
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "Dockerfile",
+        "line": 2,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "container.golang.eol-1.25-and-older",
+        "path": "Dockerfile",
+        "line": 21,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "go.runtime.end-of-support-1.20-and-older",
+        "path": "go.mod",
+        "line": 3,
+        "dependabot": null
+      },
+      {
+        "ruleId": "serverless.aws-lambda.go1.x",
+        "path": "serverless.yml",
+        "line": 10,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

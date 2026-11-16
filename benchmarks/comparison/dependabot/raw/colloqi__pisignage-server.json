@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "colloqi/pisignage-server",
+  "commit": "40b346b137c9efd2bf340553b08ec1cc57f9aa7b",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 21,
+    "findings": [
+      {
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "database.mongodb.end-of-life-4.4",
+        "path": "docker-compose.prod.yml",
+        "line": 4,
+        "dependabot": null
+      },
+      {
+        "ruleId": "database.mongodb.end-of-life-5.0",
+        "path": "docker-compose.yml",
+        "line": 4,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 40,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 26,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 29,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 36,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "package.json",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.lodash-get.deprecated",
+        "path": "package.json",
+        "line": 24,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "henrikpersson/potatis",
+  "commit": "c7ad54c42a45915497c6448208d9cadb23e1f9f6",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 27,
+    "findings": [
+      {
+        "ruleId": "android.target-sdk.existing.default-below-35",
+        "path": "nes-android/android-app/app/build.gradle",
+        "line": 13
+      },
+      {
+        "ruleId": "container.debian.eol-11-and-older",
+        "path": "nes-cloud/Dockerfile",
+        "line": 46
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 39655,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "nes-cloud/Dockerfile",
+        "name": "rustlang/rust",
+        "currentValue": "nightly",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "nes-cloud/Dockerfile",
+        "name": "libsixel-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "nes-cloud/Dockerfile",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "nes-cloud/Dockerfile",
+        "name": "tree",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "nes-cloud/Dockerfile",
+        "name": "debian",
+        "currentValue": "bullseye",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "nes-cloud/Dockerfile",
+        "name": "libsixel-bin",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "nes-cloud/Dockerfile",
+        "name": "htop",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "nes-wasm/package.json",
+        "name": "nes-wasm",
+        "currentValue": "file:./pkg",
+        "skipReason": "file",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "nes-wasm/package.json",
+        "name": "@typescript-eslint/eslint-plugin",
+        "currentValue": "^4.24.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "nes-wasm/package.json",
+        "name": "@typescript-eslint/parser",
+        "currentValue": "^4.24.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "nes-wasm/package.json",
+        "name": "eslint",
+        "currentValue": "^7.27.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "nes-wasm/package.json",
+        "name": "snowpack",
+        "currentValue": "^3.5.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "nes-wasm/package.json",
+        "name": "snowpack-plugin-wasm-pack",
+        "currentValue": "^1.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

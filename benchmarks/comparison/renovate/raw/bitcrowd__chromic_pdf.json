@@ -1,0 +1,493 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "bitcrowd/chromic_pdf",
+  "commit": "0e87984bc07b9e32fb20bf42eedc864d36d30b4c",
+  "ecosystem": "elixir",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 14,
+    "findings": [
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "line": 35
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "line": 35
+      },
+      {
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "line": 33
+      },
+      {
+        "ruleId": "elixir.erlang.eol-25",
+        "path": ".tool-versions",
+        "line": 3
+      },
+      {
+        "ruleId": "elixir.runtime.eol-1.14",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/publish-image.yml",
+        "line": 57
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/lint.yaml",
+        "line": 19
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/lint.yaml",
+        "line": 25
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/test.yaml",
+        "line": 22
+      },
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/test.yaml",
+        "line": 28
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/lint.yaml",
+        "line": 16
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/publish-image.yml",
+        "line": 38
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yaml",
+        "line": 19
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/publish-image.yml",
+        "line": 49
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 163605,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "hexpm/elixir",
+        "currentValue": "1.14.5-erlang-25.3.1-alpine-3.17.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "chromium",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "ghostscript",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "openjdk11-jre",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "poppler-utils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "imagemagick",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "procps",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "wget",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "unzip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-17-3",
+        "name": "tar",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "hexpm/elixir",
+        "currentValue": "1.15.7-erlang-26.2-alpine-3.18.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "chromium",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "ghostscript",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "openjdk11-jre",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "poppler-utils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "imagemagick",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "procps",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "wget",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "unzip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_alpine-3-18-4",
+        "name": "tar",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "hexpm/elixir",
+        "currentValue": "1.14.0-erlang-25.1-debian-buster-20220801",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "chromium",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "chromium-sandbox",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "ghostscript",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "openjdk-11-jre",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "poppler-utils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "imagemagick",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "procps",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "wget",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": ".github/docker/Dockerfile_debian-buster",
+        "name": "unzip",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint.yaml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint.yaml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint.yaml",
+        "name": "ghcr.io/bitcrowd/chromic_pdf",
+        "currentValue": "alpine-3-17-3",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/lint.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish-image.yml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish-image.yml",
+        "name": "dorny/paths-filter",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish-image.yml",
+        "name": "docker/login-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish-image.yml",
+        "name": "docker/build-push-action",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/publish-image.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yaml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yaml",
+        "name": "actions/cache",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/test.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

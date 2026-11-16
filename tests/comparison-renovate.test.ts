@@ -20,7 +20,7 @@ function record(overrides: Partial<RawRecord> & Pick<RawRecord, "repository">): 
     continuity: false,
     concurrency: 4,
     offing: {
-      version: "0.7.3",
+      version: "0.1.1",
       commit: "b".repeat(40),
       durationMs: 100,
       findings: [

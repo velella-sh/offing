@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "silviopaganini/nft-market-service",
+  "commit": "4d0647db1444b4175ef7d44f854888cd680b8885",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 22,
+    "findings": [
+      {
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 25,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 17,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 20,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": ".github/workflows/main.yml",
+        "line": 14,
+        "dependabot": null
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": ".nvmrc",
+        "line": 1,
+        "dependabot": null
+      },
+      {
+        "ruleId": "npm.package.figgy-pudding.eol",
+        "path": "package.json",
+        "line": 28,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.hapi.joi.deprecated",
+        "path": "package.json",
+        "line": 24,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 25,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.querystring.deprecated",
+        "path": "package.json",
+        "line": 23,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.resolve-url.deprecated",
+        "path": "package.json",
+        "line": 21,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.source-map-url.deprecated",
+        "path": "package.json",
+        "line": 21,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "npm.package.stable.deprecated",
+        "path": "package.json",
+        "line": 14,
+        "dependabot": {
+          "packageEcosystem": "npm",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "serverless.aws-lambda.nodejs14.x",
+        "path": "serverless.yml",
+        "line": 28,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

@@ -1,0 +1,1964 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "aeria-org/aeria",
+  "commit": "500099fcd90f3e63a3a00e283fbcc4c9355f58ba",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 118,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 23
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/pr.yaml",
+        "line": 20
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/ci.yaml",
+        "line": 27
+      },
+      {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/pr.yaml",
+        "line": 24
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-23",
+        "path": "package.json",
+        "line": 7
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-25",
+        "path": ".github/workflows/ci.yaml",
+        "line": 29
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-25",
+        "path": ".github/workflows/pr.yaml",
+        "line": 26
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-25",
+        "path": "package.json",
+        "line": 7
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 9111,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "pnpm/action-setup",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "actions/setup-node",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "changesets/action",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/ci.yaml",
+        "name": "node",
+        "currentValue": "25",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pr.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pr.yaml",
+        "name": "pnpm/action-setup",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pr.yaml",
+        "name": "actions/setup-node",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pr.yaml",
+        "name": "dependabot/fetch-metadata",
+        "currentValue": "v2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pr.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pr.yaml",
+        "name": "node",
+        "currentValue": "25",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pr.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "link:packages/builtins",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/builtins-icons",
+        "currentValue": "link:packages/builtins-icons",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/cli",
+        "currentValue": "link:packages/cli",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:packages/common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/compiler",
+        "currentValue": "link:packages/compiler",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "link:packages/core",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:packages/entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "link:packages/http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/node-http",
+        "currentValue": "link:packages/node-http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/security",
+        "currentValue": "link:packages/security",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/server",
+        "currentValue": "link:packages/server",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:packages/types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "link:packages/validation",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@changesets/cli",
+        "currentValue": "^3.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@commitlint/cli",
+        "currentValue": "^21.2.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@commitlint/config-conventional",
+        "currentValue": "^21.2.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@eslint-aeria/config",
+        "currentValue": "~0.0.9",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@types/node",
+        "currentValue": "^26.6.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "aeria",
+        "currentValue": "link:packages/aeria",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "aeria-sdk",
+        "currentValue": "link:packages/aeria-sdk",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "eslint",
+        "currentValue": "^9.39.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "husky",
+        "currentValue": "^9.1.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "typescript",
+        "currentValue": "^5.9.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "vitest",
+        "currentValue": "^5.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "node",
+        "currentValue": ">=23",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "pnpm",
+        "currentValue": "10.29.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-populate/package.json",
+        "name": "chokidar",
+        "currentValue": "^5.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-populate/package.json",
+        "name": "marked",
+        "currentValue": "^18.0.14",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-populate/package.json",
+        "name": "yaml",
+        "currentValue": "^2.9.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-populate/package.json",
+        "name": "aeria",
+        "currentValue": "file:../aeria",
+        "skipReason": "file",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-populate/package.json",
+        "name": "aeria",
+        "currentValue": "^0.0.362",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-sdk/package.json",
+        "name": "jwt-decode",
+        "currentValue": "^4.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-sdk/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-sdk/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-sdk/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria-sdk/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/cli",
+        "currentValue": "link:../cli",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "link:../core",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:../entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "link:../http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/node-http",
+        "currentValue": "link:../node-http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/security",
+        "currentValue": "link:../security",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/server",
+        "currentValue": "link:../server",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "link:../builtins",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "link:../validation",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/cli",
+        "currentValue": "^0.0.292",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "^0.0.181",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "^0.0.214",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/node-http",
+        "currentValue": "^0.0.214",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/security",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/server",
+        "currentValue": "^0.0.308",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/aeria/package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "^0.0.199",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "bcryptjs",
+        "currentValue": "^3.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "link:../core",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:../entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "link:../validation",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "^0.0.181",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/builtins/package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "^0.0.199",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "chokidar",
+        "currentValue": "^5.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "esbuild",
+        "currentValue": "^0.28.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "json5",
+        "currentValue": "^2.2.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "link:../builtins",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/compiler",
+        "currentValue": "link:../compiler",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "link:../core",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:../entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/compiler",
+        "currentValue": "^0.0.87",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "^0.0.181",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/cli/package.json",
+        "name": "node",
+        "currentValue": ">=22",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/common/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/common/package.json",
+        "name": "bson",
+        "currentValue": "^7.3.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/common/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/common/package.json",
+        "name": "bson",
+        "currentValue": "^7.3.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/compiler/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/compiler/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/compiler/package.json",
+        "name": "@phosphor-icons/core",
+        "currentValue": "^2.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/compiler/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/compiler/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "jsonwebtoken",
+        "currentValue": "^9.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "link:../builtins",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:../entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "link:../http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/security",
+        "currentValue": "link:../security",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "link:../validation",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@types/jsonwebtoken",
+        "currentValue": "^9.0.10",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "jsonwebtoken",
+        "currentValue": "^9.0.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "mongodb-memory-server",
+        "currentValue": "^11.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "mongodb-memory-server",
+        "currentValue": "^11.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "^0.0.181",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "^0.0.214",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/security",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/core/package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "^0.0.199",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/create-aeria-app/package.json",
+        "name": "semver",
+        "currentValue": "^7.8.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/create-aeria-app/package.json",
+        "name": "@types/semver",
+        "currentValue": "^7.8.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/entrypoint/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/entrypoint/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/entrypoint/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/entrypoint/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:../entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "link:../validation",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "^0.0.181",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "^0.0.199",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/http/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/node-http/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/node-http/package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "link:../http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/node-http/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/node-http/package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "^0.0.214",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "link:../core",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:../entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "^0.0.181",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/security/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "link:../core",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "link:../builtins",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:../entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "link:../http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/node-http",
+        "currentValue": "link:../node-http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/server",
+        "currentValue": "link:../server",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "^0.0.305",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "^0.0.181",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "^0.0.214",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/node-http",
+        "currentValue": "^0.0.214",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/server",
+        "currentValue": "^0.0.308",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/server/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/types/package.json",
+        "name": "@phosphor-icons/core",
+        "currentValue": "^2.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validation/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validation/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:../entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validation/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validation/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validation/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "^0.0.173",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validation/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "^0.0.181",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validation/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "^0.0.144",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/validation/package.json",
+        "name": "mongodb",
+        "currentValue": "^7.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/builtins",
+        "currentValue": "link:../packages/builtins",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/builtins-icons",
+        "currentValue": "link:../packages/builtins-icons",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/cli",
+        "currentValue": "link:../packages/cli",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/common",
+        "currentValue": "link:../packages/common",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/compiler",
+        "currentValue": "link:../packages/compiler",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/core",
+        "currentValue": "link:../packages/core",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/entrypoint",
+        "currentValue": "link:../packages/entrypoint",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/http",
+        "currentValue": "link:../packages/http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/node-http",
+        "currentValue": "link:../packages/node-http",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/security",
+        "currentValue": "link:../packages/security",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/server",
+        "currentValue": "link:../packages/server",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/types",
+        "currentValue": "link:../packages/types",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "@aeriajs/validation",
+        "currentValue": "link:../packages/validation",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "aeria",
+        "currentValue": "link:../packages/aeria",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "playground/package.json",
+        "name": "mongodb",
+        "currentValue": "^6.5.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

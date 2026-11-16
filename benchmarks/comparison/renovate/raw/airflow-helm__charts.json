@@ -1,0 +1,1153 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "airflow-helm/charts",
+  "commit": "732a0f0bdbeb420159807d3d5f858e614c6656ec",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 39,
+    "findings": [
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/pgbouncer/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/pgbouncer/Dockerfile",
+        "line": 32
+      },
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "line": 10
+      },
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "line": 141
+      },
+      {
+        "ruleId": "container.alpine.eol-3.20-and-older",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "line": 46
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 170
+      },
+      {
+        "ruleId": "github-actions.build-push-action.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 61
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 121
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 52
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 18
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 38
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/charts--release.yaml",
+        "line": 15
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "line": 15
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/sync-readme.yaml",
+        "line": 15
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/sync-readme.yaml",
+        "line": 22
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 133
+      },
+      {
+        "ruleId": "github-actions.login-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 139
+      },
+      {
+        "ruleId": "github-actions.metadata-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 147
+      },
+      {
+        "ruleId": "github-actions.metadata-action.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 50
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 130
+      },
+      {
+        "ruleId": "github-actions.setup-buildx-action.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 46
+      },
+      {
+        "ruleId": "github-actions.setup-qemu-action.node20",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 127
+      },
+      {
+        "ruleId": "github-actions.setup-qemu-action.node20",
+        "path": ".github/workflows/_test-image.yaml",
+        "line": 43
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 114
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 69
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 73
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 78
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 83
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/_release-image.yaml",
+        "line": 87
+      },
+      {
+        "ruleId": "github-actions.workflow-command.set-output",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "line": 34
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "charts/airflow/Chart.yaml",
+        "line": 18
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "charts/airflow/Chart.yaml",
+        "line": 22
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 103276,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "alpine",
+        "currentValue": "3.19",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "autoconf",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "automake",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "c-ares-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "g++",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "gcc",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "libevent-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "libtool",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "make",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "openssl-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "pkgconfig",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "alpine",
+        "currentValue": "3.19",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "dumb-init",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "c-ares",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "ca-certificates",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "libevent",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "libressl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "postgresql-client",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "python3",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/pgbouncer/Dockerfile",
+        "name": "openssl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "alpine",
+        "currentValue": "3.19",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "bash",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "cmake",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "g++",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "gcc",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "gnupg",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "libc-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "make",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "musl-nscd-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "alpine",
+        "currentValue": "3.19",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "bison",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "clang15",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "coreutils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "dpkg",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "dpkg-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "flex",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "g++",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "gcc",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "gettext",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "icu-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "krb5-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "libc-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "libedit-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "libxml2-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "libxslt-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "linux-headers",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "llvm15-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "make",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "musl-libintl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "openldap-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "openssl-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "perl-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "perl-ipc-run",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "perl-utils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "python3-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "tcl-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "util-linux-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "zlib-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "alpine",
+        "currentValue": "3.19",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "bash",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "icu-data-full",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "musl-locales",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "musl-locales-lang",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "net-tools",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "su-exec",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "tzdata",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "images/postgresql-bitnami/11/alpine/Dockerfile",
+        "name": "zstd",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "docker/setup-qemu-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "docker/setup-buildx-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "docker/login-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "docker/login-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "docker/metadata-action",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "docker/build-push-action",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_release-image.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_test-image.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_test-image.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_test-image.yaml",
+        "name": "docker/setup-qemu-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_test-image.yaml",
+        "name": "docker/setup-buildx-action",
+        "currentValue": "v3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_test-image.yaml",
+        "name": "docker/metadata-action",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_test-image.yaml",
+        "name": "docker/build-push-action",
+        "currentValue": "v5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_test-image.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/_test-image.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--release.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--release.yaml",
+        "name": "azure/setup-helm",
+        "currentValue": "v4.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--release.yaml",
+        "name": "helm/chart-releaser-action",
+        "currentValue": "v1.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--release.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--release.yaml",
+        "name": "helm",
+        "currentValue": "v3.13.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "azure/setup-helm",
+        "currentValue": "v4.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "helm/chart-testing-action",
+        "currentValue": "v2.6.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "helm/kind-action",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "helm",
+        "currentValue": "v3.13.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "chart-testing",
+        "currentValue": "v3.10.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "kubernetes-sigs/kind",
+        "currentValue": "v0.22.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "kindest/node",
+        "currentValue": "v1.27.11",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/charts--run-tests.yaml",
+        "name": "kubernetes/kubernetes",
+        "currentValue": "v1.27.13",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/sync-readme.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/sync-readme.yaml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/sync-readme.yaml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

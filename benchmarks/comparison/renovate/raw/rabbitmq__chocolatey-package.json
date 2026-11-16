@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "rabbitmq/chocolatey-package",
+  "commit": "b0a37da6883fe597c5d3bb38fefbdbb16bf1b230",
+  "ecosystem": "shell",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 9,
+    "findings": [
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": "Invoke-Validation.ps1",
+        "line": 1
+      },
+      {
+        "ruleId": "shell.powershell.end-of-life-7.0",
+        "path": "Shared.ps1",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 3457,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/update.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/update.yml",
+        "name": "windows",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/validate.yml",
+        "name": "actions/checkout",
+        "currentValue": "v6.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/validate.yml",
+        "name": "windows",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

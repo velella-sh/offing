@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "CloudNationHQ/terraform-azure-func",
+  "commit": "f3caae4c2184bfc1968fc64953d9a6558cab2575",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 39,
+    "findings": []
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 55804,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/dependabot-auto-merge.yml",
+        "name": "cloudnationhq/terraform-azure-workflows",
+        "currentValue": "main",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/linting.yml",
+        "name": "cloudnationhq/terraform-azure-workflows",
+        "currentValue": "main",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "cloudnationhq/terraform-azure-workflows",
+        "currentValue": "main",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/validate.yml",
+        "name": "cloudnationhq/terraform-azure-workflows",
+        "currentValue": "main",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

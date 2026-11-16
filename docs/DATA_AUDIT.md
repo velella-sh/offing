@@ -57,7 +57,7 @@ the row table are rejected ([Comparison method](COMPARISON_METHOD.md)).
 
 | Sample | Measured | Agree | Disagree | File |
 | --- | ---: | ---: | ---: | --- |
-| All comparable rules | [184](../benchmarks/comparison/reproduce.json) | [176](../benchmarks/comparison/reproduce.json) | [8](../benchmarks/comparison/endoflife-date.md#where-the-data-differs) | [`reproduce.json`](../benchmarks/comparison/reproduce.json) / [`endoflife-date.md`](../benchmarks/comparison/endoflife-date.md#where-the-data-differs) |
+| All comparable rules | [214](../benchmarks/comparison/reproduce.json) | [205](../benchmarks/comparison/reproduce.json) | [9](../benchmarks/comparison/endoflife-date.md#where-the-data-differs) | [`reproduce.json`](../benchmarks/comparison/reproduce.json) / [`endoflife-date.md`](../benchmarks/comparison/endoflife-date.md#where-the-data-differs) |
 | Ground-truth rules only | [92](../benchmarks/comparison/reproduce.json) | [85](../benchmarks/comparison/reproduce.json) | [7](../benchmarks/comparison/reproduce.json) | same |
 
 The eight date-difference rows (product, Offing date, endoflife.date date, Δ days) are in
@@ -103,7 +103,7 @@ it.
 
 | Gap | Value | File |
 | --- | ---: | --- |
-| endoflife.date products with no Offing rule | [447](../benchmarks/comparison/endoflife-date.md#product-coverage) of [489](../benchmarks/comparison/endoflife-date.md#product-coverage) | [`endoflife-date.md`](../benchmarks/comparison/endoflife-date.md#product-coverage) |
+| endoflife.date products with no Offing rule | [446](../benchmarks/comparison/endoflife-date.md#product-coverage) of [489](../benchmarks/comparison/endoflife-date.md#product-coverage) | [`endoflife-date.md`](../benchmarks/comparison/endoflife-date.md#product-coverage) |
 | Renovate-only npm deprecations (blind) | [232](../benchmarks/comparison/renovate/renovate.md) | [`renovate.md`](../benchmarks/comparison/renovate/renovate.md) |
 | Corpus growth target per bucket | [200](../benchmarks/corpus-targets.json) | [`corpus-targets.json`](../benchmarks/corpus-targets.json) (`target`); minima are the floor CI enforces today |
 | Dependabot head-to-head on a pinned commit | not measured | [Comparison method §7](COMPARISON_METHOD.md#7-what-cannot-be-measured-stated-in-advance) |

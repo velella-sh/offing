@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "hjkcai/swc-plugin-add-display-name",
+  "commit": "90ffffc1975a123cdb85d23c5dc4a3531783c7e9",
+  "ecosystem": "rust",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 9,
+    "findings": [
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 12,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "pamendoz/personalDockerCompose",
+  "commit": "918fa3a5c1a3cfe4a12035883c151104927252d8",
+  "ecosystem": "database",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 5,
+    "findings": [
+      {
+        "ruleId": "container.postgres.eol-13-and-older",
+        "path": "docker-compose.yml",
+        "line": 64
+      },
+      {
+        "ruleId": "container.redis.eol-6.0-and-older",
+        "path": "docker-compose.yml",
+        "line": 77
+      },
+      {
+        "ruleId": "database.postgresql.end-of-life-12",
+        "path": "docker-compose.yml",
+        "line": 64
+      },
+      {
+        "ruleId": "database.redis.end-of-life-5.0",
+        "path": "docker-compose.yml",
+        "line": 77
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 18262,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "traefik",
+        "currentValue": "v2.0.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "onlyoffice/documentserver",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "postgres",
+        "currentValue": "12.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "redis",
+        "currentValue": "5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "jellyfin/jellyfin",
+        "currentValue": "10.4.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "bitwardenrs/server",
+        "currentValue": "1.12.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "nextcloud",
+        "skipReason": "invalid-value",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "supervisor",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "nano",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

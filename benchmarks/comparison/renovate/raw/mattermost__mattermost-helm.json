@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "mattermost/mattermost-helm",
+  "commit": "07025cf61b2fd7f656d08723acdba53de238454e",
+  "ecosystem": "kubernetes",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 116,
+    "findings": [
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "docker/app/Dockerfile",
+        "line": 1
+      },
+      {
+        "ruleId": "kubernetes.batch.cronjob.v1beta1.removed",
+        "path": "mysql-backup/mysql-dump-ScheduledJob.yaml",
+        "line": 1
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.incubator.end-of-life",
+        "path": "charts/mattermost-enterprise-edition/Chart.yaml",
+        "line": 29
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "charts/mattermost-enterprise-edition/Chart.yaml",
+        "line": 33
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "charts/mattermost-enterprise-edition/Chart.yaml",
+        "line": 37
+      },
+      {
+        "ruleId": "kubernetes.helm.repository.stable.end-of-life",
+        "path": "charts/mattermost-team-edition/Chart.yaml",
+        "line": 17
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 27805,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "docker/app/Dockerfile",
+        "name": "ubuntu",
+        "currentValue": "16.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/app/Dockerfile",
+        "name": "curl",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/app/Dockerfile",
+        "name": "jq",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/app/Dockerfile",
+        "name": "netcat",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/app/Dockerfile",
+        "name": "net-tools",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/app/Dockerfile",
+        "name": "iproute",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "docker/app/Dockerfile",
+        "name": "dnsutils",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pull-request.yml",
+        "name": "actions/checkout",
+        "currentValue": "v5.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pull-request.yml",
+        "name": "actions/checkout",
+        "currentValue": "v5.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pull-request.yml",
+        "name": "ubuntu",
+        "currentValue": "22.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/pull-request.yml",
+        "name": "ubuntu",
+        "currentValue": "22.04",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "actions/checkout",
+        "currentValue": "v5.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/release.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

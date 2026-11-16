@@ -1,0 +1,409 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "flutter/samples",
+  "commit": "9df2cac15cc3d28a51aace018ad822387d30ac72",
+  "ecosystem": "dart",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 442,
+    "findings": [
+      {
+        "ruleId": "swift.app-store.ios-below-13",
+        "path": "platform_view_swift/ios/Runner.xcodeproj/project.pbxproj",
+        "line": 327
+      },
+      {
+        "ruleId": "swift.app-store.ios-below-13",
+        "path": "platform_view_swift/ios/Runner.xcodeproj/project.pbxproj",
+        "line": 461
+      },
+      {
+        "ruleId": "swift.app-store.ios-below-13",
+        "path": "platform_view_swift/ios/Runner.xcodeproj/project.pbxproj",
+        "line": 489
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 71746,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-android.yml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-android.yml",
+        "name": "actions/setup-java",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-android.yml",
+        "name": "subosito/flutter-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-android.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-android.yml",
+        "name": "java-jdk",
+        "skipReason": "unsupported",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-android.yml",
+        "name": "flutter",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-ios.yml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-ios.yml",
+        "name": "actions/setup-java",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-ios.yml",
+        "name": "subosito/flutter-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-ios.yml",
+        "name": "macos",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-ios.yml",
+        "name": "java-jdk",
+        "skipReason": "unsupported",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/build-ios.yml",
+        "name": "flutter",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/checkout",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "actions/setup-java",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "subosito/flutter-action",
+        "skipReason": "unversioned-reference",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "java-jdk",
+        "skipReason": "unsupported",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/main.yml",
+        "name": "flutter",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/animations",
+        "currentValue": "^22.0.2",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/cdk",
+        "currentValue": "^22.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/common",
+        "currentValue": "^22.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/compiler",
+        "currentValue": "^22.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/core",
+        "currentValue": "^22.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/forms",
+        "currentValue": "^22.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/material",
+        "currentValue": "^22.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/platform-browser",
+        "currentValue": "^22.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/platform-browser-dynamic",
+        "currentValue": "^22.0.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/router",
+        "currentValue": "^22.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "rxjs",
+        "currentValue": "~7.8.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "tslib",
+        "currentValue": "^2.6.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "zone.js",
+        "currentValue": "~0.15.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular-devkit/build-angular",
+        "currentValue": "^22.0.1",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/cli",
+        "currentValue": "~22.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@angular/compiler-cli",
+        "currentValue": "^22.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "@types/jasmine",
+        "currentValue": "~7.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "jasmine-core",
+        "currentValue": "~7.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "karma",
+        "currentValue": "~6.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "karma-chrome-launcher",
+        "currentValue": "~3.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "karma-coverage",
+        "currentValue": "~2.2.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "karma-jasmine",
+        "currentValue": "~5.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "karma-jasmine-html-reporter",
+        "currentValue": "~2.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "web_embedding/ng-flutter/package.json",
+        "name": "typescript",
+        "currentValue": "~7.0.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

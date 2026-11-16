@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "tlandeka/authentication-microservice-with-domain-driven-design",
+  "commit": "a7cfd82824d91d90e1f07a613cdeae1bd59f91e0",
+  "ecosystem": "database",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 67,
+    "findings": [
+      {
+        "ruleId": "container.postgres.eol-13-and-older",
+        "path": "docker-compose.yml",
+        "line": 7,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/"
+        }
+      },
+      {
+        "ruleId": "database.postgresql.end-of-life-12",
+        "path": "docker-compose.yml",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/maven.yml",
+        "line": 15,
+        "dependabot": {
+          "packageEcosystem": "github-actions",
+          "directory": "/"
+        }
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

@@ -6,9 +6,9 @@
   "selection": "blind",
   "continuity": false,
   "offing": {
-    "version": "0.7.3",
-    "commit": "7cdd0e5f7541ba9828452df5ec9dbb22fb18ae14",
-    "durationMs": 123,
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 66,
     "findings": [
       {
         "ruleId": "container.debian.eol-11-and-older",
@@ -29,6 +29,18 @@
         }
       },
       {
+        "ruleId": "container.dockerfile.maintainer",
+        "path": "ansible/playbooks/roles/ANXS.postgresql/tests/Dockerfile-centos6",
+        "line": 2,
+        "dependabot": null
+      },
+      {
+        "ruleId": "container.dockerfile.maintainer",
+        "path": "ansible/playbooks/roles/ANXS.postgresql/tests/Dockerfile-ubuntu14.04",
+        "line": 2,
+        "dependabot": null
+      },
+      {
         "ruleId": "container.ruby.eol-3.2-and-older",
         "path": "Dockerfile",
         "line": 1,
@@ -44,6 +56,15 @@
         "dependabot": {
           "packageEcosystem": "docker",
           "directory": "/ansible/playbooks/roles/ANXS.postgresql/tests/docker/images"
+        }
+      },
+      {
+        "ruleId": "container.ubuntu.eol-20.04-and-older",
+        "path": "ansible/playbooks/roles/ANXS.postgresql/tests/Dockerfile-ubuntu14.04",
+        "line": 1,
+        "dependabot": {
+          "packageEcosystem": "docker",
+          "directory": "/ansible/playbooks/roles/ANXS.postgresql/tests"
         }
       },
       {

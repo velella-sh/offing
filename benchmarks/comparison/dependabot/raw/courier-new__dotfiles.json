@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "offing.comparison.dependabot.raw.v1",
+  "repository": "courier-new/dotfiles",
+  "commit": "bb2f95ac0147e53e00d67a485535d3ffd310ba5d",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 6,
+    "findings": [
+      {
+        "ruleId": "deno.bun.runtime.eol-1.0",
+        "path": ".tool-versions",
+        "line": 7,
+        "dependabot": null
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 10,
+        "dependabot": null
+      },
+      {
+        "ruleId": "elixir.erlang.eol-26",
+        "path": ".tool-versions",
+        "line": 9,
+        "dependabot": null
+      },
+      {
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "path": ".tool-versions",
+        "line": 2,
+        "dependabot": null
+      },
+      {
+        "ruleId": "terraform.cli.end-of-support-1.6",
+        "path": ".tool-versions",
+        "line": 14,
+        "dependabot": null
+      }
+    ]
+  },
+  "dependabot": {
+    "run": "not-run",
+    "entries": []
+  }
+}

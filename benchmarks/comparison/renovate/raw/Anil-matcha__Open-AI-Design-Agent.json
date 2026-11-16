@@ -1,0 +1,407 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "Anil-matcha/Open-AI-Design-Agent",
+  "commit": "f029d0d708d8c581463f018cdc2b0084494ce401",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 48,
+    "findings": [
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "packages/design-agent/package.json",
+        "line": 33
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 21927,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "client/Dockerfile",
+        "name": "docker/dockerfile",
+        "currentValue": "1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "client/Dockerfile",
+        "name": "node",
+        "currentValue": "24-alpine",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "axios",
+        "currentValue": "^1.16.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "clsx",
+        "currentValue": "^2.1.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "js-cookie",
+        "currentValue": "^3.0.5",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "konva",
+        "currentValue": "^10.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "lucide-react",
+        "currentValue": "^1.14.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "next",
+        "currentValue": "16.2.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "next-themes",
+        "currentValue": "^0.4.6",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "react",
+        "currentValue": "19.2.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "react-dom",
+        "currentValue": "19.2.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "react-hot-toast",
+        "currentValue": "^2.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "react-icons",
+        "currentValue": "^5.6.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "react-konva",
+        "currentValue": "^19.2.3",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "react-markdown",
+        "currentValue": "^10.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "remark-gfm",
+        "currentValue": "^4.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "tailwind-merge",
+        "currentValue": "^3.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "design-agent",
+        "currentValue": "*",
+        "skipReason": "internal-package",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "@tailwindcss/postcss",
+        "currentValue": "^4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "eslint",
+        "currentValue": "^9",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "eslint-config-next",
+        "currentValue": "16.2.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "client/package.json",
+        "name": "tailwindcss",
+        "currentValue": "^4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "axios",
+        "currentValue": "^1.7.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "framer-motion",
+        "currentValue": "^12.0.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "konva",
+        "currentValue": "^10.3.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "react-hot-toast",
+        "currentValue": "^2.5.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "react-icons",
+        "currentValue": "^5.5.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "react-konva",
+        "currentValue": "^19.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "react-markdown",
+        "currentValue": "^10.1.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "react-syntax-highlighter",
+        "currentValue": "^15.6.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "remark-gfm",
+        "currentValue": "^4.0.1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "@babel/cli",
+        "currentValue": "^7.28.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "@babel/core",
+        "currentValue": "^7.29.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "@babel/preset-env",
+        "currentValue": "^7.28.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "@babel/preset-react",
+        "currentValue": "^7.28.5",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "autoprefixer",
+        "currentValue": "^10.4.14",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "postcss",
+        "currentValue": "^8.4.24",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "tailwindcss",
+        "currentValue": "^3.3.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "next",
+        "currentValue": ">=14.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "next-themes",
+        "currentValue": ">=0.4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "react",
+        "currentValue": ">=18.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "packages/design-agent/package.json",
+        "name": "react-dom",
+        "currentValue": ">=18.0.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

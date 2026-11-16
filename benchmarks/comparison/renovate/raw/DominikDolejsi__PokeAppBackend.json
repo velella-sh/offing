@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "DominikDolejsi/PokeAppBackend",
+  "commit": "798540ec3b90d94c565e71f301e0f9616a416887",
+  "ecosystem": "deno",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 52,
+    "findings": [
+      {
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": "deno.json",
+        "line": 2
+      },
+      {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/actions.yml",
+        "line": 12
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 22346,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "denoland/deno",
+        "currentValue": "1.46.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/actions.yml",
+        "name": "actions/checkout",
+        "currentValue": "v4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/actions.yml",
+        "name": "denoland/setup-deno",
+        "currentValue": "v1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/actions.yml",
+        "name": "ubuntu",
+        "currentValue": "latest",
+        "skipReason": "invalid-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "github-actions",
+        "path": ".github/workflows/actions.yml",
+        "name": "deno",
+        "currentValue": "v1.x",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

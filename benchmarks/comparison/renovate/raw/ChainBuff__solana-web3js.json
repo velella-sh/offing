@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "ChainBuff/solana-web3js",
+  "commit": "bcd955f0910d4bb3a7469058d2bc14305c5678dc",
+  "ecosystem": "node",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 9,
+    "findings": []
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 10845,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "@solana/web3.js",
+        "currentValue": "^1.95.4",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "axios",
+        "currentValue": "^1.7.7",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "typescript",
+        "currentValue": "^5.6.3",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      }
+    ]
+  }
+}

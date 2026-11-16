@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "postprintum/devcomrade",
+  "commit": "8a8a78243fd23954df7dc531249a9c2aac4a1b03",
+  "ecosystem": "shell",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 20,
+    "findings": [
+      {
+        "ruleId": "shell.powershell.end-of-life-6",
+        "path": "Package/publish.ps1",
+        "line": 1
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 13315,
+    "status": "ok",
+    "dependencies": []
+  }
+}

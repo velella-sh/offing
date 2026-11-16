@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "Vizzuality/GeoCAT",
+  "commit": "00d6194223eda78d9e51a4225fef9a7a7c546014",
+  "ecosystem": "database",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 45,
+    "findings": [
+      {
+        "ruleId": "container.postgres.eol-13-and-older",
+        "path": "docker-compose.yml",
+        "line": 4
+      },
+      {
+        "ruleId": "container.ruby.eol-3.2-and-older",
+        "path": "Dockerfile",
+        "line": 2
+      },
+      {
+        "ruleId": "database.postgresql.end-of-life-12",
+        "path": "docker-compose.yml",
+        "line": 4
+      },
+      {
+        "ruleId": "ruby.runtime.eol-2.7",
+        "path": ".ruby-version",
+        "line": 1
+      },
+      {
+        "ruleId": "ruby.runtime.eol-2.7",
+        "path": "Gemfile",
+        "line": 1
+      },
+      {
+        "ruleId": "ruby.runtime.eol-2.7",
+        "path": "Gemfile.lock",
+        "line": 240
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 21405,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "docker-compose",
+        "path": "docker-compose.yml",
+        "name": "postgres",
+        "currentValue": "12",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "docker/dockerfile",
+        "currentValue": "1",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "ruby",
+        "currentValue": "2.7.7",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "build-essential",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "postgresql-client",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "dockerfile",
+        "path": "Dockerfile",
+        "name": "libpq-dev",
+        "skipReason": "unspecified-version",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}

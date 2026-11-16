@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "offing.comparison.renovate.raw.v1",
+  "repository": "davidgf/serverless-plugin-canary-deployments",
+  "commit": "95c591f1eeba8712484f5d448c1da6b1d6dcefa3",
+  "ecosystem": "serverless",
+  "selection": "blind",
+  "continuity": false,
+  "concurrency": 4,
+  "offing": {
+    "version": "0.1.1",
+    "commit": "945a32e98abbf9bb0fc9313704a7f318fa1a47d0",
+    "durationMs": 48,
+    "findings": [
+      {
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-19",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "nodejs.runtime.legacy",
+        "path": "package.json",
+        "line": 4
+      },
+      {
+        "ruleId": "npm.package.are-we-there-yet.eol",
+        "path": "package.json",
+        "line": 34
+      },
+      {
+        "ruleId": "npm.package.gauge.eol",
+        "path": "package.json",
+        "line": 34
+      },
+      {
+        "ruleId": "npm.package.har-validator.deprecated",
+        "path": "package.json",
+        "line": 34
+      },
+      {
+        "ruleId": "npm.package.inflight.deprecated",
+        "path": "package.json",
+        "line": 33
+      },
+      {
+        "ruleId": "npm.package.npmlog.eol",
+        "path": "package.json",
+        "line": 34
+      },
+      {
+        "ruleId": "npm.package.querystring.deprecated",
+        "path": "package.json",
+        "line": 34
+      },
+      {
+        "ruleId": "npm.package.request-promise-native.deprecated",
+        "path": "package.json",
+        "line": 34
+      },
+      {
+        "ruleId": "npm.package.request.deprecated",
+        "path": "package.json",
+        "line": 34
+      },
+      {
+        "ruleId": "serverless.aws-lambda.nodejs14.x",
+        "path": "example/serverless.yml",
+        "line": 5
+      }
+    ]
+  },
+  "renovate": {
+    "version": "44.164.10",
+    "durationMs": 101439,
+    "status": "ok",
+    "dependencies": [
+      {
+        "manager": "npm",
+        "path": "example/package.json",
+        "name": "aws-sdk",
+        "currentValue": "^2.336.0",
+        "deprecated": true,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "example/package.json",
+        "name": "uuid",
+        "currentValue": "^3.3.2",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "example/package.json",
+        "name": "serverless",
+        "currentValue": "^2.57.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "example/package.json",
+        "name": "serverless-plugin-aws-alerts",
+        "currentValue": "^1.2.4",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "example/package.json",
+        "name": "serverless-plugin-canary-deployments",
+        "currentValue": "^0.4.2",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "flat",
+        "currentValue": "^4.1.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "lodash",
+        "currentValue": "^4.17.20",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "omit-empty",
+        "currentValue": "^0.4.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "chai",
+        "currentValue": "^4.2.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "get-installed-path",
+        "currentValue": "^4.0.8",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "husky",
+        "currentValue": "^3.0.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "mocha",
+        "currentValue": "^8.2.1",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "serverless",
+        "currentValue": "^2.22.0",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "standard",
+        "currentValue": "*",
+        "deprecated": false,
+        "majorUpdate": true,
+        "anyUpdate": true
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "serverless",
+        "currentValue": ">= 1.26.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      },
+      {
+        "manager": "npm",
+        "path": "package.json",
+        "name": "node",
+        "currentValue": ">=4.0",
+        "deprecated": false,
+        "majorUpdate": false,
+        "anyUpdate": false
+      }
+    ]
+  }
+}
