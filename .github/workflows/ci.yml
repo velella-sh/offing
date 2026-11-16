@@ -196,9 +196,16 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
           git diff --name-only --diff-filter=ACMRD "$BASE_SHA" HEAD > "$RUNNER_TEMP/offing-changed-files.txt"
           echo "Files changed: $(wc -l < "$RUNNER_TEMP/offing-changed-files.txt")"
+      - name: Check warm agent hook latency
+        if: matrix.node == 24 && matrix.shard == 0
+        # Measure on one reference runner before the CPU-intensive build and test suite.
+        run: |
+          npm run build --silent
+          node tools/run-tests.mjs dist/tests/agent-hooks-latency.test.js
       - name: npm run check
         # The committed action bundle is verified only for a release; ordinary pull requests would conflict on it.
         env:
+          OFFING_HOOK_LATENCY: "0"
           OFFING_VERIFY_ACTION_BUNDLE: "${{ (startsWith(github.event.pull_request.title, 'chore: release') || startsWith(github.event.head_commit.message, 'chore: release')) && '1' || '' }}"
           # Shard by measured file times (benchmarks/test-file-timings.json), not by file count.
           OFFING_TEST_SHARD: "${{ matrix.shard }}"
@@ -462,6 +469,7 @@ jobs:
           echo "Files changed: $(wc -l < "$RUNNER_TEMP/offing-changed-files.txt")"
       - name: npm run check
         env:
+          OFFING_HOOK_LATENCY: "0"
           OFFING_VERIFY_ACTION_BUNDLE: "${{ (startsWith(github.event.pull_request.title, 'chore: release') || startsWith(github.event.head_commit.message, 'chore: release')) && '1' || '' }}"
           OFFING_AFFECTED_FILES: "${{ github.event_name == 'pull_request' && format('{0}/offing-changed-files.txt', runner.temp) || '' }}"
         run: npm run check

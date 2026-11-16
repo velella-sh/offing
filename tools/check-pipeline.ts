@@ -514,7 +514,10 @@ export async function runCheck(options: RunCheckOptions = {}): Promise<void> {
       {
         id: "test:hook-latency",
         after: steps.map(({ id }) => id),
-        run: () => run(process.execPath, ["tools/run-tests.mjs", HOOK_LATENCY_TEST]),
+        run: async () => {
+          if (process.env.OFFING_HOOK_LATENCY === "0") return { reason: "measured by the reference CI job" };
+          await run(process.execPath, ["tools/run-tests.mjs", HOOK_LATENCY_TEST]);
+        },
       },
     ]);
     if (Object.keys(recorded).length > 0) await writeDigests(evalDigestFile, { ...digests, ...recorded });
