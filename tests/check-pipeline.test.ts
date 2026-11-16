@@ -299,7 +299,7 @@ test("check runs the suite once through run-tests.mjs when coverage is requested
     else process.env[COVERAGE_ENV] = previous;
   }
   // Coverage flags live inside run-tests.mjs so CI can shard and merge LCOV.
-  assert.deepEqual(suiteCommands, [["tools/run-tests.mjs"]]);
+  assert.deepEqual(suiteCommands, [["tools/run-tests.mjs"], ["tools/run-tests.mjs", HOOK_LATENCY_TEST]]);
 });
 
 test("check keeps the project runner when coverage is off", async () => {
@@ -315,7 +315,7 @@ test("check keeps the project runner when coverage is off", async () => {
       if (args[0] === "tools/run-tests.mjs") suiteCommands.push([...args]);
     },
   });
-  assert.deepEqual(suiteCommands, [["tools/run-tests.mjs"]]);
+  assert.deepEqual(suiteCommands, [["tools/run-tests.mjs"], ["tools/run-tests.mjs", HOOK_LATENCY_TEST]]);
 });
 
 test("an eval skips when its inputs are unchanged and runs again when they change", async () => {
