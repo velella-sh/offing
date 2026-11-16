@@ -4,9 +4,11 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { after, test } from "node:test";
 
+import { isIsoDate } from "@velella/ebb/registry";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import { InMemoryTransport } from "@modelcontextprotocol/server";
 
+import type { RepositoryForecast } from "../src/forecast.js";
 import { createOffingMcpServer } from "../src/mcp.js";
 import { runCli } from "./cli-runner.js";
 
@@ -14,20 +16,6 @@ interface RpcResponse {
   id: number;
   result?: Record<string, unknown>;
   error?: { message?: string };
-}
-
-interface Forecast {
-  schemaVersion: string;
-  root: string;
-  today: string;
-  until: string;
-  months: number;
-  groups: Array<{
-    month: string;
-    events: Array<{ date: string; ruleId: string; findings: Array<{ id: string; path: string; line?: number }> }>;
-  }>;
-  affecting: number;
-  total: number;
 }
 
 const temporaryRoots: string[] = [];
@@ -87,14 +75,14 @@ async function connect() {
   };
 }
 
-async function cliForecast(root: string, months: number, asOf: string): Promise<Forecast> {
+async function cliForecast(root: string, months: number, asOf: string): Promise<RepositoryForecast> {
   const result = await runCli(["forecast", root, "--months", String(months), "--as-of", asOf, "--json"]);
   assert.equal(result.code, 0, "offing forecast --json must succeed");
-  return JSON.parse(result.stdout) as Forecast;
+  return JSON.parse(result.stdout) as RepositoryForecast;
 }
 async function validator() {
   const schema = JSON.parse(await readFile(resolve("schemas/forecast.v1.schema.json"), "utf8"));
-  return new Ajv2020({ allErrors: true, strict: false }).compile(schema);
+  return new Ajv2020({ allErrors: true }).addFormat("date", isIsoDate).compile(schema);
 }
 
 test("forecast_repository returns the object offing forecast --json prints, valid against its published schema", async () => {
@@ -106,7 +94,7 @@ test("forecast_repository returns the object offing forecast --json prints, vali
       arguments: { repository_path: root, months: 12, as_of: "2026-10-29" },
     });
     assert.notEqual(call.isError, true);
-    const forecast = call.structuredContent as unknown as Forecast;
+    const forecast = call.structuredContent as unknown as RepositoryForecast;
 
     const validate = await validator();
     assert.ok(validate(forecast), JSON.stringify(validate.errors));
@@ -116,6 +104,9 @@ test("forecast_repository returns the object offing forecast --json prints, vali
     assert.equal(forecast.today, "2026-10-29");
     assert.equal(forecast.until, "2027-10-29");
     assert.equal(forecast.months, 12);
+    const { noData, ...legacy } = forecast;
+    assert.ok(validate(legacy), "the v1 schema still accepts documents that predate noData");
+    assert.deepEqual(noData, []);
 
     assert.deepEqual(
       forecast,
@@ -136,7 +127,7 @@ test("forecast_repository is deterministic for a fixed as_of and keeps every eve
     const second = await client.request("tools/call", { name: "forecast_repository", arguments: args });
     assert.deepEqual(second.structuredContent, first.structuredContent, "the same fixed window renders the same bytes");
 
-    const forecast = first.structuredContent as unknown as Forecast;
+    const forecast = first.structuredContent as unknown as RepositoryForecast;
     const scan = await client.request("tools/call", { name: "scan_repository", arguments: { repository_path: root } });
     const findings = (scan.structuredContent as { findings: Array<{ id: string; location: { path: string } }> })
       .findings;
@@ -172,7 +163,7 @@ test("forecast_repository defaults to twelve months and rejects a window outside
       arguments: { repository_path: root },
     });
     assert.notEqual(defaults.isError, true);
-    const forecast = defaults.structuredContent as unknown as Forecast;
+    const forecast = defaults.structuredContent as unknown as RepositoryForecast;
     assert.equal(forecast.months, 12);
     assert.match(forecast.today, /^\d{4}-\d{2}-\d{2}$/, "without as_of the window starts today");
 
@@ -185,12 +176,15 @@ test("forecast_repository defaults to twelve months and rejects a window outside
       assert.match((rejected.content as Array<{ text: string }>)[0]!.text, /Input validation error/);
       assert.equal("structuredContent" in rejected, false);
     }
-    const badDate = await client.request("tools/call", {
-      name: "forecast_repository",
-      arguments: { repository_path: root, as_of: "29-10-2026" },
-    });
-    assert.equal(badDate.isError, true);
-    assert.match((badDate.content as Array<{ text: string }>)[0]!.text, /as_of must be a date/);
+    for (const as_of of ["29-10-2026", "2026-02-29"]) {
+      const badDate = await client.request("tools/call", {
+        name: "forecast_repository",
+        arguments: { repository_path: root, as_of },
+      });
+      assert.equal(badDate.isError, true);
+      const [message] = badDate.content as Array<{ text: string }>;
+      assert.match(message?.text ?? "", /as_of must be a date/);
+    }
   } finally {
     await client.close();
   }

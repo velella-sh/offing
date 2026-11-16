@@ -3224,6 +3224,55 @@
         "total": {
           "type": "integer",
           "minimum": 0
+        },
+        "noData": {
+          "description": "Components without local lifecycle coverage. Current producers always include this array.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "detector",
+              "component",
+              "reference",
+              "reason",
+              "location"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "detector": {
+                "type": "string"
+              },
+              "component": {
+                "type": "string"
+              },
+              "reference": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "location": {
+                "type": "object",
+                "required": [
+                  "path"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "column": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "$defs": {
