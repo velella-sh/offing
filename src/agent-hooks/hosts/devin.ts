@@ -5,10 +5,15 @@ import type { HostHook } from "../types.js";
 
 export const hostHook: HostHook = {
   adapter: devinAdapter,
-  async setup({ root, dryRun }) {
+  stability: "beta",
+  markers: [".devin"],
+  binaries: ["devin"],
+  async setup(options) {
+    const { dryRun, remove } = options;
     return hooksFileReport(
-      await initDevinHooks({ root, dryRun }),
+      await initDevinHooks(options),
       dryRun,
+      remove,
       "Devin Local now runs Offing after write, edit, and apply_patch.",
     );
   },

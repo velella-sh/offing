@@ -45,7 +45,7 @@ _offing() {
     mcp) opts="" ;;
     data) opts="--json --data-version" ;;
     watch) opts="--weekly --board --json" ;;
-    init) opts="--agents --hooks --personal --hooks-for --file --fail-on --yes --dry-run" ;;
+    init) opts="--agents --hooks --personal --hooks-for --list --remove --file --fail-on --yes --dry-run" ;;
     setup) opts="--yes --dry-run" ;;
     new-detector) opts="--ecosystem" ;;
     new-rule) opts="--ecosystem" ;;

@@ -27,6 +27,7 @@ import { pathToFileURL } from "node:url";
 import {
   COVERAGE_EXCLUDES,
   COVERAGE_LCOV_PATH,
+  HOOK_LATENCY_TEST,
   coverageRequested,
   testProcessArgs,
 } from "../dist/tools/check-pipeline.js";
@@ -384,7 +385,7 @@ export function spawnTest(nodeArgs, options = {}) {
 async function listDistTests() {
   const files = [];
   for await (const file of glob("dist/tests/**/*.test.js", { cwd: ROOT })) {
-    files.push(resolve(ROOT, file));
+    if (resolve(ROOT, file) !== resolve(ROOT, HOOK_LATENCY_TEST)) files.push(resolve(ROOT, file));
   }
   return files.sort();
 }

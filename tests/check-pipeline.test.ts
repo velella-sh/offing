@@ -15,6 +15,7 @@ import {
   coverageTestArgs,
   digestInputs,
   EVAL_DIGEST_FILE,
+  HOOK_LATENCY_TEST,
   evalsMaySkip,
   LINT_PATTERNS,
   lintArgs,
@@ -111,6 +112,7 @@ test("check runs the action build, tests, plugin drift, and plugin eval together
   assert.ok(publishedAt > events.indexOf("build:action:end"));
   assert.ok(publishedAt > events.indexOf("test:end"));
   assert.ok(events.indexOf("check:action-bundle:start") > publishedAt);
+  assert.ok(events.indexOf("test:hook-latency:start") > events.indexOf("check:action-bundle:end"));
 });
 
 test("a broken test fails check and leaves the action bundle unpublished", async () => {
@@ -158,6 +160,7 @@ test("an ordinary pull request builds the action bundle but neither publishes no
     "eval:plugins",
     "lint",
     "test",
+    "test:hook-latency",
   ]);
   assert.equal(published, false);
 });
@@ -288,7 +291,7 @@ test("check runs the suite once through run-tests.mjs when coverage is requested
       collectCoverage: true,
       publish: async () => {},
       run: async (_command, args) => {
-        if (args[0] === "--test" || args[0] === "tools/run-tests.mjs") suiteCommands.push([...args]);
+        if (args[0] === "tools/run-tests.mjs") suiteCommands.push([...args]);
       },
     });
   } finally {
@@ -309,7 +312,7 @@ test("check keeps the project runner when coverage is off", async () => {
     collectCoverage: false,
     publish: async () => {},
     run: async (_command, args) => {
-      if (args[0] === "--test" || args[0] === "tools/run-tests.mjs") suiteCommands.push([...args]);
+      if (args[0] === "tools/run-tests.mjs") suiteCommands.push([...args]);
     },
   });
   assert.deepEqual(suiteCommands, [["tools/run-tests.mjs"]]);
@@ -570,7 +573,8 @@ test("renderStepTimingSummary includes platform, node, and the marker", () => {
 function stepName(args: readonly string[]): string {
   if (args.includes("src/action.ts")) return "build:action";
   // The plain run goes through the project runner; the coverage run is a direct `node --test`.
-  if (args[0] === "tools/run-tests.mjs" || args[0] === "--test") return "test";
+  if (args.includes(HOOK_LATENCY_TEST)) return "test:hook-latency";
+  if (args[0] === "tools/run-tests.mjs") return "test";
   if (args.some((arg) => arg.includes("eslint"))) return "lint";
   if (args.some((arg) => arg.includes("generate-commands-index"))) return "check:commands";
   if (args.some((arg) => arg.includes("check-quality"))) return "check:quality";

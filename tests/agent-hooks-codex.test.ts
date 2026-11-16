@@ -238,6 +238,7 @@ test("invalid JSON or an unexpected hooks shape is refused with the file untouch
 
 test("the init command writes the hook and honors --dry-run", async () => {
   const root = await repository();
+  await mkdir(join(root, ".codex"), { recursive: true });
   const cli = resolve("dist/src/cli.js");
   const dry = spawnSync(process.execPath, [cli, "init", "--hooks-for", "codex", root, "--dry-run"], {
     encoding: "utf8",
@@ -249,7 +250,7 @@ test("the init command writes the hook and honors --dry-run", async () => {
   const written = spawnSync(process.execPath, [cli, "init", "--hooks-for", "codex", root], { encoding: "utf8" });
   assert.equal(written.status, 0, written.stderr);
   assert.match(written.stdout, /Codex now runs Offing after apply_patch/);
-  assert.match(await readFile(join(root, CODEX_HOOKS_FILE), "utf8"), /npx --no-install offing hook codex/);
+  assert.match(await readFile(join(root, CODEX_HOOKS_FILE), "utf8"), /offing hook codex/);
 
   const unknown = spawnSync(process.execPath, [cli, "init", "--hooks-for", "gitlab", root], { encoding: "utf8" });
   assert.equal(unknown.status, 2);

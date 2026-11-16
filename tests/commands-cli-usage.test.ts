@@ -286,15 +286,17 @@ test("init: the one-step flags print their result and change nothing on a dry ru
   assert.match(husky.stdout, /^husky manages the Git hooks here, so Offing did not write one\./);
   assert.doesNotMatch(husky.stdout, /Bypass it once/);
 
+  await mkdir(join(root, ".claude"));
+  await mkdir(join(root, ".codex"));
   const claude = await runCli(["init", "--hooks-for", "claude-code", "--dry-run", root]);
   assert.equal(claude.code, 0, claude.stderr);
-  assert.match(claude.stdout, /^Would (?:create|update) \.claude\/settings\.json:/);
+  assert.match(claude.stdout, /^claude-code: Would (?:create|update) \.claude\/settings\.json:/);
   const codex = await runCli(["init", "--hooks-for", "codex", root]);
   assert.equal(codex.code, 0, codex.stderr);
-  assert.match(codex.stdout, /^Created \.codex\/hooks\.json; Codex now runs Offing after apply_patch\./);
+  assert.match(codex.stdout, /^codex: Created \.codex\/hooks\.json; Codex now runs Offing after apply_patch\./);
   const codexAgain = await runCli(["init", "--hooks-for", "codex", root]);
   assert.equal(codexAgain.code, 0, codexAgain.stderr);
-  assert.match(codexAgain.stdout, /^\.codex\/hooks\.json already has the current Offing post-edit hook/);
+  assert.match(codexAgain.stdout, /^codex: \.codex\/hooks\.json already has the current Offing post-edit hook/);
 });
 
 test("init --personal prints the global setup it made, once per state", async () => {

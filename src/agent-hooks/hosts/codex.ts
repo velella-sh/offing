@@ -5,7 +5,11 @@ import type { HostHook } from "../types.js";
 
 export const hostHook: HostHook = {
   adapter: codexAdapter,
-  async setup({ root, dryRun }) {
-    return hooksFileReport(await initCodexHooks({ root, dryRun }), dryRun, "Codex now runs Offing after apply_patch.");
+  stability: "stable",
+  markers: [".codex"],
+  binaries: ["codex"],
+  async setup(options) {
+    const { dryRun, remove } = options;
+    return hooksFileReport(await initCodexHooks(options), dryRun, remove, "Codex now runs Offing after apply_patch.");
   },
 };

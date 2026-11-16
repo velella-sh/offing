@@ -10,17 +10,28 @@ Offing ships a Git pre-push hook that scans before you push, edit hooks for seve
 
 `offing hook <host>` is how an agent host asks Offing about a file it just wrote. The host sends its own hook payload as JSON on stdin; Offing runs one offline scan of the repository, keeps the findings in that file at or above the severity gate (default `medium`, or `--fail-on none` to report nothing), and answers in the protocol the host understands. A hook only prints and exits: it never edits files.
 
-A hook must never break the agent's session. An unknown host, a malformed payload, an event that is not a file write or edit, a scan error, and a scan that takes longer than ten seconds all exit `0` with no output. `offing init --hooks-for <host>` writes the host's configuration so the host calls the command after an edit; each host has its own page, listed below.
+A hook lets the agent continue when the payload is malformed, the event is unrelated, the scan fails, or the scan exceeds ten seconds. If lifecycle data is unavailable, it exits `0` and emits one warning. Cursor writes warnings to its hook log.
 
-Each host has its own page under [`docs/hooks/`](https://github.com/velella-sh/offing/tree/main/docs/hooks), so a new host adds a page and one line here:
+```bash
+offing init --hooks --list
+offing init --hooks-for codex --dry-run
+offing init --hooks-for codex
+offing init --hooks --remove --hooks-for codex
+```
 
-- [Claude Code edit hook](hooks/claude-code.md)
-- [Cline edit hook](hooks/cline.md)
-- [Codex CLI edit hook](hooks/codex.md)
-- [GitHub Copilot edit hook](hooks/copilot.md)
-- [Cursor edit hook](hooks/cursor.md)
-- [Devin Local edit hook](hooks/devin.md)
-- [Gemini CLI edit hook](hooks/gemini.md)
+`--list` shows stability and availability for all supported hosts. Offing checks the workspace and home directory for host configuration, and looks for agent executables on `PATH`. Install a detected host with `--hooks-for`. The report names the host, project file, and event. Running the same setup again leaves the files byte for byte as they are.
+
+To remove Offing's registrations from every host config in the workspace, run `offing init --hooks --remove`. Add `--hooks-for <host>` to remove only one host, or `--dry-run` to preview which registrations would be removed. The config files and other hooks are kept.
+
+| Host | Stability |
+| --- | --- |
+| [Claude Code](hooks/claude-code.md) | Stable |
+| [Cline](hooks/cline.md) | Beta |
+| [Codex CLI](hooks/codex.md) | Stable |
+| [GitHub Copilot](hooks/copilot.md) | Beta |
+| [Cursor](hooks/cursor.md) | Stable |
+| [Devin Local](hooks/devin.md) | Beta |
+| [Gemini CLI](hooks/gemini.md) | Beta |
 
 ## Git pre-push
 

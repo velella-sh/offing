@@ -4,11 +4,17 @@ title: Claude Code edit hook
 
 # Claude Code edit hook
 
-Claude Code's `PostToolUse` hook runs after a tool finishes. Offing registers it for `Write`, `Edit`, and `MultiEdit`, reads `tool_input.file_path`, and answers in the protocol documented for Claude Code 2.1.316 (current stable, 2026-11-01) at <https://code.claude.com/docs/en/hooks>: `PostToolUse` cannot block a tool that already ran, and exit code `2` shows the hook's stderr to Claude so it can correct the file in the same turn. No findings, or any hook failure, prints nothing and exits `0`.
+Claude Code's `PostToolUse` hook runs after a tool finishes. Offing registers it for `Write`, `Edit`, and `MultiEdit`, reads `tool_input.file_path`, and answers in the protocol documented for Claude Code 2.1.316 (current stable, 2026-11-01) at <https://code.claude.com/docs/en/hooks>: `PostToolUse` cannot block a tool that already ran, and exit code `2` shows the hook's stderr to Claude so it can correct the file in the same turn. A scan with no findings exits `0` without output. Missing lifecycle data emits a warning and lets the session continue.
+
+## Install
+
+Install Offing on the `PATH` that Claude Code uses to run hooks. A global install is one way to make the command available. From the project root, preview the proposed changes and then apply the setup.
 
 ```bash
-npx @velella/offing init --hooks-for claude-code --dry-run   # show the diff first
-npx @velella/offing init --hooks-for claude-code             # merge into .claude/settings.json
+npm install --global @velella/offing
+offing init --hooks --list
+offing init --hooks-for claude-code --dry-run
+offing init --hooks-for claude-code
 ```
 
 The command keeps every existing setting and hook — including the pre-install guard below — and adds one entry. Running it again changes nothing:
@@ -22,7 +28,7 @@ The command keeps every existing setting and hook — including the pre-install 
         "hooks": [
           {
             "type": "command",
-            "command": "npx --no-install offing hook claude-code",
+            "command": "offing hook claude-code",
             "timeout": 60
           }
         ]
@@ -32,9 +38,25 @@ The command keeps every existing setting and hook — including the pre-install 
 }
 ```
 
-`npx --no-install` uses the Offing the project already has and never downloads one; where the package is not installed locally, the globally installed `offing` bin answers the same command. The hook scans offline, prints only, and never edits the file. Its own budget is ten seconds, so a slow scan fails open instead of holding the turn.
+The hook scans offline and has a ten-second scan budget.
 
-To turn it off, delete that `PostToolUse` entry from `.claude/settings.json`, or set `"disableAllHooks": true` (or pass `--settings '{"disableAllHooks": true}'`) to turn off every Claude Code hook for a session.
+## Remove
+
+```bash
+offing init --hooks --remove --hooks-for claude-code
+```
+
+Offing removes its edit hook entry and keeps the config file and other settings.
+
+## Troubleshooting
+
+If setup cannot detect Claude Code, open the host so it creates its home configuration, or make its CLI available on `PATH`, then run `offing init --hooks --list` from the project root.
+
+If the host cannot start the hook, check that `offing --version` works with the host's `PATH`. An existing Offing hook using the older `npx` launcher can be refreshed by removing and reinstalling it.
+
+Check that `disableAllHooks` is off. Open a new Claude Code session and edit a file with `Write` or `Edit` to verify the hook.
+
+If Offing warns that lifecycle data is unavailable, check the installation and any `OFFING_DATA_VERSION` pin. Run `offing data status` to inspect the data selection.
 
 The transcript below is real output from the built CLI on 2026-11-01, against the fixture repository in `tests/fixtures/agent-hooks/claude-code/repo` with the `PostToolUse` payload in `write.json`:
 

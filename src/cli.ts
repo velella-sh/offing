@@ -31,6 +31,9 @@ if (nodeProblem) {
   process.stdout.write(`${VERSION}\n`);
 } else if (await runPromptFastPath(args)) {
   // `prompt` runs on every shell prompt, so it is answered before the command table and every detector load.
+} else if (isHookRequest(args)) {
+  const { runHook } = await import("./agent-hooks/command.js");
+  process.exitCode = await runHook(args.slice(1));
 } else {
   const { run } = await import("./cli-main.js");
   process.exitCode = await run(rawArgs);
@@ -40,6 +43,12 @@ if (nodeProblem) {
 function isVersionRequest(args: readonly string[]): boolean {
   if (args.includes("--help") || args.includes("-h")) return false;
   return args.includes("--version") || args.includes("-v");
+}
+
+/** Agent hooks run as short-lived processes, so skip loading the rest of the CLI. */
+function isHookRequest(args: readonly string[]): boolean {
+  if (args[0] !== "hook") return false;
+  return !args.includes("--help") && !args.includes("-h");
 }
 
 /** Runs `offing prompt` with only its own module loaded. Returns false when the arguments need the full CLI. */

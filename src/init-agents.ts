@@ -1,6 +1,7 @@
 import { lstat, mkdir, readFile, realpath, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve, sep } from "node:path";
 
+import { insertHook, removeHook, type HookJson } from "./agent-hooks/json-edit.js";
 import { AgentFileError, renderDiff, withAgentSection } from "./agent-instructions.js";
 
 export type AgentFileName = "AGENTS.md" | "CLAUDE.md";
@@ -80,22 +81,77 @@ export async function updateAgentFile(
 
 export const CLAUDE_CODE_SETTINGS_FILE = ".claude/settings.json";
 export const CLAUDE_CODE_HOOK_MATCHER = "Write|Edit|MultiEdit";
-/** `npx --no-install` uses the package the project already has, then the global `offing` bin as the fallback. */
-export const CLAUDE_CODE_HOOK_COMMAND = "npx --no-install offing hook claude-code";
+export const CLAUDE_CODE_HOOK_COMMAND = "offing hook claude-code";
 
 export interface InitClaudeHooksOptions {
   /** The repository root. */
   root: string;
   /** Report what would change, including a diff, and write nothing. */
   dryRun?: boolean;
+  remove?: boolean;
 }
 
 export interface InitClaudeHooksResult {
   file: string;
-  change: "created" | "updated" | "unchanged";
+  change: "created" | "updated" | "removed" | "unchanged";
   written: boolean;
   /** A unified diff of the change; empty when nothing changes. */
   diff: string;
+}
+
+type HookMerge = (document: unknown) => {
+  readonly change: "added" | "unchanged";
+  readonly settings?: Record<string, unknown>;
+  readonly hooks?: Record<string, unknown>;
+  readonly document?: Record<string, unknown>;
+};
+
+async function hookFileResult(
+  options: InitClaudeHooksOptions,
+  file: string,
+  update: (before: string | undefined) => string | undefined,
+  mode?: number,
+): Promise<InitClaudeHooksResult> {
+  const root = resolve(options.root);
+  const info = await lstat(root).catch(() => undefined);
+  if (!info?.isDirectory()) throw new AgentFileError(`${root} is not a directory.`);
+  const path = join(root, file);
+  await assertInside(root, path);
+  const before = await read(path);
+  const text = update(before);
+  if (text === undefined || text === before) return { file, change: "unchanged", written: false, diff: "" };
+  const change = options.remove ? "removed" : before === undefined ? "created" : "updated";
+  const diff = renderDiff(file, before ?? "", text);
+  if (!options.dryRun) {
+    await mkdir(dirname(path), { recursive: true });
+    await writeFile(path, text, { mode });
+  }
+  return { file, change, written: !options.dryRun, diff };
+}
+
+function parseHooksJson(text: string, file: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new AgentFileError(`${file} is not valid JSON, so it was not changed.`);
+  }
+}
+
+function initJsonHook(
+  options: InitClaudeHooksOptions,
+  file: string,
+  spec: HookJson,
+  merge: HookMerge,
+): Promise<InitClaudeHooksResult> {
+  return hookFileResult(options, file, (before) => {
+    if (before === undefined && options.remove) return undefined;
+    const text = before ?? "{}\n";
+    const result = merge(parseHooksJson(text, file));
+    if (options.remove) return removeHook(text, spec);
+    if (result.change === "unchanged") return before;
+    if (before === undefined) return `${JSON.stringify(result.settings ?? result.hooks ?? result.document, null, 2)}\n`;
+    return insertHook(text, spec);
+  });
 }
 
 /** Recognizes a hook this command wrote, however its launcher is spelled (`npx … offing`, a global bin, a path). */
@@ -113,6 +169,14 @@ function hasOffingPostToolUse(entries: readonly unknown[]): boolean {
     );
   });
 }
+
+const CLAUDE_HOOK_SPEC: HookJson = {
+  event: "PostToolUse",
+  entry: {
+    matcher: CLAUDE_CODE_HOOK_MATCHER,
+    hooks: [{ type: "command", command: CLAUDE_CODE_HOOK_COMMAND, timeout: 60 }],
+  },
+};
 
 /** Merges the post-edit entry into a parsed settings document, keeping every existing key and hook in place. */
 export function withClaudeCodePostToolUse(settings: unknown): {
@@ -136,10 +200,7 @@ export function withClaudeCodePostToolUse(settings: unknown): {
   }
   const postToolUse = (postValue ?? []) as unknown[];
   if (hasOffingPostToolUse(postToolUse)) return { settings: structuredClone(settings), change: "unchanged" };
-  const entry = {
-    matcher: CLAUDE_CODE_HOOK_MATCHER,
-    hooks: [{ type: "command", command: CLAUDE_CODE_HOOK_COMMAND, timeout: 60 }],
-  };
+  const entry = CLAUDE_HOOK_SPEC.entry;
   return {
     settings: {
       ...structuredClone(settings),
@@ -151,35 +212,12 @@ export function withClaudeCodePostToolUse(settings: unknown): {
 
 /** Writes or merges the Claude Code post-edit hook into `.claude/settings.json`, preserving the user's hooks. */
 export async function initClaudeHooks(options: InitClaudeHooksOptions): Promise<InitClaudeHooksResult> {
-  const root = resolve(options.root);
-  const info = await lstat(root).catch(() => undefined);
-  if (!info?.isDirectory()) throw new AgentFileError(`${root} is not a directory.`);
-  const path = join(root, CLAUDE_CODE_SETTINGS_FILE);
-  await assertInside(root, path);
-  const before = await read(path);
-  let parsed: unknown = {};
-  if (before !== undefined) {
-    try {
-      parsed = JSON.parse(before);
-    } catch {
-      throw new AgentFileError(`${CLAUDE_CODE_SETTINGS_FILE} is not valid JSON, so it was not changed.`);
-    }
-  }
-  const update = withClaudeCodePostToolUse(parsed);
-  const text = `${JSON.stringify(update.settings, null, 2)}\n`;
-  const change = before === undefined ? "created" : update.change === "unchanged" ? "unchanged" : "updated";
-  const diff = change === "unchanged" ? "" : renderDiff(CLAUDE_CODE_SETTINGS_FILE, before ?? "", text);
-  if (change === "unchanged" || options.dryRun)
-    return { file: CLAUDE_CODE_SETTINGS_FILE, change, written: false, diff };
-  await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, text);
-  return { file: CLAUDE_CODE_SETTINGS_FILE, change, written: true, diff };
+  return initJsonHook(options, CLAUDE_CODE_SETTINGS_FILE, CLAUDE_HOOK_SPEC, withClaudeCodePostToolUse);
 }
 
 export const CODEX_HOOKS_FILE = ".codex/hooks.json";
 export const CODEX_HOOK_MATCHER = "apply_patch";
-/** The same launcher as Claude Code's: the project's own package first, the global `offing` bin as fallback. */
-export const CODEX_HOOK_COMMAND = "npx --no-install offing hook codex";
+export const CODEX_HOOK_COMMAND = "offing hook codex";
 
 export type InitCodexHooksOptions = InitClaudeHooksOptions;
 export type InitCodexHooksResult = InitClaudeHooksResult;
@@ -195,6 +233,14 @@ function hasOffingCodexPostToolUse(entries: readonly unknown[]): boolean {
     );
   });
 }
+
+const CODEX_HOOK_SPEC: HookJson = {
+  event: "PostToolUse",
+  entry: {
+    matcher: CODEX_HOOK_MATCHER,
+    hooks: [{ type: "command", command: CODEX_HOOK_COMMAND, timeout: 60 }],
+  },
+};
 
 /** Merges the post-edit entry into a parsed hooks document, keeping every existing key and hook in place. */
 export function withCodexPostToolUse(hooks: unknown): {
@@ -216,10 +262,7 @@ export function withCodexPostToolUse(hooks: unknown): {
   }
   const postToolUse = (postValue ?? []) as unknown[];
   if (hasOffingCodexPostToolUse(postToolUse)) return { hooks: structuredClone(hooks), change: "unchanged" };
-  const entry = {
-    matcher: CODEX_HOOK_MATCHER,
-    hooks: [{ type: "command", command: CODEX_HOOK_COMMAND, timeout: 60 }],
-  };
+  const entry = CODEX_HOOK_SPEC.entry;
   return {
     hooks: { ...structuredClone(hooks), hooks: { ...events, PostToolUse: [...structuredClone(postToolUse), entry] } },
     change: "added",
@@ -231,34 +274,12 @@ export function withCodexPostToolUse(hooks: unknown): {
  * (<https://learn.chatgpt.com/docs/hooks>), preserving the user's hooks. The home directory is never touched.
  */
 export async function initCodexHooks(options: InitCodexHooksOptions): Promise<InitCodexHooksResult> {
-  const root = resolve(options.root);
-  const info = await lstat(root).catch(() => undefined);
-  if (!info?.isDirectory()) throw new AgentFileError(`${root} is not a directory.`);
-  const path = join(root, CODEX_HOOKS_FILE);
-  await assertInside(root, path);
-  const before = await read(path);
-  let parsed: unknown = {};
-  if (before !== undefined) {
-    try {
-      parsed = JSON.parse(before);
-    } catch {
-      throw new AgentFileError(`${CODEX_HOOKS_FILE} is not valid JSON, so it was not changed.`);
-    }
-  }
-  const update = withCodexPostToolUse(parsed);
-  const text = `${JSON.stringify(update.hooks, null, 2)}\n`;
-  const change = before === undefined ? "created" : update.change === "unchanged" ? "unchanged" : "updated";
-  const diff = change === "unchanged" ? "" : renderDiff(CODEX_HOOKS_FILE, before ?? "", text);
-  if (change === "unchanged" || options.dryRun) return { file: CODEX_HOOKS_FILE, change, written: false, diff };
-  await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, text);
-  return { file: CODEX_HOOKS_FILE, change, written: true, diff };
+  return initJsonHook(options, CODEX_HOOKS_FILE, CODEX_HOOK_SPEC, withCodexPostToolUse);
 }
 
 export const CURSOR_HOOKS_FILE = ".cursor/hooks.json";
 export const CURSOR_RULES_FILE = ".cursor/rules/offing.mdc";
-/** The same launcher as the other hosts: the project's own package first, the global `offing` bin as fallback. */
-export const CURSOR_HOOK_COMMAND = "npx --no-install offing hook cursor";
+export const CURSOR_HOOK_COMMAND = "offing hook cursor";
 /** Front matter Cursor requires on a newly created project rule (matches `setup.ts`). */
 export const CURSOR_RULE_PREFIX =
   "---\ndescription: Check a dependency with Offing before adding it\nalwaysApply: true\n---\n\n";
@@ -267,7 +288,7 @@ export type InitCursorHooksOptions = InitClaudeHooksOptions;
 
 export interface InitCursorHooksResult {
   hooks: InitClaudeHooksResult;
-  rule: InitAgentsResult;
+  rule: Omit<InitAgentsResult, "file"> & { file: string };
 }
 
 /** Recognizes the Cursor hook this command wrote, however its launcher is spelled. */
@@ -278,6 +299,12 @@ function hasOffingAfterFileEdit(entries: readonly unknown[]): boolean {
     (entry) => isRecord(entry) && typeof entry.command === "string" && OFFING_CURSOR_HOOK_COMMAND.test(entry.command),
   );
 }
+
+const CURSOR_HOOK_SPEC: HookJson = {
+  event: "afterFileEdit",
+  versioned: true,
+  entry: { command: CURSOR_HOOK_COMMAND, timeout: 60 },
+};
 
 /**
  * Merges the `afterFileEdit` entry into a parsed Cursor hooks document, keeping every existing key and hook.
@@ -303,7 +330,7 @@ export function withCursorAfterFileEdit(document: unknown): {
   }
   const afterFileEdit: unknown[] = afterValue === undefined ? [] : afterValue.map((entry: unknown) => entry);
   if (hasOffingAfterFileEdit(afterFileEdit)) return { document: structuredClone(document), change: "unchanged" };
-  const entry = { command: CURSOR_HOOK_COMMAND, timeout: 60 };
+  const entry = CURSOR_HOOK_SPEC.entry;
   return {
     document: {
       ...structuredClone(document),
@@ -320,35 +347,13 @@ export function withCursorAfterFileEdit(document: unknown): {
  * the hook itself only audits to stderr. The home directory is never touched.
  */
 export async function initCursorHooks(options: InitCursorHooksOptions): Promise<InitCursorHooksResult> {
-  const root = resolve(options.root);
-  const info = await lstat(root).catch(() => undefined);
-  if (!info?.isDirectory()) throw new AgentFileError(`${root} is not a directory.`);
-  const path = join(root, CURSOR_HOOKS_FILE);
-  await assertInside(root, path);
-  const before = await read(path);
-  let parsed: unknown = {};
-  if (before !== undefined) {
-    try {
-      parsed = JSON.parse(before);
-    } catch {
-      throw new AgentFileError(`${CURSOR_HOOKS_FILE} is not valid JSON, so it was not changed.`);
-    }
-  }
-  const update = withCursorAfterFileEdit(parsed);
-  const text = `${JSON.stringify(update.document, null, 2)}\n`;
-  const change = before === undefined ? "created" : update.change === "unchanged" ? "unchanged" : "updated";
-  const diff = change === "unchanged" ? "" : renderDiff(CURSOR_HOOKS_FILE, before ?? "", text);
-  let written = false;
-  if (change !== "unchanged" && !options.dryRun) {
-    await mkdir(dirname(path), { recursive: true });
-    await writeFile(path, text);
-    written = true;
-  }
-  const hooks: InitClaudeHooksResult = { file: CURSOR_HOOKS_FILE, change, written, diff };
-  const rule = await updateAgentFile(root, CURSOR_RULES_FILE, {
-    createPrefix: CURSOR_RULE_PREFIX,
-    ...(options.dryRun === undefined ? {} : { dryRun: options.dryRun }),
-  });
+  const hooks = await initJsonHook(options, CURSOR_HOOKS_FILE, CURSOR_HOOK_SPEC, withCursorAfterFileEdit);
+  const rule = options.remove
+    ? { file: CURSOR_RULES_FILE, change: "unchanged" as const, written: false, diff: "" }
+    : await updateAgentFile(resolve(options.root), CURSOR_RULES_FILE, {
+        createPrefix: CURSOR_RULE_PREFIX,
+        ...(options.dryRun === undefined ? {} : { dryRun: options.dryRun }),
+      });
   return { hooks, rule };
 }
 
@@ -373,6 +378,14 @@ function hasOffingGeminiAfterTool(entries: readonly unknown[]): boolean {
     );
   });
 }
+
+const GEMINI_HOOK_SPEC: HookJson = {
+  event: "AfterTool",
+  entry: {
+    matcher: GEMINI_HOOK_MATCHER,
+    hooks: [{ name: "offing", type: "command", command: GEMINI_HOOK_COMMAND, timeout: GEMINI_HOOK_TIMEOUT_MS }],
+  },
+};
 
 /**
  * Merges the `AfterTool` entry into a parsed Gemini CLI settings document, keeping every existing setting and
@@ -401,10 +414,7 @@ export function withGeminiAfterTool(settings: unknown): {
   }
   const afterTool = (afterValue ?? []) as unknown[];
   if (hasOffingGeminiAfterTool(afterTool)) return { settings: structuredClone(settings), change: "unchanged" };
-  const entry = {
-    matcher: GEMINI_HOOK_MATCHER,
-    hooks: [{ name: "offing", type: "command", command: GEMINI_HOOK_COMMAND, timeout: GEMINI_HOOK_TIMEOUT_MS }],
-  };
+  const entry = GEMINI_HOOK_SPEC.entry;
   return {
     settings: {
       ...structuredClone(settings),
@@ -419,28 +429,7 @@ export function withGeminiAfterTool(settings: unknown): {
  * and hooks. The home directory is never touched.
  */
 export async function initGeminiHooks(options: InitGeminiHooksOptions): Promise<InitGeminiHooksResult> {
-  const root = resolve(options.root);
-  const info = await lstat(root).catch(() => undefined);
-  if (!info?.isDirectory()) throw new AgentFileError(`${root} is not a directory.`);
-  const path = join(root, GEMINI_SETTINGS_FILE);
-  await assertInside(root, path);
-  const before = await read(path);
-  let parsed: unknown = {};
-  if (before !== undefined) {
-    try {
-      parsed = JSON.parse(before);
-    } catch {
-      throw new AgentFileError(`${GEMINI_SETTINGS_FILE} is not valid JSON, so it was not changed.`);
-    }
-  }
-  const update = withGeminiAfterTool(parsed);
-  const text = `${JSON.stringify(update.settings, null, 2)}\n`;
-  const change = before === undefined ? "created" : update.change === "unchanged" ? "unchanged" : "updated";
-  const diff = change === "unchanged" ? "" : renderDiff(GEMINI_SETTINGS_FILE, before ?? "", text);
-  if (change === "unchanged" || options.dryRun) return { file: GEMINI_SETTINGS_FILE, change, written: false, diff };
-  await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, text);
-  return { file: GEMINI_SETTINGS_FILE, change, written: true, diff };
+  return initJsonHook(options, GEMINI_SETTINGS_FILE, GEMINI_HOOK_SPEC, withGeminiAfterTool);
 }
 
 export const COPILOT_HOOKS_FILE = ".github/hooks/offing.json";
@@ -462,6 +451,17 @@ function isOffingCopilotEntry(entry: unknown): boolean {
     (command) => typeof command === "string" && OFFING_COPILOT_HOOK_COMMAND.test(command),
   );
 }
+
+const COPILOT_HOOK_SPEC: HookJson = {
+  event: "postToolUse",
+  versioned: true,
+  entry: {
+    type: "command",
+    matcher: COPILOT_HOOK_MATCHER,
+    command: COPILOT_HOOK_COMMAND,
+    timeoutSec: COPILOT_HOOK_TIMEOUT_SEC,
+  },
+};
 
 /**
  * Merges the `postToolUse` entry into a parsed Copilot hooks document, keeping every existing key and hook.
@@ -490,12 +490,7 @@ export function withCopilotPostToolUse(document: unknown): {
   }
   const postToolUse = (postValue ?? []) as unknown[];
   if (postToolUse.some(isOffingCopilotEntry)) return { document: structuredClone(document), change: "unchanged" };
-  const entry = {
-    type: "command",
-    matcher: COPILOT_HOOK_MATCHER,
-    command: COPILOT_HOOK_COMMAND,
-    timeoutSec: COPILOT_HOOK_TIMEOUT_SEC,
-  };
+  const entry = COPILOT_HOOK_SPEC.entry;
   return {
     document: {
       ...structuredClone(document),
@@ -512,28 +507,7 @@ export function withCopilotPostToolUse(document: unknown): {
  * `offing setup` writes stays untouched.
  */
 export async function initCopilotHooks(options: InitCopilotHooksOptions): Promise<InitCopilotHooksResult> {
-  const root = resolve(options.root);
-  const info = await lstat(root).catch(() => undefined);
-  if (!info?.isDirectory()) throw new AgentFileError(`${root} is not a directory.`);
-  const path = join(root, COPILOT_HOOKS_FILE);
-  await assertInside(root, path);
-  const before = await read(path);
-  let parsed: unknown = {};
-  if (before !== undefined) {
-    try {
-      parsed = JSON.parse(before);
-    } catch {
-      throw new AgentFileError(`${COPILOT_HOOKS_FILE} is not valid JSON, so it was not changed.`);
-    }
-  }
-  const update = withCopilotPostToolUse(parsed);
-  const text = `${JSON.stringify(update.document, null, 2)}\n`;
-  const change = before === undefined ? "created" : update.change === "unchanged" ? "unchanged" : "updated";
-  const diff = change === "unchanged" ? "" : renderDiff(COPILOT_HOOKS_FILE, before ?? "", text);
-  if (change === "unchanged" || options.dryRun) return { file: COPILOT_HOOKS_FILE, change, written: false, diff };
-  await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, text);
-  return { file: COPILOT_HOOKS_FILE, change, written: true, diff };
+  return initJsonHook(options, COPILOT_HOOKS_FILE, COPILOT_HOOK_SPEC, withCopilotPostToolUse);
 }
 
 export const CLINE_HOOKS_FILE = ".clinerules/hooks/PostToolUse";
@@ -553,22 +527,20 @@ export type InitClineHooksResult = InitClaudeHooksResult;
  * did not write is left untouched.
  */
 export async function initClineHooks(options: InitClineHooksOptions): Promise<InitClineHooksResult> {
-  const root = resolve(options.root);
-  const info = await lstat(root).catch(() => undefined);
-  if (!info?.isDirectory()) throw new AgentFileError(`${root} is not a directory.`);
-  const path = join(root, CLINE_HOOKS_FILE);
-  await assertInside(root, path);
-  const before = await read(path);
-  if (before !== undefined && before !== CLINE_HOOK_SCRIPT)
-    throw new AgentFileError(
-      `${CLINE_HOOKS_FILE} already holds a hook Offing did not write, so it was not changed. Add \`${CLINE_HOOK_COMMAND}\` to it yourself.`,
-    );
-  const change = before === undefined ? "created" : "unchanged";
-  const diff = change === "unchanged" ? "" : renderDiff(CLINE_HOOKS_FILE, "", CLINE_HOOK_SCRIPT);
-  if (change === "unchanged" || options.dryRun) return { file: CLINE_HOOKS_FILE, change, written: false, diff };
-  await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, CLINE_HOOK_SCRIPT, { mode: 0o755 });
-  return { file: CLINE_HOOKS_FILE, change, written: true, diff };
+  const noOp = "#!/usr/bin/env bash\n";
+  return hookFileResult(
+    options,
+    CLINE_HOOKS_FILE,
+    (before) => {
+      if (options.remove) return before === CLINE_HOOK_SCRIPT ? noOp : before;
+      if (before !== undefined && before !== noOp && before !== CLINE_HOOK_SCRIPT)
+        throw new AgentFileError(
+          `${CLINE_HOOKS_FILE} already holds a hook Offing did not write, so it was not changed. Add "${CLINE_HOOK_COMMAND}" to it yourself.`,
+        );
+      return CLINE_HOOK_SCRIPT;
+    },
+    0o755,
+  );
 }
 
 export const DEVIN_HOOKS_FILE = ".devin/hooks.v1.json";
@@ -593,6 +565,15 @@ function hasOffingDevinPostToolUse(entries: readonly unknown[]): boolean {
   });
 }
 
+const DEVIN_HOOK_SPEC: HookJson = {
+  event: "PostToolUse",
+  wrapped: false,
+  entry: {
+    matcher: DEVIN_HOOK_MATCHER,
+    hooks: [{ type: "command", command: DEVIN_HOOK_COMMAND, timeout: DEVIN_HOOK_TIMEOUT_SEC }],
+  },
+};
+
 /**
  * Merges the `PostToolUse` entry into a parsed Devin hooks document. In `.devin/hooks.v1.json` the hooks object
  * is the entire file (no wrapper key), with `PostToolUse` arrays of `{ matcher, hooks }` entries
@@ -612,10 +593,7 @@ export function withDevinPostToolUse(document: unknown): {
   }
   const postToolUse = (postValue ?? []) as unknown[];
   if (hasOffingDevinPostToolUse(postToolUse)) return { document: structuredClone(document), change: "unchanged" };
-  const entry = {
-    matcher: DEVIN_HOOK_MATCHER,
-    hooks: [{ type: "command", command: DEVIN_HOOK_COMMAND, timeout: DEVIN_HOOK_TIMEOUT_SEC }],
-  };
+  const entry = DEVIN_HOOK_SPEC.entry;
   return {
     document: { ...structuredClone(document), PostToolUse: [...structuredClone(postToolUse), entry] },
     change: "added",
@@ -627,28 +605,7 @@ export function withDevinPostToolUse(document: unknown): {
  * events and hooks. The home directory is never touched.
  */
 export async function initDevinHooks(options: InitDevinHooksOptions): Promise<InitDevinHooksResult> {
-  const root = resolve(options.root);
-  const info = await lstat(root).catch(() => undefined);
-  if (!info?.isDirectory()) throw new AgentFileError(`${root} is not a directory.`);
-  const path = join(root, DEVIN_HOOKS_FILE);
-  await assertInside(root, path);
-  const before = await read(path);
-  let parsed: unknown = {};
-  if (before !== undefined) {
-    try {
-      parsed = JSON.parse(before);
-    } catch {
-      throw new AgentFileError(`${DEVIN_HOOKS_FILE} is not valid JSON, so it was not changed.`);
-    }
-  }
-  const update = withDevinPostToolUse(parsed);
-  const text = `${JSON.stringify(update.document, null, 2)}\n`;
-  const change = before === undefined ? "created" : update.change === "unchanged" ? "unchanged" : "updated";
-  const diff = change === "unchanged" ? "" : renderDiff(DEVIN_HOOKS_FILE, before ?? "", text);
-  if (change === "unchanged" || options.dryRun) return { file: DEVIN_HOOKS_FILE, change, written: false, diff };
-  await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, text);
-  return { file: DEVIN_HOOKS_FILE, change, written: true, diff };
+  return initJsonHook(options, DEVIN_HOOKS_FILE, DEVIN_HOOK_SPEC, withDevinPostToolUse);
 }
 
 export async function initAgents(options: InitAgentsOptions): Promise<InitAgentsResult> {

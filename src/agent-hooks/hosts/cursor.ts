@@ -11,7 +11,7 @@ function ruleReport(result: InitCursorHooksResult["rule"], dryRun: boolean): str
   if (dryRun) {
     const verb =
       result.change === "created" ? "create" : result.change === "added" ? "add the Offing section to" : "update";
-    return `Would ${verb} ${result.file}:\n\n${result.diff}\n`;
+    return `Would ${verb} ${result.file}: Offing dependency-check instructions.\n`;
   }
   if (result.change === "created") return `Created ${result.file}.\n`;
   if (result.change === "added") return `Added the Offing section to ${result.file}.\n`;
@@ -20,14 +20,19 @@ function ruleReport(result: InitCursorHooksResult["rule"], dryRun: boolean): str
 
 export const hostHook: HostHook = {
   adapter: cursorAdapter,
-  async setup({ root, dryRun }) {
-    const result = await initCursorHooks({ root, dryRun });
+  stability: "stable",
+  markers: [".cursor"],
+  binaries: ["cursor", "cursor-agent"],
+  async setup(options) {
+    const { dryRun, remove } = options;
+    const result = await initCursorHooks(options);
     return (
       hooksFileReport(
         result.hooks,
         dryRun,
+        remove,
         "Cursor now runs Offing afterFileEdit (audit log only; the agent reads .cursor/rules/offing.mdc).",
-      ) + ruleReport(result.rule, dryRun)
+      ) + (remove ? "" : ruleReport(result.rule, dryRun))
     );
   },
 };

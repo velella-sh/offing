@@ -219,6 +219,7 @@ test("--dry-run reports the diff and writes nothing", async () => {
 
 test("the init command writes the hook and honors --dry-run", async () => {
   const root = await repository();
+  await mkdir(join(root, ".clinerules"), { recursive: true });
   const cli = resolve("dist/src/cli.js");
   const dry = spawnSync(process.execPath, [cli, "init", "--hooks-for", "cline", root, "--dry-run"], {
     encoding: "utf8",

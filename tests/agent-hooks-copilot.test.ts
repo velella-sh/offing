@@ -200,6 +200,7 @@ test("invalid JSON or an unexpected shape is refused with the file untouched", a
 
 test("the init command writes the hook and honors --dry-run", async () => {
   const root = await repository();
+  await mkdir(join(root, ".github/hooks"), { recursive: true });
   const cli = resolve("dist/src/cli.js");
   const dry = spawnSync(process.execPath, [cli, "init", "--hooks-for", "copilot", root, "--dry-run"], {
     encoding: "utf8",

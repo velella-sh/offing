@@ -7,11 +7,17 @@ title: Cursor edit hook
 Cursor's `afterFileEdit` hook runs after the Agent edits a file. Offing reads `file_path` and `workspace_roots` from the payload documented at <https://cursor.com/docs/hooks> (checked 2026-11-07 against the current Hooks reference; Cursor's project file is `.cursor/hooks.json` with `"version": 1`). **Limitation:** that reference documents no response fields for `afterFileEdit` that reach the agent — unlike Claude Code, Codex, and Gemini CLI, Cursor cannot feed findings back into the chat from this hook. Offing therefore:
 
 1. Writes an always-applied instruction in `.cursor/rules/offing.mdc` only through `init` (never at hook time), so the agent still knows to check lifecycle status before adding a dependency.
-2. Keeps the hook as an audit log on stderr and exits `0`. No findings, or any hook failure, prints nothing and exits `0`.
+2. Keeps the hook as an audit log on stderr and exits `0`. A scan with no findings exits `0` without output. Missing lifecycle data emits a warning and lets the session continue.
+
+## Install
+
+Install Offing on the `PATH` that Cursor uses to run hooks. A global install is one way to make the command available. From the project root, preview the proposed changes and then apply the setup.
 
 ```bash
-npx @velella/offing init --hooks-for cursor --dry-run   # show the diff first
-npx @velella/offing init --hooks-for cursor             # merge into .cursor/hooks.json and keep the rule
+npm install --global @velella/offing
+offing init --hooks --list
+offing init --hooks-for cursor --dry-run
+offing init --hooks-for cursor
 ```
 
 The command writes only the project-level file Cursor documents, `<repo>/.cursor/hooks.json` — never anything in your home directory — keeps every existing key and hook, appends one `afterFileEdit` entry, and keeps (or creates) `.cursor/rules/offing.mdc`. Running it again changes nothing:
@@ -22,7 +28,7 @@ The command writes only the project-level file Cursor documents, `<repo>/.cursor
   "hooks": {
     "afterFileEdit": [
       {
-        "command": "npx --no-install offing hook cursor",
+        "command": "offing hook cursor",
         "timeout": 60
       }
     ]
@@ -30,7 +36,23 @@ The command writes only the project-level file Cursor documents, `<repo>/.cursor
 }
 ```
 
-If the workspace already has a `hooks.json`, the entry is merged into its `hooks.afterFileEdit` list. To turn it off, delete that entry, or remove the whole `.cursor/hooks.json` if Offing wrote it. The project rule stays until you delete `.cursor/rules/offing.mdc`.
+## Remove
+
+```bash
+offing init --hooks --remove --hooks-for cursor
+```
+
+Offing removes its edit hook entry and keeps the config file and other settings. Cursor keeps the shared project rule at `.cursor/rules/offing.mdc`. Use Cursor’s Rules settings to manage it.
+
+## Troubleshooting
+
+If setup cannot detect Cursor, open the host so it creates its home configuration, or make its CLI available on `PATH`, then run `offing init --hooks --list` from the project root.
+
+If the host cannot start the hook, check that `offing --version` works with the host's `PATH`. An existing Offing hook using the older `npx` launcher can be refreshed by removing and reinstalling it.
+
+Open Cursor’s **Settings → Hooks** and check the hook log after an Agent edit. Cursor writes findings and missing-data warnings there. The always-applied rule provides the instructions that the Agent reads.
+
+If Offing warns that lifecycle data is unavailable, check the installation and any `OFFING_DATA_VERSION` pin. Run `offing data status` to inspect the data selection.
 
 The transcript below is real output from the built CLI on 2026-11-07, against a repository holding the fixture Dockerfile from `tests/fixtures/agent-hooks/cursor/repo` with the `afterFileEdit` payload in `after-edit.json` (its `workspace_roots` pointed at that repository):
 

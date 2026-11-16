@@ -222,6 +222,9 @@ export function lintArgs(eslintCli: string): string[] {
 /** The compiled tests both test commands run. */
 export const TEST_FILE_GLOB = "dist/tests/**/*.test.js";
 
+/** The latency check runs by itself after the ordinary checks, so their CPU load cannot skew it. */
+export const HOOK_LATENCY_TEST = "dist/tests/agent-hooks-latency.test.js";
+
 /**
  * Files that spawn the CLI keep fixtures in their own mkdtemp directory, so more test
  * processes do not share temporary files. Twice the CPU count cut a warm run from about
@@ -444,7 +447,7 @@ export async function runCheck(options: RunCheckOptions = {}): Promise<void> {
   const recorded: Record<string, string> = {};
 
   try {
-    const { failures, timings } = await runDependentSteps([
+    const steps: DependentStep[] = [
       {
         id: "check:commands",
         run: () => run(process.execPath, ["tools/generate-commands-index.mjs", "--check"]),
@@ -505,6 +508,14 @@ export async function runCheck(options: RunCheckOptions = {}): Promise<void> {
             },
           ]
         : []),
+    ];
+    const { failures, timings } = await runDependentSteps([
+      ...steps,
+      {
+        id: "test:hook-latency",
+        after: steps.map(({ id }) => id),
+        run: () => run(process.execPath, ["--test", HOOK_LATENCY_TEST]),
+      },
     ]);
     if (Object.keys(recorded).length > 0) await writeDigests(evalDigestFile, { ...digests, ...recorded });
     await reportStepTiming(timings);

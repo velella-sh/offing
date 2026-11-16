@@ -70,7 +70,9 @@ Usage:
   offing completions <bash|zsh|fish>   # print a shell completion script
   offing lsp
   offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol
-  offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one agent host; docs/HOOKS.md lists them
+  offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one detected agent host
+  offing init --hooks --list [path]   # show agent hook stability and availability
+  offing init --hooks --remove [--hooks-for <host>] [path] [--dry-run]   # remove managed agent hooks
   offing prompt [path] [--format <text|json>] [--symbol <s>]   # shell prompt segment such as ⏳2, read from the scan cache only
   offing recommend <product|purl> [--min-days <n>] [--as-of <date>] [--json]   # which release line to write today (default 180 days of support)
   offing rollback-readiness <release-ref> --candidate <tag> [--within-days <days>] [--json]

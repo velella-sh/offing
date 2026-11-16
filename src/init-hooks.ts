@@ -1,9 +1,12 @@
 import { execFile } from "node:child_process";
-import { chmod, lstat, mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { constants } from "node:fs";
+import { homedir } from "node:os";
+import { access, chmod, lstat, mkdir, readFile, writeFile } from "node:fs/promises";
+import { delimiter, dirname, join, resolve } from "node:path";
 import { promisify } from "node:util";
 
 import { AgentFileError, renderDiff } from "./agent-instructions.js";
+import type { HostHook } from "./agent-hooks/types.js";
 import type { Severity } from "./domain.js";
 
 const execute = promisify(execFile);
@@ -131,4 +134,36 @@ export async function initHooks(options: InitHooksOptions): Promise<InitHooksRes
   await writeFile(path, update.text);
   await chmod(path, 0o755);
   return { change: update.change, file, written: true, diff };
+}
+
+/** Host detection only inspects paths. It never runs an agent or uses home paths as write targets. */
+export async function detectedHookHosts(
+  hosts: readonly HostHook[],
+  root: string,
+  env: NodeJS.ProcessEnv = process.env,
+  home = homedir(),
+): Promise<HostHook[]> {
+  const checks = await Promise.all(hosts.map((host) => detectHookHost(host, root, env, home)));
+  return hosts.filter((_, index) => checks[index]);
+}
+
+async function detectHookHost(host: HostHook, root: string, env: NodeJS.ProcessEnv, home: string): Promise<boolean> {
+  const markers = host.markers.flatMap((marker) => [join(root, marker), join(home, marker)]);
+  if (host.adapter.id === "codex" && env.CODEX_HOME) markers.push(env.CODEX_HOME);
+  if (host.adapter.id === "claude-code" && env.CLAUDE_CONFIG_DIR) markers.push(env.CLAUDE_CONFIG_DIR);
+  if ((await Promise.all(markers.map(exists))).includes(true)) return true;
+  const extensions = process.platform === "win32" ? (env.PATHEXT ?? ".EXE;.CMD;.BAT").split(";") : [""];
+  const binaries = host.binaries.flatMap((name) => extensions.map((extension) => name + extension));
+  const directories = (env.PATH ?? "").split(delimiter).filter(Boolean);
+  const available = await Promise.all(
+    directories.flatMap((directory) =>
+      binaries.map((binary) =>
+        access(join(directory, binary), constants.X_OK).then(
+          () => true,
+          () => false,
+        ),
+      ),
+    ),
+  );
+  return available.includes(true);
 }

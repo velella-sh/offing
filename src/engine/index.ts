@@ -138,53 +138,76 @@ async function resolveAnalyses(
   };
 }
 
+function scanWorkspace(root: string, options: ScanOptions) {
+  const resolvedRoot = resolve(root);
+  const { fileSystem, scanCache } = scanSetup(options);
+  // One timestamp so date-sensitive detectors agree for the whole scan.
+  const scannedAt = new Date(options.scannedAt ?? Date.now());
+  return {
+    context: { root: resolvedRoot, scannedAt: options.scannedAt ?? scannedAt.toISOString() },
+    scannedAt,
+    fileSystem,
+    scanCache,
+    noCache: options.noCache ?? process.env.OFFING_NO_CACHE === "1",
+  };
+}
+
+async function analyzeRepository(
+  workspace: ReturnType<typeof scanWorkspace>,
+  detectors: readonly Detector[],
+  dataVersion: string,
+) {
+  const { context, fileSystem, scanCache, noCache } = workspace;
+  const { root, scannedAt } = context;
+  const repoFiles = detectors.length > 0 ? await listRepositoryFiles(root, fileSystem) : [];
+  const analyses = await detectAll(detectors, {
+    context,
+    root,
+    repoFiles,
+    cache: scanCache,
+    fileSystem,
+    dataVersion,
+    noCache,
+    getFileHash: fileHashReader(root, fileSystem),
+  });
+  if (!noCache && detectors.length > 0) {
+    await recordScanManifest(scanCache, root, scannedAt, detectors, dataVersion);
+  }
+  return { analyses, repoFiles };
+}
+
+/** Runs the same detectors and cache as a full scan for consumers that only need lifecycle findings. */
+export async function scanRepositoryFindings(
+  root: string,
+  detectors: readonly Detector[],
+): Promise<Pick<ScanResult, "findings">> {
+  const active = await getActiveData();
+  // The bundled resolver is lazy. Read a required registry even when the detector cache is warm.
+  await active.read("registry/nodejs.json");
+  const { analyses } = await analyzeRepository(scanWorkspace(root, {}), detectors, active.info.version);
+  return { findings: sortFindings(analyses.flatMap((analysis) => analysis.findings)) };
+}
+
 /** Runs the detectors over a repository and returns the sorted, deduplicated findings. */
 export async function scanRepository(
   root: string,
   detectors: readonly Detector[] = [],
   options: ScanOptions = {},
 ): Promise<ScanResult> {
-  const resolvedRoot = resolve(root);
-  const noCache = options.noCache ?? process.env.OFFING_NO_CACHE === "1";
-  const { fileSystem, scanCache } = scanSetup(options);
-
-  // One timestamp for the whole scan: detectors that need "today" (CLE scheduled dates) read it from
-  // context instead of the clock, so findings stay deterministic for this run.
-  const scannedAt = new Date(options.scannedAt ?? Date.now());
-  const contextScannedAt = options.scannedAt ?? scannedAt.toISOString();
-  const context = { root: resolvedRoot, scannedAt: contextScannedAt };
-
+  const workspace = scanWorkspace(root, options);
   // Say so when downloaded data was refused and the bundled data was used instead.
-  const active = await activeScanData(detectors, scannedAt);
-  const dataVersion = options.dataVersion ?? active.version;
-
-  // Always list when detectors run: the cache needs the paths, and plan touch-sets need them
-  // in coverage so shared lockfiles conflict across tasks even when the scan found findings.
-  const repoFiles = detectors.length > 0 ? await listRepositoryFiles(resolvedRoot, fileSystem) : [];
-  const analyses = await detectAll(detectors, {
-    context,
-    root: resolvedRoot,
-    repoFiles,
-    cache: scanCache,
-    fileSystem,
-    dataVersion,
-    noCache,
-    getFileHash: fileHashReader(resolvedRoot, fileSystem),
-  });
-
-  if (!noCache && detectors.length > 0) {
-    await recordScanManifest(scanCache, resolvedRoot, contextScannedAt, detectors, dataVersion);
-  }
+  const active = await activeScanData(detectors, workspace.scannedAt);
+  const { analyses, repoFiles } = await analyzeRepository(workspace, detectors, options.dataVersion ?? active.version);
 
   const { findings, references } = await resolveAnalyses(detectors, analyses);
   return buildScanResult({
-    root: resolvedRoot,
-    scannedAt: contextScannedAt,
+    root: workspace.context.root,
+    scannedAt: workspace.context.scannedAt,
     detectors,
     findings,
     references,
     repoFiles,
-    fileSystem,
+    fileSystem: workspace.fileSystem,
     diagnostics: detectors.length === 0 ? ["No detectors are enabled."] : active.warnings,
     ...(active.data ? { data: active.data } : {}),
   });
