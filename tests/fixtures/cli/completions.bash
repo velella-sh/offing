@@ -20,7 +20,7 @@ _offing() {
     watch) opts="add remove run list --weekly --board --json" ;;
     scan) opts="--demo --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --all --by-owner --data-version --only --exclude" ;;
     baseline) opts="--output --data-version" ;;
-    forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version" ;;
+    forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force" ;;
     forecast) opts="--months --as-of --today --timeline --json --format --data-version" ;;
     countdown) opts="--as-of --limit --json --once --no-animation --no-cache --data-version" ;;
     plan) opts="--json --wave --data-version" ;;

@@ -78,6 +78,8 @@ complete -c offing -n '__fish_seen_subcommand_from forecast' -l timeline
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l json
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l format
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l data-version
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l ics
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l force
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l months
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l as-of
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l today

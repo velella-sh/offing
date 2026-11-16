@@ -15,7 +15,7 @@ Usage:
   offing scan [path] --no-cache   # bypass the scan cache and re-scan all files fresh
   offing scan <path> <path>... [--all <dir>] [--json]   # several projects, per-project and combined counts
   offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--svg [--animate] | --timeline | --json | --format mermaid]   # what reaches end of life next, by horizon
-  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--timeline | --json | --format mermaid]   # what reaches end of life next, by horizon
+  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] --ics [file] [--force]   # export the forecast as a calendar
   offing countdown [path] [--as-of <YYYY-MM-DD>] [--limit <n>] [--json] [--once] [--no-animation]   # live countdown to each dated deadline
   offing plan [path] [--json] [--wave <n>]   # migration waves from a scan; --wave prints one zero-based wave
   offing status-card [path] [--name <label>]   # print a static SVG summary of findings, next end of life, and data age

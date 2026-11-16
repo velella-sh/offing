@@ -94,8 +94,8 @@ Reports every runtime version a repository states, at its exact `path:line`, and
 ### `forecast`
 
 ```bash
-offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--svg [--animate] | --timeline | --json]
-offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--timeline | --json | --format mermaid]
+offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--svg [--animate] | --timeline | --json | --format mermaid]
+offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] --ics [file] [--force]
 ```
 
 Lists dated end-of-life events in 3-, 6-, and 12-month ranges, with a weather summary and the affected locations. See [Forecast](forecast.md) for the full contract and runnable examples.
@@ -109,6 +109,8 @@ Lists dated end-of-life events in 3-, 6-, and 12-month ranges, with a weather su
 | `--timeline` | Draw the forecast as a terminal timeline instead of a list. Cannot be combined with `--json`, `--svg`, or `--format mermaid`. |
 | `--format mermaid` | Print a fenced Mermaid Gantt chart of the dated events, grouped by ecosystem. |
 | `--json` | Print the forecast document. |
+| `--ics [file]` | Export an [iCalendar file](forecast-calendar.md) to stdout or the named file. |
+| `--force` | Allow `--ics <file>` to replace the named file. |
 
 The SVG has no script and no external references, so it is safe to commit and embed as an image. [Showcase](SHOWCASE.md) covers embedding it in a README and refreshing it on a schedule.
 

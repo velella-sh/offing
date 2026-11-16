@@ -150,6 +150,11 @@ export interface Gated extends Prepared {
   readonly selection: ScanSelection | undefined;
 }
 
+/** Optional file operands end at the next flag. A lone dash represents stdout. */
+export function optionalFileOperand(value: string | undefined): string | undefined {
+  return value && !value.startsWith("-") ? value : undefined;
+}
+
 /** The operands left after every option and the value it takes. */
 function positionalWords(args: readonly string[]): string[] {
   const positional: string[] = [];
@@ -157,6 +162,8 @@ function positionalWords(args: readonly string[]): string[] {
     const argument = args[index];
     if (!argument) continue;
     if (valueOptions.has(argument)) {
+      index += 1;
+    } else if (args[0] === "forecast" && argument === "--ics" && optionalFileOperand(args[index + 1])) {
       index += 1;
     } else if (!argument.startsWith("-")) {
       positional.push(argument);

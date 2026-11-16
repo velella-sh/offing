@@ -35,6 +35,7 @@ location. The forecast covers dated events and the gaps Offing identified.
 | `--timeline` | Print a bar chart grouped by calendar month. `NO_COLOR=1` uses ASCII bars. |
 | `--svg [--animate]` | Write a self-contained SVG. `--animate` enables CSS animation. |
 | `--format mermaid` | Print a Mermaid Gantt chart grouped by ecosystem. |
+| `--ics [file]` | Export an [iCalendar file](forecast-calendar.md) to stdout or the named file. Add `--force` to replace an existing file. |
 
 An invalid horizon or date exits with status 2. A replay uses the files present when you
 run the command. To repeat a forecast, use the same checkout, date, and data version.
