@@ -41,7 +41,7 @@ Usage:
   offing baseline [path] [--output <file>]
   offing check <purl> [--fail-on <severity|none>] [--json]
   offing check-snippet --path <path> [--json]   # check one snippet from stdin before writing it; reads no repository
-  offing guard [--fail-on <severity|none>] [--force] npm install <package>...   # check first; flags after npm go to npm
+  offing guard [--fail-on <severity|none>] [--allow <purl>] [--force] [--verbose] <manager> <install|add> <package>...
   offing usage [--file <path>] [--json]
   offing mcp
   offing data status [--json]

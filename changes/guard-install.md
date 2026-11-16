@@ -1,0 +1,1 @@
+- Guard installs across npm, pnpm, Yarn, Bun, pip, and uv with configurable severity and one-time package allowances.

@@ -141,7 +141,9 @@ complete -c offing -n '__fish_seen_subcommand_from check' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from check-snippet' -l path
 complete -c offing -n '__fish_seen_subcommand_from check-snippet' -l json
 complete -c offing -n '__fish_seen_subcommand_from guard' -l fail-on
+complete -c offing -n '__fish_seen_subcommand_from guard' -l allow
 complete -c offing -n '__fish_seen_subcommand_from guard' -l force
+complete -c offing -n '__fish_seen_subcommand_from guard' -l verbose
 complete -c offing -n '__fish_seen_subcommand_from guard' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from usage' -l file
 complete -c offing -n '__fish_seen_subcommand_from usage' -l json

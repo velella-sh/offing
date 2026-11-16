@@ -40,7 +40,7 @@ _offing() {
     fix) opts="--dry-run --show --no-animation --data-version" ;;
     check) opts="--fail-on --json --format --data-version" ;;
     check-snippet) opts="--path --json" ;;
-    guard) opts="--fail-on --force --data-version" ;;
+    guard) opts="--fail-on --allow --force --verbose --data-version" ;;
     usage) opts="--file --json" ;;
     mcp) opts="" ;;
     data) opts="--json --data-version" ;;

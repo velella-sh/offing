@@ -272,7 +272,7 @@ export async function prepare(
   const positional = positionalWords(args);
   const takesFindingId = command === "explain" || command === "context" || command === "report-issue";
   const findingId = takesFindingId ? positional[0] : undefined;
-  const pathArgument = takesFindingId ? (positional[1] ?? ".") : command === "check" ? "." : (positional[0] ?? ".");
+  const pathArgument = command === "check" || command === "guard" ? "." : (positional[takesFindingId ? 1 : 0] ?? ".");
   const demo = args.includes("--demo");
   const config = await preparedConfig(command, demo, pathArgument, ctx);
   if (typeof config === "number") return config;
