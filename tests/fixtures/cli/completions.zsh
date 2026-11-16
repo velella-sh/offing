@@ -19,7 +19,7 @@ _offing() {
     watch) compadd add remove run list --weekly --board --json ;;
         scan) _arguments '--demo' '--json' '--format' '--baseline' '--baseline-warn-days' '--on-expired' '--today' '--write-status' '--interactive' '--fail-on' '--all' '--by-owner' '--data-version' '--only' '--exclude' '*:path:_files' ;;
         baseline) _arguments '--output' '--data-version' '*:path:_files' ;;
-        forecast) _arguments '--months' '--as-of' '--today' '--svg' '--animate' '--timeline' '--json' '--format' '--data-version' '*:path:_files' ;;
+        forecast) _arguments '--months' '--as-of' '--today' '--svg' '--animate' '--timeline' '--json' '--format' '--data-version' '--ics' '--force' '*:path:_files' ;;
         forecast) _arguments '--months' '--as-of' '--today' '--timeline' '--json' '--format' '--data-version' '*:path:_files' ;;
         countdown) _arguments '--as-of' '--limit' '--json' '--once' '--no-animation' '--no-cache' '--data-version' '*:path:_files' ;;
         plan) _arguments '--json' '--wave' '--data-version' '*:path:_files' ;;

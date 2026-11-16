@@ -1,18 +1,22 @@
+import { link, mkdtemp, rename, rm, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import process from "node:process";
 
 import { DEFAULT_FORECAST_MONTHS, MAX_FORECAST_MONTHS } from "@velella/ebb/forecast";
 import { buildRepositoryForecast, renderForecastText, replayScanOptions } from "../forecast.js";
 import type { RepositoryForecast } from "../forecast.js";
+import { renderForecastIcs } from "../forecast-ics.js";
 import { renderForecastSvg } from "../forecast-svg.js";
 import { renderForecastTimeline } from "../forecast-timeline.js";
 import { renderForecastMermaid } from "../reporters.js";
 import { scanWithBuiltIns } from "../scan-builtins.js";
 import type { Gated } from "./runtime.js";
-import { afterGates, preScanPhase, repositoryPhase } from "./runtime.js";
+import { afterGates, optionalFileOperand, preScanPhase, repositoryPhase } from "./runtime.js";
 import type { CliCommand, CommandContext } from "./types.js";
 
 /** The output modes forecast offers, and the severity flag that picks between them. */
 interface ForecastModes {
+  readonly ics: boolean;
   readonly svg: boolean;
   readonly animate: boolean;
   readonly timeline: boolean;
@@ -28,6 +32,11 @@ interface ForecastModeConflict {
 
 /** The refused combinations in the order the command reports them. */
 const forecastModeConflicts: readonly ForecastModeConflict[] = [
+  {
+    message: "--ics requires its own output mode.",
+    when: (modes) =>
+      modes.ics && (modes.svg || modes.animate || modes.timeline || modes.json || modes.format !== undefined),
+  },
   { message: "--animate needs --svg.", when: (modes) => modes.animate && !modes.svg },
   { message: "Use either --svg or --json, not both.", when: (modes) => modes.svg && modes.json },
   { message: "Use either --timeline or --json, not both.", when: (modes) => modes.timeline && modes.json },
@@ -73,13 +82,44 @@ function printForecast(forecast: RepositoryForecast, modes: ForecastModes): void
   process.stdout.write(`${modes.json ? JSON.stringify(forecast, null, 2) : renderForecastText(forecast)}\n`);
 }
 
+/** Publish a complete file, using an exclusive link unless the caller authorized replacement. */
+async function writeCalendar(file: string, calendar: string, force: boolean, ctx: CommandContext): Promise<number> {
+  const directory = await mkdtemp(join(dirname(file), ".offing-calendar-"));
+  try {
+    const temporary = join(directory, "forecast.ics");
+    await writeFile(temporary, calendar);
+    if (force) await rename(temporary, file);
+    else await link(temporary, file);
+    return 0;
+  } catch (error) {
+    if (!force && error instanceof Error && "code" in error && error.code === "EEXIST") {
+      return ctx.fail("usage", "Calendar file already exists: " + file + ". Use --force to replace it.");
+    }
+    throw error;
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+}
+
 export const command: CliCommand = {
   name: "forecast",
-  flags: ["--months", "--as-of", "--today", "--svg", "--animate", "--timeline", "--json", "--format", "--data-version"],
+  flags: [
+    "--months",
+    "--as-of",
+    "--today",
+    "--svg",
+    "--animate",
+    "--timeline",
+    "--json",
+    "--format",
+    "--data-version",
+    "--ics",
+    "--force",
+  ],
   example: "offing forecast . --months 6",
   usage: [
     "  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--svg [--animate] | --timeline | --json | --format mermaid]   # what reaches end of life next, by horizon",
-    "  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--timeline | --json | --format mermaid]   # what reaches end of life next, by horizon",
+    "  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] --ics [file] [--force]   # export the forecast as a calendar",
   ],
   usageSlots: [13, 14],
   run(args, ctx) {
@@ -89,6 +129,7 @@ export const command: CliCommand = {
       const pre = preScanPhase(state, ctx);
       if (pre !== undefined) return pre;
       const modes: ForecastModes = {
+        ics: state.args.includes("--ics"),
         svg: state.args.includes("--svg"),
         animate: state.args.includes("--animate"),
         timeline: state.args.includes("--timeline"),
@@ -97,6 +138,9 @@ export const command: CliCommand = {
       };
       const modeFailure = forecastModeFailure(modes, ctx);
       if (modeFailure !== undefined) return modeFailure;
+      const file = optionalFileOperand(state.optionValue("--ics"));
+      const force = state.args.includes("--force");
+      if (force && file === undefined) return ctx.fail("usage", "--force needs --ics <file>.");
       const monthsValue = state.optionValue("--months");
       const months = state.args.includes("--months") ? Number(monthsValue) : DEFAULT_FORECAST_MONTHS;
       const monthsFailure = forecastMonthsFailure(months, ctx);
@@ -110,7 +154,13 @@ export const command: CliCommand = {
         asOfValue === undefined ? { noCache: state.noCache } : replayScanOptions(asOfValue),
       );
       const forecast = await buildRepositoryForecast(scan, months);
-      printForecast(forecast, modes);
+      if (modes.ics) {
+        const calendar = renderForecastIcs(forecast, scan.findings);
+        if (file !== undefined) return writeCalendar(file, calendar, force, ctx);
+        process.stdout.write(calendar);
+      } else {
+        printForecast(forecast, modes);
+      }
       return 0;
     });
   },

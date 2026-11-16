@@ -1,0 +1,1 @@
+- Export repository lifecycle dates as an iCalendar file with `offing forecast --ics [file]`, including all-day events and upcoming reminders.
