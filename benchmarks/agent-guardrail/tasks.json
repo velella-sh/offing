@@ -1,145 +1,905 @@
 {
-  "schemaVersion": "offing.agent-guardrail.v1",
+  "schemaVersion": "offing.agent-guardrail.v2",
   "tasks": [
     {
-      "id": "npm-request",
-      "request": "Add the request npm package so we can make HTTP calls from this project.",
-      "purl": "pkg:npm/request",
-      "ruleId": "npm.package.request.deprecated",
-      "replacement": "Native fetch or a maintained HTTP client"
+      "id": "npm-jade",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Render server-side templates",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"jade\": \"^1.11.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"pug\": \"^3.0.0\"\n  }\n}",
+      "ruleId": "npm.package.jade.deprecated"
+    },
+    {
+      "id": "runtime-node-16",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin the build image for a JavaScript CLI",
+      "requested": "FROM node:16",
+      "accepted": "FROM node:24",
+      "ruleId": "container.node.eol-21-and-older"
+    },
+    {
+      "id": "action-actions-checkout",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/checkout step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v4",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v5",
+      "ruleId": "github-actions.checkout.node20"
+    },
+    {
+      "id": "api-buffer-size",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Allocate an eight-byte buffer",
+      "requested": "export const bytes = new Buffer(8);",
+      "accepted": "export const bytes = Buffer.alloc(8);",
+      "ruleId": "nodejs.symbol.buffer.constructor"
+    },
+    {
+      "id": "api-control-buffer",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Allocate an eight-byte buffer",
+      "requested": "export const bytes = Buffer.alloc(8);",
+      "accepted": "export const bytes = Buffer.alloc(8);",
+      "ruleId": null
     },
     {
       "id": "npm-node-sass",
-      "request": "Add node-sass to compile our SCSS stylesheets.",
-      "purl": "pkg:npm/node-sass",
-      "ruleId": "npm.package.node-sass.eol",
-      "replacement": "sass"
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Compile SCSS stylesheets",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"node-sass\": \"^9.0.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"sass\": \"^1.80.0\"\n  }\n}",
+      "ruleId": "npm.package.node-sass.eol"
     },
     {
-      "id": "npm-left-pad",
-      "request": "Add the left-pad package for padding strings on the left.",
-      "purl": "pkg:npm/left-pad",
-      "ruleId": "npm.package.left-pad.deprecated",
-      "replacement": "String.prototype.padStart()"
+      "id": "npm-hapi-joi",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Validate request schemas",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@hapi/joi\": \"^17.1.1\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"joi\": \"^17.13.0\"\n  }\n}",
+      "ruleId": "npm.package.hapi.joi.deprecated"
     },
     {
-      "id": "npm-jade",
-      "request": "Add jade as the template engine for server-rendered pages.",
-      "purl": "pkg:npm/jade",
-      "ruleId": "npm.package.jade.deprecated",
-      "replacement": "pug"
+      "id": "npm-babel-preset-es2015",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Transpile modern JavaScript",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"babel-preset-es2015\": \"^6.24.1\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@babel/preset-env\": \"^7.26.0\"\n  }\n}",
+      "ruleId": "npm.package.babel-preset-es2015.deprecated"
     },
     {
-      "id": "npm-koa-router",
-      "request": "Add koa-router so we can define routes in this Koa app.",
-      "purl": "pkg:npm/koa-router",
-      "ruleId": "npm.package.koa-router.deprecated",
-      "replacement": "@koa/router"
+      "id": "npm-boom",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Build HTTP error responses",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"boom\": \"^7.3.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@hapi/boom\": \"^10.0.0\"\n  }\n}",
+      "ruleId": "npm.package.boom.deprecated"
     },
     {
-      "id": "python-nose",
-      "request": "Add the nose package so we can run our Python tests.",
-      "purl": "pkg:pypi/nose",
-      "ruleId": "python.package.nose.maintenance-only",
-      "replacement": "pytest, nose2, or unittest"
+      "id": "npm-cryptiles",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Generate random tokens",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"cryptiles\": \"^4.1.3\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@hapi/cryptiles\": \"^6.0.0\"\n  }\n}",
+      "ruleId": "npm.package.cryptiles.deprecated"
     },
     {
-      "id": "python-pycrypto",
-      "request": "Add pycrypto for encrypting and hashing data in Python.",
-      "purl": "pkg:pypi/pycrypto",
-      "ruleId": "python.package.pycrypto.obsolete",
-      "replacement": "pycryptodome or cryptography"
+      "id": "npm-istanbul",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Collect JavaScript test coverage",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"istanbul\": \"^0.4.5\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"nyc\": \"^17.0.0\"\n  }\n}",
+      "ruleId": "npm.package.istanbul.deprecated"
     },
     {
-      "id": "python-sklearn",
-      "request": "Add the sklearn package for machine learning helpers.",
-      "purl": "pkg:pypi/sklearn",
-      "ruleId": "python.package.sklearn.deprecated",
-      "replacement": "scikit-learn"
+      "id": "npm-node-pre-gyp",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Package native Node.js addons",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"node-pre-gyp\": \"^0.17.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@mapbox/node-pre-gyp\": \"^2.0.0\"\n  }\n}",
+      "ruleId": "npm.package.node-pre-gyp.deprecated"
     },
     {
-      "id": "python-pep8",
-      "request": "Add pep8 so we can lint Python style in CI.",
-      "purl": "pkg:pypi/pep8",
-      "ruleId": "python.package.pep8.deprecated",
-      "replacement": "pycodestyle"
+      "id": "npm-popper-js",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Position floating UI elements",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"popper.js\": \"^1.16.1\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@popperjs/core\": \"^2.11.8\"\n  }\n}",
+      "ruleId": "npm.package.popper.js.deprecated"
     },
     {
-      "id": "python-django-nose",
-      "request": "Add django-nose to run Django tests with nose.",
-      "purl": "pkg:pypi/django-nose",
-      "ruleId": "python.package.django-nose.maintenance-only",
-      "replacement": "pytest-django or Django unittest"
+      "id": "npm-rollup-plugin-babel",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Run Babel during Rollup builds",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"rollup-plugin-babel\": \"^4.4.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@rollup/plugin-babel\": \"^6.0.0\"\n  }\n}",
+      "ruleId": "npm.package.rollup-plugin-babel.deprecated"
     },
     {
-      "id": "go-streadway-amqp",
-      "request": "Add github.com/streadway/amqp so this Go service can talk to RabbitMQ.",
-      "purl": "pkg:golang/github.com/streadway/amqp",
-      "ruleId": "go.module.github.com.streadway.amqp.deprecated",
-      "replacement": "github.com/rabbitmq/amqp091-go"
+      "id": "npm-sntp",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Read time from an NTP server",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"sntp\": \"^2.1.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@hapi/sntp\": \"^4.0.0\"\n  }\n}",
+      "ruleId": "npm.package.sntp.deprecated"
     },
     {
-      "id": "go-golang-protobuf",
-      "request": "Add github.com/golang/protobuf for protobuf encoding in Go.",
-      "purl": "pkg:golang/github.com/golang/protobuf",
-      "ruleId": "go.module.github.com.golang.protobuf.deprecated",
-      "replacement": "google.golang.org/protobuf"
+      "id": "npm-sourcemap-codec",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Encode and decode source maps",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"sourcemap-codec\": \"^1.4.8\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@jridgewell/sourcemap-codec\": \"^1.5.0\"\n  }\n}",
+      "ruleId": "npm.package.sourcemap-codec.deprecated"
     },
     {
-      "id": "rust-atty",
-      "request": "Add the atty crate so we can detect whether stdout is a terminal.",
-      "purl": "pkg:cargo/atty",
-      "ruleId": "rust.crate.atty.unmaintained",
-      "replacement": "std::io::IsTerminal (stable since Rust 1.70), or the is-terminal crate for older compilers"
+      "id": "npm-humanwhocodes-config-array",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Process ESLint configuration arrays",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@humanwhocodes/config-array\": \"^0.13.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@eslint/config-array\": \"^0.19.0\"\n  }\n}",
+      "ruleId": "npm.package.humanwhocodes-config-array.deprecated"
     },
     {
-      "id": "rust-tempdir",
-      "request": "Add the tempdir crate for temporary directories in tests.",
-      "purl": "pkg:cargo/tempdir",
-      "ruleId": "rust.crate.tempdir.unmaintained",
-      "replacement": "tempfile"
+      "id": "npm-humanwhocodes-object-schema",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Merge ESLint configuration using a schema",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@humanwhocodes/object-schema\": \"^2.0.3\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@eslint/object-schema\": \"^2.1.0\"\n  }\n}",
+      "ruleId": "npm.package.humanwhocodes-object-schema.deprecated"
     },
     {
-      "id": "rust-failure",
-      "request": "Add the failure crate for richer error handling in this Rust crate.",
-      "purl": "pkg:cargo/failure",
-      "ruleId": "rust.crate.failure.unmaintained",
-      "replacement": "anyhow, eyre, fehler, or snafu"
+      "id": "npm-read-package-json",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Read package metadata for npm tooling",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"read-package-json\": \"^7.0.1\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@npmcli/package-json\": \"^6.0.0\"\n  }\n}",
+      "ruleId": "npm.package.read-package-json.eol"
     },
     {
-      "id": "dotnet-windowsazure-storage",
-      "request": "Add the WindowsAzure.Storage NuGet package for Azure blob and queue storage.",
-      "purl": "pkg:nuget/WindowsAzure.Storage",
-      "ruleId": "dotnet.package.windowsazure-storage.deprecated",
-      "replacement": "Azure.Storage.Blobs, Azure.Storage.Queues, Azure.Storage.Files.Shares, or Azure.Data.Tables, with Azure.Storage.Common"
+      "id": "pypi-nose",
+      "kind": "package",
+      "path": "requirements.txt",
+      "prompt": "Run the Python test suite",
+      "requested": "nose",
+      "accepted": "pytest",
+      "ruleId": "python.package.nose.maintenance-only"
     },
     {
-      "id": "dotnet-azure-servicebus",
-      "request": "Add Microsoft.Azure.ServiceBus so this .NET app can publish to Azure Service Bus.",
-      "purl": "pkg:nuget/Microsoft.Azure.ServiceBus",
-      "ruleId": "dotnet.package.microsoft-azure-servicebus.deprecated",
-      "replacement": "Azure.Messaging.ServiceBus"
+      "id": "pypi-pycrypto",
+      "kind": "package",
+      "path": "requirements.txt",
+      "prompt": "Provide cryptographic primitives for the Python app",
+      "requested": "pycrypto",
+      "accepted": "pycryptodome",
+      "ruleId": "python.package.pycrypto.obsolete"
     },
     {
-      "id": "php-swiftmailer",
-      "request": "Add swiftmailer/swiftmailer so we can send email from this PHP app.",
-      "purl": "pkg:composer/swiftmailer/swiftmailer",
-      "ruleId": "php.package.swiftmailer.swiftmailer.abandoned",
-      "replacement": "symfony/mailer"
+      "id": "pypi-sklearn",
+      "kind": "package",
+      "path": "requirements.txt",
+      "prompt": "Train a classifier in Python",
+      "requested": "sklearn",
+      "accepted": "scikit-learn",
+      "ruleId": "python.package.sklearn.deprecated"
     },
     {
-      "id": "php-zend-stdlib",
-      "request": "Add zendframework/zend-stdlib for shared Zend Framework helpers.",
-      "purl": "pkg:composer/zendframework/zend-stdlib",
-      "ruleId": "php.package.zendframework.zend-stdlib.abandoned",
-      "replacement": "laminas/laminas-stdlib"
+      "id": "pypi-pep8",
+      "kind": "package",
+      "path": "requirements.txt",
+      "prompt": "Check Python formatting conventions",
+      "requested": "pep8",
+      "accepted": "pycodestyle",
+      "ruleId": "python.package.pep8.deprecated"
     },
     {
-      "id": "elixir-fennec",
-      "request": "Add the fennec Hex package for ICE/STUN helpers in this Elixir project.",
-      "purl": "pkg:hex/fennec",
-      "ruleId": "elixir.package.fennec.retired",
-      "replacement": "mongooseice"
+      "id": "pypi-distribute",
+      "kind": "package",
+      "path": "requirements.txt",
+      "prompt": "Provide Python packaging tools",
+      "requested": "distribute",
+      "accepted": "setuptools",
+      "ruleId": "python.package.distribute.deprecated"
+    },
+    {
+      "id": "package-control-pug",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Render Pug templates",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"pug\": \"^3.0.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"pug\": \"^3.0.0\"\n  }\n}",
+      "ruleId": null
+    },
+    {
+      "id": "package-control-sass",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Compile SCSS with Dart Sass",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"sass\": \"^1.80.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"sass\": \"^1.80.0\"\n  }\n}",
+      "ruleId": null
+    },
+    {
+      "id": "package-control-joi",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Validate JSON request bodies",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"joi\": \"^17.13.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"joi\": \"^17.13.0\"\n  }\n}",
+      "ruleId": null
+    },
+    {
+      "id": "package-control-babel-preset-env",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Target configured browsers with Babel",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@babel/preset-env\": \"^7.26.0\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@babel/preset-env\": \"^7.26.0\"\n  }\n}",
+      "ruleId": null
+    },
+    {
+      "id": "package-control-popperjs-core",
+      "kind": "package",
+      "path": "package.json",
+      "prompt": "Position tooltips",
+      "requested": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@popperjs/core\": \"^2.11.8\"\n  }\n}",
+      "accepted": "{\n  \"name\": \"fixture\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@popperjs/core\": \"^2.11.8\"\n  }\n}",
+      "ruleId": null
+    },
+    {
+      "id": "runtime-node-18-alpine",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Use a compact base image for a Node.js service",
+      "requested": "FROM node:18-alpine",
+      "accepted": "FROM node:24-alpine",
+      "ruleId": "container.node.eol-21-and-older"
+    },
+    {
+      "id": "runtime-node-20-bookworm",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Use a Debian-based Node.js image for integration tests",
+      "requested": "FROM node:20-bookworm",
+      "accepted": "FROM node:24-bookworm",
+      "ruleId": "container.node.eol-21-and-older"
+    },
+    {
+      "id": "runtime-python-3-8",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin a Python image for a data import job",
+      "requested": "FROM python:3.8",
+      "accepted": "FROM python:3.13",
+      "ruleId": "container.python.eol-3.10-and-older"
+    },
+    {
+      "id": "runtime-python-3-9-slim",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Use a slim Python image for a web service",
+      "requested": "FROM python:3.9-slim",
+      "accepted": "FROM python:3.13-slim",
+      "ruleId": "container.python.eol-3.10-and-older"
+    },
+    {
+      "id": "runtime-python-3-10-alpine",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Use an Alpine Python image for a small worker",
+      "requested": "FROM python:3.10-alpine",
+      "accepted": "FROM python:3.13-alpine",
+      "ruleId": "container.python.eol-3.10-and-older"
+    },
+    {
+      "id": "runtime-ruby-2-7",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin Ruby for a static site builder",
+      "requested": "FROM ruby:2.7",
+      "accepted": "FROM ruby:3.4",
+      "ruleId": "container.ruby.eol-3.2-and-older"
+    },
+    {
+      "id": "runtime-ruby-3-1-slim",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Use a slim base for a Ruby web app",
+      "requested": "FROM ruby:3.1-slim",
+      "accepted": "FROM ruby:3.4-slim",
+      "ruleId": "container.ruby.eol-3.2-and-older"
+    },
+    {
+      "id": "runtime-ruby-3-2-alpine",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Use a compact Ruby image for a background job",
+      "requested": "FROM ruby:3.2-alpine",
+      "accepted": "FROM ruby:3.4-alpine",
+      "ruleId": "container.ruby.eol-3.2-and-older"
+    },
+    {
+      "id": "runtime-golang-1-19",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin the Go compiler image for a CLI tool",
+      "requested": "FROM golang:1.19",
+      "accepted": "FROM golang:1.26",
+      "ruleId": "container.golang.eol-1.25-and-older"
+    },
+    {
+      "id": "runtime-golang-1-21-alpine",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin a Go image for a containerized release build",
+      "requested": "FROM golang:1.21-alpine",
+      "accepted": "FROM golang:1.26-alpine",
+      "ruleId": "container.golang.eol-1.25-and-older"
+    },
+    {
+      "id": "runtime-golang-1-23-bookworm",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Match Debian and Go in the integration build image",
+      "requested": "FROM golang:1.23-bookworm",
+      "accepted": "FROM golang:1.26-bookworm",
+      "ruleId": "container.golang.eol-1.25-and-older"
+    },
+    {
+      "id": "runtime-ubuntu-18-04",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin Ubuntu for an integration-test fixture",
+      "requested": "FROM ubuntu:18.04",
+      "accepted": "FROM ubuntu:24.04",
+      "ruleId": "container.ubuntu.eol-20.04-and-older"
+    },
+    {
+      "id": "runtime-ubuntu-20-04",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin Ubuntu for a build environment",
+      "requested": "FROM ubuntu:20.04",
+      "accepted": "FROM ubuntu:24.04",
+      "ruleId": "container.ubuntu.eol-20.04-and-older"
+    },
+    {
+      "id": "runtime-debian-10",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin the operating system for a system-test image",
+      "requested": "FROM debian:10",
+      "accepted": "FROM debian:13",
+      "ruleId": "container.debian.eol-11-and-older"
+    },
+    {
+      "id": "runtime-debian-11-slim",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Use a slim Debian base for a service",
+      "requested": "FROM debian:11-slim",
+      "accepted": "FROM debian:13-slim",
+      "ruleId": "container.debian.eol-11-and-older"
+    },
+    {
+      "id": "runtime-alpine-3-17",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin a small Alpine image for a helper",
+      "requested": "FROM alpine:3.17",
+      "accepted": "FROM alpine:3.23",
+      "ruleId": "container.alpine.eol-3.20-and-older"
+    },
+    {
+      "id": "runtime-alpine-3-18",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin Alpine for a smoke-test image",
+      "requested": "FROM alpine:3.18",
+      "accepted": "FROM alpine:3.23",
+      "ruleId": "container.alpine.eol-3.20-and-older"
+    },
+    {
+      "id": "runtime-alpine-3-19",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin the Alpine base in the release container",
+      "requested": "FROM alpine:3.19",
+      "accepted": "FROM alpine:3.23",
+      "ruleId": "container.alpine.eol-3.20-and-older"
+    },
+    {
+      "id": "runtime-alpine-3-20",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin an Alpine base for a container build",
+      "requested": "FROM alpine:3.20",
+      "accepted": "FROM alpine:3.23",
+      "ruleId": "container.alpine.eol-3.20-and-older"
+    },
+    {
+      "id": "runtime-control-node",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin the node base image",
+      "requested": "FROM node:24",
+      "accepted": "FROM node:24",
+      "ruleId": null
+    },
+    {
+      "id": "runtime-control-python",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin the python base image",
+      "requested": "FROM python:3.13",
+      "accepted": "FROM python:3.13",
+      "ruleId": null
+    },
+    {
+      "id": "runtime-control-ruby",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin the ruby base image",
+      "requested": "FROM ruby:3.4",
+      "accepted": "FROM ruby:3.4",
+      "ruleId": null
+    },
+    {
+      "id": "runtime-control-golang",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin the golang base image",
+      "requested": "FROM golang:1.26",
+      "accepted": "FROM golang:1.26",
+      "ruleId": null
+    },
+    {
+      "id": "runtime-control-alpine",
+      "kind": "runtime",
+      "path": "Dockerfile",
+      "prompt": "Pin the alpine base image",
+      "requested": "FROM alpine:3.23",
+      "accepted": "FROM alpine:3.23",
+      "ruleId": null
+    },
+    {
+      "id": "action-actions-setup-node",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/setup-node step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-node@v4",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-node@v5",
+      "ruleId": "github-actions.setup-node.node20"
+    },
+    {
+      "id": "action-actions-cache",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/cache step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/cache@v4",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/cache@v5",
+      "ruleId": "github-actions.cache.node20"
+    },
+    {
+      "id": "action-actions-upload-artifact",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/upload-artifact step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/upload-artifact@v6",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/upload-artifact@v7",
+      "ruleId": "github-actions.upload-artifact.retired"
+    },
+    {
+      "id": "action-actions-download-artifact",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/download-artifact step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/download-artifact@v6",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/download-artifact@v7",
+      "ruleId": "github-actions.download-artifact.retired"
+    },
+    {
+      "id": "action-actions-setup-python",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/setup-python step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-python@v5",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-python@v6",
+      "ruleId": "github-actions.setup-python.node20"
+    },
+    {
+      "id": "action-actions-setup-go",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/setup-go step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-go@v5",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-go@v6",
+      "ruleId": "github-actions.setup-go.node20"
+    },
+    {
+      "id": "action-actions-setup-java",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/setup-java step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-java@v4",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-java@v5",
+      "ruleId": "github-actions.setup-java.node20"
+    },
+    {
+      "id": "action-actions-setup-dotnet",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/setup-dotnet step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-dotnet@v4",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-dotnet@v5",
+      "ruleId": "github-actions.setup-dotnet.node20"
+    },
+    {
+      "id": "action-actions-github-script",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/github-script step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/github-script@v7",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/github-script@v8",
+      "ruleId": "github-actions.github-script.node20"
+    },
+    {
+      "id": "action-actions-labeler",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/labeler step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/labeler@v5",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/labeler@v6",
+      "ruleId": "github-actions.labeler.node20"
+    },
+    {
+      "id": "action-actions-stale",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/stale step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/stale@v9",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/stale@v10",
+      "ruleId": "github-actions.stale.node20"
+    },
+    {
+      "id": "action-actions-configure-pages",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/configure-pages step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/configure-pages@v5",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/configure-pages@v6",
+      "ruleId": "github-actions.configure-pages.node20"
+    },
+    {
+      "id": "action-actions-deploy-pages",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/deploy-pages step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/deploy-pages@v4",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/deploy-pages@v5",
+      "ruleId": "github-actions.deploy-pages.node20"
+    },
+    {
+      "id": "action-actions-create-github-app-token",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/create-github-app-token step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/create-github-app-token@v2",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/create-github-app-token@v3",
+      "ruleId": "github-actions.create-github-app-token.node20"
+    },
+    {
+      "id": "action-actions-first-interaction",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/first-interaction step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/first-interaction@v2",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/first-interaction@v3",
+      "ruleId": "github-actions.first-interaction.node20"
+    },
+    {
+      "id": "action-docker-setup-buildx-action",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the docker/setup-buildx-action step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: docker/setup-buildx-action@v3",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: docker/setup-buildx-action@v4",
+      "ruleId": "github-actions.setup-buildx-action.node20"
+    },
+    {
+      "id": "action-docker-build-push-action",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the docker/build-push-action step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: docker/build-push-action@v6",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: docker/build-push-action@v7",
+      "ruleId": "github-actions.build-push-action.node20"
+    },
+    {
+      "id": "action-docker-login-action",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the docker/login-action step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: docker/login-action@v3",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: docker/login-action@v4",
+      "ruleId": "github-actions.login-action.node20"
+    },
+    {
+      "id": "action-docker-setup-qemu-action",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the docker/setup-qemu-action step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: docker/setup-qemu-action@v3",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: docker/setup-qemu-action@v4",
+      "ruleId": "github-actions.setup-qemu-action.node20"
+    },
+    {
+      "id": "action-control-actions-checkout",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/checkout step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v5",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v5",
+      "ruleId": null
+    },
+    {
+      "id": "action-control-actions-setup-node",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/setup-node step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-node@v5",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/setup-node@v5",
+      "ruleId": null
+    },
+    {
+      "id": "action-control-actions-cache",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/cache step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/cache@v5",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/cache@v5",
+      "ruleId": null
+    },
+    {
+      "id": "action-control-actions-upload-artifact",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/upload-artifact step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/upload-artifact@v7",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/upload-artifact@v7",
+      "ruleId": null
+    },
+    {
+      "id": "action-control-actions-download-artifact",
+      "kind": "action",
+      "path": ".github/workflows/example.yml",
+      "prompt": "Configure the actions/download-artifact step in the example workflow",
+      "requested": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/download-artifact@v7",
+      "accepted": "name: Guard benchmark\non: workflow_dispatch\njobs:\n  example:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/download-artifact@v7",
+      "ruleId": null
+    },
+    {
+      "id": "api-buffer-text",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Encode hello as a byte buffer",
+      "requested": "export const bytes = new Buffer(\"hello\");",
+      "accepted": "export const bytes = Buffer.from(\"hello\");",
+      "ruleId": "nodejs.symbol.buffer.constructor"
+    },
+    {
+      "id": "api-buffer-array",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Create a buffer holding bytes 1 and 2",
+      "requested": "export const bytes = new Buffer([1, 2]);",
+      "accepted": "export const bytes = Buffer.from([1, 2]);",
+      "ruleId": "nodejs.symbol.buffer.constructor"
+    },
+    {
+      "id": "api-array",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Expose an array predicate",
+      "requested": "import util from \"node:util\";\nexport const isArray = (value) => util.isArray(value);",
+      "accepted": "export const isArray = Array.isArray;",
+      "ruleId": "nodejs.symbol.util.isarray"
+    },
+    {
+      "id": "api-string",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Expose a string predicate",
+      "requested": "import util from \"node:util\";\nexport const isString = (value) => util.isString(value);",
+      "accepted": "export const isString = (value) => typeof value === \"string\";",
+      "ruleId": "nodejs.symbol.util.isstring"
+    },
+    {
+      "id": "api-boolean",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Expose a boolean predicate",
+      "requested": "import util from \"node:util\";\nexport const isBoolean = (value) => util.isBoolean(value);",
+      "accepted": "export const isBoolean = (value) => typeof value === \"boolean\";",
+      "ruleId": "nodejs.symbol.util.isboolean"
+    },
+    {
+      "id": "api-date",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Expose a Date predicate",
+      "requested": "import util from \"node:util\";\nexport const isDate = (value) => util.isDate(value);",
+      "accepted": "export const isDate = (value) => value instanceof Date;",
+      "ruleId": "nodejs.symbol.util.isdate"
+    },
+    {
+      "id": "api-interfaces",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Read the network interface list",
+      "requested": "import os from \"node:os\";\nexport const interfaces = os.getNetworkInterfaces();",
+      "accepted": "import os from \"node:os\";\nexport const interfaces = os.networkInterfaces();",
+      "ruleId": "nodejs.symbol.os.getnetworkinterfaces"
+    },
+    {
+      "id": "api-exists",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Expose an asynchronous file existence check",
+      "requested": "import fs from \"node:fs\";\nexport const exists = (path, callback) => fs.exists(path, callback);",
+      "accepted": "import fs from \"node:fs\";\nexport const exists = (path, callback) => fs.stat(path, (error) => callback(!error));",
+      "ruleId": "nodejs.symbol.fs.exists"
+    },
+    {
+      "id": "api-import-imp",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Import the Python import-system helper",
+      "requested": "import imp",
+      "accepted": "import importlib",
+      "ruleId": "python.module.imp.removed"
+    },
+    {
+      "id": "api-find-module",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Find the json module",
+      "requested": "import imp\nspec = imp.find_module(\"json\")",
+      "accepted": "import importlib.util\nspec = importlib.util.find_spec(\"json\")",
+      "ruleId": "python.symbol.imp.find-module"
+    },
+    {
+      "id": "api-magic",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Read the Python bytecode magic number",
+      "requested": "import imp\nmagic = imp.get_magic()",
+      "accepted": "import importlib.util\nmagic = importlib.util.MAGIC_NUMBER",
+      "ruleId": "python.symbol.imp.get-magic"
+    },
+    {
+      "id": "api-new-module",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Create an empty Python module",
+      "requested": "import imp\nmodule = imp.new_module(\"fixture\")",
+      "accepted": "import types\nmodule = types.ModuleType(\"fixture\")",
+      "ruleId": "python.symbol.imp.new-module"
+    },
+    {
+      "id": "api-reload",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Reload the json module",
+      "requested": "import imp\nimport json\nimp.reload(json)",
+      "accepted": "import importlib\nimport json\nimportlib.reload(json)",
+      "ruleId": "python.symbol.imp.reload"
+    },
+    {
+      "id": "api-cache-from-source",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Find the cache path for a Python source file",
+      "requested": "import imp\ncache = imp.cache_from_source(\"app.py\")",
+      "accepted": "import importlib.util\ncache = importlib.util.cache_from_source(\"app.py\")",
+      "ruleId": "python.symbol.imp.cache-from-source"
+    },
+    {
+      "id": "api-source-from-cache",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Find the source path behind cached bytecode",
+      "requested": "import imp\nsource = imp.source_from_cache(\"__pycache__/app.cpython-313.pyc\")",
+      "accepted": "import importlib.util\nsource = importlib.util.source_from_cache(\"__pycache__/app.cpython-313.pyc\")",
+      "ruleId": "python.symbol.imp.source-from-cache"
+    },
+    {
+      "id": "api-utc-now",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Record the current UTC time",
+      "requested": "from datetime import datetime\nnow = datetime.utcnow()",
+      "accepted": "from datetime import UTC, datetime\nnow = datetime.now(UTC)",
+      "ruleId": "python.symbol.datetime.utcnow"
+    },
+    {
+      "id": "api-utc-timestamp",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Convert the Unix epoch to UTC",
+      "requested": "from datetime import datetime\nepoch = datetime.utcfromtimestamp(0)",
+      "accepted": "from datetime import UTC, datetime\nepoch = datetime.fromtimestamp(0, UTC)",
+      "ruleId": "python.symbol.datetime.utcfromtimestamp"
+    },
+    {
+      "id": "api-utc-report",
+      "kind": "api",
+      "path": "metrics.py",
+      "prompt": "Expose a UTC clock for metrics",
+      "requested": "from datetime import datetime\ndef report_time():\n    return datetime.utcnow()",
+      "accepted": "from datetime import UTC, datetime\ndef report_time():\n    return datetime.now(UTC)",
+      "ruleId": "python.symbol.datetime.utcnow"
+    },
+    {
+      "id": "api-utc-expiry",
+      "kind": "api",
+      "path": "sessions.py",
+      "prompt": "Convert session expiry seconds to a UTC date",
+      "requested": "from datetime import datetime\ndef read_expiry(seconds):\n    return datetime.utcfromtimestamp(seconds)",
+      "accepted": "from datetime import UTC, datetime\ndef read_expiry(seconds):\n    return datetime.fromtimestamp(seconds, UTC)",
+      "ruleId": "python.symbol.datetime.utcfromtimestamp"
+    },
+    {
+      "id": "api-control-array",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Expose an array predicate",
+      "requested": "export const isArray = Array.isArray;",
+      "accepted": "export const isArray = Array.isArray;",
+      "ruleId": null
+    },
+    {
+      "id": "api-control-comment",
+      "kind": "api",
+      "path": "app.js",
+      "prompt": "Document an older call while allocating a buffer with the current API",
+      "requested": "// Historical example: new Buffer(8)\nexport const bytes = Buffer.alloc(8);",
+      "accepted": "// Historical example: new Buffer(8)\nexport const bytes = Buffer.alloc(8);",
+      "ruleId": null
+    },
+    {
+      "id": "api-control-utc",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Record an aware UTC date",
+      "requested": "from datetime import UTC, datetime\nnow = datetime.now(UTC)",
+      "accepted": "from datetime import UTC, datetime\nnow = datetime.now(UTC)",
+      "ruleId": null
+    },
+    {
+      "id": "api-control-import",
+      "kind": "api",
+      "path": "app.py",
+      "prompt": "Find the json module",
+      "requested": "import importlib.util\nspec = importlib.util.find_spec(\"json\")",
+      "accepted": "import importlib.util\nspec = importlib.util.find_spec(\"json\")",
+      "ruleId": null
     }
   ]
 }
