@@ -98,16 +98,15 @@ offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--svg [--animate] 
 offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--timeline | --json | --format mermaid]
 ```
 
-Lists what reaches end of life next, grouped by month, from the current scan.
+Lists dated end-of-life events in 3-, 6-, and 12-month ranges, with a weather summary and the affected locations. See [Forecast](forecast.md) for the full contract and runnable examples.
 
 | Flag | What it does |
 | --- | --- |
 | `--months <n>` | How many months ahead to look. Whole number from `1` to `36`; default `12`. |
 | `--as-of <YYYY-MM-DD>` | Treat this date as today. |
-| `--timeline` | Draw the forecast as a terminal timeline instead of a list. Cannot be combined with `--json` or `--svg`. |
 | `--svg` | Print a self-contained SVG timeline for a README or a slide. Cannot be combined with `--timeline` or `--json`. |
 | `--animate` | With `--svg`, grow a bar from today to each event in date order and pulse the today marker twice with CSS. `prefers-reduced-motion: reduce` shows the final frame immediately. |
-| `--timeline` | Draw the forecast as a terminal timeline instead of a list. Cannot be combined with `--json` or `--format mermaid`. |
+| `--timeline` | Draw the forecast as a terminal timeline instead of a list. Cannot be combined with `--json`, `--svg`, or `--format mermaid`. |
 | `--format mermaid` | Print a fenced Mermaid Gantt chart of the dated events, grouped by ecosystem. |
 | `--json` | Print the forecast document. |
 

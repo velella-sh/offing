@@ -150,7 +150,7 @@ export async function scanRepository(
 
   // One timestamp for the whole scan: detectors that need "today" (CLE scheduled dates) read it from
   // context instead of the clock, so findings stay deterministic for this run.
-  const scannedAt = new Date();
+  const scannedAt = new Date(options.scannedAt ?? Date.now());
   const contextScannedAt = options.scannedAt ?? scannedAt.toISOString();
   const context = { root: resolvedRoot, scannedAt: contextScannedAt };
 

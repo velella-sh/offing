@@ -131,12 +131,25 @@ test("offing forecast reports Node.js 22 reaching end of life, for a fixed date"
 
   const sixMonths = JSON.parse(await run("--months", "6", "--json")) as { groups: Array<{ month: string }> };
   assert.ok(!sixMonths.groups.some((group) => group.month === "2027-04"));
-  assert.match(await run(), /2027-04-30/);
+  assert.match(await run(), /^Weather: clear\n[\s\S]*3-6 months[\s\S]*2027-04-30[^\n]*\n {4}package\.json:1/m);
 });
 
 test("rejects a months value that is not a whole number from 1 to 36", async () => {
-  for (const value of ["0", "x", "1.5", "37"]) {
-    const result = await runCli(["forecast", ".", "--months", value]);
+  for (const value of [[], ["0"], ["-1"], ["x"], ["1.5"], ["37"]]) {
+    const result = await runCli(["forecast", ".", "--months", ...value]);
     assert.equal(result.code, 2);
+    assert.equal(result.stdout, "");
+    assert.equal(result.stderr.trim().split("\n").length, 1);
+    assert.match(result.stderr, /--months must be a whole number from 1 to 36\./);
+  }
+});
+
+test("rejects invalid or omitted replay dates with one usage error", async () => {
+  for (const value of [[], ["tomorrow"], ["2025-02-29"], ["2026-1-01"]]) {
+    const result = await runCli(["forecast", ".", "--as-of", ...value]);
+    assert.equal(result.code, 2);
+    assert.equal(result.stdout, "");
+    assert.equal(result.stderr.trim().split("\n").length, 1);
+    assert.match(result.stderr, /--as-of .* must be a date/);
   }
 });

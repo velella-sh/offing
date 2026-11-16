@@ -10,6 +10,7 @@ import { CLE_FILE_NAME, cleDetector, ingestCle, parseCleDocument } from "../src/
 import { builtInDetectors } from "../src/detectors/index.js";
 import { scanRepository } from "../src/engine/index.js";
 import { CLE_SCHEMA } from "@velella/ebb/export/cle";
+import { runCli } from "./cli-runner.js";
 
 const packagesRoot = resolve("tests/fixtures/cle-ingest/packages");
 const temporaryRoots: string[] = [];
@@ -234,4 +235,14 @@ test("the installed-package walk reads pnpm stores and scoped packages and skips
   assert.ok(serialized.includes("store-widget"), "a package in a pnpm store is read");
   assert.ok(serialized.includes("scoped-widget"), "a scoped package is read");
   assert.ok(!serialized.includes("linked-widget"), "a symbolic link is not followed");
+});
+
+test("forecast replays installed-package events against the requested day", async () => {
+  const root = await packageWithCle({ effective: "2001-06-01T00:00:00Z" });
+  const args = ["forecast", root, "--as-of", "2001-05-01", "--months", "3", "--data-version", "bundled"];
+  const historical = await runCli(args);
+  assert.equal(historical.code, 0);
+  assert.match(historical.stdout, /scheduled \(maintainer CLE\) \[low\] \(cle\.endOfLife\.npm-dated-widget\.1\)/);
+  assert.match(historical.stdout, /node_modules\/dated-widget\/cle\.json:1/);
+  assert.deepEqual(await runCli(args), historical);
 });

@@ -1,0 +1,1 @@
+- Show forecast weather, dated events by horizon, affected locations, and lifecycle data gaps in the terminal forecast.
