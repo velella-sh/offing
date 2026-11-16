@@ -44,6 +44,7 @@ if (nodeProblem) {
 
 /** Mirrors the precedence in `cli-main`: help wins, then the version flag. Only the bare flag is a fast-path request. */
 function isVersionRequest(args: readonly string[]): boolean {
+  if (args[0] === "guard") return false;
   if (args.includes("--help") || args.includes("-h")) return false;
   return args.includes("--version") || args.includes("-v");
 }

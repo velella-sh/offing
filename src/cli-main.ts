@@ -1,5 +1,6 @@
 import process from "node:process";
 
+import { cliOptionArgs } from "./cli-args.js";
 import { commands } from "./commands/index.generated.js";
 import { bindContext, createCommandContext, fail } from "./commands/runtime.js";
 import { isCompletionShell, renderCompletions, renderHelp } from "./completions.js";
@@ -11,11 +12,12 @@ const HELP = renderHelp(commands);
 
 /** Dispatches one CLI invocation and returns its exit code. Exported so tests can drive the shipping commands in process. */
 export async function main(rawArgs: readonly string[]): Promise<number> {
-  const ctx = createCommandContext(rawArgs, HELP, (shell) =>
+  const optionArgs = cliOptionArgs(rawArgs);
+  const ctx = createCommandContext(optionArgs, HELP, (shell) =>
     isCompletionShell(shell) ? renderCompletions(shell) : undefined,
   );
   bindContext(ctx);
-  const args = rawArgs.filter((argument) => argument !== "--debug");
+  const args = optionArgs.filter((argument) => argument !== "--debug");
   if (args.includes("--help") || args.includes("-h") || args.length === 0) {
     process.stdout.write(HELP);
     return 0;
@@ -27,7 +29,7 @@ export async function main(rawArgs: readonly string[]): Promise<number> {
   const name = args[0];
   const command = commands.find((candidate) => candidate.name === name);
   if (!command) return ctx.fail("usage", `Unknown command: ${name ?? ""}`, `\n${HELP}`, "unknown-command");
-  return command.run(args.slice(1), ctx);
+  return command.run([...args.slice(1), ...rawArgs.slice(optionArgs.length)], ctx);
 }
 
 /**
@@ -41,7 +43,7 @@ export async function run(rawArgs: readonly string[] = process.argv.slice(2)): P
     const { code, kind } = classifyError(error);
     // Only Offing and Ebb errors classify as anything but internal, and both are Errors.
     if (kind !== "internal" && error instanceof Error) return fail(kind, error.message, "", code);
-    const { message, appendix } = unexpectedFailure(error, rawArgs.includes("--debug"));
+    const { message, appendix } = unexpectedFailure(error, cliOptionArgs(rawArgs).includes("--debug"));
     return fail("internal", message, appendix, code);
   }
 }

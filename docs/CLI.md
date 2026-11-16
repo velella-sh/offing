@@ -368,19 +368,7 @@ Paths that are absolute, contain `..`, or exceed 256 characters are rejected, as
 
 ### `guard`
 
-```bash
-offing guard [--fail-on <severity|none>] [--force] npm install <package>...
-```
-
-Checks packages before the package manager runs, then installs only when allowed. Offing reads its own options only before the manager token; everything after `npm`, including `--force`, is passed to npm.
-
-| Flag | What it does |
-| --- | --- |
-| `--fail-on <severity\|none>` | Refuse the install when a package is affected at or above this severity. Default `high`. |
-| `--force` | Run the install anyway after printing a warning. |
-| `--data-version <version>` | Pin the lifecycle data for the check, before the manager token. |
-
-Only `npm install` is supported today. The command exits with npm's own code when it runs, and `1` when it refuses.
+Check dependencies against local lifecycle data before running npm, pnpm, Yarn, Bun, pip, or uv. See [Guard package installs](guard.md) for supported commands, flags, and examples.
 
 ### `usage`
 

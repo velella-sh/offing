@@ -83,7 +83,7 @@ test("an allowed install reaches npm with the arguments unchanged and in order",
   });
   assert.equal(result.allowed, true);
   assert.equal(result.exitCode, 7);
-  assert.equal(result.output, "");
+  assert.equal(result.output, "no data for pkg:npm/express@4.18.0, no data for pkg:npm/left-pad@1.3.0");
   assert.equal(runs.length, 1);
   assert.equal(runs[0]!.command, "npm");
   assert.deepEqual(values(runs[0]!), ["install", "--save-dev", "express@4.18.0", "left-pad@1.3.0"]);
@@ -130,26 +130,14 @@ test("value-taking npm flags keep their value in place and are not judged as pac
   }
 });
 
-test("a bare -- ends checking and everything after it is forwarded untouched", async () => {
-  const request = parseNpmInstall(["install", "--", "-w", "web", "request@2.88.2"]);
-  assert.deepEqual(values(request), ["install", "--", "-w", "web", "request@2.88.2"]);
-  assert.deepEqual(specs(request), []);
+test("a bare -- ends flag parsing and keeps following operands in place", async () => {
+  const args = ["install", "--", "request@2.88.2"];
+  const request = parseNpmInstall(args);
+  assert.deepEqual(values(request), args);
+  assert.deepEqual(specs(request), ["request@2.88.2"]);
 
-  let checked = 0;
-  let ran = false;
-  const result = await guardCommand(["npm", "install", "--", "request@2.88.2"], {
-    check: async () => {
-      checked += 1;
-      return noData("pkg:npm/unused");
-    },
-    run: () => {
-      ran = true;
-      return 0;
-    },
-  });
-  assert.equal(result.allowed, true);
-  assert.equal(checked, 0);
-  assert.equal(ran, true);
+  const result = await guardCommand(["npm", ...args], { run: () => assert.fail("blocked install ran") });
+  assert.equal(result.allowed, false);
 });
 
 test("npm install without package arguments is not checked", async () => {
@@ -318,7 +306,7 @@ test("a package that cannot be checked blocks the install", async () => {
 });
 
 test("unsupported managers, install commands, and gates are usage errors", () => {
-  assert.throws(() => parseGuardArgs(["pip", "install", "nose"]), /Unsupported package manager "pip"/);
+  assert.throws(() => parseGuardArgs(["gem", "install", "rails"]), /Unsupported package manager "gem"/);
   assert.throws(() => parseGuardArgs(["npm", "ci"]), /Expected `npm install`/);
   assert.throws(() => parseGuardArgs(["--fail-on", "urgent", "npm", "install", "request"]), /--fail-on needs one of/);
   assert.throws(() => parseGuardArgs([]), /Missing package manager/);
@@ -340,7 +328,7 @@ test("the CLI refuses a deprecated package before npm runs", async () => {
 });
 
 test("the CLI reports a guard usage error as a usage failure", async () => {
-  const result = await runCli(["guard", "pip", "install", "nose"]);
+  const result = await runCli(["guard", "gem", "install", "rails"]);
   assert.equal(result.code, 2);
   assert.match(result.stderr, /Unsupported package manager/);
 });
