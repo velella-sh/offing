@@ -46,32 +46,22 @@ const problems = [];
 const imports = new Map();
 const edges = new Map();
 
+function literalText(node) {
+  return node && ts.isStringLiteralLike(node) ? node.text : undefined;
+}
+
 function moduleName(node) {
-  if (
-    (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
-    node.moduleSpecifier &&
-    ts.isStringLiteralLike(node.moduleSpecifier)
-  )
-    return node.moduleSpecifier.text;
-  if (
-    ts.isImportEqualsDeclaration(node) &&
-    ts.isExternalModuleReference(node.moduleReference) &&
-    node.moduleReference.expression &&
-    ts.isStringLiteralLike(node.moduleReference.expression)
-  ) {
-    return node.moduleReference.expression.text;
+  if (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) return literalText(node.moduleSpecifier);
+  if (ts.isImportEqualsDeclaration(node) && ts.isExternalModuleReference(node.moduleReference)) {
+    return literalText(node.moduleReference.expression);
   }
   if (
     ts.isCallExpression(node) &&
-    node.arguments[0] &&
-    ts.isStringLiteralLike(node.arguments[0]) &&
     (node.expression.kind === ts.SyntaxKind.ImportKeyword || node.expression.getText() === "require")
   ) {
-    return node.arguments[0].text;
+    return literalText(node.arguments[0]);
   }
-  if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument) && ts.isStringLiteral(node.argument.literal)) {
-    return node.argument.literal.text;
-  }
+  if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument)) return literalText(node.argument.literal);
   return undefined;
 }
 
@@ -129,14 +119,18 @@ function declarationName(node) {
   );
 }
 
+function markBinding(node) {
+  if (!ts.isBindingElement(node) || !ts.isObjectBindingPattern(node.parent)) return;
+  const name = node.propertyName ?? node.name;
+  if (ts.isIdentifier(name)) {
+    used.add(canonical(checker.getPropertyOfType(checker.getTypeAtLocation(node.parent), name.text)));
+  }
+}
+
 for (const file of files.filter((file) => reachable.has(file))) {
   const source = program.getSourceFile(file);
   const visit = (node) => {
-    if (ts.isBindingElement(node) && ts.isObjectBindingPattern(node.parent)) {
-      const name = node.propertyName ?? node.name;
-      if (ts.isIdentifier(name))
-        used.add(canonical(checker.getPropertyOfType(checker.getTypeAtLocation(node.parent), name.text)));
-    }
+    markBinding(node);
     if (ts.isIdentifier(node) && !declarationName(node)) {
       const symbol = ts.isShorthandPropertyAssignment(node.parent)
         ? checker.getShorthandAssignmentValueSymbol(node.parent)

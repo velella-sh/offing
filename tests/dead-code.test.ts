@@ -1,12 +1,15 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import type { TestContext } from "node:test";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+
+import ts from "typescript";
+import { functionMeasures, TARGETS } from "../tools/check-quality.js";
 
 const checker = fileURLToPath(new URL("../../tools/check-dead-code.mjs", import.meta.url));
 const exec = promisify(execFile);
@@ -132,4 +135,13 @@ test("undeclared packages fail and malformed configuration fails visibly", async
   const invalid = await check(root);
   assert.notEqual(invalid.code, 0);
   assert.match(invalid.stderr, /expected/u);
+});
+
+test("the JavaScript dead-code checker meets the repository function quality limits", async () => {
+  const contents = await readFile(checker, "utf8");
+  const source = ts.createSourceFile(checker, contents, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  for (const fn of functionMeasures(source)) {
+    assert.ok(fn.complexity <= TARGETS.complexity, fn.name);
+    assert.ok(fn.lines <= TARGETS.functionLines, fn.name);
+  }
 });
