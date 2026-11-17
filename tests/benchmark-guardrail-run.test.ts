@@ -1,158 +1,77 @@
 import assert from "node:assert/strict";
-import { access, mkdtemp, readFile, rm } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { promisify } from "node:util";
 
-import {
-  ADDED_PURLS_FILENAME,
-  SCHEMA_VERSION,
-  baselinePrompt,
-  createFakeGuardrailAgent,
-  guardrailPrompt,
-  installGuardrail,
-  readAddedPurls,
-  runGuardrailTask,
-} from "../benchmarks/agent-guardrail/run.js";
-import type { AgentAdapter } from "../benchmarks/agent-guardrail/run.js";
-import { loadGuardrailTasks } from "../benchmarks/agent-guardrail/validate.js";
-
-const jade = {
-  id: "npm-jade",
-  request: "Add jade as the template engine for server-rendered pages.",
-  purl: "pkg:npm/jade",
-  ruleId: "npm.package.jade.deprecated",
-  replacement: "pug",
-};
-
-test("the fake adapter scripts baseline added-deprecated and guardrail refused", async () => {
-  const outputDir = await mkdtemp(join(tmpdir(), "offing-guardrail-results-"));
-  try {
-    const result = await runGuardrailTask(jade, {
-      agent: createFakeGuardrailAgent(),
-      outputDir,
-    });
-
-    assert.equal(result.schemaVersion, SCHEMA_VERSION);
-    assert.equal(result.taskId, "npm-jade");
-    assert.equal(result.attempts.length, 2);
-
-    const baseline = result.attempts.find((attempt) => attempt.arm === "baseline");
-    const guardrail = result.attempts.find((attempt) => attempt.arm === "guardrail");
-    assert.ok(baseline);
-    assert.ok(guardrail);
-
-    assert.equal(baseline.outcome, "added-deprecated");
-    assert.deepEqual(baseline.addedPurls, ["pkg:npm/jade"]);
-    assert.equal(baseline.agent.name, "fake-guardrail");
-    assert.equal(baseline.agent.exitCode, 0);
-    assert.ok(baseline.prompt.includes("ARM: baseline"));
-    assert.ok(!baseline.prompt.includes(".agents/skills/offing"));
-
-    assert.equal(guardrail.outcome, "refused");
-    assert.deepEqual(guardrail.addedPurls, []);
-    assert.ok(guardrail.prompt.includes("ARM: guardrail"));
-    assert.ok(guardrail.prompt.includes(".agents/skills/offing/SKILL.md"));
-    assert.ok(guardrail.prompt.includes("check_dependency"));
-
-    assert.equal(result.score.baseline.counts["added-deprecated"], 1);
-    assert.equal(result.score.guardrail.counts.refused, 1);
-    assert.equal(result.score.baseline.rates["added-deprecated"], 1);
-    assert.equal(result.score.guardrail.rates.refused, 1);
-
-    for (const attempt of result.attempts) {
-      assert.ok(attempt.resultPath);
-      const written = JSON.parse(await readFile(attempt.resultPath, "utf8")) as {
-        schemaVersion: string;
-        arm: string;
-        outcome: string;
-        addedPurls: string[];
-      };
-      assert.equal(written.schemaVersion, SCHEMA_VERSION);
-      assert.equal(written.arm, attempt.arm);
-      assert.equal(written.outcome, attempt.outcome);
-      assert.deepEqual(written.addedPurls, attempt.addedPurls);
-
-      const expectedName = join(outputDir, `${attempt.taskId}.${attempt.arm}.json`);
-      assert.equal(attempt.resultPath, expectedName);
-    }
-  } finally {
-    await rm(outputDir, { recursive: true, force: true });
-  }
-});
-
-test("result files are written for a single arm and worktrees are removed", async () => {
-  const outputDir = await mkdtemp(join(tmpdir(), "offing-guardrail-one-arm-"));
-  try {
-    const result = await runGuardrailTask(jade, {
-      agent: createFakeGuardrailAgent(),
-      arms: ["guardrail"],
-      outputDir,
-    });
-
-    assert.equal(result.attempts.length, 1);
-    assert.equal(result.attempts[0]?.arm, "guardrail");
-    assert.equal(result.attempts[0]?.outcome, "refused");
-    await access(join(outputDir, "npm-jade.guardrail.json"));
-    await assert.rejects(access(join(outputDir, "npm-jade.baseline.json")));
-  } finally {
-    await rm(outputDir, { recursive: true, force: true });
-  }
-});
-
-test("installGuardrail writes the skill and AGENTS.md into a directory", async () => {
-  const root = await mkdtemp(join(tmpdir(), "offing-guardrail-install-"));
-  try {
-    await installGuardrail(root, "# fake skill\n\nCall check_dependency.\n");
-    const skill = await readFile(join(root, ".agents/skills/offing/SKILL.md"), "utf8");
-    assert.ok(skill.includes("check_dependency"));
-    const agents = await readFile(join(root, "AGENTS.md"), "utf8");
-    assert.ok(agents.includes(".agents/skills/offing/SKILL.md"));
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
-});
-
-test("readAddedPurls returns an empty list when the file is missing", async () => {
-  const root = await mkdtemp(join(tmpdir(), "offing-guardrail-empty-"));
-  try {
-    assert.deepEqual(await readAddedPurls(root), []);
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
-});
-
-test("prompts carry the arm markers the fake adapter needs", () => {
-  assert.ok(baselinePrompt(jade).includes("TASK_PURL: pkg:npm/jade"));
-  assert.ok(baselinePrompt(jade).includes(`to ${ADDED_PURLS_FILENAME}`));
-  assert.ok(guardrailPrompt(jade, "skill body").includes("skill body"));
-  assert.ok(guardrailPrompt(jade, "skill body").includes("ARM: guardrail"));
-});
-
-test("a custom collector can supply added Package URLs", async () => {
-  const outputDir = await mkdtemp(join(tmpdir(), "offing-guardrail-collector-"));
-  const agent: AgentAdapter = {
-    name: "idle",
-    async run() {
-      return { exitCode: 0, signal: null, stdout: "", stderr: "", timedOut: false };
+test("both installed host hooks replay five task pairs with identical prompts and per-attempt metadata", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "offing-guard-eval-test-"));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await promisify(execFile)(
+    process.execPath,
+    ["dist/benchmarks/agent-guardrail/run.js", "--jobs", "2", "--output-dir", directory],
+    {
+      env: { ...process.env, OFFING_DATA_VERSION: "bundled" },
     },
-  };
-  try {
-    const result = await runGuardrailTask(jade, {
-      agent,
-      arms: ["baseline"],
-      outputDir,
-      collectAddedPurls: async () => ["pkg:npm/pug"],
-    });
-    assert.equal(result.attempts[0]?.outcome, "named-replacement");
-    assert.deepEqual(result.attempts[0]?.addedPurls, ["pkg:npm/pug"]);
-  } finally {
-    await rm(outputDir, { recursive: true, force: true });
+  );
+
+  for (const host of ["codex", "cursor"]) {
+    const { attempts } = JSON.parse(await readFile(join(directory, `replay-${host}.json`), "utf8")) as {
+      attempts: {
+        arm: string;
+        prompt: string;
+        startedAt: string;
+        task: { id: string };
+        agent: { host: string; model: string; version: string; offingVersion: string };
+        observation: { content: string | null; deniedRequestedEdit: boolean; failed: boolean };
+        hooks: unknown[];
+      }[];
+    };
+    assert.equal(attempts.length, 10);
+    for (let index = 0; index < attempts.length; index += 2) {
+      const baseline = attempts[index];
+      const guarded = attempts[index + 1];
+      assert.ok(baseline && guarded);
+      assert.deepEqual([baseline.arm, guarded.arm], ["baseline", "guardrail"]);
+      assert.equal(baseline.task.id, guarded.task.id);
+      assert.equal(baseline.prompt, guarded.prompt);
+      assert.equal(baseline.hooks.length, 0);
+      assert.equal(guarded.hooks.length, 1);
+      for (const attempt of [baseline, guarded]) {
+        assert.equal(attempt.agent.host, host);
+        assert.equal(attempt.agent.model, "scripted-replay");
+        assert.ok(attempt.agent.version && attempt.agent.offingVersion && Date.parse(attempt.startedAt));
+        assert.equal(attempt.observation.failed, false);
+      }
+    }
+    assert.equal(attempts[7]?.observation.deniedRequestedEdit, true);
+    assert.equal(attempts[7]?.observation.content, null);
+    assert.equal(attempts[9]?.observation.deniedRequestedEdit, false);
+    assert.ok(attempts[9]?.observation.content);
   }
 });
 
-test("the harness loads the checked-in guardrail tasks", () => {
-  const tasks = loadGuardrailTasks();
-  assert.equal(tasks.schemaVersion, "offing.agent-guardrail.v1");
-  assert.equal(tasks.tasks.length, 20);
+test("retries both arms of a failed pair and retains the original attempts", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "offing-guard-eval-retry-"));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const run = promisify(execFile);
+  const args = ["dist/benchmarks/agent-guardrail/run.js", "--host", "codex", "--output-dir", directory];
+  const options = { env: { ...process.env, OFFING_DATA_VERSION: "bundled" } };
+  await run(process.execPath, args, options);
+  const path = join(directory, "replay-codex.json");
+  const initial = JSON.parse(await readFile(path, "utf8")) as {
+    attempts: { observation: { failed: boolean } }[];
+  };
+  const failed = initial.attempts[1];
+  assert.ok(failed);
+  failed.observation.failed = true;
+  await writeFile(path, JSON.stringify(initial));
+  await run(process.execPath, [...args, "--retry-failed"], options);
+  const retry = JSON.parse(await readFile(path, "utf8")) as typeof initial & { previousAttempts: unknown[] };
+  assert.equal(retry.attempts.length, 10);
+  assert.equal(retry.attempts[1]?.observation.failed, false);
+  assert.deepEqual(retry.previousAttempts, initial.attempts.slice(0, 2));
+  assert.deepEqual(retry.attempts.slice(2), initial.attempts.slice(2));
 });

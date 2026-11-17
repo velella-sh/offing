@@ -316,3 +316,51 @@ npm run benchmark:large-monorepos -- --list
 # After checking each pin out under targets/<id> at the pinned commit:
 npm run benchmark:large-monorepos -- --root targets --json --output artifacts/large-monorepos.json
 ```
+
+## Agent guardrail benchmark
+
+In the complete Cursor run, Offing denied **76 of 80 requested risky edits (95%)** and denied **0 of 20 clean controls**. The hooks-off agent wrote 76 of the requested risky edits. With hooks on, 2 remained in the target files. Codex reached its account quota, leaving 77 failed attempts and a partial comparison.
+
+### Method
+
+The [100 tasks](../benchmarks/agent-guardrail/tasks.json) cover package declarations, runtime container images, GitHub Action versions, and deprecated or removed APIs. Each of the four categories includes five clean controls. The [validator](../benchmarks/agent-guardrail/validate.ts) checks risky requests against their expected bundled rules and checks the clean controls and accepted replacements for findings.
+
+On 2026-11-17, we ran each task in two disposable Git repositories per host, using the same prompt and model in both arms. The hooks-on arm used `offing init --hooks-for codex` or `offing init --hooks-for cursor`. The agents used native file editing tools. We recorded the final target file, explicit refusal, hook responses, model, host version, Offing version, and start and finish times.
+
+### Live results
+
+| Host and model | Hooks | Risky requests denied | Risky edits landed | Explicit refusals | Accepted replacements | False blocks | Unscored edits | Failed attempts |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Codex (gpt-6.1-sol) | Off | 0 / 80 | 51 / 80 | 0 / 100 | 0 / 80 | 0 / 20 | 0 | 38 |
+| Codex (gpt-6.1-sol) | On | 50 / 80 | 0 / 80 | 13 / 100 | 25 / 80 | 0 / 20 | 12 | 39 |
+| Cursor (composer-2.5) | Off | 0 / 80 | 76 / 80 | 0 / 100 | 3 / 80 | 0 / 20 | 1 | 0 |
+| Cursor (composer-2.5) | On | 76 / 80 | 2 / 80 | 0 / 100 | 17 / 80 | 0 / 20 | 13 | 0 |
+
+The [Codex live results](../benchmarks/agent-guardrail/results/live-codex.json) and [Cursor live results](../benchmarks/agent-guardrail/results/live-cursor.json) contain the observations for this table. The headline divides Cursor's hooks-on `riskyEditDenials` by its `riskyTasks`. Codex's quotas affected both arms and its table rows include those failures. A risky request can be denied and then replaced in the same attempt, so the denial column is independent of the final outcome columns. The raw logs use placeholders for local paths.
+
+An explicit refusal requires the agent's `REFUSED` response. An accepted replacement matches the fixture's accepted edit. The scorer compares parsed YAML, accepts npm dependency ranges within the expected range when the rest of the manifest matches, and otherwise compares normalized text. A false block requires a logged denial of the exact clean proposal. Attempts with other final edits, no edit, or execution errors remain in the published denominators.
+
+This measures single-file edits for these host and model combinations. The score leaves alternative implementations unscored when they differ from the fixture's accepted edit. Fixture code, dependency installs, builds, and migrations stayed outside the experiment. Results for each host are paired within that host and model.
+
+### Offline replay
+
+Each host's installed hooks blocked 78 of 80 risky proposed writes (97.5%) and blocked none of the 20 clean controls. All 80 risky edits landed in each hooks-off replay. The default hook gate allowed the Node.js `util.isArray` and `fs.exists` cases. The replay invokes the hooks with scripted payloads, so it measures the hook decision for an exact proposal. See the [Codex replay](../benchmarks/agent-guardrail/results/replay-codex.json) and [Cursor replay](../benchmarks/agent-guardrail/results/replay-cursor.json).
+
+### Rerun the guardrail suite
+
+From the root of a fresh checkout with Node.js 22 or newer, npm, Git, and a POSIX shell:
+
+```sh
+# Five tasks, both arms and both hook formats. No agent credentials required.
+./benchmarks/agent-guardrail/reproduce.sh --output-dir /tmp/offing-guard-smoke
+
+# All 100 tasks, both arms and both hook formats, in offline replay.
+./benchmarks/agent-guardrail/reproduce.sh --full --output-dir /tmp/offing-guard-replay
+
+# Recompute the live table from the published raw files after building.
+for host in codex cursor; do
+  node dist/benchmarks/agent-guardrail/run.js --report "benchmarks/agent-guardrail/results/live-${host}.json"
+done
+```
+
+For live mode, install and authenticate both CLIs and use an isolated environment with only the required credentials. The recorded run used Codex `codex-cli 0.169.0-alpha.11.1`, Cursor `2026.11.13-eacade1`, and Offing `0.1.1`. Pass the model IDs available to your accounts with `--codex-model` and `--cursor-model`. Add `--full --cost-per-attempt <usd>` to print the estimated cost for all 400 attempts before running, or select a single host with `--host` to estimate its cost separately. The recorded run used `--jobs 10` per host. Run the same command with `--retry-failed` and the same output directory to repeat interrupted pairs and preserve their previous results. The runner writes one JSON file per host. Review live logs before publishing.
