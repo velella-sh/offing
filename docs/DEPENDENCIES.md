@@ -79,10 +79,26 @@ codemods that edit those files without reformatting them.
 directly is required because Offing imports `zod/v4` itself. Replacing it would duplicate the schema definitions
 and drift from what the SDK validates.
 
+## Development checks
+
+`npm run check:dead-code` uses the installed TypeScript compiler to follow imports from the package exports,
+CLI binaries, tests, tools, benchmarks, and explicitly declared entry points in `dead-code.json`.
+It rejects unreachable source files, unused exported symbols, and unused or undeclared packages.
+Files loaded dynamically belong in the entry list. Tools that load packages by configuration can name
+the concrete configuration file under `dependencyReferences`.
+
+The pinned `typescript-eslint@8.72.1` uses two `tinyglobby` functions to discover project files.
+A local compatibility package in `tools/typescript-eslint-glob/` supplies those functions through `glob@14.0.6`.
+It accepts the parser's `cwd`, `ignore`, and `expandDirectories: false` options and rejects unsupported
+options. A parser integration test exercises a real TypeScript program found through a project glob.
+The explicit root dependency makes npm share this local package with the parser. Check the adapter's
+callers and tests before upgrading the pinned parser.
+
 ## What the audit checked
 
 Need: every dependency in `package.json` is imported by at least one file under shipped `src/`, or by a file that
-entry points import. `knip` in `npm run check` fails on an unused declaration.
+entry points import. `npm run check:dead-code` uses the TypeScript compiler to reject unused files, exports, and dependency declarations.
+Its entry points and files are declared in `dead-code.json`; package exports and CLI binaries are read from `package.json`.
 
 Upkeep: each package is published from an actively maintained upstream (`modelcontextprotocol/typescript-sdk`,
 `velella-sh/ebb`, `npm/node-semver`, `squirrelchat/smol-toml`, `eemeli/yaml`,

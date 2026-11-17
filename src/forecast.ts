@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { bundledRules } from "@velella/ebb/bundled-rules";
 import { purlIdentity } from "@velella/ebb/purl";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
-import { declaredDependencies, parsePackageManifest } from "./detectors/npm/manifest.js";
+import { declarationLine, declaredDependencies, parsePackageManifest } from "./detectors/npm/manifest.js";
 import type { PackageManifest } from "./detectors/npm/manifest.js";
 import type { ScanResult, UnclassifiedReference } from "./domain.js";
 import type { ScanOptions } from "./engine/index.js";
@@ -42,7 +42,7 @@ function noDataInManifest(contents: string, path: string, known: ReadonlySet<str
     return [];
   }
   const references: UnclassifiedReference[] = [];
-  for (const [component, { range }] of declaredDependencies(manifest)) {
+  for (const [component, { range, section }] of declaredDependencies(manifest)) {
     if (typeof range !== "string") continue;
     const identity = npmIdentity(component, range);
     if (identity === undefined || known.has(identity)) continue;
@@ -51,7 +51,7 @@ function noDataInManifest(contents: string, path: string, known: ReadonlySet<str
       detector: "npm",
       reference: identity,
       reason: "no lifecycle rule for the package",
-      location: { path },
+      location: { path, line: declarationLine(contents, section, component) },
     });
   }
   return references;

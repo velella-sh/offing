@@ -1,0 +1,1 @@
+- Forecast coverage gaps for npm dependencies now point to the declaration line in `package.json`.

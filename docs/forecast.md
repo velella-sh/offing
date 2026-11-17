@@ -8,6 +8,7 @@ description: See upcoming end-of-life dates, affected files, and gaps in lifecyc
 `offing forecast [path]` scans the repository and shows what reaches a dated end of life
 within the selected window. The path defaults to the current directory.
 To check a single dependency file, use the [browser forecast](forecast-web.md).
+See the [forecast accuracy report](forecast-accuracy.md) for results from public repositories.
 
 The terminal report groups events into 0–3, 3–6, and 6–12 month ranges. Each cutoff day
 belongs to the range that ends on it. A shorter window ends at the requested month.
@@ -23,7 +24,7 @@ The first line summarizes the nearest range:
 
 The **No data** section lists declarations the scan could not classify and direct npm dependencies
 in the root or its workspaces that have no rule in the active data. Each entry gives its reason and
-location. The forecast covers dated events and the gaps Offing identified.
+location, including the declaration line for npm dependencies. The forecast covers dated events and the gaps Offing identified.
 
 | Option | Effect |
 | --- | --- |

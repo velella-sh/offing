@@ -48,9 +48,9 @@ test("forecast reports unclassified components and unknown npm packages with loc
   assert.deepEqual(
     noData.map(({ component, location }) => [component, location]),
     [
-      ["@example/workspace-unknown", { path: "workspace/package.json" }],
+      ["@example/workspace-unknown", { path: "workspace/package.json", line: 1 }],
       ["bun.lockb", { path: "bun.lockb", line: 1 }],
-      ["unknown-package", { path: "package.json" }],
+      ["unknown-package", { path: "package.json", line: 7 }],
     ],
   );
   const text = await runCli(args, { env: { NO_COLOR: "1" } });
@@ -58,7 +58,7 @@ test("forecast reports unclassified components and unknown npm packages with loc
   assert.match(text.stdout, /^Weather: cloudy\n/);
   assert.match(
     text.stdout,
-    /^No data\n[\s\S]*unknown-package \(pkg:npm\/unknown-package\) at package\.json: no lifecycle rule/m,
+    /^No data\n[\s\S]*unknown-package \(pkg:npm\/unknown-package\) at package\.json:7: no lifecycle rule/m,
   );
   assert.deepEqual(await runCli(args, { env: { NO_COLOR: undefined } }), text);
 });
