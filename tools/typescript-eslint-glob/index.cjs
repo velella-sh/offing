@@ -13,5 +13,7 @@ exports.globSync = (pattern, options = {}) => {
   if (expandDirectories !== false) {
     throw new Error("typescript-eslint project globs must set expandDirectories to false");
   }
-  return find(pattern, { cwd, ignore, nodir: true, dot: false }).sort();
+  return find(pattern, { cwd, ignore, nodir: true, dot: false })
+    .map((path) => path.replaceAll("\\", "/"))
+    .sort();
 };
