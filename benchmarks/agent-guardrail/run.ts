@@ -2,7 +2,7 @@ import { execFile } from "node:child_process";
 import { lstat, mkdir, mkdtemp, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { parseArgs, promisify } from "node:util";
+import { isDeepStrictEqual, parseArgs, promisify } from "node:util";
 
 import {
   deniedRequestedEdit,
@@ -109,6 +109,41 @@ async function runAttempt(task: GuardrailTask, arm: GuardrailArm, agent: Agent) 
 }
 
 type Attempt = Awaited<ReturnType<typeof runAttempt>>;
+const resultsSchema = "offing.agent-guardrail-results.v2";
+
+interface Results {
+  schemaVersion: typeof resultsSchema;
+  attempts: Attempt[];
+  previousAttempts?: Attempt[];
+}
+
+async function loadPairs(path: string, tasks: readonly GuardrailTask[], agent: Agent) {
+  const saved = JSON.parse(await readFile(path, "utf8")) as Results;
+  if (saved.schemaVersion !== resultsSchema || saved.attempts.length % GUARDRAIL_ARMS.length !== 0) {
+    throw new Error("Expected a paired guardrail result file.");
+  }
+  const results = new Map<string, Attempt[]>();
+  for (const task of tasks) {
+    const pair = saved.attempts.slice(results.size * GUARDRAIL_ARMS.length, (results.size + 1) * GUARDRAIL_ARMS.length);
+    if (pair.length === 0) break;
+    if (
+      !pair.every(
+        (attempt, index) =>
+          attempt.arm === GUARDRAIL_ARMS[index] &&
+          isDeepStrictEqual(attempt.task, task) &&
+          isDeepStrictEqual(attempt.agent, agent) &&
+          attempt.prompt === taskPrompt(task),
+      )
+    ) {
+      throw new Error(`Stored pair for ${task.id} does not match this benchmark or agent version.`);
+    }
+    results.set(task.id, pair);
+  }
+  if (results.size * GUARDRAIL_ARMS.length !== saved.attempts.length) {
+    throw new Error("Stored results contain tasks outside this run.");
+  }
+  return { results, previousAttempts: saved.previousAttempts ?? [] };
+}
 
 async function runPair(task: GuardrailTask, agent: Agent) {
   const attempts: Attempt[] = [];
@@ -116,20 +151,32 @@ async function runPair(task: GuardrailTask, agent: Agent) {
   return attempts;
 }
 
-async function runSuite(tasks: readonly GuardrailTask[], agent: Agent, path: string, jobs: number) {
-  const attempts: Attempt[] = [];
+async function runSuite(tasks: readonly GuardrailTask[], agent: Agent, path: string, jobs: number, retry: boolean) {
+  const { results, previousAttempts } = retry
+    ? await loadPairs(path, tasks, agent)
+    : { results: new Map<string, Attempt[]>(), previousAttempts: [] };
+  const pending = tasks.filter(
+    (task) => results.get(task.id)?.every((attempt) => !attempt.observation.failed) !== true,
+  );
   await mkdir(dirname(path), { recursive: true });
   let cursor = 0;
-  while (cursor < tasks.length) {
-    const batch = tasks.slice(cursor, cursor + (cursor === 0 ? 1 : jobs));
+  while (cursor < pending.length) {
+    const batch = pending.slice(cursor, cursor + (cursor === 0 ? 1 : jobs));
     const pairs = await Promise.all(batch.map((task) => runPair(task, agent)));
-    attempts.push(...pairs.flat());
+    for (const pair of pairs) {
+      const id = pair[0]?.task.id;
+      if (!id) throw new Error("Missing task ID in result pair.");
+      previousAttempts.push(...(results.get(id) ?? []));
+      results.set(id, pair);
+    }
     cursor += batch.length;
-    const result = JSON.stringify({ schemaVersion: "offing.agent-guardrail-results.v2", attempts }, null, 2);
-    await writeFile(`${path}.tmp`, `${result}\n`);
+    const attempts = [...results.values()].flat();
+    const report = { schemaVersion: resultsSchema, attempts, ...(previousAttempts.length ? { previousAttempts } : {}) };
+    await writeFile(`${path}.tmp`, `${JSON.stringify(report, null, 2)}\n`);
     await rename(`${path}.tmp`, path);
-    if (agent.mode === "live" && attempts.length === 2 && attempts.some((attempt) => attempt.observation.failed)) break;
+    if (agent.mode === "live" && cursor === 1 && pairs.flat().some((attempt) => attempt.observation.failed)) break;
   }
+  const attempts = [...results.values()].flat();
   process.stdout.write(`${agent.host} (${agent.mode}) ${JSON.stringify(summarizeAttempts(attempts))}\n`);
   return attempts.some((attempt) => attempt.observation.failed);
 }
@@ -142,6 +189,7 @@ interface CliOptions {
   "cost-per-attempt"?: string;
   host?: string;
   jobs?: string;
+  "retry-failed"?: boolean;
   report?: string;
 }
 
@@ -180,6 +228,7 @@ async function main() {
       full: { type: "boolean" },
       host: { type: "string" },
       jobs: { type: "string" },
+      "retry-failed": { type: "boolean" },
       "output-dir": { type: "string", default: "guardrail-results" },
       "codex-model": { type: "string" },
       "cursor-model": { type: "string" },
@@ -194,7 +243,9 @@ async function main() {
     const version = mode === "live" ? await agentVersion(host) : process.version;
     const model = models[host] ?? "scripted-replay";
     const path = resolve(values["output-dir"], `${mode}-${host}.json`);
-    if (await runSuite(selected, { host, mode, model, version, offingVersion }, path, jobs)) process.exitCode = 1;
+    const retry = values["retry-failed"] ?? false;
+    if (await runSuite(selected, { host, mode, model, version, offingVersion }, path, jobs, retry))
+      process.exitCode = 1;
   }
 }
 

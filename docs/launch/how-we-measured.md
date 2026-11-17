@@ -5,8 +5,8 @@ description: How the hooks-on and hooks-off guardrail benchmark was run and how 
 
 # How we measured the Offing guardrail
 
-We replayed 100 proposed edits per host with the Offing hooks off and on. The suite covers package declarations, runtime images, GitHub Actions, and deprecated or removed APIs. In the hooks-on replay, each host's hook blocked 78 of 80 risky edits (97.5%) and allowed all 20 clean controls.
+We ran 100 tasks twice in Cursor, for 200 live attempts. Each pair used the same model and prompt. The tasks cover packages, runtime images, GitHub Actions, and deprecated or removed APIs. With the hooks installed, Offing denied **76 of 80 requested risky edits (95%)** and denied **0 of 20 clean controls**. The companion Codex run reached its account quota and is reported separately.
 
-These results describe scripted edit decisions on single-file fixtures. Measurements of live agent refusals and replacement choices are pending. The replay also leaves package installation, builds, and other editing tools outside its scope.
+The benchmark measures proposed and completed writes to one file at a time. It tracks explicit refusals, accepted replacements, and false blocks separately. It leaves alternative implementations, dependency installation, and application behavior outside the headline.
 
-To reproduce the five-task smoke run, run `./benchmarks/agent-guardrail/reproduce.sh` from the repository root. See the [benchmark report](../BENCHMARKS.md#agent-guardrail-benchmark) for the full command, scoring method, and raw JSON.
+Run `./benchmarks/agent-guardrail/reproduce.sh` from the repository root for a five-task offline check. The [benchmark report](../BENCHMARKS.md#agent-guardrail-benchmark) links the live results and shows how to rerun the comparison and recalculate the headline.
