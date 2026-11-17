@@ -74,7 +74,7 @@ export async function runLive(
           "--",
           prompt,
         ]
-      : ["--print", "--output-format", "json", "--workspace", cwd, "--model", model, "--", prompt];
+      : ["--print", "--trust", "--output-format", "json", "--workspace", cwd, "--model", model, "--", prompt];
   try {
     const child = exec(binaries[host], args, { cwd, env, timeout: 180_000, maxBuffer: 4 * 1024 * 1024 });
     child.child.stdin?.end();

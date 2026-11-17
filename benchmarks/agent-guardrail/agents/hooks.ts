@@ -23,9 +23,10 @@ interface HookTrace {
 }
 
 export async function installHooks(directory: string, host: Host) {
+  const hostDirectory = host === "codex" ? ".codex" : ".cursor";
+  await mkdir(join(directory, hostDirectory), { recursive: true });
   await exec(process.execPath, [cli, "init", "--hooks-for", host, directory], { cwd: directory });
-  const path = host === "codex" ? ".codex/hooks.json" : ".cursor/hooks.json";
-  const config = JSON.parse(await readFile(join(directory, path), "utf8")) as {
+  const config = JSON.parse(await readFile(join(directory, hostDirectory, "hooks.json"), "utf8")) as {
     hooks: Record<string, { command?: string; hooks?: { command: string }[] }[]>;
   };
   const entry = config.hooks[preEvents[host]]?.[0];

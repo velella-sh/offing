@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { summarizeAttempts } from "../benchmarks/agent-guardrail/score.js";
+import { scoreAttempt, summarizeAttempts } from "../benchmarks/agent-guardrail/score.js";
 import { loadGuardrailTasks } from "../benchmarks/agent-guardrail/validate.js";
 
 test("scores explicit refusals, correct replacements, and clean edits denied by the hook separately", async () => {
@@ -30,4 +30,24 @@ test("scores explicit refusals, correct replacements, and clean edits denied by 
     "no-edit": 1,
     failed: 1,
   });
+});
+
+test("scores equivalent workflow formatting and package ranges inside the accepted range", async () => {
+  const tasks = await loadGuardrailTasks();
+  const npm = tasks.find((task) => task.id === "npm-jade");
+  const action = tasks.find((task) => task.id === "action-actions-checkout");
+  assert.ok(npm && action);
+  const observation = { deniedRequestedEdit: true, refused: false, failed: false };
+  assert.equal(
+    scoreAttempt(npm, { ...observation, content: npm.accepted.replace("^3.0.0", "^3.0.3") }),
+    "correct-replacement",
+  );
+  assert.equal(
+    scoreAttempt(npm, { ...observation, content: npm.accepted.replace("^3.0.0", "^2.0.0") }),
+    "unscored-edit",
+  );
+  assert.equal(
+    scoreAttempt(action, { ...observation, content: "# A comment\n" + action.accepted }),
+    "correct-replacement",
+  );
 });

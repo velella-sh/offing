@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
 import { lstat, mkdir, mkdtemp, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { parseArgs, promisify } from "node:util";
 
@@ -69,6 +69,7 @@ async function runAttempt(task: GuardrailTask, arm: GuardrailArm, agent: Agent) 
   const directory = await realpath(await mkdtemp(join(tmpdir(), "offing-guard-eval-")));
   const cwd = join(directory, "project");
   const startedAt = new Date().toISOString();
+  const redact = (text: string) => text.replaceAll(directory, "<fixture>").replaceAll(homedir(), "<home>");
   try {
     await mkdir(dirname(join(cwd, task.path)), { recursive: true });
     await exec("git", ["init", "--quiet", cwd]);
@@ -93,9 +94,14 @@ async function runAttempt(task: GuardrailTask, arm: GuardrailArm, agent: Agent) 
       finishedAt: new Date().toISOString(),
       prompt: taskPrompt(task),
       observation,
-      stdout,
-      stderr: missingHook ? `${stderr}\nThe host wrote the file without an Offing hook trace.\n` : stderr,
-      hooks: traces.map((trace) => ({ ...trace, input: trace.input.replaceAll(directory, "<fixture>") })),
+      stdout: redact(stdout),
+      stderr: redact(missingHook ? `${stderr}\nThe host wrote the file without an Offing hook trace.\n` : stderr),
+      hooks: traces.map((trace) => ({
+        ...trace,
+        input: redact(trace.input),
+        stdout: redact(trace.stdout),
+        stderr: redact(trace.stderr),
+      })),
     };
   } finally {
     await rm(directory, { recursive: true, force: true });
@@ -104,11 +110,21 @@ async function runAttempt(task: GuardrailTask, arm: GuardrailArm, agent: Agent) 
 
 type Attempt = Awaited<ReturnType<typeof runAttempt>>;
 
-async function runSuite(tasks: readonly GuardrailTask[], agent: Agent, path: string) {
+async function runPair(task: GuardrailTask, agent: Agent) {
+  const attempts: Attempt[] = [];
+  for (const arm of GUARDRAIL_ARMS) attempts.push(await runAttempt(task, arm, agent));
+  return attempts;
+}
+
+async function runSuite(tasks: readonly GuardrailTask[], agent: Agent, path: string, jobs: number) {
   const attempts: Attempt[] = [];
   await mkdir(dirname(path), { recursive: true });
-  for (const task of tasks) {
-    for (const arm of GUARDRAIL_ARMS) attempts.push(await runAttempt(task, arm, agent));
+  let cursor = 0;
+  while (cursor < tasks.length) {
+    const batch = tasks.slice(cursor, cursor + (cursor === 0 ? 1 : jobs));
+    const pairs = await Promise.all(batch.map((task) => runPair(task, agent)));
+    attempts.push(...pairs.flat());
+    cursor += batch.length;
     const result = JSON.stringify({ schemaVersion: "offing.agent-guardrail-results.v2", attempts }, null, 2);
     await writeFile(`${path}.tmp`, `${result}\n`);
     await rename(`${path}.tmp`, path);
@@ -125,10 +141,13 @@ interface CliOptions {
   "cursor-model"?: string;
   "cost-per-attempt"?: string;
   host?: string;
+  jobs?: string;
   report?: string;
 }
 
 function parseInputs(options: CliOptions, tasks: GuardrailTask[]) {
+  const jobs = Number(options.jobs ?? "1");
+  if (!Number.isSafeInteger(jobs) || jobs < 1) throw new Error("--jobs must be a positive integer.");
   const hosts = HOSTS.filter((host) => !options.host || host === options.host);
   if (!hosts.length) throw new Error("--host must be codex or cursor.");
   const models = { codex: options["codex-model"], cursor: options["cursor-model"] };
@@ -147,7 +166,7 @@ function parseInputs(options: CliOptions, tasks: GuardrailTask[]) {
       `${attempts} ${mode} attempts${mode === "replay" ? "; estimated provider cost: USD 0.00" : ""}.\n`,
     );
   }
-  return { hosts, models, mode, selected };
+  return { hosts, models, mode, selected, jobs };
 }
 
 async function printSavedResults(path: string) {
@@ -160,6 +179,7 @@ async function main() {
     options: {
       full: { type: "boolean" },
       host: { type: "string" },
+      jobs: { type: "string" },
       "output-dir": { type: "string", default: "guardrail-results" },
       "codex-model": { type: "string" },
       "cursor-model": { type: "string" },
@@ -168,13 +188,13 @@ async function main() {
     },
   });
   if (values.report) return printSavedResults(values.report);
-  const { hosts, models, mode, selected } = parseInputs(values, await loadGuardrailTasks());
+  const { hosts, models, mode, selected, jobs } = parseInputs(values, await loadGuardrailTasks());
   const { version: offingVersion } = JSON.parse(await readFile(manifest, "utf8")) as { version: string };
   for (const host of hosts) {
     const version = mode === "live" ? await agentVersion(host) : process.version;
     const model = models[host] ?? "scripted-replay";
     const path = resolve(values["output-dir"], `${mode}-${host}.json`);
-    if (await runSuite(selected, { host, mode, model, version, offingVersion }, path)) process.exitCode = 1;
+    if (await runSuite(selected, { host, mode, model, version, offingVersion }, path, jobs)) process.exitCode = 1;
   }
 }
 

@@ -9,9 +9,13 @@ import { promisify } from "node:util";
 test("both installed host hooks replay five task pairs with identical prompts and per-attempt metadata", async (t) => {
   const directory = await mkdtemp(join(tmpdir(), "offing-guard-eval-test-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
-  await promisify(execFile)(process.execPath, ["dist/benchmarks/agent-guardrail/run.js", "--output-dir", directory], {
-    env: { ...process.env, OFFING_DATA_VERSION: "bundled" },
-  });
+  await promisify(execFile)(
+    process.execPath,
+    ["dist/benchmarks/agent-guardrail/run.js", "--jobs", "2", "--output-dir", directory],
+    {
+      env: { ...process.env, OFFING_DATA_VERSION: "bundled" },
+    },
+  );
 
   for (const host of ["codex", "cursor"]) {
     const { attempts } = JSON.parse(await readFile(join(directory, `replay-${host}.json`), "utf8")) as {
