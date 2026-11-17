@@ -1,0 +1,34 @@
+{
+  "entry": [
+    "src/action.ts",
+    "src/lsp.ts",
+    "src/agent-hooks/hosts/*.ts",
+    "tools/**/*.ts",
+    "benchmarks/**/*.ts",
+    "tests/**/*.test.ts",
+    "web/forecast/app.ts",
+    "web/forecast/build.ts",
+    "validation/**/*.ts"
+  ],
+  "project": [
+    "src/**/*.ts",
+    "tools/**/*.ts",
+    "benchmarks/**/*.ts",
+    "tests/**/*.ts",
+    "web/**/*.ts",
+    "validation/**/*.ts"
+  ],
+  "ignore": [
+    "tests/fixtures/**"
+  ],
+  "dependencyFiles": [
+    "tools/**/*.mjs",
+    "*.js",
+    "*.mjs"
+  ],
+  "dependencyReferences": {
+    "tinyglobby": [
+      "tools/typescript-eslint-glob/package.json"
+    ]
+  }
+}
