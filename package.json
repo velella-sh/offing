@@ -113,6 +113,7 @@
     "eval:plugins": "npm run build --silent && node dist/benchmarks/plugin-host-eval.js",
     "eval:agent-loop": "npm run build --silent && node dist/benchmarks/agent-loop/index.js",
     "validate:codex-plugin": "npm run build --silent && node dist/tools/validate-codex-plugin.js",
+    "validate": "npm run build --silent && node dist/validation/run.js",
     "validate:public-repos": "npm run build --silent && node dist/benchmarks/public-repositories.js",
     "comparison:reproduce": "npm run build --silent && node dist/benchmarks/comparison/reproduce.js",
     "differential:report": "npm run build --silent && node dist/benchmarks/differential/report.js",
