@@ -85,7 +85,7 @@
     "test:coverage": "npm run build --silent && node --test --experimental-test-coverage --test-coverage-exclude=\"dist/tests/**\" --test-coverage-exclude=\"dist/benchmarks/**\" --test-coverage-exclude=\"dist/action/**\" --test-coverage-exclude=\"dist/src/usage/vendor/**\" --test-coverage-exclude=\"integrations/github-app/replay.mjs\" --test-coverage-lines=93 --test-coverage-branches=87 --test-coverage-functions=93 --test-reporter=spec --test-reporter=lcov --test-reporter-destination=stdout --test-reporter-destination=lcov.info \"dist/tests/**/*.test.js\"",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "check:dead-code": "knip --no-progress",
+    "check:dead-code": "node tools/check-dead-code.mjs",
     "lint": "eslint \"src/**/*.ts\" \"tools/**/*.ts\" --max-warnings=0",
     "lint:baseline": "eslint \"src/**/*.ts\" \"tools/**/*.ts\" --max-warnings=0 --suppress-all",
     "check:fast": "npm run build --silent && node dist/tools/check-fast.js",
@@ -171,10 +171,10 @@
     "eslint": "^10.14.0",
     "fast-check": "^4.10.2",
     "ical.js": "2.2.1",
-    "knip": "^6.44.1",
     "playwright": "1.65.1",
+    "tinyglobby": "file:tools/typescript-eslint-glob",
     "typescript": "^5.9.0",
-    "typescript-eslint": "^8.72.1"
+    "typescript-eslint": "8.72.1"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.3.1",

@@ -45,7 +45,7 @@ export const FULL_RUN_FILES: readonly string[] = [
   "biome.json",
   "eslint-suppressions.json",
   "eslint.config.js",
-  "knip.jsonc",
+  "dead-code.json",
   "lighthouserc.json",
   "package-lock.json",
   "package.json",
