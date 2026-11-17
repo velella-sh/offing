@@ -27,7 +27,7 @@ const binaryEntries = Object.values(
   typeof manifest.bin === "string" ? { bin: manifest.bin } : (manifest.bin ?? {}),
 ).map(sourcePath);
 const roots = new Set([...expand(config.entry), ...publicEntries, ...binaryEntries]);
-const configFile = ts.readConfigFile(resolve(root, "tsconfig.json"), ts.sys.readFile);
+const configFile = ts.readConfigFile(posix(resolve(root, "tsconfig.json")), ts.sys.readFile);
 if (configFile.error) throw new Error(ts.flattenDiagnosticMessageText(configFile.error.messageText, "\n"));
 const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, root);
 if (parsed.errors.length)
