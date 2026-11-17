@@ -37,6 +37,7 @@ async function assertPrivacy(requests: readonly Request[], allowed: ReadonlySet<
 }
 
 test("forecast drop, clipboard and calendar stay local and modified data is rejected", {
+  timeout: 60_000,
   skip: process.env.OFFING_FORECAST_BROWSER !== "1" && "Run the forecast-web browser check with Chromium installed.",
 }, async (t) => {
   const files = await readdir(directory);
@@ -57,7 +58,13 @@ test("forecast drop, clipboard and calendar stay local and modified data is reje
     response.end(bytes);
   });
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
-  t.after(() => new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve()))));
+  t.after(
+    () =>
+      new Promise<void>((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()));
+        server.closeAllConnections();
+      }),
+  );
   const address = server.address();
   assert.ok(address && typeof address !== "string");
   const origin = `http://127.0.0.1:${address.port}`;
