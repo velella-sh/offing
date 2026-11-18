@@ -11,6 +11,7 @@ import { scannerRecognizesFixtureName } from "../src/fixture-names.js";
 const ROOTS = [
   "examples/demo",
   "plugins/codex/review-fixtures/demo",
+  "examples/forecast",
   "examples/gallery",
   "examples/drift",
   "examples/codemods",

@@ -1,0 +1,51 @@
+name: Forecast examples
+
+on:
+  pull_request:
+    paths:
+      - "examples/forecast/**"
+      - ".github/workflows/examples.yml"
+      - ".github/actions/setup/**"
+      - "src/**"
+      - "tools/examples.ts"
+      - "package*.json"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: forecast-examples-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  forecast:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - run: npm run build
+      - name: Verify before and after forecasts
+        shell: bash
+        env:
+          NO_COLOR: "1"
+        run: |
+          check_weather() {
+            local example="$1" date="$2" expected="$3" report
+            report=$(node dist/tools/examples.js "forecast/$example" forecast --as-of "$date" --months 3)
+            printf '%s\n%s\n' "$example" "$report"
+            [[ ${report%%$'\n'*} == "Weather: $expected" ]]
+          }
+
+          while read -r ecosystem date; do
+            check_weather "$ecosystem-before" "$date" storm
+            check_weather "$ecosystem-after" "$date" clear
+          done <<'EXAMPLES'
+          node 2026-02-01
+          python 2025-09-01
+          actions 2026-08-01
+          EXAMPLES
