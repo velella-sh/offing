@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test } from "node:test";
 
 import { exampleRepositories } from "../benchmarks/first-run.js";
+import { materializeExample } from "../tools/examples.js";
 import { runCli } from "./cli-runner.js";
 import { copyFixtureTree } from "./fixture-copies.js";
 
@@ -30,4 +31,24 @@ test("every example has a stable text forecast, including with NO_COLOR", async 
     await writeFile(snapshot, outputs.join("\n"));
   }
   assert.equal(outputs.join("\n"), await readFile(snapshot, "utf8"));
+});
+
+test("forecast migrations change the weather from storm to clear", async (t) => {
+  const dates = {
+    node: "2026-02-01",
+    python: "2025-09-01",
+    actions: "2026-08-01",
+  };
+  const weather = { before: "storm", after: "clear" };
+  for (const [ecosystem, date] of Object.entries(dates)) {
+    for (const [phase, expected] of Object.entries(weather)) {
+      const name = `${ecosystem}-${phase}`;
+      const directory = await materializeExample(`forecast/${name}`);
+      t.after(() => rm(dirname(directory), { recursive: true, force: true }));
+      const args = ["forecast", directory, "--as-of", date, "--months", "3", "--data-version", "bundled"];
+      const result = await runCli(args, { env: { NO_COLOR: "1" } });
+      assert.equal(result.code, 0, `${name}: ${result.stderr}`);
+      assert.equal(result.stdout.split("\n", 1)[0], `Weather: ${expected}`, name);
+    }
+  }
 });
