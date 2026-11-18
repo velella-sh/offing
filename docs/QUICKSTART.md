@@ -8,24 +8,47 @@ description: "Five copy-paste steps, from the first scan to a baseline in CI. Yo
 Five copy-paste steps, from the first scan to a baseline in CI. You need Node.js 22 or newer and a repository to scan. Every command runs locally; nothing is uploaded.
 
 > [!NOTE]
-> Every command on this page runs locally. Nothing is uploaded.
+> Scans run locally and upload nothing. `npx` may download Offing and its dependencies before the scan starts.
 
-## 1. Run the first scan
+## 1. Run Offing without configuration
+
+From the directory you want to scan:
 
 ```bash
-npx @velella/offing scan .
+npx --yes @velella/offing
 ```
 
-Each finding names its severity, the exact file and line, the replacement, and the source. The first lines look like this on the demo project:
+No subcommand is needed. Offing scans the current directory and prints the top findings and upcoming lifecycle deadlines. It never prompts or opens a browser, even on a terminal. If Git history is unavailable, it still scans the files on disk. For the full report with finding IDs, replacements, and evidence, run `npx --yes @velella/offing scan .`. Use `npx --yes @velella/offing --json` for the structured forecast without the next-step hints.
+
+The bare invocation starts working with the release that includes this change. To try it before then, use a checkout of Offing as shown below.
+
+### Try the demo
+
+From a checkout of [Offing](https://github.com/velella-sh/offing), run:
+
+```bash
+npm ci
+npm run example --silent -- demo --as-of 2026-10-25
+```
+
+The example runner copies the demo into a temporary directory and runs Offing there without a subcommand. The fixed date makes the output reproducible:
 
 ```text
-Found 5 lifecycle risks. The most urgent:
+Weather: clear
+Forecast: 2026-10-25 to 2027-10-25
+Lifecycle findings: 5; upcoming deadlines: 0; no data: 0.
   HIGH Unsupported actions/checkout runtime (.github/workflows/ci.yml:9)
   MEDIUM Node.js 18 is end-of-life (package.json:5)
-  …
+  MEDIUM Node.js 19 is end-of-life (package.json:5)
+Git history is not available; Offing scanned the files on disk.
+
+Next: offing forecast
+Next: offing init --hooks
 ```
 
-Add `--json` for machine-readable output, or `--format compact` for one line per finding when an agent reads the result.
+### First download size
+
+On macOS arm64 with Node.js 22.23.1 and npm 10.9.8, a clean-cache `npx` install of the published `@velella/offing@0.1.1` downloaded **5,208,351 compressed bytes** (about 5.21 MB) across 12 package tarballs, including dependencies. This excludes registry metadata and protocol overhead; the exact size can vary by platform and dependency versions. To remeasure from the Offing checkout, run `npm run benchmark:first-run -- --npx-size`.
 
 ## 2. Check one dependency before adding it
 
@@ -37,7 +60,7 @@ The command prints the lifecycle problem, the replacement, and the evidence. It 
 
 ## 3. Read the evidence for one finding
 
-Take a finding id from step 1 and inspect it:
+Take a finding ID from the full `scan .` report in step 1 and inspect it:
 
 ```bash
 npx @velella/offing explain '<finding-id>' .

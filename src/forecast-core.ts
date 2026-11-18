@@ -26,14 +26,14 @@ export function forecastWeather(events: readonly ForecastEvent[], hasNoData: boo
 }
 
 /** Keep each data value on one terminal line, even when a repository supplies control characters. */
-function singleLine(text: string): string {
+export function singleLine(text: string): string {
   return text.replace(
     /\p{Cc}|\p{Zl}|\p{Zp}/gu,
     (character) => `\\u${character.charCodeAt(0).toString(16).padStart(4, "0")}`,
   );
 }
 
-function locationText({ path, line }: SourceLocation): string {
+export function locationText({ path, line }: SourceLocation): string {
   return line === undefined ? singleLine(path) : `${singleLine(path)}:${line}`;
 }
 

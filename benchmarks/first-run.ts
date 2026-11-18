@@ -1,10 +1,103 @@
 import { spawnSync } from "node:child_process";
 import { appendFileSync, existsSync } from "node:fs";
-import { copyFile, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { copyFile, cp, mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { pathToFileURL } from "node:url";
+import { restoreFixtureNames } from "../src/fixture-names.js";
+
+const exampleGroups = new Set(["agents", "codemods", "drift", "gallery", "starters", "upgrade"]);
+const EXAMPLE_BUDGET_MS = 5000;
+
+async function directories(root: string): Promise<string[]> {
+  return (await readdir(root, { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
+    .map((entry) => entry.name)
+    .sort();
+}
+
+export async function exampleRepositories(root: string): Promise<string[]> {
+  const examples: string[] = [];
+  for (const name of await directories(root)) {
+    if (exampleGroups.has(name)) {
+      examples.push(...(await directories(join(root, name))).map((child) => `${name}/${child}`));
+    } else {
+      examples.push(name);
+    }
+  }
+  return examples;
+}
+
+function timeExample(root: string, name: string, cli: string): { seconds: string; passed: boolean } {
+  const start = performance.now();
+  const result = spawnSync(process.execPath, [cli], {
+    cwd: join(root, name),
+    env: { ...process.env, CI: "true", OFFING_NO_CACHE: "1" },
+    encoding: "utf8",
+    timeout: EXAMPLE_BUDGET_MS,
+  });
+  const duration = performance.now() - start;
+  const passed = result.status === 0 && result.stdout.startsWith("Weather: ") && duration < EXAMPLE_BUDGET_MS;
+  if (!passed) console.error(`${name}: ${result.error?.message ?? result.stderr}`);
+  return { seconds: (duration / 1000).toFixed(3), passed };
+}
+
+async function timeExamples(): Promise<void> {
+  const root = await mkdtemp(join(tmpdir(), "offing-examples-first-run-"));
+  try {
+    await cp("examples", root, { recursive: true });
+    await restoreFixtureNames(root);
+    const cli = resolve("dist/src/cli.js");
+    const rows = ["| Example repository | First run | Under 5 s |", "|---|---:|---|"];
+    for (const name of await exampleRepositories(root)) {
+      const { seconds, passed } = timeExample(root, name, cli);
+      rows.push(`| ${name} | ${seconds} s | ${passed ? "Pass" : "Fail"} |`);
+      if (!passed) process.exitCode = 1;
+    }
+    console.log(rows.join("\n"));
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+}
+
+export async function cachedTarballBytes(cache: string): Promise<{ tarballs: number; bytes: number }> {
+  // shortcut: npm's HTTP cache index is not a public API; revisit if npm changes its layout.
+  const index = join(cache, "_cacache", "index-v5");
+  const tarballs = new Map<string, number>();
+  for (const entry of await readdir(index, { recursive: true, withFileTypes: true })) {
+    if (!entry.isFile()) continue;
+    const contents = await readFile(join(entry.parentPath, entry.name), "utf8");
+    for (const line of contents.trim().split("\n")) {
+      if (!line) continue;
+      const { key, size } = JSON.parse(line.slice(line.indexOf("\t") + 1)) as { key: string; size?: number };
+      if (key.startsWith("make-fetch-happen:request-cache:") && key.endsWith(".tgz") && size !== undefined) {
+        tarballs.set(key, size);
+      }
+    }
+  }
+  return { tarballs: tarballs.size, bytes: [...tarballs.values()].reduce((sum, size) => sum + size, 0) };
+}
+
+async function measureNpxDownload(): Promise<void> {
+  const root = await mkdtemp(join(tmpdir(), "offing-npx-first-run-"));
+  try {
+    const cache = join(root, "cache");
+    const result = spawnSync("npx", ["--yes", "--ignore-scripts", "@velella/offing", "--version"], {
+      cwd: root,
+      encoding: "utf8",
+      env: { ...process.env, npm_config_cache: cache, npm_config_registry: "https://registry.npmjs.org" },
+      shell: process.platform === "win32",
+      timeout: 180_000,
+    });
+    if (result.status !== 0) throw new Error(result.error?.message ?? result.stderr);
+    const { bytes, tarballs } = await cachedTarballBytes(cache);
+    if (tarballs === 0) throw new Error("No downloaded tarballs were recorded in the clean npm cache.");
+    console.log(`@velella/offing ${result.stdout.trim()}: ${bytes} compressed bytes across ${tarballs} tarballs.`);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+}
 
 /** Target budget for time to first useful finding: 2 minutes = 120,000 ms. */
 export const TWO_MINUTE_BUDGET_MS = 120_000;
@@ -247,6 +340,8 @@ function appendMarkdownSummary(summaryPath: string, result: FirstRunBenchmarkRes
 }
 
 export async function runCli(argv = process.argv.slice(2)): Promise<void> {
+  if (argv.length === 0 || argv[0] === "--examples") return timeExamples();
+  if (argv[0] === "--npx-size") return measureNpxDownload();
   let packageSpec: string | undefined;
   let targetDir: string | undefined;
   let useNpx = false;

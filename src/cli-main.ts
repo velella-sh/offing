@@ -6,6 +6,7 @@ import { bindContext, createCommandContext, fail } from "./commands/runtime.js";
 import { isCompletionShell, renderCompletions, renderHelp } from "./completions.js";
 import { unexpectedFailure } from "./errors.js";
 import { classifyError } from "./offing-error.js";
+import { runOnboarding } from "./onboarding/first-run.js";
 import { VERSION } from "./version.js";
 
 const HELP = renderHelp(commands);
@@ -18,7 +19,7 @@ export async function main(rawArgs: readonly string[]): Promise<number> {
   );
   bindContext(ctx);
   const args = optionArgs.filter((argument) => argument !== "--debug");
-  if (args.includes("--help") || args.includes("-h") || args.length === 0) {
+  if (args.includes("--help") || args.includes("-h")) {
     process.stdout.write(HELP);
     return 0;
   }
@@ -27,6 +28,7 @@ export async function main(rawArgs: readonly string[]): Promise<number> {
     return 0;
   }
   const name = args[0];
+  if (name === undefined || name === "--as-of" || name === "--json") return runOnboarding(args, ctx);
   const command = commands.find((candidate) => candidate.name === name);
   if (!command) return ctx.fail("usage", `Unknown command: ${name ?? ""}`, `\n${HELP}`, "unknown-command");
   return command.run([...args.slice(1), ...rawArgs.slice(optionArgs.length)], ctx);

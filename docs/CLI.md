@@ -13,7 +13,7 @@ Every command runs locally. Scans read repository files and bundled lifecycle da
 
 | Option | What it does |
 | --- | --- |
-| `-h`, `--help` | Print the command list and exit `0`. Running `offing` with no arguments prints the same text. |
+| `-h`, `--help` | Print the command list and exit `0`. |
 | `-v`, `--version` | Print the package version and exit `0`. |
 | `--debug` | On an unexpected failure (`internal`, exit `5`), print the stack trace to stderr. |
 | `--json` | Print a machine-readable document where the command supports one. Same as `--format json` for `scan`, `check`, and `forecast`. |
@@ -22,6 +22,8 @@ Every command runs locally. Scans read repository files and bundled lifecycle da
 | `--no-cache` | Bypass the scan cache and re-read every file. Available on `scan`. Same as `OFFING_NO_CACHE=1`. |
 
 ## Scanning and reporting
+
+With no subcommand, `offing` scans the current directory and prints a short forecast without prompting. Use `offing --as-of YYYY-MM-DD` to set the reference date, or `offing --json` for the same machine-readable output as `offing forecast --json`.
 
 ### `scan`
 

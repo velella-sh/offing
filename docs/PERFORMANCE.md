@@ -116,7 +116,7 @@ npm run benchmark:monorepo -- --check
 # CLI start-up budget.
 npm run benchmark:startup
 
-# Time to first useful finding.
+# Bare Offing on the example repositories.
 npm run benchmark:first-run
 
 # Source-usage precision, recall, and engine comparison.
