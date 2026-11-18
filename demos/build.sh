@@ -21,7 +21,7 @@ encode_mp4() {
 case ${1:-} in
   --check)
     # VHS fails on an unmet Wait, but cannot see Bash exit statuses itself.
-    # The guard tape checks its own statuses because a refusal must exit 1.
+    # The check and guard tapes assert their own expected exit code of 1.
     for tape in demos/*.tape; do
       name=${tape##*/}
       output=$(sed -n 's/^Output //p' "$tape" | head -n 1)
@@ -31,7 +31,7 @@ case ${1:-} in
       fi
       status_file="$build_dir/${name%.tape}.status"
       prompt_check=''
-      if [[ $name != guard.tape ]]; then
+      if [[ $name != guard.tape && $name != check.tape ]]; then
         # Expand the status and destination in the recorded shell.
         # shellcheck disable=SC2016
         prompt_check='status=$?; if (( status != 0 )); then printf "%s\n" "$status" > "$OFFING_DEMO_ERROR"; fi'
