@@ -1,0 +1,1 @@
+- Run a local scan and show a short lifecycle forecast when Offing is invoked without a subcommand.

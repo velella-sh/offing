@@ -210,7 +210,9 @@ The benchmark corpus is intentionally controlled. The automated test suite separ
 
 ## Time to first useful finding
 
-Run `npm run benchmark:first-run` to time a clean run of the quickstart to its first useful finding.
+Run `npm run benchmark:first-run` to time bare `offing` on clean copies of the example repositories. The table measures process launch through completion with the scan cache disabled; the command fails if any example does not print a forecast in under 5 seconds. Download time is not part of this budget.
+
+Use `npm run benchmark:first-run -- --npx-size` to measure the compressed package downloads from an empty npm cache. Use `npm run benchmark:first-run -- --check` to time the original smoke fixture and check that it reports a finding.
 
 The benchmark tracks Offing's adoption goal: a new user goes from `npx` to a useful, explained finding in under two minutes (120 s) on any supported OS without prior installation or configuration.
 
@@ -222,7 +224,7 @@ The local benchmark (`benchmarks/first-run.ts`) measures wall-clock time from in
 2. Rule evaluation against bundled offline lifecycle data.
 3. Emission of the first useful finding (`npm.package.request.deprecated` at `package.json:5` and the Node.js end-of-life runtime).
 
-On 2026-10-28, running `npm run benchmark:first-run` against the local build on macOS (Apple silicon, Node.js 26) completed the clean scan in 0.28 s, reporting 4 findings. Treat this duration as an observational local reference point.
+On 2026-10-28, the smoke fixture against the local build on macOS (Apple silicon, Node.js 26) completed the clean scan in 0.28 s, reporting 4 findings. Treat this duration as an observational local reference point.
 
 ### Release workflow timing
 

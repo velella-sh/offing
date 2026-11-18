@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
-import { readFile, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { test } from "node:test";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import {
   TWO_MINUTE_BUDGET_MS,
+  cachedTarballBytes,
   createCleanSmokeProject,
   detectRunnerName,
   formatFirstRunMarkdown,
@@ -14,6 +15,22 @@ import {
   measureFirstRun,
   type FirstRunBenchmarkResult,
 } from "../benchmarks/first-run.js";
+
+test("counts compressed tarball payloads in the clean npm cache without counting metadata", async (t) => {
+  const cache = await mkdtemp(join(tmpdir(), "offing-npm-index-"));
+  t.after(() => rm(cache, { recursive: true, force: true }));
+  const index = join(cache, "_cacache", "index-v5", "aa", "bb");
+  await mkdir(index, { recursive: true });
+  const prefix = "make-fetch-happen:request-cache:https://registry.npmjs.org/";
+  const entries = [
+    { key: `${prefix}package`, size: 30 },
+    { key: `${prefix}package/-/package.tgz`, size: 10 },
+    { key: `${prefix}package/-/package.tgz`, size: 10 },
+    { key: `${prefix}dependency/-/dependency.tgz`, size: 20 },
+  ];
+  await writeFile(join(index, "index"), entries.map((entry) => `\nchecksum\t${JSON.stringify(entry)}`).join(""));
+  assert.deepEqual(await cachedTarballBytes(cache), { tarballs: 2, bytes: 30 });
+});
 
 test("createCleanSmokeProject creates a temporary directory with the smoke fixture and cleans up", async () => {
   const clean = await createCleanSmokeProject();

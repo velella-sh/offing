@@ -1,0 +1,35 @@
+=== examples/demo ===
+Weather: clear
+Forecast: 2026-10-25 to 2027-10-25
+Lifecycle findings: 5; upcoming deadlines: 0; no data: 0.
+  HIGH Unsupported actions/checkout runtime (.github/workflows/ci.yml:9)
+  MEDIUM Node.js 18 is end-of-life (package.json:5)
+  MEDIUM Node.js 19 is end-of-life (package.json:5)
+Git history is not available; Offing scanned the files on disk.
+
+Next: offing forecast
+Next: offing init --hooks
+
+=== examples/gallery/container ===
+Weather: storm
+Forecast: 2026-10-25 to 2027-10-25
+Lifecycle findings: 18; upcoming deadlines: 2; no data: 0.
+  HIGH Alpine Linux image release lines 3.20 and older are end-of-life (os-images.Dockerfile:3)
+  HIGH Alpine Linux image release line 3.21 is end-of-life (os-images.Dockerfile:8)
+  HIGH Debian image release lines 11 and older are end-of-life (os-images.Dockerfile:2)
+  2026-11-01 Alpine Linux image release line 3.21 is end-of-life
+  2027-06-01 Ubuntu image release line 22.04 reaches standard support end-of-life on 2027-06-01
+Git history is not available; Offing scanned the files on disk.
+
+Next: offing forecast
+Next: offing init --hooks
+
+=== examples/gallery/python ===
+Weather: clear
+Forecast: 2026-10-25 to 2027-10-25
+Lifecycle findings: 1; upcoming deadlines: 0; no data: 0.
+  HIGH Python 3.9 and older are end-of-life (.python-version:1)
+Git history is not available; Offing scanned the files on disk.
+
+Next: offing forecast
+Next: offing init --hooks

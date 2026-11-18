@@ -1,31 +1,11 @@
 import assert from "node:assert/strict";
-import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { test } from "node:test";
 
+import { exampleRepositories } from "../benchmarks/first-run.js";
 import { runCli } from "./cli-runner.js";
 import { copyFixtureTree } from "./fixture-copies.js";
-
-const groups = new Set(["agents", "codemods", "drift", "gallery", "starters", "upgrade"]);
-
-async function directories(root: string): Promise<string[]> {
-  return (await readdir(root, { withFileTypes: true }))
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
-    .map((entry) => entry.name)
-    .sort();
-}
-
-async function exampleRepositories(root: string): Promise<string[]> {
-  const examples: string[] = [];
-  for (const name of await directories(root)) {
-    if (groups.has(name)) {
-      examples.push(...(await directories(join(root, name))).map((child) => `${name}/${child}`));
-    } else {
-      examples.push(name);
-    }
-  }
-  return examples;
-}
 
 test("every example has a stable text forecast, including with NO_COLOR", async (t) => {
   const roots: string[] = [];
