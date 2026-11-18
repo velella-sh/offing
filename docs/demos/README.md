@@ -43,6 +43,9 @@ follow [the recording script](https://github.com/velella-sh/offing/blob/main/dem
 request, hook response, and verification output from a live Codex CLI run,
 with the CLI events formatted for the recording and idle time trimmed.
 
+Run `bash demos/build.sh --check` after building Offing to exercise the
+Demos CI check locally. This mode needs GNU `timeout` and discards its renders.
+
 ## Other tape sources
 
 These tapes render standalone. With Offing built and on your `PATH`, run
@@ -57,4 +60,4 @@ These tapes render standalone. With Offing built and on your `PATH`, run
 | [timelapse.tape](timelapse.tape) | 364 B | Current checkout and `offing timelapse` |
 | [watch-board.tape](watch-board.tape) | 328 B | Local watch list and `offing watch --board` |
 | [wrapped.tape](wrapped.tape) | 346 B | Current checkout and `offing wrapped` |
-| `README.md` | 2.9 kB | This inventory |
+| `README.md` | 3.0 kB | This inventory |
