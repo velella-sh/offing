@@ -41,8 +41,8 @@ _offing_color() {
 npx() {
   shift
   if [ -t 1 ]; then
-    node "$OFFING_CLI" "$@" | _offing_color
-    return "${PIPESTATUS[0]}"
+    (set -o pipefail; node "$OFFING_CLI" "$@" | _offing_color)
+  else
+    node "$OFFING_CLI" "$@"
   fi
-  node "$OFFING_CLI" "$@"
 }

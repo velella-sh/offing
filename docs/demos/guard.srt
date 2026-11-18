@@ -1,0 +1,22 @@
+1
+00:00:00,000 --> 00:00:03,300
+offing guard --data-version bundled npm install
+--dry-run --offline request@2.88.2
+
+2
+00:00:03,300 --> 00:00:07,400
+offing guard: refused to run npm (1 blocked, --fail-on high).
+pkg:npm/request@2.88.2 — request is deprecated
+
+3
+00:00:07,400 --> 00:00:11,200
+Replacement: Native fetch or a maintained HTTP client
+Evidence: https://www.npmjs.com/package/request
+
+4
+00:00:11,200 --> 00:00:13,300
+node -e 'fetch("data:,OK").then(r => r.text()).then(console.log)'
+
+5
+00:00:13,300 --> 00:00:22,000
+OK

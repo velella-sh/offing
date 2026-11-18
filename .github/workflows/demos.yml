@@ -1,29 +1,21 @@
 name: Demos
 
-# Demo recordings are generated, never hand-recorded: the tapes in demos/
-# render through the pinned VHS recorder below against the offline CLI build,
-# and this job fails when a tape has no committed recording under
-# docs/assets/demos/. GIF output is not byte-stable, so a fresh render is not
-# diffed against the committed file. Regenerate locally from the repository root after
-# `npm ci && npm run build` (VHS needs the ttyd and ffmpeg binaries listed
-# below and a Chromium-based browser; VHS downloads one if none is on PATH):
-#
-#   for tape in demos/*.tape; do vhs "$tape" || exit 1; done
-#
-# Renders land in the demo-recordings artifact; a maintainer reviews them and
-# commits the GIFs.
+# Smoke-render the tapes from the local CLI build. The job discards its renders.
+# See docs/demos/README.md for the GIF and MP4 build commands.
 
 on:
   pull_request:
     paths:
       - "demos/**"
       - "docs/assets/demos/**"
+      - "docs/demos/**"
       - ".github/workflows/demos.yml"
   push:
     branches: [main]
     paths:
       - "demos/**"
       - "docs/assets/demos/**"
+      - "docs/demos/**"
       - ".github/workflows/demos.yml"
   workflow_dispatch:
 
@@ -69,33 +61,7 @@ jobs:
           sudo install -m 0755 "$RUNNER_TEMP/vhs" "$RUNNER_TEMP/ttyd" /usr/local/bin/
           vhs --version
           ttyd --version
-      - name: Render every tape into docs/assets/demos
+      - name: Check every tape
         env:
           VHS_NO_SANDBOX: "true"
-        run: |
-          for tape in demos/*.tape; do
-            echo "::group::$tape"
-            vhs "$tape"
-            echo "::endgroup::"
-          done
-          ls -l docs/assets/demos
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        with:
-          name: demo-recordings
-          path: docs/assets/demos/
-      - name: Fail when a tape has no committed recording
-        run: |
-          # GIF encoding is not byte-stable (frame timing varies between runs),
-          # so the gate checks coverage, not bytes: every tape must have its
-          # recording committed. Review a fresh render in the demo-recordings
-          # artifact and commit it when a tape changes.
-          missing=0
-          for tape in demos/*.tape; do
-            out=$(sed -n 's/^Output //p' "$tape" | head -n 1)
-            if [ -z "$out" ] || [ -z "$(git ls-files -- "$out")" ]; then
-              echo "::error::$tape has no committed recording ($out). Render it and commit the GIF."
-              missing=1
-            fi
-          done
-          [ "$missing" -eq 0 ]
-          echo "Every tape has a committed recording."
+        run: bash demos/build.sh --check
