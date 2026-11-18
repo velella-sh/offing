@@ -34,5 +34,9 @@ Type "clear" Enter
 Show
 
 Type "npx @velella/offing check pkg:npm/request@2.88.2" Enter
+Wait+Screen@10s /Status: affected/
 Wait@30s /❯ *$/
 Sleep 4
+Hide
+Type@1ms '[[ $? == 1 ]] && echo "check-demo: ok"' Enter
+Wait+Screen@10s /(?m)^check-demo: ok *$/
