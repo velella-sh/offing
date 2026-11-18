@@ -56,6 +56,9 @@ jobs:
           curl -fsSL --retry 3 -o "$RUNNER_TEMP/ttyd" \
             "https://github.com/tsl0922/ttyd/releases/download/${TTYD_VERSION}/ttyd.x86_64"
           echo "${TTYD_SHA256}  $RUNNER_TEMP/ttyd" | sha256sum --check -
+          # Large downloads from the runner's regional EC2 mirror can exhaust the job timeout.
+          sudo sed -i -E 's@https?://[^/]*ec2\.archive\.ubuntu\.com/ubuntu@https://archive.ubuntu.com/ubuntu@g' \
+            /etc/apt/sources.list.d/ubuntu.sources
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg fonts-jetbrains-mono
           sudo install -m 0755 "$RUNNER_TEMP/vhs" "$RUNNER_TEMP/ttyd" /usr/local/bin/

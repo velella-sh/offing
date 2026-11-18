@@ -36,8 +36,17 @@ case ${1:-} in
         # shellcheck disable=SC2016
         prompt_check='status=$?; if (( status != 0 )); then printf "%s\n" "$status" > "$OFFING_DEMO_ERROR"; fi'
       fi
+      # Keep the commands and waits. Shorten the presentation-only timing.
+      smoke_tape="$build_dir/$name"
+      awk '
+        /^Set Framerate / { next }
+        /^Set Shell / { print; print "Set Framerate 15"; next }
+        /^Set TypingSpeed / { print "Set TypingSpeed 5ms"; next }
+        /^Sleep / { print "Sleep 300ms"; next }
+        { print }
+      ' "$tape" > "$smoke_tape"
       PROMPT_COMMAND="$prompt_check" OFFING_DEMO_ERROR="$status_file" \
-        timeout 120s vhs "$tape" -o "$build_dir/${name%.tape}.gif"
+        timeout 120s vhs "$smoke_tape" -o "$build_dir/${name%.tape}.gif"
       if [[ -s $status_file ]]; then
         echo "$tape contained a command that exited $(<"$status_file")" >&2
         exit 1

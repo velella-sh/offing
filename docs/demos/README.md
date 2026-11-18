@@ -44,7 +44,8 @@ request, hook response, and verification output from a live Codex CLI run,
 with the CLI events formatted for the recording and idle time trimmed.
 
 Run `bash demos/build.sh --check` after building Offing to exercise the
-Demos CI check locally. This mode uses `timeout` and discards its renders.
+Demos CI check locally. This mode uses `timeout`, shortens display pauses,
+and discards its renders.
 
 ## Other tape sources
 
