@@ -1,0 +1,35 @@
+name: Forecast examples
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "examples/forecast/**"
+      - ".github/workflows/examples.yml"
+      - ".github/actions/setup/**"
+      - "src/**"
+      - "tests/forecast-snapshots.test.ts"
+      - "tools/examples.ts"
+      - "package*.json"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: forecast-examples-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  forecast:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - run: npm run build
+      - name: Verify before and after forecasts
+        run: node --test --test-name-pattern="forecast migrations" dist/tests/forecast-snapshots.test.js
