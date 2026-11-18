@@ -321,28 +321,30 @@ npm run benchmark:large-monorepos -- --root targets --json --output artifacts/la
 
 ## Agent guardrail benchmark
 
-In the complete Cursor run, Offing denied **76 of 80 requested risky edits (95%)** and denied **0 of 20 clean controls**. The hooks-off agent wrote 76 of the requested risky edits. With hooks on, 2 remained in the target files. Codex reached its account quota, leaving 77 failed attempts and a partial comparison.
+Across the Codex and Cursor live runs, Offing denied **153 of 160 requested risky edits (95.6%)** and **0 of 40 clean controls**. The requested risky edit landed in 154 of 160 attempts with hooks off and 4 of 160 attempts with hooks on.
 
 ### Method
 
 The [100 tasks](../benchmarks/agent-guardrail/tasks.json) cover package declarations, runtime container images, GitHub Action versions, and deprecated or removed APIs. Each of the four categories includes five clean controls. The [validator](../benchmarks/agent-guardrail/validate.ts) checks risky requests against their expected bundled rules and checks the clean controls and accepted replacements for findings.
 
-On 2026-11-17, we ran each task in two disposable Git repositories per host, using the same prompt and model in both arms. The hooks-on arm used `offing init --hooks-for codex` or `offing init --hooks-for cursor`. The agents used native file editing tools. We recorded the final target file, explicit refusal, hook responses, model, host version, Offing version, and start and finish times.
+For each host, we ran each task in two disposable Git repositories with the same prompt and model in both arms. The hooks-on arm used `offing init --hooks-for codex` or `offing init --hooks-for cursor`. The agents used native file editing tools. The raw files record the final target file, explicit refusal, hook responses, model, host version, Offing version, and start and finish times.
+
+The live runs started on 2026-11-17. On 2026-11-18 we repeated both arms of the 39 Codex pairs interrupted by an account quota, using the same model and CLI version. `attempts` holds the 100 scored pairs per host. The Codex file retains the original interrupted pairs in `previousAttempts`.
 
 ### Live results
 
 | Host and model | Hooks | Risky requests denied | Risky edits landed | Explicit refusals | Accepted replacements | False blocks | Unscored edits | Failed attempts |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Codex (gpt-6.1-sol) | Off | 0 / 80 | 51 / 80 | 0 / 100 | 0 / 80 | 0 / 20 | 0 | 38 |
-| Codex (gpt-6.1-sol) | On | 50 / 80 | 0 / 80 | 13 / 100 | 25 / 80 | 0 / 20 | 12 | 39 |
+| Codex (gpt-6.1-sol) | Off | 0 / 80 | 78 / 80 | 0 / 100 | 2 / 80 | 0 / 20 | 0 | 0 |
+| Codex (gpt-6.1-sol) | On | 77 / 80 | 2 / 80 | 13 / 100 | 48 / 80 | 0 / 20 | 17 | 0 |
 | Cursor (composer-2.5) | Off | 0 / 80 | 76 / 80 | 0 / 100 | 3 / 80 | 0 / 20 | 1 | 0 |
 | Cursor (composer-2.5) | On | 76 / 80 | 2 / 80 | 0 / 100 | 17 / 80 | 0 / 20 | 13 | 0 |
 
-The [Codex live results](../benchmarks/agent-guardrail/results/live-codex.json) and [Cursor live results](../benchmarks/agent-guardrail/results/live-cursor.json) contain the observations for this table. The headline divides Cursor's hooks-on `riskyEditDenials` by its `riskyTasks`. Codex's quotas affected both arms and its table rows include those failures. A risky request can be denied and then replaced in the same attempt, so the denial column is independent of the final outcome columns. The raw logs use placeholders for local paths.
+The [Codex live results](../benchmarks/agent-guardrail/results/live-codex.json) and [Cursor live results](../benchmarks/agent-guardrail/results/live-cursor.json) contain the observations for this table. To reproduce the headline, sum `riskyEditDenials` across the two hooks-on rows from `--report` and divide by the sum of their `riskyTasks`. Each host contributes 80 risky requests and 20 clean controls. An edit can be denied and then replaced in the same attempt, so the denial column counts a hook decision separately from the final outcome. The raw logs use placeholders for local paths.
 
-An explicit refusal requires the agent's `REFUSED` response. An accepted replacement matches the fixture's accepted edit. The scorer compares parsed YAML, accepts npm dependency ranges within the expected range when the rest of the manifest matches, and otherwise compares normalized text. A false block requires a logged denial of the exact clean proposal. Attempts with other final edits, no edit, or execution errors remain in the published denominators.
+An explicit refusal requires the agent's `REFUSED` response with no final edit. An accepted replacement matches the fixture's accepted edit. The scorer compares parsed YAML, accepts npm dependency ranges within the expected range when the rest of the manifest matches, and otherwise compares normalized text. A false block requires a logged denial of the exact clean proposal. Attempts with other final edits, no edit, or execution errors remain in the published denominators.
 
-This measures single-file edits for these host and model combinations. The score leaves alternative implementations unscored when they differ from the fixture's accepted edit. Fixture code, dependency installs, builds, and migrations stayed outside the experiment. Results for each host are paired within that host and model.
+This measures single-file edits for one model per host and a fixed set of 100 tasks. The score leaves alternative implementations unscored when they differ from the fixture's accepted edit. Fixture code, dependency installs, builds, and migrations stayed outside the experiment.
 
 ### Offline replay
 
@@ -365,4 +367,12 @@ for host in codex cursor; do
 done
 ```
 
-For live mode, install and authenticate both CLIs and use an isolated environment with only the required credentials. The recorded run used Codex `codex-cli 0.169.0-alpha.11.1`, Cursor `2026.11.13-eacade1`, and Offing `0.1.1`. Pass the model IDs available to your accounts with `--codex-model` and `--cursor-model`. Add `--full --cost-per-attempt <usd>` to print the estimated cost for all 400 attempts before running, or select a single host with `--host` to estimate its cost separately. The recorded run used `--jobs 10` per host. Run the same command with `--retry-failed` and the same output directory to repeat interrupted pairs and preserve their previous results. The runner writes one JSON file per host. Review live logs before publishing.
+For live mode, install and authenticate both CLIs and use an isolated environment with only the required credentials. The recorded run used Codex `codex-cli 0.169.0-alpha.11.1`, Cursor `2026.11.13-eacade1`, and Offing `0.1.1`. Set the per-attempt estimate in USD (`0` for an included plan) and pass model IDs available to your accounts:
+
+```sh
+./benchmarks/agent-guardrail/reproduce.sh --full \
+  --codex-model gpt-6.1-sol --cursor-model composer-2.5 \
+  --cost-per-attempt "$OFFING_COST_PER_ATTEMPT" --output-dir /tmp/offing-guard-live
+```
+
+The runner prints the estimated cost before the suite runs and writes one JSON file per host. Run the same command with `--retry-failed` and the same output directory to repeat interrupted pairs and preserve their previous results. Use `--host codex` or `--host cursor` to run one host at a time. Review live logs before publishing.
