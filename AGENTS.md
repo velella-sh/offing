@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Instructions for coding agents (Codex, Claude Code, Cursor, Copilot, Kilo Code, and others) and for people working the same way. Read this before changing the repository.
+Start with the affected source or documentation and its tests. Use the relevant references below when touching their areas.
 
 ## Before you change anything
 
@@ -29,17 +29,7 @@ npm run dev -- scan   # run the CLI from source
 
 `npm run validate:public-repos` runs the pinned public-repository corpus. It needs network access, so it is not part of `npm run check`; run it when detector behavior changes.
 
-### Running the corpus locally
-
-An uncached full run fetches all repositories and takes very long. Always:
-
-1. `export OFFING_CORPUS_CACHE=~/.cache/offing-corpus`, then `npm run corpus:warm` once (and again after pulling `main`).
-2. Run with `--offline` afterwards, for example `npm run validate:public-repos -- --offline`.
-3. While developing, narrow the run with `--changed`, `--ecosystem <name>`, or `--repo <owner/name>`; run the full corpus only at the end.
-4. Leave `--concurrency` at its default (16); do not lower it unless fetches time out.
-5. `npm run record:corpus-run` accepts no narrowing flags and needs a clean tree: warm first, then `npm run record:corpus-run -- --offline`.
-
-Details: [docs/VALIDATION.md](docs/VALIDATION.md), "Fetching and the checkout cache".
+For corpus work, use the [checkout cache and offline commands](docs/validation/running-the-corpus.md#warm-ahead-run-offline). Narrow development runs and keep the default concurrency unless fetches time out. Record the full offline result from a clean tree.
 
 ## Architecture boundaries
 
