@@ -170,6 +170,46 @@ The pointer is published as `more.v1.schema.json`. Every tool schema carries the
 
 `check_upgrade` takes `target` as `runtime@version`, for example `php@8.4`, and reads only files already in the repository. It never installs a runtime, runs Composer, or uses the network. When no analyzer finds evidence for that runtime, the verdict is `unknown` and the tool says so; that is not a statement that the upgrade is safe.
 
+### How the descriptions were measured
+
+Tool selection was measured with the eval in `benchmarks/skill-trigger-eval.ts`, on 56 prompts that each name a task one tool answers, five or six per tool ([`benchmarks/mcp-tool-selection.json`](https://github.com/velella-sh/offing/tree/main/benchmarks/mcp-tool-selection.json)). No host and no model took part. The measurement is a lexical stand-in: it ranks the eleven tools by the words a prompt shares with their name, title, and description, a word counting for more the fewer tools use it. A prompt counts as selected when its tool ranks first alone.
+
+| Descriptions | Selected | Expected tool among the first three | Mean rank of the expected tool, of 11 |
+| --- | ---: | ---: | ---: |
+| Before: `main` at `e502f98` | 29 of 56, 51.8% | 41 of 56, 73.2% | 2.91 |
+| After: the descriptions on this page | 32 of 56, 57.1% | 46 of 56, 82.1% | 2.04 |
+
+| Prompts whose tool ranked first | Before | After |
+| --- | ---: | ---: |
+| `scan_repository` | 0 of 5 | 2 of 5 |
+| `list_deprecations` | 1 of 5 | 0 of 5 |
+| `explain_deprecation` | 0 of 5 | 0 of 5 |
+| `create_migration_context` | 0 of 5 | 2 of 5 |
+| `verify_migration` | 3 of 5 | 3 of 5 |
+| `check_dependency` | 5 of 6 | 5 of 6 |
+| `check_upgrade` | 5 of 5 | 4 of 5 |
+| `check_snippet` | 4 of 5 | 3 of 5 |
+| `forecast_repository` | 3 of 5 | 4 of 5 |
+| `plan_migrations` | 3 of 5 | 5 of 5 |
+| `recommend_version` | 5 of 5 | 4 of 5 |
+
+Read the numbers for what they measure, which is the wording and nothing else. The new descriptions put the expected tool closer to the top on average, and four of them lost a prompt they had before. Many of the misses come from the stand-in, which matches words and not meaning: "out of support" goes to the tool that says "stays supported", and "verify that nothing is left" goes to the tool that says "nothing is estimated". It also reads a tool's reference to another tool as that tool's own words: `scan_repository` says `list_deprecations` lists the findings more compactly, so the prompts that ask for a list rank `scan_repository` first. Both lists are far below the 90% the trigger evals in the same file are held to, so the selection rate is reported and not gated. Whether a host picks the right tool has not been measured.
+
+The trigger evals did not move, because they classify a prompt by its words alone and read no description: scan-and-migrate has recall 1.00 and a false-trigger rate of 0.00 on 114 prompts, check-before-add 1.00 and 0.00 on 54, and upgrade-runtime-action 1.00 and 0.00 on 42.
+
+To take both numbers again:
+
+```sh
+npm run build --silent
+node dist/benchmarks/skill-trigger-eval.js
+git show e502f98:tests/fixtures/mcp-tool-schemas.json > /tmp/tools-before.json
+node dist/benchmarks/skill-trigger-eval.js --tools /tmp/tools-before.json
+```
+
+The `toolSelection` section of each output holds the numbers. The ranking and the selection rule were fixed before the first run and did not change; the last two columns were added to the output after it. The corpus was written after the descriptions and before the first run, and it was not changed afterwards. Do not rewrite a description to raise the number: change one only when a user would phrase the task the way a missed prompt does.
+
+`check_upgrade` takes `target` as `runtime@version`, for example `php@8.4`, and reads only files already in the repository. It never installs a runtime, runs Composer, or uses the network. When no analyzer finds evidence for that runtime, the verdict is `unknown` and the tool says so; that is not a statement that the upgrade is safe.
+
 ### Checking a snippet before writing it
 
 `check_snippet` answers "if I write this content to this path, what would Offing flag?" before the file exists. Pass the intended repository-relative `path` — `Dockerfile`, `.github/workflows/ci.yml`, `package.json` — and the exact `content`. Offing writes only that one file into a temporary directory, runs all built-in detectors against it, and returns the findings with paths and lines relative to the snippet, plus a `message` that says when the snippet is clean. The temporary directory is always removed, and the real repository is never read or written.

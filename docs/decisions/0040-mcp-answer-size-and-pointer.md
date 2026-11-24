@@ -86,3 +86,7 @@ are never cut, and the pointer then reports the answer's true size.
   named in `more.clipped`.
 - The token count is an estimate, not a tokenizer. It is reproducible, which is what a test can assert, and it is
   higher than a real count, which is the safe side of a cap.
+- Tool selection is measured and not assumed. `benchmarks/skill-trigger-eval.ts` ranks the eleven tools for 56
+  prompts by the words they share with a request, and reports how often the right tool ranks first: 29 of 56 with
+  the descriptions of `main` at `e502f98`, 32 of 56 with these. It is a lexical stand-in that no host took part in,
+  far under the floor the trigger evals are held to, so `docs/MCP.md` reports it and no check is gated on it.
