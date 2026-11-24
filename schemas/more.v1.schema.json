@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/velella-sh/offing/schemas/more.v1.schema.json",
+  "title": "Offing truncated answer pointer v1",
+  "description": "What an MCP tool answer left out to stay under 2,000 estimated tokens, and where to read the rest. Every tool output schema carries this definition as its optional `more` field, so the answer stays valid for the tool's own schema; a tool adds it only when something was cut.",
+  "type": "object",
+  "required": [
+    "truncated",
+    "hint",
+    "omitted",
+    "estimatedTokens"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "truncated": {
+      "const": true,
+      "description": "Always true: the answer was cut to fit the size cap."
+    },
+    "hint": {
+      "type": "string",
+      "minLength": 1,
+      "description": "How to read what was left out."
+    },
+    "omitted": {
+      "type": "array",
+      "description": "One entry per array that lost elements. A path with [] sums every array at that position, including those inside elements that were left out.",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "shown",
+          "total"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?(\\.[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?)*$",
+            "description": "Where the array sits, such as findings or findings[].usages."
+          },
+          "shown": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Elements in the answer as returned."
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Elements in the full answer."
+          }
+        }
+      }
+    },
+    "clipped": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Path of every text that was shortened; it ends with a truncation marker."
+    },
+    "estimatedTokens": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Size of the answer as returned: three characters of JSON text count as one token."
+    }
+  }
+}

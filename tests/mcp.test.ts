@@ -9,7 +9,7 @@ import { after, test } from "node:test";
 
 import { InMemoryTransport } from "@modelcontextprotocol/server";
 
-import { createOffingMcpServer, MCP_TOOL_ANNOTATIONS, MCP_TOOL_NAMES } from "../src/mcp.js";
+import { createOffingMcpServer, MCP_OUTPUT_SCHEMA_FILES, MCP_TOOL_ANNOTATIONS, MCP_TOOL_NAMES } from "../src/mcp.js";
 
 interface RpcResponse {
   id: number;
@@ -197,7 +197,10 @@ test("local MCP server exposes the complete scan-to-verification workflow", asyn
         .sort(),
     );
     assert.deepEqual(
-      Object.keys(verificationSchema.properties).sort(),
+      // `more` is declared by every schema and returned only when the token cap cut the answer.
+      Object.keys(verificationSchema.properties)
+        .filter((key) => key !== "more")
+        .sort(),
       Object.keys(verificationContent).sort(),
       "every field the tool returns is declared by the published schema",
     );
@@ -568,6 +571,23 @@ test("every tool advertises an outputSchema, and its structured content validate
   }
 });
 
+test("every tool schema carries the published `more` pointer, whole, and never requires it", async () => {
+  const read = async (file: string) =>
+    JSON.parse(await readFile(resolve("schemas", file), "utf8")) as Record<string, unknown>;
+  const { $schema, $id, title, description, ...pointer } = await read("more.v1.schema.json");
+  assert.ok($schema && $id && title && description);
+
+  for (const tool of MCP_TOOL_NAMES) {
+    const schema = await read(MCP_OUTPUT_SCHEMA_FILES[tool]);
+    const properties = schema.properties as Record<string, unknown>;
+    assert.deepEqual(properties.more, pointer, `${tool} carries the published pointer`);
+    assert.ok(
+      !(schema.required as string[]).includes("more"),
+      `${tool} must still accept the answers it gave before the pointer existed`,
+    );
+  }
+});
+
 test("the finding schema is the item schema of the scan result", async () => {
   const scan = JSON.parse(await readFile(resolve("schemas/scan.v1.schema.json"), "utf8")) as {
     properties: { findings: { items: Record<string, unknown> } };
@@ -578,7 +598,10 @@ test("the finding schema is the item schema of the scan result", async () => {
   >;
   const { $schema, $id, title, description, ...shape } = finding;
   assert.ok($schema && $id && title && description);
-  assert.deepEqual(shape, scan.properties.findings.items);
+  // `more` is the token cap's pointer: an explain_deprecation answer can carry it, a finding inside a scan cannot.
+  const { more, ...properties } = shape.properties as Record<string, unknown>;
+  assert.ok(more, "a finding returned on its own can carry the pointer");
+  assert.deepEqual({ ...shape, properties }, scan.properties.findings.items);
 });
 
 test("a failed tool call returns an error, not structured content", async () => {

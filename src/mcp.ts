@@ -136,7 +136,7 @@ export function createOffingMcpServer(tools = new OffingAgentTools()): McpServer
     { name: "offing", version: VERSION },
     {
       instructions:
-        "Offing performs deterministic deprecation analysis inside the local process. Repository contents are never sent over the network. Scan before editing, create migration context, then verify the previously observed finding.",
+        "Offing performs deterministic deprecation analysis inside the local process. Repository contents are never sent over the network. Scan before editing, create migration context, then verify the previously observed finding. Every answer is held under 2,000 tokens: one that was cut ends with a `more` field that counts what is missing and says where to read it.",
     },
   );
 
