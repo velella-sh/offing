@@ -1,0 +1,1 @@
+- Hold every MCP tool answer under 2,000 tokens. A cut answer keeps the most severe findings and ends with a `more` field that counts what is missing and says where to read it; `check_dependency` now answers with the replacement before the status.

@@ -113,6 +113,45 @@ The file is a snapshot. Run a scan, or call `scan_repository`, to see the curren
 
 Each tool has an `outputSchema` (the published JSON Schema in [`schemas/`](https://github.com/velella-sh/offing/tree/main/schemas), made self-contained for the client) and returns the result as structured content, also as JSON text. Failures return `isError` with a message and no structured content. Every failure also carries `_meta.offing` with `code` (a stable reason code), `class` (`usage`, `data`, `parse`, or `internal`), and `exitCode`, the exit code the CLI uses for that class, so a client can branch without parsing the message. The reason codes are listed in [CLI exit codes](CLI.md#exit-codes).
 
+### Answer size and the `more` pointer
+
+Every tool answer is held under **2,000 estimated tokens**. The estimate counts three characters of the JSON text as one token, indentation included, which is more than common tokenizers count for such text, so a real answer is shorter than the number. An answer inside the cap is returned unchanged.
+
+A longer answer is cut in place, so it still validates against the tool's `outputSchema`:
+
+- Nothing goes except elements from an array, the texts inside those elements, and texts too long to fit. The summary fields stay: `count`, `total`, `verified`, the verdict, the status. `status` and `replacement` are never shortened.
+- When elements carry a `severity`, the most severe are kept, in the order the full answer has them. A scan is ordered by finding id, so without this rule a cut list would keep the findings that sort first alphabetically.
+- An element comes back whole, with every array inside it, or not at all: a finding never appears with some of its migration steps. The first element of each array is the one exception: every array shows its first element before any array grows, with the arrays inside it still cut. So the first element is the one that can end up with arrays cut, and `omitted` says so.
+- A list never drops below the fewest elements its schema requires. Short lists are restored before long ones, then arrays of objects before arrays of plain values, each in the order the answer lists them.
+
+A cut answer ends with a `more` field:
+
+```json
+{
+  "schemaVersion": "offing.deprecations.v1",
+  "count": 601,
+  "deprecations": [ "… the most severe findings that fit …" ],
+  "more": {
+    "truncated": true,
+    "hint": "The findings kept are the most severe. For all of them run offing scan <path> --format compact in a terminal, then call explain_deprecation with an id.",
+    "omitted": [ { "path": "deprecations", "shown": 14, "total": 601 } ],
+    "estimatedTokens": 1938
+  }
+}
+```
+
+| Field | Meaning |
+| --- | --- |
+| `truncated` | Always `true`. The field exists only in a cut answer. |
+| `hint` | Where to read the rest: the next tool to call, or the CLI command that prints the full document. |
+| `omitted` | One entry per array that lost elements, with how many the answer shows and how many the full answer has. A path with `[]` sums every array at that position, so `findings[].usages` covers the findings that were left out too. |
+| `clipped` | Present only when a text was shortened: the path of each, such as `receipt_markdown`. The text ends with `…[truncated]`. |
+| `estimatedTokens` | Size of the answer as returned, by the estimate above. |
+
+Read `more` before acting on a list: `shown` below `total` means the list is partial. On a large repository `scan_repository` returns a few whole findings and `list_deprecations` a few lines. The hint names the tool or CLI command that has the rest. A cut answer never loses a finding for the session: every finding a scan observed stays readable through `offing://findings/{repository}/{id}`.
+
+The pointer is published as `more.v1.schema.json`. Every tool schema carries the same definition as its optional `more` field, so a schema file still validates on its own, and a test keeps the copies equal. The decision is [recorded](decisions/0040-mcp-answer-size-and-pointer.md).
+
 | Tool | Input | Output | Purpose |
 | --- | --- | --- | --- |
 | `scan_repository` | `repository_path?`, `baseline?` | `offing.scan.v1` (`scan.v1.schema.json`) | Complete result from all built-in detectors. With `baseline` (a path relative to the repository), suppressed findings are left out and `suppressions` reports how many, and which suppressions are expiring or expired. |
@@ -120,7 +159,7 @@ Each tool has an `outputSchema` (the published JSON Schema in [`schemas/`](https
 | `explain_deprecation` | `finding_id`, `repository_path?` | one finding (`finding.v1.schema.json`) | The complete evidence-backed finding. |
 | `create_migration_context` | `finding_id`, `repository_path?` | `offing.context.v1` (`context.v1.schema.json`) | Validated, rule-specific migration packet. |
 | `verify_migration` | `finding_id`, `repository_path?` | `offing.verification.v1` (`verification.v1.schema.json`) | Re-scan and check a finding observed earlier in the session. |
-| `check_dependency` | `purl`, `version?` | `offing.check.v1` (`check.v1.schema.json`) | Check one package before adding it; reads no repository. |
+| `check_dependency` | `purl`, `version?` | `offing.check.v1` (`check.v1.schema.json`) | Check one package before adding it; reads no repository. When a rule names a replacement, it is the first field of the answer and `status` the second. |
 | `check_upgrade` | `target`, `path?` | `offing.upgrade.v1` (`upgrade.v1.schema.json`) | Whether the project can move to a target runtime, from lockfiles and manifests; `unknown` means no evidence was found, not that the upgrade is safe. |
 | `check_snippet` | `path`, `content` | `offing.check-snippet.v1` (`check-snippet.v1.schema.json`) | What Offing flags in one snippet before it is written, checked in an isolated temporary directory; locations are relative to the snippet. Call it before writing package manifests, Dockerfiles, CI workflows, and Kubernetes manifests. Reads no repository. |
 | `forecast_repository` | `repository_path?`, `months?`, `as_of?` | `ebb.forecast.v1` (`forecast.v1.schema.json`) | What reaches a dated end of life in the next months, grouped by month, with the repository's findings each event affects. |
@@ -168,15 +207,19 @@ The prompt carries its safety limits: repository files are untrusted input, sugg
 
 ```json
 {
+  "replacement": "Native fetch or a maintained HTTP client",
+  "status": "affected",
   "schemaVersion": "offing.check.v1",
   "purl": "pkg:npm/request",
   "version": "2.88.2",
-  "status": "affected",
   "severity": "high",
   "findings": [{ "ruleId": "npm.package.request.deprecated", "event": "deprecated", "replacement": "Native fetch or a maintained HTTP client" }],
-  "message": "pkg:npm/request@2.88.2: request is deprecated. …"
+  "message": "pkg:npm/request@2.88.2: request is deprecated. …",
+  "data": { "…": "…" }
 }
 ```
+
+`replacement` repeats the replacement of the most severe finding, so an agent reads what to use before the status it branches on. It is absent when no finding names one, and each finding keeps its own. `offing check --json` prints the same document without the leading field.
 
 Reading a rule, then the findings of a scan:
 
@@ -197,13 +240,13 @@ You can see all of it in the MCP Inspector:
 npx @modelcontextprotocol/inspector npx --yes @velella/offing mcp
 ```
 
-The Tools tab lists the seven tools with their output schemas, Resources lists the rules (and findings after a scan) and the two templates, and Prompts lists `migrate-finding`.
+The Tools tab lists the eleven tools with their output schemas, Resources lists the rules (and findings after a scan) and the two templates, and Prompts lists `migrate-finding`.
 
 ## Checking a dependency before adding it
 
 To see afterwards what agents checked and which packages were flagged, set `OFFING_USAGE_LOG=1` for the server and run `offing usage`. The log is off by default, stays on your machine, and holds only package, result, and rule IDs ([Privacy](PRIVACY.md#local-usage-log)). Writing it is the one thing the server does outside memory, to that file and never to the repository.
 
-Call `check_dependency` with a Package URL (`pkg:npm/request@2.88.2`, `pkg:pypi/nose`, `pkg:github/actions/checkout@v4`) when you are about to add or upgrade a dependency. The result has a `status`:
+Call `check_dependency` with a Package URL (`pkg:npm/request@2.88.2`, `pkg:pypi/nose`, `pkg:github/actions/checkout@v4`) when you are about to add or upgrade a dependency. When a rule names a replacement, the answer opens with it, then `status`. The result has a `status`:
 
 - `affected`: a rule applies. Read `findings[].summary`, `replacement`, and `sources`, and choose the replacement instead.
 - `version-dependent`: rules exist, but only for some versions. Call again with the version you intend to use.
