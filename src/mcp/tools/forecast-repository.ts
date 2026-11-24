@@ -12,7 +12,7 @@ export function registerForecastRepository(server: McpServer, tools: OffingAgent
     name: "forecast_repository",
     title: "Forecast repository",
     description:
-      "Run a fresh local scan and list what reaches a dated end of life in the next months, grouped by month, with the findings in this repository that each event will affect. Only events that carry an authoritative date are listed; nothing is estimated.",
+      "Call when you plan a roadmap or upgrade schedule and need to know what reaches end of life first. Runs a fresh local scan, with no network. Returns ebb.forecast.v1: buckets by months left (0-3, 3-6, 6-12) with the events that affect this repository, then the same events by month. Only dated events are listed; nothing is estimated.",
     inputSchema: z.object({
       ...repositoryInput,
       months: z

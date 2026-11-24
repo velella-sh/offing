@@ -13,7 +13,7 @@ export function registerCheckUpgrade(server: McpServer, tools: OffingAgentTools)
     name: "check_upgrade",
     title: "Check upgrade",
     description:
-      "Answer from files already in the repository whether a project can move to a target runtime, without running anything or using the network. Pass target as runtime@version, for example php@8.4. Returns offing.upgrade.v1: the verdict, the analyzers that applied, and every blocker, warning, and unknown with its path, line, and the exact constraint it read. An unknown verdict means Offing found no evidence for this runtime in this repository; it is not a statement that the upgrade is safe.",
+      "Call before you upgrade to a runtime, such as php@8.4 or nodejs@22. Reads the lockfiles and manifests in the repository; runs nothing, uses no network. Returns offing.upgrade.v1: the verdict and every blocker, warning, and unknown with its path, line, and constraint. An unknown verdict means no evidence was found; it is not a statement that the upgrade is safe.",
     inputSchema: z.object({
       path: z
         .string()

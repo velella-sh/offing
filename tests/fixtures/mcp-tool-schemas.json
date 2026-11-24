@@ -2,7 +2,7 @@
   {
     "name": "scan_repository",
     "title": "Scan repository",
-    "description": "Run all built-in Offing detectors against a local repository and return the complete versioned scan result.",
+    "description": "Call when you are about to plan work on a repository and need its lifecycle findings first: deprecated packages, end-of-life runtimes, retired APIs, at exact file and line. Runs every built-in Offing detector locally, with no network. Returns offing.scan.v1. On a large repository the answer is cut; list_deprecations lists the findings more compactly.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -697,7 +697,7 @@
   {
     "name": "list_deprecations",
     "title": "List deprecations",
-    "description": "Run a fresh local scan and return a compact, versioned list of lifecycle findings.",
+    "description": "Call when you need an overview of a repository's lifecycle findings before planning a change: one entry per finding with its id, rule, severity, and location. Runs a fresh local scan with no network. Returns offing.deprecations.v1. Pass an id to explain_deprecation for the full evidence.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -925,7 +925,7 @@
   {
     "name": "explain_deprecation",
     "title": "Explain deprecation",
-    "description": "Run a fresh local scan and return one complete evidence-backed finding by ID.",
+    "description": "Call when a scan or list has given you a finding id and you need its evidence before changing code: what is affected, where it is used, the replacement and deadline when a rule gives them, and the authoritative sources. Runs a fresh local scan with no network. Returns one complete finding.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1307,7 +1307,7 @@
   {
     "name": "create_migration_context",
     "title": "Create migration context",
-    "description": "Create a validated, rule-specific migration packet for one finding from a fresh local scan.",
+    "description": "Call when you are about to edit code to resolve one finding and need the constraints first: the affected files, the usages to change, the migration steps, and the verification commands. Runs a fresh local scan with no network. Returns offing.context.v1. Then call verify_migration with the same finding_id.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1950,7 +1950,7 @@
   {
     "name": "verify_migration",
     "title": "Verify migration",
-    "description": "Re-scan locally and check whether a finding observed earlier in this MCP session is gone. Suggested project commands are returned but never executed. When the repository was scanned earlier in the session, the result also carries a receipt and receipt_markdown for the pull request body.",
+    "description": "Call when you have changed code to resolve a finding and need to confirm it is gone. Re-scans the repository locally, with no network, and checks the finding observed earlier in this session. Returns offing.verification.v1 with verified, the findings a fresh scan still reports, and suggested commands, which are never run.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -2652,7 +2652,7 @@
   {
     "name": "check_dependency",
     "title": "Check dependency",
-    "description": "Check one package, and optionally one version, against Offing's lifecycle rules before adding it to a project. Pass a Package URL such as pkg:npm/request@2.88.2 or pkg:github/actions/checkout@v4. Returns offing.check.v1: a status (affected, not-affected, version-dependent, or no-data), the evidence-backed findings, and a replacement when one is known. no-data means Offing has no rule for the package, not that it is safe. No repository is read.",
+    "description": "Call before you install, add, or pick a package or GitHub Action. Pass a Package URL such as pkg:npm/request@2.88.2 or pkg:github/actions/checkout@v4. Returns offing.check.v1 with replacement first when one is known, then status: affected, version-dependent, not-affected, or no-data. no-data means Offing has no rule for the package, not that it is safe. Reads no repository and no network.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3010,7 +3010,7 @@
   {
     "name": "check_upgrade",
     "title": "Check upgrade",
-    "description": "Answer from files already in the repository whether a project can move to a target runtime, without running anything or using the network. Pass target as runtime@version, for example php@8.4. Returns offing.upgrade.v1: the verdict, the analyzers that applied, and every blocker, warning, and unknown with its path, line, and the exact constraint it read. An unknown verdict means Offing found no evidence for this runtime in this repository; it is not a statement that the upgrade is safe.",
+    "description": "Call before you upgrade to a runtime, such as php@8.4 or nodejs@22. Reads the lockfiles and manifests in the repository; runs nothing, uses no network. Returns offing.upgrade.v1: the verdict and every blocker, warning, and unknown with its path, line, and constraint. An unknown verdict means no evidence was found; it is not a statement that the upgrade is safe.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3225,7 +3225,7 @@
   {
     "name": "check_snippet",
     "title": "Check snippet",
-    "description": "Check proposed file contents for lifecycle issues before writing them. Pass the intended repository-relative path and the exact content. Supports Node.js and Python API usage, GitHub Actions, Kubernetes, and other built-in detectors that can read one file in isolation. Findings include the snippet location, evidence, and the reviewed replacement when available.",
+    "description": "Call before you write a file: a package manifest, Dockerfile, CI workflow, Kubernetes manifest, or Node.js or Python code that calls an API. Pass the intended repository-relative path and the exact content. Returns offing.check-snippet.v1: each finding with its line, the flagged code, the replacement when one is reviewed, and a source. Reads no repository.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3666,7 +3666,7 @@
   {
     "name": "forecast_repository",
     "title": "Forecast repository",
-    "description": "Run a fresh local scan and list what reaches a dated end of life in the next months, grouped by month, with the findings in this repository that each event will affect. Only events that carry an authoritative date are listed; nothing is estimated.",
+    "description": "Call when you plan a roadmap or upgrade schedule and need to know what reaches end of life first. Runs a fresh local scan, with no network. Returns ebb.forecast.v1: buckets by months left (0-3, 3-6, 6-12) with the events that affect this repository, then the same events by month. Only dated events are listed; nothing is estimated.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3951,7 +3951,7 @@
   {
     "name": "plan_migrations",
     "title": "Plan migrations",
-    "description": "Run a fresh local scan and return a migration plan: waves of independent tasks a coordinating agent can hand to other agents. Each item names the finding, the paths it touches, and a suggested branch.",
+    "description": "Call when several findings must be fixed and you are splitting the work across tasks or agents. Runs a fresh local scan, with no network. Returns offing.plan.v1: one item per finding with the paths it touches and a suggested branch, and waves in which no two items touch the same path, so they can run in parallel.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4205,7 +4205,7 @@
   {
     "name": "recommend_version",
     "title": "Recommend version",
-    "description": "Say which release line of a runtime, container image, GitHub Action, or package to write today, instead of whatever training data remembers. Pass a product name such as node, python, or postgres, or a Package URL such as pkg:docker/library/node or pkg:githubactions/actions/checkout. Returns offing.recommend.v1: the recommended line and the date it is supported until, other qualifying alternatives, the lines to avoid with their dates, and evidence sources. A line qualifies when the data does not mark it ended and its end date is at least minimumSupportDays away (default 180). The answer comes only from Offing's bundled lifecycle data, never from the network, so it never says 'latest' and is limited to what the data covers. no-data means Offing has no data for the product, not that any version is safe. No repository is read.",
+    "description": "Call before you write a version into a Dockerfile, CI workflow, or manifest and want a line that stays supported. Returns offing.recommend.v1: the recommended line with its end date, alternatives, lines to avoid, and sources, from bundled lifecycle data only; it never says 'latest'. no-data means no data for the product, not that a version is safe.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",

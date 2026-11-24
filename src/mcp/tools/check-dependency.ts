@@ -11,7 +11,7 @@ export function registerCheckDependency(server: McpServer, tools: OffingAgentToo
     name: "check_dependency",
     title: "Check dependency",
     description:
-      "Check one package, and optionally one version, against Offing's lifecycle rules before adding it to a project. Pass a Package URL such as pkg:npm/request@2.88.2 or pkg:github/actions/checkout@v4. Returns offing.check.v1: a status (affected, not-affected, version-dependent, or no-data), the evidence-backed findings, and a replacement when one is known. no-data means Offing has no rule for the package, not that it is safe. No repository is read.",
+      "Call before you install, add, or pick a package or GitHub Action. Pass a Package URL such as pkg:npm/request@2.88.2 or pkg:github/actions/checkout@v4. Returns offing.check.v1 with replacement first when one is known, then status: affected, version-dependent, not-affected, or no-data. no-data means Offing has no rule for the package, not that it is safe. Reads no repository and no network.",
     inputSchema: z.object({
       purl: z
         .string()
