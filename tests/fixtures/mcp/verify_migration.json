@@ -1,0 +1,167 @@
+{
+  "before": [
+    {
+      "name": "scan_repository",
+      "arguments": {
+        "repository_path": "<repository>"
+      }
+    }
+  ],
+  "request": {
+    "name": "verify_migration",
+    "arguments": {
+      "finding_id": "npm.package.request.deprecated:package.json:5",
+      "repository_path": "<repository>"
+    }
+  },
+  "response": {
+    "schemaVersion": "offing.verification.v1",
+    "repositoryRoot": "<repository>",
+    "findingId": "npm.package.request.deprecated:package.json:5",
+    "verifiedAt": "<timestamp>",
+    "verified": false,
+    "commandsExecuted": false,
+    "summary": "A fresh local scan still reports 1 matching deprecation.",
+    "remainingFindings": [
+      {
+        "id": "npm.package.request.deprecated:package.json:5",
+        "ruleId": "npm.package.request.deprecated",
+        "title": "request is deprecated",
+        "summary": "request is declared in dependencies as 2.88.2; resolved: not found in a supported lockfile. The package is fully deprecated and no new changes are expected.",
+        "severity": "high",
+        "confidence": "range",
+        "location": {
+          "path": "package.json",
+          "line": 5
+        },
+        "replacement": "Native fetch or a maintained HTTP client",
+        "deadline": "2020-02-11",
+        "migration": {
+          "constraints": [
+            "Preserve request method, headers, authentication, redirects, timeouts, retries, proxy behavior, streaming, and response/error semantics used by each call site."
+          ],
+          "steps": [
+            {
+              "id": "choose-http-client",
+              "title": "Choose the target HTTP client",
+              "instructions": "Select native fetch or one maintained client whose behavior covers the affected request usages.",
+              "targets": "all"
+            },
+            {
+              "id": "replace-request-calls",
+              "title": "Rewrite request usages",
+              "instructions": "Translate callbacks, options, response handling, errors, and streams at every reported import and call.",
+              "targets": "usages"
+            },
+            {
+              "id": "replace-request-dependency",
+              "title": "Replace the dependency",
+              "instructions": "Remove request from package metadata and add the selected maintained client only if native fetch is insufficient.",
+              "targets": "declaration"
+            }
+          ],
+          "verification": [
+            {
+              "command": "npm run test --if-present",
+              "purpose": "Run HTTP behavior and repository tests when defined."
+            },
+            {
+              "command": "npm run build --if-present",
+              "purpose": "Verify imports, types, and the build remain valid."
+            }
+          ]
+        },
+        "sources": [
+          {
+            "title": "request package deprecation notice",
+            "url": "https://www.npmjs.com/package/request",
+            "accessedAt": "2026-10-13"
+          }
+        ],
+        "usages": [
+          {
+            "kind": "import",
+            "language": "javascript",
+            "symbol": "request",
+            "location": {
+              "path": "src/index.js",
+              "line": 1,
+              "column": 26
+            },
+            "excerpt": "const request = require(\"request\");"
+          }
+        ],
+        "impact": {
+          "usageCount": 1,
+          "affectedFiles": 1,
+          "level": "low"
+        },
+        "detector": "npm",
+        "advisoryIds": [
+          "GHSA-p8p7-x288-28g6"
+        ]
+      }
+    ],
+    "suggestedCommands": [
+      {
+        "command": "npm run test --if-present",
+        "purpose": "Run HTTP behavior and repository tests when defined."
+      },
+      {
+        "command": "npm run build --if-present",
+        "purpose": "Verify imports, types, and the build remain valid."
+      },
+      {
+        "command": "offing scan . --json",
+        "purpose": "Confirm the lifecycle finding no longer appears."
+      }
+    ],
+    "receipt": {
+      "schema": "offing.receipt.v1",
+      "counts": {
+        "resolved": 0,
+        "remaining": 2,
+        "introduced": 0
+      },
+      "resolved": [],
+      "remaining": [
+        {
+          "id": "nodejs.runtime.eol-20:.github/workflows/ci.yml:7",
+          "rule": "nodejs.runtime.eol-20",
+          "title": "Node.js 20 is end-of-life",
+          "severity": "high",
+          "path": ".github/workflows/ci.yml",
+          "line": 7
+        },
+        {
+          "id": "npm.package.request.deprecated:package.json:5",
+          "rule": "npm.package.request.deprecated",
+          "title": "request is deprecated",
+          "severity": "high",
+          "path": "package.json",
+          "line": 5
+        }
+      ],
+      "introduced": [],
+      "commands": [
+        {
+          "command": "node --version",
+          "purpose": "Confirm the active Node.js runtime is supported."
+        },
+        {
+          "command": "npm run build --if-present",
+          "purpose": "Verify the project builds on the target runtime."
+        },
+        {
+          "command": "npm run test --if-present",
+          "purpose": "Run the repository test suite on the target runtime when defined."
+        }
+      ],
+      "data": {
+        "before": "<data: ageDays, createdAt, reviewedThrough, source, stale, version>",
+        "after": "<data: ageDays, createdAt, reviewedThrough, source, stale, version>"
+      }
+    },
+    "receipt_markdown": "<!-- offing-receipt -->\n## Offing receipt: Findings remain\n\n| Resolved | Remaining | Introduced |\n| --- | --- | --- |\n| 0 | 2 | 0 |\n\n### Resolved\n\n_None._\n\n### Remaining\n\n| Severity | Finding | Location |\n| --- | --- | --- |\n| high | Node\\.js 20 is end\\-of\\-life | \\.github/workflows/ci\\.yml:7 |\n| high | request is deprecated | package\\.json:5 |\n\n### Introduced\n\n_None._\n\n### Suggested commands\n\n```\nnode --version  # Confirm the active Node.js runtime is supported.\nnpm run build --if-present  # Verify the project builds on the target runtime.\nnpm run test --if-present  # Run the repository test suite on the target runtime when defined.\n```\n\nReproduce with: `offing receipt <path> --before <scan.json>`\n"
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "request": {
+    "name": "forecast_repository",
+    "arguments": {
+      "repository_path": "<repository>",
+      "as_of": "2025-09-01"
+    }
+  },
+  "response": {
+    "schemaVersion": "ebb.forecast.v1",
+    "root": "<repository>",
+    "today": "2025-09-01",
+    "until": "2026-09-01",
+    "months": 12,
+    "buckets": [
+      {
+        "from": 0,
+        "to": 3,
+        "until": "2025-12-01",
+        "label": "0-3 months",
+        "total": 2,
+        "affecting": 0,
+        "events": []
+      },
+      {
+        "from": 3,
+        "to": 6,
+        "until": "2026-03-01",
+        "label": "3-6 months",
+        "total": 1,
+        "affecting": 0,
+        "events": []
+      },
+      {
+        "from": 6,
+        "to": 12,
+        "until": "2026-09-01",
+        "label": "6-12 months",
+        "total": 3,
+        "affecting": 1,
+        "events": [
+          {
+            "date": "2026-04-30",
+            "ruleId": "nodejs.runtime.eol-20",
+            "ecosystem": "nodejs",
+            "title": "Node.js 20 is end-of-life",
+            "severity": "high",
+            "source": "https://github.com/nodejs/Release/blob/main/schedule.json",
+            "findings": [
+              {
+                "id": "nodejs.runtime.eol-20:.github/workflows/ci.yml:7",
+                "path": ".github/workflows/ci.yml",
+                "line": 7
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "groups": [
+      {
+        "month": "2025-10",
+        "events": [
+          {
+            "date": "2025-10-26",
+            "ruleId": "npm.package.next.14.support-end",
+            "ecosystem": "npm",
+            "title": "Next.js 14 is out of support",
+            "severity": "high",
+            "source": "https://nextjs.org/support-policy",
+            "findings": []
+          },
+          {
+            "date": "2025-10-31",
+            "ruleId": "python.runtime.eol-3.9-and-older",
+            "ecosystem": "python",
+            "title": "Python 3.9 and older are end-of-life",
+            "severity": "high",
+            "source": "https://devguide.python.org/versions/",
+            "findings": []
+          }
+        ]
+      },
+      {
+        "month": "2025-12",
+        "events": [
+          {
+            "date": "2025-12-03",
+            "ruleId": "python.package.django-5.1.eol",
+            "ecosystem": "python",
+            "title": "Django 5.1 is end-of-life",
+            "severity": "high",
+            "source": "https://www.djangoproject.com/download/#supported-versions",
+            "findings": []
+          }
+        ]
+      },
+      {
+        "month": "2026-04",
+        "events": [
+          {
+            "date": "2026-04-07",
+            "ruleId": "python.package.django-4.2.eol",
+            "ecosystem": "python",
+            "title": "Django 4.2 LTS is end-of-life",
+            "severity": "high",
+            "source": "https://www.djangoproject.com/download/#supported-versions",
+            "findings": []
+          },
+          {
+            "date": "2026-04-30",
+            "ruleId": "nodejs.runtime.eol-20",
+            "ecosystem": "nodejs",
+            "title": "Node.js 20 is end-of-life",
+            "severity": "high",
+            "source": "https://github.com/nodejs/Release/blob/main/schedule.json",
+            "findings": [
+              {
+                "id": "nodejs.runtime.eol-20:.github/workflows/ci.yml:7",
+                "path": ".github/workflows/ci.yml",
+                "line": 7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "month": "2026-06",
+        "events": [
+          {
+            "date": "2026-06-01",
+            "ruleId": "nodejs.runtime.eol-25",
+            "ecosystem": "nodejs",
+            "title": "Node.js 25 is end-of-life",
+            "severity": "high",
+            "source": "https://github.com/nodejs/Release/blob/main/schedule.json",
+            "findings": []
+          }
+        ]
+      }
+    ],
+    "affecting": 1,
+    "total": 6,
+    "noData": []
+  }
+}

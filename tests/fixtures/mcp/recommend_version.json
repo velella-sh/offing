@@ -1,0 +1,74 @@
+{
+  "request": {
+    "name": "recommend_version",
+    "arguments": {
+      "product": "node",
+      "as_of": "2025-09-01"
+    }
+  },
+  "response": {
+    "schemaVersion": "offing.recommend.v1",
+    "query": {
+      "name": "node",
+      "minimumSupportDays": 180,
+      "asOf": "2025-09-01"
+    },
+    "status": "recommended",
+    "product": {
+      "id": "generic-nodejs",
+      "purl": "pkg:generic/nodejs",
+      "name": "nodejs"
+    },
+    "recommended": "25",
+    "supportedUntil": "2026-06-01",
+    "alternatives": [
+      {
+        "line": "22",
+        "supportedUntil": "2027-04-30"
+      },
+      {
+        "line": "20",
+        "supportedUntil": "2026-04-30"
+      }
+    ],
+    "avoid": [
+      {
+        "line": "23",
+        "ruleId": "nodejs.runtime.eol-23",
+        "reason": "ended",
+        "endDate": "2025-06-01"
+      },
+      {
+        "line": "18",
+        "ruleId": "nodejs.runtime.eol-18",
+        "reason": "ended",
+        "endDate": "2025-04-30"
+      },
+      {
+        "line": "21",
+        "ruleId": "nodejs.runtime.eol-21",
+        "reason": "ended",
+        "endDate": "2024-06-01"
+      },
+      {
+        "line": "19",
+        "ruleId": "nodejs.runtime.eol-19",
+        "reason": "ended",
+        "endDate": "2023-06-01"
+      },
+      {
+        "line": "<18.0.0",
+        "ruleId": "nodejs.runtime.legacy",
+        "reason": "ended"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Node.js Release Working Group schedule",
+        "url": "https://github.com/nodejs/Release/blob/main/schedule.json",
+        "accessedAt": "2026-10-17"
+      }
+    ],
+    "message": "Write nodejs 25: the bundled data supports it until 2026-06-01. This covers only what Offing's data lists; it is not a statement about newer versions."
+  }
+}
