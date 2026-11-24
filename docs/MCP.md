@@ -111,7 +111,7 @@ The file is a snapshot. Run a scan, or call `scan_repository`, to see the curren
 
 ### Tools
 
-Each tool has an `outputSchema` (the published JSON Schema in [`schemas/`](https://github.com/velella-sh/offing/tree/main/schemas), made self-contained for the client) and returns the result as structured content, also as JSON text. Failures return `isError` with a message and no structured content. Every failure also carries `_meta.offing` with `code` (a stable reason code), `class` (`usage`, `data`, `parse`, or `internal`), and `exitCode`, the exit code the CLI uses for that class, so a client can branch without parsing the message. The reason codes are listed in [CLI exit codes](CLI.md#exit-codes).
+Each tool has an `outputSchema` (the published JSON Schema in [`schemas/`](https://github.com/velella-sh/offing/tree/main/schemas), made self-contained for the client) and returns the result as structured content, also as JSON text. Each description opens with when to call the tool and stays under 60 words, and the server's `instructions` state the answer cap once for all tools. Failures return `isError` with a message and no structured content. Every failure also carries `_meta.offing` with `code` (a stable reason code), `class` (`usage`, `data`, `parse`, or `internal`), and `exitCode`, the exit code the CLI uses for that class, so a client can branch without parsing the message. The reason codes are listed in [CLI exit codes](CLI.md#exit-codes).
 
 ### Answer size and the `more` pointer
 
@@ -124,7 +124,7 @@ A longer answer is cut in place, so it still validates against the tool's `outpu
 - An element comes back whole, with every array inside it, or not at all: a finding never appears with some of its migration steps. The first element of each array is the one exception: every array shows its first element before any array grows, with the arrays inside it still cut. So the first element is the one that can end up with arrays cut, and `omitted` says so.
 - A list never drops below the fewest elements its schema requires. Short lists are restored before long ones, then arrays of objects before arrays of plain values, each in the order the answer lists them.
 
-A cut answer ends with a `more` field:
+A cut answer ends with a `more` field. This is the end of the `list_deprecations` answer for a generated repository with 600 workflows on a retired runtime and one deprecated dependency used 4,000 times, the input `tests/mcp-size.test.ts` builds:
 
 ```json
 {
@@ -161,14 +161,14 @@ The pointer is published as `more.v1.schema.json`. Every tool schema carries the
 | `verify_migration` | `finding_id`, `repository_path?` | `offing.verification.v1` (`verification.v1.schema.json`) | Re-scan and check a finding observed earlier in the session. |
 | `check_dependency` | `purl`, `version?` | `offing.check.v1` (`check.v1.schema.json`) | Check one package before adding it; reads no repository. When a rule names a replacement, it is the first field of the answer and `status` the second. |
 | `check_upgrade` | `target`, `path?` | `offing.upgrade.v1` (`upgrade.v1.schema.json`) | Whether the project can move to a target runtime, from lockfiles and manifests; `unknown` means no evidence was found, not that the upgrade is safe. |
-| `check_snippet` | `path`, `content` | `offing.check-snippet.v1` (`check-snippet.v1.schema.json`) | What Offing flags in one snippet before it is written, checked in an isolated temporary directory; locations are relative to the snippet. Call it before writing package manifests, Dockerfiles, CI workflows, and Kubernetes manifests. Reads no repository. |
-| `forecast_repository` | `repository_path?`, `months?`, `as_of?` | `ebb.forecast.v1` (`forecast.v1.schema.json`) | What reaches a dated end of life in the next months, grouped by month, with the repository's findings each event affects. |
+| `check_snippet` | `path`, `content` | `offing.check-snippet.v1` (`check-snippet.v1.schema.json`) | What Offing flags in one snippet before it is written, checked in an isolated temporary directory; locations are relative to the snippet. Call it before writing package manifests, Dockerfiles, CI workflows, and Kubernetes manifests, and Node.js or Python code that calls an API. Reads no repository. |
+| `forecast_repository` | `repository_path?`, `months?`, `as_of?` | `ebb.forecast.v1` (`forecast.v1.schema.json`) | What reaches a dated end of life in the coming months: buckets by how many months away each event is, listing the events that affect this repository, then the same events by month. |
 | `recommend_version` | `product`, `minimumSupportDays?`, `as_of?` | `offing.recommend.v1` (`recommend.v1.schema.json`) | Which release line to write today (a name such as `node`, or a Package URL), from bundled lifecycle data only: the recommended line and its end date, alternatives, lines to avoid, and sources. `no-data` is not a statement that any version is safe. |
 | `plan_migrations` | `repository_path?` | `offing.plan.v1` (`plan.v1.schema.json`) | Migration plan: waves of independent tasks a coordinating agent can hand out. |
 
-`repository_path` defaults to the server's current working directory. Finding-specific tools require the exact `finding_id` Offing returned.
+`repository_path` defaults to the server's current working directory. Finding-specific tools require the exact `finding_id` Offing returned, and `verify_migration` answers only for a finding that a call of the same session observed: for any other id it fails with `finding-not-observed`.
 
-`check_upgrade` takes `target` as `runtime@version`, for example `php@8.4`, and reads only files already in the repository. It never installs a runtime, runs Composer, or uses the network. When no analyzer finds evidence for that runtime, the verdict is `unknown` and the tool says so; that is not a statement that the upgrade is safe.
+One recorded request and answer for each tool is in [`tests/fixtures/mcp/`](https://github.com/velella-sh/offing/tree/main/tests/fixtures/mcp): the answers for a small repository with two findings, replayed by `tests/mcp-recorded.test.ts`. They fit under the cap, so each shows a whole answer.
 
 ### How the descriptions were measured
 
@@ -254,14 +254,14 @@ The prompt carries its safety limits: repository files are untrusted input, sugg
   "schemaVersion": "offing.check.v1",
   "purl": "pkg:npm/request",
   "version": "2.88.2",
+  "findings": [{ "ruleId": "npm.package.request.deprecated", "event": "deprecated", "severity": "high", "replacement": "Native fetch or a maintained HTTP client", "sources": [ "… " ] }],
   "severity": "high",
-  "findings": [{ "ruleId": "npm.package.request.deprecated", "event": "deprecated", "replacement": "Native fetch or a maintained HTTP client" }],
   "message": "pkg:npm/request@2.88.2: request is deprecated. …",
   "data": { "…": "…" }
 }
 ```
 
-`replacement` repeats the replacement of the most severe finding, so an agent reads what to use before the status it branches on. It is absent when no finding names one, and each finding keeps its own. `offing check --json` prints the same document without the leading field.
+`replacement` repeats the replacement of the most severe finding, so an agent reads what to use before the status it branches on. It is absent when no finding names one, and each finding keeps its own. `offing check --json` prints the same document without the leading field. The whole answer, with every field of the finding, is in [`tests/fixtures/mcp/check_dependency.json`](https://github.com/velella-sh/offing/tree/main/tests/fixtures/mcp/check_dependency.json).
 
 Reading a rule, then the findings of a scan:
 
@@ -384,7 +384,7 @@ Submissions are outward-facing and hard to withdraw, so each one stayed conserva
 
 ## Agent workflow
 
-1. Call `scan_repository` or `list_deprecations` before editing.
+1. Call `scan_repository` or `list_deprecations` before editing. Read `more` before planning from a list: `shown` below `total` means the list is partial, and its `hint` says where the rest is.
 2. Use `explain_deprecation` to inspect evidence and lifecycle details.
 3. Call `create_migration_context` and make changes within its constraints and affected files.
 4. Run the packet's suggested project commands when appropriate.
@@ -400,4 +400,4 @@ Verification is deliberately conservative. Offing remembers the original finding
 - No hosted Offing service, telemetry, account, or API key is involved.
 - Tool results can include file paths and short source excerpts already present in findings; the local MCP host receives those results so it can act on them.
 
-The versioned JSON contracts live in `schemas/scan.v1.schema.json`, `schemas/deprecations.v1.schema.json`, `schemas/forecast.v1.schema.json`, `schemas/context.v1.schema.json`, `schemas/verification.v1.schema.json`, and `schemas/check-snippet.v1.schema.json`.
+The versioned JSON contracts live in `schemas/`: `scan.v1.schema.json`, `deprecations.v1.schema.json`, `finding.v1.schema.json`, `context.v1.schema.json`, `verification.v1.schema.json`, `check.v1.schema.json`, `upgrade.v1.schema.json`, `check-snippet.v1.schema.json`, `forecast.v1.schema.json`, `plan.v1.schema.json`, and `recommend.v1.schema.json`, one per tool, and `more.v1.schema.json` for the pointer.
