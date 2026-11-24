@@ -46,10 +46,17 @@ run the command. To repeat a forecast, use the same checkout, date, and data ver
 
 The [forecast v1 schema](../schemas/forecast.v1.schema.json) describes the document.
 `schemaVersion` is `ebb.forecast.v1`. The document includes `root`, `today`, `until`,
-`months`, and `groups` of events by calendar month. Each event carries its date, rule,
-severity, source, and finding locations. `affecting` counts events with findings and
-`total` counts all dated events in the window. `noData` contains the coverage gaps and is
-an empty array when the report finds zero gaps.
+`months`, `buckets`, and `groups` of events by calendar month. Each event carries its
+date, rule, severity, source, and finding locations. `affecting` counts events with
+findings and `total` counts all dated events in the window. `noData` contains the
+coverage gaps and is an empty array when the report finds zero gaps.
+
+`buckets` is the grouping the terminal report prints: events by how many months away
+they are, `0-3 months`, `3-6 months`, and `6-12 months`, then on to the horizon when it
+is longer, such as `12-36 months` for a three-year window. Every event is in exactly one
+bucket, by its date. A bucket's `total` counts every event in it and `affecting` counts
+the ones with findings here; `events` lists only those, so it has `affecting` elements.
+The bucket totals add up to `total`.
 
 ## Examples
 

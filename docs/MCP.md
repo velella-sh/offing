@@ -176,7 +176,9 @@ The pointer is published as `more.v1.schema.json`. Every tool schema carries the
 
 ### Planning ahead with the forecast
 
-`forecast_repository` answers "what ends of life are coming, and which of them hit this repository?" It runs a fresh local scan, then lists the lifecycle events that carry an authoritative date inside a window. Each event carries its rule, source, severity, and the findings in this repository that it will affect, grouped by calendar month with the earliest first.
+`forecast_repository` answers "what ends of life are coming, and which of them hit this repository?" It runs a fresh local scan, then lists the lifecycle events that carry an authoritative date inside a window. Each event carries its date, rule, source, severity, and the findings in this repository that it will affect.
+
+The answer opens with `buckets`, the grouping the terminal report prints: events by how many months away they are, `0-3 months`, `3-6 months`, and `6-12 months`, then on to the horizon when the window is longer. Every event is in exactly one bucket. A bucket counts every event in it (`total`) and lists only the ones that affect this repository (`events`, one per `affecting`), earliest first, so the three buckets are the short answer. `groups` then lists the same events by calendar month, earliest first.
 
 The window starts at `as_of` (a `YYYY-MM-DD` date; today in UTC when omitted) and defaults to `months` 12, from 1 to 36. Passing `as_of` makes the result deterministic. The output is the same `ebb.forecast.v1` document that `offing forecast --json` prints. Only dated events are listed, so a package with no authoritative deadline does not appear; nothing is estimated.
 

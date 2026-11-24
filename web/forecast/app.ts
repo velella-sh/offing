@@ -1,7 +1,6 @@
 import { forecastWeather, renderForecastText } from "../../src/forecast-core.js";
 import type { RepositoryForecast } from "../../src/forecast-core.js";
 import { renderForecastIcs } from "../../src/forecast-ics.js";
-import { forecastBuckets } from "../../src/forecast-timeline.js";
 import { loadData } from "./data.js";
 import { createReport } from "./report.js";
 
@@ -31,15 +30,11 @@ function textElement(tag: string, text: string): HTMLElement {
 }
 
 function renderBuckets(forecast: RepositoryForecast): void {
-  const buckets = forecastBuckets(forecast);
-  const panels = buckets.map((bucket) => {
-    const affecting = bucket.events.filter((event) => event.findings.length);
+  const panels = forecast.buckets.map((bucket) => {
+    const affecting = bucket.events;
     const panel = document.createElement("section");
     const heading = textElement("h3", bucket.label.replace("-", "–"));
-    const count = textElement(
-      "p",
-      `${affecting.length} for this file · ${bucket.events.length - affecting.length} elsewhere`,
-    );
+    const count = textElement("p", `${affecting.length} for this file · ${bucket.total - affecting.length} elsewhere`);
     count.className = "bucket-count";
     panel.append(heading, count);
     if (affecting.length === 0) return panel;
@@ -55,7 +50,7 @@ function renderBuckets(forecast: RepositoryForecast): void {
     panel.append(list);
     return panel;
   });
-  const near = buckets[0]?.events.filter((event) => event.findings.length) ?? [];
+  const near = forecast.buckets[0]?.events ?? [];
   element("result-title").textContent = `Weather: ${forecastWeather(near, forecast.noData.length > 0)}`;
   element("buckets").replaceChildren(...panels);
 }

@@ -5,8 +5,11 @@ import type { RegistryV2Rule } from "@velella/ebb/registry";
 
 import type { SourceLocation, UnclassifiedReference } from "./domain.js";
 import { forecastBuckets } from "./forecast-timeline.js";
+import type { ForecastBucket } from "./forecast-timeline.js";
 
 export interface RepositoryForecast extends Forecast {
+  /** Events by horizon, the grouping the terminal report prints. */
+  buckets: ForecastBucket[];
   noData: UnclassifiedReference[];
 }
 
@@ -17,7 +20,10 @@ export function buildForecastReport(
   months: number,
   noData: UnclassifiedReference[],
 ): RepositoryForecast {
-  return { ...buildForecast(scan, rules, today, months), noData };
+  const { groups, affecting, total, ...head } = buildForecast(scan, rules, today, months);
+  // The buckets come before the month groups: they are the short answer the groups spell out.
+  const buckets = forecastBuckets({ ...head, groups, affecting, total });
+  return { ...head, buckets, groups, affecting, total, noData };
 }
 
 export function forecastWeather(events: readonly ForecastEvent[], hasNoData: boolean): "clear" | "cloudy" | "storm" {
@@ -39,18 +45,18 @@ export function locationText({ path, line }: SourceLocation): string {
 
 /** Render the affected events by horizon with the original locations and explicit data gaps. */
 export function renderForecastText(forecast: RepositoryForecast): string {
-  const buckets = forecastBuckets(forecast);
-  const affecting = buckets.map((bucket) => bucket.events.filter((event) => event.findings.length > 0));
   const lines = [
-    `Weather: ${forecastWeather(affecting[0] ?? [], forecast.noData.length > 0)}`,
+    `Weather: ${forecastWeather(forecast.buckets[0]?.events ?? [], forecast.noData.length > 0)}`,
     `Forecast from ${forecast.today} to ${forecast.until} (${forecast.months} month${forecast.months === 1 ? "" : "s"})`,
   ];
 
-  for (const [index, bucket] of buckets.entries()) {
-    const events = affecting[index] ?? [];
-    const other = bucket.events.length - events.length;
-    lines.push("", bucket.label, `  ${events.length} affecting this repository, ${other} elsewhere`);
-    for (const event of events) {
+  for (const bucket of forecast.buckets) {
+    lines.push(
+      "",
+      bucket.label,
+      `  ${bucket.affecting} affecting this repository, ${bucket.total - bucket.affecting} elsewhere`,
+    );
+    for (const event of bucket.events) {
       lines.push(`  ${event.date}  ${singleLine(event.title)} [${event.severity}] (${singleLine(event.ruleId)})`);
       for (const finding of event.findings) lines.push(`    ${locationText(finding)}`);
     }

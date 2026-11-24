@@ -104,9 +104,24 @@ test("forecast_repository returns the object offing forecast --json prints, vali
     assert.equal(forecast.today, "2026-10-29");
     assert.equal(forecast.until, "2027-10-29");
     assert.equal(forecast.months, 12);
-    const { noData, ...legacy } = forecast;
-    assert.ok(validate(legacy), "the v1 schema still accepts documents that predate noData");
+    const { noData, buckets, ...legacy } = forecast;
+    assert.ok(validate(legacy), "the v1 schema still accepts documents that predate noData and buckets");
     assert.deepEqual(noData, []);
+
+    // The buckets are the terminal report's grouping: three for a twelve-month window, and they sum to the total.
+    assert.deepEqual(
+      buckets.map(({ from, to, until, label }) => [from, to, until, label]),
+      [
+        [0, 3, "2027-01-29", "0-3 months"],
+        [3, 6, "2027-04-29", "3-6 months"],
+        [6, 12, "2027-10-29", "6-12 months"],
+      ],
+    );
+    assert.equal(
+      buckets.reduce((sum, { total }) => sum + total, 0),
+      forecast.total,
+    );
+    for (const bucket of buckets) assert.equal(bucket.events.length, bucket.affecting);
 
     assert.deepEqual(
       forecast,
@@ -149,6 +164,28 @@ test("forecast_repository is deterministic for a fixed as_of and keeps every eve
     }
     assert.equal(forecast.total, events);
     assert.equal(forecast.affecting, affecting);
+
+    // A longer horizon adds a fourth bucket, and every affecting event is in exactly one of them.
+    assert.deepEqual(
+      forecast.buckets.map(({ from, to }) => [from, to]),
+      [
+        [0, 3],
+        [3, 6],
+        [6, 12],
+        [12, 36],
+      ],
+    );
+    const key = ({ date, ruleId }: { date: string; ruleId: string }) => `${date} ${ruleId}`;
+    const inGroups = forecast.groups.flatMap((group) => group.events).filter((event) => event.findings.length > 0);
+    assert.deepEqual(
+      forecast.buckets.flatMap((bucket) => bucket.events).map(key),
+      inGroups.map(key),
+      "the buckets list the affecting events once each, in date order",
+    );
+    assert.equal(
+      forecast.buckets.reduce((sum, bucket) => sum + bucket.total, 0),
+      forecast.total,
+    );
   } finally {
     await client.close();
   }
