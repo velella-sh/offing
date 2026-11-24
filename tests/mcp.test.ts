@@ -571,6 +571,39 @@ test("every tool advertises an outputSchema, and its structured content validate
   }
 });
 
+test("check_dependency answers with the replacement first and the status second", async () => {
+  const client = await connectTestClient();
+  try {
+    const affected = await client.request("tools/call", {
+      name: "check_dependency",
+      arguments: { purl: "pkg:npm/request@2.88.2" },
+    });
+    const answer = affected.structuredContent as Record<string, unknown>;
+    // The order an agent reads: what to use, then the status it branches on, then the rest of the check.
+    assert.deepEqual(Object.keys(answer).slice(0, 3), ["replacement", "status", "schemaVersion"]);
+    assert.equal(answer.status, "affected");
+    assert.equal(answer.replacement, (answer.findings as Array<{ replacement?: string }>)[0]?.replacement);
+    assert.ok(answer.replacement);
+    assert.equal(
+      (affected.content as Array<{ text: string }>)[0]?.text,
+      JSON.stringify(answer, null, 2),
+      "the JSON text keeps the same order",
+    );
+
+    const unknown = await client.request("tools/call", {
+      name: "check_dependency",
+      arguments: { purl: "pkg:npm/express" },
+    });
+    const noData = unknown.structuredContent as Record<string, unknown>;
+    assert.equal(Object.keys(noData)[0], "status", "no replacement is known, so the status leads");
+    assert.equal("replacement" in noData, false);
+    // No other field moved or went missing: after `status` the check document keeps its own order.
+    assert.deepEqual(Object.keys(noData), ["status", "schemaVersion", "purl", "findings", "message", "data"]);
+  } finally {
+    await client.close();
+  }
+});
+
 test("every tool schema carries the published `more` pointer, whole, and never requires it", async () => {
   const read = async (file: string) =>
     JSON.parse(await readFile(resolve("schemas", file), "utf8")) as Record<string, unknown>;

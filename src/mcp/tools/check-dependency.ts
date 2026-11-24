@@ -27,7 +27,11 @@ export function registerCheckDependency(server: McpServer, tools: OffingAgentToo
     }),
     async handler(_context, { purl, version }) {
       try {
-        return success(await checkDependency({ purl, ...(version ? { version } : {}) }));
+        const { status, ...rest } = await checkDependency({ purl, ...(version ? { version } : {}) });
+        // An agent reads what to use before the status it branches on, so the replacement of the most severe
+        // finding comes first. Each finding keeps its own replacement; the field is left out when none is known.
+        const replacement = rest.findings[0]?.replacement;
+        return success({ ...(replacement ? { replacement } : {}), status, ...rest });
       } catch (error) {
         return failure(error);
       }

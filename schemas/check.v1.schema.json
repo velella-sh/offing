@@ -2,11 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/velella-sh/offing/schemas/check.v1.schema.json",
   "title": "Offing dependency check v1",
-  "description": "The result of checking one package, and optionally one version, against Offing's lifecycle rules.",
+  "description": "The result of checking one package, and optionally one version, against Offing's lifecycle rules. In an MCP answer the replacement, when one is known, is the first field and the status the second.",
   "type": "object",
   "required": ["schemaVersion", "purl", "status", "findings", "message"],
   "additionalProperties": false,
   "properties": {
+    "replacement": { "type": "string", "description": "The replacement named by the most severe finding. It comes first in an answer so it is read before the status; it is absent when no finding names one." },
     "data": { "$ref": "scan.v1.schema.json#/properties/data" },
     "schemaVersion": { "const": "offing.check.v1" },
     "purl": { "type": "string", "pattern": "^pkg:", "description": "Version-less canonical Package URL." },
