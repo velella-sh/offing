@@ -79,9 +79,9 @@ The [`java`](../detectors/java.md) detector. See [Detectors](../DETECTORS.md) an
 - [Java 22 to 24 are no longer supported](java.jdk.end-of-support-22-24.html)
 - [Java 26 is no longer supported](java.jdk.end-of-support-26.html)
 - [Java 9 and 10 are no longer supported](java.jdk.end-of-support-9-10.html)
-- [mysql:mysql-connector-java has moved to com.mysql:mysql-connector-j](java.maven.mysql.mysql-connector-java.relocated.html)
-- [org.hibernate:hibernate-entitymanager has moved to org.hibernate.orm:hibernate-entitymanager](java.maven.org.hibernate.hibernate-entitymanager.relocated.html)
-- [org.slf4j:slf4j-log4j12 has moved to org.slf4j:slf4j-reload4j](java.maven.org.slf4j.slf4j-log4j12.relocated.html)
+- [mysql\:mysql-connector-java has moved to com.mysql\:mysql-connector-j](java.maven.mysql.mysql-connector-java.relocated.html)
+- [org.hibernate\:hibernate-entitymanager has moved to org.hibernate.orm\:hibernate-entitymanager](java.maven.org.hibernate.hibernate-entitymanager.relocated.html)
+- [org.slf4j\:slf4j-log4j12 has moved to org.slf4j\:slf4j-reload4j](java.maven.org.slf4j.slf4j-log4j12.relocated.html)
 
 
 ## Data

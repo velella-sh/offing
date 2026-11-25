@@ -10,9 +10,9 @@ last_modified_at: "2026-10-20"
 json_twin: "/rules/java.maven.org.hibernate.hibernate-entitymanager.relocated.json"
 ---
 
-# org.hibernate:hibernate-entitymanager has moved to org.hibernate.orm:hibernate-entitymanager
+# org.hibernate\:hibernate-entitymanager has moved to org.hibernate.orm\:hibernate-entitymanager
 
-**Deprecated.** The source gives no day. Replacement: org.hibernate.orm:hibernate-entitymanager. Source: [org.hibernate:hibernate-entitymanager 6.0.0.Alpha7 POM on Maven Central](https://repo1.maven.org/maven2/org/hibernate/hibernate-entitymanager/6.0.0.Alpha7/hibernate-entitymanager-6.0.0.Alpha7.pom).
+**Deprecated.** The source gives no day. Replacement: org.hibernate.orm\:hibernate-entitymanager. Source: [org.hibernate\:hibernate-entitymanager 6.0.0.Alpha7 POM on Maven Central](https://repo1.maven.org/maven2/org/hibernate/hibernate-entitymanager/6.0.0.Alpha7/hibernate-entitymanager-6.0.0.Alpha7.pom).
 
 Check a version:
 
@@ -20,7 +20,7 @@ Check a version:
 offing check pkg:maven/org.hibernate/hibernate-entitymanager
 ```
 
-The POM of org.hibernate:hibernate-entitymanager 6.0.0.Alpha7 declares a relocation to org.hibernate.orm:hibernate-entitymanager.
+The POM of org.hibernate\:hibernate-entitymanager 6.0.0.Alpha7 declares a relocation to org.hibernate.orm\:hibernate-entitymanager.
 
 [Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
 
@@ -32,7 +32,7 @@ The POM of org.hibernate:hibernate-entitymanager 6.0.0.Alpha7 declares a relocat
 | Component | `pkg:maven/org.hibernate/hibernate-entitymanager` |
 | Affected versions | `vers:maven/>=6.0.0.Alpha3` |
 | Date from the source | The source gives no day |
-| Replacement | org.hibernate.orm:hibernate-entitymanager |
+| Replacement | org.hibernate.orm\:hibernate-entitymanager |
 | Evidence last seen | 2026-10-20 |
 | Reviewed | 2026-10-20 by arminazimi, drafted by the `java-2` importer |
 | Review due | 2027-04-18 (180 days after the last review) |
@@ -40,13 +40,13 @@ The POM of org.hibernate:hibernate-entitymanager 6.0.0.Alpha7 declares a relocat
 
 ## Sources
 
-- [org.hibernate:hibernate-entitymanager 6.0.0.Alpha7 POM on Maven Central](https://repo1.maven.org/maven2/org/hibernate/hibernate-entitymanager/6.0.0.Alpha7/hibernate-entitymanager-6.0.0.Alpha7.pom) (accessed 2026-10-20)
+- [org.hibernate\:hibernate-entitymanager 6.0.0.Alpha7 POM on Maven Central](https://repo1.maven.org/maven2/org/hibernate/hibernate-entitymanager/6.0.0.Alpha7/hibernate-entitymanager-6.0.0.Alpha7.pom) (accessed 2026-10-20)
 
 ## Migration
 
 **Constraints**
 
-- Replace org.hibernate:hibernate-entitymanager with org.hibernate.orm:hibernate-entitymanager; the relocation in the artifact's POM names the new coordinates, so keep the version unless you intend to upgrade it.
+- Replace org.hibernate\:hibernate-entitymanager with org.hibernate.orm\:hibernate-entitymanager; the relocation in the artifact's POM names the new coordinates, so keep the version unless you intend to upgrade it.
 - Update every module and dependency-management block that names the old coordinates, and remove exclusions that mention them.
 
 **Steps**
@@ -72,8 +72,8 @@ The [`java`](../detectors/java.md) detector. See [Detectors](../DETECTORS.md) an
 - [Java 22 to 24 are no longer supported](java.jdk.end-of-support-22-24.html)
 - [Java 26 is no longer supported](java.jdk.end-of-support-26.html)
 - [Java 9 and 10 are no longer supported](java.jdk.end-of-support-9-10.html)
-- [mysql:mysql-connector-java has moved to com.mysql:mysql-connector-j](java.maven.mysql.mysql-connector-java.relocated.html)
-- [org.slf4j:slf4j-log4j12 has moved to org.slf4j:slf4j-reload4j](java.maven.org.slf4j.slf4j-log4j12.relocated.html)
+- [mysql\:mysql-connector-java has moved to com.mysql\:mysql-connector-j](java.maven.mysql.mysql-connector-java.relocated.html)
+- [org.slf4j\:slf4j-log4j12 has moved to org.slf4j\:slf4j-reload4j](java.maven.org.slf4j.slf4j-log4j12.relocated.html)
 - [Spring Boot 1.x is out of open-source support](java.maven.spring-boot.legacy-1x.end-of-support.html)
 
 

@@ -27,6 +27,8 @@ defaults:
 theme:
   name: "@velella/lateen"
   options:
+    # Lateen 0.2.5 ships an Offing preset (accent and neutral tints); the logo, favicon and footer below stay ours.
+    preset: offing
     logo:
       light: /assets/brand/offing-mark-adaptive.svg
       dark: /assets/brand/offing-mark-adaptive.svg
@@ -40,10 +42,10 @@ theme:
       links:
         - title: GitHub
           url: https://github.com/velella-sh/offing
-        - title: Mizzen
-          url: https://velella.sh/mizzen/
-        - title: Lateen
-          url: https://velella.sh/lateen/
+        - title: a Velella project
+          url: https://velella.sh/
+        - title: Changelog
+          url: /CHANGELOG/
 # Offing publishes its own llms.txt, llms-full.txt and sitemap.xml (docs/llms.txt is curated by hand; the others are
 # generated before the build), so Mizzen's own copies stay off.
 outputs:

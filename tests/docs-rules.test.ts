@@ -50,7 +50,6 @@ test("every document that CONTRIBUTING.md and docs/RULES.md link to exists, and 
     ],
     ["CONTRIBUTING.md", ["docs/RULES.md", "https://github.com/velella-sh/ebb", "tests/npm.test.ts"]],
     ["docs/DETECTORS.md", ["RULES.md"]],
-    ["docs/index.md", ["RULES.md"]],
   ] as const) {
     const text = await readFile(resolve(file), "utf8");
     for (const link of links) {
@@ -60,4 +59,7 @@ test("every document that CONTRIBUTING.md and docs/RULES.md link to exists, and 
       await readFile(target); // throws when the target is missing
     }
   }
+  // The home page follows the Lateen showpiece (three cards), so the rules are reached from the site navigation.
+  const navigation = await readFile(resolve("docs/_data/navigation.yml"), "utf8");
+  assert.match(navigation, /url: \/RULES\//, "docs navigation links the rules");
 });

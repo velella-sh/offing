@@ -12,7 +12,7 @@ json_twin: "/rules/npm.package.lodash-isequal.deprecated.json"
 
 # lodash.isequal is deprecated
 
-**Deprecated.** The source gives no day. Replacement: node:util.isDeepStrictEqual. Source: [lodash.isequal package deprecation notice](https://www.npmjs.com/package/lodash.isequal).
+**Deprecated.** The source gives no day. Replacement: node\:util.isDeepStrictEqual. Source: [lodash.isequal package deprecation notice](https://www.npmjs.com/package/lodash.isequal).
 
 Check a version:
 
@@ -20,7 +20,7 @@ Check a version:
 offing check pkg:npm/lodash.isequal
 ```
 
-npm recommends replacing lodash.isequal with node:util.isDeepStrictEqual.
+npm recommends replacing lodash.isequal with node\:util.isDeepStrictEqual.
 
 [Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
 
@@ -32,7 +32,7 @@ npm recommends replacing lodash.isequal with node:util.isDeepStrictEqual.
 | Component | `pkg:npm/lodash.isequal` |
 | Affected versions | `vers:npm/*` |
 | Date from the source | The source gives no day |
-| Replacement | node:util.isDeepStrictEqual |
+| Replacement | node\:util.isDeepStrictEqual |
 | Evidence last seen | 2026-10-16 |
 | Reviewed | 2026-10-16 by arminazimi, drafted by the `npm-deprecated` importer |
 | Review due | 2027-10-16 (365 days after the last review) |
@@ -51,8 +51,8 @@ npm recommends replacing lodash.isequal with node:util.isDeepStrictEqual.
 
 **Steps**
 
-1. **Compare equality semantics.** Identify value types used at each call site and confirm node:util.isDeepStrictEqual has acceptable semantics.
-2. **Use Node deep strict equality.** Replace lodash.isequal imports and calls with node:util.isDeepStrictEqual, then remove the dependency.
+1. **Compare equality semantics.** Identify value types used at each call site and confirm node\:util.isDeepStrictEqual has acceptable semantics.
+2. **Use Node deep strict equality.** Replace lodash.isequal imports and calls with node\:util.isDeepStrictEqual, then remove the dependency.
 
 **Verification**
 

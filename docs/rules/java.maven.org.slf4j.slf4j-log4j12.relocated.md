@@ -10,9 +10,9 @@ last_modified_at: "2026-10-17"
 json_twin: "/rules/java.maven.org.slf4j.slf4j-log4j12.relocated.json"
 ---
 
-# org.slf4j:slf4j-log4j12 has moved to org.slf4j:slf4j-reload4j
+# org.slf4j\:slf4j-log4j12 has moved to org.slf4j\:slf4j-reload4j
 
-**Deprecated.** The source gives no day. Replacement: org.slf4j:slf4j-reload4j. Source: [org.slf4j:slf4j-log4j12 2.1.0-alpha1 POM on Maven Central](https://repo1.maven.org/maven2/org/slf4j/slf4j-log4j12/2.1.0-alpha1/slf4j-log4j12-2.1.0-alpha1.pom).
+**Deprecated.** The source gives no day. Replacement: org.slf4j\:slf4j-reload4j. Source: [org.slf4j\:slf4j-log4j12 2.1.0-alpha1 POM on Maven Central](https://repo1.maven.org/maven2/org/slf4j/slf4j-log4j12/2.1.0-alpha1/slf4j-log4j12-2.1.0-alpha1.pom).
 
 Check a version:
 
@@ -20,7 +20,7 @@ Check a version:
 offing check pkg:maven/org.slf4j/slf4j-log4j12
 ```
 
-The POM of org.slf4j:slf4j-log4j12 2.1.0-alpha1 declares a relocation to org.slf4j:slf4j-reload4j.
+The POM of org.slf4j\:slf4j-log4j12 2.1.0-alpha1 declares a relocation to org.slf4j\:slf4j-reload4j.
 
 [Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
 
@@ -32,7 +32,7 @@ The POM of org.slf4j:slf4j-log4j12 2.1.0-alpha1 declares a relocation to org.slf
 | Component | `pkg:maven/org.slf4j/slf4j-log4j12` |
 | Affected versions | `vers:maven/>=2.0.13` |
 | Date from the source | The source gives no day |
-| Replacement | org.slf4j:slf4j-reload4j |
+| Replacement | org.slf4j\:slf4j-reload4j |
 | Evidence last seen | 2026-10-17 |
 | Reviewed | 2026-10-17 by arminazimi, drafted by the `java-2` importer |
 | Review due | 2027-04-15 (180 days after the last review) |
@@ -40,13 +40,13 @@ The POM of org.slf4j:slf4j-log4j12 2.1.0-alpha1 declares a relocation to org.slf
 
 ## Sources
 
-- [org.slf4j:slf4j-log4j12 2.1.0-alpha1 POM on Maven Central](https://repo1.maven.org/maven2/org/slf4j/slf4j-log4j12/2.1.0-alpha1/slf4j-log4j12-2.1.0-alpha1.pom) (accessed 2026-10-17)
+- [org.slf4j\:slf4j-log4j12 2.1.0-alpha1 POM on Maven Central](https://repo1.maven.org/maven2/org/slf4j/slf4j-log4j12/2.1.0-alpha1/slf4j-log4j12-2.1.0-alpha1.pom) (accessed 2026-10-17)
 
 ## Migration
 
 **Constraints**
 
-- Replace org.slf4j:slf4j-log4j12 with org.slf4j:slf4j-reload4j; the relocation in the artifact's POM names the new coordinates, so keep the version unless you intend to upgrade it.
+- Replace org.slf4j\:slf4j-log4j12 with org.slf4j\:slf4j-reload4j; the relocation in the artifact's POM names the new coordinates, so keep the version unless you intend to upgrade it.
 - Update every module and dependency-management block that names the old coordinates, and remove exclusions that mention them.
 
 **Steps**
@@ -72,8 +72,8 @@ The [`java`](../detectors/java.md) detector. See [Detectors](../DETECTORS.md) an
 - [Java 22 to 24 are no longer supported](java.jdk.end-of-support-22-24.html)
 - [Java 26 is no longer supported](java.jdk.end-of-support-26.html)
 - [Java 9 and 10 are no longer supported](java.jdk.end-of-support-9-10.html)
-- [mysql:mysql-connector-java has moved to com.mysql:mysql-connector-j](java.maven.mysql.mysql-connector-java.relocated.html)
-- [org.hibernate:hibernate-entitymanager has moved to org.hibernate.orm:hibernate-entitymanager](java.maven.org.hibernate.hibernate-entitymanager.relocated.html)
+- [mysql\:mysql-connector-java has moved to com.mysql\:mysql-connector-j](java.maven.mysql.mysql-connector-java.relocated.html)
+- [org.hibernate\:hibernate-entitymanager has moved to org.hibernate.orm\:hibernate-entitymanager](java.maven.org.hibernate.hibernate-entitymanager.relocated.html)
 - [Spring Boot 1.x is out of open-source support](java.maven.spring-boot.legacy-1x.end-of-support.html)
 
 
