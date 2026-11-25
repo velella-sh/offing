@@ -1,10 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/server";
+import { fromJsonSchema, type McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
 
 import type { OffingAgentTools } from "../agent-tools.js";
 import { classifyError, EXIT_CODES } from "../offing-error.js";
-import { outputSchema } from "./output-schema.js";
-import { MCP_TOOL_ANNOTATIONS, type McpToolName } from "./tool-names.js";
+import { estimateTokens, limitToolAnswer, MAX_TOOL_TOKENS, serialized } from "./limit.js";
+import { type JsonObject, toolOutputSchema } from "./output-schema.js";
+import { MCP_TOOL_ANNOTATIONS, MCP_TOOL_MORE_HINTS, type McpToolName } from "./tool-names.js";
 
 /** Input every repository-scoped tool shares. */
 export const repositoryInput = {
@@ -33,6 +34,19 @@ export interface McpToolResult {
   structuredContent?: Record<string, unknown>;
   isError?: boolean;
   [key: string]: unknown;
+}
+
+/**
+ * Keeps a successful result under the token cap. The structured content is cut against the schema the tool
+ * advertises, which is the one the SDK validates it with, and the JSON text is rewritten from it.
+ */
+function capped(result: McpToolResult, schema: JsonObject, more: string): McpToolResult {
+  const answer = result.structuredContent;
+  if (result.isError === true || answer === undefined) return result;
+  const text = result.content.find((part) => part.type === "text")?.text ?? serialized(answer);
+  if (estimateTokens(text) <= MAX_TOOL_TOKENS) return result;
+  limitToolAnswer(answer, schema, more);
+  return { ...result, content: [{ type: "text", text: serialized(answer) }] };
 }
 
 /** A successful call: the same JSON as text and as structured content, so either client style works. */
@@ -75,15 +89,16 @@ export function registerMcpTool<Shape extends z.ZodRawShape>(
     handler: (context: McpToolContext, input: z.infer<z.ZodObject<Shape>>) => Promise<McpToolResult>;
   },
 ): void {
+  const schema = toolOutputSchema(config.name);
   server.registerTool(
     config.name,
     {
       title: config.title,
       description: config.description,
       inputSchema: config.inputSchema,
-      outputSchema: outputSchema(config.name),
+      outputSchema: fromJsonSchema(schema as Parameters<typeof fromJsonSchema>[0]),
       annotations: MCP_TOOL_ANNOTATIONS,
     },
-    (input) => config.handler({ server, tools }, input),
+    async (input) => capped(await config.handler({ server, tools }, input), schema, MCP_TOOL_MORE_HINTS[config.name]),
   );
 }

@@ -9,7 +9,8 @@ export function registerListDeprecations(server: McpServer, tools: OffingAgentTo
   registerMcpTool(server, tools, {
     name: "list_deprecations",
     title: "List deprecations",
-    description: "Run a fresh local scan and return a compact, versioned list of lifecycle findings.",
+    description:
+      "Call when you need an overview of a repository's lifecycle findings before planning a change: one entry per finding with its id, rule, severity, and location. Runs a fresh local scan with no network. Returns offing.deprecations.v1. Pass an id to explain_deprecation for the full evidence.",
     inputSchema: z.object(repositoryInput),
     async handler(context, { repository_path }) {
       try {

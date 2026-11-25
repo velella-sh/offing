@@ -1,0 +1,186 @@
+{
+  "request": {
+    "name": "create_migration_context",
+    "arguments": {
+      "finding_id": "npm.package.request.deprecated:package.json:5",
+      "repository_path": "<repository>"
+    }
+  },
+  "response": {
+    "schemaVersion": "offing.context.v1",
+    "generatedAt": "<timestamp>",
+    "repositoryRoot": "<repository>",
+    "finding": {
+      "id": "npm.package.request.deprecated:package.json:5",
+      "ruleId": "npm.package.request.deprecated",
+      "title": "request is deprecated",
+      "summary": "request is declared in dependencies as 2.88.2; resolved: not found in a supported lockfile. The package is fully deprecated and no new changes are expected.",
+      "severity": "high",
+      "confidence": "range",
+      "location": {
+        "path": "package.json",
+        "line": 5
+      },
+      "replacement": "Native fetch or a maintained HTTP client",
+      "deadline": "2020-02-11",
+      "migration": {
+        "constraints": [
+          "Preserve request method, headers, authentication, redirects, timeouts, retries, proxy behavior, streaming, and response/error semantics used by each call site."
+        ],
+        "steps": [
+          {
+            "id": "choose-http-client",
+            "title": "Choose the target HTTP client",
+            "instructions": "Select native fetch or one maintained client whose behavior covers the affected request usages.",
+            "targets": "all"
+          },
+          {
+            "id": "replace-request-calls",
+            "title": "Rewrite request usages",
+            "instructions": "Translate callbacks, options, response handling, errors, and streams at every reported import and call.",
+            "targets": "usages"
+          },
+          {
+            "id": "replace-request-dependency",
+            "title": "Replace the dependency",
+            "instructions": "Remove request from package metadata and add the selected maintained client only if native fetch is insufficient.",
+            "targets": "declaration"
+          }
+        ],
+        "verification": [
+          {
+            "command": "npm run test --if-present",
+            "purpose": "Run HTTP behavior and repository tests when defined."
+          },
+          {
+            "command": "npm run build --if-present",
+            "purpose": "Verify imports, types, and the build remain valid."
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "request package deprecation notice",
+          "url": "https://www.npmjs.com/package/request",
+          "accessedAt": "2026-10-13"
+        }
+      ],
+      "usages": [
+        {
+          "kind": "import",
+          "language": "javascript",
+          "symbol": "request",
+          "location": {
+            "path": "src/index.js",
+            "line": 1,
+            "column": 26
+          },
+          "excerpt": "const request = require(\"request\");"
+        }
+      ],
+      "impact": {
+        "usageCount": 1,
+        "affectedFiles": 1,
+        "level": "low"
+      },
+      "detector": "npm",
+      "advisoryIds": [
+        "GHSA-p8p7-x288-28g6"
+      ]
+    },
+    "affectedFiles": [
+      "package.json",
+      "src/index.js"
+    ],
+    "usages": [
+      {
+        "kind": "import",
+        "language": "javascript",
+        "symbol": "request",
+        "location": {
+          "path": "src/index.js",
+          "line": 1,
+          "column": 26
+        },
+        "excerpt": "const request = require(\"request\");"
+      }
+    ],
+    "constraints": [
+      "Target replacement: Native fetch or a maintained HTTP client.",
+      "Migration deadline: 2020-02-11.",
+      "Preserve request method, headers, authentication, redirects, timeouts, retries, proxy behavior, streaming, and response/error semantics used by each call site.",
+      "Preserve behavior across 1 identified source usage.",
+      "Keep the migration within the evidence and affected files in this packet unless verification reveals additional scope."
+    ],
+    "steps": [
+      {
+        "id": "review-evidence",
+        "title": "Review lifecycle evidence",
+        "instructions": "Confirm the reported lifecycle state for request is deprecated against the authoritative sources.",
+        "targets": "declaration",
+        "paths": [
+          "package.json"
+        ]
+      },
+      {
+        "id": "choose-http-client",
+        "title": "Choose the target HTTP client",
+        "instructions": "Select native fetch or one maintained client whose behavior covers the affected request usages.",
+        "targets": "all",
+        "paths": [
+          "package.json",
+          "src/index.js"
+        ]
+      },
+      {
+        "id": "replace-request-calls",
+        "title": "Rewrite request usages",
+        "instructions": "Translate callbacks, options, response handling, errors, and streams at every reported import and call.",
+        "targets": "usages",
+        "paths": [
+          "src/index.js"
+        ]
+      },
+      {
+        "id": "replace-request-dependency",
+        "title": "Replace the dependency",
+        "instructions": "Remove request from package metadata and add the selected maintained client only if native fetch is insufficient.",
+        "targets": "declaration",
+        "paths": [
+          "package.json"
+        ]
+      },
+      {
+        "id": "verify-migration",
+        "title": "Verify the migration",
+        "instructions": "Run the suggested verification commands and re-scan the repository.",
+        "targets": "all",
+        "paths": [
+          "package.json",
+          "src/index.js"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "title": "request package deprecation notice",
+        "url": "https://www.npmjs.com/package/request",
+        "accessedAt": "2026-10-13"
+      }
+    ],
+    "verification": [
+      {
+        "command": "npm run test --if-present",
+        "purpose": "Run HTTP behavior and repository tests when defined."
+      },
+      {
+        "command": "npm run build --if-present",
+        "purpose": "Verify imports, types, and the build remain valid."
+      },
+      {
+        "command": "offing scan . --json",
+        "purpose": "Confirm the lifecycle finding no longer appears."
+      }
+    ]
+  }
+}

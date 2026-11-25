@@ -9,7 +9,8 @@ export function registerExplainDeprecation(server: McpServer, tools: OffingAgent
   registerMcpTool(server, tools, {
     name: "explain_deprecation",
     title: "Explain deprecation",
-    description: "Run a fresh local scan and return one complete evidence-backed finding by ID.",
+    description:
+      "Call when a scan or list has given you a finding id and you need its evidence before changing code: what is affected, where it is used, the replacement and deadline when a rule gives them, and the authoritative sources. Runs a fresh local scan with no network. Returns one complete finding.",
     inputSchema: z.object(findingInput),
     async handler(context, { finding_id, repository_path }) {
       try {

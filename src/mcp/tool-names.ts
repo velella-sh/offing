@@ -37,3 +37,21 @@ export const MCP_TOOL_ANNOTATIONS = {
   idempotentHint: true,
   openWorldHint: false,
 } as const;
+
+/** Where the rest of a cut answer is read, one line per tool; an answer over the cap ends with it as `more.hint`. */
+export const MCP_TOOL_MORE_HINTS = {
+  scan_repository:
+    "Call list_deprecations on the same repository_path to see the findings more compactly, then explain_deprecation with one id. The full document: offing scan <path> --json.",
+  list_deprecations:
+    "The findings kept are the most severe. For all of them run offing scan <path> --format compact in a terminal, then call explain_deprecation with an id.",
+  explain_deprecation: "The complete finding, with every usage: offing explain <finding_id> <path> --json.",
+  create_migration_context: "The complete packet: offing context <finding_id> <path> --json.",
+  verify_migration:
+    "Call list_deprecations on the same repository_path to see every finding a fresh scan still reports, then explain_deprecation with one id.",
+  check_dependency: "The complete check: offing check <purl> --json.",
+  check_upgrade: "The complete report: offing upgrade-check --to <runtime>@<version> --json.",
+  check_snippet: "The complete check: offing check-snippet --path <path> --json, with the content on stdin.",
+  forecast_repository: "The complete forecast: offing forecast <path> --months <n> --as-of <date> --json.",
+  plan_migrations: "The complete plan: offing plan <path> --json.",
+  recommend_version: "The complete answer: offing recommend <product> --json.",
+} as const satisfies Record<McpToolName, string>;

@@ -11,7 +11,7 @@ export function registerCheckSnippet(server: McpServer, tools: OffingAgentTools)
     name: "check_snippet",
     title: "Check snippet",
     description:
-      "Check proposed file contents for lifecycle issues before writing them. Pass the intended repository-relative path and the exact content. Supports Node.js and Python API usage, GitHub Actions, Kubernetes, and other built-in detectors that can read one file in isolation. Findings include the snippet location, evidence, and the reviewed replacement when available.",
+      "Call before you write a file: a package manifest, Dockerfile, CI workflow, Kubernetes manifest, or Node.js or Python code that calls an API. Pass the intended repository-relative path and the exact content. Returns offing.check-snippet.v1: each finding with its line, the flagged code, the replacement when one is reviewed, and a source. Reads no repository.",
     inputSchema: z.object({
       path: z
         .string()

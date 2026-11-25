@@ -1,0 +1,73 @@
+{
+  "request": {
+    "name": "check_dependency",
+    "arguments": {
+      "purl": "pkg:npm/request@2.88.2"
+    }
+  },
+  "response": {
+    "replacement": "Native fetch or a maintained HTTP client",
+    "status": "affected",
+    "schemaVersion": "offing.check.v1",
+    "purl": "pkg:npm/request",
+    "version": "2.88.2",
+    "findings": [
+      {
+        "ruleId": "npm.package.request.deprecated",
+        "ecosystem": "npm",
+        "event": "deprecated",
+        "severity": "high",
+        "title": "request is deprecated",
+        "summary": "The package is fully deprecated and no new changes are expected.",
+        "replacement": "Native fetch or a maintained HTTP client",
+        "deadline": "2020-02-11",
+        "affectedVersions": "vers:npm/*",
+        "sources": [
+          {
+            "title": "request package deprecation notice",
+            "url": "https://www.npmjs.com/package/request",
+            "accessedAt": "2026-10-13"
+          }
+        ],
+        "migration": {
+          "constraints": [
+            "Preserve request method, headers, authentication, redirects, timeouts, retries, proxy behavior, streaming, and response/error semantics used by each call site."
+          ],
+          "steps": [
+            {
+              "id": "choose-http-client",
+              "title": "Choose the target HTTP client",
+              "instructions": "Select native fetch or one maintained client whose behavior covers the affected request usages.",
+              "targets": "all"
+            },
+            {
+              "id": "replace-request-calls",
+              "title": "Rewrite request usages",
+              "instructions": "Translate callbacks, options, response handling, errors, and streams at every reported import and call.",
+              "targets": "usages"
+            },
+            {
+              "id": "replace-request-dependency",
+              "title": "Replace the dependency",
+              "instructions": "Remove request from package metadata and add the selected maintained client only if native fetch is insufficient.",
+              "targets": "declaration"
+            }
+          ],
+          "verification": [
+            {
+              "command": "npm run test --if-present",
+              "purpose": "Run HTTP behavior and repository tests when defined."
+            },
+            {
+              "command": "npm run build --if-present",
+              "purpose": "Verify imports, types, and the build remain valid."
+            }
+          ]
+        }
+      }
+    ],
+    "severity": "high",
+    "message": "pkg:npm/request@2.88.2: request is deprecated. The package is fully deprecated and no new changes are expected. Replacement: Native fetch or a maintained HTTP client.",
+    "data": "<data: ageDays, createdAt, reviewedThrough, source, stale, version>"
+  }
+}

@@ -9,7 +9,6 @@ import { command as forecastCommand } from "../commands/forecast.js";
 import type { CommandContext } from "../commands/types.js";
 import type { ScanResult } from "../domain.js";
 import { forecastWeather, locationText, singleLine } from "../forecast-core.js";
-import { forecastBuckets } from "../forecast-timeline.js";
 import { buildRepositoryForecast, replayScanOptions, type RepositoryForecast } from "../forecast.js";
 import { scanWithBuiltIns } from "../scan-builtins.js";
 
@@ -30,9 +29,8 @@ async function hasGitHistory(root: string): Promise<boolean> {
 }
 
 function renderFirstRun(scan: ScanResult, forecast: RepositoryForecast, empty: boolean, history: boolean): string {
-  const buckets = forecastBuckets(forecast);
-  const upcoming = buckets.flatMap(({ events }) => events.filter((event) => event.findings.length > 0));
-  const nearest = buckets[0]?.events.filter((event) => event.findings.length > 0) ?? [];
+  const upcoming = forecast.buckets.flatMap(({ events }) => events);
+  const nearest = forecast.buckets[0]?.events ?? [];
   const lines = [
     `Weather: ${forecastWeather(nearest, forecast.noData.length > 0)}`,
     `Forecast: ${forecast.today} to ${forecast.until}`,

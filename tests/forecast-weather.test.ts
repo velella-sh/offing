@@ -4,6 +4,7 @@ import { test } from "node:test";
 import type { ForecastEvent } from "@velella/ebb/forecast";
 import type { RepositoryForecast } from "../src/forecast.js";
 import { renderForecastText } from "../src/forecast.js";
+import { forecastBuckets } from "../src/forecast-timeline.js";
 
 function event(date: string, severity: ForecastEvent["severity"], affectsRepository = true): ForecastEvent {
   return {
@@ -18,8 +19,8 @@ function event(date: string, severity: ForecastEvent["severity"], affectsReposit
 }
 
 function report(events: ForecastEvent[]): string {
-  const forecast: RepositoryForecast = {
-    schemaVersion: "ebb.forecast.v1",
+  const base = {
+    schemaVersion: "ebb.forecast.v1" as const,
     root: "/repo",
     today: "2026-10-25",
     until: "2027-10-25",
@@ -27,8 +28,9 @@ function report(events: ForecastEvent[]): string {
     groups: [{ month: "2026-10", events }],
     affecting: events.filter((item) => item.findings.length > 0).length,
     total: events.length,
-    noData: [],
   };
+  // The report reads the buckets the document carries, so they are built the way the document builder builds them.
+  const forecast: RepositoryForecast = { ...base, buckets: forecastBuckets(base), noData: [] };
   return renderForecastText(forecast);
 }
 

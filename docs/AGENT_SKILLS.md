@@ -144,6 +144,8 @@ npm run eval:skill-triggers
 
 The command builds the evaluator, prints JSON results overall and by host lane, lists any failed case IDs, and exits unsuccessfully when the corpus has fewer than 50 cases, recall is below 90%, or the false-trigger rate is 5% or higher. It has no model, network, account, or API-key dependency, so CI and contributors can reproduce the same baseline.
 
+The same output ends with `toolSelection`, which is not about the Skill: it measures how the MCP tool descriptions rank for a request, with no gate ([Local MCP server](MCP.md#how-the-descriptions-were-measured)).
+
 Current published baseline:
 
 | Lane | Cases | Recall | False-trigger rate |

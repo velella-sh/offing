@@ -1,26 +1,59 @@
 import { addMonths } from "@velella/ebb/forecast";
 import type { Forecast, ForecastEvent } from "@velella/ebb/forecast";
 
-interface ForecastBucket {
+import { required } from "./required.js";
+
+/**
+ * The events of one horizon of a forecast: 0-3, 3-6, and 6-12 months, then on to the horizon when it is longer.
+ * Every event is in exactly one bucket, by its date.
+ */
+export interface ForecastBucket {
+  /** Months after the window starts where the bucket begins. */
+  from: number;
+  /** Months after the window starts where the bucket ends, which is the horizon for the last bucket. */
+  to: number;
+  /** The last day in the bucket. */
+  until: string;
+  /** The horizon as the terminal report prints it, such as `0-3 months`. */
   label: string;
+  /** Every event in the bucket. */
+  total: number;
+  /** How many of them affect at least one finding in the repository. */
+  affecting: number;
+  /** The events that affect at least one finding in the repository, earliest first. */
   events: ForecastEvent[];
 }
 
-/** Split the existing events at inclusive calendar-month cutoffs, retaining any longer horizon. */
+/**
+ * Groups the existing events at inclusive calendar-month cutoffs, retaining any longer horizon. It changes how
+ * no event is computed. The terminal report, the JSON document, and the browser page all read these buckets.
+ */
 export function forecastBuckets(forecast: Forecast): ForecastBucket[] {
   const cutoffs = [3, 6, 12].filter((months) => months < forecast.months);
+  const horizons = [...cutoffs, forecast.months];
   const ends = [...cutoffs.map((months) => addMonths(forecast.today, months)), forecast.until];
-  const buckets: ForecastBucket[] = [...cutoffs, forecast.months].map((end, index) => ({
-    label: `${cutoffs[index - 1] ?? 0}-${end} months`,
-    events: [],
-  }));
+  const grouped: ForecastEvent[][] = horizons.map(() => []);
 
   const events = forecast.groups.flatMap((group) => group.events);
   events.sort((left, right) => left.date.localeCompare(right.date) || left.ruleId.localeCompare(right.ruleId));
   for (const event of events) {
-    buckets[ends.findIndex((until) => event.date <= until)]?.events.push(event);
+    grouped[ends.findIndex((until) => event.date <= until)]?.push(event);
   }
-  return buckets;
+
+  return horizons.map((to, index) => {
+    const all = grouped[index] ?? [];
+    const affecting = all.filter((event) => event.findings.length > 0);
+    const from = cutoffs[index - 1] ?? 0;
+    return {
+      from,
+      to,
+      until: required(ends[index], "the last day of a forecast bucket"),
+      label: `${from}-${to} months`,
+      total: all.length,
+      affecting: affecting.length,
+      events: affecting,
+    };
+  });
 }
 
 export interface ForecastTimelineOptions {

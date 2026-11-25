@@ -11,7 +11,7 @@ export function registerRecommendVersion(server: McpServer, tools: OffingAgentTo
     name: "recommend_version",
     title: "Recommend version",
     description:
-      "Say which release line of a runtime, container image, GitHub Action, or package to write today, instead of whatever training data remembers. Pass a product name such as node, python, or postgres, or a Package URL such as pkg:docker/library/node or pkg:githubactions/actions/checkout. Returns offing.recommend.v1: the recommended line and the date it is supported until, other qualifying alternatives, the lines to avoid with their dates, and evidence sources. A line qualifies when the data does not mark it ended and its end date is at least minimumSupportDays away (default 180). The answer comes only from Offing's bundled lifecycle data, never from the network, so it never says 'latest' and is limited to what the data covers. no-data means Offing has no data for the product, not that any version is safe. No repository is read.",
+      "Call before you write a version into a Dockerfile, CI workflow, or manifest and want a line that stays supported. Returns offing.recommend.v1: the recommended line with its end date, alternatives, lines to avoid, and sources, from bundled lifecycle data only; it never says 'latest'. no-data means no data for the product, not that a version is safe.",
     inputSchema: z.object({
       product: z
         .string()

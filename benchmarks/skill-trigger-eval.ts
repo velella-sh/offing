@@ -320,6 +320,168 @@ export function deprecationCoverageOnUpgradeJob(cases: SkillEvalCase[]): {
   };
 }
 
+// --- Tool selection: does a tool's name and description lead a request to it? ------------------------------
+
+/** The recorded answer of `tools/list`, which `tests/mcp.test.ts` holds equal to what the server advertises. */
+export const ADVERTISED_TOOLS = "tests/fixtures/mcp-tool-schemas.json";
+
+export interface ToolSelectionCase {
+  id: string;
+  prompt: string;
+  /** The one tool that answers the prompt. */
+  tool: string;
+  reason: string;
+}
+
+export interface ToolSelectionCorpus {
+  schemaVersion: "offing.mcp-tool-selection.v1";
+  cases: ToolSelectionCase[];
+}
+
+/** What the selection reads of a tool: what a host shows an agent before it calls anything. */
+export interface AdvertisedTool {
+  name: string;
+  title?: string;
+  description: string;
+}
+
+export interface ToolSelectionMetrics {
+  cases: number;
+  selected: number;
+  selectionRate: number;
+  /** How many prompts have their tool among the first three, a shortlist a host could still tell apart. */
+  inFirstThree: number;
+  /** Where the tool of a prompt ranks on average, 1 being first of all tools. */
+  meanRank: number;
+  /** Per tool: how many prompts name it, and for how many it ranked first. */
+  byTool: Record<string, { cases: number; selected: number }>;
+  /** The prompts whose tool did not rank first, with what ranked first instead; none when two tie. */
+  misses: Array<{ id: string; expected: string; selected?: string }>;
+}
+
+/** Words that carry grammar and not meaning. A word that appears in one description only would otherwise count for it. */
+const STOP_WORDS = new Set(
+  `
+  a an the this that these those it its they them their we our us you your i me my he she his her is are was were
+  be been being am do does did done have has had will would can could should shall may might must of in on at by for
+  with from to into over under about as and or but if then than so not no any all some one every each here there
+  when where which what who how why again still also just please need want tell show give make
+`.split(/\s+/),
+);
+
+/** Two words are one term when they share this many letters at the start: `deprecated` and `deprecation` are, while
+ * `check` and `checkout` are not. */
+const SHARED_PREFIX = 6;
+const INFLECTIONS = ["s", "es", "ed", "ing"];
+
+/** Whether `longer` is `shorter` with a plural or a tense ending: `plan`/`planning`, `line`/`lines`. */
+function isInflection(shorter: string, longer: string): boolean {
+  const stem = shorter.endsWith("e") ? shorter.slice(0, -1) : shorter;
+  return INFLECTIONS.some((ending) => longer === stem + ending || longer === stem + stem.at(-1) + ending);
+}
+
+function sameTerm(left: string, right: string): boolean {
+  if (left === right) return true;
+  const shorter = left.length < right.length ? left : right;
+  const longer = left.length < right.length ? right : left;
+  if (isInflection(shorter, longer)) return true;
+  let shared = 0;
+  while (shared < Math.min(left.length, right.length) && left[shared] === right[shared]) shared += 1;
+  return shared >= SHARED_PREFIX;
+}
+
+/** The words of a text that can tell one tool from another, each once: lower case, split at punctuation and at the
+ * seams of a tool name, and without the words of grammar. */
+function words(text: string): string[] {
+  return [...new Set(text.toLowerCase().match(/[a-z0-9]+/g) ?? [])].filter((word) => !STOP_WORDS.has(word));
+}
+
+/** How much a word of a prompt tells tools apart: nothing when no tool uses it or every tool does, and more the
+ * fewer tools use it. */
+function termWeight(word: string, termsOfTools: readonly (readonly string[])[]): number {
+  const toolsUsingIt = termsOfTools.filter((terms) => terms.some((term) => sameTerm(word, term))).length;
+  return toolsUsingIt === 0 || toolsUsingIt === termsOfTools.length ? 0 : Math.log(termsOfTools.length / toolsUsingIt);
+}
+
+/**
+ * Ranks the tools for a prompt by their name, title, and description. Each word of the prompt counts for every tool
+ * that uses the word, weighted by how few tools do.
+ *
+ * This is a deterministic stand-in for the first step of a host's choice, which is to match a request against what a
+ * tool says about itself. It reads no code, it has no notion of order between calls, and it never declines a prompt
+ * on its own, so it measures the wording of the descriptions and nothing else.
+ */
+export function rankTools(prompt: string, tools: readonly AdvertisedTool[]): Array<{ name: string; score: number }> {
+  const text = (tool: AdvertisedTool) => [tool.name, tool.title ?? "", tool.description].join(" ");
+  const termsOfTools = tools.map((tool) => words(text(tool)));
+  const weights = new Map(words(prompt).map((word) => [word, termWeight(word, termsOfTools)]));
+  return tools
+    .map((tool, index) => ({
+      name: tool.name,
+      score: [...weights].reduce(
+        (sum, [word, weight]) =>
+          sum + (weight > 0 && termsOfTools[index]?.some((term) => sameTerm(word, term)) ? weight : 0),
+        0,
+      ),
+    }))
+    .sort((left, right) => right.score - left.score || left.name.localeCompare(right.name));
+}
+
+/** The one tool that ranks first, or undefined when two tie or no word of the prompt appears in any tool. */
+function leader(ranked: ReturnType<typeof rankTools>): string | undefined {
+  const first = ranked[0];
+  if (!first || first.score === 0 || first.score === ranked[1]?.score) return undefined;
+  return first.name;
+}
+
+export function selectTool(prompt: string, tools: readonly AdvertisedTool[]): string | undefined {
+  return leader(rankTools(prompt, tools));
+}
+
+/** The selection rate is the share of prompts whose tool ranks first. The rank of the tool and its place in a
+ * shortlist of three say how close the rest came. */
+export function calculateToolSelection(
+  cases: readonly ToolSelectionCase[],
+  tools: readonly AdvertisedTool[],
+): ToolSelectionMetrics {
+  const byTool: Record<string, { cases: number; selected: number }> = {};
+  const misses: ToolSelectionMetrics["misses"] = [];
+  let rankSum = 0;
+  let inFirstThree = 0;
+  for (const item of cases) {
+    const ranked = rankTools(item.prompt, tools);
+    const rank = Math.max(1, ranked.findIndex((tool) => tool.name === item.tool) + 1);
+    rankSum += rank;
+    if (rank <= 3) inFirstThree += 1;
+    const tally = (byTool[item.tool] ??= { cases: 0, selected: 0 });
+    tally.cases += 1;
+    const selected = leader(ranked);
+    if (selected === item.tool) tally.selected += 1;
+    else misses.push({ id: item.id, expected: item.tool, ...(selected ? { selected } : {}) });
+  }
+  const selected = cases.length - misses.length;
+  return {
+    cases: cases.length,
+    selected,
+    selectionRate: cases.length === 0 ? 0 : selected / cases.length,
+    inFirstThree,
+    meanRank: cases.length === 0 ? 0 : rankSum / cases.length,
+    byTool,
+    misses,
+  };
+}
+
+export async function loadToolSelectionCorpus(): Promise<ToolSelectionCorpus> {
+  return JSON.parse(await readFile(resolve("benchmarks/mcp-tool-selection.json"), "utf8")) as ToolSelectionCorpus;
+}
+
+/** The tools in a recorded `tools/list` answer, in the shape the selection reads. */
+export async function loadAdvertisedTools(path = ADVERTISED_TOOLS): Promise<AdvertisedTool[]> {
+  const document = JSON.parse(await readFile(resolve(path), "utf8")) as AdvertisedTool[] | { tools: AdvertisedTool[] };
+  const tools = Array.isArray(document) ? document : document.tools;
+  return tools.map(({ name, title, description }) => ({ name, ...(title ? { title } : {}), description }));
+}
+
 async function run(): Promise<void> {
   const corpus = await loadSkillEvalCorpus();
   const overall = calculateMetrics(corpus.cases);
@@ -364,6 +526,14 @@ async function run(): Promise<void> {
   const addFalseOnLifecycle = addOnLifecyclePrompts.filter((item) => classifyDependencyAddition(item.prompt));
   const upgradeOnAdd = lifecycleOnAddPrompts.filter((item) => classifyRuntimeActionUpgrade(item.prompt));
   const addOnUpgrade = upgradeJob.cases.filter((item) => item.shouldTrigger && classifyDependencyAddition(item.prompt));
+  // `--tools <file>` scores the tool list of another commit, which is how a before number is taken. Reported and
+  // not gated: the ranking is a lexical stand-in, far from the floor the trigger evals above are held to.
+  const toolsFlag = process.argv.indexOf("--tools");
+  const tools = toolsFlag === -1 ? undefined : process.argv[toolsFlag + 1];
+  const toolSelection = {
+    tools: tools ?? ADVERTISED_TOOLS,
+    ...calculateToolSelection((await loadToolSelectionCorpus()).cases, await loadAdvertisedTools(tools)),
+  };
   const result = {
     schemaVersion: corpus.schemaVersion,
     skill: "offing",
@@ -398,6 +568,7 @@ async function run(): Promise<void> {
       upgradeFalseTriggersOnAddPrompts: upgradeOnAdd.map((item) => item.id),
       checkBeforeAddFalseTriggersOnUpgradePrompts: addOnUpgrade.map((item) => item.id),
     },
+    toolSelection,
   };
 
   console.log(JSON.stringify(result, null, 2));

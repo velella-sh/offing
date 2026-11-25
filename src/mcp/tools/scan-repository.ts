@@ -10,7 +10,7 @@ export function registerScanRepository(server: McpServer, tools: OffingAgentTool
     name: "scan_repository",
     title: "Scan repository",
     description:
-      "Run all built-in Offing detectors against a local repository and return the complete versioned scan result.",
+      "Call when you are about to plan work on a repository and need its lifecycle findings first: deprecated packages, end-of-life runtimes, retired APIs, at exact file and line. Runs every built-in Offing detector locally, with no network. Returns offing.scan.v1. On a large repository the answer is cut; list_deprecations lists the findings more compactly.",
     inputSchema: z.object({
       ...repositoryInput,
       baseline: z

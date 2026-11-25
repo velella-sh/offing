@@ -1,0 +1,56 @@
+{
+  "request": {
+    "name": "plan_migrations",
+    "arguments": {
+      "repository_path": "<repository>"
+    }
+  },
+  "response": {
+    "schema": "offing.plan.v1",
+    "waves": [
+      {
+        "index": 0,
+        "itemIds": [
+          "nodejs.runtime.eol-20:.github/workflows/ci.yml:7",
+          "npm.package.request.deprecated:package.json:5"
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": "nodejs.runtime.eol-20:.github/workflows/ci.yml:7",
+        "findingId": "nodejs.runtime.eol-20:.github/workflows/ci.yml:7",
+        "title": "Node.js 20 is end-of-life",
+        "severity": "high",
+        "touches": [
+          ".github/workflows/ci.yml"
+        ],
+        "branch": "offing/nodejs.runtime.eol-20-nodejs.r",
+        "wave": 0
+      },
+      {
+        "id": "npm.package.request.deprecated:package.json:5",
+        "findingId": "npm.package.request.deprecated:package.json:5",
+        "title": "request is deprecated",
+        "severity": "high",
+        "touches": [
+          "package.json",
+          "src/index.js"
+        ],
+        "branch": "offing/npm.package.request.deprecated-npm.pack",
+        "wave": 0
+      }
+    ],
+    "summary": {
+      "items": 2,
+      "waves": 1,
+      "bySeverity": {
+        "info": 0,
+        "low": 0,
+        "medium": 0,
+        "high": 2,
+        "critical": 0
+      }
+    }
+  }
+}
