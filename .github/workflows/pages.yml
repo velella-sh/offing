@@ -100,10 +100,15 @@ jobs:
         run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out docs/_site --workers auto'
       - name: Build the browser forecast
         run: npm run build:forecast-web -- docs/_site/forecast-web/app
+      - name: Check the site keeps its dot-folders
+        # The Mizzen network reads /.mizzen/manifest.json, and agents read /.well-known/.
+        run: test -f docs/_site/.mizzen/manifest.json && test -d docs/_site/.well-known
       - name: Upload the GitHub Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: docs/_site
+          # The action drops dot-folders by default, which hid /.mizzen/ and /.well-known/ (404).
+          include-hidden-files: true
       - name: Upload the site for Lighthouse
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
