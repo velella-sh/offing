@@ -10,7 +10,7 @@ last_modified_at: "2026-11-05"
 json_twin: "/rules/github-actions.workflow-command.save-state.json"
 ---
 
-# Deprecated GitHub Actions ::save-state command
+# Deprecated GitHub Actions :\:save-state command
 
 **Deprecated.** The source gives no day. Replacement: $GITHUB_STATE. Source: [GitHub Actions: Deprecating save-state and set-output commands](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/).
 
@@ -20,7 +20,7 @@ Check a version:
 offing check pkg:generic/github-actions/save-state
 ```
 
-GitHub deprecated the ::save-state workflow command. Append to the GITHUB_STATE environment file instead.
+GitHub deprecated the :\:save-state workflow command. Append to the GITHUB_STATE environment file instead.
 
 [Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
 

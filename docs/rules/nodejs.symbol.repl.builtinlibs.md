@@ -12,7 +12,7 @@ json_twin: "/rules/nodejs.symbol.repl.builtinlibs.json"
 
 # Repl._builtinLibs is deprecated
 
-**Deprecated.** The source gives no day. Replacement: require('node:module').builtinModules. Source: [Node.js deprecations: DEP0142](https://nodejs.org/api/deprecations.html).
+**Deprecated.** The source gives no day. Replacement: require('node\:module').builtinModules. Source: [Node.js deprecations: DEP0142](https://nodejs.org/api/deprecations.html).
 
 Check a version:
 
@@ -32,7 +32,7 @@ Node.js deprecates repl._builtinLibs (DEP0142: documentation-only since v14.3.0)
 | Component | `pkg:generic/nodejs` |
 | Affected versions | `vers:semver/>=14.3.0` |
 | Date from the source | The source gives no day |
-| Replacement | require('node:module').builtinModules |
+| Replacement | require('node\:module').builtinModules |
 | Evidence last seen | 2026-10-21 |
 | Reviewed | 2026-10-21 by arminazimi |
 | Review due | 2027-10-21 (365 days after the last review) |
@@ -50,7 +50,7 @@ Node.js deprecates repl._builtinLibs (DEP0142: documentation-only since v14.3.0)
 
 **Steps**
 
-1. **Replace the usage.** Replace each reported use of repl._builtinLibs with require('node:module').builtinModules.
+1. **Replace the usage.** Replace each reported use of repl._builtinLibs with require('node\:module').builtinModules.
 
 **Verification**
 

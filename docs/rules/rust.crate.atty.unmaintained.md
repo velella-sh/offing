@@ -12,7 +12,7 @@ json_twin: "/rules/rust.crate.atty.unmaintained.json"
 
 # atty is no longer maintained
 
-**Deprecated.** The source gives no day. Replacement: std::io::IsTerminal (stable since Rust 1.70), or the is-terminal crate for older compilers. Source: [RustSec advisory RUSTSEC-2024-0375](https://rustsec.org/advisories/RUSTSEC-2024-0375.html).
+**Deprecated.** The source gives no day. Replacement: std:\:io:\:IsTerminal (stable since Rust 1.70), or the is-terminal crate for older compilers. Source: [RustSec advisory RUSTSEC-2024-0375](https://rustsec.org/advisories/RUSTSEC-2024-0375.html).
 
 Check a version:
 
@@ -32,7 +32,7 @@ The maintainer of atty has published an official notice that the crate is no lon
 | Component | `pkg:cargo/atty` |
 | Affected versions | `vers:cargo/*` |
 | Date from the source | The source gives no day |
-| Replacement | std::io::IsTerminal (stable since Rust 1.70), or the is-terminal crate for older compilers |
+| Replacement | std:\:io:\:IsTerminal (stable since Rust 1.70), or the is-terminal crate for older compilers |
 | Evidence last seen | 2026-10-17 |
 | Reviewed | 2026-10-17 by arminazimi |
 | Review due | 2026-12-01 (45 days after the last review) |
@@ -50,7 +50,7 @@ The maintainer of atty has published an official notice that the crate is no lon
 
 **Steps**
 
-1. **Use std::io::IsTerminal.** Replace `atty::is(Stream::Stdout)` with `std::io::stdout().is_terminal()` (stable since Rust 1.70, `use std::io::IsTerminal`), or use the is-terminal crate on older compilers, and remove the atty dependency.
+1. **Use std:\:io:\:IsTerminal.** Replace `atty::is(Stream::Stdout)` with `std::io::stdout().is_terminal()` (stable since Rust 1.70, `use std::io::IsTerminal`), or use the is-terminal crate on older compilers, and remove the atty dependency.
 
 **Verification**
 

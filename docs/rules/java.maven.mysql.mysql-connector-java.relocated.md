@@ -10,9 +10,9 @@ last_modified_at: "2026-10-17"
 json_twin: "/rules/java.maven.mysql.mysql-connector-java.relocated.json"
 ---
 
-# mysql:mysql-connector-java has moved to com.mysql:mysql-connector-j
+# mysql\:mysql-connector-java has moved to com.mysql\:mysql-connector-j
 
-**Deprecated.** The source gives no day. Replacement: com.mysql:mysql-connector-j. Source: [mysql:mysql-connector-java 8.0.33 POM on Maven Central](https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.33/mysql-connector-java-8.0.33.pom).
+**Deprecated.** The source gives no day. Replacement: com.mysql\:mysql-connector-j. Source: [mysql\:mysql-connector-java 8.0.33 POM on Maven Central](https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.33/mysql-connector-java-8.0.33.pom).
 
 Check a version:
 
@@ -20,7 +20,7 @@ Check a version:
 offing check pkg:maven/mysql/mysql-connector-java
 ```
 
-The POM of mysql:mysql-connector-java 8.0.33 declares a relocation to com.mysql:mysql-connector-j. Its message says: "MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates."
+The POM of mysql\:mysql-connector-java 8.0.33 declares a relocation to com.mysql\:mysql-connector-j. Its message says: "MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates."
 
 [Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
 
@@ -32,7 +32,7 @@ The POM of mysql:mysql-connector-java 8.0.33 declares a relocation to com.mysql:
 | Component | `pkg:maven/mysql/mysql-connector-java` |
 | Affected versions | `vers:maven/>=8.0.31` |
 | Date from the source | The source gives no day |
-| Replacement | com.mysql:mysql-connector-j |
+| Replacement | com.mysql\:mysql-connector-j |
 | Evidence last seen | 2026-10-17 |
 | Reviewed | 2026-10-17 by arminazimi, drafted by the `java-2` importer |
 | Review due | 2027-04-15 (180 days after the last review) |
@@ -40,13 +40,13 @@ The POM of mysql:mysql-connector-java 8.0.33 declares a relocation to com.mysql:
 
 ## Sources
 
-- [mysql:mysql-connector-java 8.0.33 POM on Maven Central](https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.33/mysql-connector-java-8.0.33.pom) (accessed 2026-10-17)
+- [mysql\:mysql-connector-java 8.0.33 POM on Maven Central](https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.33/mysql-connector-java-8.0.33.pom) (accessed 2026-10-17)
 
 ## Migration
 
 **Constraints**
 
-- Replace mysql:mysql-connector-java with com.mysql:mysql-connector-j; the relocation in the artifact's POM names the new coordinates, so keep the version unless you intend to upgrade it.
+- Replace mysql\:mysql-connector-java with com.mysql\:mysql-connector-j; the relocation in the artifact's POM names the new coordinates, so keep the version unless you intend to upgrade it.
 - Update every module and dependency-management block that names the old coordinates, and remove exclusions that mention them.
 
 **Steps**
@@ -72,8 +72,8 @@ The [`java`](../detectors/java.md) detector. See [Detectors](../DETECTORS.md) an
 - [Java 22 to 24 are no longer supported](java.jdk.end-of-support-22-24.html)
 - [Java 26 is no longer supported](java.jdk.end-of-support-26.html)
 - [Java 9 and 10 are no longer supported](java.jdk.end-of-support-9-10.html)
-- [org.hibernate:hibernate-entitymanager has moved to org.hibernate.orm:hibernate-entitymanager](java.maven.org.hibernate.hibernate-entitymanager.relocated.html)
-- [org.slf4j:slf4j-log4j12 has moved to org.slf4j:slf4j-reload4j](java.maven.org.slf4j.slf4j-log4j12.relocated.html)
+- [org.hibernate\:hibernate-entitymanager has moved to org.hibernate.orm\:hibernate-entitymanager](java.maven.org.hibernate.hibernate-entitymanager.relocated.html)
+- [org.slf4j\:slf4j-log4j12 has moved to org.slf4j\:slf4j-reload4j](java.maven.org.slf4j.slf4j-log4j12.relocated.html)
 - [Spring Boot 1.x is out of open-source support](java.maven.spring-boot.legacy-1x.end-of-support.html)
 
 

@@ -52,7 +52,7 @@ Hex marks every published fennec release as retired with reason renamed, and the
 
 **Steps**
 
-1. **Replace the dependency.** Remove {:fennec, …} from mix.exs deps and add {:mongooseice, …} at a maintained version, then run mix deps.get.
+1. **Replace the dependency.** Remove {\:fennec, …} from mix.exs deps and add {\:mongooseice, …} at a maintained version, then run mix deps.get.
 2. **Migrate fennec usages.** Update application and module references from Fennec to MongooseICE as the mongooseice package documents.
 
 **Verification**

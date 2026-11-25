@@ -75,12 +75,22 @@ function addDays(date: string, days: number): string {
 /** A string safe inside a YAML double-quoted scalar. */
 const yaml = (value: string) => JSON.stringify(value);
 
-/** Prose for Markdown: HTML in a rule can never turn into markup, but inline code spans stay literal. */
+/**
+ * Prose for Markdown: HTML in a rule can never turn into markup, but inline code spans stay literal. A colon that
+ * starts a word (`group:artifact`, `node:util`, `{:fennec, ...}`) is escaped, because Mizzen reads `:name` as a
+ * text directive and warns about an unknown component.
+ */
 const inline = (value: string) =>
   value
     .split(/(`[^`\n]*`)/)
     .map((part, index) =>
-      index % 2 === 1 ? part : part.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+      index % 2 === 1
+        ? part
+        : part
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/:(?=[A-Za-z_])/g, "\\:"),
     )
     .join("");
 

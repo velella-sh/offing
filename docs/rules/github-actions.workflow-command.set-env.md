@@ -10,7 +10,7 @@ last_modified_at: "2026-11-05"
 json_twin: "/rules/github-actions.workflow-command.set-env.json"
 ---
 
-# Removed GitHub Actions ::set-env command
+# Removed GitHub Actions :\:set-env command
 
 **Removed** as of 2020-11-16. Replacement: $GITHUB_ENV. Source: [GitHub Actions: Removing set-env and add-path commands on November 16](https://github.blog/changelog/2020-11-09-github-actions-removing-set-env-and-add-path-commands-on-november-16/).
 
@@ -20,7 +20,7 @@ Check a version:
 offing check pkg:generic/github-actions/set-env
 ```
 
-GitHub removed the ::set-env workflow command. Append to the GITHUB_ENV environment file instead.
+GitHub removed the :\:set-env workflow command. Append to the GITHUB_ENV environment file instead.
 
 [Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
 

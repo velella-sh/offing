@@ -52,7 +52,7 @@ pub.dev marks analysis_server_client as discontinued.
 
 **Steps**
 
-1. **Audit the client call sites.** List every file that imports package:analysis_server_client and the client, server, and protocol calls it makes.
+1. **Audit the client call sites.** List every file that imports package\:analysis_server_client and the client, server, and protocol calls it makes.
 2. **Choose a maintained replacement.** Pick a maintained fork or implement the analysis_server protocol directly, and confirm the choice supports the Dart SDK constraint in environment.sdk.
 3. **Replace the dependency.** Update the imports and call sites, replace analysis_server_client in pubspec.yaml, and re-resolve dependencies so pubspec.lock no longer contains it.
 

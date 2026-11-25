@@ -76,9 +76,9 @@ The [`java`](../detectors/java.md) detector. See [Detectors](../DETECTORS.md) an
 
 ### Same ecosystem
 
-- [mysql:mysql-connector-java has moved to com.mysql:mysql-connector-j](java.maven.mysql.mysql-connector-java.relocated.html)
-- [org.hibernate:hibernate-entitymanager has moved to org.hibernate.orm:hibernate-entitymanager](java.maven.org.hibernate.hibernate-entitymanager.relocated.html)
-- [org.slf4j:slf4j-log4j12 has moved to org.slf4j:slf4j-reload4j](java.maven.org.slf4j.slf4j-log4j12.relocated.html)
+- [mysql\:mysql-connector-java has moved to com.mysql\:mysql-connector-j](java.maven.mysql.mysql-connector-java.relocated.html)
+- [org.hibernate\:hibernate-entitymanager has moved to org.hibernate.orm\:hibernate-entitymanager](java.maven.org.hibernate.hibernate-entitymanager.relocated.html)
+- [org.slf4j\:slf4j-log4j12 has moved to org.slf4j\:slf4j-reload4j](java.maven.org.slf4j.slf4j-log4j12.relocated.html)
 - [Spring Boot 1.x is out of open-source support](java.maven.spring-boot.legacy-1x.end-of-support.html)
 - [Spring Boot 2.x is out of open-source support](java.maven.spring-boot.legacy-2x.end-of-support.html)
 - [Spring Boot 3.x is out of open-source support](java.maven.spring-boot.legacy-3x.end-of-support.html)

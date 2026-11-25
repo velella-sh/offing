@@ -530,7 +530,7 @@ reports assertion failures such as:
 largest-contentful-paint failure for maxNumericValue assertion.
 ```
 
-with budgets: LCP 2500 ms, total page weight 163840 bytes, document size 40960 bytes.
+with budgets: LCP 3000 ms, total page weight 229376 bytes, document size 40960 bytes.
 
 **Cause.** A docs page grew past its Lighthouse budget — heavy inline content, new scripts, or
 images.

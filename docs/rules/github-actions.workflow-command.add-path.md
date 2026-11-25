@@ -10,7 +10,7 @@ last_modified_at: "2026-11-05"
 json_twin: "/rules/github-actions.workflow-command.add-path.json"
 ---
 
-# Removed GitHub Actions ::add-path command
+# Removed GitHub Actions :\:add-path command
 
 **Removed** as of 2020-11-16. Replacement: $GITHUB_PATH. Source: [GitHub Actions: Removing set-env and add-path commands on November 16](https://github.blog/changelog/2020-11-09-github-actions-removing-set-env-and-add-path-commands-on-november-16/).
 
@@ -20,7 +20,7 @@ Check a version:
 offing check pkg:generic/github-actions/add-path
 ```
 
-GitHub removed the ::add-path workflow command. Append to the GITHUB_PATH environment file instead.
+GitHub removed the :\:add-path workflow command. Append to the GITHUB_PATH environment file instead.
 
 [Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
 
