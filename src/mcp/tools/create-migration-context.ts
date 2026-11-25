@@ -9,7 +9,8 @@ export function registerCreateMigrationContext(server: McpServer, tools: OffingA
   registerMcpTool(server, tools, {
     name: "create_migration_context",
     title: "Create migration context",
-    description: "Create a validated, rule-specific migration packet for one finding from a fresh local scan.",
+    description:
+      "Call when you are about to edit code to resolve one finding and need the constraints first: the affected files, the usages to change, the migration steps, and the verification commands. Runs a fresh local scan with no network. Returns offing.context.v1. Then call verify_migration with the same finding_id.",
     inputSchema: z.object(findingInput),
     async handler(context, { finding_id, repository_path }) {
       try {

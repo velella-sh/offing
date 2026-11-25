@@ -10,7 +10,7 @@ export function registerVerifyMigration(server: McpServer, tools: OffingAgentToo
     name: "verify_migration",
     title: "Verify migration",
     description:
-      "Re-scan locally and check whether a finding observed earlier in this MCP session is gone. Suggested project commands are returned but never executed. When the repository was scanned earlier in the session, the result also carries a receipt and receipt_markdown for the pull request body.",
+      "Call when you have changed code to resolve a finding and need to confirm it is gone. Re-scans the repository locally, with no network, and checks the finding observed earlier in this session. Returns offing.verification.v1 with verified, the findings a fresh scan still reports, and suggested commands, which are never run.",
     inputSchema: z.object(findingInput),
     async handler(context, { finding_id, repository_path }) {
       try {

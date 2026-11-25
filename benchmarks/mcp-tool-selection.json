@@ -1,0 +1,341 @@
+{
+  "schemaVersion": "offing.mcp-tool-selection.v1",
+  "cases": [
+    {
+      "id": "scan-full-audit",
+      "prompt": "Audit this project and tell me everything that is outdated or out of support, with the file and line of each.",
+      "tool": "scan_repository",
+      "reason": "The whole repository, every kind of finding, at exact locations."
+    },
+    {
+      "id": "scan-every-check",
+      "prompt": "Run every check you have on this repo: deprecated packages, end-of-life runtimes, retired APIs. I need the complete report.",
+      "tool": "scan_repository",
+      "reason": "All detectors and the complete document."
+    },
+    {
+      "id": "scan-before-planning",
+      "prompt": "Before we plan the quarter's maintenance work, give me the full picture of lifecycle problems in this repository.",
+      "tool": "scan_repository",
+      "reason": "The findings first, before work is planned."
+    },
+    {
+      "id": "scan-where-used",
+      "prompt": "What is the state of this codebase? Find every dependency, runtime, and API that is no longer maintained and show me where each is used.",
+      "tool": "scan_repository",
+      "reason": "Every finding with its usages."
+    },
+    {
+      "id": "scan-with-guidance",
+      "prompt": "Go through the whole project and report what has reached end of life, including migration guidance.",
+      "tool": "scan_repository",
+      "reason": "Findings with their migration guidance, whole repository."
+    },
+    {
+      "id": "list-which-packages",
+      "prompt": "Which packages in this repo are deprecated?",
+      "tool": "list_deprecations",
+      "reason": "A question answered by the list of findings."
+    },
+    {
+      "id": "list-quick",
+      "prompt": "Quick one: list the deprecated dependencies here, nothing more.",
+      "tool": "list_deprecations",
+      "reason": "Only the list."
+    },
+    {
+      "id": "list-compact",
+      "prompt": "Just give me a compact list of the lifecycle findings in this project.",
+      "tool": "list_deprecations",
+      "reason": "A compact list."
+    },
+    {
+      "id": "list-short",
+      "prompt": "Check which libraries we use that are no longer maintained, as a short list.",
+      "tool": "list_deprecations",
+      "reason": "A short list."
+    },
+    {
+      "id": "list-overview",
+      "prompt": "Sum up the deprecations in this repository in a few lines.",
+      "tool": "list_deprecations",
+      "reason": "An overview."
+    },
+    {
+      "id": "explain-why-flagged",
+      "prompt": "Why is request flagged? Show me the evidence and every place we use it.",
+      "tool": "explain_deprecation",
+      "reason": "Evidence and usages of one finding."
+    },
+    {
+      "id": "explain-finding-id",
+      "prompt": "Tell me more about the finding npm.package.request.deprecated:package.json:5.",
+      "tool": "explain_deprecation",
+      "reason": "One finding by id."
+    },
+    {
+      "id": "explain-checkout",
+      "prompt": "What exactly is wrong with actions/checkout@v4 in our workflow, and where is it used?",
+      "tool": "explain_deprecation",
+      "reason": "Why one observed finding is flagged."
+    },
+    {
+      "id": "explain-node16",
+      "prompt": "Explain the finding for the Node 16 image in our Dockerfile: what is the evidence and what does it affect?",
+      "tool": "explain_deprecation",
+      "reason": "Evidence for one finding."
+    },
+    {
+      "id": "explain-sources",
+      "prompt": "I see a warning about our Python version. What are the sources for it, and which files does it touch?",
+      "tool": "explain_deprecation",
+      "reason": "Sources of one finding."
+    },
+    {
+      "id": "context-everything",
+      "prompt": "I'm going to replace the deprecated request package. Give me everything I need to do the migration: constraints, affected files, and steps.",
+      "tool": "create_migration_context",
+      "reason": "What is needed to migrate one finding."
+    },
+    {
+      "id": "context-packet",
+      "prompt": "Prepare a migration packet for the finding on the checkout action so another agent can do the work.",
+      "tool": "create_migration_context",
+      "reason": "A migration packet."
+    },
+    {
+      "id": "context-preserve",
+      "prompt": "What do I have to preserve and which files do I touch when I move off this deprecated API?",
+      "tool": "create_migration_context",
+      "reason": "Constraints and affected files of one finding."
+    },
+    {
+      "id": "context-node16",
+      "prompt": "Build the context for migrating away from the Node 16 base image, verification commands included.",
+      "tool": "create_migration_context",
+      "reason": "Migration context with verification commands."
+    },
+    {
+      "id": "context-finding-id",
+      "prompt": "Hand me the migration context for npm.package.request.deprecated:package.json:5.",
+      "tool": "create_migration_context",
+      "reason": "Migration context for one finding."
+    },
+    {
+      "id": "verify-removed",
+      "prompt": "I removed the request dependency and rewrote the calls. Confirm the finding is gone.",
+      "tool": "verify_migration",
+      "reason": "After a change: is the finding gone."
+    },
+    {
+      "id": "verify-checkout",
+      "prompt": "We updated the workflow to actions/checkout@v5. Check that the old finding no longer appears.",
+      "tool": "verify_migration",
+      "reason": "After a change: does the finding still appear."
+    },
+    {
+      "id": "verify-fixed",
+      "prompt": "Did my change fix the deprecation? Re-scan and verify.",
+      "tool": "verify_migration",
+      "reason": "Confirm a fix."
+    },
+    {
+      "id": "verify-node16",
+      "prompt": "After the migration, verify that nothing is left of the Node 16 finding.",
+      "tool": "verify_migration",
+      "reason": "Confirm a fix."
+    },
+    {
+      "id": "verify-resolved",
+      "prompt": "Check the repository again and tell me whether the deprecation we discussed earlier is resolved.",
+      "tool": "verify_migration",
+      "reason": "Confirm a fix for a finding seen earlier."
+    },
+    {
+      "id": "dep-is-deprecated",
+      "prompt": "Is the request package deprecated?",
+      "tool": "check_dependency",
+      "reason": "One package, no repository."
+    },
+    {
+      "id": "dep-before-add",
+      "prompt": "Before I add lodash 4.17.21, check whether it is still maintained.",
+      "tool": "check_dependency",
+      "reason": "One package before it is added."
+    },
+    {
+      "id": "dep-action",
+      "prompt": "Can I safely depend on actions/upload-artifact@v3?",
+      "tool": "check_dependency",
+      "reason": "One GitHub Action."
+    },
+    {
+      "id": "dep-purl",
+      "prompt": "Is pkg:npm/moment@2.29.4 affected by any lifecycle rule?",
+      "tool": "check_dependency",
+      "reason": "One Package URL."
+    },
+    {
+      "id": "dep-old-version",
+      "prompt": "We want to pull in an old version of moment. What's its status?",
+      "tool": "check_dependency",
+      "reason": "The status of one package version."
+    },
+    {
+      "id": "dep-pypi",
+      "prompt": "Check one dependency for me: celery 5.0.0 on PyPI.",
+      "tool": "check_dependency",
+      "reason": "One dependency."
+    },
+    {
+      "id": "upgrade-php",
+      "prompt": "Can this project move to PHP 8.4? Tell me what blocks it.",
+      "tool": "check_upgrade",
+      "reason": "A move to a target runtime."
+    },
+    {
+      "id": "upgrade-node",
+      "prompt": "We want to upgrade to Node 22. Are there any blockers in the lockfiles?",
+      "tool": "check_upgrade",
+      "reason": "Blockers for a runtime upgrade."
+    },
+    {
+      "id": "upgrade-python",
+      "prompt": "Would upgrading the runtime to Python 3.13 break anything in this repository?",
+      "tool": "check_upgrade",
+      "reason": "A runtime upgrade."
+    },
+    {
+      "id": "upgrade-ready",
+      "prompt": "Is this codebase ready to move to nodejs@22?",
+      "tool": "check_upgrade",
+      "reason": "A runtime upgrade."
+    },
+    {
+      "id": "upgrade-blockers",
+      "prompt": "Find out what stops us from moving to Java 21 before we commit to the upgrade.",
+      "tool": "check_upgrade",
+      "reason": "Blockers for a runtime upgrade."
+    },
+    {
+      "id": "snippet-dockerfile",
+      "prompt": "Before I save this Dockerfile, check that FROM node:16 is okay.",
+      "tool": "check_snippet",
+      "reason": "Content about to be written."
+    },
+    {
+      "id": "snippet-workflow",
+      "prompt": "I'm about to write a workflow with actions/checkout@v3. Any lifecycle issues in it?",
+      "tool": "check_snippet",
+      "reason": "Content about to be written."
+    },
+    {
+      "id": "snippet-manifest",
+      "prompt": "Here's a package.json I want to create. Does it pin anything that is end of life?",
+      "tool": "check_snippet",
+      "reason": "Content about to be written."
+    },
+    {
+      "id": "snippet-python",
+      "prompt": "Check this Python file for calls to APIs that were removed.",
+      "tool": "check_snippet",
+      "reason": "Content about to be written."
+    },
+    {
+      "id": "snippet-kubernetes",
+      "prompt": "Review the Kubernetes manifest I'm about to write for retired APIs.",
+      "tool": "check_snippet",
+      "reason": "Content about to be written."
+    },
+    {
+      "id": "forecast-next-12",
+      "prompt": "What reaches end of life in this repo over the next 12 months?",
+      "tool": "forecast_repository",
+      "reason": "Dated events ahead."
+    },
+    {
+      "id": "forecast-upcoming",
+      "prompt": "Which upcoming EOL dates will hit this project? I'm planning the roadmap.",
+      "tool": "forecast_repository",
+      "reason": "Upcoming dates for a roadmap."
+    },
+    {
+      "id": "forecast-from-january",
+      "prompt": "Give me a forecast of lifecycle events for this repository, starting from January.",
+      "tool": "forecast_repository",
+      "reason": "Dated events from a start date."
+    },
+    {
+      "id": "forecast-soon",
+      "prompt": "What's going out of support soon that affects our stack?",
+      "tool": "forecast_repository",
+      "reason": "What ends soon."
+    },
+    {
+      "id": "forecast-schedule",
+      "prompt": "I need an upgrade schedule for the coming year based on dated end-of-life events.",
+      "tool": "forecast_repository",
+      "reason": "A schedule from dated events."
+    },
+    {
+      "id": "plan-parallel",
+      "prompt": "Split the deprecation fixes in this repo into tasks I can hand to parallel agents.",
+      "tool": "plan_migrations",
+      "reason": "Work split across agents."
+    },
+    {
+      "id": "plan-waves",
+      "prompt": "Make a migration plan: which findings can be fixed at the same time without touching the same files?",
+      "tool": "plan_migrations",
+      "reason": "Waves that touch different paths."
+    },
+    {
+      "id": "plan-branches",
+      "prompt": "Plan the work to clear the lifecycle findings in this repository, wave by wave, with branch names.",
+      "tool": "plan_migrations",
+      "reason": "Waves with branch names."
+    },
+    {
+      "id": "plan-group",
+      "prompt": "We have 20 findings. Group them into waves so that nothing conflicts.",
+      "tool": "plan_migrations",
+      "reason": "Waves."
+    },
+    {
+      "id": "plan-coordinates",
+      "prompt": "Coordinate the migration: give me one item per finding, the paths it touches, and its wave.",
+      "tool": "plan_migrations",
+      "reason": "One item per finding, in waves."
+    },
+    {
+      "id": "recommend-node",
+      "prompt": "Which Node.js version should I pin in the Dockerfile today?",
+      "tool": "recommend_version",
+      "reason": "A line to write."
+    },
+    {
+      "id": "recommend-python",
+      "prompt": "What version of Python do you recommend for a new service?",
+      "tool": "recommend_version",
+      "reason": "A line to write."
+    },
+    {
+      "id": "recommend-postgres",
+      "prompt": "I'm writing a CI workflow. Which PostgreSQL major is still supported?",
+      "tool": "recommend_version",
+      "reason": "A supported line to write."
+    },
+    {
+      "id": "recommend-engines",
+      "prompt": "Pick a Node release line for package.json engines that stays supported for at least a year.",
+      "tool": "recommend_version",
+      "reason": "A line that stays supported."
+    },
+    {
+      "id": "recommend-ruby",
+      "prompt": "Instead of guessing from memory, which Ruby version should we write into the Gemfile?",
+      "tool": "recommend_version",
+      "reason": "A line to write."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "request": {
+    "name": "check_upgrade",
+    "arguments": {
+      "path": "<repository>",
+      "target": "php@8.4"
+    }
+  },
+  "response": {
+    "schemaVersion": "offing.upgrade.v1",
+    "target": {
+      "runtime": "php",
+      "version": "8.4"
+    },
+    "verdict": "blocked",
+    "analyzers": [
+      "composer-lock",
+      "target-lifecycle"
+    ],
+    "issues": [
+      {
+        "analyzer": "composer-lock",
+        "level": "blocker",
+        "subject": "acme/legacy@1.0.0",
+        "path": "composer.lock",
+        "line": 6,
+        "reason": "acme/legacy@1.0.0 requires php ^7.0, which excludes PHP 8.4.",
+        "evidence": {
+          "kind": "lockfile",
+          "value": "require.php: ^7.0"
+        }
+      }
+    ]
+  }
+}

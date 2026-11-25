@@ -1,0 +1,41 @@
+{
+  "request": {
+    "name": "list_deprecations",
+    "arguments": {
+      "repository_path": "<repository>"
+    }
+  },
+  "response": {
+    "schemaVersion": "offing.deprecations.v1",
+    "repositoryRoot": "<repository>",
+    "scannedAt": "<timestamp>",
+    "count": 2,
+    "data": "<data: ageDays, createdAt, reviewedThrough, source, stale, version>",
+    "deprecations": [
+      {
+        "id": "nodejs.runtime.eol-20:.github/workflows/ci.yml:7",
+        "ruleId": "nodejs.runtime.eol-20",
+        "title": "Node.js 20 is end-of-life",
+        "severity": "high",
+        "location": {
+          "path": ".github/workflows/ci.yml",
+          "line": 7
+        },
+        "usageCount": 0,
+        "affectedFiles": 0
+      },
+      {
+        "id": "npm.package.request.deprecated:package.json:5",
+        "ruleId": "npm.package.request.deprecated",
+        "title": "request is deprecated",
+        "severity": "high",
+        "location": {
+          "path": "package.json",
+          "line": 5
+        },
+        "usageCount": 1,
+        "affectedFiles": 1
+      }
+    ]
+  }
+}

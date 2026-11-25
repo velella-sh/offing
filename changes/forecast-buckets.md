@@ -1,0 +1,1 @@
+- Add `buckets` to the forecast JSON and to `forecast_repository`: the events grouped by how many months away they are (0-3, 3-6, 6-12, then up to the horizon), the same grouping the terminal report prints.

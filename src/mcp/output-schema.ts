@@ -1,18 +1,17 @@
 import { readFileSync } from "node:fs";
 
-import { fromJsonSchema } from "@modelcontextprotocol/server";
-
 import { findPackageFileSync } from "../package-files.js";
 import { required } from "../required.js";
 import { MCP_OUTPUT_SCHEMA_FILES, type McpToolName } from "./tool-names.js";
 
-type JsonObject = Record<string, unknown>;
+export type JsonObject = Record<string, unknown>;
 
 function readSchema(file: string): JsonObject {
   return JSON.parse(readFileSync(findPackageFileSync(`schemas/${file}`, import.meta.url), "utf8")) as JsonObject;
 }
 
-function resolvePointer(document: JsonObject, pointer: string): unknown {
+/** The node a JSON Pointer such as `/properties/data` names inside `document`, or undefined when there is none. */
+export function resolvePointer(document: JsonObject, pointer: string): unknown {
   return pointer
     .split("/")
     .filter(Boolean)
@@ -46,9 +45,4 @@ export function inlineSchemaReferences(node: unknown, file: string): unknown {
 export function toolOutputSchema(tool: McpToolName): JsonObject {
   const file = MCP_OUTPUT_SCHEMA_FILES[tool];
   return inlineSchemaReferences(readSchema(file), file) as JsonObject;
-}
-
-/** The advertised output schema as the MCP SDK expects it. */
-export function outputSchema(tool: McpToolName) {
-  return fromJsonSchema(toolOutputSchema(tool) as Parameters<typeof fromJsonSchema>[0]);
 }

@@ -2,11 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/velella-sh/offing/schemas/check.v1.schema.json",
   "title": "Offing dependency check v1",
-  "description": "The result of checking one package, and optionally one version, against Offing's lifecycle rules.",
+  "description": "The result of checking one package, and optionally one version, against Offing's lifecycle rules. In an MCP answer the replacement, when one is known, is the first field and the status the second.",
   "type": "object",
   "required": ["schemaVersion", "purl", "status", "findings", "message"],
   "additionalProperties": false,
   "properties": {
+    "replacement": { "type": "string", "description": "The replacement named by the most severe finding. It comes first in an answer so it is read before the status; it is absent when no finding names one." },
     "data": { "$ref": "scan.v1.schema.json#/properties/data" },
     "schemaVersion": { "const": "offing.check.v1" },
     "purl": { "type": "string", "pattern": "^pkg:", "description": "Version-less canonical Package URL." },
@@ -44,6 +45,43 @@
             }
           },
           "migration": { "$ref": "scan.v1.schema.json#/properties/findings/items/properties/migration" }
+        }
+      }
+    },
+    "more": {
+      "type": "object",
+      "required": ["truncated", "hint", "omitted", "estimatedTokens"],
+      "additionalProperties": false,
+      "properties": {
+        "truncated": { "const": true, "description": "Always true: the answer was cut to fit the size cap." },
+        "hint": { "type": "string", "minLength": 1, "description": "How to read what was left out." },
+        "omitted": {
+          "type": "array",
+          "description": "One entry per array that lost elements. A path with [] sums every array at that position, including those inside elements that were left out.",
+          "items": {
+            "type": "object",
+            "required": ["path", "shown", "total"],
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?(\\.[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?)*$",
+                "description": "Where the array sits, such as findings or findings[].usages."
+              },
+              "shown": { "type": "integer", "minimum": 0, "description": "Elements in the answer as returned." },
+              "total": { "type": "integer", "minimum": 1, "description": "Elements in the full answer." }
+            }
+          }
+        },
+        "clipped": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Path of every text that was shortened; it ends with a truncation marker."
+        },
+        "estimatedTokens": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Size of the answer as returned: three characters of JSON text count as one token."
         }
       }
     }

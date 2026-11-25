@@ -171,7 +171,13 @@ Do not use an end-to-end test to check logic that a unit test can reach. Spawnin
 
 ## MCP tests
 
-MCP tests use the SDK's in-memory transport, so no port, subprocess, or network is involved. `tests/mcp.test.ts:89` initializes a real client and server over a linked pair, lists tools, calls `scan_repository`, and follows the finding through the scan-to-verification workflow. `tests/mcp.test.ts:426` checks that every tool advertises an `outputSchema` and that its structured content validates against it. One stdio test (`tests/mcp.test.ts:227`) covers the real transport; everything else stays in memory.
+MCP tests use the SDK's in-memory transport, so no port, subprocess, or network is involved. `tests/mcp.test.ts:85` initializes a real client and server over a linked pair, lists tools, calls `scan_repository`, and follows the finding through the scan-to-verification workflow. `tests/mcp.test.ts:511` checks that every tool advertises an `outputSchema` and that its structured content validates against it. One stdio test (`tests/mcp.test.ts:219`) covers the real transport; everything else stays in memory. `tests/mcp-client.ts` connects a client to a fresh server for any test that needs one.
+
+Three files hold the size of an answer:
+
+- `tests/mcp-recorded.test.ts` sends each tool one recorded request from `tests/fixtures/mcp/` and holds the answer to the recording, which validates against the advertised schema. Record again with `UPDATE_GOLDEN=1` after a deliberate change to an answer, then review the diff.
+- `tests/mcp-size.test.ts` calls every tool on an input whose full answer is far over the cap, and checks that each answer stays under it, validates against its advertised schema, and carries the `more` pointer.
+- `tests/mcp-limit.test.ts` checks the cut on small built answers: which elements come back first, what the pointer counts, and which fields are never shortened.
 
 Use an in-memory MCP test for any tool shape, resource, prompt, or annotation change. Use the stdio test only when the transport or entry point changes.
 

@@ -11,7 +11,7 @@ export function registerPlanMigrations(server: McpServer, tools: OffingAgentTool
     name: "plan_migrations",
     title: "Plan migrations",
     description:
-      "Run a fresh local scan and return a migration plan: waves of independent tasks a coordinating agent can hand to other agents. Each item names the finding, the paths it touches, and a suggested branch.",
+      "Call when several findings must be fixed and you are splitting the work across tasks or agents. Runs a fresh local scan, with no network. Returns offing.plan.v1: one item per finding with the paths it touches and a suggested branch, and waves in which no two items touch the same path, so they can run in parallel.",
     inputSchema: z.object(repositoryInput),
     async handler(context, { repository_path }) {
       try {
