@@ -255,7 +255,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if git diff --quiet; then
+          if [ -z "$(git status --porcelain -- benchmarks/corpus-runs/ benchmarks/thresholds.json docs/VALIDATION.md)" ]; then
             echo "Nothing changed; the recorded run is already current."
             exit 0
           fi
@@ -263,7 +263,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$branch"
-          git commit -am "chore(validation): record the full corpus run"
+          git add benchmarks/corpus-runs/ benchmarks/thresholds.json docs/VALIDATION.md
+          git commit -m "chore(validation): record the full corpus run"
           git push origin "$branch"
           gh pr create --base main --head "$branch" \
             --title "chore(validation): record the full corpus run" \

@@ -1,0 +1,1 @@
+- Publish reproducible Offing accuracy by ecosystem and detector maturity, with a separate held-out comparison and per-ecosystem trends.

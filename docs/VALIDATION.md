@@ -4,7 +4,11 @@ title: v0.1 validation
 
 # v0.1 validation
 
-Offing v0.1 was validated on 2026-10-14 against 20 public repositories pinned to immutable commits: ten Node.js repositories, nine Python repositories, and one Node.js/GitHub Actions repository. The complete corpus and expected finding locations live in `benchmarks/public-repositories/`; the executable harness is `benchmarks/public-repositories.ts`.
+The [accuracy dashboard](https://velella.sh/offing/dashboard/) reports precision and recall from the recorded full public corpus and the independently selected held-out set. The dashboard identifies the run date, Offing commit, Ebb data version, and repository count for each set. The ecosystem pages link misses to the original pinned files.
+
+From a clean checkout with the locked dependencies installed, rebuild the dashboard offline with `npm run accuracy`. It reads the pinned corpus in `benchmarks/public-repositories/`, the scored run archives in `benchmarks/corpus-runs/`, the detector thresholds, and the committed held-out result. It writes the local Mizzen data under `docs/_data/`; the published site builds those same files. The full corpus and the held-out set cover different rules and must be read with their respective scopes.
+
+To produce a new measurement from the pinned repository checkouts, follow [Running the corpus](validation/running-the-corpus.md). Use `npm run record:corpus-run -- --offline` with a warm checkout cache for a new full run, and `npm run validate:held-out -- --output benchmarks/held-out-result.json` to remeasure the held-out set.
 
 ## Results
 
