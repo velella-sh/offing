@@ -10,7 +10,11 @@ import { findPackageFileSync } from "./package-files.js";
 const SCHEMA_FILE = "schemas/agent-guard-request.v1.schema.json";
 
 export function agentGuardRequestSchema(): Record<string, unknown> {
-  return JSON.parse(readFileSync(findPackageFileSync(SCHEMA_FILE, import.meta.url), "utf8")) as Record<string, unknown>;
+  const schema: unknown = JSON.parse(readFileSync(findPackageFileSync(SCHEMA_FILE, import.meta.url), "utf8"));
+  if (schema === null || typeof schema !== "object" || Array.isArray(schema)) {
+    throw new Error("Agent Guard request schema must be an object.");
+  }
+  return { ...schema };
 }
 
 let validate: ValidateFunction<AgentGuardRequest> | undefined;

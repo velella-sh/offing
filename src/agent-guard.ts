@@ -33,7 +33,10 @@ function reply(decision: AgentGuardResponse["decision"], reason: string): AgentG
 }
 
 function wireText(text: string, max: number): string {
-  const clean = Buffer.from(text.replace(/[\x00-\x1f\x7f]+/g, " ").trim(), "utf8").toString("utf8");
+  const utf8 = Buffer.from(text, "utf8").toString("utf8");
+  const clean = Array.from(utf8, (char) => (char.charCodeAt(0) < 32 ? " " : char))
+    .join("")
+    .trim();
   return clean.length > max
     ? Array.from(clean)
         .slice(0, max - 1)

@@ -12,7 +12,7 @@ export function registerAgentGuard(server: McpServer): void {
     {
       title: "Agent Guard protocol",
       description:
-        "Call for a protocol v1 guard verdict before a proposed operation. Returns an allow, warn, or block decision and its evidence.",
+        "Call when you need a protocol v1 guard verdict for a proposed operation. Returns an allow, warn, or block decision and its evidence.",
       inputSchema: fromJsonSchema(agentGuardRequestSchema() as JsonSchemaType),
       outputSchema: fromJsonSchema(toolOutputSchema("agent_guard") as JsonSchemaType),
       annotations: MCP_TOOL_ANNOTATIONS,
