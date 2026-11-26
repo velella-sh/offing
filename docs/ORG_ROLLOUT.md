@@ -17,7 +17,7 @@ This guide takes one person from an unconfigured organization to a weekly lifecy
 
 The scan itself stays local. The organization-scan workflow lists repositories and downloads artifacts through the GitHub API; each scan checks out one repository and reads its files and Offing's bundled data, with no network access. Per-repository adoption uses one `uses:` line that calls the reusable scan workflow.
 
-> **Version.** The reusable workflows and the `org:rollout` tool first ship in `v0.8.0`. The examples below call `@v0.8.0`. Until that tag exists, call `@main` only to try a workflow, then replace it with the release tag before relying on it.
+> The reusable workflow examples follow `main` and pin a released scanner. Pin the workflow commit SHA for a fixed revision.
 
 ## Before you start
 
@@ -97,7 +97,7 @@ permissions:
 
 jobs:
   org-scan:
-    uses: velella-sh/offing/.github/workflows/org-scan.yml@v0.8.0
+    uses: velella-sh/offing/.github/workflows/org-scan.yml@main
     with:
       organization: your-org
       fail-on-severity: high
@@ -206,7 +206,7 @@ The baseline only takes effect where a workflow passes it to the Action or the r
 ```yaml
 jobs:
   lifecycle:
-    uses: velella-sh/offing/.github/workflows/offing-reusable.yml@v0.8.0
+    uses: velella-sh/offing/.github/workflows/offing-reusable.yml@main
     with:
       baseline: .offing-baseline.json
       fail-on-severity: high
@@ -333,7 +333,7 @@ Enable one or both webhooks by adding the secrets and passing them from the call
 ```yaml
 jobs:
   org-scan:
-    uses: velella-sh/offing/.github/workflows/org-scan.yml@v0.8.0
+    uses: velella-sh/offing/.github/workflows/org-scan.yml@main
     with:
       organization: your-org
     secrets:
@@ -398,7 +398,7 @@ workflow-templates/offing.properties.json
 
 3. Commit them on the default branch. The next time someone opens **Actions → New workflow** in a repository of the organization, **Offing lifecycle scan** appears in the list.
 
-The starter is one job with one `uses:` line. It calls [`.github/workflows/offing-reusable.yml`](../.github/workflows/offing-reusable.yml) on pull requests, pushes to the default branch, a weekly schedule, and `workflow_dispatch`, with `contents: read` only:
+The starter grants only `contents: read` and runs on pull requests, pushes to the default branch, a weekly schedule, and manual dispatch.
 
 ```yaml
 name: Offing
@@ -416,10 +416,17 @@ permissions:
 
 jobs:
   lifecycle:
-    uses: velella-sh/offing/.github/workflows/offing-reusable.yml@v0.8.0
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: velella-sh/offing@v0.1.1
+        with:
+          upload-report: "false"
 ```
 
-`$default-branch` is GitHub's placeholder; it becomes the repository's real default branch when someone creates the workflow from the gallery. Until `v0.8.0` is tagged, replace `@v0.8.0` with `@main` in the copy under `workflow-templates/`, then pin the release tag before relying on it. To accept existing findings later, add `with: baseline: .offing-baseline.json` on that job (see [step 3](#3-accept-existing-findings-with-a-baseline)). Inputs, outputs, and the permission boundary are documented under [Reusable workflow](GITHUB_ACTION.md#reusable-workflow-one-uses-line).
+GitHub substitutes `$default-branch` when someone creates the workflow from the gallery. To accept existing findings, set `baseline: .offing-baseline.json` under the Action step's `with` block. See [step 3](#3-accept-existing-findings-with-a-baseline).
 
 ## 7. Open adoption pull requests at scale
 
@@ -441,7 +448,7 @@ npm run org:rollout -- --repos acme/api,acme/web       # a specific repository l
 For every target repository (non-archived, not a fork, with a default branch) it:
 
 1. Checks whether any existing workflow under `.github/workflows/` already invokes `velella-sh/offing`. If one does, the repository is skipped, so reapplication can never stack duplicate workflows.
-2. Resolves the action version to pin. Pass `--action-ref v0.8.0` for a fixed version; otherwise the tool pins the repository's latest release tag.
+2. Resolves the action version to pin. Pass `--action-ref v0.1.1` for a fixed version; otherwise the tool pins the repository's latest release tag.
 3. Prints the plan: each repository with `pull-request` or `skip`, the totals, and the full workflow file that would be added. **Without `--apply` this is the whole run.**
 4. With `--apply`, and a token with write access, it opens one pull request per repository. The pull request creates the branch, adds `.github/workflows/offing.yml` (the workflow in [GitHub Action](GITHUB_ACTION.md)), and opens the pull request against the default branch.
 
@@ -489,7 +496,6 @@ Artifacts are retained for 14 days. Download or roll up a run's reports before t
 | The digest is skipped | Neither `slack-webhook-url` nor `teams-webhook-url` was passed. |
 | The digest job fails at `Download scan reports` | The caller did not grant `actions: read`. The reusable workflow cannot elevate its own permissions. |
 | Committed baselines have no effect | The workflow did not pass `baseline`. Add it to the per-repository Action step. The organization scan does not pass one. |
-| The workflow reports `v0.8.0` not found | The release is not tagged yet. Use `@main` to try it, then pin the release tag. |
 
 ## Privacy and permissions
 

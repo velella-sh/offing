@@ -162,7 +162,14 @@ Trusted publishing needs the package to name its publisher. On npmjs.com, open t
    mcp-publisher publish
    ```
 8. **Check the GitHub release body.** After the binaries create the release, the Release workflow writes the matching section of `CHANGELOG.md` at the tag, an install line, binary verification instructions, and a tagged changelog link. No copy-and-paste is needed. A pre-release without its own section gets a short pre-release note. Edit by hand only to add a release-specific note: reruns preserve every non-placeholder body. To preview notes, run *Release notes body* with `release_tag` and leave `dry_run` on. To explicitly replace an existing body, turn `dry_run` off and set `force` to true; with `force` false a hand-written body is preserved.
-9. **Move the major tag** only if the project publishes one (for example `v1`), as a force-updated lightweight tag pointing at the new release. Do not move it for a pre-1.0 version. The same Release run does this after npm publish succeeds, for stable tags from `v1.0.0` on: the decision is in `.github/scripts/major-tag.mjs` (unit-tested), the tag only moves forward, and a pre-release or `0.x` tag changes nothing. To see what it would do for a tag without pushing anything, run the `Release` workflow by hand with `release_tag` set (a manual run with `release_tag` is always a dry run for the tag). To exercise every release stage without publishing, run it with `dry_run` on.
+9. **Move the signed major Action tag.** Consumers use full release tags for 0.x. After conformance and npm publish pass for a stable release from `v1.0.0` onward, the release workflow signs an annotated major tag, verifies the signature and moves the tag forward with a lease. Pre-releases leave moving tags unchanged. Before the first stable major release, provision a dedicated passphrase-free SSH signing key in the `ACTION_TAG_SIGNING_KEY` Actions secret and publish its public key for consumers. With the reviewed public key saved as `offing-release.pub`, verify the tag after fetching it:
+
+   ```sh
+   printf 'release@velella.sh %s\n' "$(cat offing-release.pub)" > offing-allowed-signers
+   git -c gpg.format=ssh -c gpg.ssh.allowedSignersFile="$PWD/offing-allowed-signers" verify-tag v1
+   ```
+
+   Dispatch `Release` with `release_tag` to test the tag decision without moving any ref. Set `dry_run` to exercise the release stages without publishing.
 10. **Package the plugins.** For Codex, `npm run package:codex-plugin` writes `artifacts/offing-codex-plugin-<version>.zip`; follow [Codex submission](CODEX_SUBMISSION.md) to submit it. The Claude plugin is served from the repository marketplace, so the merged change in step 4 is its release; see [Claude plugin](CLAUDE_PLUGIN.md).
 11. **Announce** only after the npm package, tag, and release are live.
 
@@ -244,3 +251,19 @@ Decide by what has already been published, and prefer fixing forward.
 - **Bad rule**: revert or correct the rule in `registry/` and release a patch. If the rule is actively harmful (it reports something that is not deprecated), release first and discuss afterwards.
 
 After any rollback, add a line to `CHANGELOG.md` explaining what happened and which version replaces the bad one.
+
+
+## GitHub Action release acceptance and Marketplace
+
+For a tag implementing the [Action v1 contract](spec/action/v1.md), record the
+`acc-action-v1` release job URL, tested tag, resolved commit and package
+version in the release acceptance record. Also run the
+[conformance workflow from a clean consumer repository](spec/action/conformance/README.md)
+against that published ref and include its run URL. Record the lifecycle SARIF
+profile check when its independent checker is available.
+
+Marketplace publication is a maintainer action after the release checks and
+owner approval. In the GitHub release form, preview the Action metadata and
+branding, select the Marketplace category, and use the release tag that passed
+conformance. Record the listing URL in the release acceptance record. Follow
+[GitHub's Marketplace publishing instructions](https://docs.github.com/en/actions/how-tos/create-and-publish-actions/publish-in-github-marketplace).

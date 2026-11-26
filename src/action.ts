@@ -25,7 +25,7 @@ import { prepareForecast, readForecastMonths } from "./github-action/forecast.js
 import { trackingIssueEventAllowed, upsertTrackingIssue } from "./action-tracking-issue.js";
 import { upsertFixSuggestionsReview, upsertPullRequestComment } from "./pr-comment.js";
 import type { GitHubActionOutcome, GitHubAnnotation, SeverityGate, UnannotatedFindings } from "./github-action.js";
-import { createBaseline } from "./baseline.js";
+import { createBaseline, daysBetween } from "./baseline.js";
 import type { Baseline, ExpiredPolicy } from "./baseline.js";
 
 /** The branch the onboarding app opens its pull request from. */
@@ -134,7 +134,9 @@ function reportUrl(): string | undefined {
   const server = process.env.GITHUB_SERVER_URL;
   const repository = process.env.GITHUB_REPOSITORY;
   const runId = process.env.GITHUB_RUN_ID;
-  return server && repository && runId ? `${server}/${repository}/actions/runs/${runId}` : undefined;
+  return process.env["INPUT_UPLOAD-REPORT"] === "true" && server && repository && runId
+    ? `${server}/${repository}/actions/runs/${runId}`
+    : undefined;
 }
 
 interface RepositoryRef {
@@ -434,7 +436,10 @@ function resolveReportPaths(env: Env, workspace: string): ReportPaths {
   const runnerTemp = env.RUNNER_TEMP ?? workspace;
   return {
     reportPath: resolve(runnerTemp, "offing-report.json"),
-    sarifPath: env["INPUT_UPLOAD-SARIF"] === "true" ? resolve(runnerTemp, "offing-results.sarif") : undefined,
+    sarifPath:
+      env.INPUT_SARIF === "true" || env["INPUT_UPLOAD-SARIF"] === "true"
+        ? resolve(runnerTemp, "offing-results.sarif")
+        : undefined,
     badgePath: env["INPUT_UPLOAD-BADGE"] === "true" ? resolve(runnerTemp, "offing-badge.json") : undefined,
   };
 }
@@ -537,7 +542,12 @@ async function publishOutputs(outcome: RunOutcome): Promise<void> {
   await setOutput("finding-count", String(findings.length));
   await setOutput("has-new-findings", findings.length > 0 ? "true" : "false");
   await setOutput("highest-severity", highestSeverity(findings));
-  await setOutput("next-eol-date", nextEndOfLife(findings));
+  const deadline = nextEndOfLife(findings);
+  await setOutput("next-eol-date", deadline);
+  await setOutput(
+    "next-eol-days",
+    deadline ? String(daysBetween(outcome.result.scannedAt.slice(0, 10), deadline)) : "",
+  );
   await setOutput("findings-json", renderFindingsJson(findings));
 }
 

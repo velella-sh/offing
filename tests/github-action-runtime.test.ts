@@ -77,6 +77,34 @@ async function runActionFixture(
   return { code, stdout, outputs: await readFile(output, "utf8"), summary: await readFile(summary, "utf8") };
 }
 
+test("the standalone v1 conformance runner verifies the failure gate, dated outputs and local SARIF", async () => {
+  const root = await fixtureRepository();
+  const workflows = join(root, ".github", "workflows");
+  await mkdir(workflows, { recursive: true });
+  await writeFile(join(workflows, "ci.yml"), "jobs:\n  test:\n    steps:\n      - uses: actions/checkout@v4\n");
+  const gate = await runActionFixture(root, { INPUT_SARIF: "true" });
+  assert.equal(gate.code, 1);
+  const outputs = Object.fromEntries(
+    gate.outputs
+      .trimEnd()
+      .split("\n")
+      .map((line) => {
+        const separator = line.indexOf("=");
+        return [line.slice(0, separator), line.slice(separator + 1)];
+      }),
+  );
+  const verifier = resolve("docs/spec/action/conformance/run.mjs");
+  const result = execFileSync(process.execPath, [verifier, "gate", "failure"], { input: JSON.stringify(outputs) });
+  assert.match(result.toString(), /acc-action-v1: gate passed/);
+
+  const cleanRoot = await fixtureRepository();
+  await writeFile(join(cleanRoot, "package.json"), JSON.stringify({ private: true }));
+  const clean = await runActionFixture(cleanRoot);
+  assert.equal(clean.code, 0);
+  assert.match(clean.outputs, /^next-eol-days=$/m);
+  assert.doesNotMatch(clean.outputs, /^sarif-path=/m);
+});
+
 test("the GitHub Action reports only regressions and enforces severity gates", async () => {
   const root = await fixtureRepository();
   const baselinePath = join(root, ".offing-baseline.json");
@@ -296,7 +324,7 @@ test("the summary lists at most ten findings, says how many more there are, and 
   );
   const text = renderSummary(many, false, "high", { ...data, stale: true, ageDays: 40 }, false);
   assert.equal(text.split("\n").filter((line) => line.startsWith("| medium | Finding")).length, 10);
-  assert.match(text, /…and 3 more; the JSON report artifact lists every finding\./);
+  assert.match(text, /…and 3 more; the JSON report lists every finding\./);
   assert.match(text, /\| medium \| 13 \|/);
   assert.match(text, /> \*\*Warning:\*\* the lifecycle data is stale/);
   assert.equal(text.includes("Scanned by"), false, "attribution off");

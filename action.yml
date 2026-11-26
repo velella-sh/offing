@@ -1,5 +1,5 @@
-name: Offing lifecycle intelligence
-description: Find end-of-life runtimes, deprecated packages, and retired Actions at the exact line — offline and evidence-backed.
+name: Offing
+description: Local-first end-of-life and deprecation scanner for your repository.
 author: Offing
 
 branding:
@@ -60,13 +60,18 @@ inputs:
     required: false
     default: ""
   report-name:
+    deprecationMessage: Use the default offing-report artifact name or upload report-path in a separate step.
     description: Artifact name for the JSON report when upload-report is true.
     required: false
     default: offing-report
   upload-report:
     description: Upload the JSON report to GitHub Actions artifacts. The local report is always generated.
     required: false
-    default: "true"
+    default: "false"
+  sarif:
+    description: Generate a local SARIF report without uploading it to GitHub code scanning.
+    required: false
+    default: "false"
   upload-sarif:
     description: >-
       Upload the findings to GitHub code scanning as SARIF. Needs the security-events: write permission
@@ -133,6 +138,7 @@ inputs:
     required: false
     default: "false"
   attribution:
+    deprecationMessage: Omit attribution to use the default job summary.
     description: >-
       Add one line to the job summary that says the scan was done by Offing and links to it.
       Set to "false" to leave it out.
@@ -161,6 +167,9 @@ outputs:
       The earliest end-of-life date among the remaining findings (YYYY-MM-DD), or empty when no finding
       carries a deadline.
     value: ${{ steps.scan.outputs.next-eol-date }}
+  next-eol-days:
+    description: Signed UTC calendar days from the scan date to next-eol-date, or empty when no deadline is available.
+    value: ${{ steps.scan.outputs.next-eol-days }}
   findings-json:
     description: >-
       The remaining findings as one compact JSON array. Each entry has id, ruleId, severity, title, path,
@@ -173,7 +182,7 @@ outputs:
     description: Absolute runner path to the SVG badge, or empty when upload-badge is false.
     value: ${{ steps.scan.outputs.badge-svg-path }}
   sarif-path:
-    description: Absolute runner path to the generated SARIF file, or empty when upload-sarif is false.
+    description: Absolute runner path to the generated SARIF file, or empty unless sarif or upload-sarif is true.
     value: ${{ steps.scan.outputs.sarif-path }}
 
 runs:
@@ -193,6 +202,8 @@ runs:
         INPUT_FAIL-ON-SEVERITY: ${{ inputs.fail-on-severity }}
         INPUT_MODE: ${{ inputs.mode }}
         INPUT_ANNOTATIONS: ${{ inputs.annotations }}
+        INPUT_UPLOAD-REPORT: ${{ inputs.upload-report }}
+        INPUT_SARIF: ${{ inputs.sarif }}
         INPUT_UPLOAD-SARIF: ${{ inputs.upload-sarif }}
         INPUT_UPLOAD-BADGE: ${{ inputs.upload-badge }}
         INPUT_FORECAST: ${{ inputs.forecast }}

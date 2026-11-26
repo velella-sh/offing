@@ -5,7 +5,7 @@ description: "A reusable Action that scans the checked-out repository locally, a
 
 # GitHub Action
 
-Offing's reusable Action scans the checked-out repository locally, emits GitHub annotations for findings, compares against an optional baseline, enforces a severity gate, and uploads the versioned JSON result.
+Offing's reusable Action scans the checked-out repository locally, emits GitHub annotations for findings, compares against an optional baseline, enforces a severity gate, and writes the versioned JSON result.
 
 ## What it looks like
 
@@ -31,8 +31,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: velella-sh/offing@v0.1.1
         with:
-          baseline: .offing-baseline.json
-          fail-on-severity: high
+          upload-report: "false"
 ```
 
 Version tags provide stable release references. Pin a full commit SHA when your threat model requires immutable third-party action references. A release tag points at a commit that carries the compiled Action bundle, which the release chain builds onto a `release/<tag>` branch and never rebuilds, so the Action runs without installing anything and a tag you pinned keeps doing what it did. [Releasing](RELEASING.md#action-bundles-on-release-tags) explains why the bundle is not on `main`.
@@ -57,15 +56,15 @@ permissions:
 
 jobs:
   lifecycle:
-    uses: velella-sh/offing/.github/workflows/offing-reusable.yml@v0.8.0
+    uses: velella-sh/offing/.github/workflows/offing-reusable.yml@main
     with:
       baseline: .offing-baseline.json
       fail-on-severity: high
 ```
 
-> **Version.** The reusable workflow first ships in `v0.8.0`. Until that tag exists, call `@main` only to try it, then replace it with the release tag before relying on it.
+> The reusable workflow example follows `main`. Pin the workflow commit SHA for a fixed revision. The workflow pins its own scanner.
 
-Every workflow input is optional and matches the Action default of the same name. Pass only what you need to change:
+Every workflow input is optional. The wrapper preserves the defaults shown below.
 
 | Workflow input | Default | Meaning |
 | --- | --- | --- |
@@ -82,9 +81,9 @@ Every workflow input is optional and matches the Action default of the same name
 | `upload-report` | `true` | Upload the JSON report as an Actions artifact. |
 | `attribution` | `true` | Credit Offing in the job summary. |
 
-The workflow exposes the same result outputs as the Action (`report-path`, `finding-count`, `has-new-findings`, `highest-severity`, `next-eol-date`, `findings-json`) so a later job can branch on them. Features that need write permissions — `pr-comment`, `suggest-fixes`, `commands`, `fix-pr`, `tracking-issue`, `upload-sarif`, `upload-badge` — stay on the Action step above; the reusable workflow keeps the minimal `contents: read` permission set.
+The workflow exposes these result outputs (`report-path`, `finding-count`, `has-new-findings`, `highest-severity`, `next-eol-date`, `findings-json`) so a later job can branch on them. Use the Action directly for optional features such as PR comments, code scanning, or badge uploads.
 
-For an organization `.github` repository that offers the starter in the Actions "New workflow" gallery, copy [`templates/workflows/`](../templates/workflows/) into that repository's `workflow-templates/` directory. See [Organization rollout](ORG_ROLLOUT.md#offer-the-starter-from-the-organizations-github-repository).
+To offer a starter workflow in the Actions "New workflow" gallery, copy [`templates/workflows/`](../templates/workflows/) into that repository's `workflow-templates/` directory. See [Organization rollout](ORG_ROLLOUT.md#offer-the-starter-from-the-organizations-github-repository).
 
 ### SHA-pinned actions
 
@@ -163,46 +162,12 @@ Use `--format teams` with a Teams workflow URL, or `--format webhook` with any e
 
 ## Inputs and outputs
 
-Every input is optional. The values below are the defaults used when a workflow
-does not provide a `with` entry.
-
-| Input | Default | Meaning |
-| --- | --- | --- |
-| `path` | `.` | Repository root or subdirectory to scan; `.` is the checked-out repository. |
-| `paths` | empty | Multi-line list of directories or globs (for example `packages/*`) relative to `path`. Each match is scanned in one run; findings go into one report and SARIF, with a job-summary section per package. Empty scans only `path`. |
-| `baseline` | empty | Baseline path relative to `path` (or to each matched package when `paths` is set). Empty reports every finding; a configured path that is missing fails the Action. |
-| `min-support-days` | empty | Warn (medium severity) on lines whose support ends within this many days; off when empty. |
-| `baseline-warn-days` | `14` | Warn when a baseline suppression expires within this many days (0 to 365). |
-| `on-expired` | `resurface` | What a baseline suppression does after its `expires` day: `resurface` (its finding is reported again) or `fail` (also fail the job). |
-| `fail-on-severity` | `high` | Lowest failing level: `none`, `info`, `low`, `medium`, `high`, or `critical`. |
-| `mode` | `scan` | `scan` scans the checked-out tree. `diff` compares the pull request base and head SHAs from the event payload and fails only on findings the pull request introduces. See [pull request diff mode](#pull-request-diff-mode). |
-| `annotations` | empty | Which findings become workflow annotations: `changed` annotates only findings on lines the pull request added or changed (the default in diff mode), `all` annotates every finding (the default in scan mode), `none` emits no annotations. Findings left out stay counted in the summary and the JSON report. |
-| `report-name` | `offing-report` | Artifact name for the JSON report when `upload-report` is `true`. |
-| `upload-report` | `true` | Upload the JSON report as an Actions artifact. `false` keeps the generated report only on the runner. |
-| `upload-sarif` | `false` | Set to `true` to upload the findings to GitHub code scanning as SARIF. Needs `security-events: write`. |
-| `upload-badge` | `false` | Generate a Shields.io endpoint JSON and a branded SVG badge, and upload both as the `offing-badge` artifact (14 days). |
-| `forecast` | `false` | Publish the lifecycle forecast in the job summary, the pull request comment, and a calendar artifact. See [lifecycle forecast](forecast-action.md). |
-| `forecast-months` | `6` | Forecast horizon in whole months, from 1 to 36. |
-| `pr-comment` | `false` | Set to `true` to post one summary comment on pull requests (counts and the top findings). Re-runs update the same comment. Needs `pull-requests: write`. |
-| `agent-authors` | `Copilot, google-labs-jules[bot], devin-ai-integration[bot], chatgpt-codex-connector[bot], claude[bot]` | Comma-separated logins treated as coding agents. In diff mode, when the pull request author matches, the comment adds the **Stale choices this agent introduced** section. Set to `none` to turn it off. Matching ignores case and a leading `@`. |
-| `suggest-fixes` | `false` | In diff mode, post one review whose `suggestion` blocks apply the deterministic fixes for findings on lines the pull request changed. Re-runs update the same review. Needs `pull-requests: write`; pull requests from forks are skipped. |
-| `commands` | `false` | Set to `true` to answer `/offing explain` and `/offing ignore` comments when the workflow runs on `issue_comment`. Replies only to owners, members, and collaborators. Needs `pull-requests: write`. |
-| `fix-pr` | `false` | Set to `true` to open or update one pull request on `offing/fixes` with every deterministic fix, and close it when nothing is left to fix. Runs only on `schedule` and `workflow_dispatch` events. Needs `contents: write` and `pull-requests: write`. See [scheduled fix pull request](#scheduled-fix-pull-request). |
-| `tracking-issue` | `false` | Set to `true` in a scheduled workflow to keep one issue listing findings by end-of-life date. Re-runs update the same issue; it closes when nothing is left and reopens when findings return. Needs `issues: write`. |
-| `github-token` | `${{ github.token }}` | Token used for PR comments (including the forecast), command replies, fix suggestions, fix pull requests, and the tracking issue. |
-| `attribution` | `true` | Adds one line to the job summary saying the scan was done by Offing, with a link. Set to `false` to leave it out. |
-
-| Output | Availability | Meaning |
-| --- | --- | --- |
-| `report-path` | Always | Absolute runner path to the generated JSON report, whether or not `upload-report` is enabled. |
-| `finding-count` | Always | Number of findings remaining after baseline comparison, encoded as a decimal string. |
-| `has-new-findings` | Always | `true` when at least one finding remains after baseline comparison, `false` otherwise. In diff mode it covers the findings the pull request introduces. |
-| `highest-severity` | Always | The highest remaining severity (`info`, `low`, `medium`, `high`, or `critical`), or empty when there are no findings. |
-| `next-eol-date` | Always | The earliest end-of-life date among the remaining findings (`YYYY-MM-DD`), or empty when no finding carries a deadline. |
-| `findings-json` | Always | The remaining findings as one compact JSON array. Each entry has `id`, `ruleId`, `severity`, `title`, `path`, and `line` and `deadline` when known. |
-| `badge-path` | When `upload-badge` is `true` | Absolute runner path to `offing-badge.json`; otherwise empty. |
-| `badge-svg-path` | When `upload-badge` is `true` | Absolute runner path to `offing-badge.svg`, next to the JSON; otherwise empty. |
-| `sarif-path` | When `upload-sarif` is `true` | Absolute runner path to the generated SARIF file; otherwise empty. |
+The [v1 contract](spec/action/v1.md) defines every input and output, the exit
+status, the permissions each feature needs, and which files are written or
+uploaded. The contract version describes the interface. Git refs in the
+examples select published releases. The examples below use `v0.1.1`, which
+uploads the JSON report by default. Releases implementing the v1 contract
+keep it on the runner unless you set `upload-report: true`.
 
 The job summary shows how many findings there are per severity, the ten most severe findings with their location and a link to the evidence each one cites, the age of the lifecycle data, and a warning when the data is stale. When there are more than ten findings, it says how many more there are; the JSON report artifact lists them all.
 
@@ -222,7 +187,7 @@ The outputs describe the findings that remain after baseline comparison, so a la
 The scan step must pass for the steps after it to run, so this example sets `fail-on-severity: none` and leaves the decision to the later steps:
 
 ```yaml
-- uses: velella-sh/offing@v0
+- uses: velella-sh/offing@v0.1.1
   id: offing
   with:
     fail-on-severity: none
@@ -231,7 +196,9 @@ The scan step must pass for the steps after it to run, so this example sets `fai
   run: echo "Offing found new findings; highest severity is ${{ steps.offing.outputs.highest-severity }}."
 - name: Warn about the next deadline
   if: steps.offing.outputs.next-eol-date != ''
-  run: echo "The next end of life is ${{ steps.offing.outputs.next-eol-date }}."
+  env:
+    NEXT_EOL: ${{ steps.offing.outputs.next-eol-date }}
+  run: echo "The next end of life is $NEXT_EOL."
 - name: List finding ids
   run: echo '${{ steps.offing.outputs.findings-json }}' | jq -r '.[].id'
 ```
@@ -244,7 +211,7 @@ Monorepos should not need one job per package. Set `paths` to a multi-line list 
 
 ```yaml
 - uses: actions/checkout@v7
-- uses: velella-sh/offing@v0
+- uses: velella-sh/offing@v0.1.1
   with:
     paths: |
       packages/*
@@ -266,7 +233,7 @@ permissions:
   pull-requests: write
 steps:
   - uses: actions/checkout@v6
-  - uses: velella-sh/offing@v0
+  - uses: velella-sh/offing@v0.1.1
     with:
       pr-comment: "true"
 ```
@@ -302,7 +269,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: refs/pull/${{ github.event.issue.number }}/head
-      - uses: velella-sh/offing@v0
+      - uses: velella-sh/offing@v0.1.1
         with:
           commands: "true"
 ```
@@ -360,7 +327,7 @@ steps:
   - uses: actions/checkout@v7
     with:
       fetch-depth: 0   # diff mode archives the base and head SHAs from git objects, so fetch their history
-  - uses: velella-sh/offing@v0
+  - uses: velella-sh/offing@v0.1.1
     with:
       mode: diff
 ```
@@ -381,7 +348,7 @@ steps:
   - uses: actions/checkout@v7
     with:
       fetch-depth: 0   # diff mode archives the base and head SHAs from git objects
-  - uses: velella-sh/offing@v0
+  - uses: velella-sh/offing@v0.1.1
     with:
       mode: diff
       suggest-fixes: "true"
@@ -486,7 +453,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: velella-sh/offing@vX.Y.Z
+      - uses: velella-sh/offing@v0.1.1
         id: scan
         with:
           upload-badge: true
@@ -555,7 +522,7 @@ The token of a pull request from a fork is read-only, so the upload would fail t
 
 ### SARIF output
 
-The same SARIF is available from the CLI, so other CI systems and editors can read it:
+Set `sarif: true` with a v1-compatible release to generate `sarif-path` using read-only permissions. The same SARIF is available from the CLI, so other CI systems and editors can read it:
 
 ```bash
 offing scan . --format sarif > offing.sarif

@@ -49,7 +49,7 @@ For CI:
 A minimal GitHub Actions step:
 
     - uses: actions/checkout@v7
-    - uses: velella-sh/offing@v0.7.1
+    - uses: velella-sh/offing@v0.1.1
       with:
         baseline: .offing-baseline.json
         fail-on-severity: high

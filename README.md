@@ -101,10 +101,10 @@ steps:
   - uses: actions/checkout@v7
   - uses: velella-sh/offing@v0.1.1
     with:
-      fail-on-severity: high
+      upload-report: "false"
 ```
 
-Offing annotates the pull request at the exact line, posts one summary comment with the evidence, suppresses accepted findings with a baseline, fails on the severity you choose, and uploads the complete JSON report or SARIF. Scans run on the runner, so repository contents never leave it. Pin a full commit SHA instead of a tag when you need an immutable reference. Setup, inputs, permissions and artifacts are in the [GitHub Action guide](docs/GITHUB_ACTION.md). The [onboarding GitHub App](docs/ONBOARDING_APP.md) can open that workflow as one reviewed pull request per repository.
+Offing scans on the runner, annotates exact lines, and writes a local JSON report. The [GitHub Action guide](docs/GITHUB_ACTION.md) shows how to configure the severity gate, baselines, PR comments, and uploads. The [v1 contract](docs/spec/action/v1.md) defines the versioned interface. The [onboarding GitHub App](docs/ONBOARDING_APP.md) can open that workflow as one reviewed pull request per repository.
 
 ## Why not just Renovate?
 

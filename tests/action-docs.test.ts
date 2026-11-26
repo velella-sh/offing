@@ -6,7 +6,10 @@ import { test } from "node:test";
 import { parse } from "yaml";
 
 interface ActionDefinition {
-  inputs: Record<string, { default?: unknown; required?: unknown }>;
+  name: string;
+  description: string;
+  branding: { icon: string; color: string };
+  inputs: Record<string, { default?: unknown; required?: unknown; deprecationMessage?: string }>;
   outputs: Record<string, unknown>;
 }
 
@@ -14,7 +17,7 @@ interface ActionDefinition {
 function tableRows(markdown: string, firstHeader: string): string[][] {
   const lines = markdown.split("\n");
   const start = lines.findIndex((line) => line.startsWith(`| ${firstHeader} |`));
-  assert.notEqual(start, -1, `docs/GITHUB_ACTION.md has no table whose header starts with "${firstHeader}"`);
+  assert.notEqual(start, -1, `docs/spec/action/v1.md has no table whose header starts with "${firstHeader}"`);
   const rows: string[][] = [];
   for (let index = start + 2; index < lines.length && lines[index]!.startsWith("|"); index += 1) {
     // Cells are split on pipes that are not escaped; the docs do not put pipes inside code spans.
@@ -34,11 +37,11 @@ const documentedDefault = (cell: string): string => (cell === "empty" ? "" : unq
 
 async function load() {
   const action = parse(await readFile(resolve("action.yml"), "utf8")) as ActionDefinition;
-  const docs = await readFile(resolve("docs/GITHUB_ACTION.md"), "utf8");
+  const docs = await readFile(resolve("docs/spec/action/v1.md"), "utf8");
   return { action, docs };
 }
 
-test("docs/GITHUB_ACTION.md documents exactly the inputs of action.yml, with the same defaults", async () => {
+test("docs/spec/action/v1.md documents exactly the inputs of action.yml, with the same defaults", async () => {
   const { action, docs } = await load();
   const rows = tableRows(docs, "Input");
   const documented = new Map(rows.map((row) => [unquote(row[0]!), documentedDefault(row[1]!)]));
@@ -57,7 +60,7 @@ test("docs/GITHUB_ACTION.md documents exactly the inputs of action.yml, with the
   }
 });
 
-test("docs/GITHUB_ACTION.md documents exactly the outputs of action.yml", async () => {
+test("docs/spec/action/v1.md documents exactly the outputs of action.yml", async () => {
   const { action, docs } = await load();
   const documented = tableRows(docs, "Output").map((row) => unquote(row[0]!));
   assert.deepEqual(
@@ -88,4 +91,16 @@ test("the table reader reports a missing table and keeps escaped pipes inside a 
   assert.deepEqual(tableRows("| Input | Default |\n| --- | --- |\n| `a` | x \\| y |\n\ntext", "Input"), [
     ["`a`", "x \\| y"],
   ]);
+});
+
+test("the Action has the approved branding and retains deprecated inputs with a warning", async () => {
+  const { action, docs } = await load();
+  assert.equal(action.name, "Offing");
+  assert.equal(action.description, "Local-first end-of-life and deprecation scanner for your repository.");
+  assert.deepEqual(action.branding, { icon: "activity", color: "gray-dark" });
+  for (const [name, input] of Object.entries(action.inputs)) {
+    const row = tableRows(docs, "Input").find(([key]) => key === `\`${name}\``);
+    assert.equal(Boolean(input.deprecationMessage), row?.[2]?.startsWith("Deprecated."));
+  }
+  assert.equal(action.inputs["upload-report"]?.default, "false");
 });
