@@ -1,3 +1,4 @@
+import { MISE_FILE_NAMES, MISE_FILES, miseDeclarations } from "../../version-files/mise.js";
 import { readFile, readdir } from "node:fs/promises";
 import { basename, join } from "node:path";
 
@@ -6,9 +7,17 @@ import { relativePosix } from "../../paths.js";
 import { validateRegistryV2 } from "@velella/ebb/registry";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 import { DETECTOR_API_VERSION } from "../../sdk.js";
-import type { Detector, DetectorAnalysis, DetectorContext, DetectorFinding, DetectorInputs } from "../../sdk.js";
+import type {
+  DetectorUnclassifiedReference,
+  Detector,
+  DetectorAnalysis,
+  DetectorContext,
+  DetectorFinding,
+  DetectorInputs,
+} from "../../sdk.js";
 import { parseVersLenient, versContains } from "@velella/ebb/vers/index";
-import { parseToolVersions } from "./parse-elixir-runtime.js";
+import type { ElixirRuntimeDeclaration } from "./parse-elixir-runtime.js";
+import { elixirDeclarations, erlangDeclarations, parseToolVersions } from "./parse-elixir-runtime.js";
 import { parseMixExs } from "./parse-mix-exs.js";
 import { parseMixLock } from "./parse-mix-lock.js";
 
@@ -42,8 +51,12 @@ const SKIPPED_DIRECTORIES = new Set([
 ]);
 const ELIXIR_PURL = "pkg:generic/elixir";
 const ERLANG_PURL = "pkg:generic/erlang";
+const MISE_PARSERS = new Map([
+  [ELIXIR_PURL, ({ value, line }: { value: string; line: number }) => elixirDeclarations(value, line)],
+  [ERLANG_PURL, ({ value, line }: { value: string; line: number }) => erlangDeclarations(value, line)],
+]);
 const HEX_PURL_PREFIX = "pkg:hex/";
-const ELIXIR_FILES = new Set([".tool-versions", "mix.exs", "mix.lock"]);
+const ELIXIR_FILES = new Set([".tool-versions", ...MISE_FILES, "mix.exs", "mix.lock"]);
 /** An exact Mix or asdf pin: major.minor or major.minor.patch, with no operator. */
 const EXACT_VERSION = /^[1-9][0-9]*(?:\.[0-9]+)?(?:\.[0-9]+)?$/;
 
@@ -120,14 +133,14 @@ async function readUtf8(file: string): Promise<string | undefined> {
 }
 
 /** Judge the Elixir and Erlang/OTP pins in a `.tool-versions` file. */
-function judgeToolVersions(
+function judgeRuntimeDeclarations(
   path: string,
-  contents: string,
+  declarations: ElixirRuntimeDeclaration[],
   elixirRules: readonly RegistryV2Rule[],
   erlangRules: readonly RegistryV2Rule[],
   report: Report,
 ): void {
-  for (const declaration of parseToolVersions(contents)) {
+  for (const declaration of declarations) {
     if (declaration.kind === "elixir") {
       const rule = firstMatchingRule(elixirRules, declaration.value);
       if (rule) report(rule, path, declaration.line, `${path} pins Elixir ${declaration.value}. ${rule.summary}`);
@@ -187,7 +200,7 @@ export class ElixirDetector implements Detector {
   readonly apiVersion = DETECTOR_API_VERSION;
   readonly id = "elixir";
   /** The files `scan` may read; conformance fails a scan that reads another. */
-  readonly inputs: DetectorInputs = { fileNames: [".tool-versions", "mix.exs", "mix.lock"] };
+  readonly inputs: DetectorInputs = { fileNames: [".tool-versions", ...MISE_FILES, "mix.exs", "mix.lock"] };
 
   /** `loadRules` lets tests supply rules; by default they come from the packaged `registry/elixir.json`. */
   constructor(
@@ -224,14 +237,20 @@ export class ElixirDetector implements Detector {
       });
     };
 
+    const unclassified: DetectorUnclassifiedReference[] = [];
     for (const file of files) {
       const contents = await readUtf8(file);
       if (contents === undefined) continue;
       const path = relativePosix(context.root, file);
       const name = basename(file);
 
-      if (name === ".tool-versions") judgeToolVersions(path, contents, elixirRules, erlangRules, report);
-      else if (name === "mix.exs") judgeMixExs(path, contents, elixirRules, packageRules, report);
+      if (name === ".tool-versions" || MISE_FILE_NAMES.has(name)) {
+        const declarations =
+          name === ".tool-versions"
+            ? parseToolVersions(contents)
+            : miseDeclarations(path, contents, MISE_PARSERS, unclassified);
+        judgeRuntimeDeclarations(path, declarations, elixirRules, erlangRules, report);
+      } else if (name === "mix.exs") judgeMixExs(path, contents, elixirRules, packageRules, report);
       else if (name === "mix.lock") judgeMixLock(path, contents, packageRules, report);
     }
 
@@ -239,7 +258,7 @@ export class ElixirDetector implements Detector {
       if (left.location.path !== right.location.path) return left.location.path < right.location.path ? -1 : 1;
       return (left.location.line ?? 0) - (right.location.line ?? 0) || left.id.localeCompare(right.id);
     });
-    return { findings, unclassified: [] };
+    return { findings, unclassified };
   }
 }
 

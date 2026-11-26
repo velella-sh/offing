@@ -1,0 +1,1 @@
+- Scan runtime declarations in mise and npm devEngines files and Python and pip declarations in Conda environments.

@@ -1,3 +1,5 @@
+import { MISE_FILE_NAMES, MISE_FILES, miseDeclarations } from "../../version-files/mise.js";
+import { PINNED_PHP_VERSION } from "./parse-php-runtime.js";
 import { readFile, readdir } from "node:fs/promises";
 import { basename, join } from "node:path";
 
@@ -50,8 +52,14 @@ const SKIPPED_DIRECTORIES = new Set([
   "testdata",
 ]);
 const RUNTIME_PURL = "pkg:generic/php";
+const MISE_PARSERS = new Map([
+  [
+    RUNTIME_PURL,
+    ({ value, line }: { value: string; line: number }) => (PINNED_PHP_VERSION.test(value) ? [{ value, line }] : []),
+  ],
+]);
 const COMPOSER_PURL_PREFIX = "pkg:composer/";
-const PHP_FILES = new Set([".php-version", ".tool-versions", "composer.json", "composer.lock"]);
+const PHP_FILES = new Set([".php-version", ".tool-versions", ...MISE_FILES, "composer.json", "composer.lock"]);
 
 async function phpFiles(root: string): Promise<string[]> {
   const files: string[] = [];
@@ -301,7 +309,7 @@ export class PhpDetector implements Detector {
   readonly id = "php";
   /** The files `scan` may read; conformance fails a scan that reads another. */
   readonly inputs: DetectorInputs = {
-    fileNames: [".php-version", ".tool-versions", "composer.json", "composer.lock"],
+    fileNames: [".php-version", ".tool-versions", ...MISE_FILES, "composer.json", "composer.lock"],
     sourceExtensions: [".php"],
   };
 
@@ -321,6 +329,7 @@ export class PhpDetector implements Detector {
 
     const { runtimeRules, packageRules } = indexRules(await this.loadRules());
     const state: ScanState = { findings: [], withUsage: [] };
+    const unclassified: DetectorUnclassifiedReference[] = [];
     for (const file of files) {
       let contents: string;
       try {
@@ -328,10 +337,16 @@ export class PhpDetector implements Detector {
       } catch {
         continue;
       }
-      scanFile(state, runtimeRules, packageRules, basename(file), relativePosix(context.root, file), contents);
+      const path = relativePosix(context.root, file);
+      if (MISE_FILE_NAMES.has(basename(file))) {
+        for (const declaration of miseDeclarations(path, contents, MISE_PARSERS, unclassified))
+          reportRuntime(state, runtimeRules, path, declaration, "pins");
+        continue;
+      }
+      scanFile(state, runtimeRules, packageRules, basename(file), path, contents);
     }
 
-    const unclassified = await attachUsages(context.root, state);
+    unclassified.push(...(await attachUsages(context.root, state)));
     state.findings.sort(compareFindings);
     return { findings: state.findings, unclassified };
   }

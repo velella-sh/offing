@@ -1,3 +1,4 @@
+import { MISE_FILE_NAMES, MISE_FILES, miseDeclarations } from "../../version-files/mise.js";
 import { readFile, readdir } from "node:fs/promises";
 import { basename, join } from "node:path";
 
@@ -7,10 +8,17 @@ import { purlIdentity } from "@velella/ebb/purl";
 import { validateRegistryV2 } from "@velella/ebb/registry";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 import { DETECTOR_API_VERSION } from "../../sdk.js";
-import type { Detector, DetectorAnalysis, DetectorContext, DetectorFinding, DetectorInputs } from "../../sdk.js";
+import type {
+  DetectorUnclassifiedReference,
+  Detector,
+  DetectorAnalysis,
+  DetectorContext,
+  DetectorFinding,
+  DetectorInputs,
+} from "../../sdk.js";
 import { ruleFinding, sortFindings } from "../../rule-finding.js";
 import { versContains } from "@velella/ebb/vers/index";
-import { parseBunVersion, parseBunfig, parseDenoJson } from "./parse.js";
+import { exactVersionPin, parseBunVersion, parseBunfig, parseDenoJson } from "./parse.js";
 import type { DenoDeclaration } from "./parse.js";
 import { parseToolVersions } from "./parse-tool-versions.js";
 
@@ -38,11 +46,33 @@ const SKIPPED_DIRECTORIES = new Set([
   "testdata",
 ]);
 
-const DENO_BUN_FILES = new Set(["deno.json", "deno.jsonc", "bunfig.toml", ".bun-version", ".tool-versions"]);
+const DENO_BUN_FILES = new Set([
+  "deno.json",
+  "deno.jsonc",
+  "bunfig.toml",
+  ".bun-version",
+  ".tool-versions",
+  ...MISE_FILES,
+]);
 
 const DENO_PURL = "pkg:generic/deno";
 const BUN_PURL = "pkg:generic/bun";
 const EXACT_VERSION = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
+
+const MISE_PARSERS = new Map(
+  (
+    [
+      ["deno-runtime", DENO_PURL],
+      ["bun-runtime", BUN_PURL],
+    ] as const
+  ).map(([kind, purl]) => [
+    purl,
+    ({ value, line }: { value: string; line: number }): DenoDeclaration[] => {
+      const version = exactVersionPin(value);
+      return version === undefined ? [] : [{ kind, value: version, line }];
+    },
+  ]),
+);
 
 async function denoBunFiles(root: string): Promise<string[]> {
   const files: string[] = [];
@@ -106,7 +136,7 @@ export class DenoDetector implements Detector {
   readonly apiVersion = DETECTOR_API_VERSION;
   readonly id = "deno";
   readonly inputs: DetectorInputs = {
-    fileNames: ["deno.json", "deno.jsonc", "bunfig.toml", ".bun-version", ".tool-versions"],
+    fileNames: ["deno.json", "deno.jsonc", "bunfig.toml", ".bun-version", ".tool-versions", ...MISE_FILES],
   };
 
   constructor(
@@ -129,6 +159,7 @@ export class DenoDetector implements Detector {
       findings.push(ruleFinding(rule, path, line, summary));
     };
 
+    const unclassified: DetectorUnclassifiedReference[] = [];
     for (const file of files) {
       let contents: string;
       try {
@@ -139,7 +170,9 @@ export class DenoDetector implements Detector {
       const path = relativePosix(context.root, file);
       const name = basename(file);
 
-      const declarations = declarationsFor(name, contents);
+      const declarations = MISE_FILE_NAMES.has(name)
+        ? miseDeclarations(path, contents, MISE_PARSERS, unclassified)
+        : declarationsFor(name, contents);
 
       for (const declaration of declarations) {
         if (!EXACT_VERSION.test(declaration.value)) continue;
@@ -154,7 +187,7 @@ export class DenoDetector implements Detector {
 
     sortFindings(findings);
 
-    return { findings, unclassified: [] };
+    return { findings, unclassified };
   }
 }
 

@@ -7,13 +7,18 @@ import { collectLockfiles } from "./parse-lockfiles.js";
 import { collectPyprojectDependencies, collectPyprojectRuntime } from "./parse-pyproject.js";
 import { collectRequirementsFile, requirementFiles } from "./parse-requirements.js";
 import { collectSetupRuntime } from "./parse-setup-py.js";
-import { collectVersionFiles } from "./parse-version-files.js";
+import type { DetectorUnclassifiedReference } from "../../sdk.js";
+import { collectCondaEnvironment, collectVersionFiles } from "./parse-version-files.js";
 import { readOptional } from "../read-optional.js";
 import { parseTomlDocument } from "./shared.js";
 
 /** Every declaration file in one project: version pins, setup.cfg, tox.ini, and setup.py. */
-async function collectDeclarations(projectRoot: string): Promise<Declaration[]> {
-  const declarations = await collectVersionFiles(projectRoot);
+async function collectDeclarations(
+  root: string,
+  projectRoot: string,
+  unclassified: DetectorUnclassifiedReference[],
+): Promise<Declaration[]> {
+  const declarations = await collectVersionFiles(root, projectRoot, unclassified);
   for (const name of ["setup.cfg", "tox.ini"] as const) {
     const path = resolve(projectRoot, name);
     const contents = await readOptional(path);
@@ -26,14 +31,17 @@ async function collectDeclarations(projectRoot: string): Promise<Declaration[]> 
 }
 
 /** Read one project directory; undefined when it has no pyproject, requirements, or version files. */
-export async function scanProject(root: string, directory: string): Promise<ProjectScan | undefined> {
+export async function scanProject(
+  root: string,
+  directory: string,
+  unclassified: DetectorUnclassifiedReference[],
+): Promise<ProjectScan | undefined> {
   const projectRoot = resolve(root, directory);
   const pyprojectPath = resolve(projectRoot, "pyproject.toml");
   const pyprojectContents = await readOptional(pyprojectPath);
   const pyproject = pyprojectContents ? parseTomlDocument(pyprojectContents) : undefined;
   const requirements = await requirementFiles(projectRoot);
-  const versionDeclarations = await collectDeclarations(projectRoot);
-  if (!pyprojectContents && requirements.length === 0 && versionDeclarations.length === 0) return undefined;
+  const versionDeclarations = await collectDeclarations(root, projectRoot, unclassified);
 
   const dependencies = new Map<string, DirectDependency>();
   const resolved: ResolvedVersions = new Map();
@@ -45,6 +53,10 @@ export async function scanProject(root: string, directory: string): Promise<Proj
   for (const path of requirements) {
     collectRequirementsFile(path, await readFile(path, "utf8"), dependencies, resolved);
   }
+  const conda = await collectCondaEnvironment(root, projectRoot, dependencies, resolved, unclassified);
+  declarations.push(...conda);
+  if (!pyprojectContents && requirements.length === 0 && declarations.length === 0 && dependencies.size === 0)
+    return undefined;
   await collectLockfiles(projectRoot, resolved);
   return { directory, declarations, dependencies, resolved };
 }

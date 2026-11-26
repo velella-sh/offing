@@ -75,6 +75,34 @@ jobs:
             console.log(`npm scan: ${scan.findings.length} findings`);
           ' "$out/npm-scan.json"
 
+      - name: acc-version-files
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          fixture="$RUNNER_TEMP/version-files"
+          mkdir -p "$fixture"
+          cp "$GITHUB_WORKSPACE/tests/fixtures/version-files/consumer/mise.toml" "$fixture/"
+          "$bin" scan "$fixture" --json > "$out/version-files-scan.json"
+          node -e '
+            const scan = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+            const atPin = ({ location }) => location.path === "mise.toml" && location.line === 2;
+            if (!scan.findings.some((f) => f.ruleId === "nodejs.runtime.eol-18" && atPin(f))) {
+              throw new Error("npm scan missed the Node.js 18 pin in mise.toml");
+            }
+            if (!scan.unclassified?.references.some((r) => r.reference === "lts" && r.reason.startsWith("no-data:") && atPin(r))) {
+              throw new Error("npm scan missed the unresolved mise alias");
+            }
+          ' "$out/version-files-scan.json"
+          {
+            printf '### acc-version-files\n\n'
+            printf -- '- Tarball %s\n' "$(basename "$out"/*.tgz)"
+            printf -- '- Installed CLI version %s\n' "$("$bin" --version)"
+            printf -- '- Tested commit %s\n' "$GITHUB_SHA"
+            printf -- '- offing scan found Node.js 18 and reported lts as no-data at mise.toml:2.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build the Docker image and scan the fixture
         id: docker
         run: |
