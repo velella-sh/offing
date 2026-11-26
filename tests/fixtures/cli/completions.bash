@@ -5,7 +5,7 @@ _offing() {
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   command="${COMP_WORDS[1]}"
   if [ "$COMP_CWORD" -eq 1 ]; then
-    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions hook lsp prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
+    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions config hook lsp prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
     return
   fi
   case "$prev" in
@@ -18,6 +18,7 @@ _offing() {
     completions) opts="bash zsh fish" ;;
     data) opts="status update --json --data-version" ;;
     watch) opts="add remove run list --weekly --board --json" ;;
+    config) opts="validate --json" ;;
     scan) opts="--demo --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --all --by-owner --data-version --only --exclude" ;;
     baseline) opts="--output --data-version" ;;
     forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force" ;;
@@ -56,6 +57,7 @@ _offing() {
     report-issue) opts="--output --data-version" ;;
     capabilities) opts="--json" ;;
     completions) opts="" ;;
+    config) opts="--json" ;;
     hook) opts="--fail-on" ;;
     lsp) opts="" ;;
     prompt) opts="--format --symbol" ;;

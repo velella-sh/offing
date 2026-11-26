@@ -69,6 +69,7 @@ Usage:
   offing capabilities [--json]
   offing completions <bash|zsh|fish>   # print a shell completion script
   offing lsp
+  offing config validate [path] [--json]
   offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol
   offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one detected agent host
   offing init --hooks --list [path]   # show agent hook stability and availability
@@ -124,6 +125,7 @@ Examples:
   offing report-issue <finding-id> . --output issue.md
   offing capabilities --json
   offing completions zsh > ~/.zfunc/_offing
+  offing config validate
   offing hook claude-code
   offing lsp
   offing prompt --symbol EOL:

@@ -32,7 +32,7 @@ async function makeTempDir(): Promise<string> {
 test("JSON Schema: schemas/config.v1.schema.json validates valid configurations and rejects invalid ones", async () => {
   const schemaText = await readFile(resolve("schemas/config.v1.schema.json"), "utf8");
   const schema = JSON.parse(schemaText);
-  const ajv = new Ajv2020({ allErrors: true });
+  const ajv = new Ajv2020({ allErrors: true, allowUnionTypes: true });
   const validate = ajv.compile(schema);
 
   assert.equal(validate({}), true, "empty config should be valid");

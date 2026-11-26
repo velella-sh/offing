@@ -9,6 +9,8 @@ description: "Every command runs locally. Scans read repository files and bundle
 
 Every command runs locally. Scans read repository files and bundled lifecycle data, and no scan uses the network. Only `data update` and the Skill install in `setup --yes` download anything; see [Privacy](PRIVACY.md).
 
+See [Offing configuration](CONFIG.md) for `offing config validate [path] [--json]` and editor completion.
+
 ## Global options
 
 | Option | What it does |

@@ -96,15 +96,15 @@ ${list}
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const files = await commandFiles();
   const next = renderIndex(files);
-  if (process.argv.includes("--check")) {
-    const current = await readFile(output, "utf8").catch(() => "");
-    if (current !== next) {
+  const current = await readFile(output, "utf8").catch(() => "");
+  if (current !== next) {
+    if (process.argv.includes("--check")) {
       process.stderr.write(
         "src/commands/index.generated.ts is out of date. Run: node tools/generate-commands-index.mjs\n",
       );
       process.exitCode = 1;
+    } else {
+      await writeFile(output, next);
     }
-  } else {
-    await writeFile(output, next);
   }
 }

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/config-validation.v1.schema.json",
+  "title": "Offing configuration validation result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "file", "valid", "diagnostics"],
+  "properties": {
+    "schemaVersion": { "const": "offing.config-validation.v1" },
+    "file": { "type": ["string", "null"] },
+    "valid": { "type": "boolean" },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "line", "column", "code", "severity", "pointer", "message", "suggestion"],
+        "properties": {
+          "file": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "column": { "type": "integer", "minimum": 1 },
+          "code": {
+            "enum": ["invalid-json", "invalid-value", "unknown-key", "deprecated-key", "unreadable-file", "input-limit"]
+          },
+          "severity": { "enum": ["error", "warning"] },
+          "pointer": { "type": "string" },
+          "message": { "type": "string" },
+          "suggestion": { "type": "string" }
+        }
+      }
+    }
+  }
+}

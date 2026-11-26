@@ -37,7 +37,7 @@
         "required": ["id", "category", "status", "summary", "details"],
         "properties": {
           "id": { "type": "string" },
-          "category": { "enum": ["runtime", "package", "mcp", "skill", "plugin", "ci", "system"] },
+          "category": { "enum": ["runtime", "package", "mcp", "skill", "plugin", "ci", "system", "config"] },
           "status": { "enum": ["pass", "warning", "fail"] },
           "summary": { "type": "string" },
           "details": { "type": "string" },

@@ -1,0 +1,1 @@
+- Validate Offing config with `offing config validate`, `offing doctor`, and the `offing-config` pre-commit hook. Diagnostics include source locations and fixes, with a versioned JSON result for CI.
