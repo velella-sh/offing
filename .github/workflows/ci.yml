@@ -312,12 +312,11 @@ jobs:
           retention-days: 1
           if-no-files-found: error
 
-  # Collect coverage once, unsharded. Check jobs already proved the suite on every shard;
-  # this job only measures. V8 LCOV BRDA block ids are process-local, so merging partial
-  # shard reports under-counts branch coverage by several points versus a single run.
+  # Collect coverage once, unsharded, alongside the check matrix. V8 LCOV BRDA block ids
+  # are process-local, so merging partial reports under-counts branch coverage.
   coverage:
     name: coverage
-    needs: [changes, check]
+    needs: changes
     if: needs.changes.outputs.docs_only != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -426,9 +425,8 @@ jobs:
           path: ${{ runner.temp }}/coverage.json
           retention-days: 1
 
-  # Windows runs on code pull requests too, so a path-separator or line-ending bug is caught before the merge
-  # instead of turning main red after a stack of merges. macOS runs on main and in the merge queue only: that
-  # runner is scarce. The Linux-only steps stay in `check`.
+  # Pull requests compare Windows and Linux tarballs. The merge queue and main also run the
+  # full suite on Windows and macOS to catch platform-specific failures before landing.
   check-cross-os:
     needs: changes
     if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
@@ -452,26 +450,11 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: ${{ runner.os != 'Windows' && 'npm' || '' }}
-      - name: List the files this pull request changes
-        if: github.event_name == 'pull_request'
-        shell: bash
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          set -euo pipefail
-          : > "$RUNNER_TEMP/offing-changed-files.txt"
-          if [ -z "${BASE_SHA:-}" ]; then
-            echo "No base SHA; the full suite runs."
-            exit 0
-          fi
-          git fetch --no-tags --depth=1 origin "$BASE_SHA"
-          git diff --name-only --diff-filter=ACMRD "$BASE_SHA" HEAD > "$RUNNER_TEMP/offing-changed-files.txt"
-          echo "Files changed: $(wc -l < "$RUNNER_TEMP/offing-changed-files.txt")"
       - name: npm run check
+        if: github.event_name != 'pull_request'
         env:
           OFFING_HOOK_LATENCY: "0"
-          OFFING_VERIFY_ACTION_BUNDLE: "${{ (startsWith(github.event.pull_request.title, 'chore: release') || startsWith(github.event.head_commit.message, 'chore: release')) && '1' || '' }}"
-          OFFING_AFFECTED_FILES: "${{ github.event_name == 'pull_request' && format('{0}/offing-changed-files.txt', runner.temp) || '' }}"
+          OFFING_VERIFY_ACTION_BUNDLE: "${{ startsWith(github.event.head_commit.message, 'chore: release') && '1' || '' }}"
         run: npm run check
       - name: Record the packed tarball hash
         # The comparison runs in ci-ok against the Linux record from `check`. macOS joins on main and

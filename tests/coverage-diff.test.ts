@@ -137,6 +137,7 @@ test("the CI workflow shards checks and collects coverage in one unsharded run",
       };
       coverage: { name?: string; steps: Array<Record<string, unknown>>; needs?: unknown };
       "check-cross-os": { steps: Array<Record<string, unknown>> };
+      "ci-ok": { needs: string[] };
     };
   };
   const packageJson = JSON.parse(await readFile("package.json", "utf8")) as {
@@ -178,6 +179,8 @@ test("the CI workflow shards checks and collects coverage in one unsharded run",
   assert.match(String(latency.run), /node tools\/run-tests\.mjs dist\/tests\/agent-hooks-latency\.test\.js/);
 
   assert.equal(workflow.jobs.coverage.name, "coverage");
+  assert.equal(workflow.jobs.coverage.needs, "changes");
+  assert.ok(workflow.jobs["ci-ok"].needs.includes("coverage"));
   const coverageSteps = workflow.jobs.coverage.steps;
   const coverageNamed = (pattern: RegExp): Record<string, unknown> | undefined =>
     coverageSteps.find((step) => typeof step.name === "string" && pattern.test(step.name));
