@@ -1,0 +1,1 @@
+- Fix Docker builds by including the forecast web sources required by the TypeScript build.
