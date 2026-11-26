@@ -93,7 +93,7 @@ inputs:
   pr-comment:
     description: >-
       Post one summary comment on pull requests and update it on every re-run. Needs the
-      pull-requests: write permission on the job; leave it off for pull requests from forks, whose token is read-only.
+      pull-requests: write permission on the job. Fork pull requests get the same report in the job summary.
       The baseline proposal on an offing/onboarding pull request is posted even when this is false.
     required: false
     default: "false"
@@ -247,4 +247,12 @@ runs:
         name: offing-forecast
         path: ${{ steps.scan.outputs.forecast-calendar-path }}
         if-no-files-found: warn
+        retention-days: 14
+    - name: Upload pull request receipt
+      if: always() && steps.scan.outputs.receipt-path != ''
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: offing-pr-receipt
+        path: ${{ steps.scan.outputs.receipt-path }}
+        if-no-files-found: error
         retention-days: 14

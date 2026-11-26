@@ -20,8 +20,13 @@ function unquotePath(header: string): string {
 export function parseChangedLines(diff: string): Map<string, LineRange[]> {
   const changed = new Map<string, LineRange[]>();
   let path: string | undefined;
+  let inHunk = false;
   for (const line of diff.split("\n")) {
-    if (line.startsWith("+++ ")) {
+    if (line.startsWith("diff --git ")) {
+      path = undefined;
+      inHunk = false;
+    }
+    if (!inHunk && line.startsWith("+++ ")) {
       const header = unquotePath(line.slice(4).trim());
       path = header === "/dev/null" ? undefined : header.replace(/^b\//, "");
       continue;
@@ -29,6 +34,7 @@ export function parseChangedLines(diff: string): Map<string, LineRange[]> {
     if (path === undefined || !line.startsWith("@@ ")) continue;
     const match = /^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/.exec(line);
     if (!match) continue;
+    inHunk = true;
     const start = Number(match[1]);
     const count = match[2] === undefined ? 1 : Number(match[2]);
     if (count > 0) changed.set(path, [...(changed.get(path) ?? []), { start, end: start + count - 1 }]);

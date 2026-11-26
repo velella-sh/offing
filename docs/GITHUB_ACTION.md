@@ -225,7 +225,7 @@ High and critical findings become error annotations, medium findings become warn
 
 ### Pull request comment
 
-Set `pr-comment: true` to get the comment shown at the top of this page: the counts per severity and the top findings, instead of reading every annotation. The same comment is updated on each re-run. The scan itself stays offline; only posting the comment calls the GitHub API.
+Set `pr-comment: true` to add a [lifecycle countdown](PR_COMMENT.md) and a findings summary to your pull request. Offing updates the same comment on each re-run. The scan itself stays offline; only posting the comment calls the GitHub API.
 
 ```yaml
 permissions:
@@ -233,12 +233,14 @@ permissions:
   pull-requests: write
 steps:
   - uses: actions/checkout@v6
-  - uses: velella-sh/offing@v0.1.1
+    with:
+      fetch-depth: 0
+  - uses: velella-sh/offing@v0.1.2
     with:
       pr-comment: "true"
 ```
 
-Pull requests from forks get a read-only token, so the comment cannot be posted there: the Action logs a warning and the scan result is unaffected.
+For fork pull requests, Offing writes the same report to the job summary and skips the comment.
 
 ### Agent-authored pull requests
 

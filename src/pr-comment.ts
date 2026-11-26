@@ -4,6 +4,7 @@
  * never use the network.
  */
 import { FIX_SUGGESTION_MARKER, PR_COMMENT_MARKER } from "./github-action.js";
+import { limitPullRequestComment } from "./github-action/render.js";
 import type { SuggestionComment } from "./github-action.js";
 
 export interface PullRequestCommentTarget {
@@ -72,6 +73,7 @@ export async function upsertPullRequestComment(
   target: PullRequestCommentTarget,
   body: string,
 ): Promise<"created" | "updated"> {
+  body = limitPullRequestComment(body, () => PR_COMMENT_MARKER);
   const base = `/repos/${target.repository}/issues`;
   for (let page = 1; page <= 10; page += 1) {
     const comments = (await githubRequest(
