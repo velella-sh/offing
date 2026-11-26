@@ -551,6 +551,22 @@ maintains exactly one such issue. It closes itself once `main`'s CI goes green.
 top priority — every later merge queue inherits the doubt. Do not open a second red-main issue by
 hand, and do not re-run the failing `main` commit hoping for green; fix forward or revert.
 
+### Scorecard misses a merge queue test run
+
+When `Open alerts` reports a Scorecard `CI-Tests` alert, compare the pull request's head SHA with
+the SHA tested by the merge queue. [Scorecard reads check results for the pull request head](https://github.com/ossf/scorecard/blob/61e84743356275f6ffca23b1b2f2cb945e19eb96/checks/raw/ci_tests.go#L35-L55).
+GitHub Actions records the queue's required `ci-ok` check on the merge group SHA.
+
+[Alert #11](https://github.com/velella-sh/offing/security/code-scanning/11) reported 29 of 30
+pull requests tested. Scorecard found no checks on the head of [PR #106](https://github.com/velella-sh/offing/pull/106).
+The queue's [`ci-ok` check](https://github.com/velella-sh/offing/actions/runs/43752947053/job/132932627734)
+passed at 19:38:46 UTC on 2026-11-15, 23 seconds before that same SHA landed on `main`.
+
+If the check passed on the exact commit that landed, record the run as evidence for the maintainer
+under the [dismissal policy](SECURITY_TRIAGE.md#dismissal). If the check is missing, failed, or
+completed after the merge, investigate how the change landed. After the alert closes, run
+`gh workflow run open-alerts.yml --ref main` and confirm the result.
+
 ### Nightly and scheduled signal, not a gate
 
 Red `corpus.yml` (affected, full, or record), `mutation.yml`,
