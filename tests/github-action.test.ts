@@ -618,7 +618,15 @@ test("action.yml declares annotations with an empty default and passes it to the
 });
 
 test("pr-comment shares its countdown with a fork summary and uploads the before/after receipt", async () => {
-  const { root, base, head } = await repositoryWithAddedFinding();
+  const root = await gitRepository("offing-countdown-receipt-");
+  git(root, ["commit", "-q", "--allow-empty", "-m", "base"]);
+  const base = git(root, ["rev-parse", "HEAD"]).trim();
+  const scope = join(root, "packages", "app");
+  await mkdir(scope, { recursive: true });
+  await writeFile(join(scope, "Dockerfile"), "FROM node:22-alpine\n");
+  git(root, ["add", "."]);
+  git(root, ["commit", "-q", "-m", "head"]);
+  const head = git(root, ["rev-parse", "HEAD"]).trim();
   const eventPath = join(root, "event.json");
   const event = (name: string) => ({
     pull_request: {
@@ -628,6 +636,7 @@ test("pr-comment shares its countdown with a fork summary and uploads the before
     },
   });
   const env = {
+    INPUT_PATH: scope,
     GITHUB_EVENT_PATH: eventPath,
     GITHUB_SERVER_URL: "https://github.com",
     GITHUB_REPOSITORY: "base/repo",
@@ -642,11 +651,11 @@ test("pr-comment shares its countdown with a fork summary and uploads the before
   assert.match(fork.stdout, /fork pull request uses a read-only token/);
   assert.match(fork.summary, /### PR countdown/);
   assert.match(fork.summary, /\[Receipt\].*\[Evidence\]/);
-  assert.match(fork.summary, /workflows\/ci\\\.yml:4/);
+  assert.match(fork.summary, /Dockerfile:1/);
   assert.match(fork.outputs, /receipt-path=.*offing-receipt\.json/);
   const receipt = JSON.parse(await readFile(join(root, ".runner", "offing-receipt.json"), "utf8"));
-  assert.equal(receipt.introduced[0]?.path, ".github/workflows/ci.yml");
-  assert.equal(receipt.introduced[0]?.line, 4);
+  assert.equal(receipt.introduced[0]?.path, "Dockerfile");
+  assert.equal(receipt.introduced[0]?.line, 1);
 
   await writeFile(eventPath, JSON.stringify(event("base/repo")));
   const sameRepository = await runAction(root, { ...env, "INPUT_GITHUB-TOKEN": "" });
