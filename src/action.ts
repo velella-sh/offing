@@ -5,7 +5,7 @@ import process from "node:process";
 import { dirname, relative, resolve } from "node:path";
 
 import { publishFixPullRequest } from "./action-fix-pr.js";
-import type { DataInfo, Finding, ScanResult, SuppressionState } from "./domain.js";
+import type { ScanResult } from "./domain.js";
 import { runCommentCommands } from "./action-commands.js";
 import {
   highestSeverity,
@@ -22,6 +22,9 @@ import {
   suggestionComment,
 } from "./github-action.js";
 import { prepareForecast, readForecastMonths } from "./github-action/forecast.js";
+import { compactPullRequestComment, limitPullRequestComment } from "./github-action/render.js";
+import { preparePullRequestCountdown } from "./github-action/pr-context.js";
+import type { PullRequestCountdown } from "./github-action/pr-countdown.js";
 import { trackingIssueEventAllowed, upsertTrackingIssue } from "./action-tracking-issue.js";
 import { upsertFixSuggestionsReview, upsertPullRequestComment } from "./pr-comment.js";
 import type { GitHubActionOutcome, GitHubAnnotation, SeverityGate, UnannotatedFindings } from "./github-action.js";
@@ -99,34 +102,9 @@ async function setOutput(name: string, value: string): Promise<void> {
   if (output) await appendFile(output, `${name}=${value}\n`, "utf8");
 }
 
-async function writeSummary(
-  findings: readonly Finding[],
-  failed: boolean,
-  gate: SeverityGate,
-  data?: DataInfo,
-  expiredFailure = false,
-  suppressions?: SuppressionState,
-  diff?: GitHubActionOutcome["diff"],
-  packages?: GitHubActionOutcome["packages"],
-  unannotated?: UnannotatedFindings,
-  proposal?: { path: string; count: number },
-  forecast?: string,
-): Promise<void> {
+async function writeSummary(body: string): Promise<void> {
   const summary = process.env.GITHUB_STEP_SUMMARY;
-  if (!summary) return;
-  // On by default; `attribution: "false"` turns the line off.
-  const attribution = process.env.INPUT_ATTRIBUTION !== "false";
-  const note = expiredFailure
-    ? "\n> **Failed:** a baseline suppression has expired and `on-expired` is set to `fail`.\n"
-    : "";
-  const proposalNote = proposal
-    ? `\n> **Suggested baseline:** \`${proposal.path}\` does not exist yet, so this first run recorded its ${proposal.count} finding${proposal.count === 1 ? "" : "s"} in a baseline proposal on the pull request comment.\n`
-    : "";
-  await appendFile(
-    summary,
-    `${renderSummary(findings, failed, gate, data, attribution, suppressions, diff, packages, unannotated)}${note}${proposalNote}${forecast ? `\n${forecast}` : ""}`,
-    "utf8",
-  );
+  if (summary) await appendFile(summary, body, "utf8");
 }
 
 /** The run page lists the uploaded report artifact, so it is the link the summary uses for the full report. */
@@ -174,75 +152,140 @@ function resolveDiffMode(event: PullRequestEvent): { mode?: "diff"; diffRange?: 
 function isForkPullRequest(event: PullRequestEvent): boolean {
   const head = event.pull_request?.head?.repo;
   const base = event.pull_request?.base?.repo;
-  return (
-    head?.fork === true ||
-    (head?.full_name !== undefined && base?.full_name !== undefined && head.full_name !== base.full_name)
-  );
+  if (head?.full_name !== undefined && base?.full_name !== undefined) return head.full_name !== base.full_name;
+  return head?.fork === true;
+}
+
+function expiredNote(outcome: GitHubActionOutcome): string {
+  return outcome.expiredFailure
+    ? "\n> **Failed:** a baseline suppression has expired and `on-expired` is set to `fail`.\n"
+    : "";
 }
 
 function scanCommentBody(
   outcome: GitHubActionOutcome,
   unannotated: UnannotatedFindings | undefined,
-  proposal: { path: string; baseline: Baseline } | undefined,
+  proposal: ProposedBaseline | undefined,
+  forecast: string | undefined,
+  countdown: PullRequestCountdown | undefined,
 ): string {
-  const { result, gateFailed, gate, expiredFailure, diff, packages, agent } = outcome;
+  const { result, gateFailed, gate, diff, packages, agent } = outcome;
+  const attribution = process.env.INPUT_ATTRIBUTION !== "false";
   const body = renderComment(
     result.findings,
     gateFailed,
     gate,
     result.data,
-    process.env.INPUT_ATTRIBUTION !== "false",
+    attribution,
     result.suppressions,
     diff,
     packages,
     unannotated,
     agent,
+    countdown,
   );
-  const note = expiredFailure
-    ? "\n> **Failed:** a baseline suppression has expired and `on-expired` is set to `fail`.\n"
-    : "";
   const proposalNote = proposal ? `\n${renderBaselineProposal(proposal.path, proposal.baseline)}` : "";
-  return `${body}${note}${proposalNote}`;
+  const forecastNote = forecast ? `\n${forecast}` : "";
+  const full = `${body}${expiredNote(outcome)}${proposalNote}${forecastNote}`;
+  return limitPullRequestComment(full, () =>
+    compactPullRequestComment(result.findings, gateFailed, gate, attribution, countdown),
+  );
+}
+
+function stepSummaryBody(
+  outcome: GitHubActionOutcome,
+  unannotated: UnannotatedFindings | undefined,
+  proposal: ProposedBaseline | undefined,
+  forecast: string | undefined,
+): string {
+  const { result, gateFailed, gate, diff, packages } = outcome;
+  const attribution = process.env.INPUT_ATTRIBUTION !== "false";
+  const summary = renderSummary(
+    result.findings,
+    gateFailed,
+    gate,
+    result.data,
+    attribution,
+    result.suppressions,
+    diff,
+    packages,
+    unannotated,
+  );
+  const count = proposal?.baseline.findings.length ?? 0;
+  const proposalNote = proposal
+    ? `\n> **Suggested baseline:** \`${proposal.path}\` does not exist yet, so this first run recorded its ${count} finding${plural(count)} in a baseline proposal on the pull request comment.\n`
+    : "";
+  return `${summary}${expiredNote(outcome)}${proposalNote}${forecast ? `\n${forecast}` : ""}`;
 }
 
 /** Posts or updates the one summary comment. A comment that cannot be posted warns without failing the scan. */
-async function postComment(
-  outcome: GitHubActionOutcome,
-  event: PullRequestEvent,
-  unannotated?: UnannotatedFindings,
-  proposal?: { path: string; baseline: Baseline },
-  forecast?: string,
-): Promise<void> {
-  // Onboarding records its first baseline in the comment even without pr-comment.
-  const includeFindings = process.env["INPUT_PR-COMMENT"] === "true" || proposal !== undefined;
-  if (!includeFindings && !forecast) return;
-  if (forecast && isForkPullRequest(event)) {
+async function postComment(body: string, ctx: RunContext, forecastOnly = false): Promise<void> {
+  if (ctx.fork) {
+    const title = forecastOnly ? "forecast comment" : "pull request comment";
     console.log(
-      "::notice title=Offing forecast comment skipped::Pull requests from forks typically have a read-only token.",
+      `::notice title=Offing ${title} skipped::This fork pull request uses a read-only token. See the job summary.`,
     );
     return;
   }
   try {
-    const pullRequest = event.pull_request?.number;
-    const token = process.env["INPUT_GITHUB-TOKEN"];
-    const repository = process.env.GITHUB_REPOSITORY;
+    const pullRequest = ctx.event.pull_request?.number;
+    const token = ctx.env["INPUT_GITHUB-TOKEN"];
+    const repository = ctx.env.GITHUB_REPOSITORY;
     if (!pullRequest || !token || !repository) {
       console.log(
         "::notice title=Offing pull request comment skipped::pr-comment needs a pull_request event, a token, and GITHUB_REPOSITORY.",
       );
       return;
     }
-    const body = includeFindings ? scanCommentBody(outcome, unannotated, proposal) : PR_COMMENT_MARKER;
-    const forecastNote = forecast ? `\n\n${forecast}` : "";
     const done = await upsertPullRequestComment(
-      { apiUrl: process.env.GITHUB_API_URL ?? "https://api.github.com", repository, pullRequest, token },
-      `${body}${forecastNote}`,
+      { apiUrl: ctx.env.GITHUB_API_URL ?? "https://api.github.com", repository, pullRequest, token },
+      body,
     );
     console.log(`Offing ${done} its pull request comment.`);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.log(`::warning title=Offing could not post the pull request comment::${commandValue(message)}`);
   }
+}
+
+async function readCountdown(outcome: GitHubActionOutcome, ctx: RunContext): Promise<PullRequestCountdown | undefined> {
+  const pr = ctx.event.pull_request;
+  const { GITHUB_SERVER_URL: server, GITHUB_REPOSITORY: repository, GITHUB_RUN_ID: runId } = ctx.env;
+  const receipt = server && repository && runId ? `${server}/${repository}/actions/runs/${runId}#artifacts` : undefined;
+  try {
+    const { countdown, receiptPath } = await preparePullRequestCountdown(
+      outcome,
+      { base: pr?.base?.sha, head: pr?.head?.sha },
+      receipt,
+    );
+    if (receiptPath) await setOutput("receipt-path", receiptPath);
+    return countdown;
+  } catch {
+    console.log(
+      "::notice title=Offing PR countdown skipped::Check out the pull request head or merge commit with fetch-depth: 0.",
+    );
+    return undefined;
+  }
+}
+
+async function publishScanSummaries(
+  outcome: GitHubActionOutcome,
+  ctx: RunContext,
+  proposal: ProposedBaseline | undefined,
+  forecast: string | undefined,
+): Promise<void> {
+  const unannotated = unannotatedNote(outcome);
+  const pr = ctx.event.pull_request;
+  if (ctx.env["INPUT_PR-COMMENT"] === "true" && pr) {
+    const countdown = await readCountdown(outcome, ctx);
+    const body = scanCommentBody(outcome, unannotated, proposal, forecast, countdown);
+    await writeSummary(body);
+    await postComment(body, ctx);
+    return;
+  }
+  await writeSummary(stepSummaryBody(outcome, unannotated, proposal, forecast));
+  if (proposal) await postComment(scanCommentBody(outcome, unannotated, proposal, forecast, undefined), ctx);
+  else if (pr && forecast) await postComment(`${PR_COMMENT_MARKER}\n\n${forecast}`, ctx, true);
 }
 
 /**
@@ -663,22 +706,8 @@ async function reportOutcome(
   for (const annotation of outcome.annotations) console.log(annotationCommand(annotation));
   warnAboutSuppressions(outcome);
   await publishOutputs(outcome);
-  const unannotated = unannotatedNote(outcome);
   const forecast = await publishForecast(outcome, ctx, forecastMonths);
-  await writeSummary(
-    outcome.result.findings,
-    outcome.gateFailed,
-    outcome.gate,
-    outcome.result.data,
-    outcome.expiredFailure,
-    outcome.result.suppressions,
-    outcome.diff,
-    outcome.packages,
-    unannotated,
-    proposal ? { path: proposal.path, count: proposal.baseline.findings.length } : undefined,
-    forecast,
-  );
-  await postComment(outcome, ctx.event, unannotated, proposal, ctx.event.pull_request ? forecast : undefined);
+  await publishScanSummaries(outcome, ctx, proposal, forecast);
   await postFixSuggestions(outcome, ctx.event);
   await publishFixes(outcome.result);
   await updateTrackingIssue(outcome);
