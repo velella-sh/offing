@@ -1,0 +1,1 @@
+- Show grouped lifecycle deadlines for changed lines in pull request comments and use the same summary on forks.

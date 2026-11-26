@@ -616,3 +616,48 @@ test("action.yml declares annotations with an empty default and passes it to the
   assert.equal(action.inputs.annotations?.default, "");
   assert.equal(action.runs.steps[0]?.env?.INPUT_ANNOTATIONS, "${{ inputs.annotations }}");
 });
+
+test("pr-comment shares its countdown with a fork summary and uploads the before/after receipt", async () => {
+  const root = await gitRepository("offing-countdown-receipt-");
+  git(root, ["commit", "-q", "--allow-empty", "-m", "base"]);
+  const base = git(root, ["rev-parse", "HEAD"]).trim();
+  const scope = join(root, "packages", "app");
+  await mkdir(scope, { recursive: true });
+  await writeFile(join(scope, "Dockerfile"), "FROM node:22-alpine\n");
+  git(root, ["add", "."]);
+  git(root, ["commit", "-q", "-m", "head"]);
+  const head = git(root, ["rev-parse", "HEAD"]).trim();
+  const eventPath = join(root, "event.json");
+  const event = (name: string) => ({
+    pull_request: {
+      number: 42,
+      base: { sha: base, repo: { full_name: "base/repo" } },
+      head: { sha: head, repo: { full_name: name } },
+    },
+  });
+  const env = {
+    INPUT_PATH: scope,
+    GITHUB_EVENT_PATH: eventPath,
+    GITHUB_SERVER_URL: "https://github.com",
+    GITHUB_REPOSITORY: "base/repo",
+    GITHUB_RUN_ID: "99",
+    "INPUT_PR-COMMENT": "true",
+    "INPUT_FAIL-ON-SEVERITY": "none",
+    INPUT_ANNOTATIONS: "none",
+  };
+  await writeFile(eventPath, JSON.stringify(event("fork/repo")));
+  const fork = await runAction(root, { ...env, "INPUT_GITHUB-TOKEN": "read-only" });
+  assert.equal(fork.code, 0);
+  assert.match(fork.stdout, /fork pull request uses a read-only token/);
+  assert.match(fork.summary, /### PR countdown/);
+  assert.match(fork.summary, /\[Receipt\].*\[Evidence\]/);
+  assert.match(fork.summary, /Dockerfile:1/);
+  assert.match(fork.outputs, /receipt-path=.*offing-receipt\.json/);
+  const receipt = JSON.parse(await readFile(join(root, ".runner", "offing-receipt.json"), "utf8"));
+  assert.equal(receipt.introduced[0]?.path, "Dockerfile");
+  assert.equal(receipt.introduced[0]?.line, 1);
+
+  await writeFile(eventPath, JSON.stringify(event("base/repo")));
+  const sameRepository = await runAction(root, { ...env, "INPUT_GITHUB-TOKEN": "" });
+  assert.equal(sameRepository.summary, fork.summary);
+});

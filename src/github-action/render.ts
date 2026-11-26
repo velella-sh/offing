@@ -8,6 +8,8 @@ import { buildForecast } from "@velella/ebb/forecast";
 import { required } from "../required.js";
 import { describeData } from "../reporters.js";
 import { severityRank } from "./inputs.js";
+import { renderPrCountdown } from "./pr-countdown.js";
+import type { PullRequestCountdown } from "./pr-countdown.js";
 import type {
   GitHubActionFailure,
   GitHubAnnotation,
@@ -88,8 +90,7 @@ function daysBetween(from: string, to: string): number {
  * lists exactly the dated findings the scan reports. Capped like the findings table, so a large report
  * stays inside GitHub's summary size limit.
  */
-function renderTimeline(findings: readonly Finding[]): string[] {
-  const today = new Date().toISOString().slice(0, 10);
+function renderTimeline(findings: readonly Finding[], today = new Date().toISOString().slice(0, 10)): string[] {
   const forecast = buildForecast({ root: ".", findings }, [], today);
   if (forecast.total === 0) return [];
 
@@ -261,6 +262,21 @@ function appendDataSection(lines: string[], data: DataInfo | undefined): void {
  * `unannotated` counts the findings that are not on a line the pull request changed, with a link to the full report.
  * `agent` adds the stale choices an agent-authored pull request introduced, with the replacements.
  */
+function appendTimeline(
+  lines: string[],
+  findings: readonly Finding[],
+  countdown: PullRequestCountdown | undefined,
+): void {
+  if (!countdown) {
+    lines.push(...renderTimeline(findings));
+    return;
+  }
+  const timeline = renderTimeline(countdown.timelineFindings, countdown.today);
+  if (timeline.length > 0) {
+    lines.push("<details>", "<summary>Repository timeline</summary>", "", ...timeline, "</details>", "");
+  }
+}
+
 export function renderSummary(
   findings: readonly Finding[],
   failed: boolean,
@@ -272,10 +288,12 @@ export function renderSummary(
   packages?: readonly PackageScanSummary[],
   unannotated?: UnannotatedFindings,
   agent?: AgentIntroducedFindings,
+  countdown?: PullRequestCountdown,
 ): string {
   const lines = ["## Offing", "", renderOverview(findings, failed, gate, diff, packages), ""];
+  if (countdown) lines.push(...renderPrCountdown(countdown));
   if (agent) lines.push(...renderAgentSection(agent.findings));
-  lines.push(...renderTimeline(findings));
+  appendTimeline(lines, findings, countdown);
   appendFindingSections(lines, findings, packages);
   appendDiffSection(lines, diff);
   appendUnannotatedSection(lines, unannotated);
@@ -287,6 +305,32 @@ export function renderSummary(
 
 /** Hidden marker that identifies the one comment Offing owns on a pull request, so re-runs update it. */
 export const PR_COMMENT_MARKER = "<!-- offing-pr-comment -->";
+
+const COMMENT_LIMIT_BYTES = 65_536;
+
+/** Keep the marker and complete Markdown sections when a scan produces a very large comment. */
+export function limitPullRequestComment(body: string, compact: () => string): string {
+  if (Buffer.byteLength(body, "utf8") <= COMMENT_LIMIT_BYTES) return body;
+  const notice = "\nSome details were omitted to fit GitHub’s comment limit. The JSON report lists every finding.\n";
+  const limited = `${compact()}${notice}`;
+  return Buffer.byteLength(limited, "utf8") <= COMMENT_LIMIT_BYTES
+    ? limited
+    : `${PR_COMMENT_MARKER}\n## Offing\n${notice}`;
+}
+
+/** Keeps the overview and countdown if the supplementary sections exceed the comment budget. */
+export function compactPullRequestComment(
+  findings: readonly Finding[],
+  failed: boolean,
+  gate: SeverityGate,
+  attribution: boolean,
+  countdown?: PullRequestCountdown,
+): string {
+  const lines = [PR_COMMENT_MARKER, "## Offing", "", renderOverview(findings, failed, gate, undefined, undefined), ""];
+  if (countdown) lines.push(...renderPrCountdown(countdown));
+  if (attribution) lines.push(ATTRIBUTION_LINE, "");
+  return lines.join("\n");
+}
 
 /** The pull-request comment: the marker, then the same counts and top findings as the job summary. */
 export function renderComment(
@@ -300,6 +344,8 @@ export function renderComment(
   packages?: readonly PackageScanSummary[],
   unannotated?: UnannotatedFindings,
   agent?: AgentIntroducedFindings,
+  countdown?: PullRequestCountdown,
 ): string {
-  return `${PR_COMMENT_MARKER}\n${renderSummary(findings, failed, gate, data, attribution, suppressions, diff, packages, unannotated, agent)}`;
+  const body = `${PR_COMMENT_MARKER}\n${renderSummary(findings, failed, gate, data, attribution, suppressions, diff, packages, unannotated, agent, countdown)}`;
+  return limitPullRequestComment(body, () => compactPullRequestComment(findings, failed, gate, attribution, countdown));
 }
