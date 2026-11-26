@@ -17,9 +17,9 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
-import { readCorpusArchive } from "../benchmarks/corpus-run-archive.js";
+import { CORPUS_RUNS_DIR, readCorpusArchive } from "../benchmarks/corpus-run-archive.js";
 import type { ArchivedCorpusRun } from "../benchmarks/corpus-run-archive.js";
-import { buildDashboardAccuracy, HELD_OUT_RESULT_FILE } from "./dashboard-accuracy.js";
+import { buildDashboardAccuracy, HELD_OUT_RESULT_FILE, loadHeldOutResult } from "./dashboard-accuracy.js";
 import type { HeldOutResult } from "./dashboard-accuracy.js";
 
 import { corpusCounts, loadCorpusTargets, TARGETS_PATH } from "../benchmarks/corpus-targets.js";
@@ -130,7 +130,7 @@ export interface DashboardData {
   schemaVersion: typeof DASHBOARD_SCHEMA;
   referenceDay: string;
   corpus: { file: string; repositories: number; ecosystems: DashboardEcosystem[] };
-  sources: { thresholds: string; corpus: string; targets: string; decision: string };
+  sources: { thresholds: string; corpus: string; targets: string; decision: string; runs: string; heldOut: string };
   /** null when benchmarks/thresholds.json records no full run. */
   run: DashboardRun | null;
   detectors: DashboardDetector[];
@@ -353,6 +353,8 @@ export function buildDashboardData(input: {
       corpus: CORPUS_FILE,
       targets: TARGETS_FILE,
       decision: DECISION_FILE,
+      runs: CORPUS_RUNS_DIR,
+      heldOut: HELD_OUT_RESULT_FILE,
     },
     run,
     detectors,
@@ -369,7 +371,7 @@ export async function buildDashboardDataFromRoot(root: string, today: string): P
   const targets = await loadCorpusTargets(root);
   const corpus = (await loadPublicCorpus(root)).repositories;
   const archives = await readCorpusArchive(root);
-  const heldOut = JSON.parse(await readFile(resolve(root, HELD_OUT_RESULT_FILE), "utf8")) as HeldOutResult;
+  const heldOut = await loadHeldOutResult(root);
   const day = today === "run-date" ? thresholds.lastFullRun?.date : today;
   if (day === undefined) throw new Error(`--today run-date needs a lastFullRun in ${THRESHOLDS_FILE}.`);
   return buildDashboardData({ thresholds, corpus, targets, today: day, archives, heldOut });

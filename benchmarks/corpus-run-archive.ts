@@ -22,6 +22,7 @@ export interface AccuracyMiss {
 
 export interface ArchivedCorpusRun extends FullRunRecord {
   ebbVersion: string;
+  recordedAt?: string;
   perEcosystem: Record<string, AccuracyCounts & { repositories: number; misses: AccuracyMiss[] }>;
 }
 
@@ -72,10 +73,12 @@ export async function readCorpusArchive(root: string): Promise<ArchivedCorpusRun
     if (error.code === "ENOENT") return [];
     throw error;
   });
-  return Promise.all(
+  const archives = await Promise.all(
     files
       .filter((file) => /^\d{4}-\d{2}-\d{2}-[a-f0-9]{7,40}\.json$/.test(file))
       .sort()
       .map(async (file) => JSON.parse(await readFile(resolve(dir, file), "utf8")) as ArchivedCorpusRun),
   );
+  const time = (run: ArchivedCorpusRun) => run.recordedAt ?? `${run.date}T00:00:00.000Z`;
+  return archives.sort((left, right) => time(left).localeCompare(time(right), "en"));
 }

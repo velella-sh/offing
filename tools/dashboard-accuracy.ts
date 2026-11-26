@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+
 import type { AccuracyCounts, AccuracyMiss, ArchivedCorpusRun } from "../benchmarks/corpus-run-archive.js";
 import { maturityLevels } from "../benchmarks/thresholds.js";
 import type { FullRunRecord, MaturityLevel, Thresholds } from "../benchmarks/thresholds.js";
@@ -9,6 +12,48 @@ export interface HeldOutResult {
   run?: { date: string; commit: string; ebbVersion: string };
   summary: AccuracyCounts & { repositories: number };
   repositories: Array<{ repository: string; commit: string; missing: string[]; unexpected: string[] }>;
+}
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === "string");
+}
+
+function heldOutRepository(value: unknown): value is HeldOutResult["repositories"][number] {
+  return (
+    isObject(value) &&
+    typeof value.repository === "string" &&
+    typeof value.commit === "string" &&
+    isStringArray(value.missing) &&
+    isStringArray(value.unexpected)
+  );
+}
+
+function isHeldOutResult(value: unknown): value is HeldOutResult {
+  if (!isObject(value) || value.schemaVersion !== "offing.held-out-result.v1") return false;
+  const { run, scope, summary, repositories } = value;
+  const counts = ["repositories", "truePositives", "falsePositives", "falseNegatives"];
+  const validRun =
+    run === undefined ||
+    (isObject(run) && ["date", "commit", "ebbVersion"].every((key) => typeof run[key] === "string"));
+  return (
+    validRun &&
+    isStringArray(scope) &&
+    isObject(summary) &&
+    counts.every((key) => Number.isSafeInteger(summary[key])) &&
+    Array.isArray(repositories) &&
+    repositories.every(heldOutRepository) &&
+    summary.repositories === repositories.length
+  );
+}
+
+export async function loadHeldOutResult(root: string): Promise<HeldOutResult> {
+  const value: unknown = JSON.parse(await readFile(resolve(root, HELD_OUT_RESULT_FILE), "utf8"));
+  if (!isHeldOutResult(value)) throw new Error(`${HELD_OUT_RESULT_FILE} is not a valid held-out result.`);
+  return value;
 }
 
 const ratio = (numerator: number, denominator: number): number | null =>
@@ -53,7 +98,7 @@ function missLink({ finding, repository, commit, kind }: AccuracyMiss): string {
   const [ruleId, ...location] = finding.split(":");
   const line = location.pop();
   const path = location.join(":").split("/").map(encodeURIComponent).join("/");
-  const label = `${kind === "missing" ? "Missing" : "Unexpected"}: ${ruleId}`.replace(/[\[\]\\]/g, "\\$&");
+  const label = `${kind === "missing" ? "Missing" : "Unexpected"}: ${ruleId}`.replace(/[[\]\\]/g, "\\$&");
   const [owner, repo] = repository.split("/").map(encodeURIComponent);
   const anchor = line && /^\d+$/.test(line) ? `#L${line}` : "";
   return `- [${label} in ${owner}/${repo}](https://github.com/${owner}/${repo}/blob/${commit}/${path}${anchor})`;

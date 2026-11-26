@@ -84,7 +84,10 @@ try {
   const thresholds = JSON.parse(thresholdsText) as Thresholds;
   const record = buildFullRunRecord(report, thresholds, { date, commit });
   const ebb = dataInfoFrom(await getActiveData());
-  await writeCorpusArchive(".", archiveCorpusRun(record, ebb.version, report.repositories));
+  await writeCorpusArchive(".", {
+    ...archiveCorpusRun(record, ebb.version, report.repositories),
+    recordedAt: new Date().toISOString(),
+  });
   await writeFile(THRESHOLDS, withLastFullRun(thresholdsText, record));
   await run(process.execPath, [resolve("dist/tools/build-dashboard-data.js"), "--today", "run-date"]);
   await run(process.execPath, [resolve("dist/tools/coverage-matrix.js")]);
