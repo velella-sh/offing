@@ -1,0 +1,287 @@
+{
+  "repository": "nopSolutions/nopCommerce",
+  "commit": "e83c2e3d70687c74cf9e0d6eb983a1432b44460e",
+  "ecosystem": "dotnet",
+  "selection": "targeted",
+  "expected": [
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "Dockerfile",
+      "line": 2,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read Dockerfile:2 at the pinned commit: `FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "Dockerfile",
+      "line": 43,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read Dockerfile:43 at the pinned commit: `FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS runtime`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "global.json",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read global.json:3 at the pinned commit: `\"version\": \"8.0.204\",`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj:5 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Libraries/Nop.Core/Nop.Core.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Libraries/Nop.Core/Nop.Core.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Libraries/Nop.Data/Nop.Data.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Libraries/Nop.Data/Nop.Data.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Libraries/Nop.Services/Nop.Services.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Libraries/Nop.Services/Nop.Services.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.DiscountRules.CustomerRoles/Nop.Plugin.DiscountRules.CustomerRoles.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.DiscountRules.CustomerRoles/Nop.Plugin.DiscountRules.CustomerRoles.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.ExchangeRate.EcbExchange/Nop.Plugin.ExchangeRate.EcbExchange.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.ExchangeRate.EcbExchange/Nop.Plugin.ExchangeRate.EcbExchange.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.ExternalAuth.Facebook/Nop.Plugin.ExternalAuth.Facebook.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.ExternalAuth.Facebook/Nop.Plugin.ExternalAuth.Facebook.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Misc.Brevo/Nop.Plugin.Misc.Brevo.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Misc.Brevo/Nop.Plugin.Misc.Brevo.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Misc.NopMobileApp/Nop.Plugin.Misc.NopMobileApp.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Misc.NopMobileApp/Nop.Plugin.Misc.NopMobileApp.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Misc.Omnisend/Nop.Plugin.Misc.Omnisend.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Misc.Omnisend/Nop.Plugin.Misc.Omnisend.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Misc.WebApi.Frontend/Nop.Plugin.Misc.WebApi.Frontend.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Misc.WebApi.Frontend/Nop.Plugin.Misc.WebApi.Frontend.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Misc.Zettle/Nop.Plugin.Misc.Zettle.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Misc.Zettle/Nop.Plugin.Misc.Zettle.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Nop.Plugin.Payments.CheckMoneyOrder.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Nop.Plugin.Payments.CheckMoneyOrder.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Payments.Manual/Nop.Plugin.Payments.Manual.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Payments.Manual/Nop.Plugin.Payments.Manual.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Nop.Plugin.Payments.PayPalCommerce.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Nop.Plugin.Payments.PayPalCommerce.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Pickup.PickupInStore/Nop.Plugin.Pickup.PickupInStore.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Pickup.PickupInStore/Nop.Plugin.Pickup.PickupInStore.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/Nop.Plugin.Shipping.FixedByWeightByTotal.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/Nop.Plugin.Shipping.FixedByWeightByTotal.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Shipping.UPS/Nop.Plugin.Shipping.UPS.csproj",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Shipping.UPS/Nop.Plugin.Shipping.UPS.csproj:3 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Tax.Avalara/Nop.Plugin.Tax.Avalara.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Tax.Avalara/Nop.Plugin.Tax.Avalara.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/Nop.Plugin.Tax.FixedOrByCountryStateZip.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/Nop.Plugin.Tax.FixedOrByCountryStateZip.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Widgets.FacebookPixel/Nop.Plugin.Widgets.FacebookPixel.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Widgets.FacebookPixel/Nop.Plugin.Widgets.FacebookPixel.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Widgets.GoogleAnalytics/Nop.Plugin.Widgets.GoogleAnalytics.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Widgets.GoogleAnalytics/Nop.Plugin.Widgets.GoogleAnalytics.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Widgets.NivoSlider/Nop.Plugin.Widgets.NivoSlider.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Widgets.NivoSlider/Nop.Plugin.Widgets.NivoSlider.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Plugins/Nop.Plugin.Widgets.What3words/Nop.Plugin.Widgets.What3words.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Plugins/Nop.Plugin.Widgets.What3words/Nop.Plugin.Widgets.What3words.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Presentation/Nop.Web/Nop.Web.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Presentation/Nop.Web/Nop.Web.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-8.0",
+      "path": "src/Tests/Nop.Tests/Nop.Tests.csproj",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read src/Tests/Nop.Tests/Nop.Tests.csproj:4 at the pinned commit: `<TargetFramework>net8.0</TargetFramework>`. This declaration selects .NET 8 (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    }
+  ]
+}

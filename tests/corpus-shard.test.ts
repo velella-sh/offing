@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+import { corpusShardCacheKeys } from "../benchmarks/corpus-cache-key.js";
 import { describeShard, parseShard, shardCoversEverything, shardEntries } from "../benchmarks/corpus-shard.js";
 
 test("--shard reads <index>/<count> in both spellings", () => {
@@ -40,4 +41,27 @@ test("only a single shard covers everything; a sharded run is not a full run", (
   assert.equal(shardCoversEverything({ index: 1, count: 1 }), true);
   assert.equal(shardCoversEverything({ index: 1, count: 2 }), false);
   assert.match(describeShard({ index: 2, count: 8 }, 70, 557), /SHARD 2\/8: 70 of 557 entries/);
+});
+
+test("a shard cache key follows its own pinned checkouts and sparse inputs", () => {
+  const entries = [
+    { repository: "owner/one", commit: "one", note: "initial evidence" },
+    { repository: "owner/two", commit: "two", note: "initial evidence" },
+  ];
+  const shard = { index: 1, count: 2 };
+  const keyFor = (pins: typeof entries, fingerprint = "sparse:example") =>
+    corpusShardCacheKeys(pins, shard, fingerprint);
+  const initial = keyFor(entries);
+  assert.deepEqual(
+    keyFor([
+      { ...entries[0]!, note: "updated evidence" },
+      { ...entries[1]!, commit: "changed" },
+    ]),
+    initial,
+  );
+  const repinned = keyFor([{ ...entries[0]!, commit: "changed" }, entries[1]!]);
+  assert.equal(repinned.prefix, initial.prefix);
+  assert.notEqual(repinned.key, initial.key);
+  assert.notEqual(keyFor(entries, "sparse:new-input").prefix, initial.prefix);
+  assert.notEqual(corpusShardCacheKeys(entries, { index: 2, count: 2 }, "sparse:example").prefix, initial.prefix);
 });
