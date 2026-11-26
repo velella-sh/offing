@@ -22,7 +22,7 @@ offing check pkg:pypi/django
 
 The Django project lists the 1.8 release series as unsupported: it no longer receives security updates or bug fixes, and its end of extended support was April 1, 2018.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

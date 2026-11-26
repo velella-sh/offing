@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-functions-runtime/nodejs8
 
 The Cloud Run functions runtime support schedule lists Node.js 8 (runtime ID nodejs8) as deprecated on 2020-06-05 and decommissioned later. Google no longer provides maintenance for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

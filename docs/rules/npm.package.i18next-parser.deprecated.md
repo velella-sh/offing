@@ -22,7 +22,7 @@ offing check pkg:npm/i18next-parser
 
 npm marks i18next-parser as deprecated: "Project is deprecated, use i18next-cli instead"
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

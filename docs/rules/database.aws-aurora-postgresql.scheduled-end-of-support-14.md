@@ -22,7 +22,7 @@ offing check pkg:generic/aws-aurora/postgresql
 
 AWS ends standard support for Aurora PostgreSQL 14 on 2027-02-28. RDS Extended Support may keep it running for a fee through 2030-02-28. Upgrade to Aurora PostgreSQL 16 or later before then.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

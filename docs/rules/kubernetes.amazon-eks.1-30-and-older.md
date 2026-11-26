@@ -22,7 +22,7 @@ offing check pkg:generic/amazon-eks
 
 The Amazon EKS release calendar no longer lists 1.30 or earlier: each passed its end of extended support, after which Amazon EKS upgrades the control plane on its own to the oldest version still in extended support. The calendar gives no date for these releases, so this rule carries none.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

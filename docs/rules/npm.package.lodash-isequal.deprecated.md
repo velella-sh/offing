@@ -22,7 +22,7 @@ offing check pkg:npm/lodash.isequal
 
 npm recommends replacing lodash.isequal with node\:util.isDeepStrictEqual.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

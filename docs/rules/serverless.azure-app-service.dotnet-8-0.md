@@ -22,7 +22,7 @@ offing check pkg:generic/azure-app-service/dotnet
 
 Azure App Service follows the community support timeline for each language stack: past the end-of-support date the app keeps running, but the platform stops providing security patches or related support for that runtime version. The .NET support policy announces the end of support for .NET 8 on 2026-11-10, so plan the DOTNETCORE|8.0 stack upgrade before that date.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

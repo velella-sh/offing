@@ -22,7 +22,7 @@ offing check pkg:generic/azure-app-service/dotnet
 
 Azure App Service follows the community support timeline for each language stack: past the end-of-support date the app keeps running, but the platform stops providing security patches or related support for that runtime version. .NET Core 3.1, the newest release in this range, left support on 2022-12-13, so a DOTNETCORE|3.1 or older app runs an unpatched runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

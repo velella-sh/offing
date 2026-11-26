@@ -22,7 +22,7 @@ offing check pkg:golang/cloud.google.com/go/pubsub
 
 The latest cloud.google.com/go/pubsub module declares: "use cloud.google.com/go/pubsub/v2 instead. This version will be supported with bug fixes and security patches until December 31st, 2026. For migration, see https://github.com/googleapis/google-cloud-go/blob/main/pubsub/MIGRATING.md"
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-functions-runtime/ruby32
 
 The Cloud Run functions runtime support schedule lists Ruby 3.2 (runtime ID ruby32) as deprecated on 2026-03-31 and decommissioned on 2026-09-30. Google no longer provides maintenance for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

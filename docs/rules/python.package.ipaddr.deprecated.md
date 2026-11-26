@@ -22,7 +22,7 @@ offing check pkg:pypi/ipaddr
 
 The project states that ipaddr was superseded by the Python standard-library ipaddress module and its Python 2 backport.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

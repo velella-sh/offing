@@ -22,7 +22,7 @@ offing check pkg:generic/azure-app-service/java
 
 Community support for Java 7 ended on 2022-07-29 and Azure App Service retired Java 7, so a JAVA|7 or older app runs a runtime the platform no longer patches. App Service provides and supports OpenJDK builds for Java 8 and later.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

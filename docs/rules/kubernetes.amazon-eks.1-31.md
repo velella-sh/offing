@@ -22,7 +22,7 @@ offing check pkg:generic/amazon-eks
 
 The Amazon EKS release calendar gives 1.31 end of standard support on 2025-11-26 and end of extended support on 2026-11-26. The cluster now receives patches only while extended support is enabled, and pays the extended-support rate per cluster hour.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

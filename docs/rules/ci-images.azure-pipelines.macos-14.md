@@ -22,7 +22,7 @@ offing check pkg:generic/azure-pipelines/macos-image
 
 The macOS 14 Sonoma hosted image deprecation started on 2026-07-06 and its scheduled removal moved to 2026-11-23 (from 2026-11-02), per Microsoft's hosted image deprecation schedule. Brownouts run through 2026-11-20.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

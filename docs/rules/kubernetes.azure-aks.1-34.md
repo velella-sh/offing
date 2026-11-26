@@ -22,7 +22,7 @@ offing check pkg:generic/azure-aks
 
 AKS supports a generally available Kubernetes version for 12 months. The supported-versions page gives AKS 1.34 an end of life of 2026-11-30, with long-term support, which must be enabled for the cluster, ending on 2027-11-30.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

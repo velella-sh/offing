@@ -33,6 +33,11 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - name: Build dashboard data for Mizzen
+        run: npm run build:dashboard --silent
       - name: Install the site tools
         run: |
           mkdir "$RUNNER_TEMP/site-tools"

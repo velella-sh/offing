@@ -22,7 +22,7 @@ offing check pkg:golang/github.com/golang/protobuf
 
 The latest github.com/golang/protobuf module declares: "Use the "google.golang.org/protobuf" module instead."
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

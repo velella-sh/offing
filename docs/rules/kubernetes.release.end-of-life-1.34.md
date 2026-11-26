@@ -22,7 +22,7 @@ offing check pkg:generic/kubernetes
 
 The Kubernetes release history lists Kubernetes 1.34 as end-of-life on 2026-10-27; the release no longer receives security updates or bug fixes.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

@@ -22,7 +22,7 @@ offing check pkg:generic/cmake-generator/visual-studio-12-2013
 
 CMake 3.31 removed the Visual Studio 12 2013 generator. Projects and presets that still name that generator cannot configure on CMake 3.31 or newer. CMake 3.31.0 was published on 2024-11-06.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

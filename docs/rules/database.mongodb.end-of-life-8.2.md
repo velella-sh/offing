@@ -22,7 +22,7 @@ offing check pkg:generic/mongodb
 
 MongoDB Server 8.2 reached end of life on 2026-07-31 and no longer receives fixes from the vendor.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

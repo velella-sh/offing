@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-functions-runtime/python310
 
 The Cloud Run functions runtime support schedule lists Python 3.10 (runtime ID python310) as deprecated on 2026-10-04 and scheduled for decommission on 2027-04-04. Google no longer offers runtime support for deployments that use it.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

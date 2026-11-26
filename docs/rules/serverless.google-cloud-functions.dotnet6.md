@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-functions-runtime/dotnet6
 
 The Cloud Run functions runtime support schedule lists .NET 6 (runtime ID dotnet6) as deprecated on 2024-11-12 and decommissioned on 2025-11-12. Google no longer provides maintenance for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

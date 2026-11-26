@@ -22,7 +22,7 @@ offing check pkg:generic/google-gke
 
 The GKE release schedule lists GKE 1.31 with end of standard support on 2026-01-16 and end of extended support on 2026-10-22. GKE no longer provides patches for this minor version.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

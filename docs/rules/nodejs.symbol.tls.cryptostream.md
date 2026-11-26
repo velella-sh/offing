@@ -22,7 +22,7 @@ offing check pkg:generic/nodejs
 
 Node.js removed tls.CryptoStream (DEP0042: documentation-only since v0.11.3, end-of-life since v10.0.0).
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

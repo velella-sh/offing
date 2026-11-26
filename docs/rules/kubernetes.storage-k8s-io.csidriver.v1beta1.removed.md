@@ -22,7 +22,7 @@ offing check pkg:generic/kubernetes/storage.k8s.io/CSIDriver
 
 The Kubernetes Deprecated API Migration Guide states that the storage.k8s.io/v1beta1 API version of CSIDriver is no longer served as of v1.22, which was released on 2021-08-04.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

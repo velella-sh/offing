@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-functions-runtime/python38
 
 The Cloud Run functions runtime support schedule lists Python 3.8 (runtime ID python38) as deprecated on 2024-10-14 and decommissioned on 2025-10-14. Google no longer provides maintenance for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

@@ -22,7 +22,7 @@ offing check pkg:generic/azure-app-service/node
 
 Azure App Service follows the community support timeline for each language stack: past the end-of-support date the app keeps running, but the platform stops providing security patches or related support for that runtime version. Node.js 16 and every earlier release reached end of life upstream before 2023-09-11, so a NODE|16 or older app runs an unpatched runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

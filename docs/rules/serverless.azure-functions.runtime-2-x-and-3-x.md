@@ -22,7 +22,7 @@ offing check pkg:generic/azure-functions
 
 Azure Functions lists runtime versions 2.x and 3.x as retired, both at end of extended support since 2022-12-13. Apps on ~2 or ~3 are not eligible for new features, security patches, or service support, and v3 apps in the Linux Consumption plan stop running after 2026-09-30.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

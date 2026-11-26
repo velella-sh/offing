@@ -22,7 +22,7 @@ offing check pkg:generic/aws-lambda-runtime/ruby3.3
 
 The AWS Lambda runtimes table lists ruby3.3 as supported with a projected deprecation date of 2027-03-31. After that date AWS no longer applies security or other updates to that managed runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

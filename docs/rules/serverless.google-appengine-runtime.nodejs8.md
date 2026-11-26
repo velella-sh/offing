@@ -22,7 +22,7 @@ offing check pkg:generic/google-appengine-runtime/nodejs8
 
 The App Engine standard environment runtime support schedule lists Node.js 8 (runtime ID nodejs8) with end of support on 2018-06-27 and deprecation on 2019-10-01. Google no longer provides patches or support for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

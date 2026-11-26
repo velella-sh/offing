@@ -22,7 +22,7 @@ offing check pkg:generic/terraform
 
 HashiCorp supports the two most recent Terraform release lines. Terraform 1.1 (first released 2021-12-08) stopped being one of them when Terraform 1.3 was released on 2022-09-21.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

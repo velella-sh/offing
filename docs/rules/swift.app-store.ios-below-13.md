@@ -22,7 +22,7 @@ offing check pkg:generic/ios
 
 Since September 9, 2026, iOS and iPadOS apps uploaded to App Store Connect must target iOS 13 or later.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

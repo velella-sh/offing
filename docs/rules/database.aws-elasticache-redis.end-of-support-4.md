@@ -22,7 +22,7 @@ offing check pkg:generic/aws-elasticache/redis
 
 AWS ended standard support for ElastiCache for Redis OSS 4 on 2026-01-31. RDS Extended Support may keep it running for a fee through 2029-01-31. Upgrade to Valkey or Redis OSS 7.1 or later.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

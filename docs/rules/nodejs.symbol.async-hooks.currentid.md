@@ -22,7 +22,7 @@ offing check pkg:generic/nodejs
 
 Node.js removed async_hooks.currentId (DEP0070: runtime deprecation since v8.2.0, end-of-life since v9.0.0).
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

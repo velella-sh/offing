@@ -22,7 +22,7 @@ offing check pkg:generic/azure-app-service/python
 
 Azure App Service follows the community support timeline for each language stack: past the end-of-support date the app keeps running, but the platform stops providing security patches or related support for that runtime version. The Python release cycle ended support for Python 3.10 on 2026-10-01, so a PYTHON|3.10 app no longer receives a patched runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

@@ -22,7 +22,7 @@ offing check pkg:generic/aws-rds/postgres
 
 AWS ended standard support for RDS for PostgreSQL 9.6 on 2022-04-30. RDS Extended Support was not offered for this version, so it receives no further RDS security or bug fixes. Upgrade to PostgreSQL 15 or later.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

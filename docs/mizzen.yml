@@ -9,8 +9,22 @@ network:
   project: offing
 include:
   - .well-known
-exclude:
-  - dashboard/README.md
+collections:
+  dashboard:
+    source: _data/dashboard-detectors.json
+    id: id
+  dashboard-ecosystems:
+    source: _data/dashboard-ecosystems.json
+    id: id
+  dashboard-minimums:
+    source: _data/dashboard-minimums.json
+    id: id
+  dashboard-run:
+    source: _data/dashboard-run.json
+    id: id
+  rules:
+    source: _data/rules.json
+    id: id
 repository:
   url: https://github.com/velella-sh/offing
   branch: main
@@ -180,6 +194,7 @@ redirects:
   /launch/screenshots.html: /launch/screenshots/
   /launch/show-hn.html: /launch/show-hn/
   /launch/social.html: /launch/social/
+  /lookup.html: /lookup/
   /playbooks/agent.html: /playbooks/agent/
   /playbooks/cli.html: /playbooks/cli/
   /playbooks/github.html: /playbooks/github/

@@ -22,7 +22,7 @@ offing check pkg:generic/azure-functions
 
 Azure Functions supports only version 4.x of the runtime host and ended support for version 1.x on 2026-09-14. A FUNCTIONS_EXTENSION_VERSION of ~1 no longer receives security patches and the app is not eligible for Azure support.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

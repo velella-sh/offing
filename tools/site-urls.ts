@@ -31,7 +31,7 @@ const SKIP_FILES = new Set(["mizzen.yml", "coverage-descriptions.json", "differe
 /** Asset trees and local build output, walked by the page scan. */
 const SKIP_DIRECTORIES = new Set(["assets", "vendor", "_site"]);
 /** Pages that docs/mizzen.yml excludes: repository notes, not site pages. */
-const EXCLUDED_PAGES = new Set(["dashboard/README.md"]);
+const EXCLUDED_PAGES = new Set<string>();
 /** The Mizzen config, relative to the repository root. */
 export const SITE_CONFIG_PATH = "docs/mizzen.yml";
 /**

@@ -22,7 +22,7 @@ offing check pkg:generic/terraform
 
 Terraform v0.12 replaced the list() and map() functions with first-class [ ... ] and { ... } syntax, and the v0.15 upgrade guide states that the deprecated functions were removed in v0.15. Replace list(a, b) with tolist([a, b]) and map(k, v) with tomap({ k = v }); because Terraform can usually infer the type from context, the bare [ ... ] and { ... } forms often work without the conversion. The list(string) and map(string) type constraints are different and remain valid.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

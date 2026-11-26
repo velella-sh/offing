@@ -22,7 +22,7 @@ offing check pkg:generic/terraform
 
 Terraform v0.12.14 deprecated a string whose whole value is one interpolation, such as "${var.name}": the same value is written as the bare expression var.name. Terraform still accepts the quoted form but recommends the bare expression for readability, and terraform fmt repairs simple examples. A string that mixes text with an interpolation, such as "prefix-${var.name}", is not the deprecated form and still needs its quotes.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

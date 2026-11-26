@@ -22,7 +22,7 @@ offing check pkg:npm/w3c-hr-time
 
 npm directs users of w3c-hr-time to native performance.now() and performance.timeOrigin.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

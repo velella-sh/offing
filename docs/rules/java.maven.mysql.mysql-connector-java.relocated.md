@@ -22,7 +22,7 @@ offing check pkg:maven/mysql/mysql-connector-java
 
 The POM of mysql\:mysql-connector-java 8.0.33 declares a relocation to com.mysql\:mysql-connector-j. Its message says: "MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates."
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |
