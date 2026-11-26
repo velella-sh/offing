@@ -4,6 +4,10 @@ name: Release publish tags
 
 on:
   workflow_call:
+    secrets:
+      action_tag_signing_key:
+        description: Dedicated SSH private key for signing major Action tags
+        required: false
     inputs:
       dry_run:
         description: Decide only; push nothing
@@ -75,7 +79,10 @@ jobs:
         run: |
           old_target="$(git ls-remote --refs origin "refs/tags/$MAJOR_TAG" | cut -f1)"
           current_tags=""
-          if [ -n "$old_target" ]; then current_tags="$(git tag --points-at "$old_target")"; fi
+          if [ -n "$old_target" ]; then
+            old_commit="$(git rev-parse "${old_target}^{commit}")"
+            current_tags="$(git tag --points-at "$old_commit")"
+          fi
           echo "old-target=$old_target" >> "$GITHUB_OUTPUT"
           node .github/scripts/major-tag.mjs direction --major "$MAJOR_TAG" --release "$RELEASE_TAG" --current-tags "$current_tags" >> "$GITHUB_OUTPUT"
       - name: Say what would happen (dry run)
@@ -93,15 +100,30 @@ jobs:
           else
             echo "Dry run: no major tag would move. Nothing was pushed." | tee -a "$GITHUB_STEP_SUMMARY"
           fi
-      - name: Move the major Action tag
+      - name: Sign and move the major Action tag
         if: env.DRY_RUN != 'true' && steps.release.outputs.move == 'true'
         env:
           RELEASE_SHA: ${{ steps.release.outputs.release-sha }}
           RELEASE_TAG: ${{ steps.release.outputs.release-tag }}
           MAJOR_TAG: ${{ steps.release.outputs.major-tag }}
           OLD_TARGET: ${{ steps.direction.outputs.old-target }}
+          ACTION_TAG_SIGNING_KEY: ${{ secrets.action_tag_signing_key }}
         shell: bash
         run: |
-          git tag --force "$MAJOR_TAG" "$RELEASE_SHA"
+          if [ -z "$ACTION_TAG_SIGNING_KEY" ]; then
+            echo "::error::Set ACTION_TAG_SIGNING_KEY before publishing a stable major Action tag."
+            exit 1
+          fi
+          umask 077
+          signing_dir="$(mktemp -d)"
+          trap 'rm "$signing_dir/key" "$signing_dir/allowed-signers"; rmdir "$signing_dir"' EXIT
+          printf '%s\n' "$ACTION_TAG_SIGNING_KEY" > "$signing_dir/key"
+          unset ACTION_TAG_SIGNING_KEY
+          public_key="$(ssh-keygen -y -f "$signing_dir/key")"
+          printf 'release@velella.sh %s\n' "$public_key" > "$signing_dir/allowed-signers"
+          git -c user.name='Offing Release' -c user.email=release@velella.sh \
+            -c gpg.format=ssh -c user.signingkey="$signing_dir/key" \
+            tag --sign --force --message "Offing Action $MAJOR_TAG ($RELEASE_TAG)" "$MAJOR_TAG" "$RELEASE_SHA"
+          git -c gpg.format=ssh -c gpg.ssh.allowedSignersFile="$signing_dir/allowed-signers" verify-tag "$MAJOR_TAG"
           git push origin "refs/tags/$MAJOR_TAG" --force-with-lease="refs/tags/$MAJOR_TAG:$OLD_TARGET"
           echo "$MAJOR_TAG now points to $RELEASE_TAG ($RELEASE_SHA)." >> "$GITHUB_STEP_SUMMARY"

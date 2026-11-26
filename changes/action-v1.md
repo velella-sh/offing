@@ -1,0 +1,1 @@
+- Define the GitHub Action v1 contract, report UTC days to the next deadline, and make JSON artifact uploads opt-in.

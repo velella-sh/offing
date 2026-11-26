@@ -252,6 +252,9 @@ jobs:
         if: runner.os == 'Linux' && matrix.node == 24 && matrix.shard == 0
         # Build the bundle from the source under test: an ordinary pull request ships only the committed bundle.
         run: npm run build:action --silent && node dist/benchmarks/action-cold-start.js --check
+      - name: acc-action-v1
+        if: runner.os == 'Linux' && matrix.node == 24 && matrix.shard == 0
+        uses: $/.github/actions/action-conformance
       - name: Upload the build output
         if: runner.os == 'Linux' && matrix.node == 24 && matrix.shard == 0 && github.event_name != 'pull_request'
         # self-scan and perf-budget reuse this build instead of compiling again.
@@ -295,7 +298,7 @@ jobs:
         with:
           baseline: .offing-baseline.json
           fail-on-severity: high
-          report-name: offing-report-${{ github.sha }}
+          upload-report: true
           upload-sarif: ${{ github.event_name == 'push' }}
           upload-badge: ${{ github.event_name == 'push' }}
       - name: Record the packed tarball hash
@@ -486,6 +489,10 @@ jobs:
       - uses: $/.github/actions/setup
         with:
           cache: npm
+      - name: Build the Action for conformance
+        run: npm run build:action --silent
+      - name: acc-action-v1
+        uses: $/.github/actions/action-conformance
       - run: npm run build --silent
       - name: Check the reference pages against the registry
         run: node dist/tools/build-reference-pages.js --check

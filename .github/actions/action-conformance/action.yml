@@ -1,0 +1,35 @@
+name: Action v1 conformance
+description: Check the bundled Offing Action in the workspace against the v1 contract.
+runs:
+  using: composite
+  steps:
+    - name: Prepare isolated consumer checkouts
+      shell: bash
+      run: |
+        mkdir -p "$RUNNER_TEMP/clean" "$RUNNER_TEMP/gate/.github/workflows"
+        printf '%s\n' '{"private":true}' > "$RUNNER_TEMP/clean/package.json"
+        printf '%s\n' 'jobs:' '  test:' '    steps:' '      - uses: actions/checkout@v4' > "$RUNNER_TEMP/gate/.github/workflows/ci.yml"
+    - name: Scan a clean fixture with defaults
+      id: clean
+      uses: ./ # zizmor: ignore[self-repository] -- the checked-out Action is the subject of the test
+      with:
+        path: ${{ runner.temp }}/clean
+    - name: Check the clean scan
+      env:
+        OUTPUTS: ${{ toJSON(steps.clean.outputs) }}
+        OUTCOME: ${{ steps.clean.outcome }}
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/../../../docs/spec/action/conformance/run.mjs" clean "$OUTCOME" <<< "$OUTPUTS"
+    - name: Exercise the severity gate and local SARIF
+      id: gate
+      continue-on-error: true
+      uses: ./ # zizmor: ignore[self-repository] -- the checked-out Action is the subject of the test
+      with:
+        path: ${{ runner.temp }}/gate
+        sarif: "true"
+    - name: Check the gate and SARIF outputs
+      env:
+        OUTPUTS: ${{ toJSON(steps.gate.outputs) }}
+        OUTCOME: ${{ steps.gate.outcome }}
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/../../../docs/spec/action/conformance/run.mjs" gate "$OUTCOME" <<< "$OUTPUTS"

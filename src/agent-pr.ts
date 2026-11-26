@@ -68,7 +68,7 @@ export function renderAgentSection(findings: readonly Finding[]): string[] {
     );
   }
   if (findings.length > AGENT_SECTION_LIMIT)
-    lines.push("", `…and ${findings.length - AGENT_SECTION_LIMIT} more; the JSON report artifact lists every finding.`);
+    lines.push("", `…and ${findings.length - AGENT_SECTION_LIMIT} more; the JSON report lists every finding.`);
   lines.push("", "Replace these and push again; Offing will re-check.", "");
   return lines;
 }

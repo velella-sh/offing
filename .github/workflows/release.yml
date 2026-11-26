@@ -27,9 +27,19 @@ permissions:
   contents: read
 
 jobs:
+  action-conformance:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    uses: ./.github/workflows/action-conformance.yml # zizmor: ignore[self-repository] -- test the bundled Action on the release tag
+    with:
+      action_ref: ${{ github.ref }}
+
   # The npm publish lives here, not in a reusable stage: Scorecard's Packaging check needs a publish in a workflow with its own runs.
   npm-publish:
-    if: ${{ (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+    needs: [action-conformance]
+    if: >-
+      !cancelled() &&
+      ((github.event_name == 'push' && needs.action-conformance.result == 'success') ||
+       (github.event_name == 'workflow_dispatch' && inputs.dry_run))
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -116,6 +126,8 @@ jobs:
     uses: ./.github/workflows/release-publish-tags.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
     permissions:
       contents: write
+    secrets:
+      action_tag_signing_key: ${{ secrets.ACTION_TAG_SIGNING_KEY }}
     with:
       dry_run: ${{ github.event_name == 'workflow_dispatch' }}
       release_tag: ${{ inputs.release_tag || '' }}

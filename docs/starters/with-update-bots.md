@@ -156,7 +156,7 @@ The grouping is the point: Dependabot already updates those packages, and the gr
 Config fragments tell the bots what to do after a finding exists. The CI gate is what notices new findings, including usage that a bot pull request introduces. Copy the workflow from the [Next.js starter](nextjs.md#1-pull-request-workflow):
 
 ```yaml
-- uses: velella-sh/offing@v0.7.1
+- uses: velella-sh/offing@v0.1.1
   with:
     baseline: .offing-baseline.json
     fail-on-severity: high

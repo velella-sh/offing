@@ -88,5 +88,5 @@ test("the section keeps ten findings and points at the report for the rest", () 
   const text = renderAgentSection(many).join("\n");
 
   assert.equal(text.split("\n").filter((line) => line.startsWith("| `package.json:1`")).length, 10);
-  assert.match(text, /…and 2 more; the JSON report artifact lists every finding\./);
+  assert.match(text, /…and 2 more; the JSON report lists every finding\./);
 });

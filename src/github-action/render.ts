@@ -116,7 +116,7 @@ function renderTimeline(findings: readonly Finding[]): string[] {
   if (events.length > SUMMARY_TIMELINE_EVENTS)
     lines.push(
       "",
-      `…and ${events.length - SUMMARY_TIMELINE_EVENTS} more dated events; the JSON report artifact lists every deadline.`,
+      `…and ${events.length - SUMMARY_TIMELINE_EVENTS} more dated events; the JSON report lists every deadline.`,
     );
   lines.push("");
   return lines;
@@ -150,7 +150,7 @@ function appendFindingTables(lines: string[], findings: readonly Finding[]): voi
     );
   }
   if (findings.length > top.length)
-    lines.push("", `…and ${findings.length - top.length} more; the JSON report artifact lists every finding.`);
+    lines.push("", `…and ${findings.length - top.length} more; the JSON report lists every finding.`);
   lines.push("");
 }
 

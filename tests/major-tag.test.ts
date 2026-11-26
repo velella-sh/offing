@@ -131,6 +131,9 @@ test("the workflow uses the script, keeps write access to the major-tag job, and
   assert.ok(push, "there is a push step");
   assert.match(push.if ?? "", /DRY_RUN != 'true'/, "the push step is skipped in a dry run");
   assert.equal(steps.filter((step) => step.run?.includes("git push")).length, 1, "exactly one step pushes");
+  assert.match(push.run ?? "", /tag --sign --force/);
+  assert.match(push.run ?? "", /verify-tag[\s\S]+push origin/);
+  assert.match(push.run ?? "", /--force-with-lease/);
   const text = steps.map((step) => step.run ?? "").join("\n");
   assert.match(text, /major-tag\.mjs select/);
   assert.match(text, /major-tag\.mjs direction/);
