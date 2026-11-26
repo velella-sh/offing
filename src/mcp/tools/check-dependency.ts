@@ -2,7 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
 
 import type { OffingAgentTools } from "../../agent-tools.js";
-import { checkDependency } from "../../check-dependency.js";
+import { assessGuardDependency } from "../../agent-guard.js";
 import { failure, registerMcpTool, success } from "../tool-support.js";
 
 /** Registers `check_dependency`: one package, and optionally one version, against the lifecycle rules. */
@@ -27,7 +27,8 @@ export function registerCheckDependency(server: McpServer, tools: OffingAgentToo
     }),
     async handler(_context, { purl, version }) {
       try {
-        const { status, ...rest } = await checkDependency({ purl, ...(version ? { version } : {}) });
+        const { check } = await assessGuardDependency({ purl, ...(version ? { version } : {}) });
+        const { status, ...rest } = check;
         // An agent reads what to use before the status it branches on, so the replacement of the most severe
         // finding comes first. Each finding keeps its own replacement; the field is left out when none is known.
         const replacement = rest.findings[0]?.replacement;

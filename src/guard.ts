@@ -1,7 +1,7 @@
 import { parsePurl, PurlError, purlIdentity } from "@velella/ebb/purl";
 import crossSpawn from "cross-spawn";
 
-import { checkDependency } from "./check-dependency.js";
+import { assessGuardDependency, meetsGuardThreshold } from "./agent-guard.js";
 import type { DependencyCheck } from "./check-dependency.js";
 import { severityValues } from "./domain.js";
 import { required } from "./required.js";
@@ -59,11 +59,9 @@ interface ParsedGuard {
   verbose: boolean;
 }
 
-const severityRank = new Map(severityValues.map((severity, index) => [severity, index]));
 /** Whether an affected check is severe enough for the gate. */
 export function blocksInstall(check: DependencyCheck, failOn: GuardGate = "high"): boolean {
-  if (failOn === "none" || check.status !== "affected" || check.severity === undefined) return false;
-  return (severityRank.get(check.severity) ?? 0) >= (severityRank.get(failOn) ?? 0);
+  return check.status === "affected" && meetsGuardThreshold(check.severity, failOn);
 }
 
 /** Decides whether the install may run. Pure: it performs no lookup and runs nothing. */
@@ -85,8 +83,10 @@ export async function checkGuardPackages(
 ): Promise<GuardCheck[]> {
   const check =
     options.check ??
-    ((entry: GuardPackage) =>
-      checkDependency({ purl: entry.purl, ...(entry.version === undefined ? {} : { version: entry.version }) }));
+    (async (entry: GuardPackage) => {
+      const input = { purl: entry.purl, ...(entry.version === undefined ? {} : { version: entry.version }) };
+      return (await assessGuardDependency(input, options.failOn)).check;
+    });
   const checks: GuardCheck[] = [];
   for (const entry of packages) {
     try {

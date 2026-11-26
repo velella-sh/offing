@@ -1,0 +1,16 @@
+{
+  "request": {
+    "name": "agent_guard",
+    "arguments": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "purl": "pkg:npm/request@2.88.2"
+    }
+  },
+  "response": {
+    "schemaVersion": "offing.agent-guard.response.v1",
+    "decision": "block",
+    "reason": "request is deprecated (high; blocking threshold: high).",
+    "replacement": "Native fetch or a maintained HTTP client",
+    "source": "https://www.npmjs.com/package/request"
+  }
+}

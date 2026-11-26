@@ -152,6 +152,7 @@ test("no tool, resource, or prompt changes the repository tree", async () => {
       check_dependency: { purl: "pkg:npm/request@2.88.2" },
       check_upgrade: { path: root, target: "php@8.4" },
       check_snippet: { path: "Dockerfile", content: "FROM node:16\n" },
+      agent_guard: { schemaVersion: "offing.agent-guard.request.v1", purl: "pkg:npm/request@2.88.2" },
       forecast_repository: { repository_path: root, as_of: "2026-10-29" },
       plan_migrations: { repository_path: root },
       recommend_version: { product: "node", as_of: "2026-01-01" },

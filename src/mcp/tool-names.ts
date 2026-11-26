@@ -8,6 +8,7 @@ export const MCP_TOOL_NAMES = [
   "check_dependency",
   "check_upgrade",
   "check_snippet",
+  "agent_guard",
   "forecast_repository",
   "plan_migrations",
   "recommend_version",
@@ -25,6 +26,7 @@ export const MCP_OUTPUT_SCHEMA_FILES = {
   check_dependency: "check.v1.schema.json",
   check_upgrade: "upgrade.v1.schema.json",
   check_snippet: "check-snippet.v1.schema.json",
+  agent_guard: "agent-guard-response.v1.schema.json",
   forecast_repository: "forecast.v1.schema.json",
   plan_migrations: "plan.v1.schema.json",
   recommend_version: "recommend.v1.schema.json",
@@ -54,4 +56,4 @@ export const MCP_TOOL_MORE_HINTS = {
   forecast_repository: "The complete forecast: offing forecast <path> --months <n> --as-of <date> --json.",
   plan_migrations: "The complete plan: offing plan <path> --json.",
   recommend_version: "The complete answer: offing recommend <product> --json.",
-} as const satisfies Record<McpToolName, string>;
+} as const satisfies Record<Exclude<McpToolName, "agent_guard">, string>;

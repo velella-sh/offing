@@ -551,6 +551,7 @@ test("every tool advertises an outputSchema, and its structured content validate
       ["check_dependency", { purl: "pkg:npm/express" }],
       ["check_upgrade", { path: root, target: "php@8.4" }],
       ["check_snippet", { path: "Dockerfile", content: "FROM node:16\n" }],
+      ["agent_guard", { schemaVersion: "offing.agent-guard.request.v1", purl: "pkg:npm/request@2.88.2" }],
       ["forecast_repository", { repository_path: root, as_of: "2026-10-29" }],
       ["plan_migrations", { repository_path: root }],
       ["recommend_version", { product: "node", as_of: "2026-01-01" }],
@@ -613,6 +614,10 @@ test("every tool schema carries the published `more` pointer, whole, and never r
   for (const tool of MCP_TOOL_NAMES) {
     const schema = await read(MCP_OUTPUT_SCHEMA_FILES[tool]);
     const properties = schema.properties as Record<string, unknown>;
+    if (tool === "agent_guard") {
+      assert.equal(properties.more, undefined, "the transport-independent verdict carries one finding at most");
+      continue;
+    }
     assert.deepEqual(properties.more, pointer, `${tool} carries the published pointer`);
     assert.ok(
       !(schema.required as string[]).includes("more"),

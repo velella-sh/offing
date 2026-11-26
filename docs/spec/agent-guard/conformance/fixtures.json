@@ -1,0 +1,126 @@
+[
+  {
+    "id": "deprecated-package",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "purl": "pkg:npm/request@2.88.2"
+    },
+    "expected": {
+      "decision": "block",
+      "replacement": "Native fetch or a maintained HTTP client",
+      "source": "https://www.npmjs.com/package/request"
+    }
+  },
+  {
+    "id": "blocking-disabled",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "purl": "pkg:npm/request@2.88.2",
+      "context": {
+        "failOn": "none"
+      }
+    },
+    "expected": {
+      "decision": "warn",
+      "replacement": "Native fetch or a maintained HTTP client",
+      "source": "https://www.npmjs.com/package/request"
+    }
+  },
+  {
+    "id": "below-threshold",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "purl": "pkg:npm/request@2.88.2",
+      "context": {
+        "failOn": "critical"
+      }
+    },
+    "expected": {
+      "decision": "warn",
+      "replacement": "Native fetch or a maintained HTTP client",
+      "source": "https://www.npmjs.com/package/request"
+    }
+  },
+  {
+    "id": "unaffected-release",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "purl": "pkg:github/actions/checkout@v5"
+    },
+    "expected": {
+      "decision": "allow"
+    }
+  },
+  {
+    "id": "requires-version",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "purl": "pkg:github/actions/checkout"
+    },
+    "expected": {
+      "decision": "warn"
+    }
+  },
+  {
+    "id": "missing-data",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "purl": "pkg:npm/offing-conformance-unlisted"
+    },
+    "expected": {
+      "decision": "warn"
+    }
+  },
+  {
+    "id": "end-of-life-image",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "snippet": {
+        "path": "Dockerfile",
+        "content": "FROM node:16\n"
+      }
+    },
+    "expected": {
+      "decision": "block",
+      "replacement": "A node image on a supported release line, such as node:22",
+      "source": "https://nodejs.org/en/about/eol"
+    }
+  },
+  {
+    "id": "supported-image",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "snippet": {
+        "path": "Dockerfile",
+        "content": "FROM node:24\n"
+      }
+    },
+    "expected": {
+      "decision": "allow"
+    }
+  },
+  {
+    "id": "multiple-subjects",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "purl": "pkg:npm/request@2.88.2",
+      "snippet": {
+        "path": "Dockerfile",
+        "content": "FROM node:16\n"
+      },
+      "language": "dockerfile"
+    },
+    "expected": null
+  },
+  {
+    "id": "outside-repository",
+    "request": {
+      "schemaVersion": "offing.agent-guard.request.v1",
+      "snippet": {
+        "path": "../Dockerfile",
+        "content": "FROM node:16\n"
+      }
+    },
+    "expected": null
+  }
+]

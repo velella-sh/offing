@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/server";
 
 import type { OffingAgentTools } from "../agent-tools.js";
+import { registerAgentGuard } from "./tools/agent-guard.js";
 import { registerCheckDependency } from "./tools/check-dependency.js";
 import { registerCheckSnippet } from "./tools/check-snippet.js";
 import { registerCheckUpgrade } from "./tools/check-upgrade.js";
@@ -26,6 +27,7 @@ export const MCP_TOOL_REGISTRARS = [
   registerCheckDependency,
   registerCheckUpgrade,
   registerCheckSnippet,
+  registerAgentGuard,
   registerForecastRepository,
   registerPlanMigrations,
   registerRecommendVersion,

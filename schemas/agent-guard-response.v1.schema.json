@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/agent-guard-response.v1.schema.json",
+  "title": "Agent Guard response v1",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "offing.agent-guard.response.v1"
+    },
+    "decision": {
+      "enum": [
+        "allow",
+        "warn",
+        "block"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "pattern": "\\S",
+      "maxLength": 350
+    },
+    "replacement": {
+      "type": "string",
+      "pattern": "\\S",
+      "maxLength": 350
+    },
+    "source": {
+      "type": "string",
+      "pattern": "^https?://[^/\\s]+[^\\s]*$",
+      "maxLength": 1000
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "decision",
+    "reason"
+  ],
+  "additionalProperties": false
+}

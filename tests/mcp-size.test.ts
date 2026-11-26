@@ -92,6 +92,10 @@ test("every tool keeps its answer under 2,000 tokens on a large input, valid aga
       check_dependency: { purl: `pkg:npm/${LONG_INPUT}` },
       check_upgrade: { path: root, target: "php@8.4" },
       check_snippet: { path: "src/many.js", content: SNIPPET },
+      agent_guard: {
+        schemaVersion: "offing.agent-guard.request.v1",
+        snippet: { path: "src/many.js", content: SNIPPET },
+      },
       forecast_repository: { repository_path: root, months: 24, as_of: "2025-01-01" },
       plan_migrations: { repository_path: root },
       recommend_version: { product: `no-such-product-${LONG_INPUT}` },
@@ -110,6 +114,11 @@ test("every tool keeps its answer under 2,000 tokens on a large input, valid aga
       assert.ok(validate, `${name} advertises an output schema`);
       assert.equal(validate(answer), true, `${name}: ${JSON.stringify(validate.errors?.slice(0, 2))}`);
       assert.deepEqual(JSON.parse(text), answer, `${name}: the JSON text is the structured content`);
+
+      if (name === "agent_guard") {
+        assert.equal(answer.more, undefined, "a verdict carries one finding at most");
+        continue;
+      }
 
       // The inputs are large, so it is the cap that keeps each answer short, and the pointer says so.
       const more = answer.more as MorePointer | undefined;
