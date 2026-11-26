@@ -112,6 +112,27 @@ jobs:
           node .github/scripts/acc-config-validate.mjs "$out"/*.tgz \
             "$out/npm-install/node_modules/.bin/offing" "$out/pre-commit/bin/pre-commit"
 
+      - name: acc-guard-protocol
+        working-directory: ${{ runner.temp }}
+        env:
+          OFFING_DATA_VERSION: bundled
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          tarball="$(ls "$out"/*.tgz)"
+          suite="$GITHUB_WORKSPACE/docs/spec/agent-guard/conformance"
+          node "$suite/check.mjs" "$bin" guard --protocol
+          node "$GITHUB_WORKSPACE/.github/scripts/acc-guard-protocol.mjs" "$bin"
+          {
+            printf '### acc-guard-protocol\n\n'
+            printf -- '- Tarball %s\n' "$(basename "$tarball")"
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$tarball" | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI version %s\n' "$("$bin" --version)"
+            printf -- '- Tested commit %s\n' "$GITHUB_SHA"
+            printf -- '- The installed CLI and MCP server passed the standalone Agent Guard cases.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build the Docker image and scan the fixture
         id: docker
         run: |
