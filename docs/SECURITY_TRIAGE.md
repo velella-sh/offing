@@ -98,6 +98,7 @@ To dismiss an alert:
 |---|---|---|---|---|
 | 2026-11-07 | code-scanning#241 | `node` image in `benchmarks/agent-staleness/outputs/seed/hooks/dockerfile-node-app/` (PinnedDependencies) | `used in tests` / fixture seed, not shipped | [@arminazimi](https://github.com/arminazimi) |
 | 2026-11-07 | code-scanning#242 | `node` image in `benchmarks/agent-staleness/outputs/seed/plain/dockerfile-node-app/` (PinnedDependencies) | `used in tests` / fixture seed, not shipped | [@arminazimi](https://github.com/arminazimi) |
+| 2026-11-26 | [code-scanning#11](https://github.com/velella-sh/offing/security/code-scanning/11) | OpenSSF Scorecard `CI-Tests` | `false positive`. The [required merge queue check](https://github.com/velella-sh/offing/actions/runs/43752947053/job/132932627734) passed on the SHA that landed. See [PR #337](https://github.com/velella-sh/offing/pull/337). | [@arminazimi](https://github.com/arminazimi) |
 
 **Every dismissal is reviewed at release.** When the baseline table above is updated for a release, each row in the dismissal log is re-read against the current manifests. A dismissal whose reason no longer holds is reversed: the alert is reopened and treated as new, with its deadline counted from the reopening date. A fixture that has become a shipped dependency is the usual cause.
 
