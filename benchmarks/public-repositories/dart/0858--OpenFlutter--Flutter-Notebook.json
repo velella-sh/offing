@@ -660,6 +660,438 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 13 of mecury_project/example/without_splash_color/pubspec.yaml reads `sdk: \">=2.0.0-dev.68.0 <3.0.0\"`. Dart publishes security updates only for the current stable release (Dart security policy, https://dart.dev/security); the page's documentation reflects Dart 3.13.7 as the current stable line."
       }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/android/app/build.gradle",
+      "line": 28,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/android/app/build.gradle:28 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/animated_container/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/animated_container/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/animated_cross_fade/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/animated_cross_fade/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/animated_floating_action_bar/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/animated_floating_action_bar/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/animation_challenge/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/animation_challenge/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/animation_demo/android/app/build.gradle",
+      "line": 28,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/animation_demo/android/app/build.gradle:28 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/beaytiful_search_bar_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/beaytiful_search_bar_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/bloc_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/bloc_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/bloc_provider_pattern/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/bloc_provider_pattern/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/bottom_appbar_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/bottom_appbar_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/chip_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/chip_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/clipper_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/clipper_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/custom_router_transition/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/custom_router_transition/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/draggable_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/draggable_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/event_bus_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/event_bus_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 28`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/expansion_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/expansion_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/flutter_auto_json_parsing/android/app/build.gradle",
+      "line": 28,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/flutter_auto_json_parsing/android/app/build.gradle:28 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/flutter_bottomnavigationbar/android/app/build.gradle",
+      "line": 28,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/flutter_bottomnavigationbar/android/app/build.gradle:28 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/flutter_provide/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/flutter_provide/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/flutter_widget_of_the_week/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/flutter_widget_of_the_week/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/frosted_glass_style_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/frosted_glass_style_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/hero_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/hero_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/intro_views/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/intro_views/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/keep_alive_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/keep_alive_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/load_multi_image/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/load_multi_image/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/navigator_example/android/app/build.gradle",
+      "line": 43,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/navigator_example/android/app/build.gradle:43 at the pinned commit: `targetSdkVersion 28`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/overlay/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/overlay/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/pinch_zoom_image_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/pinch_zoom_image_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/provider_example/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/provider_example/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 28`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/pull_on_loading/android/app/build.gradle",
+      "line": 28,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/pull_on_loading/android/app/build.gradle:28 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/redux_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/redux_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/release_preview2/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/release_preview2/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/reorderble_listview_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/reorderble_listview_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/right_back_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/right_back_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/ripple_animation/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/ripple_animation/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 28`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/scoped_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/scoped_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/slider_screen/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/slider_screen/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/sliver_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/sliver_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/spinkit_animation/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/spinkit_animation/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/splash_screen_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/splash_screen_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/swipe_to_dismiss/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/swipe_to_dismiss/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/textfields_focus_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/textfields_focus_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/tool_tips_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/tool_tips_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/url_launcher_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/url_launcher_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/warp_demo/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/warp_demo/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/widget_to_image/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/widget_to_image/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/will_pop_scope_demo/android/app/build.gradle",
+      "line": 28,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/will_pop_scope_demo/android/app/build.gradle:28 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mecury_project/example/without_splash_color/android/app/build.gradle",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read mecury_project/example/without_splash_color/android/app/build.gradle:38 at the pinned commit: `targetSdkVersion 27`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
     }
   ]
 }

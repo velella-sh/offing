@@ -336,6 +336,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 2 of frontend/rust-toolchain.toml reads `channel = \"1.85\"`. The cited Rust declaration matches a reviewed end-of-life or crate advisory rule."
       }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "frontend/appflowy_flutter/packages/appflowy_backend/example/android/app/build.gradle",
+      "line": 39,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read frontend/appflowy_flutter/packages/appflowy_backend/example/android/app/build.gradle:39 at the pinned commit: `targetSdkVersion 33`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
     }
   ]
 }

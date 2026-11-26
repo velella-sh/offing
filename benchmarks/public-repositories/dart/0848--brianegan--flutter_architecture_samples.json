@@ -165,6 +165,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 247 of .github/workflows/analyze_test_build.yml reads `uses: actions/download-artifact@v4`. The cited workflow pin is below the supported major for that Action under Offing's reviewed GitHub Actions lifecycle rules."
       }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "bloc_library/android/app/build.gradle",
+      "line": 43,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read bloc_library/android/app/build.gradle:43 at the pinned commit: `targetSdkVersion 28`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
     }
   ]
 }

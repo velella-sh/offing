@@ -30,6 +30,33 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 489 of platform_view_swift/ios/Runner.xcodeproj/project.pbxproj reads `IPHONEOS_DEPLOYMENT_TARGET = 8.0;`. The cited Xcode or iOS deployment target matches a reviewed acceptance rule."
       }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "add_to_app/books/android_books/app/build.gradle",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read add_to_app/books/android_books/app/build.gradle:12 at the pinned commit: `targetSdkVersion 29`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "add_to_app/fullscreen/android_fullscreen/app/build.gradle",
+      "line": 10,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read add_to_app/fullscreen/android_fullscreen/app/build.gradle:10 at the pinned commit: `targetSdkVersion 33`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "android_splash_screen/android/app/build.gradle",
+      "line": 43,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read android_splash_screen/android/app/build.gradle:43 at the pinned commit: `targetSdkVersion 34`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
     }
   ]
 }

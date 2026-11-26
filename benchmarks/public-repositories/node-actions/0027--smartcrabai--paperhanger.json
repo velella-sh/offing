@@ -48,6 +48,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 22 of .github/workflows/ci.yml reads node-version: 22.19.0, a Node.js 22 declaration, which is scheduled to reach end-of-life on 2027-04-30."
       }
+    },
+    {
+      "ruleId": "java.jdk.end-of-support-26",
+      "path": ".mise.toml",
+      "line": 64,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read .mise.toml:64 at the pinned commit: `java = \"26.0.1\"`. Oracle's roadmap places the end of Premier Support for Java 26 in September 2026 (https://www.oracle.com/java/technologies/java-se-support-roadmap.html)."
+      }
     }
   ]
 }
