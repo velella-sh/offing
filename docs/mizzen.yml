@@ -16,6 +16,18 @@ collections:
   dashboard-ecosystems:
     source: _data/dashboard-ecosystems.json
     id: id
+  dashboard-accuracy-ecosystems:
+    source: _data/dashboard-accuracy-ecosystems.json
+    id: id
+    template: _templates/dashboard-ecosystem.md
+    permalink: /dashboard/ecosystems/{id}/
+    markdown: [misses, trend]
+  dashboard-maturity:
+    source: _data/dashboard-maturity.json
+    id: id
+  dashboard-comparison:
+    source: _data/dashboard-comparison.json
+    id: id
   dashboard-minimums:
     source: _data/dashboard-minimums.json
     id: id
