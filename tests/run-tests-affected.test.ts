@@ -94,13 +94,17 @@ test("no list, an unreadable list, or coverage all keep the whole suite", async 
 
 test("ci.yml sets the change list on pull requests only, and coverage never narrows", async () => {
   const workflow = parseYaml(await readFile(".github/workflows/ci.yml", "utf8"));
-  const checkStepEnv = (job: string) => {
-    const steps: Array<{ name?: string; env?: Record<string, string> | null }> = workflow.jobs[job].steps;
-    return steps.find((step) => step.name === "npm run check")?.env ?? {};
-  };
-  for (const job of ["check", "check-cross-os"]) {
-    assert.match(checkStepEnv(job).OFFING_AFFECTED_FILES ?? "", /github\.event_name == 'pull_request'/, job);
-  }
+  const checkSteps: Array<{ name?: string; env?: Record<string, string> | null }> = workflow.jobs.check.steps;
+  const check = checkSteps.find((step) => step.name === "npm run check");
+  assert.match(check?.env?.OFFING_AFFECTED_FILES ?? "", /github\.event_name == 'pull_request'/);
+
+  const crossOsSteps: Array<{ name?: string; if?: string; env?: Record<string, string> | null }> =
+    workflow.jobs["check-cross-os"].steps;
+  const crossOsCheck = crossOsSteps.find((step) => step.name === "npm run check");
+  assert.ok(crossOsCheck);
+  assert.equal(crossOsCheck.if, "github.event_name != 'pull_request'");
+  assert.equal(crossOsCheck.env?.OFFING_AFFECTED_FILES, undefined);
+
   const coverageSteps: Array<{ env?: Record<string, string> | null }> = workflow.jobs.coverage.steps;
   for (const step of coverageSteps) {
     assert.equal(step.env?.OFFING_AFFECTED_FILES, undefined, "coverage must measure the whole suite");
