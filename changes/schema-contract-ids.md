@@ -1,0 +1,1 @@
+- Publish Offing's public JSON schemas at their canonical identifiers and include the previous identifiers as compatibility aliases for one release.

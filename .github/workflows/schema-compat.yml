@@ -1,0 +1,36 @@
+name: Released schema compatibility
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          install: "false"
+          package-manager-cache: "false"
+      - name: Compare schemas with the latest published release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          release="$(gh release view --repo "$GITHUB_REPOSITORY" --json tagName --jq .tagName)"
+          [[ "$release" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          git fetch --no-tags --depth=1 origin "refs/tags/$release:refs/tags/$release"
+          mkdir "$RUNNER_TEMP/released-schemas"
+          git archive "refs/tags/$release" schemas | tar -x -C "$RUNNER_TEMP/released-schemas"
+          notices="$RUNNER_TEMP/released-schemas/schemas/deprecation-notices.json"
+          # The first gate records the exact breaks already on main after v0.1.1.
+          # After that release, a notice must already be in the published schema set.
+          if [ "$release" = "v0.1.1" ]; then notices=schemas/deprecation-notices.json; fi
+          node tools/check-schema-compat.ts "$RUNNER_TEMP/released-schemas/schemas" schemas \
+            --release "$release" --notes "$notices"

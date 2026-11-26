@@ -45,9 +45,15 @@ contract, the replacement, and the earliest release that can remove it.
 ## Schema identifiers
 
 Resolve references using the schema set shipped in the same npm package as
-Offing. The current files contain both GitHub-domain identifiers such as
-`https://github.com/velella-sh/offing/schemas/scan.v1.schema.json` and site
-identifiers such as `https://velella.sh/offing/schemas/doctor.v1.schema.json`.
-An identifier keys a schema in a validator. Register the packaged schemas
-under their declared identifiers to validate offline. The
-[CLI reference](CLI.md#scan) documents the JSON scan format.
+Offing. Each public schema's `$id` is its location under
+`https://velella.sh/offing/schemas/`. For example, scan uses
+`https://velella.sh/offing/schemas/scan.v1.schema.json`.
+
+For one release after the identifier move, the package ships
+[legacy-ids.json](https://github.com/velella-sh/offing/blob/main/schemas/legacy-ids.json).
+The file maps the public URLs to their previous GitHub-domain IDs. Use it when
+registering the packaged schemas offline. With Ajv, pass
+`ajv.addSchema(schema, legacyIds[schema.$id])` for each schema with an alias.
+Ajv resolves both the old lookup key and the schema's declared `$id`, including
+references to individual fields. New consumers can register the schemas by
+`$id` alone. The [CLI reference](CLI.md#scan) documents the JSON scan format.

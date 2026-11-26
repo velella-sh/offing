@@ -635,6 +635,9 @@ jobs:
           git add coverage.json offing-badge.json offing-badge.svg
           git diff --cached --quiet || { git commit -qm "chore: update the badges"; git push origin badges; }
 
+  schema-compat:
+    uses: ./.github/workflows/schema-compat.yml
+
   # The only required status check. Branch protection names this job, never the
   # individual jobs, so the matrix can change without editing repository settings.
   ci-ok:
@@ -642,7 +645,7 @@ jobs:
     if: always()
     # Site budget and docs doctor are called above when a queued change touches site files.
     # Lighthouse runs in pages.yml against the Pages build artifact.
-    needs: [changes, generated-files, check, coverage, docs, check-cross-os, site-budget, docs-doctor, self-scan, perf-budget, coverage-badge]
+    needs: [changes, generated-files, check, coverage, docs, check-cross-os, site-budget, docs-doctor, self-scan, perf-budget, coverage-badge, schema-compat]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

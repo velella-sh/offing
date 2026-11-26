@@ -40,7 +40,7 @@ test("the starter configuration validates against the published schema and loads
   assert.equal(config.configPath, join(starter, ".offing.json"));
   assert.equal(config.schemaVersion, "offing.config.v1");
   assert.equal(config.failOn, "high");
-  assert.equal(config.$schema, "https://github.com/velella-sh/offing/schemas/config.v1.schema.json");
+  assert.equal(config.$schema, "https://velella.sh/offing/schemas/config.v1.schema.json");
   assert.deepEqual(config.ignore, ["_site/", ".jekyll-cache/", ".bundle/", "vendor/"]);
   assert.equal(config.baseline, undefined, "the starter ships no baseline; the README explains how to add one");
 

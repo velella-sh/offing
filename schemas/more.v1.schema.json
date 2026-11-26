@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/velella-sh/offing/schemas/more.v1.schema.json",
+  "$id": "https://velella.sh/offing/schemas/more.v1.schema.json",
   "title": "Offing truncated answer pointer v1",
   "description": "What an MCP tool answer left out to stay under 2,000 estimated tokens, and where to read the rest. Every tool output schema carries this definition as its optional `more` field, so the answer stays valid for the tool's own schema; a tool adds it only when something was cut.",
   "type": "object",

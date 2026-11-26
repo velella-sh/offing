@@ -28,7 +28,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/scan.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/scan.v1.schema.json",
       "title": "Offing scan result v1",
       "type": "object",
       "required": [
@@ -718,7 +718,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/deprecations.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/deprecations.v1.schema.json",
       "title": "Offing deprecation list v1",
       "type": "object",
       "required": [
@@ -954,7 +954,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/finding.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/finding.v1.schema.json",
       "title": "Offing finding v1",
       "description": "One evidence-backed lifecycle finding, as returned by explain_deprecation and exposed as an offing://findings resource. It is the item schema of the findings array in scan.v1.",
       "type": "object",
@@ -1336,7 +1336,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/context.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/context.v1.schema.json",
       "title": "Offing migration context v1",
       "type": "object",
       "required": [
@@ -1979,7 +1979,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/verification.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/verification.v1.schema.json",
       "title": "Offing migration verification v1",
       "type": "object",
       "required": [
@@ -2330,7 +2330,7 @@
         },
         "receipt": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/velella-sh/offing/schemas/receipt.v1.schema.json",
+          "$id": "https://velella.sh/offing/schemas/receipt.v1.schema.json",
           "title": "Offing verification receipt v1",
           "description": "What the change since the session's last scan did to the repository's findings. Present when a scan was observed before verification.",
           "type": "object",
@@ -2680,7 +2680,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/check.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/check.v1.schema.json",
       "title": "Offing dependency check v1",
       "description": "The result of checking one package, and optionally one version, against Offing's lifecycle rules. In an MCP answer the replacement, when one is known, is the first field and the status the second.",
       "type": "object",
@@ -3039,7 +3039,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/upgrade.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/upgrade.v1.schema.json",
       "title": "Offing upgrade report v1",
       "description": "Whether a repository can move to a target runtime, answered from files already in the repository.",
       "type": "object",
@@ -3254,7 +3254,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/check-snippet.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/check-snippet.v1.schema.json",
       "title": "Offing snippet check v1",
       "description": "What Offing flags in one file snippet, with snippet-relative paths, lines, and replacement guidance.",
       "type": "object",
@@ -3699,7 +3699,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/forecast.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/forecast.v1.schema.json",
       "title": "Offing forecast v1",
       "type": "object",
       "required": [
@@ -4031,7 +4031,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/plan.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/plan.v1.schema.json",
       "title": "Offing migration plan v1",
       "$comment": "Every item id belongs to exactly one wave. JSON Schema cannot compare members across arrays, so tests/plan-schema.test.ts rejects duplicates together with this schema.",
       "type": "object",
@@ -4299,7 +4299,7 @@
     },
     "outputSchema": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/velella-sh/offing/schemas/recommend.v1.schema.json",
+      "$id": "https://velella.sh/offing/schemas/recommend.v1.schema.json",
       "title": "Offing version recommendation v1",
       "description": "Which release line of a runtime, image, GitHub Action, or package to write today, answered from Offing's bundled lifecycle data only. It is limited to what the data covers and never names a version as the latest.",
       "type": "object",

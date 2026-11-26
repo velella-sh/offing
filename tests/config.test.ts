@@ -38,7 +38,7 @@ test("JSON Schema: schemas/config.v1.schema.json validates valid configurations 
   assert.equal(validate({}), true, "empty config should be valid");
 
   const fullValid = {
-    $schema: "https://github.com/velella-sh/offing/schemas/config.v1.schema.json",
+    $schema: "https://velella.sh/offing/schemas/config.v1.schema.json",
     schemaVersion: "offing.config.v1",
     failOn: "high",
     ignore: ["node_modules/**", "dist/**"],
