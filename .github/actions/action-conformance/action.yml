@@ -21,15 +21,29 @@ runs:
       shell: bash
       run: node "$GITHUB_ACTION_PATH/../../../docs/spec/action/conformance/run.mjs" clean "$OUTCOME" <<< "$OUTPUTS"
     - name: Exercise the severity gate and local SARIF
+      if: ${{ !cancelled() }}
       id: gate
       continue-on-error: true
       uses: ./ # zizmor: ignore[self-repository] -- the checked-out Action is the subject of the test
       with:
         path: ${{ runner.temp }}/gate
         sarif: "true"
+        upload-report: "false"
     - name: Check the gate and SARIF outputs
+      if: ${{ !cancelled() }}
       env:
         OUTPUTS: ${{ toJSON(steps.gate.outputs) }}
         OUTCOME: ${{ steps.gate.outcome }}
       shell: bash
       run: node "$GITHUB_ACTION_PATH/../../../docs/spec/action/conformance/run.mjs" gate "$OUTCOME" <<< "$OUTPUTS"
+    - name: Check the lifecycle SARIF profile
+      if: ${{ !cancelled() }}
+      env:
+        SARIF_PATH: ${{ steps.gate.outputs.sarif-path }}
+      shell: bash
+      run: |
+        if [ -z "$SARIF_PATH" ]; then
+          echo "::error::Offing did not produce a local SARIF file at sarif-path."
+          exit 1
+        fi
+        node "$GITHUB_ACTION_PATH/../../../docs/spec/sarif/conformance/check.mjs" "$SARIF_PATH"

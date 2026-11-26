@@ -1,6 +1,12 @@
 name: Offing Action conformance
 
 on:
+  workflow_dispatch:
+    inputs:
+      action_ref:
+        description: Tag or SHA of a packaged Action from this repository.
+        type: string
+        required: true
   workflow_call:
     inputs:
       action_repository:
