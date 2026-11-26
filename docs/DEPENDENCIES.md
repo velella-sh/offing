@@ -1,6 +1,6 @@
 ---
 title: Runtime dependencies
-description: Why Offing ships six runtime dependencies, what each one does, what removing it would cost, and the checks a new one must pass.
+description: Why Offing ships its runtime dependencies, what each one does, what removing it would cost, and the checks a new one must pass.
 ---
 
 # Runtime dependencies
@@ -16,12 +16,12 @@ scan. On **2026-11-09** the lifecycle data and the code that reads and verifies 
 
 ## Result
 
-Six direct dependencies remain. Each one is imported by shipped `src/` code, declares no install script, and has
+The initial audit covered six direct dependencies. Each one is imported by shipped `src/` code, declares no install script, and has
 no reviewed lifecycle rule that would make Offing report it as end-of-life, deprecated, or retired. Nothing was
 unused, so nothing was removed. Removing any of them would drop a feature users already rely on; the section for
 each package says which one.
 
-They resolve to a runtime tree of eleven packages: `@modelcontextprotocol/core`, Ebb's three Sigstore packages, and
+The initial six resolved to a runtime tree of eleven packages: `@modelcontextprotocol/core`, Ebb's three Sigstore packages, and
 `@sigstore/core` are the transitive additions. `npm audit --omit=dev` reports zero advisories, and [SECURITY.md](../SECURITY.md) requires
 that to stay true at any severity and any depth.
 
@@ -29,6 +29,8 @@ that to stay true at any severity and any depth.
 |---|---|---|---|---|---|
 | `@modelcontextprotocol/server` | `^2.3.1` | 2.4.0 | Apache-2.0 | Runs the local MCP server and its stdio transport | none |
 | `@velella/ebb` | `^0.1.1` | 0.1.1 | MIT (data CC BY 4.0) | The lifecycle rules, purl and VERS matching, and signed data updates | none |
+| `ajv` | `^8.20.0` | 8.20.0 | MIT | Validates Offing config against the packaged JSON Schema | none |
+| `jsonc-parser` | `^3.3.1` | 3.3.1 | MIT | Maps config keys, values, and syntax errors to source locations | none |
 | `semver` | `^7.8.5` | 7.8.5 | ISC | Reads and compares semantic versions and npm ranges | none |
 | `smol-toml` | `^1.9.1` | 1.9.1 | BSD-3-Clause | Parses TOML manifests and lockfiles | none |
 | `yaml` | `^2.9.1` | 2.9.1 | ISC | Parses YAML manifests with exact line numbers | none |
@@ -51,6 +53,12 @@ the rules, the purl and VERS matching, the forecast, and the data updates that f
 it with Sigstore before use. Its runtime dependencies are `@sigstore/bundle`, `@sigstore/protobuf-specs`, and
 `@sigstore/verify`, which verify a data bundle offline against the trusted root Ebb ships. It is part of the same
 organization and reviewed the same way. Without it Offing would have no rules to report.
+
+### `ajv` and `jsonc-parser`
+
+The config validator loads Ajv on demand to check files against the same JSON Schema the editor reads.
+It uses the JSON scanner from `jsonc-parser` for exact key and value locations and for syntax diagnostics.
+Offing still parses strict JSON. Both versions passed the repository's lifecycle check before adoption.
 
 ### `semver`
 
@@ -105,7 +113,7 @@ Upkeep: each package is published from an actively maintained upstream (`modelco
 `colinhacks/zod`). [Dependabot](../.github/dependabot.yml) opens weekly update pull requests with a seven-day
 cooldown, and the lockfile pins the resolved version.
 
-Install scripts: none of the six declares `preinstall`, `install`, or `postinstall` at its installed version.
+Install scripts: none of the audited packages declares `preinstall`, `install`, or `postinstall` at its installed version.
 These commands reproduce the audit:
 
 ```bash

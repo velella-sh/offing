@@ -7,9 +7,10 @@ import { fileURLToPath } from "node:url";
 import { satisfies } from "semver";
 
 import { checkAgainst, systemToolRules } from "./check-dependency.js";
+import { inspectDiscoveredConfig, renderConfigDiagnostic } from "./config-validate.js";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 
-export const doctorCategories = ["runtime", "package", "mcp", "skill", "plugin", "ci", "system"] as const;
+export const doctorCategories = ["runtime", "package", "mcp", "skill", "plugin", "ci", "system", "config"] as const;
 export type DoctorCategory = (typeof doctorCategories)[number];
 export type DoctorStatus = "pass" | "warning" | "fail";
 export type DoctorContext = "local" | "github-actions" | "gitlab-ci";
@@ -404,6 +405,23 @@ function systemCheck(entry: SystemTool): DoctorCheck {
   };
 }
 
+async function configCheck(root: string): Promise<DoctorCheck | undefined> {
+  const result = await inspectDiscoveredConfig(root);
+  if (!result.file) return undefined;
+  const status = !result.valid ? "fail" : result.diagnostics.length > 0 ? "warning" : "pass";
+  return {
+    id: "config.validation",
+    category: "config",
+    status,
+    summary: `Offing configuration ${result.file}`,
+    details:
+      result.diagnostics.length > 0
+        ? result.diagnostics.map(renderConfigDiagnostic).join("\n")
+        : "The config matches the Offing schema.",
+    ...(status === "pass" ? {} : { remediation: "Apply the suggested changes, then run offing config validate." }),
+  };
+}
+
 export async function diagnoseEnvironment(root = ".", options: DoctorOptions = {}): Promise<DoctorResult> {
   const environment = options.environment ?? process.env;
   const installationRoot = resolve(options.installationRoot ?? defaultInstallationRoot);
@@ -419,6 +437,8 @@ export async function diagnoseEnvironment(root = ".", options: DoctorOptions = {
   ];
   checks.push(pluginCheck(checks));
   checks.push(await ciCheck(context, environment));
+  const config = await configCheck(root);
+  if (config) checks.push(config);
   const system = options.system ? await diagnoseSystem(options) : undefined;
   if (system) checks.push(...system.map(systemCheck));
 

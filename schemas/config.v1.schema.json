@@ -16,65 +16,137 @@
       "description": "Offing configuration schema version."
     },
     "failOn": {
-      "enum": ["none", "info", "low", "medium", "high", "critical"],
+      "enum": [
+        "none",
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical",
+        null
+      ],
       "description": "Exit with code 1 when a finding is at or above this severity."
     },
     "fail-on": {
-      "enum": ["none", "info", "low", "medium", "high", "critical"],
+      "enum": [
+        "none",
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical",
+        null
+      ],
       "description": "Alias for failOn."
     },
     "ignore": {
-      "oneOf": [
-        { "type": "string", "minLength": 1 },
-        { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      "description": "Paths or glob patterns to ignore during scan.",
+      "type": [
+        "string",
+        "array",
+        "null"
       ],
-      "description": "Paths or glob patterns to ignore during scan."
+      "pattern": "\\S",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      }
     },
     "ignorePaths": {
-      "oneOf": [
-        { "type": "string", "minLength": 1 },
-        { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      "description": "Deprecated alias. Use ignore.",
+      "type": [
+        "string",
+        "array",
+        "null"
       ],
-      "description": "Alias for ignore."
+      "pattern": "\\S",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      },
+      "deprecated": true
     },
     "ignore-paths": {
-      "oneOf": [
-        { "type": "string", "minLength": 1 },
-        { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      "description": "Deprecated alias. Use ignore.",
+      "type": [
+        "string",
+        "array",
+        "null"
       ],
-      "description": "Alias for ignore."
+      "pattern": "\\S",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      },
+      "deprecated": true
     },
     "dataVersion": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Pinned lifecycle data version, for example 2026.10.01, or 'bundled'."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Pinned lifecycle data version, for example 2026.10.01, or 'bundled'.",
+      "pattern": "\\S"
     },
     "data-version": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Alias for dataVersion."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Alias for dataVersion.",
+      "pattern": "\\S"
     },
     "baseline": {
-      "oneOf": [
-        { "type": "string", "minLength": 1 },
-        { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      "description": "Path or paths to baseline files to suppress known findings.",
+      "type": [
+        "string",
+        "array",
+        "null"
       ],
-      "description": "Path or paths to baseline files to suppress known findings."
+      "pattern": "\\S",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      }
     },
     "baselines": {
-      "type": "array",
-      "items": { "type": "string", "minLength": 1 },
-      "description": "Alias for baseline."
+      "type": [
+        "string",
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      },
+      "description": "Alias for baseline.",
+      "pattern": "\\S"
     },
     "baselineFiles": {
-      "type": "array",
-      "items": { "type": "string", "minLength": 1 },
-      "description": "Alias for baseline."
+      "type": [
+        "string",
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      },
+      "description": "Alias for baseline.",
+      "pattern": "\\S"
     },
     "baseline-files": {
-      "type": "array",
-      "items": { "type": "string", "minLength": 1 },
-      "description": "Alias for baseline."
+      "type": [
+        "string",
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      },
+      "description": "Alias for baseline.",
+      "pattern": "\\S"
     }
   }
 }

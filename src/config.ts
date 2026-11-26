@@ -58,25 +58,26 @@ export function validateConfig(raw: unknown, filePath = CONFIG_FILE_NAME): Offin
     );
   }
 
+  if (record.$schema !== undefined && typeof record.$schema !== "string") {
+    throw new ConfigError(`Invalid $schema in ${filePath}: expected a string.`);
+  }
   if (record.schemaVersion !== undefined && record.schemaVersion !== CONFIG_SCHEMA_VERSION) {
     throw new ConfigError(`Invalid schemaVersion in ${filePath}: expected "${CONFIG_SCHEMA_VERSION}".`);
   }
 
-  const failOn = parseFailOn(firstSetKey(record, ["failOn", "fail-on"]), filePath);
-  const dataVersion = parseDataVersion(firstSetKey(record, ["dataVersion", "data-version"]), filePath);
-  const ignore = parsePathList(
-    firstSetKey(record, ["ignore", "ignorePaths", "ignore-paths"]),
-    filePath,
-    IGNORE_PROBLEMS,
+  const failOn = parseAliases(record, ["failOn", "fail-on"], (value) => parseFailOn(value, filePath));
+  const dataVersion = parseAliases(record, ["dataVersion", "data-version"], (value) =>
+    parseDataVersion(value, filePath),
   );
-  const baseline = parsePathList(
-    firstSetKey(record, ["baseline", "baselines", "baselineFiles", "baseline-files"]),
-    filePath,
-    BASELINE_PROBLEMS,
+  const ignore = parseAliases(record, ["ignore", "ignorePaths", "ignore-paths"], (value) =>
+    parsePathList(value, filePath, IGNORE_PROBLEMS),
+  );
+  const baseline = parseAliases(record, ["baseline", "baselines", "baselineFiles", "baseline-files"], (value) =>
+    parsePathList(value, filePath, BASELINE_PROBLEMS),
   );
 
   return {
-    ...(record.$schema ? { $schema: String(record.$schema) } : {}),
+    ...(record.$schema !== undefined ? { $schema: record.$schema } : {}),
     ...(record.schemaVersion ? { schemaVersion: CONFIG_SCHEMA_VERSION } : {}),
     ...(failOn !== undefined ? { failOn } : {}),
     ...(dataVersion !== undefined ? { dataVersion } : {}),
@@ -85,9 +86,13 @@ export function validateConfig(raw: unknown, filePath = CONFIG_FILE_NAME): Offin
   };
 }
 
-/** The value under the first of a key's spellings that is set (not absent and not null). */
-function firstSetKey(record: Record<string, unknown>, keys: readonly string[]): unknown {
-  return keys.map((key) => record[key]).find((value) => value !== undefined && value !== null);
+/** Validate each spelling and retain the first non-null value. */
+function parseAliases<T>(
+  record: Record<string, unknown>,
+  keys: readonly string[],
+  parse: (value: unknown) => T | undefined,
+): T | undefined {
+  return keys.map((key) => parse(record[key] ?? undefined)).find((value) => value !== undefined);
 }
 
 function parseFailOn(raw: unknown, filePath: string): (Severity | "none") | undefined {
@@ -159,7 +164,7 @@ export async function findConfigFile(startDir: string): Promise<string | undefin
     try {
       const gitDir = join(current, ".git");
       const gitStats = await stat(gitDir);
-      if (gitStats.isDirectory()) {
+      if (gitStats.isDirectory() || gitStats.isFile()) {
         break;
       }
     } catch {

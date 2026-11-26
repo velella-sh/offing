@@ -87,14 +87,15 @@ repos:
       - id: offing
 ```
 
-The repository defines two hooks in `.pre-commit-hooks.yaml`, both `language: node`:
+The repository defines three hooks in `.pre-commit-hooks.yaml`, all `language: node`:
 
 | Hook                          | Runs                                                                       |
 | ----------------------------- | -------------------------------------------------------------------------- |
 | `offing`                   | On every commit.                                                           |
 | `offing-changed-manifests` | Only when a manifest, lockfile, or CI workflow file is part of the commit. |
+| `offing-config` | When the root `.offing.json` changes. See [configuration validation](CONFIG.md#block-invalid-config-in-pre-commit). |
 
-Both run `offing scan . --fail-on high --format compact`, so a commit is blocked by a `high` or `critical` finding. The scan reads the whole repository, because a finding depends on more than the staged files, and it stays offline. To change the gate, override `entry` in your config:
+The two scan hooks run `offing scan . --fail-on high --format compact`, so a commit is blocked by a `high` or `critical` finding. The scan reads the whole repository, because a finding depends on more than the staged files, and it stays offline. To change the gate, override `entry` in your config:
 
 ```yaml
 hooks:

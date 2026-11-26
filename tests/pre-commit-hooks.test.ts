@@ -30,13 +30,14 @@ function parseHooks(text: string): Hook[] {
 
 const hooks = parseHooks(await readFile(".pre-commit-hooks.yaml", "utf8"));
 
-test("pre-commit hooks define offing and offing-changed-manifests on Node", () => {
+test("pre-commit defines all three Offing hooks on Node", () => {
   assert.deepEqual(
     hooks.map((hook) => hook.id),
-    ["offing", "offing-changed-manifests"],
+    ["offing", "offing-changed-manifests", "offing-config"],
   );
   for (const hook of hooks) {
     assert.equal(hook.language, "node");
+    if (hook.id === "offing-config") continue;
     assert.equal(hook.passFilenames, "false");
     assert.match(hook.entry, /^offing scan \. --fail-on high/);
   }
@@ -55,6 +56,18 @@ test("offing-changed-manifests triggers on manifests and workflows only", () => 
     assert.ok(pattern.test(path), path);
   }
   for (const path of ["src/index.ts", "README.md", "docs/package.json.md"]) {
+    assert.ok(!pattern.test(path), path);
+  }
+});
+
+test("offing-config passes the changed root config to the validator", () => {
+  const hook = hooks.find(({ id }) => id === "offing-config");
+  assert.ok(hook?.files);
+  assert.equal(hook.passFilenames, "true");
+  assert.equal(hook.entry, "offing config validate");
+  const pattern = new RegExp(hook.files);
+  assert.ok(pattern.test(".offing.json"));
+  for (const path of ["offing.json", "package.json", "nested/.offing.json", ".offing.json.bak"]) {
     assert.ok(!pattern.test(path), path);
   }
 });

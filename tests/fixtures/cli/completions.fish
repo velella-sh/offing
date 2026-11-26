@@ -38,6 +38,7 @@ complete -c offing -n __fish_use_subcommand -a doctor
 complete -c offing -n __fish_use_subcommand -a report-issue
 complete -c offing -n __fish_use_subcommand -a capabilities
 complete -c offing -n __fish_use_subcommand -a completions
+complete -c offing -n __fish_use_subcommand -a config
 complete -c offing -n __fish_use_subcommand -a hook
 complete -c offing -n __fish_use_subcommand -a lsp
 complete -c offing -n __fish_use_subcommand -a prompt
@@ -51,6 +52,7 @@ complete -c offing -n __fish_use_subcommand -l version
 complete -c offing -n '__fish_seen_subcommand_from completions' -a 'bash zsh fish'
 complete -c offing -n '__fish_seen_subcommand_from data' -a 'status update'
 complete -c offing -n '__fish_seen_subcommand_from watch' -a 'add remove run list'
+complete -c offing -n '__fish_seen_subcommand_from config' -a 'validate'
 complete -c offing -n '__fish_seen_subcommand_from scan check' -l fail-on -x -a 'info low medium high critical none'
 complete -c offing -n '__fish_seen_subcommand_from scan' -l format -x -a 'text json sarif rdjson compact html mermaid'
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l format -x -a 'text json sarif rdjson compact html mermaid'
@@ -176,6 +178,7 @@ complete -c offing -n '__fish_seen_subcommand_from doctor' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from report-issue' -l output
 complete -c offing -n '__fish_seen_subcommand_from report-issue' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from capabilities' -l json
+complete -c offing -n '__fish_seen_subcommand_from config' -l json
 complete -c offing -n '__fish_seen_subcommand_from hook' -l fail-on
 complete -c offing -n '__fish_seen_subcommand_from prompt' -l format
 complete -c offing -n '__fish_seen_subcommand_from prompt' -l symbol

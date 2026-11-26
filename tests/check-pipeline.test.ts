@@ -52,7 +52,7 @@ test("npm test builds first, and npm run check builds only once", () => {
 
 test("the TypeScript build uses build mode, so an unchanged tree is skipped", () => {
   // `tsc -p` re-parses and re-binds every file on each run; `tsc -b` skips the project when its outputs are newer than its inputs.
-  assert.match(scripts.build!, /^tsc -b tsconfig\.json && /);
+  assert.match(scripts.build!, /^node tools\/generate-commands-index\.mjs && tsc -b tsconfig\.json && /);
 });
 
 test("check:rules names every rule the pre-push hook runs", () => {

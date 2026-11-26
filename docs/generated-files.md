@@ -33,7 +33,7 @@ Targets:
 
 | Path | Generator | Read by | Churn (30 days) | Needed by | Target |
 |---|---|---|---|---|---|
-| `src/commands/index.generated.ts` | `node tools/generate-commands-index.mjs` (`--check` runs in `npm run check`, step `check:commands`) | `src/cli-main.ts`, `src/completions.ts`, `tests/cli-registry.test.ts` | 1 | npm package, tests | Build time. It is a TypeScript input to `tsc`, so the build can generate it before compiling. Keep the drift check. |
+| `src/commands/index.generated.ts` | `node tools/generate-commands-index.mjs` (`--check` runs in `npm run check`, step `check:commands`) | `src/cli-main.ts`, `src/completions.ts`, `tests/cli-registry.test.ts` | 1 | npm package, tests | Build time. `npm run build` generates it before compiling. The generated index is ignored by Git. |
 | `plugins/claude/` | `npm run build:plugins` (`tools/plugin-packages.ts`, source `skills/`) | Claude Code plugin hosts (installed from the repository), `tests/plugin-packaging.test.ts`, `npm run check:plugins` | 25 (`plugins/`) | Agents (plugin hosts), tests | Keep. Hosts install from the repository. |
 | `plugins/codex/` | `npm run build:plugins` (`tools/plugin-packages.ts`, source `skills/`) | Codex plugin hosts, `tools/validate-codex-plugin.ts` | 25 (`plugins/`, shared) | Agents (plugin hosts), tests | Keep. |
 | `.claude-plugin/marketplace.json` | `npm run build:plugins` | Claude Code marketplace install | 9 | Agents (plugin hosts) | Keep. |
@@ -78,6 +78,5 @@ These files look generated but have no generator in the repository. Do not add o
 
 These are not part of this inventory. Each one should be its own issue.
 
-1. Move `src/commands/index.generated.ts` to build time (generate before `tsc`).
-2. Add `CHANGELOG.md` to the generated-files table in AGENTS.md.
-3. Make `docs/differential-report.*` part of a drift check.
+1. Add `CHANGELOG.md` to the generated-files table in AGENTS.md.
+2. Make `docs/differential-report.*` part of a drift check.

@@ -183,7 +183,10 @@ async function preparedConfig(
   try {
     return await loadConfig(pathArgument);
   } catch (error) {
-    if (error instanceof ConfigError) return ctx.failError(error);
+    if (error instanceof ConfigError) {
+      // Doctor displays the located errors inside its own report.
+      return command === "doctor" ? undefined : ctx.failError(error);
+    }
     throw error;
   }
 }
