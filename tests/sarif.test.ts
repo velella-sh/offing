@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { test } from "node:test";
 
-import type { Finding, ScanResult, Severity } from "../src/domain.js";
+import type { DataInfo, Finding, ScanResult, Severity } from "../src/domain.js";
 import { renderSarif } from "../src/reporters.js";
 import { runCli } from "./cli-runner.js";
 
@@ -79,6 +79,49 @@ test("every finding becomes one result with an exact location, a rule index, and
     "github-actions.checkout.node20:.github/workflows/ci.yml:7",
   );
   assert.equal(run.results[0].locations[0].physicalLocation.artifactLocation.uriBaseId, "%SRCROOT%");
+});
+
+test("SARIF fingerprints survive repeat scans and lifecycle data updates", () => {
+  const original = finding("npm.package.request.deprecated", "package.json", 12);
+  const data: DataInfo = {
+    source: "bundled",
+    version: "2026.10.16",
+    createdAt: null,
+    reviewedThrough: "2026-10-16",
+    ageDays: 0,
+    stale: false,
+  };
+  const before = { ...scan([original]), data };
+  const after: ScanResult = {
+    ...before,
+    scannedAt: "2026-10-23T00:00:00.000Z",
+    data: { ...data, version: "2026.10.23", reviewedThrough: "2026-10-23" },
+    findings: [
+      {
+        ...original,
+        severity: "medium",
+        deadline: "2027-01-01",
+        replacement: "Native fetch",
+        sources: [
+          {
+            title: "Updated source",
+            url: "https://example.com/updated-source",
+          },
+        ],
+      },
+    ],
+  };
+
+  const run = (result: ScanResult) => JSON.parse(renderSarif(result)).runs[0];
+  const baseline = run(before);
+  const repeated = run({ ...before, scannedAt: "2026-10-17T00:00:00.000Z" });
+  const updated = run(after);
+  assert.notEqual(updated.properties.offingData.version, baseline.properties.offingData.version);
+  assert.notDeepEqual(updated.results[0].properties.offingLifecycle, baseline.results[0].properties.offingLifecycle);
+  const expectedFingerprint = { "offingFindingId/v1": original.id };
+  assert.deepEqual(baseline.results[0].partialFingerprints, expectedFingerprint);
+  assert.deepEqual(repeated.results[0].partialFingerprints, expectedFingerprint);
+  assert.deepEqual(updated.results[0].partialFingerprints, expectedFingerprint);
 });
 
 test("severity maps to SARIF levels", () => {
