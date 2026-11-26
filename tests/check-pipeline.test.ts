@@ -36,10 +36,7 @@ test("npm test builds first, and npm run check builds only once", () => {
     scripts.check,
     "npm run format:check && npm run check:dead-code && npm run build && node dist/tools/check-pipeline.js",
   );
-  assert.equal(
-    scripts["check:dead-code"],
-    "node tools/generate-commands-index.mjs && node tools/check-dead-code.mjs",
-  );
+  assert.equal(scripts["check:dead-code"], "node tools/generate-commands-index.mjs && node tools/check-dead-code.mjs");
   assert.equal(scripts.check.match(/npm run build/g)?.length, 1);
   assert.match(scripts["check:plugins"]!, /^npm run build --silent && /);
   assert.match(scripts["eval:plugins"]!, /^npm run build --silent && /);
