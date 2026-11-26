@@ -1,0 +1,7 @@
+java {
+  toolchain { languageVersion.set(JavaLanguageVersion.of(libs.versions.java.get())) }
+  sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get())
+}
+dependencies {
+  implementation(libs.guava)
+}

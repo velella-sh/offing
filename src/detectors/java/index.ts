@@ -12,21 +12,30 @@ import { DETECTOR_API_VERSION } from "../../sdk.js";
 import type { Detector, DetectorAnalysis, DetectorContext, DetectorFinding, DetectorInputs } from "../../sdk.js";
 import { analyzeSourceUsage } from "../../source-usage.js";
 import { versContains } from "@velella/ebb/vers/index";
-import { jdkRuleVersion } from "./jdk-version.js";
-import type { DependencyDeclaration, DynamicJdkDeclaration, JdkDeclaration } from "./jdk-version.js";
-import { parseCatalog } from "./parse-catalog.js";
+import { MISE_FILE_NAMES, MISE_FILES, miseDeclarations } from "../../version-files/mise.js";
+import { jdkDeclaration, jdkRuleVersion } from "./jdk-version.js";
+import type {
+  DependencyDeclaration,
+  DynamicJdkDeclaration,
+  GradleWrapperDeclaration,
+  JdkDeclaration,
+  KotlinPluginDeclaration,
+} from "./jdk-version.js";
+import { parseCatalog, parseCatalogIndex } from "./parse-catalog.js";
+import type { CatalogIndex, CatalogPluginDeclaration } from "./parse-catalog.js";
 import { parseGradle } from "./parse-gradle.js";
 import { parseJavaVersion, parseSdkmanrc, parseToolVersions } from "./parse-pins.js";
 import { MAXIMUM_INPUT_BYTES, parsePom } from "./parse-pom.js";
+import { parseWrapper } from "./parse-wrapper.js";
 
 /**
- * Finds JDK feature releases that are out of support, and Maven dependencies that have moved.
+ * Finds JDK feature releases that are out of support, Gradle wrapper versions, and Maven
+ * dependencies that have moved.
  *
  * It reads the JDK a project pins or targets (`pom.xml`, `build.gradle(.kts)`, `.java-version`,
- * `.sdkmanrc`, `.tool-versions`) and its direct Maven dependencies, and nothing else (decision 0009).
- * A toolchain or pinned JDK names the JDK itself and keeps the rule's severity; a compile level
- * (`maven.compiler.release`, `sourceCompatibility`) only names the language level code is compiled for,
- * so it is reported at medium severity. Nothing is built, resolved, or run.
+ * `.sdkmanrc`, `.tool-versions`, `mise.toml`, `.mise.toml`), Gradle version catalogs (`libs.versions.toml`),
+ * Gradle wrappers (`gradle-wrapper.properties`), and direct Maven dependencies (decision 0009).
+ * Nothing is built, resolved, or run.
  */
 
 const MAXIMUM_DEPTH = 8;
@@ -46,22 +55,28 @@ const SKIPPED_DIRECTORIES = new Set([
   "testdata",
 ]);
 const JDK_PURL = "pkg:generic/java";
+const GRADLE_PURL = "pkg:generic/gradle";
 
-type Parser = (
-  contents: string,
-) => Array<JdkDeclaration | DynamicJdkDeclaration | DependencyDeclaration | { kind: string; line: number }>;
+type LocatedDeclaration =
+  | JdkDeclaration
+  | DynamicJdkDeclaration
+  | DependencyDeclaration
+  | KotlinPluginDeclaration
+  | CatalogPluginDeclaration
+  | GradleWrapperDeclaration;
 
-type LocatedDeclaration = ReturnType<Parser>[number];
+type Parser = (contents: string) => LocatedDeclaration[];
 
 const PARSERS = new Map<string, Parser>([
   ["pom.xml", parsePom],
-  ["build.gradle", parseGradle],
-  ["build.gradle.kts", parseGradle],
   ["libs.versions.toml", parseCatalog],
+  ["gradle-wrapper.properties", parseWrapper],
   [".java-version", parseJavaVersion],
   [".sdkmanrc", parseSdkmanrc],
   [".tool-versions", parseToolVersions],
 ]);
+
+const GRADLE_FILES = new Set(["build.gradle", "build.gradle.kts"]);
 
 async function candidateFiles(root: string): Promise<string[]> {
   const files: string[] = [];
@@ -77,7 +92,10 @@ async function candidateFiles(root: string): Promise<string[]> {
       if (entry.isSymbolicLink()) continue;
       if (entry.isDirectory()) {
         if (!SKIPPED_DIRECTORIES.has(entry.name)) await walk(join(directory, entry.name), depth + 1);
-      } else if (entry.isFile() && PARSERS.has(entry.name)) {
+      } else if (
+        entry.isFile() &&
+        (PARSERS.has(entry.name) || GRADLE_FILES.has(entry.name) || MISE_FILE_NAMES.has(entry.name))
+      ) {
         files.push(join(directory, entry.name));
       }
     }
@@ -106,7 +124,6 @@ const ROLE_TEXT = {
   "compile-level": "the language level the code is compiled for",
 } as const;
 
-/** A file the detector may read, or `undefined` when it is unreadable or over the input ceiling. */
 async function readJavaFile(file: string): Promise<string | undefined> {
   try {
     if ((await stat(file)).size > MAXIMUM_INPUT_BYTES) return undefined;
@@ -121,20 +138,56 @@ interface Located {
   declaration: LocatedDeclaration;
 }
 
-/** Every declaration the parsers return for the candidate files, in directory and file order. */
-async function collectDeclarations(root: string): Promise<Located[]> {
-  const located: Located[] = [];
-  for (const file of await candidateFiles(root)) {
+function mergeCatalogs(indexes: readonly CatalogIndex[]): CatalogIndex | undefined {
+  if (indexes.length === 0) return undefined;
+  const versions = new Map<string, string>();
+  const libraries = new Map<string, DependencyDeclaration>();
+  const plugins = new Map<string, CatalogPluginDeclaration>();
+  for (const idx of indexes) {
+    for (const [k, v] of idx.versions) versions.set(k, v);
+    for (const [k, v] of idx.libraries) libraries.set(k, v);
+    for (const [k, v] of idx.plugins) plugins.set(k, v);
+  }
+  return { versions, libraries, plugins };
+}
+
+async function collectDeclarations(
+  root: string,
+  unclassified: Array<Omit<UnclassifiedReference, "detector">>,
+): Promise<Located[]> {
+  const files = await candidateFiles(root);
+  const loaded: Array<{ path: string; name: string; contents: string }> = [];
+  const catalogs: CatalogIndex[] = [];
+  for (const file of files) {
     const contents = await readJavaFile(file);
     if (contents === undefined) continue;
-    const path = relativePosix(root, file);
-    const parser = required(PARSERS.get(basename(file)), "parser");
-    for (const declaration of parser(contents)) located.push({ path, declaration });
+    const name = basename(file);
+    if (name === "libs.versions.toml") catalogs.push(parseCatalogIndex(contents));
+    loaded.push({ path: relativePosix(root, file), name, contents });
+  }
+  const mergedCatalog = mergeCatalogs(catalogs);
+  const miseParsers = new Map([
+    [
+      JDK_PURL,
+      (pin: { value: string; line: number }) => {
+        const d = jdkDeclaration("pin", pin.value, pin.line);
+        return d ? [d] : [];
+      },
+    ],
+  ]);
+
+  const located: Located[] = [];
+  for (const { path, name, contents } of loaded) {
+    const declarations: LocatedDeclaration[] = GRADLE_FILES.has(name)
+      ? parseGradle(contents, mergedCatalog)
+      : MISE_FILE_NAMES.has(name)
+        ? miseDeclarations(path, contents, miseParsers, unclassified)
+        : required(PARSERS.get(name), "parser")(contents);
+    for (const declaration of declarations) located.push({ path, declaration });
   }
   return located;
 }
 
-/** What a judgment needs to report one declaration: its subject, candidate rules, version, and severity. */
 interface Judgment {
   subject: string;
   candidates: RegistryV2Rule[] | undefined;
@@ -142,16 +195,18 @@ interface Judgment {
   severityOf: (rule: RegistryV2Rule) => RegistryV2Rule["severity"];
 }
 
-type Verdict = Judgment | { dynamic: DynamicJdkDeclaration };
+type Verdict =
+  | Judgment
+  | { dynamic: DynamicJdkDeclaration }
+  | { noData: { component: string; reference: string; reason: string; line: number } };
 
-/** The subject, candidate rules, and severity a declaration is judged by, or nothing when it is not judged. */
 function judgeDeclaration(
   rules: ReadonlyMap<string, RegistryV2Rule[]>,
   declaration: LocatedDeclaration,
 ): Verdict | undefined {
-  if (declaration.kind === "dynamic") return { dynamic: declaration as DynamicJdkDeclaration };
+  if (declaration.kind === "dynamic") return { dynamic: declaration };
   if (declaration.kind === "jdk") {
-    const jdk = declaration as JdkDeclaration;
+    const jdk = declaration;
     return {
       candidates: rules.get(JDK_PURL),
       version: jdkRuleVersion(jdk.major),
@@ -160,7 +215,7 @@ function judgeDeclaration(
     };
   }
   if (declaration.kind === "dependency") {
-    const dependency = declaration as DependencyDeclaration;
+    const dependency = declaration;
     return {
       candidates: rules.get(formatPurl({ type: "maven", namespace: dependency.group, name: dependency.artifact })),
       version: dependency.version,
@@ -168,10 +223,29 @@ function judgeDeclaration(
       severityOf: (rule) => rule.severity,
     };
   }
+  if (declaration.kind === "gradle-wrapper") {
+    const wrapper = declaration;
+    const candidates = rules.get(GRADLE_PURL);
+    if (!candidates || candidates.length === 0) {
+      return {
+        noData: {
+          component: GRADLE_PURL,
+          reference: wrapper.value,
+          reason: "no-data: Ebb has no lifecycle rule for Gradle",
+          line: wrapper.line,
+        },
+      };
+    }
+    return {
+      candidates,
+      version: wrapper.value,
+      subject: `Gradle ${wrapper.value}`,
+      severityOf: (rule) => rule.severity,
+    };
+  }
   return undefined;
 }
 
-/** Where the repository's Java and Kotlin source imports an affected dependency, so a packet can list the files. */
 async function attachUsage(
   root: string,
   findings: readonly DetectorFinding[],
@@ -201,25 +275,31 @@ export class JavaDetector implements Detector {
       "build.gradle",
       "build.gradle.kts",
       "libs.versions.toml",
+      "gradle-wrapper.properties",
       ".java-version",
       ".sdkmanrc",
       ".tool-versions",
+      ...MISE_FILES,
     ],
     sourceExtensions: [".java", ".kt"],
   };
+
+  constructor(
+    private readonly loadRules: () => Promise<RegistryV2Rule[]> = async () =>
+      validateRegistryV2(await loadDataFile("registry/java.json")).rules,
+  ) {}
 
   async scan(context: DetectorContext): Promise<DetectorFinding[]> {
     return [...(await this.analyze(context)).findings];
   }
 
   async analyze(context: DetectorContext): Promise<DetectorAnalysis> {
-    const located = await collectDeclarations(context.root);
-    if (located.length === 0) return { findings: [], unclassified: [] };
-
-    const registry = validateRegistryV2(await loadDataFile("registry/java.json"));
-    const rules = rulesByPurl(registry.rules);
-    const findings: DetectorFinding[] = [];
     const unclassified: Omit<UnclassifiedReference, "detector">[] = [];
+    const located = await collectDeclarations(context.root, unclassified);
+    if (located.length === 0 && unclassified.length === 0) return { findings: [], unclassified: [] };
+
+    const rules = rulesByPurl(await this.loadRules());
+    const findings: DetectorFinding[] = [];
     const withUsage: Array<{ id: string; rule: RegistryV2Rule }> = [];
 
     for (const { path, declaration } of located) {
@@ -232,6 +312,11 @@ export class JavaDetector implements Detector {
           reason: `the JDK version of ${ROLE_TEXT[judgment.dynamic.role]} is a property, expression, or floating value, which Offing does not expand`,
           location: { path, line: declaration.line },
         });
+        continue;
+      }
+      if ("noData" in judgment) {
+        const { component, reference, reason, line } = judgment.noData;
+        unclassified.push({ component, reference, reason, location: { path, line } });
         continue;
       }
 

@@ -531,7 +531,7 @@ test("reads inline versions and skips entries with unresolvable refs", () => {
   ]);
 });
 
-test("catalog: ignores comments, blank lines, and other sections", () => {
+test("catalog: reads [plugins], multi-line tables, and ignores comments and other sections", () => {
   const source = [
     "[versions]",
     'v = "1.0"',
@@ -546,7 +546,10 @@ test("catalog: ignores comments, blank lines, and other sections", () => {
     "# this is a comment",
     'lib = { group = "g", name = "a", version.ref = "v" }',
   ].join("\n");
-  assert.deepEqual(parseCatalog(source), [{ kind: "dependency", group: "g", artifact: "a", version: "1.0", line: 12 }]);
+  assert.deepEqual(parseCatalog(source), [
+    { kind: "catalog-plugin", alias: "some-plugin", id: "com.example", version: "1.0", line: 8 },
+    { kind: "dependency", group: "g", artifact: "a", version: "1.0", line: 12 },
+  ]);
 });
 
 test("catalog: version ref lookup is case-insensitive on the alias", () => {

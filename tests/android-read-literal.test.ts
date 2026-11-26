@@ -16,8 +16,11 @@ test("readLiteral accepts bare, assigned, and quoted numeric SDK values", () => 
   assert.deepEqual(values("minSdk 24 /* c */"), ["minSdk=24"]);
 });
 
-test("readLiteral rejects method calls, empty and non-numeric values", () => {
-  assert.deepEqual(values("compileSdk(34)"), []);
+test("readLiteral accepts method calls and rejects empty and non-numeric values", () => {
+  assert.deepEqual(values("compileSdk(34)"), ["compileSdk=34"]);
+  assert.deepEqual(values('buildToolsVersion("34.0.0")'), ["buildToolsVersion=34.0.0"]);
+  assert.deepEqual(values("compileSdkVersion 34"), ["compileSdk=34"]);
+  assert.deepEqual(values("targetSdkVersion = 33"), ["targetSdk=33"]);
   assert.deepEqual(values("compileSdk"), []);
   assert.deepEqual(values("compileSdk ;"), []);
   assert.deepEqual(values("compileSdk = // c"), []);

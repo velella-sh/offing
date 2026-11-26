@@ -83,12 +83,17 @@ test("ignores receiver and ext properties that look like SDK keys", () => {
   ]);
 });
 
-test("skips method-call forms and legacy *Version names", () => {
+test("reads method-call forms and legacy *Version names", () => {
   assert.deepEqual(
     parseAndroidBuildGradle(
       "android {\n  compileSdk(34)\n  minSdk(21)\n  targetSdkVersion 33\n  compileSdkVersion = 34\n}",
     ),
-    [],
+    [
+      { kind: "compileSdk", value: "34", line: 2 },
+      { kind: "minSdk", value: "21", line: 3 },
+      { kind: "targetSdk", value: "33", line: 4 },
+      { kind: "compileSdk", value: "34", line: 5 },
+    ],
   );
 });
 
@@ -282,14 +287,16 @@ test("settings junk and oversize inputs yield nothing", () => {
 
 // libs.versions.toml
 
-test("reads agp and kotlin from [versions] in libs.versions.toml", async () => {
+test("reads agp and kotlin from [versions] and [plugins] in libs.versions.toml", async () => {
   assert.deepEqual(parseAndroidLibsVersionsToml(await fixture("positive", "libs.versions.toml")), [
     { kind: "agp", value: "8.5.2", line: 2 },
     { kind: "kotlin", value: "1.9.24", line: 3 },
+    { kind: "agp", value: "8.5.2", line: 10 },
   ]);
   assert.deepEqual(parseAndroidLibsVersionsToml(await fixture("zero", "libs.versions.toml")), [
     { kind: "agp", value: "8.7.0", line: 2 },
     { kind: "kotlin", value: "2.0.21", line: 3 },
+    { kind: "agp", value: "8.7.0", line: 10 },
   ]);
 });
 

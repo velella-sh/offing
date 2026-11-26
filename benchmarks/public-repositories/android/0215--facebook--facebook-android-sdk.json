@@ -30,6 +30,33 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 60 of facebook-core/build.gradle.kts reads `testImplementation(\"com.android.billingclient:billing:8.0.0\")`. Google Play Billing Library majors follow the two-year deprecation cycle on https://developer.android.com/google/play/billing/deprecation-faq."
       }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "samples/FBLoginSample/build.gradle",
+      "line": 19,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 19 of samples/FBLoginSample/build.gradle declares legacy targetSdkVersion below 35. Google Play requires targetSdk 35+ for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "samples/HelloFacebookSample/build.gradle",
+      "line": 25,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 25 of samples/HelloFacebookSample/build.gradle declares legacy targetSdkVersion below 35. Google Play requires targetSdk 35+ for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "samples/KotlinSampleApp/build.gradle",
+      "line": 48,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 48 of samples/KotlinSampleApp/build.gradle declares legacy targetSdkVersion below 35. Google Play requires targetSdk 35+ for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
     }
   ]
 }

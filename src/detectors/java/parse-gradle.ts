@@ -1,4 +1,6 @@
 import { jdkDeclaration } from "./jdk-version.js";
+import { normalizeCatalogAlias } from "./parse-catalog.js";
+import type { CatalogIndex } from "./parse-catalog.js";
 import { required } from "../../required.js";
 import type {
   DependencyDeclaration,
@@ -103,8 +105,13 @@ const TOOLCHAIN = /(?:languageVersion\s*(?:=|\.set\()\s*JavaLanguageVersion\s*\.
 const COMPATIBILITY = /\b(?:sourceCompatibility|targetCompatibility)\b\s*(?:=|\.set\()?\s*([^\n;]*)/g;
 const KOTLIN_PLUGIN =
   /(?:\bkotlin\(\s*["'][A-Za-z0-9.-]+["']\s*\)|\bid\s*\(?\s*["']org\.jetbrains\.kotlin\.[A-Za-z0-9.-]+["']\s*\)?)\s*version\s+["']([^"'$]+)["']/g;
+const ALIAS_PLUGIN = /\balias\s*\(?\s*libs\.plugins\.([A-Za-z0-9_.]+)\s*\)?/g;
 const CONFIGURATION =
   /\b(?:implementation|api|compileOnly|runtimeOnly|testImplementation|testRuntimeOnly|testCompileOnly|annotationProcessor|kapt|ksp|compile|runtime|testCompile)\s*\(?\s*["']([A-Za-z0-9_.-]+:[A-Za-z0-9_.-]+:[^"'$:@\s]+)(?::[A-Za-z0-9_.-]+)?(?:@[a-z]+)?["']/g;
+const LIBS_DEPENDENCY =
+  /\b(?:implementation|api|compileOnly|runtimeOnly|testImplementation|testRuntimeOnly|testCompileOnly|annotationProcessor|kapt|ksp|compile|runtime|testCompile)\s*\(?\s*libs\.(?!versions\.|plugins\.|bundles\.)([A-Za-z0-9_.]+)\s*\)?/g;
+const CATALOG_VERSION_EXPR =
+  /^(?:JavaVersion\s*\.\s*toVersion\(\s*)?libs\.versions\.([A-Za-z0-9_.]+?)(?:\.asProvider\(\))?(?:\.get\(\))?(?:\.(?:toInt|toInteger|toString)\(\))?(?:\s*\))?$/;
 
 function unquote(text: string): string {
   return text.replace(/^["']|["']$/g, "");
@@ -146,13 +153,23 @@ function* locatedMatches(
   }
 }
 
+/** Resolve a `libs.versions.*` expression against a loaded version catalog. */
+function resolveCatalogVersion(value: string, catalog: CatalogIndex | undefined): string | undefined {
+  if (!catalog) return undefined;
+  const match = CATALOG_VERSION_EXPR.exec(value.trim());
+  if (!match) return undefined;
+  return catalog.versions.get(normalizeCatalogAlias(required(match[1], "catalog version alias")));
+}
+
 /** A literal JDK version text from a compatibility value, or undefined when the value is an expression. */
-function compatibilityLiteral(value: string): string | undefined {
+function compatibilityLiteral(value: string, catalog: CatalogIndex | undefined): string | undefined {
   const constant = /^JavaVersion\s*\.\s*VERSION_([0-9_]+)$/.exec(value);
   if (constant) return required(constant[1], "version constant").replace(/_/g, ".");
   const quoted = /^(["'])([0-9.]+)\1$/.exec(value);
   if (quoted) return required(quoted[2], "quoted version");
-  return /^[0-9]+(?:\.[0-9]+)?$/.test(value) ? value : undefined;
+  if (/^[0-9]+(?:\.[0-9]+)?$/.test(value)) return value;
+  const catalogVersion = resolveCatalogVersion(value, catalog);
+  return catalogVersion && /^[0-9]+(?:\.[0-9]+)?$/.test(catalogVersion) ? catalogVersion : undefined;
 }
 
 /** Maps a character offset in `code` to its 1-based line number. */
@@ -171,8 +188,30 @@ function lineLocator(code: string): (offset: number) => number {
   };
 }
 
+function collectCatalogGradle(
+  code: string,
+  catalog: CatalogIndex | undefined,
+  insideString: (offset: number) => boolean,
+  lineAt: (offset: number) => number,
+  add: (declaration: GradleDeclaration | undefined) => void,
+): void {
+  if (!catalog) return;
+  for (const [offset, match] of locatedMatches(code, ALIAS_PLUGIN, insideString)) {
+    const plugin = catalog.plugins.get(normalizeCatalogAlias(required(match[1], "plugin alias")));
+    if (plugin && plugin.id.startsWith("org.jetbrains.kotlin.")) {
+      add({ kind: "kotlin-plugin", value: plugin.version, line: lineAt(offset) });
+    }
+  }
+  for (const [offset, match] of locatedMatches(code, LIBS_DEPENDENCY, insideString)) {
+    const lib = catalog.libraries.get(normalizeCatalogAlias(required(match[1], "library alias")));
+    if (lib) {
+      add({ kind: "dependency", group: lib.group, artifact: lib.artifact, version: lib.version, line: lineAt(offset) });
+    }
+  }
+}
+
 /** Parse a Gradle build script without file, network, or process I/O. */
-export function parseGradle(contents: string): GradleDeclaration[] {
+export function parseGradle(contents: string, catalog?: CatalogIndex): GradleDeclaration[] {
   if (Buffer.byteLength(contents, "utf8") > MAXIMUM_INPUT_BYTES) return [];
 
   try {
@@ -194,12 +233,15 @@ export function parseGradle(contents: string): GradleDeclaration[] {
     for (const [offset, match] of locatedMatches(code, TOOLCHAIN, insideString)) {
       const argument = balancedArgument(code, offset + match[0].length);
       if (argument === undefined) continue;
-      const literal = /^["']?[0-9]+["']?$/.test(argument) ? unquote(argument) : undefined;
+      const resolved = /^["']?[0-9]+["']?$/.test(argument)
+        ? unquote(argument)
+        : resolveCatalogVersion(argument, catalog);
+      const literal = resolved && /^[0-9]+$/.test(resolved) ? resolved : undefined;
       add(declare("toolchain", argument, literal, lineAt(offset)));
     }
     for (const [offset, match] of locatedMatches(code, COMPATIBILITY, insideString)) {
       const raw = trimUnbalanced(required(match[1], "compatibility value"));
-      if (raw) add(declare("compile-level", raw, compatibilityLiteral(raw), lineAt(offset)));
+      if (raw) add(declare("compile-level", raw, compatibilityLiteral(raw, catalog), lineAt(offset)));
     }
     for (const [offset, match] of locatedMatches(code, KOTLIN_PLUGIN, insideString)) {
       add({ kind: "kotlin-plugin", value: required(match[1], "kotlin version").trim(), line: lineAt(offset) });
@@ -208,6 +250,7 @@ export function parseGradle(contents: string): GradleDeclaration[] {
       const [group, artifact, version] = required(match[1], "notation").split(":") as [string, string, string];
       add({ kind: "dependency", group, artifact, version, line: lineAt(offset) });
     }
+    collectCatalogGradle(code, catalog, insideString, lineAt, add);
     return found.sort((left, right) => left.line - right.line);
   } catch {
     return [];

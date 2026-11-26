@@ -3,5 +3,15 @@
   "commit": "a4f99c12681c9aafb2d1ee50f964cd023424a0e5",
   "ecosystem": "android",
   "selection": "blind",
-  "expected": []
+  "expected": [
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "Application/build.gradle",
+      "line": 42,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Reviewed at this commit: line 42 of Application/build.gradle declares legacy targetSdkVersion below 35. Google Play requires targetSdk 35+ for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    }
+  ]
 }
