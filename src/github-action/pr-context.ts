@@ -21,14 +21,22 @@ function checkoutRefs(repo: string, base: string, head: string, diffMode: boolea
   return { before, after: head };
 }
 
+async function scanReceiptTree(repo: string, ref: string, prefix: string): Promise<Finding[]> {
+  if (!prefix) return scanRefWithBuiltIns(repo, ref);
+  const entry = git(repo, ["--literal-pathspecs", "ls-tree", ref, "--", prefix]).toString();
+  const tree = /^040000 tree ([0-9a-f]+)\t/u.exec(entry)?.[1];
+  return tree ? scanRefWithBuiltIns(repo, tree) : [];
+}
+
 async function writeReceipt(
   outcome: GitHubActionOutcome,
   repo: string,
   before: string,
+  prefix: string,
   afterFindings: Finding[],
   includes: (finding: Finding) => boolean,
 ): Promise<string> {
-  const beforeFindings = (await scanRefWithBuiltIns(repo, before)).filter(includes);
+  const beforeFindings = (await scanReceiptTree(repo, before, prefix)).filter(includes);
   const after = { ...outcome.result, findings: afterFindings.filter(includes) };
   const receipt = buildReceipt({ ...after, findings: beforeFindings }, after, { data: { before: null, after: null } });
   const path = join(dirname(outcome.reportPath), "offing-receipt.json");
@@ -61,13 +69,12 @@ export async function preparePullRequestCountdown(
   const selected = selectChangedAnnotations(dated, scoped).annotated;
   const countdown = { today: scannedAt.slice(0, 10), findings: selected, timelineFindings };
   if (selected.length === 0 || !receiptUrl) return { countdown };
-  const paths = outcome.packages?.map(({ path }) =>
-    path === "." ? prefix : [prefix, path].filter(Boolean).join("/"),
-  ) ?? [prefix];
-  const includes = ({ location }: Finding) => paths.some((path) => !path || location.path.startsWith(`${path}/`));
+  const paths = outcome.packages?.map(({ path }) => path) ?? ["."];
+  const includes = ({ location }: Finding) =>
+    paths.some((path) => path === "." || location.path.startsWith(`${path}/`));
   try {
-    const afterFindings = outcome.diff ? timelineFindings : await scanRefWithBuiltIns(repo, after);
-    const receiptPath = await writeReceipt(outcome, repo, before, afterFindings, includes);
+    const afterFindings = outcome.diff ? timelineFindings : await scanReceiptTree(repo, after, prefix);
+    const receiptPath = await writeReceipt(outcome, repo, before, prefix, afterFindings, includes);
     return { countdown: { ...countdown, receiptUrl }, receiptPath };
   } catch {
     console.log(
