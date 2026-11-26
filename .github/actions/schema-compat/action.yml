@@ -1,0 +1,25 @@
+name: Released schema compatibility
+description: Compare the public schema set with the latest published Offing release.
+
+runs:
+  using: composite
+  steps:
+    - name: Compare schemas with the latest published release
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+        release="$(gh release view --repo "$GITHUB_REPOSITORY" --json tagName --jq .tagName)"
+        [[ "$release" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+        if ! git show-ref --verify --quiet "refs/tags/$release"; then
+          git fetch --no-tags --depth=1 origin "refs/tags/$release:refs/tags/$release"
+        fi
+        mkdir "$RUNNER_TEMP/released-schemas"
+        git archive "refs/tags/$release" schemas | tar -x -C "$RUNNER_TEMP/released-schemas"
+        notices="$RUNNER_TEMP/released-schemas/schemas/deprecation-notices.json"
+        # The first gate records the exact breaks already on main after v0.1.1.
+        # After that release, a notice must already be in the published schema set.
+        if [ "$release" = "v0.1.1" ]; then notices=schemas/deprecation-notices.json; fi
+        node tools/check-schema-compat.ts "$RUNNER_TEMP/released-schemas/schemas" schemas \
+          --release "$release" --notes "$notices"

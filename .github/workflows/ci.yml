@@ -196,6 +196,9 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
           git diff --name-only --diff-filter=ACMRD "$BASE_SHA" HEAD > "$RUNNER_TEMP/offing-changed-files.txt"
           echo "Files changed: $(wc -l < "$RUNNER_TEMP/offing-changed-files.txt")"
+      - name: acc-schemas
+        if: matrix.node == 24 && matrix.shard == 0
+        uses: $/.github/actions/schema-compat
       - name: Check warm agent hook latency
         if: matrix.node == 24 && matrix.shard == 0
         # Measure on one reference runner before the CPU-intensive build and test suite.
@@ -489,6 +492,8 @@ jobs:
       - uses: $/.github/actions/setup
         with:
           cache: npm
+      - name: acc-schemas
+        uses: $/.github/actions/schema-compat
       - name: Build the Action for conformance
         run: npm run build:action --silent
       - name: acc-action-v1
@@ -635,9 +640,6 @@ jobs:
           git add coverage.json offing-badge.json offing-badge.svg
           git diff --cached --quiet || { git commit -qm "chore: update the badges"; git push origin badges; }
 
-  schema-compat:
-    uses: ./.github/workflows/schema-compat.yml
-
   # The only required status check. Branch protection names this job, never the
   # individual jobs, so the matrix can change without editing repository settings.
   ci-ok:
@@ -645,7 +647,7 @@ jobs:
     if: always()
     # Site budget and docs doctor are called above when a queued change touches site files.
     # Lighthouse runs in pages.yml against the Pages build artifact.
-    needs: [changes, generated-files, check, coverage, docs, check-cross-os, site-budget, docs-doctor, self-scan, perf-budget, coverage-badge, schema-compat]
+    needs: [changes, generated-files, check, coverage, docs, check-cross-os, site-budget, docs-doctor, self-scan, perf-budget, coverage-badge]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
