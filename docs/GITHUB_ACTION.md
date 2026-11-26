@@ -83,7 +83,7 @@ Every workflow input is optional. The wrapper preserves the defaults shown below
 
 The workflow exposes these result outputs (`report-path`, `finding-count`, `has-new-findings`, `highest-severity`, `next-eol-date`, `findings-json`) so a later job can branch on them. Use the Action directly for optional features such as PR comments, code scanning, or badge uploads.
 
-To offer a starter workflow in the Actions "New workflow" gallery, copy [`templates/workflows/`](../templates/workflows/) into that repository's `workflow-templates/` directory. See [Organization rollout](ORG_ROLLOUT.md#offer-the-starter-from-the-organizations-github-repository).
+To offer a starter workflow in the Actions "New workflow" gallery, copy [`templates/workflows/`](https://github.com/velella-sh/offing/tree/main/templates/workflows) into that repository's `workflow-templates/` directory. See [Organization rollout](ORG_ROLLOUT.md).
 
 ### SHA-pinned actions
 
