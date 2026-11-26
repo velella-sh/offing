@@ -26,7 +26,10 @@
                 "tags": [
                   "lifecycle",
                   "github-actions"
-                ]
+                ],
+                "offingLifecycle": {
+                  "severity": "medium"
+                }
               }
             },
             {
@@ -47,7 +50,13 @@
                 "tags": [
                   "lifecycle",
                   "npm"
-                ]
+                ],
+                "offingLifecycle": {
+                  "severity": "high",
+                  "endOfLifeDate": "2020-02-11",
+                  "source": "https://www.npmjs.com/package/request",
+                  "replacement": "Native fetch or a maintained HTTP client"
+                }
               }
             }
           ]
@@ -78,7 +87,10 @@
             "offingFindingId/v1": "github-actions.checkout.node20:.github/workflows/ci.yml:7"
           },
           "properties": {
-            "confidence": "exact"
+            "confidence": "exact",
+            "offingLifecycle": {
+              "severity": "medium"
+            }
           }
         },
         {
@@ -105,7 +117,13 @@
             "offingFindingId/v1": "npm.package.request.deprecated:package.json:12"
           },
           "properties": {
-            "confidence": "exact"
+            "confidence": "exact",
+            "offingLifecycle": {
+              "severity": "high",
+              "endOfLifeDate": "2020-02-11",
+              "source": "https://www.npmjs.com/package/request",
+              "replacement": "Native fetch or a maintained HTTP client"
+            }
           }
         }
       ]

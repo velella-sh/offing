@@ -544,6 +544,7 @@ Output is deterministic: rules and results are sorted, paths are repository-rela
 | `results[].message.text` | The finding summary, which names the exact reference, such as `actions/checkout@v3` |
 | `results[].locations[]` | File path (`uriBaseId` `%SRCROOT%`) and `startLine` when the finding has a line |
 | `results[].partialFingerprints["offingFindingId/v1"]` | The finding id, so alerts keep their identity between runs |
+| Rule and result `properties.offingLifecycle` | Severity and known deadline, primary evidence URL, and replacement, as defined by the [lifecycle SARIF profile](spec/sarif/v1.md) |
 
 JSON, text, annotations, and SARIF are renderings of the same findings. A finding suppressed by a baseline is absent from all of them.
 
