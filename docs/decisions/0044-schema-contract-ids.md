@@ -27,8 +27,10 @@ CI compares candidate schemas against the last public release. A change that
 breaks a previously published contract needs a notice for the exact diagnostic
 set and release. The gate reads these notices from the published schema set. The adoption baseline separately records the three contracts
 whose schema changes were already on main when this check was introduced.
-Those notices acknowledge the missing advance notice. CI rejects further
-changes to those assertion paths until the new difference is reviewed.
+Those notices acknowledge the missing advance notice. While v0.1.1 is the
+latest release, CI uses the notices from the base revision. The initial gate
+accepts only the exact bootstrap file. CI rejects new assertion differences
+that lack a notice from the relevant prior release.
 
 The [standalone conformance checker](../spec/schemas/README.md) verifies the
 Pages catalog, including external and JSON Pointer references, from a clean

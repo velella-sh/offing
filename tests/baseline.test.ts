@@ -162,6 +162,7 @@ const file = (findings: object[]) => ({
 
 test("the schema accepts a baseline with and without suppression fields", async () => {
   const validate = await baselineValidator();
+  assert.ok(validate(createBaseline(result)), JSON.stringify(validate.errors));
   assert.ok(validate(file([entry])), JSON.stringify(validate.errors));
   assert.ok(
     validate(
