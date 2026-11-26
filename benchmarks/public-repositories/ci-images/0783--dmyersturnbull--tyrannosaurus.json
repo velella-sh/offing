@@ -156,6 +156,15 @@
         "kind": "maintainer-review",
         "note": "Read tyrannosaurus/resources/Dockerfile.txt:3 at this commit: `FROM python:3.10`: tag 3.10 is at or below the rule's 3.10-and-older bound."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "environment.yml",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read environment.yml:6 at the pinned commit: `python>=3.9,<4`. The compatibility floor admits Python 3.9, which is past end of life (https://devguide.python.org/versions/)."
+      }
     }
   ]
 }

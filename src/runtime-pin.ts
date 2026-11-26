@@ -4,6 +4,8 @@ import { resolve } from "node:path";
 import semver from "semver";
 
 import type { ReplacementRequirements } from "./domain.js";
+import { MISE_FILES, parseMisePins } from "./version-files/mise.js";
+import { parseToolVersionEntries } from "./version-files/tool-versions.js";
 
 /** The Node.js and Python versions a repository pins, as written in its files. */
 export type PinnedRuntimes = ReplacementRequirements;
@@ -16,23 +18,28 @@ async function readOptional(path: string): Promise<string | undefined> {
   }
 }
 
-function toolVersion(contents: string | undefined, tool: string): string | undefined {
-  for (const line of (contents ?? "").split(/\r?\n/)) {
-    const match = new RegExp(`^${tool}\\s+(\\S+)`, "i").exec(line.trim());
-    if (match?.[1]) return match[1];
-  }
-  return undefined;
-}
-
 /** Reads the runtimes a repository pins in its root files. Nothing is executed and no network is used. */
 export async function readPinnedRuntimes(root: string): Promise<PinnedRuntimes> {
-  const toolVersions = await readOptional(resolve(root, ".tool-versions"));
+  const tools = parseToolVersionEntries((await readOptional(resolve(root, ".tool-versions"))) ?? "", {
+    spacedComments: true,
+  });
+  const toolVersion = (name: string): string | undefined =>
+    tools.find(({ tool, tail }) => tool.toLowerCase() === name && tail !== "")?.tail.split(/\s+/)[0];
+  const mise = (await Promise.all(MISE_FILES.map((name) => readOptional(resolve(root, name))))).flatMap((contents) =>
+    contents ? parseMisePins(contents) : [],
+  );
+  const miseVersion = (purl: string): string | undefined =>
+    mise.find((pin) => pin.purl === purl && /^v?\d+(?:\.\d+){0,2}$/.test(pin.value))?.value;
   const node =
     (await readOptional(resolve(root, ".nvmrc")))?.trim() ||
     (await readOptional(resolve(root, ".node-version")))?.trim() ||
-    toolVersion(toolVersions, "nodejs") ||
-    toolVersion(toolVersions, "node");
-  const python = (await readOptional(resolve(root, ".python-version")))?.trim() || toolVersion(toolVersions, "python");
+    toolVersion("nodejs") ||
+    toolVersion("node") ||
+    miseVersion("pkg:generic/nodejs");
+  const python =
+    (await readOptional(resolve(root, ".python-version")))?.trim() ||
+    toolVersion("python") ||
+    miseVersion("pkg:generic/python");
   return {
     ...(node && semver.coerce(node) ? { node } : {}),
     ...(python && semver.coerce(python) ? { python } : {}),

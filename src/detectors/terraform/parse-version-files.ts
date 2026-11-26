@@ -1,3 +1,5 @@
+import { parseToolVersionEntries } from "../../version-files/tool-versions.js";
+
 /**
  * Pure, bounded parsers for the Terraform CLI version pinned in `.terraform-version`
  * (tfenv, tenv) and in the `terraform` entry of `.tool-versions` (asdf, mise).
@@ -21,7 +23,7 @@ export interface TerraformCliDeclaration {
   line: number;
 }
 
-const TERRAFORM_VERSION = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
+export const TERRAFORM_VERSION = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 
 function lines(contents: string): string[] | undefined {
   if (Buffer.byteLength(contents, "utf8") > MAXIMUM_INPUT_BYTES) return undefined;
@@ -51,15 +53,13 @@ export function parseTerraformVersionFile(contents: string): TerraformCliDeclara
 
 /** Parse the `terraform` entry from a `.tool-versions` file. */
 export function parseToolVersionsTerraform(contents: string): TerraformCliDeclaration[] {
-  const all = lines(contents);
-  if (!all) return [];
-
-  for (const [index, raw] of all.entries()) {
-    const fields = withoutComment(raw).split(/\s+/);
-    if (fields[0] !== "terraform") continue;
-    const version = fields[1];
-    if (version === undefined || !TERRAFORM_VERSION.test(version)) return [];
-    return [{ value: version, line: index + 1 }];
-  }
-  return [];
+  const entry = parseToolVersionEntries(contents, {
+    maxBytes: MAXIMUM_INPUT_BYTES,
+    maxLine: MAXIMUM_LINE_LENGTH,
+    legacyNewlines: true,
+  }).find(({ tool }) => tool === "terraform");
+  const version = entry?.versions[0];
+  return entry && version !== undefined && TERRAFORM_VERSION.test(version)
+    ? [{ value: version, line: entry.line }]
+    : [];
 }

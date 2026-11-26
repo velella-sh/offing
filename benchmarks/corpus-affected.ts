@@ -77,7 +77,7 @@ export const REGISTRY_ECOSYSTEMS: Readonly<Record<string, readonly string[]>> = 
   "cpp.json": ["cpp"],
   "dart.json": ["dart"],
   "database.json": ["database"],
-  "deno.json": ["deno"],
+  "deno.json": ["deno", "node"],
   "dotnet.json": ["dotnet", "node-actions", "container"],
   "elixir.json": ["elixir"],
   "github-actions-shas.json": ["node-actions"],
@@ -130,6 +130,7 @@ export const FIXTURE_ECOSYSTEMS: Readonly<Record<string, readonly string[]>> = {
     ),
   ),
   "github-actions": ["node-actions"],
+  "version-files": ["deno", "elixir", "java", "node", "php", "python", "ruby", "terraform"],
 };
 
 /**
@@ -143,10 +144,20 @@ export const SHARED_FILE_ECOSYSTEMS: ReadonlyArray<{ pattern: RegExp; ecosystems
       ecosystems: ["android", "dart", "dotnet", "go", "java", "node", "php", "python", "ruby", "rust", "swift"],
       reason: "source usage mapping",
     },
+    {
+      pattern: /^src\/version-files\/(mise|tool-versions)\.ts$/,
+      ecosystems: ["deno", "elixir", "java", "node", "php", "python", "ruby", "terraform"],
+      reason: "shared version-manager parsing",
+    },
+    {
+      pattern: /^src\/version-files\/conda\.ts$/,
+      ecosystems: ["python"],
+      reason: "Conda environment parsing",
+    },
     { pattern: /^src\/workspaces\.ts$/, ecosystems: ["node", "python"], reason: "workspace discovery" },
     {
       pattern: /^src\/rule-finding\.ts$/,
-      ecosystems: ["database", "deno", "dotnet", "go", "node-actions", "scala", "shell"],
+      ecosystems: ["database", "deno", "dotnet", "go", "node", "node-actions", "scala", "shell"],
       reason: "rule findings",
     },
     {
@@ -220,7 +231,7 @@ export const SHARED_FILE_ECOSYSTEMS: ReadonlyArray<{ pattern: RegExp; ecosystems
     },
     {
       pattern: /^src\/detectors\/json-lines\.ts$/,
-      ecosystems: ["cpp", "dart", "deno", "dotnet", "php", "swift"],
+      ecosystems: ["cpp", "dart", "deno", "dotnet", "node", "php", "swift"],
       reason: "JSON line locations",
     },
     {

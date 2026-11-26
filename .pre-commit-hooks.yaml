@@ -12,4 +12,4 @@
   entry: offing scan . --fail-on high --format compact
   language: node
   pass_filenames: false
-  files: '(^|/)(package(-lock)?\.json|npm-shrinkwrap\.json|yarn\.lock|pnpm-lock\.yaml|\.nvmrc|\.node-version|\.tool-versions|Dockerfile[^/]*|requirements[^/]*\.txt|pyproject\.toml|Pipfile(\.lock)?|poetry\.lock|go\.mod|Cargo\.(toml|lock)|Gemfile(\.lock)?|composer\.(json|lock)|pom\.xml|build\.gradle(\.kts)?|[^/]+\.csproj|global\.json|pubspec\.yaml|Package\.swift|\.github/workflows/[^/]+\.ya?ml|\.gitlab-ci\.yml|\.circleci/config\.yml|azure-pipelines\.yml)$'
+  files: '(^|/)(package(-lock)?\.json|npm-shrinkwrap\.json|yarn\.lock|pnpm-lock\.yaml|\.nvmrc|\.node-version|\.tool-versions|\.?mise\.toml|environment\.ya?ml|Dockerfile[^/]*|requirements[^/]*\.txt|pyproject\.toml|Pipfile(\.lock)?|poetry\.lock|go\.mod|Cargo\.(toml|lock)|Gemfile(\.lock)?|composer\.(json|lock)|pom\.xml|build\.gradle(\.kts)?|[^/]+\.csproj|global\.json|pubspec\.yaml|Package\.swift|\.github/workflows/[^/]+\.ya?ml|\.gitlab-ci\.yml|\.circleci/config\.yml|azure-pipelines\.yml)$'

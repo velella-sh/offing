@@ -1,3 +1,4 @@
+import { parseToolVersionEntries } from "../../version-files/tool-versions.js";
 import { jdkDeclaration } from "./jdk-version.js";
 import { required } from "../../required.js";
 import type { DynamicJdkDeclaration, JdkDeclaration } from "./jdk-version.js";
@@ -45,8 +46,18 @@ export function parseSdkmanrc(contents: string): PinDeclaration[] {
 
 /** The first version of the `java` entry of a `.tool-versions` file. */
 export function parseToolVersions(contents: string): PinDeclaration[] {
-  for (const { text, line } of logicalLines(contents)) {
-    const [tool, version] = text.replace(/\s+#.*$/, "").split(/\s+/);
+  if (contents.includes("\0")) return [];
+  for (const {
+    tool,
+    versions: [version],
+    line,
+  } of parseToolVersionEntries(contents, {
+    maxBytes: MAXIMUM_INPUT_BYTES,
+    maxLine: MAXIMUM_LINE_LENGTH,
+    legacyNewlines: true,
+    trimBeforeLimit: true,
+    spacedComments: true,
+  })) {
     if (tool !== "java" || !version || /^(?:path|ref):/.test(version)) continue;
     const declaration = jdkDeclaration("pin", version, line);
     return declaration ? [declaration] : [];

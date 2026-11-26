@@ -1,0 +1,35 @@
+#:schema ./schema/mise.json
+min_version = "2026.9.7"
+
+[env]
+_.path = ["./target/debug", "./node_modules/.bin"]
+
+[tools]
+mr-boxington = { version = "latest", minimum_release_age = "0s" }
+tak = { version = "latest", minimum_release_age = "0s" }
+age = "latest"
+aube = { version = "latest", minimum_release_age = "0s" }
+cargo-binstall = "latest"
+cargo-deny = { version = "latest", lazy = true }
+communique = { version = "latest", minimum_release_age = "0s" }
+cargo-insta = "latest"
+"aqua:nextest-rs/nextest/cargo-nextest" = "latest"
+git-cliff = "latest"
+gh = "latest"
+hk = { version = "latest", minimum_release_age = "0s" }
+jactionlint = "latest"
+jouet = "v0.0.5"
+jq = "latest"
+lua-language-server = "latest"
+stylua = "latest"
+"npm:markdownlint-cli" = "latest"
+oxfmt = "0.74.0"
+"npm:ajv-cli" = "latest"
+shellcheck = "latest"
+shfmt = "latest"
+taplo = "latest"
+tombi = "latest"
+usage = { version = "latest", minimum_release_age = "0s" }
+wait-for-gh-rate-limit = { version = "latest", minimum_release_age = "0s" }
+sops = "latest"
+node = "24"

@@ -1,3 +1,4 @@
+import { parseCondaEnvironment } from "../version-files/conda.js";
 import { readFile, readdir } from "node:fs/promises";
 import { basename, join } from "node:path";
 
@@ -462,19 +463,7 @@ function collectCircleci(pins: RuntimePin[], path: string, contents: string): vo
 }
 
 function collectConda(pins: RuntimePin[], path: string, contents: string): void {
-  const lineCounter = new LineCounter();
-  const document = parseDocument(contents, { lineCounter, prettyErrors: false });
-  if (document.errors.length > 0 || !isMap(document.contents)) return;
-  const dependencies = document.contents.get("dependencies", true);
-  if (!isSeq(dependencies)) return;
-  for (const item of dependencies.items) {
-    if (!isScalar(item) || typeof item.value !== "string" || !item.range) continue;
-    const raw = item.value.trim();
-    const match = /^python\s*(>=|<=|>|<|==|=|~=|!=)?\s*(\S+)$/i.exec(raw);
-    const version = match?.[2];
-    if (version === undefined) continue;
-    const line = lineCounter.linePos(item.range[0]).line;
-    const operator = match?.[1];
+  for (const { raw, version, operator, line } of parseCondaEnvironment(contents).python) {
     if (operator === ">=" || operator === ">" || operator === "~=") {
       addPin(pins, path, line, "conda environment.yml", raw, "floor", resolveFloor(`${operator}${version}`));
     } else if (operator === "<" || operator === "<=" || operator === "!=") {

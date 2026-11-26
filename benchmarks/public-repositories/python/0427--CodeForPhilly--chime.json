@@ -156,6 +156,15 @@
         "kind": "maintainer-review",
         "note": "Read Dockerfile.dash:6 at this commit: `ENV PORT $PORT`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "environment.yml",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read environment.yml:6 at the pinned commit: `python>=3.6`. The compatibility floor admits Python 3.6, which is past end of life (https://devguide.python.org/versions/)."
+      }
     }
   ]
 }

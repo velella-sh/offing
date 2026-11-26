@@ -1,0 +1,69 @@
+name: Offing Action conformance
+
+on:
+  workflow_call:
+    inputs:
+      action_repository:
+        description: Repository providing the Action, defaults to the caller's repository.
+        type: string
+        required: false
+      action_ref:
+        description: Tag, branch, or SHA providing the Action, defaults to the caller's commit.
+        type: string
+        required: false
+      contract_ref:
+        description: Ref for the checker, defaults to the caller's revision in Offing and main elsewhere.
+        type: string
+        required: false
+      build:
+        description: Build the bundle from source for a checkout that does not contain it.
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  acc-action-v1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out the Action under test
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: ${{ inputs.action_repository || github.repository }}
+          ref: ${{ inputs.action_ref || github.sha }}
+          persist-credentials: false
+      - name: Check out the contract and runner
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: velella-sh/offing
+          ref: ${{ inputs.contract_ref || (github.repository == 'velella-sh/offing' && github.sha || 'refs/heads/main') }}
+          path: .offing-contract
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Build the source candidate
+        if: inputs.build
+        run: |
+          npm ci
+          npm run build:action
+      - name: Check the packaged Action
+        uses: ./.offing-contract/.github/actions/action-conformance # zizmor: ignore[self-repository] -- separately checked out checker
+      - name: Record the tested Action
+        if: always()
+        env:
+          ACTION_REPOSITORY: ${{ inputs.action_repository || github.repository }}
+          ACTION_REF: ${{ inputs.action_ref || github.sha }}
+          SOURCE_BUILD: ${{ inputs.build }}
+        run: |
+          {
+            echo '### acc-action-v1'
+            printf 'Repository: %s\n\nRef: %s\n\n' "$ACTION_REPOSITORY" "$ACTION_REF"
+            printf 'Commit: %s\n\n' "$(git rev-parse HEAD)"
+            printf 'Package version: %s\n\n' "$(node -p "require('./package.json').version")"
+            printf 'Built from source: %s\n' "$SOURCE_BUILD"
+          } >> "$GITHUB_STEP_SUMMARY"

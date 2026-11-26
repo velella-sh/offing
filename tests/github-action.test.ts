@@ -109,7 +109,7 @@ test("a clean run writes the zero-findings summary, no annotations, and exits 0"
   assert.deepEqual(run.annotations, []);
   assert.equal(
     run.outputs,
-    `report-path=${join(root, ".runner", "offing-report.json")}\nfinding-count=0\nhas-new-findings=false\nhighest-severity=\nnext-eol-date=\nfindings-json=[]\n`,
+    `report-path=${join(root, ".runner", "offing-report.json")}\nfinding-count=0\nhas-new-findings=false\nhighest-severity=\nnext-eol-date=\nnext-eol-days=\nfindings-json=[]\n`,
   );
   assert.equal(
     normalizeDataLine(run.summary),
@@ -129,7 +129,7 @@ test("a run whose findings meet the severity gate fails with the finding and gat
     `::error title=Offing policy gate failed::Offing failed: 1 finding met or exceeded the high severity gate. JSON report: ${reportPath}. Next steps: review the annotations and JSON report, then fix the findings or update the baseline and rerun Offing.`,
   ]);
   assert.equal(
-    run.outputs,
+    run.outputs.replace(/^next-eol-days=-?\d+\n/m, ""),
     `report-path=${reportPath}\nfinding-count=1\nhas-new-findings=true\nhighest-severity=high\nnext-eol-date=2026-09-23\nfindings-json=[{"id":"github-actions.checkout.node20:.github/workflows/ci.yml:4","ruleId":"github-actions.checkout.node20","severity":"high","title":"Unsupported actions/checkout runtime","path":".github/workflows/ci.yml","line":4,"deadline":"2026-09-23"}]\n`,
   );
   assert.equal(
@@ -465,6 +465,7 @@ test("the diff summary counts the findings left out of the annotations and links
     GITHUB_SERVER_URL: "https://github.com",
     GITHUB_REPOSITORY: "o/r",
     GITHUB_RUN_ID: "7",
+    "INPUT_UPLOAD-REPORT": "true",
   });
 
   assert.equal(run.code, 0);
@@ -585,7 +586,7 @@ test("the timeline keeps ten dated events and points at the report for the rest"
   const text = renderSummary(many, false, "high", undefined, false);
 
   assert.equal(text.split("\n").filter((line) => /^\| \d{4}-\d{2}-\d{2} \|/.test(line)).length, 10);
-  assert.match(text, /…and 3 more dated events; the JSON report artifact lists every deadline\./);
+  assert.match(text, /…and 3 more dated events; the JSON report lists every deadline\./);
 });
 
 test("a scan with a dated finding writes the timeline with days left into the job summary", async () => {

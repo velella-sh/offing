@@ -1,8 +1,16 @@
+import { MISE_FILES } from "../../version-files/mise.js";
 import type { Severity, SourceUsage } from "../../domain.js";
 import { relativePosix } from "../../paths.js";
 import { required } from "../../required.js";
 import { DETECTOR_API_VERSION } from "../../sdk.js";
-import type { Detector, DetectorContext, DetectorFinding, DetectorInputs } from "../../sdk.js";
+import type {
+  DetectorAnalysis,
+  DetectorUnclassifiedReference,
+  Detector,
+  DetectorContext,
+  DetectorFinding,
+  DetectorInputs,
+} from "../../sdk.js";
 import { analyzeSourceUsage, impactFor } from "../../source-usage.js";
 import { parseVersLenient, versContains } from "@velella/ebb/vers/index";
 import { discoverPythonWorkspaces, usagesOwnedBy } from "../../workspaces.js";
@@ -204,6 +212,9 @@ export class PythonDetector implements Detector {
       ".python-version",
       "runtime.txt",
       ".tool-versions",
+      ...MISE_FILES,
+      "environment.yml",
+      "environment.yaml",
       "setup.cfg",
       "setup.py",
       "tox.ini",
@@ -217,21 +228,29 @@ export class PythonDetector implements Detector {
   };
 
   async scan(context: DetectorContext): Promise<DetectorFinding[]> {
+    return [...(await this.analyze(context)).findings];
+  }
+
+  async analyze(context: DetectorContext): Promise<DetectorAnalysis> {
+    const unclassified: DetectorUnclassifiedReference[] = [];
     const memberDirectories = await discoverPythonWorkspaces(context.root);
     // The root project is "", each uv workspace member is its relative directory.
     const projects: ProjectScan[] = [];
     for (const directory of ["", ...memberDirectories]) {
-      const project = await scanProject(context.root, directory);
+      const project = await scanProject(context.root, directory, unclassified);
       if (project) projects.push(project);
     }
-    if (projects.length === 0) return [];
+    if (projects.length === 0) return { findings: [], unclassified };
 
     await shareRootLockfile(context.root, projects);
     const rules = await loadRules();
-    return [
-      ...runtimeFindings(context.root, rules, projects),
-      ...(await packageFindings(context.root, rules, projects)),
-    ];
+    return {
+      findings: [
+        ...runtimeFindings(context.root, rules, projects),
+        ...(await packageFindings(context.root, rules, projects)),
+      ],
+      unclassified,
+    };
   }
 }
 
