@@ -474,12 +474,12 @@ const displayScores = (scores: { precision: number | null; recall: number | null
 });
 
 function renderAccuracyCollections(data: DashboardData): Record<string, string> {
-  const rows = data.accuracy.ecosystems.map(({ scores, misses, trend, ...row }, index) => ({
+  const rows = data.accuracy.ecosystems.map(({ scores, misses, ...row }) => ({
     ...row,
     ...scores,
     ...displayScores(scores),
     misses: misses.length ? misses.join("\n") : "No archived misses for this ecosystem.",
-    trend: trendMarkdown(trend, index),
+    trend: trendMarkdown(data.accuracy.trends[row.id] ?? [], row.id),
   }));
   const maturity = data.accuracy.maturity.map(({ scores, ...row }) => ({
     ...row,
@@ -494,9 +494,9 @@ function renderAccuracyCollections(data: DashboardData): Record<string, string> 
   };
 }
 
-function trendMarkdown(trend: DashboardData["accuracy"]["ecosystems"][number]["trend"], index: number): string {
+function trendMarkdown(trend: DashboardData["accuracy"]["trends"][string], id: string): string {
   if (trend.length < 2) return "Trend requires two runs with measured precision and recall.";
-  const chart = `::line-chart{from="dashboard.accuracy.ecosystems.${index}.trend" category="run" value="precision,recall" title="Precision and recall by recorded run"}`;
+  const chart = `::line-chart{from="dashboard.accuracy.trends.${id}" category="run" value="precision,recall" title="Precision and recall by recorded run"}`;
   const provenance = trend.map(
     ({ run, date, commit, ebbVersion, repositories }) =>
       `- Run ${run} · ${date} · [${commit.slice(0, 7)}](https://github.com/velella-sh/offing/commit/${commit}) · Ebb ${ebbVersion} · ${repositories} repositories`,

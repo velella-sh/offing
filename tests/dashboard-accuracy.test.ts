@@ -72,8 +72,8 @@ test("the dashboard pools counts, ranks measured ecosystems, and retains per-run
     recall: 0.3333,
   });
   assert.equal(accuracy.ecosystems[0]?.repositories, 1);
-  assert.equal(accuracy.ecosystems[0]?.trend[1]?.repositories, 1);
-  assert.equal(accuracy.ecosystems[0]?.trend[1]?.commit, run.commit);
+  assert.equal(accuracy.trends.python?.[1]?.repositories, 1);
+  assert.equal(accuracy.trends.python?.[1]?.commit, run.commit);
   assert.match(accuracy.ecosystems[0]?.misses[0] ?? "", /example\/b\/blob\/\w+\/environment\.yml#L7/);
   assert.deepEqual(accuracy.maturity.find(({ id }) => id === "stable")?.scores, {
     truePositives: 11,

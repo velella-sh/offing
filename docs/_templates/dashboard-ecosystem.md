@@ -2,7 +2,7 @@
 title: "{id} accuracy"
 description: "Pinned public corpus accuracy for {id} repositories."
 layout: doc
-image: /assets/og/accuracy-dashboard.svg
+image: https://velella.sh/offing/assets/og/accuracy-dashboard.svg
 ---
 
 # :field[id] accuracy
