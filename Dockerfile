@@ -8,6 +8,7 @@ COPY tools ./tools
 COPY examples ./examples
 COPY tests ./tests
 COPY benchmarks ./benchmarks
+COPY web ./web
 RUN npm run build
 RUN npm prune --omit=dev --ignore-scripts
 
