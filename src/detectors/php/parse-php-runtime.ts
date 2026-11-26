@@ -1,3 +1,5 @@
+import { parseToolVersionEntries } from "../../version-files/tool-versions.js";
+
 /**
  * Pure, bounded parsers for the PHP runtime a project pins in `.php-version` and `.tool-versions`.
  *
@@ -43,17 +45,7 @@ export function parsePhpVersion(contents: string): PhpRuntimeDeclaration[] {
  * nothing rather than a partial result.
  */
 export function parseToolVersions(contents: string): PhpRuntimeDeclaration[] {
-  if (Buffer.byteLength(contents, "utf8") > MAXIMUM_INPUT_BYTES) return [];
-
-  const declarations: PhpRuntimeDeclaration[] = [];
-  for (const [index, rawLine] of contents.split(/\r?\n/).entries()) {
-    if (rawLine.length > MAXIMUM_LINE_LENGTH) continue;
-    const text = rawLine.replace(/#.*$/, "").trim();
-    if (text === "") continue;
-    const [tool, ...versions] = text.split(/\s+/);
-    if (tool !== "php" || versions.length === 0 || versions.some((version) => !PINNED_PHP_VERSION.test(version)))
-      continue;
-    for (const value of versions) declarations.push({ value, line: index + 1 });
-  }
-  return declarations;
+  return parseToolVersionEntries(contents, { maxBytes: MAXIMUM_INPUT_BYTES, maxLine: MAXIMUM_LINE_LENGTH })
+    .filter(({ tool, versions }) => tool === "php" && versions.every((value) => PINNED_PHP_VERSION.test(value)))
+    .flatMap(({ versions, line }) => versions.map((value) => ({ value, line })));
 }

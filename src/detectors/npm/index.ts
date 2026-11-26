@@ -1,3 +1,4 @@
+import { MISE_FILES } from "../../version-files/mise.js";
 import { resolve } from "node:path";
 
 import { DETECTOR_API_VERSION } from "../../sdk.js";
@@ -17,7 +18,7 @@ import type { NpmProject } from "./project.js";
 import { readOptional } from "../read-optional.js";
 import { loadNodeRules, loadPackageRules, matchPackageRules, matchedRuleFinding } from "./rules.js";
 import type { MatchedPackageRule } from "./rules.js";
-import { runtimeFindings, runtimeRuleContext } from "./runtime.js";
+import { judgeRuntimeDeclarations, miseRuntimeDeclarations, runtimeFindings, runtimeRuleContext } from "./runtime.js";
 
 /** Turns usage-analysis skip lines (`path: reason`) into unclassified references for the report. */
 function unclassifiedFromUsageSkips(skips: readonly string[]): DetectorUnclassifiedReference[] {
@@ -31,6 +32,31 @@ function unclassifiedFromUsageSkips(skips: readonly string[]): DetectorUnclassif
       location: { path: path || ".", line: 1 },
     };
   });
+}
+
+async function scanMiseOnly(root: string): Promise<DetectorAnalysis> {
+  const unclassified: DetectorUnclassifiedReference[] = [];
+  const declarations = await miseRuntimeDeclarations(root, "", unclassified);
+  if (declarations.length === 0) return { findings: [], unclassified };
+  const rules = await loadNodeRules();
+  const findings = judgeRuntimeDeclarations(root, declarations, rules, runtimeRuleContext(rules), new Set());
+  return { findings, unclassified };
+}
+
+async function npmRuntimeFindings(
+  root: string,
+  hasRoot: boolean,
+  projects: readonly NpmProject[],
+  rules: Awaited<ReturnType<typeof loadNodeRules>>,
+  unclassified: DetectorUnclassifiedReference[],
+): Promise<DetectorFinding[]> {
+  const findings: DetectorFinding[] = [];
+  const seen = new Set<string>();
+  const runtime = runtimeRuleContext(rules);
+  for (const project of hasRoot ? projects : [undefined, ...projects]) {
+    findings.push(...(await runtimeFindings(root, project, rules, runtime, seen, unclassified)));
+  }
+  return findings;
 }
 
 export class NpmDetector implements Detector {
@@ -48,6 +74,7 @@ export class NpmDetector implements Detector {
       "bun.lockb",
       ".nvmrc",
       ".node-version",
+      ...MISE_FILES,
       "pnpm-workspace.yaml",
       "lerna.json",
     ],
@@ -61,9 +88,8 @@ export class NpmDetector implements Detector {
   async analyze(context: DetectorContext): Promise<DetectorAnalysis> {
     const rootManifest = await readOptional(resolve(context.root, "package.json"));
     const workspaceDirectories = await discoverNpmWorkspaces(context.root);
-    if (!rootManifest && workspaceDirectories.length === 0) return { findings: [], unclassified: [] };
-
     const unclassified: DetectorUnclassifiedReference[] = [];
+    if (!rootManifest && workspaceDirectories.length === 0) return scanMiseOnly(context.root);
     if ((await readOptional(resolve(context.root, "bun.lockb"))) !== undefined) {
       unclassified.push(binaryBunLockReference("bun.lockb"));
     }
@@ -80,14 +106,8 @@ export class NpmDetector implements Detector {
       if (project) projects.push(project);
     }
 
-    const findings: DetectorFinding[] = [];
-    const matched: MatchedPackageRule[] = [];
-    const runtime = runtimeRuleContext(nodeRules);
-    const seenRuntimeRules = new Set<string>();
-    for (const project of projects) {
-      findings.push(...(await runtimeFindings(context.root, project, nodeRules, runtime, seenRuntimeRules)));
-      matched.push(...matchPackageRules(project, packageRules));
-    }
+    const findings = await npmRuntimeFindings(context.root, Boolean(rootManifest), projects, nodeRules, unclassified);
+    const matched: MatchedPackageRule[] = projects.flatMap((project) => matchPackageRules(project, packageRules));
 
     const matchedRules = [...new Map(matched.map((item) => [item.rule.id, item.rule])).values()];
     const usageSkips: string[] = [];

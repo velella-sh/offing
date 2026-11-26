@@ -1,3 +1,5 @@
+import { parseToolVersionEntries } from "../../version-files/tool-versions.js";
+
 /**
  * Pure, bounded parsers for the Elixir and Erlang/OTP runtimes a project pins in `.tool-versions`.
  *
@@ -34,34 +36,37 @@ export function otpFromElixirPin(value: string): string | undefined {
   return match?.[1];
 }
 
+export function elixirDeclarations(value: string, line: number): ElixirRuntimeDeclaration[] {
+  if (!PINNED_ELIXIR_VERSION.test(value)) return [];
+  const declarations: ElixirRuntimeDeclaration[] = [{ kind: "elixir", value: elixirVersion(value), line }];
+  const otp = otpFromElixirPin(value);
+  if (otp) declarations.push({ kind: "erlang", value: otp, line });
+  return declarations;
+}
+
+export function erlangDeclarations(value: string, line: number): ElixirRuntimeDeclaration[] {
+  return PINNED_ERLANG_VERSION.test(value) ? [{ kind: "erlang", value, line }] : [];
+}
+
 /**
  * Parse every pinned Elixir and Erlang version in a `.tool-versions` file. An `elixir` line with an
  * `-otp-N` suffix also yields an Erlang declaration for that major. If any token on a tool's line is
  * unsupported, that line returns nothing rather than a partial result.
  */
 export function parseToolVersions(contents: string): ElixirRuntimeDeclaration[] {
-  if (Buffer.byteLength(contents, "utf8") > MAXIMUM_INPUT_BYTES) return [];
-
   const declarations: ElixirRuntimeDeclaration[] = [];
-  for (const [index, rawLine] of contents.split(/\r?\n/).entries()) {
-    if (rawLine.length > MAXIMUM_LINE_LENGTH) continue;
-    const text = rawLine.replace(/#.*$/, "").trim();
-    if (text === "") continue;
-    const [tool, ...versions] = text.split(/\s+/);
-    const line = index + 1;
-
+  for (const { tool, versions, line } of parseToolVersionEntries(contents, {
+    maxBytes: MAXIMUM_INPUT_BYTES,
+    maxLine: MAXIMUM_LINE_LENGTH,
+  })) {
     if (tool === "elixir") {
-      if (versions.length === 0 || versions.some((version) => !PINNED_ELIXIR_VERSION.test(version))) continue;
-      for (const raw of versions) {
-        declarations.push({ kind: "elixir", value: elixirVersion(raw), line });
-        const otp = otpFromElixirPin(raw);
-        if (otp) declarations.push({ kind: "erlang", value: otp, line });
-      }
+      if (versions.some((version) => !PINNED_ELIXIR_VERSION.test(version))) continue;
+      for (const value of versions) declarations.push(...elixirDeclarations(value, line));
       continue;
     }
 
     if (tool === "erlang") {
-      if (versions.length === 0 || versions.some((version) => !PINNED_ERLANG_VERSION.test(version))) continue;
+      if (versions.some((version) => !PINNED_ERLANG_VERSION.test(version))) continue;
       for (const value of versions) declarations.push({ kind: "erlang", value, line });
     }
   }

@@ -4,7 +4,9 @@ import semver from "semver";
 
 import type { DeprecationRule, Severity } from "../../domain.js";
 import { relativePosix } from "../../paths.js";
-import type { DetectorFinding } from "../../sdk.js";
+import type { DetectorFinding, DetectorUnclassifiedReference } from "../../sdk.js";
+import { MISE_FILES, miseDeclarations, noVersionData } from "../../version-files/mise.js";
+import { devEngineEntries, otherDevEngineFindings } from "./dev-engines.js";
 import type { PackageManifest } from "./manifest.js";
 import { propertyLine } from "./manifest.js";
 import type { NpmProject } from "./project.js";
@@ -23,6 +25,15 @@ interface RuntimeDeclaration {
   value: string;
   kind: "compatibility range" | "pinned runtime";
 }
+
+const NODE_PURL = "pkg:generic/nodejs";
+const MISE_PARSERS = new Map([
+  [
+    NODE_PURL,
+    ({ value, line }: { value: string; line: number }) =>
+      /^v?\d+(?:\.\d+){0,2}$/.test(value) || semver.valid(value) ? [{ value, line }] : [],
+  ],
+]);
 
 interface RuntimeRuleContext {
   endedRules: NodeRule[];
@@ -132,19 +143,74 @@ export function runtimeRuleContext(nodeRules: readonly NodeRule[]): RuntimeRuleC
   return { endedRules, scheduledMajors, newestRuleMajor };
 }
 
+async function runtimeDeclarations(
+  root: string,
+  project: NpmProject | undefined,
+  unclassified: DetectorUnclassifiedReference[],
+): Promise<RuntimeDeclaration[]> {
+  const declarations = project
+    ? manifestRuntimeDeclarations(project.manifestPath, project.contents, project.manifest)
+    : [];
+  if (project) {
+    for (const filename of [".nvmrc", ".node-version"] as const) {
+      const path = resolve(root, project.directory, filename);
+      const value = (await readOptional(path))?.trim();
+      if (value) declarations.push({ path, line: 1, value, kind: "pinned runtime" });
+    }
+    for (const { name, version, line } of devEngineEntries(project.contents, "runtime")) {
+      if (name !== "node" && name !== "nodejs") continue;
+      if (!version.trim() || !semver.validRange(version)) {
+        unclassified.push(noVersionData(relativePosix(root, project.manifestPath), line, NODE_PURL, version || name));
+      } else {
+        declarations.push({ path: project.manifestPath, line, value: version, kind: "compatibility range" });
+      }
+    }
+  }
+  declarations.push(...(await miseRuntimeDeclarations(root, project?.directory ?? "", unclassified)));
+  return declarations;
+}
+
+export async function miseRuntimeDeclarations(
+  root: string,
+  directory: string,
+  unclassified: DetectorUnclassifiedReference[],
+): Promise<RuntimeDeclaration[]> {
+  const declarations: RuntimeDeclaration[] = [];
+  for (const filename of MISE_FILES) {
+    const path = resolve(root, directory, filename);
+    const contents = await readOptional(path);
+    if (contents === undefined) continue;
+    for (const pin of miseDeclarations(relativePosix(root, path), contents, MISE_PARSERS, unclassified))
+      declarations.push({ ...pin, path, kind: "pinned runtime" });
+  }
+  return declarations;
+}
+
 export async function runtimeFindings(
   root: string,
-  project: NpmProject,
+  project: NpmProject | undefined,
   nodeRules: readonly NodeRule[],
   { endedRules, scheduledMajors, newestRuleMajor }: RuntimeRuleContext,
   seen: Set<string>,
+  unclassified: DetectorUnclassifiedReference[],
 ): Promise<DetectorFinding[]> {
-  const declarations = manifestRuntimeDeclarations(project.manifestPath, project.contents, project.manifest);
-  for (const filename of [".nvmrc", ".node-version"] as const) {
-    const path = resolve(root, project.directory, filename);
-    const value = (await readOptional(path))?.trim();
-    if (value) declarations.push({ path, line: 1, value, kind: "pinned runtime" });
-  }
+  const declarations = await runtimeDeclarations(root, project, unclassified);
+  const findings = project
+    ? await otherDevEngineFindings(relativePosix(root, project.manifestPath), project.contents, unclassified)
+    : [];
+  return [
+    ...findings,
+    ...judgeRuntimeDeclarations(root, declarations, nodeRules, { endedRules, scheduledMajors, newestRuleMajor }, seen),
+  ];
+}
+
+export function judgeRuntimeDeclarations(
+  root: string,
+  declarations: readonly RuntimeDeclaration[],
+  nodeRules: readonly NodeRule[],
+  { endedRules, scheduledMajors, newestRuleMajor }: RuntimeRuleContext,
+  seen: Set<string>,
+): DetectorFinding[] {
   const findings: DetectorFinding[] = [];
   for (const declaration of declarations) {
     const majors = runtimeMajors(

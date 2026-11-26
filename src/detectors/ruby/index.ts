@@ -1,3 +1,5 @@
+import { MISE_FILE_NAMES, MISE_FILES, miseDeclarations } from "../../version-files/mise.js";
+import { PINNED_RUBY_VERSION } from "./parse-ruby-runtime.js";
 import { readFile, readdir } from "node:fs/promises";
 import { basename, join } from "node:path";
 
@@ -48,8 +50,14 @@ const SKIPPED_DIRECTORIES = new Set([
   "testdata",
 ]);
 const RUNTIME_PURL = "pkg:generic/ruby";
+const MISE_PARSERS = new Map([
+  [
+    RUNTIME_PURL,
+    ({ value, line }: { value: string; line: number }) => (PINNED_RUBY_VERSION.test(value) ? [{ value, line }] : []),
+  ],
+]);
 const GEM_PURL_PREFIX = "pkg:gem/";
-const RUBY_FILES = new Set([".ruby-version", ".tool-versions", "Gemfile", "Gemfile.lock"]);
+const RUBY_FILES = new Set([".ruby-version", ".tool-versions", ...MISE_FILES, "Gemfile", "Gemfile.lock"]);
 
 async function rubyFiles(root: string): Promise<string[]> {
   const files: string[] = [];
@@ -307,7 +315,7 @@ export class RubyDetector implements Detector {
   readonly id = "ruby";
   /** The files `scan` may read; conformance fails a scan that reads another. */
   readonly inputs: DetectorInputs = {
-    fileNames: [".ruby-version", ".tool-versions", "Gemfile", "Gemfile.lock"],
+    fileNames: [".ruby-version", ".tool-versions", ...MISE_FILES, "Gemfile", "Gemfile.lock"],
     sourceExtensions: [".rb", ".rake", ".ru"],
   };
 
@@ -327,6 +335,7 @@ export class RubyDetector implements Detector {
 
     const { runtimeRules, gemRules } = indexRules(await this.loadRules());
     const state: ScanState = { findings: [], withUsage: [] };
+    const unclassified: DetectorUnclassifiedReference[] = [];
     for (const file of files) {
       let contents: string;
       try {
@@ -334,10 +343,16 @@ export class RubyDetector implements Detector {
       } catch {
         continue;
       }
-      scanFile(state, runtimeRules, gemRules, basename(file), relativePosix(context.root, file), contents);
+      const path = relativePosix(context.root, file);
+      if (MISE_FILE_NAMES.has(basename(file))) {
+        for (const declaration of miseDeclarations(path, contents, MISE_PARSERS, unclassified))
+          reportRuntime(state, runtimeRules, path, declaration, "pins");
+        continue;
+      }
+      scanFile(state, runtimeRules, gemRules, basename(file), path, contents);
     }
 
-    const unclassified = await attachUsages(context.root, state);
+    unclassified.push(...(await attachUsages(context.root, state)));
     state.findings.sort(compareFindings);
     return { findings: state.findings, unclassified };
   }

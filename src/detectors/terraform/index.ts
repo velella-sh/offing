@@ -1,3 +1,4 @@
+import { MISE_FILE_NAMES, MISE_FILES, miseDeclarations } from "../../version-files/mise.js";
 import { readFile, readdir } from "node:fs/promises";
 import { basename, join } from "node:path";
 
@@ -24,7 +25,7 @@ import { parseTerraformFile, parseTerraformLegacy } from "./parse-terraform.js";
 import type { TerraformDeclaration, TerraformLegacyDeclaration } from "./parse-terraform.js";
 import { jsonStringLines, parseTerraformPlanJson, planDeclarationLine } from "./plan.js";
 import type { TerraformPlanDeclaration } from "./plan.js";
-import { parseTerraformVersionFile, parseToolVersionsTerraform } from "./parse-version-files.js";
+import { parseTerraformVersionFile, parseToolVersionsTerraform, TERRAFORM_VERSION } from "./parse-version-files.js";
 
 /**
  * Terraform lifecycle detector.
@@ -77,8 +78,14 @@ const SKIPPED_DIRECTORIES = new Set([
   "__fixtures__",
   "testdata",
 ]);
-const VERSION_FILES = new Set([".terraform-version", ".tool-versions", ".terraform.lock.hcl"]);
+const VERSION_FILES = new Set([".terraform-version", ".tool-versions", ...MISE_FILES, ".terraform.lock.hcl"]);
 const TERRAFORM_PURL = "pkg:generic/terraform";
+const MISE_PARSERS = new Map([
+  [
+    TERRAFORM_PURL,
+    ({ value, line }: { value: string; line: number }) => (TERRAFORM_VERSION.test(value) ? [{ value, line }] : []),
+  ],
+]);
 const INTERPOLATION_RULE_ID = "terraform.syntax.interpolation-only";
 const LEGACY_FUNCTION_RULE_ID = "terraform.function.list-map";
 const REGISTRY_HOST = "registry.terraform.io";
@@ -327,8 +334,11 @@ async function readText(file: string): Promise<string | undefined> {
 
 /** `.terraform-version` and `.tool-versions` pin a CLI version. */
 function scanVersionFile(scan: TerraformScan, path: string, name: string, contents: string): void {
-  const declarations =
-    name === ".terraform-version" ? parseTerraformVersionFile(contents) : parseToolVersionsTerraform(contents);
+  const declarations = MISE_FILE_NAMES.has(name)
+    ? miseDeclarations(path, contents, MISE_PARSERS, scan.unclassified)
+    : name === ".terraform-version"
+      ? parseTerraformVersionFile(contents)
+      : parseToolVersionsTerraform(contents);
   for (const declaration of declarations) {
     const rule = firstMatchingRule(scan.cliRules, declaration.value);
     if (rule) {
@@ -522,7 +532,14 @@ export class TerraformDetector implements Detector {
   readonly id = "terraform";
   /** The files `scan` may read; conformance fails a scan that reads another. */
   readonly inputs: DetectorInputs = {
-    fileNames: [".terraform-version", ".tool-versions", ".terraform.lock.hcl", "*plan*.json", "*.tfplan.json"],
+    fileNames: [
+      ".terraform-version",
+      ".tool-versions",
+      ...MISE_FILES,
+      ".terraform.lock.hcl",
+      "*plan*.json",
+      "*.tfplan.json",
+    ],
     extensions: [".tf"],
   };
 
@@ -548,7 +565,7 @@ export class TerraformDetector implements Detector {
       if (contents === undefined) continue;
       const path = relativePosix(context.root, file);
       const name = basename(file);
-      if (name === ".terraform-version" || name === ".tool-versions") {
+      if (name === ".terraform-version" || name === ".tool-versions" || MISE_FILE_NAMES.has(name)) {
         scanVersionFile(scan, path, name, contents);
       } else if (name === ".terraform.lock.hcl") {
         scanLockFile(scan, path, contents);

@@ -39,6 +39,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 113 of Gemfile.lock reads `   ruby 3.1.2p20`. The Ruby maintenance branches page marks this release line as end of life (https://www.ruby-lang.org/en/downloads/branches/)."
       }
+    },
+    {
+      "ruleId": "ruby.runtime.eol-3.1",
+      "path": ".mise.toml",
+      "line": 2,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read .mise.toml:2 at the pinned commit: `ruby = \"3.1.2\"`. Ruby marks release line 3.1 end of life (https://www.ruby-lang.org/en/downloads/branches/)."
+      }
     }
   ]
 }
