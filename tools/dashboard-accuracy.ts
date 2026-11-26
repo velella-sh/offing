@@ -78,11 +78,7 @@ function ecosystemTrend(archives: readonly ArchivedCorpusRun[], id: string) {
   });
 }
 
-function ecosystemAccuracy(
-  ids: readonly string[],
-  archives: readonly ArchivedCorpusRun[],
-  current: ArchivedCorpusRun | undefined,
-) {
+function ecosystemAccuracy(ids: readonly string[], current: ArchivedCorpusRun | undefined) {
   return ids
     .map((id) => {
       const summary = current?.perEcosystem[id];
@@ -92,9 +88,6 @@ function ecosystemAccuracy(
         repositories: summary?.repositories ?? "not measured",
         scores: summary ? accuracyCounts(summary) : null,
         misses: summary?.misses.map(missLink) ?? [],
-        trend: ecosystemTrend(archives, id)
-          .slice(-60)
-          .map((point, index) => ({ run: index + 1, ...point })),
       };
     })
     .sort(
@@ -132,7 +125,15 @@ export function buildDashboardAccuracy(
   const current = archives.find((run) => run.date === last?.date && run.commit === last.commit);
   return {
     provenance: runProvenance(last, current?.ebbVersion),
-    ecosystems: ecosystemAccuracy(ecosystems, archives, current),
+    ecosystems: ecosystemAccuracy(ecosystems, current),
+    trends: Object.fromEntries(
+      ecosystems.map((id) => [
+        id,
+        ecosystemTrend(archives, id)
+          .slice(-60)
+          .map((point, index) => ({ run: index + 1, ...point })),
+      ]),
+    ),
     maturity: last
       ? maturityLevels.map((level) => ({
           id: level,
