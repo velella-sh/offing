@@ -21,6 +21,15 @@
         "note": "Reviewed at this commit: read line 75 of .github/workflows/build.yml, which holds `- 22`; it matches the declared range of registry rule nodejs.runtime.eol-22, whose sources record a Node.js release the Node.js release schedule marks as end-of-life. Checked by AI agent under maintainer direction on 2026-11-07 by reading the cited line in the pinned checkout. Outcome: confirmed."
       },
       "line": 75
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "freechat-sdk/java/build.gradle",
+      "line": 41,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read freechat-sdk/java/build.gradle:41 at the pinned commit: `targetSdkVersion 25`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
     }
   ]
 }

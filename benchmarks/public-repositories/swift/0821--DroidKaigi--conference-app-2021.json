@@ -453,6 +453,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 1 of ios/.xcode-version reads `12.4`, an Xcode release older than 15. Apple's App Store upcoming requirements require apps uploaded to App Store Connect to be built with Xcode 15 starting April 29, 2024 (https://developer.apple.com/news/upcoming-requirements/?id=04292024a)."
       }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "android/build.gradle",
+      "line": 24,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read android/build.gradle:24 at the pinned commit: `targetSdkVersion 30`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
     }
   ]
 }

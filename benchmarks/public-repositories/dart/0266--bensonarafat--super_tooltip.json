@@ -39,6 +39,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 14 of example/pubspec.yaml reads `sdk: '>=2.18.6 <3.0.0'`. Dart publishes security updates only for the current stable release (Dart security policy, https://dart.dev/security); the page's documentation reflects Dart 3.13.7 as the current stable line."
       }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "example/android/app/build.gradle",
+      "line": 41,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read example/android/app/build.gradle:41 at the pinned commit: `targetSdkVersion 34`. This literal inside the Android Gradle block is below the Google Play target API floor for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
     }
   ]
 }
