@@ -1,0 +1,37 @@
+name: Released schema compatibility
+description: Compare the public schema set with the latest published Offing release.
+
+runs:
+  using: composite
+  steps:
+    - name: Compare schemas with the latest published release
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.sha }}
+      run: |
+        set -euo pipefail
+        release="$(gh release view --repo "$GITHUB_REPOSITORY" --json tagName --jq .tagName)"
+        [[ "$release" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+        if ! git show-ref --verify --quiet "refs/tags/$release"; then
+          git fetch --no-tags --depth=1 origin "refs/tags/$release:refs/tags/$release"
+        fi
+        mkdir "$RUNNER_TEMP/released-schemas"
+        git archive "refs/tags/$release" schemas | tar -x -C "$RUNNER_TEMP/released-schemas"
+        notices="$RUNNER_TEMP/released-schemas/schemas/deprecation-notices.json"
+        if [ "$release" = "v0.1.1" ]; then
+          # v0.1.1 predates the gate. Trust the base's bootstrap notices, or the exact
+          # initial file when this change first introduces the gate.
+          if ! git cat-file -e "$BASE_SHA^{commit}"; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          fi
+          notices="$RUNNER_TEMP/bootstrap-notices.json"
+          if git cat-file -e "$BASE_SHA:schemas/deprecation-notices.json" 2>/dev/null; then
+            git show "$BASE_SHA:schemas/deprecation-notices.json" > "$notices"
+          else
+            echo '5a0a9bc8d445e88e0b2119fb8cfa581ddaf2c88c5685728991a95bed95101815  schemas/deprecation-notices.json' | sha256sum -c -
+            cp schemas/deprecation-notices.json "$notices"
+          fi
+        fi
+        node tools/check-schema-compat.ts "$RUNNER_TEMP/released-schemas/schemas" schemas \
+          --release "$release" --notes "$notices"

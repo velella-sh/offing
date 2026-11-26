@@ -196,6 +196,9 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
           git diff --name-only --diff-filter=ACMRD "$BASE_SHA" HEAD > "$RUNNER_TEMP/offing-changed-files.txt"
           echo "Files changed: $(wc -l < "$RUNNER_TEMP/offing-changed-files.txt")"
+      - name: acc-schemas
+        if: matrix.node == 24 && matrix.shard == 0
+        uses: $/.github/actions/schema-compat
       - name: Check warm agent hook latency
         if: matrix.node == 24 && matrix.shard == 0
         # Measure on one reference runner before the CPU-intensive build and test suite.
@@ -489,6 +492,8 @@ jobs:
       - uses: $/.github/actions/setup
         with:
           cache: npm
+      - name: acc-schemas
+        uses: $/.github/actions/schema-compat
       - name: Build the Action for conformance
         run: npm run build:action --silent
       - name: acc-action-v1

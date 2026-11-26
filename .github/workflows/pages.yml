@@ -98,6 +98,8 @@ jobs:
       - name: Build the documentation site
         # Keep the deployed base path (/offing, set in docs/mizzen.yml) so internal links match production.
         run: '"$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out docs/_site --workers auto'
+      - name: Publish and check the public JSON schemas
+        run: node docs/spec/schemas/check.mjs --stage schemas --directory docs/_site/schemas
       - name: Build the browser forecast
         run: npm run build:forecast-web -- docs/_site/forecast-web/app
       - name: Check the site keeps its dot-folders

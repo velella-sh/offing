@@ -108,7 +108,7 @@ export function pinnedCiWorkflow(gate: Severity): string {
 export function onboardingConfig(stacks: readonly OnboardingStack[], gate: Severity): string {
   const ignore = ignoreForStacks(stacks);
   const config: Record<string, unknown> = {
-    $schema: "https://github.com/velella-sh/offing/schemas/config.v1.schema.json",
+    $schema: "https://velella.sh/offing/schemas/config.v1.schema.json",
     schemaVersion: "offing.config.v1",
     failOn: gate,
     baseline: [".offing-baseline.json"],

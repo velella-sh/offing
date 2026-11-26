@@ -1,0 +1,16 @@
+{
+  "v0.1.1": {
+    "check-snippet.v1.schema.json": {
+      "fingerprint": "c520d4e92e05909c647dd54e90aa14b29ea3b584d238b1a1e6971f69b8afb98c",
+      "notice": "Recorded after the change landed. Snippet findings now describe the actual snippet result instead of borrowing the scan finding schema. Consumers should validate snippet findings with the matching package version and handle the snippet's code and source fields and nullable replacement."
+    },
+    "config.v1.schema.json": {
+      "fingerprint": "cfc34c31fa933c720f1592d0848ad95836bd715148fe0df9429904337d8e6985",
+      "notice": "Recorded after the change landed. The schema is now used by offing config validate. Use nonempty strings for paths and data versions, supported severity names, and valid string lists for baseline files and ignore paths. The config guide describes the accepted forms."
+    },
+    "doctor.v1.schema.json": {
+      "fingerprint": "a5e8beb3a509616453ebd2e52bf78c7ecc8a6efb0ee8b8dc85bd12d8d8a898f1",
+      "notice": "Recorded after the change landed. Doctor can now emit the config check category. Consumers validating the previous closed category enum should upgrade the schema before consuming doctor reports from this release."
+    }
+  }
+}

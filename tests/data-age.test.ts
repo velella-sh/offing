@@ -63,7 +63,7 @@ async function pinOldData(createdAt: string): Promise<string> {
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 ajv.addSchema(JSON.parse(await readFile(resolve("schemas/scan.v1.schema.json"), "utf8")) as object);
-const validateScan = ajv.getSchema("https://github.com/velella-sh/offing/schemas/scan.v1.schema.json")!;
+const validateScan = ajv.getSchema("https://velella.sh/offing/schemas/scan.v1.schema.json")!;
 
 test("a scan says which data it used and how old it is, in JSON and text", async () => {
   const result = await scanRepository(await project(), builtInDetectors);

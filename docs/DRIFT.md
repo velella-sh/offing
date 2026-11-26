@@ -45,7 +45,7 @@ Unresolved values are reported with the reason and excluded from the drift compa
 `align <release>` rewrites `.ruby-version`, a single-value `.tool-versions` ruby line, an exact `Gemfile` `ruby` directive, a `ruby/setup-ruby` `ruby-version` input, and the tag of a Dockerfile, GitLab CI, or CircleCI image. It refuses floors, ranges, image digests, and multi-value lines. `Gemfile.lock` is reported and refused with "regenerate the lockfile": Bundler owns that file.
 `offing drift` finds every place a repository states a runtime version and reports, per runtime, whether those values agree. A repository that runs Node 18 in its Dockerfile, Node 20 in CI, and Node 22 in `.nvmrc` has a drift, even when every test passes on the version the developer uses. The command reads repository files only: scans never use the network and never execute repository code.
 offing drift .                    # text report
-offing drift . --json             # https://github.com/velella-sh/offing/schemas/drift.v1.schema.json
+offing drift . --json             # https://velella.sh/offing/schemas/drift.v1.schema.json
 offing drift . --check            # exit 1 when a runtime drifts or has a floor conflict
 offing drift . --runtime java --align 21   # print a patch; never write it
 `--json` prints an `offing.drift.v1` document. Every pin carries its repository-relative path, the 1-based line of the value, the source it came from, the value exactly as written, and the release it resolves to offline. A value that cannot be resolved offline keeps its place in the report with an `unresolved` reason instead of a guessed release.
