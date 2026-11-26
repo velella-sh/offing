@@ -4,7 +4,7 @@ import type { Forecast } from "@velella/ebb/forecast";
 import { renderForecastSvg } from "../forecast-svg.js";
 import { renderTreemapSvg, treemapFileId } from "../treemap.js";
 import { renderJson } from "./json.js";
-import { REPORTER_API_VERSION, describeData, findingOrder, type Reporter } from "./shared.js";
+import { REPORTER_API_VERSION, displayLocation, describeData, findingOrder, type Reporter } from "./shared.js";
 
 const HTML_ESCAPES: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 
@@ -49,10 +49,6 @@ const HTML_TREEMAP_STYLE = `
 section.treemap{margin:0 0 1.5rem}section.treemap svg{max-width:100%;height:auto}
 @media print{section.treemap{break-inside:avoid}}`;
 
-function htmlLocation(location: { path: string; line?: number }): string {
-  return `${location.path}${location.line ? `:${location.line}` : ""}`;
-}
-
 function severityLabel(severity: Severity): string {
   return severity.charAt(0).toUpperCase() + severity.slice(1);
 }
@@ -68,7 +64,7 @@ function htmlSource(source: { title: string; url: string }): string {
 
 function htmlFinding(finding: Finding): string {
   const rows: Array<[string, string]> = [
-    ["Location", `<code>${escapeHtml(htmlLocation(finding.location))}</code>`],
+    ["Location", `<code>${escapeHtml(displayLocation(finding.location))}</code>`],
     ["Rule", `<code>${escapeHtml(finding.ruleId)}</code> (detector ${escapeHtml(finding.detector)})`],
     ["Confidence", escapeHtml(finding.confidence)],
   ];
@@ -85,7 +81,7 @@ function htmlFinding(finding: Finding): string {
   for (const usage of finding.usages ?? [])
     rows.push([
       "Usage",
-      `<code>${escapeHtml(htmlLocation(usage.location))}</code> ${escapeHtml(usage.kind)} ${escapeHtml(usage.symbol)}`,
+      `<code>${escapeHtml(displayLocation(usage.location))}</code> ${escapeHtml(usage.kind)} ${escapeHtml(usage.symbol)}`,
     ]);
   for (const step of finding.migration?.steps ?? [])
     rows.push(["Migration", `${escapeHtml(step.title)}: ${escapeHtml(step.instructions)}`]);

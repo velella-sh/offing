@@ -64,6 +64,10 @@
         "column": {
           "type": "integer",
           "minimum": 1
+        },
+        "jsonPointer": {
+          "type": "string",
+          "pattern": "^/"
         }
       }
     },
@@ -175,6 +179,10 @@
               "column": {
                 "type": "integer",
                 "minimum": 1
+              },
+              "jsonPointer": {
+                "type": "string",
+                "pattern": "^/"
               }
             }
           }

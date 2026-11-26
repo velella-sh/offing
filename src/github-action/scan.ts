@@ -64,10 +64,14 @@ function mergeSuppressions(states: readonly SuppressionState[]): SuppressionStat
 
 async function scanOneRoot(
   root: string,
-  options: Pick<GitHubActionOptions, "baselinePath" | "today" | "baselineWarnDays" | "onExpired" | "minSupportDays">,
+  options: Pick<
+    GitHubActionOptions,
+    "sbom" | "baselinePath" | "today" | "baselineWarnDays" | "onExpired" | "minSupportDays"
+  >,
 ): Promise<{ result: ScanResult; expiredFailure: boolean }> {
   return runScanRequest({
     root,
+    ...(options.sbom === undefined ? {} : { sbom: options.sbom }),
     ...(options.baselinePath === undefined ? {} : { baselinePath: options.baselinePath }),
     ...(options.today === undefined ? {} : { today: options.today }),
     ...(options.baselineWarnDays === undefined ? {} : { baselineWarnDays: options.baselineWarnDays }),
@@ -151,6 +155,9 @@ async function scanPathsMode(
 
 /** Scans the checked-out tree, one package path, or a pull request range, depending on the inputs. */
 export async function scanInMode(root: string, options: GitHubActionOptions): Promise<ScanOutcome> {
+  if (options.sbom && (options.mode === "diff" || options.paths?.length)) {
+    throw new Error("sbom requires scan mode and cannot be combined with paths.");
+  }
   if (options.mode === "diff") return scanDiffMode(root, options);
   if (options.paths && options.paths.length > 0) return scanPathsMode(root, options, options.paths);
   const scanned = await scanOneRoot(root, options);

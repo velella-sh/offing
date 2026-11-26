@@ -1,0 +1,1 @@
+- Scan CycloneDX, SPDX, and Syft JSON SBOMs offline from the CLI, GitHub Action, or MCP, with component JSON Pointer locations and the existing report formats.

@@ -1,7 +1,7 @@
 import type { DependencyCheck } from "../check-dependency.js";
 import { COVERAGE_WALK_LIMIT, type ScanCoverage, type ScanResult } from "../domain.js";
 import type { MigrationPacket, UpgradePath } from "../migration-packet.js";
-import { REPORTER_API_VERSION, compare, describeData, type Reporter } from "./shared.js";
+import { REPORTER_API_VERSION, displayLocation, compare, describeData, type Reporter } from "./shared.js";
 
 /** How many paths the empty-scan text report lists before saying "... and N more". JSON coverage stays complete. */
 export const EMPTY_SCAN_PATH_LIST_LIMIT = 10;
@@ -75,8 +75,7 @@ export function renderFirstRunSummary(result: ScanResult): string[] {
   }
   const lines = [`Found ${count} lifecycle risk${count === 1 ? "" : "s"}. The most urgent:`];
   for (const finding of result.findings.slice(0, 3)) {
-    const line = finding.location.line ? `:${finding.location.line}` : "";
-    lines.push(`  ${finding.severity.toUpperCase()} ${finding.title} (${finding.location.path}${line})`);
+    lines.push(`  ${finding.severity.toUpperCase()} ${finding.title} (${displayLocation(finding.location)})`);
   }
   if (count > 3) lines.push(`  …and ${count - 3} more below.`);
   lines.push("Next: run `offing init --personal` to check every repository before you push.", "");
@@ -85,11 +84,10 @@ export function renderFirstRunSummary(result: ScanResult): string[] {
 
 /** One finding's body for the text report; kept separate so `renderText` stays under the complexity ceiling. */
 function findingTextLines(finding: ScanResult["findings"][number]): string[] {
-  const line = finding.location.line ? `:${finding.location.line}` : "";
   const lines = [
     "",
     `${finding.severity.toUpperCase()} ${finding.title}`,
-    `${finding.location.path}${line}`,
+    `${displayLocation(finding.location)}`,
     `Confidence: ${finding.confidence}`,
     finding.summary,
   ];
@@ -183,12 +181,11 @@ export function renderCheckText(check: DependencyCheck): string {
 }
 
 export function renderFindingText(finding: ScanResult["findings"][number]): string {
-  const line = finding.location.line ? `:${finding.location.line}` : "";
   const lines = [
     `${finding.severity.toUpperCase()} ${finding.title}`,
     `ID: ${finding.id}`,
     `Rule: ${finding.ruleId}`,
-    `Location: ${finding.location.path}${line}`,
+    `Location: ${displayLocation(finding.location)}`,
     "",
     finding.summary,
   ];

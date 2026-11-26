@@ -75,6 +75,13 @@ jobs:
             console.log(`npm scan: ${scan.findings.length} findings`);
           ' "$out/npm-scan.json"
 
+      - name: acc-sbom-scan
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          node .github/scripts/acc-sbom-scan.mjs "$out"/*.tgz \
+            "$out/npm-install/node_modules/.bin/offing" dist/action/index.js
+
       - name: acc-version-files
         working-directory: ${{ runner.temp }}
         run: |

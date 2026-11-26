@@ -38,6 +38,8 @@ export interface SourceLocation {
   path: string;
   line?: number;
   column?: number;
+  /** JSON Pointer to an SBOM component when there is no source line. */
+  jsonPointer?: string;
 }
 
 /** A named set of matchers that together describe how one deprecated API is used. */

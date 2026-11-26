@@ -32,6 +32,7 @@ Usage:
   offing drift [path] [--json] [--check] [--runtime <id>] [--align <release>]   # report every runtime version a repository states and whether they agree
   offing receipt [path] --before <scan.json> [--format markdown|json] [--fail-on-introduced]   # what a change resolved, left, or introduced; never runs a command
   offing scan [path] --by-owner [--json]   # group findings by CODEOWNERS owner; files with no owner are listed as unowned
+  offing scan --sbom <file|-> [--json | --format <format>]   # scan a CycloneDX, SPDX or Syft JSON SBOM
   offing rollup <report.json>... [--owners <file>] [--json | --html]   # merge saved scan reports by product and owner; reads files only
   offing renovate-preset [path]   # print Renovate packageRules for replacements and runtime pins; does not edit config
   offing dependabot-config [path]   # print a dependabot.yml that groups updates for deprecated packages; does not write files

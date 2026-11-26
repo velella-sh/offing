@@ -47,6 +47,7 @@ import {
 } from "../reporters.js";
 import { STATUS_FILE_NAME, writeStatusFile } from "../status-file.js";
 import { browseFindings, canBrowse } from "../tui.js";
+import { scanSbomFile } from "../sbom-scan.js";
 import { selectorValuesSummary, unknownSelectors } from "../scan-selectors.js";
 import { classifyError, DEFAULT_REASONS, type ErrorCode } from "../offing-error.js";
 import { EXIT_CODES, type CommandContext, type FailureClass } from "./types.js";
@@ -56,6 +57,7 @@ export { EXIT_CODES };
 
 const valueOptions = new Set([
   "--baseline",
+  "--sbom",
   "--output",
   "--format",
   "--fail-on",
@@ -517,11 +519,25 @@ export async function runScanPipeline(command: string, args: readonly string[], 
   if (typeof gated === "number") return gated;
   const takesFindingId = command === "explain" || command === "context" || command === "report-issue";
   if (takesFindingId && !gated.findingId) return ctx.fail("usage", "Missing finding ID.", `\n${ctx.help}`);
+  if (gated.args.includes("--sbom")) return runSbomScan(gated, ctx);
   const early = await repositoryPhase(gated, ctx);
   if (early !== undefined) return early;
   const pre = preScanPhase(gated, ctx);
   if (pre !== undefined) return pre;
   return runScanFamily(gated, ctx);
+}
+
+/** Read one SBOM, then apply the same scan reporting and severity policy as a repository scan. */
+async function runSbomScan(state: Gated, ctx: CommandContext): Promise<number> {
+  const input = state.optionValue("--sbom");
+  if (state.command !== "scan" || !input || input.startsWith("--") || state.optionValues("--sbom").length !== 1) {
+    return ctx.fail("usage", "Use offing scan --sbom <file|-> with exactly one SBOM.");
+  }
+  const unsupported = ["--demo", "--all", "--by-owner", "--write-status", "--interactive"];
+  if (state.positional.length > 0 || unsupported.some((flag) => state.args.includes(flag))) {
+    return ctx.fail("usage", "--sbom cannot be combined with repository operands, " + unsupported.join(", ") + ".");
+  }
+  return runScanFamily(state, ctx);
 }
 
 async function runScanFamily(state: Gated, ctx: CommandContext): Promise<number> {
@@ -550,9 +566,7 @@ async function scanWithFilters(
     return ctx.fail("usage", "--min-support-days must be a whole number of days (0 to 3650).");
   }
   const asOfValue = state.optionValue("--as-of") ?? state.optionValue("--today");
-  let result = state.demo
-    ? await scanDemo(builtInDetectors)
-    : await scanWithBuiltIns(state.pathArgument, { noCache: state.noCache });
+  let result = await scanInput(state);
   if (asOfValue !== undefined) result = await applyAsOf(result, asOfValue);
   if (minSupportDays !== undefined)
     result = applyMinSupport(result, minSupportDays, asOfValue ?? new Date().toISOString().slice(0, 10));
@@ -562,6 +576,13 @@ async function scanWithFilters(
   if (ignorePatterns.length > 0) result = applyIgnore(result, ignorePatterns);
   if (state.selection) result = applyScanSelection(result, state.selection);
   return { result, asOfValue };
+}
+
+function scanInput(state: Gated): Promise<ScanResult> {
+  const sbom = state.optionValue("--sbom");
+  if (sbom !== undefined) return scanSbomFile(sbom);
+  if (state.demo) return scanDemo(builtInDetectors);
+  return scanWithBuiltIns(state.pathArgument, { noCache: state.noCache });
 }
 
 /** `baseline`: writes the current findings as suppressions, carrying the history of the file it replaces. */
@@ -708,7 +729,7 @@ async function printByOwner(state: Gated, result: ScanResult, ctx: CommandContex
 async function renderScanReport(state: Gated, result: ScanResult, asOfValue: string | undefined): Promise<string> {
   const { format, json, command } = state;
   const asOf = asOfValue ?? new Date().toISOString().slice(0, 10);
-  const firstRun = command === "scan" && !(await hasPersonalConfig());
+  const firstRun = command === "scan" && !state.args.includes("--sbom") && !(await hasPersonalConfig());
   if (format !== undefined) {
     const reporter = getScanReporter(format);
     if (reporter) {

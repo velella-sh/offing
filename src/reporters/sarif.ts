@@ -78,6 +78,9 @@ function sarifResult(finding: Finding, ruleIds: readonly string[]) {
     message: { text: finding.summary },
     locations: [
       {
+        ...(finding.location.jsonPointer
+          ? { logicalLocations: [{ fullyQualifiedName: finding.location.jsonPointer }] }
+          : {}),
         physicalLocation: {
           artifactLocation: { uri: finding.location.path, uriBaseId: "%SRCROOT%" },
           ...(finding.location.line ? { region: { startLine: finding.location.line } } : {}),

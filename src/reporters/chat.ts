@@ -1,6 +1,13 @@
 import type { Finding, ScanResult } from "../domain.js";
 import { severityValues } from "../domain.js";
-import { REPORTER_API_VERSION, escapeMarkdown, findingOrder, severityRank, type Reporter } from "./shared.js";
+import {
+  REPORTER_API_VERSION,
+  displayLocation,
+  escapeMarkdown,
+  findingOrder,
+  severityRank,
+  type Reporter,
+} from "./shared.js";
 
 /** The most findings a chat or webhook message lists. The rest are counted, not listed, so one message stays small. */
 export const CHAT_MAX_FINDINGS = 20;
@@ -24,10 +31,6 @@ function chatHeadline(findings: Finding[]): string {
     .filter(([, count]) => count > 0)
     .map(([severity, count]) => `${severity} ${count}`);
   return `Offing: ${findings.length} finding${findings.length === 1 ? "" : "s"} (${counts.join(", ")})`;
-}
-
-function findingLocation(finding: Finding): string {
-  return finding.location.line ? `${finding.location.path}:${finding.location.line}` : finding.location.path;
 }
 
 /** Slack mrkdwn treats `&`, `<` and `>` as control characters, so only those three are escaped. */
@@ -64,7 +67,7 @@ export function renderSlack(result: ScanResult): string {
       text: {
         type: "mrkdwn",
         text: clipSlack(
-          `*${finding.severity}* ${finding.title}\n${findingLocation(finding)}\n${finding.summary}` +
+          `*${finding.severity}* ${finding.title}\n${displayLocation(finding.location)}\n${finding.summary}` +
             (finding.replacement ? `\nReplacement: ${finding.replacement}` : ""),
           SLACK_SECTION_MAX,
         ),
@@ -99,7 +102,7 @@ export function renderTeams(result: ScanResult): string {
     ...findings.slice(0, CHAT_MAX_FINDINGS).flatMap((finding) => [
       {
         type: "TextBlock",
-        text: escapeMarkdown(`${finding.severity}: ${finding.title} (${findingLocation(finding)})`),
+        text: escapeMarkdown(`${finding.severity}: ${finding.title} (${displayLocation(finding.location)})`),
         weight: "Bolder",
         wrap: true,
         separator: true,

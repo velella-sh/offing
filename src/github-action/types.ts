@@ -69,6 +69,8 @@ export interface GitHubActionOptions {
    * Ignored in diff mode.
    */
   paths?: readonly string[];
+  /** A JSON SBOM under root. Applies to scan mode only. */
+  sbom?: string;
   /** When set, also write the findings as SARIF 2.1.0 to this path, for upload to code scanning. */
   sarifPath?: string;
   /** When set, write a Shields.io endpoint JSON file for optional publication. */
