@@ -1,0 +1,78 @@
+name: Launch metrics
+
+on:
+  schedule:
+    - cron: "23 7 * * 1"
+  workflow_dispatch:
+    inputs:
+      launch_date:
+        description: "Confirmed launch date (YYYY-MM-DD UTC) to record the baseline. Leave blank for weekly metrics."
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: launch-metrics
+  cancel-in-progress: false
+
+jobs:
+  record:
+    if: github.repository == 'velella-sh/offing' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          package-manager-cache: "false"
+      - name: Collect public metrics
+        id: collect
+        env:
+          LAUNCH_DATE: ${{ inputs.launch_date }}
+        run: |
+          npm run build --silent
+          if [[ -n "$LAUNCH_DATE" ]]; then
+            node dist/tools/launch-metrics/index.js --baseline "$LAUNCH_DATE" | tee "$RUNNER_TEMP/launch-metrics.json"
+            git add -- metrics/baseline.json
+            echo "record=baseline" >> "$GITHUB_OUTPUT"
+          else
+            node dist/tools/launch-metrics/index.js | tee "$RUNNER_TEMP/launch-metrics.json"
+            week="$(jq -er '.week | select(test("^[0-9]{4}-W[0-9]{2}$"))' "$RUNNER_TEMP/launch-metrics.json")"
+            git add -- "metrics/$week.json" metrics/chart.svg
+            echo "record=$week" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
+      - name: Open a pull request for the snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RECORD: ${{ steps.collect.outputs.record }}
+        run: |
+          if git diff --cached --quiet; then
+            echo "The snapshot is already current."
+            exit 0
+          fi
+          prefix="automation/launch-metrics-$RECORD"
+          open_branches="$(gh pr list --base main --json headRefName --jq '.[].headRefName' --limit 1000)"
+          if grep -F "${prefix}-" <<< "$open_branches" > /dev/null; then
+            echo "A pull request for $RECORD is already open."
+            exit 0
+          fi
+          title="chore(metrics): record launch metrics for $RECORD"
+          branch="$prefix-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$branch"
+          git commit -m "$title"
+          git -c 'credential.helper=!gh auth git-credential' push origin "HEAD:refs/heads/$branch"
+          body='Recorded by the launch metrics workflow from unauthenticated public APIs.'
+          if [[ "$RECORD" == baseline ]]; then
+            body="$body"$'\n\nCloses #304'
+          fi
+          gh pr create --base main --head "$branch" --title "$title" --body "$body"
+        shell: bash
