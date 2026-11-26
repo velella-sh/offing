@@ -1,0 +1,80 @@
+{
+  "repository": "JustinLloyd/chia-utilities",
+  "commit": "8b8ec508c9701b8bf9fd7a56d7a307da957b9b91",
+  "ecosystem": "shell",
+  "selection": "targeted",
+  "expected": [
+    {
+      "ruleId": "shell.powershell.end-of-life-7.0",
+      "path": "farm_chia.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read farm_chia.ps1:1 at the pinned commit: `#Requires -Version 7.0`. PowerShell 7.0 is retired (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle)."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.0",
+      "path": "get_proofs.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read get_proofs.ps1:1 at the pinned commit: `#Requires -Version 7.0`. PowerShell 7.0 is retired (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle)."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.0",
+      "path": "migrate_plots_from_nas.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read migrate_plots_from_nas.ps1:1 at the pinned commit: `#Requires -Version 7.0`. PowerShell 7.0 is retired (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle)."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.0",
+      "path": "migrate_plots_to_nas.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read migrate_plots_to_nas.ps1:1 at the pinned commit: `#Requires -Version 7.0`. PowerShell 7.0 is retired (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle)."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.0",
+      "path": "plot_chia.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read plot_chia.ps1:1 at the pinned commit: `#Requires -Version 7.0`. PowerShell 7.0 is retired (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle)."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.0",
+      "path": "plot_status.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read plot_status.ps1:1 at the pinned commit: `#Requires -Version 7.0`. PowerShell 7.0 is retired (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle)."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.0",
+      "path": "test_plot_chia.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read test_plot_chia.ps1:1 at the pinned commit: `#Requires -Version 7.0`. PowerShell 7.0 is retired (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle)."
+      }
+    },
+    {
+      "ruleId": "shell.powershell.end-of-life-7.0",
+      "path": "trim_ssds.ps1",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read trim_ssds.ps1:1 at the pinned commit: `#Requires -Version 7.0`. PowerShell 7.0 is retired (https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle)."
+      }
+    }
+  ]
+}

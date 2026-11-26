@@ -149,19 +149,20 @@ jobs:
         with:
           cache: npm
       - run: npm run build --silent
-      # Pinned commits never change, so earlier checkouts stay valid. Shard membership is
-      # deterministic, so an entry is stored by exactly one shard and no checkout is cached twice.
-      # The shared restore prefix lets a shard start from another shard's cache (and the affected
-      # and record jobs reuse the newest one) after the corpus hash changes. Restore and save are
-      # separate steps so the cache is saved even when the comparison fails.
-      - name: Restore the shared corpus checkout cache
+      - name: Compute the shard checkout cache key
+        id: checkout-key
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: node dist/benchmarks/corpus-cache-key.js --shard "$SHARD/8" >> "$GITHUB_OUTPUT"
+      # Reuse this shard's compatible checkouts after a pin changes. Changing the sparse file
+      # patterns starts a new cache so a detector cannot keep seeing an incomplete checkout.
+      - name: Restore the shard checkout cache
         id: corpus-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ${{ env.OFFING_CORPUS_CACHE }}
-          key: corpus-checkouts-${{ hashFiles('benchmarks/public-repositories/**') }}-shard-${{ matrix.shard }}
-          restore-keys: |
-            corpus-checkouts-
+          key: ${{ steps.checkout-key.outputs.key }}
+          restore-keys: ${{ steps.checkout-key.outputs.prefix }}
       - name: Compare this shard with the pinned corpus
         env:
           SHARD: ${{ matrix.shard }}
@@ -170,11 +171,11 @@ jobs:
         # repository that fails is named in the report and fails the run instead of crashing it.
         run: node dist/benchmarks/public-repositories.js --shard "$SHARD/$SHARD_COUNT" --output "corpus-result-$SHARD.json"
       - name: Save the shard cache
-        if: always() && steps.corpus-cache.outputs.cache-hit != 'true'
+        if: success() && steps.corpus-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ${{ env.OFFING_CORPUS_CACHE }}
-          key: corpus-checkouts-${{ hashFiles('benchmarks/public-repositories/**') }}-shard-${{ matrix.shard }}
+          key: ${{ steps.checkout-key.outputs.key }}
       - name: Upload the shard report
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7

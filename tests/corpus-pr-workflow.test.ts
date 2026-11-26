@@ -48,18 +48,19 @@ test("one workflow covers affected, full, and record with a mode input", () => {
 test("the full run shards the corpus across eight jobs and the merge job rebuilds one report", () => {
   const full = workflow.jobs.full!;
   assert.deepEqual(full.strategy?.matrix?.shard, [1, 2, 3, 4, 5, 6, 7, 8]);
-  const shardStep = full.steps.find((step) => step.run?.includes("--shard"))!;
+  const shardStep = full.steps.find((step) => step.run?.includes("public-repositories.js --shard"))!;
   assert.equal(shardStep.env?.SHARD, "${{ matrix.shard }}");
   assert.equal(shardStep.env?.SHARD_COUNT, "8");
   assert.match(shardStep.run!, /public-repositories\.js --shard "\$SHARD\/\$SHARD_COUNT"/);
   assert.match(shardStep.run!, /corpus-result-\$SHARD\.json/);
-  // Each shard owns its cache key, and every one restores through the shared prefix.
+  const cacheKey = full.steps.find((step) => step.run?.includes("corpus-cache-key.js"))!;
+  assert.match(cacheKey.run!, /--shard "\$SHARD\/8"/);
   const restore = full.steps.find((step) => step.uses?.startsWith("actions/cache/restore@"))!;
   const save = full.steps.find((step) => step.uses?.startsWith("actions/cache/save@"))!;
-  const key = "corpus-checkouts-${{ hashFiles('benchmarks/public-repositories/**') }}-shard-${{ matrix.shard }}";
-  assert.equal(restore.with?.key, key);
-  assert.equal(save.with?.key, key);
-  assert.match(String(restore.with?.["restore-keys"]), /corpus-checkouts-/);
+  assert.equal(restore.with?.key, "${{ steps.checkout-key.outputs.key }}");
+  assert.equal(save.with?.key, restore.with?.key);
+  assert.equal(restore.with?.["restore-keys"], "${{ steps.checkout-key.outputs.prefix }}");
+  assert.match(save.if ?? "", /success\(\)/);
 
   const merge = workflow.jobs.merge!;
   assert.equal(merge.needs, "full");
