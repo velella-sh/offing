@@ -15,6 +15,56 @@
       }
     },
     {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mqtt-client-Android/app/build.gradle",
+      "line": 11,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "url": "https://developer.android.com/google/play/requirements/target-sdk",
+        "note": "Reviewed at this commit: line 11 of mqtt-client-Android/app/build.gradle declares legacy targetSdkVersion below 35. Google Play requires targetSdk 35+ for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "mqtt-client-Flutter/android/app/build.gradle",
+      "line": 44,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "url": "https://developer.android.com/google/play/requirements/target-sdk",
+        "note": "Reviewed at this commit: line 44 of mqtt-client-Flutter/android/app/build.gradle declares legacy targetSdkVersion below 35. Google Play requires targetSdk 35+ for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "paho.mqtt.android-kotlin/basicSample/build.gradle",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "url": "https://developer.android.com/google/play/requirements/target-sdk",
+        "note": "Reviewed at this commit: line 12 of paho.mqtt.android-kotlin/basicSample/build.gradle declares legacy targetSdkVersion below 35. Google Play requires targetSdk 35+ for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "paho.mqtt.android-kotlin/extendedSample/build.gradle",
+      "line": 13,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "url": "https://developer.android.com/google/play/requirements/target-sdk",
+        "note": "Reviewed at this commit: line 13 of paho.mqtt.android-kotlin/extendedSample/build.gradle declares legacy targetSdkVersion below 35. Google Play requires targetSdk 35+ for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
+      "ruleId": "android.target-sdk.existing.default-below-35",
+      "path": "paho.mqtt.android-kotlin/serviceLibrary/build.gradle",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "url": "https://developer.android.com/google/play/requirements/target-sdk",
+        "note": "Reviewed at this commit: line 23 of paho.mqtt.android-kotlin/serviceLibrary/build.gradle declares legacy targetSdkVersion below 35. Google Play requires targetSdk 35+ for existing phone and tablet apps (https://developer.android.com/google/play/requirements/target-sdk)."
+      }
+    },
+    {
       "ruleId": "cpp.cmake.policy-below-3.5.removed",
       "path": "mqtt-client-C-nng/CMakeLists.txt",
       "line": 7,

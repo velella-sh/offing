@@ -1,6 +1,7 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import { basename, join } from "node:path";
 
+import type { UnclassifiedReference } from "../../domain.js";
 import { loadDataFile } from "@velella/ebb/data-source";
 import { relativePosix } from "../../paths.js";
 import { formatPurl, purlIdentity } from "@velella/ebb/purl";
@@ -239,11 +240,27 @@ async function collectCandidates(root: string): Promise<Candidate[]> {
 function matchCandidates(
   candidates: readonly Candidate[],
   byPurl: Map<string, RegistryV2Rule[]>,
-): { findings: DetectorFinding[]; withUsage: Array<{ id: string; rule: RegistryV2Rule }> } {
+): {
+  findings: DetectorFinding[];
+  unclassified: Omit<UnclassifiedReference, "detector">[];
+  withUsage: Array<{ id: string; rule: RegistryV2Rule }>;
+} {
   const findings: DetectorFinding[] = [];
+  const unclassified: Omit<UnclassifiedReference, "detector">[] = [];
   const withUsage: Array<{ id: string; rule: RegistryV2Rule }> = [];
+  const agpPurl = SETTINGS_PURL.agp;
   for (const candidate of candidates) {
-    const rule = firstMatchingRule(byPurl.get(candidate.purl) ?? [], candidate.version);
+    const purlRules = byPurl.get(candidate.purl) ?? [];
+    if (candidate.purl === agpPurl && purlRules.length === 0) {
+      unclassified.push({
+        component: agpPurl,
+        reference: candidate.version,
+        reason: "no-data: Ebb has no lifecycle rule for Android Gradle Plugin",
+        location: { path: candidate.path, line: candidate.line },
+      });
+      continue;
+    }
+    const rule = firstMatchingRule(purlRules, candidate.version);
     if (!rule) continue;
     const id = `${rule.id}:${candidate.path}:${candidate.line}`;
     findings.push({
@@ -260,7 +277,7 @@ function matchCandidates(
     });
     if ((rule.usage ?? []).length > 0) withUsage.push({ id, rule });
   }
-  return { findings, withUsage };
+  return { findings, unclassified, withUsage };
 }
 
 async function attachSourceUsage(
@@ -309,10 +326,10 @@ export class AndroidDetector implements Detector {
     const candidates = await collectCandidates(context.root);
     if (candidates.length === 0) return { findings: [], unclassified: [] };
 
-    const { findings, withUsage } = matchCandidates(candidates, rulesByPurl(await this.loadRules()));
+    const { findings, unclassified, withUsage } = matchCandidates(candidates, rulesByPurl(await this.loadRules()));
     await attachSourceUsage(context.root, findings, withUsage);
     sortFindings(findings);
-    return { findings, unclassified: [] };
+    return { findings, unclassified };
   }
 }
 

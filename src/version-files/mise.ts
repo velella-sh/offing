@@ -8,6 +8,7 @@ export const MISE_FILE_NAMES: ReadonlySet<string> = new Set(MISE_FILES);
 
 /** Backend qualifiers are significant. A custom backend need not install the same product. */
 const TOOL_PURLS = new Map([
+  ["java", "pkg:generic/java"],
   ["node", "pkg:generic/nodejs"],
   ["nodejs", "pkg:generic/nodejs"],
   ["python", "pkg:generic/python"],

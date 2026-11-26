@@ -1,18 +1,16 @@
 /**
  * Pure, bounded parser for Android SDK settings in `build.gradle` and `build.gradle.kts`.
  *
- * Reads only literal assignments inside an `android { ... }` block (including nested
- * `defaultConfig`):
+ * Reads only literal assignments and method-call forms inside an `android { ... }` block
+ * (including nested `defaultConfig`):
  *
- * - `compileSdk`, `minSdk`, `targetSdk` as a bare or quoted integer (`34`, `"34"`, `= 34`);
- * - `buildToolsVersion` as a quoted version string (`"34.0.0"`, `= "34.0.0"`).
+ * - `compileSdk`, `minSdk`, `targetSdk` (and legacy `compileSdkVersion`, `minSdkVersion`,
+ *   `targetSdkVersion`) as a bare or quoted integer (`34`, `"34"`, `= 34`, `(34)`, `("34")`);
+ * - `buildToolsVersion` as a quoted version string (`"34.0.0"`, `= "34.0.0"`, `("34.0.0")`).
  *
  * Unsupported / skipped (returns nothing for that site, not an error):
  * - values outside an `android` block;
  * - property references, version-catalog calls, string interpolation (`$`);
- * - method-call forms such as `compileSdk(34)` or `minSdk(21)`;
- * - legacy Groovy names `compileSdkVersion` / `minSdkVersion` / `targetSdkVersion`
- *   (only the four names above are in scope for this parser);
  * - receiver / ext properties such as `ext.minSdk` or `foo.compileSdk`;
  * - lookalike text inside string literals or comments;
  * - Groovy/Kotlin forms that are not a single literal on one line;
@@ -42,6 +40,16 @@ export interface AndroidSdkDeclaration {
   line: number;
 }
 
+const KIND_MAP: Record<string, AndroidSdkKind> = {
+  compileSdk: "compileSdk",
+  compileSdkVersion: "compileSdk",
+  minSdk: "minSdk",
+  minSdkVersion: "minSdk",
+  targetSdk: "targetSdk",
+  targetSdkVersion: "targetSdk",
+  buildToolsVersion: "buildToolsVersion",
+};
+
 /** Half-open `[start, end)` spans of each `android { ... }` block (outer braces included). */
 function androidBlocks(masked: string): Array<[number, number]> {
   const blocks: Array<[number, number]> = [];
@@ -64,13 +72,13 @@ function androidBlocks(masked: string): Array<[number, number]> {
 
 // Keyword only — do not consume trailing whitespace here. On the masked view, blanked
 // string literals are spaces; swallowing them would skip past the real RHS in the original.
-const KEYWORD = /(?<!\.)\b(compileSdk|minSdk|targetSdk|buildToolsVersion)\b/g;
+const KEYWORD =
+  /(?<!\.)\b(compileSdk|minSdk|targetSdk|buildToolsVersion|compileSdkVersion|minSdkVersion|targetSdkVersion)\b/g;
 
 function isSpace(code: number): boolean {
   return code === 0x20 || code === 0x09 || code === 0x0d;
 }
 
-/** True when `offset` starts `//` or `/*`. */
 function atComment(source: string, offset: number): boolean {
   return source.startsWith("//", offset) || source.startsWith("/*", offset);
 }
@@ -81,11 +89,16 @@ function skipSpaces(source: string, from: number): number {
   return index;
 }
 
-/** Offset of the literal after optional spaces and an optional `=`. */
-function literalStart(source: string, offset: number): number {
+/** Offset of the literal after optional spaces and an optional `=` or `(`, plus whether `(` was opened. */
+function literalStart(source: string, offset: number): { index: number; inParens: boolean } {
   const index = skipSpaces(source, offset);
-  if (index < source.length && source.charCodeAt(index) === 0x3d) return skipSpaces(source, index + 1);
-  return index;
+  if (index < source.length && source.charCodeAt(index) === 0x3d) {
+    return { index: skipSpaces(source, index + 1), inParens: false };
+  }
+  if (index < source.length && source.charCodeAt(index) === 0x28) {
+    return { index: skipSpaces(source, index + 1), inParens: true };
+  }
+  return { index, inParens: false };
 }
 
 /** Read a quoted string starting at the opening quote; undefined on newline or dangling escape. */
@@ -112,19 +125,28 @@ function readQuoted(source: string, start: number): { value: string; end: number
   return { value, end: position };
 }
 
-function readBareNumber(source: string, start: number): string | undefined {
+function hasValidTrail(source: string, end: number, inParens: boolean): boolean {
+  const trail = skipSpaces(source, end);
+  if (inParens) {
+    if (trail >= source.length || source.charCodeAt(trail) !== 0x29) return false;
+    const afterParen = skipSpaces(source, trail + 1);
+    if (afterParen >= source.length) return true;
+    const next = source.charCodeAt(afterParen);
+    return next === 0x0a || next === 0x3b || next === 0x7d || atComment(source, afterParen);
+  }
+  if (trail >= source.length) return true;
+  const next = source.charCodeAt(trail);
+  return next === 0x0a || next === 0x3b || next === 0x7d || atComment(source, trail);
+}
+
+function readBareNumber(source: string, start: number, inParens: boolean): string | undefined {
   let position = start;
   while (position < source.length) {
     const code = source.charCodeAt(position);
     if (code < 0x30 || code > 0x39) break;
     position++;
   }
-  const trail = skipSpaces(source, position);
-  if (trail < source.length) {
-    const next = source.charCodeAt(trail);
-    if (next !== 0x0a && next !== 0x3b && next !== 0x7d && !atComment(source, trail)) return undefined;
-  }
-  return source.slice(start, position);
+  return hasValidTrail(source, position, inParens) ? source.slice(start, position) : undefined;
 }
 
 function isQuote(code: number): boolean {
@@ -132,39 +154,40 @@ function isQuote(code: number): boolean {
 }
 
 function isTerminator(code: number): boolean {
-  // 0x28 is the method-call form, e.g. compileSdk(34).
-  return code === 0x28 || code === 0x0a || code === 0x3b || code === 0x7d;
+  return code === 0x0a || code === 0x3b || code === 0x7d;
 }
 
 /** buildToolsVersion: a closed quoted dotted version without interpolation. */
-function readBuildToolsLiteral(source: string, index: number): string | undefined {
+function readBuildToolsLiteral(source: string, index: number, inParens: boolean): string | undefined {
   if (!isQuote(source.charCodeAt(index))) return undefined;
   const quoted = readQuoted(source, index);
   if (quoted === undefined || source[quoted.end - 1] !== source.charAt(index)) return undefined;
+  if (!hasValidTrail(source, quoted.end, inParens)) return undefined;
   return !quoted.value.includes("$") && /^\d+(?:\.\d+)*$/.test(quoted.value) ? quoted.value : undefined;
 }
 
 /** Other SDK kinds: a quoted or bare integer. */
-function readSdkNumberLiteral(source: string, index: number): string | undefined {
+function readSdkNumberLiteral(source: string, index: number, inParens: boolean): string | undefined {
   const startCode = source.charCodeAt(index);
   if (isQuote(startCode)) {
     const quoted = readQuoted(source, index);
-    if (quoted === undefined) return undefined;
+    if (quoted === undefined || !hasValidTrail(source, quoted.end, inParens)) return undefined;
     return !quoted.value.includes("$") && /^\d+$/.test(quoted.value) ? quoted.value : undefined;
   }
   if (startCode < 0x30 || startCode > 0x39) return undefined;
-  return readBareNumber(source, index);
+  return readBareNumber(source, index, inParens);
 }
 
 /**
  * Read a literal RHS from the original source after a keyword match.
- * Accepts an optional `=`. Stops at newline, `;`, `}`, or a comment start.
- * Method-call `(` forms yield undefined.
+ * Accepts an optional `=` or `(...)`. Stops at newline, `;`, `}`, or a comment start.
  */
 function readLiteral(source: string, offset: number, kind: AndroidSdkKind): string | undefined {
-  const index = literalStart(source, offset);
+  const { index, inParens } = literalStart(source, offset);
   if (index >= source.length || atComment(source, index) || isTerminator(source.charCodeAt(index))) return undefined;
-  return kind === "buildToolsVersion" ? readBuildToolsLiteral(source, index) : readSdkNumberLiteral(source, index);
+  return kind === "buildToolsVersion"
+    ? readBuildToolsLiteral(source, index, inParens)
+    : readSdkNumberLiteral(source, index, inParens);
 }
 
 /** Parse an Android Gradle build script without file, network, or process I/O. */
@@ -188,7 +211,7 @@ export function parseAndroidBuildGradle(contents: string): AndroidSdkDeclaration
     for (const match of block.matchAll(KEYWORD)) {
       const absolute = blockStart + required(match.index, "keyword offset");
       if (lineLengthAt(absolute) > MAXIMUM_LINE_LENGTH) continue;
-      const kind = match[1] as AndroidSdkKind;
+      const kind = required(KIND_MAP[match[1] ?? ""], "sdk kind");
       const value = readLiteral(contents, absolute + match[0].length, kind);
       if (value === undefined) continue;
       add({ kind, value, line: lineAt(absolute) });

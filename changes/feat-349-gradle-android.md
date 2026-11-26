@@ -1,0 +1,1 @@
+- Extend Gradle and Android parsing (`libs.versions.toml` `[plugins]` and multi-line tables, `libs.*` catalog resolution, `compileSdk(34)` and legacy `*Version` forms, `gradle-wrapper.properties` and AGP `no-data` reporting, and `mise.toml` Java pins).

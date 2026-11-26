@@ -6,20 +6,21 @@ The `android` detector reports Google Play Billing Library majors past their dep
 
 | File | Declaration |
 | --- | --- |
-| `build.gradle`, `build.gradle.kts` | Literal `compileSdk`, `minSdk`, `targetSdk`, and `buildToolsVersion` inside an `android { }` block, and string-notation Maven dependencies |
+| `build.gradle`, `build.gradle.kts` | Literal `compileSdk`, `minSdk`, `targetSdk`, and `buildToolsVersion` (including method-call forms like `compileSdk(34)` and legacy `compileSdkVersion` / `minSdkVersion` / `targetSdkVersion` forms) inside an `android { }` block, and string-notation Maven dependencies |
 | `settings.gradle`, `settings.gradle.kts` | Literal Android Gradle Plugin and Kotlin Android plugin version pins |
-| `libs.versions.toml` | The `[versions]` keys `agp` and `kotlin` |
+| `libs.versions.toml` | `[versions]` keys `agp` and `kotlin`, plus `[plugins]` entries (`com.android.application`, `com.android.library`, `org.jetbrains.kotlin.android`) including multi-line tables and `[plugins.alias]` sub-tables |
 
 ## What it judges
 
 - A string-notation `com.android.billingclient:billing` pin on majors 5 through 9.
-- A literal `targetSdk` below 35 inside an `android { }` block (`android.target-sdk.existing.default-below-35`), matching Google Play's requirement for existing default (phone and tablet) apps.
+- A literal `targetSdk` (or `targetSdkVersion` / `targetSdk(...)`) below 35 inside an `android { }` block (`android.target-sdk.existing.default-below-35`), matching Google Play's requirement for existing default (phone and tablet) apps.
+- **Android Gradle Plugin (`pkg:generic/android/agp`)**: reports EOL findings when Ebb ships AGP rules, and emits a `no-data` unclassified reference (`no-data: Ebb has no lifecycle rule for Android Gradle Plugin`) otherwise. Missing AGP rules are tracked on the [Ebb roadmap](https://github.com/velella-sh/org/blob/main/ebb/ROADMAP.md) rather than adding data logic to Offing.
 
 ## What it does not judge
 
-- `compileSdk`, `minSdk`, `buildToolsVersion`, AGP, and Kotlin pins until a reviewed rule names them.
-- Legacy names `compileSdkVersion` / `minSdkVersion` / `targetSdkVersion`, method-call forms such as `compileSdk(34)`, and SDK settings outside an `android { }` block (for example `extensions.configure<BaseExtension>`).
-- Map-notation Maven coordinates, version-catalog library aliases, and configurations such as `debugImplementation`.
+- `compileSdk`, `minSdk`, `buildToolsVersion`, and Kotlin pins until a reviewed rule names them.
+- SDK settings outside an `android { }` block (for example `extensions.configure<BaseExtension>`).
+- Map-notation Maven coordinates and configurations such as `debugImplementation`.
 - Wear OS, Android TV, Android XR, and Automotive OS form-factor floors that differ from the default phone/tablet rule.
 
 ## Evidence

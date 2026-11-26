@@ -1,0 +1,13 @@
+[versions]
+java = "16"
+springBoot = "2.7.18"
+
+[libraries]
+spring-boot = {
+  group = "org.springframework.boot",
+  name = "spring-boot",
+  version.ref = "springBoot"
+}
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "1.9.24" }
