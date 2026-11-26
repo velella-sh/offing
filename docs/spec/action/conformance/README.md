@@ -26,7 +26,7 @@ jobs:
     uses: velella-sh/offing/.github/workflows/action-conformance.yml@main
     with:
       action_repository: velella-sh/offing
-      action_ref: ${{ vars.OFFING_ACTION_REF }}
+      action_ref: "<published v1-compatible ref>"
 ```
 
 Use an isolated workflow without secrets or write permissions when checking a

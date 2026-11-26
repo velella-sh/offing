@@ -32,8 +32,12 @@ function tableRows(markdown: string, firstHeader: string): string[][] {
 
 const unquote = (cell: string): string => cell.replace(/^`(.*)`$/, "$1");
 
-/** The default as the docs write it: `empty` for the empty string, otherwise the value in code ticks. */
-const documentedDefault = (cell: string): string => (cell === "empty" ? "" : unquote(cell));
+/** Resolve the defaults the spec describes in prose. */
+function documentedDefault(cell: string): string {
+  if (cell === "empty") return "";
+  if (cell === "job token") return "${{ github.token }}";
+  return unquote(cell);
+}
 
 async function load() {
   const action = parse(await readFile(resolve("action.yml"), "utf8")) as ActionDefinition;
