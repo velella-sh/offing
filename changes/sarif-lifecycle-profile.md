@@ -1,0 +1,1 @@
+- Include versioned lifecycle evidence in SARIF rules and results and provide a standalone checker for SARIF profile v1.

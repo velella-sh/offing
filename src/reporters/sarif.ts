@@ -41,6 +41,15 @@ function sarifHelp(finding: Finding): { text: string; markdown: string } {
   return { text: text.join("\n\n"), markdown: markdown.join("\n\n") };
 }
 
+function lifecycleProperties(finding: Finding) {
+  return {
+    severity: finding.severity,
+    ...(finding.deadline ? { endOfLifeDate: finding.deadline } : {}),
+    ...(finding.sources[0] ? { source: finding.sources[0].url } : {}),
+    ...(finding.replacement ? { replacement: finding.replacement } : {}),
+  };
+}
+
 /** One SARIF rule descriptor per rule id, taken from its first finding. */
 function sarifRules(findings: readonly Finding[], ruleIds: readonly string[]) {
   return ruleIds.flatMap((ruleId) => {
@@ -54,7 +63,7 @@ function sarifRules(findings: readonly Finding[], ruleIds: readonly string[]) {
         help: sarifHelp(finding),
         ...(finding.sources[0] ? { helpUri: finding.sources[0].url } : {}),
         defaultConfiguration: { level: SARIF_LEVEL[finding.severity] },
-        properties: { tags: ["lifecycle", finding.detector] },
+        properties: { tags: ["lifecycle", finding.detector], offingLifecycle: lifecycleProperties(finding) },
       },
     ];
   });
@@ -76,7 +85,7 @@ function sarifResult(finding: Finding, ruleIds: readonly string[]) {
       },
     ],
     partialFingerprints: { "offingFindingId/v1": finding.id },
-    properties: { confidence: finding.confidence },
+    properties: { confidence: finding.confidence, offingLifecycle: lifecycleProperties(finding) },
   };
 }
 
