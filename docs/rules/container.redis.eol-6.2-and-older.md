@@ -22,7 +22,7 @@ offing check pkg:docker/library/redis
 
 The Redis 6.2 release line is scheduled to stop receiving fixes from the vendor on 2027-04-01.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

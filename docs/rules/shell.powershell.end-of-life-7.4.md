@@ -22,7 +22,7 @@ offing check pkg:generic/powershell
 
 Microsoft's PowerShell support lifecycle lists 7.4 as retired: support ended on 2026-11-10, so it receives no further updates, including security updates.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

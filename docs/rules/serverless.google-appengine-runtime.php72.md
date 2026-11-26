@@ -22,7 +22,7 @@ offing check pkg:generic/google-appengine-runtime/php72
 
 The App Engine standard environment runtime support schedule lists PHP 7.2 (runtime ID php72) with end of support on 2024-01-30 and deprecation on 2025-01-31. Google no longer provides patches or support for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

@@ -22,7 +22,7 @@ offing check pkg:generic/golang
 
 The Go release policy supports a major release until two newer major releases exist. Go 1.24 support ended when Go 1.26 was released.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

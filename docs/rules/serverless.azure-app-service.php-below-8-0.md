@@ -22,7 +22,7 @@ offing check pkg:generic/azure-app-service/php
 
 Azure App Service follows the community support timeline for each language stack: past the end-of-support date the app keeps running, but the platform stops providing security patches or related support for that runtime version. PHP 7.4, the newest release in this range, reached end of life on 2022-11-28, so a PHP|7.4 or older app runs an unpatched runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

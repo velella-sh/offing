@@ -22,7 +22,7 @@ offing check pkg:generic/google-appengine-runtime/ruby32
 
 The App Engine standard environment runtime support schedule lists Ruby 3.2 (runtime ID ruby32) with end of support on 2026-03-31 and deprecation on 2027-03-31. Google no longer provides patches or support for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

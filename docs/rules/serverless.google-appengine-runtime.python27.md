@@ -22,7 +22,7 @@ offing check pkg:generic/google-appengine-runtime/python27
 
 The App Engine standard environment runtime support schedule lists Python 2.7 (runtime ID python27) with end of support on 2024-01-31, deprecation on 2026-01-31, and decommission on 2027-01-31. Google no longer provides patches or support for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

@@ -11,7 +11,7 @@ import { parse } from "yaml";
 import type { RegistryV2, RegistryV2Rule } from "@velella/ebb/registry";
 import {
   BUILD_TIME_REFERENCE_PATHS,
-  LOOKUP_PAGE,
+  RULES_DATA_FILE,
   SITE_URL,
   answerLead,
   buildFiles,
@@ -24,9 +24,9 @@ import {
   pageTitle,
   relatedRules,
   renderIndex,
-  renderLookupPage,
   renderRuleData,
   renderRulePage,
+  renderRulesCollection,
   renderSitemap,
   ruleDataUrl,
   ruleUrl,
@@ -180,8 +180,8 @@ test("a page states status, versions, dates, sources, freshness, migration, and 
   assert.match(page, /1\. \*\*Change it\.\*\* Do the change\./);
   assert.match(page, /- `make test`: Run the tests\./);
   assert.match(page, /No built-in detector reads `demo` declarations yet/);
-  assert.match(page, /\]\(\.\.\/lookup\.html\)/);
-  assert.match(page, /<form action="\.\.\/lookup\.html" method="get" role="search">/);
+  assert.match(page, /\]\(\.\.\/lookup\/\)/);
+  assert.doesNotMatch(page, /<form\b/);
 });
 
 test("a range with a pipe does not break the table", () => {
@@ -345,59 +345,35 @@ test("the sitemap lists the site, the lookup page, both indexes, every rule, and
   assert.ok(sitemap.length < 50_000_000 && locations.length < 50_000);
 });
 
-test("the lookup page inlines every rule with sources and makes no requests", async () => {
+test("the rules collection source contains every rule with sources, status, and url", async () => {
   const registries = await loadRegistries();
-  const page = renderLookupPage(registries);
+  const json = renderRulesCollection(registries);
   const entries = lookupEntries(registries);
   assert.ok(entries.length >= 100);
-  assert.match(page, /^<!doctype html>\n<html lang="en">/);
-  assert.match(page, /<link rel="canonical" href="https:\/\/velella\.sh\/offing\/lookup\.html" \/>/);
-  assert.match(page, /<meta property="og:image" content="https:\/\/velella\.sh\/offing\/assets\/og\/default\.svg" \/>/);
-  assert.match(page, /<script type="application\/json" id="lookup-data">/);
-  assert.doesNotMatch(page, /\bfetch\s*\(|XMLHttpRequest|navigator\.sendBeacon/);
-  assert.match(page, /makes no network requests after it loads/);
-
-  const match = /<script type="application\/json" id="lookup-data">\n([\s\S]*?)\n\s*<\/script>/.exec(page);
-  assert.ok(match);
-  const embedded = JSON.parse(match[1]!) as Array<{ id: string; sources: Array<{ url: string }>; title: string }>;
-  assert.equal(embedded.length, entries.length);
+  const parsed = JSON.parse(json) as Array<{
+    id: string;
+    status: string;
+    url: string;
+    sources: Array<{ url: string }>;
+  }>;
+  assert.equal(parsed.length, entries.length);
   assert.deepEqual(
-    embedded.map((entry) => entry.id),
+    parsed.map((entry) => entry.id),
     entries.map((entry) => entry.id),
   );
-  for (const entry of embedded) {
+  for (const entry of parsed) {
+    assert.ok(entry.status.length > 0, entry.id);
+    assert.equal(entry.url, `/rules/${entry.id}.html`);
     assert.ok(entry.sources.length >= 1, entry.id);
     assert.ok(
       entry.sources.every((source) => /^https?:\/\//.test(source.url)),
       entry.id,
     );
   }
-  assert.match(page, /href = "rules\/" \+/);
-  assert.match(page, /sourceLink\.href = source\.url/);
   assert.equal(
-    buildFiles(registries).some((file) => file.path === LOOKUP_PAGE),
+    buildFiles(registries).some((file) => file.path === RULES_DATA_FILE),
     true,
   );
-});
-
-test("lookup data can never close the embedded JSON element", () => {
-  const page = renderLookupPage([
-    registry([
-      rule({
-        title: "A </script><script>alert(1)</script> title",
-        summary: "Bad </script><script>alert(2)</script> text",
-        sources: [{ title: "Doc </script>", url: "https://example.com/x" }],
-      }),
-    ]),
-  ]);
-  const block = page.slice(page.indexOf('<script type="application/json" id="lookup-data">'));
-  const end = block.indexOf("</script>");
-  assert.equal(block.indexOf("</"), end);
-  const embedded = JSON.parse(
-    /<script type="application\/json" id="lookup-data">\n([\s\S]*?)\n\s*<\/script>/.exec(page)![1]!,
-  ) as Array<{ title: string; summary: string }>;
-  assert.equal(embedded[0]!.title, "A </script><script>alert(1)</script> title");
-  assert.equal(embedded[0]!.summary, "Bad </script><script>alert(2)</script> text");
 });
 
 test("the site configuration gives the absolute URL the canonical links rely on", async () => {
@@ -428,7 +404,7 @@ test("drift names a changed page, a missing page, and a stale page", async () =>
   await writeFile(join(root, "docs/rules/demo.thing.eol-1.md"), "edited\n");
   const fewer = buildFiles([registry([rule()])]);
   assert.deepEqual(await drift(fewer, root), [
-    "differs: docs/lookup.html",
+    "differs: docs/_data/rules.json",
     "differs: docs/rules/demo.thing.eol-1.md",
     "differs: docs/rules/index.md",
     "differs: docs/sitemap.xml",
@@ -444,7 +420,7 @@ test("drift names a changed page, a missing page, and a stale page", async () =>
   await write(fewer, root);
 
   assert.deepEqual(await drift(buildFiles([registry([rule(), rule({ id: "demo.new.eol-3" })])]), root), [
-    "differs: docs/lookup.html",
+    "differs: docs/_data/rules.json",
     "differs: docs/rules/demo.thing.eol-1.md",
     "differs: docs/rules/index.md",
     "differs: docs/sitemap.xml",

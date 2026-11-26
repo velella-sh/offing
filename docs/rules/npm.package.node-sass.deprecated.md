@@ -22,7 +22,7 @@ offing check pkg:npm/node-sass
 
 npm marks node-sass as deprecated: "Node Sass is no longer supported. Please use `sass` or `sass-embedded` instead."
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

@@ -22,7 +22,7 @@ offing check pkg:generic/google-appengine-runtime/python310
 
 The App Engine standard environment runtime support schedule lists Python 3.10 (runtime ID python310) with end of support on 2026-10-04 and deprecation on 2027-10-01. Google no longer provides patches or support for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

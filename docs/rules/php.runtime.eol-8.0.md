@@ -22,7 +22,7 @@ offing check pkg:generic/php
 
 The PHP unsupported branches page lists the PHP 8.0 branch as end of life on 2023-11-26; the branch no longer receives security or bug fixes from the PHP project.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

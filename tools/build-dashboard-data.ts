@@ -1,7 +1,8 @@
-// Builds docs/dashboard/data.json: the numbers behind the public accuracy dashboard, from committed files only.
+// Builds docs/_data/dashboard.json (and the flattened collection sources under docs/_data/): the numbers
+// behind the public accuracy dashboard, from committed files only.
 //
 //   npm run build --silent
-//   node dist/tools/build-dashboard-data.js --today 2026-10-18     # writes docs/dashboard/data.json (gitignored; Pages builds it)
+//   node dist/tools/build-dashboard-data.js --today 2026-10-18     # writes docs/_data/dashboard*.json (gitignored; Pages builds it)
 //   node dist/tools/build-dashboard-data.js --today run-date       # the reference day is lastFullRun.date
 //   node dist/tools/build-dashboard-data.js --today run-date --check
 //
@@ -28,7 +29,11 @@ export const CORPUS_FILE = PUBLIC_CORPUS_DIR;
 export const TARGETS_FILE = TARGETS_PATH;
 export const DECISION_FILE = "docs/decisions/0013-detector-maturity.md";
 export const TARGET_DECISION_FILE = "docs/decisions/0030-corpus-selection-and-200-target.md";
-export const OUTPUT_FILE = "docs/dashboard/data.json";
+export const OUTPUT_FILE = "docs/_data/dashboard.json";
+export const DETECTORS_COLLECTION_FILE = "docs/_data/dashboard-detectors.json";
+export const ECOSYSTEMS_COLLECTION_FILE = "docs/_data/dashboard-ecosystems.json";
+export const MINIMUMS_COLLECTION_FILE = "docs/_data/dashboard-minimums.json";
+export const RUN_COLLECTION_FILE = "docs/_data/dashboard-run.json";
 
 /** The corpus ecosystems each detector reads, which is what its zero-finding repositories are counted over. */
 export const detectorEcosystems: Readonly<Record<string, readonly string[]>> = {
@@ -346,22 +351,29 @@ export function buildDashboardData(input: {
   };
 }
 
-export async function renderDashboardData(root: string, today: string): Promise<string> {
-  const thresholds = JSON.parse(await readFile(resolve(root, THRESHOLDS_FILE), "utf8")) as Thresholds;
+export async function buildDashboardDataFromRoot(root: string, today: string): Promise<DashboardData> {
+  const rawThresholds: unknown = JSON.parse(await readFile(resolve(root, THRESHOLDS_FILE), "utf8"));
+  const thresholds = rawThresholds as Thresholds;
   const targets = await loadCorpusTargets(root);
   const corpus = (await loadPublicCorpus(root)).repositories;
   const day = today === "run-date" ? thresholds.lastFullRun?.date : today;
   if (day === undefined) throw new Error(`--today run-date needs a lastFullRun in ${THRESHOLDS_FILE}.`);
-  return `${JSON.stringify(buildDashboardData({ thresholds, corpus, targets, today: day }), null, 2)}\n`;
+  return buildDashboardData({ thresholds, corpus, targets, today: day });
+}
+
+export async function renderDashboardData(root: string, today: string): Promise<string> {
+  return `${JSON.stringify(await buildDashboardDataFromRoot(root, today), null, 2)}\n`;
 }
 
 /** True when the rendered dashboard JSON has the shape Pages must publish. */
 export function isWellFormedDashboardData(text: string, expectedReferenceDay?: string): boolean {
   if (!text.endsWith("\n") || text.endsWith("\n\n") || text.includes("\r")) return false;
   try {
-    const data = JSON.parse(text) as {
-      schemaVersion?: string;
-      referenceDay?: string;
+    const parsed: unknown = JSON.parse(text);
+    if (typeof parsed !== "object" || parsed === null) return false;
+    const data = parsed as {
+      schemaVersion?: unknown;
+      referenceDay?: unknown;
       corpus?: { ecosystems?: unknown };
     };
     if (data.schemaVersion !== DASHBOARD_SCHEMA) return false;
@@ -383,14 +395,71 @@ function todayArgument(args: readonly string[]): string {
   return value;
 }
 
+export function renderDashboardCollections(data: DashboardData): Record<string, string> {
+  const detectors = data.detectors.map((detector) => ({
+    id: detector.id,
+    level: detector.level,
+    earnedLevel: detector.earnedLevel,
+    aboveEvidence:
+      detector.level === "stable" && detector.earnedLevel !== "stable"
+        ? "above the counted evidence, kept by decision 0013"
+        : "supported by counted evidence",
+    precision: detector.run?.precision ?? "not measured",
+    recall: detector.run?.recall ?? "not measured",
+    truePositives: detector.run?.truePositives ?? "not measured",
+    falsePositives: detector.run?.falsePositives ?? "not measured",
+    falseNegatives: detector.run?.falseNegatives ?? "not measured",
+    repositoriesWithFindings: detector.evidence.repositoriesWithFindings,
+    expectedFindings: detector.evidence.expectedFindings,
+    zeroFindingRepositories: detector.evidence.zeroFindingRepositories,
+  }));
+  const ecosystems = data.corpus.ecosystems.map((entry) => ({
+    id: entry.id,
+    repositories: entry.repositories,
+    minimum: entry.minimum,
+    target: entry.target,
+  }));
+  const minimums = Object.entries(data.evidenceMinimums).map(([level, req]) => ({
+    id: level,
+    repositoriesWithFindings: req.repositoriesWithFindings,
+    expectedFindings: req.expectedFindings,
+    zeroFindingRepositories: req.zeroFindingRepositories,
+  }));
+  const run = data.run
+    ? [
+        {
+          id: "last-full-run",
+          date: data.run.date,
+          commit: data.run.commit,
+          repositories: data.run.repositories,
+          findings: data.run.findings,
+          runAgeDays: data.run.runAgeDays,
+          staleStatus: data.run.runAgeDays > 14 ? "stale" : "fresh",
+          recordedPrecision: data.run.recordedPrecision,
+          recordedRecall: data.run.recordedRecall,
+          medianScanMs: data.run.timing.medianScanMs ?? "not measured",
+          p95ScanMs: data.run.timing.p95ScanMs ?? "not measured",
+        },
+      ]
+    : [];
+  const format = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
+  return {
+    [DETECTORS_COLLECTION_FILE]: format(detectors),
+    [ECOSYSTEMS_COLLECTION_FILE]: format(ecosystems),
+    [MINIMUMS_COLLECTION_FILE]: format(minimums),
+    [RUN_COLLECTION_FILE]: format(run),
+  };
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
   const today = todayArgument(args);
   const target = resolve(OUTPUT_FILE);
-  renderDashboardData(".", today).then(
-    async (text) => {
+  buildDashboardDataFromRoot(".", today).then(
+    async (data) => {
+      const text = `${JSON.stringify(data, null, 2)}\n`;
       if (args.includes("--check")) {
-        const expectedDay = today === "run-date" ? (JSON.parse(text) as { referenceDay: string }).referenceDay : today;
+        const expectedDay = today === "run-date" ? data.referenceDay : today;
         if (!isWellFormedDashboardData(text, expectedDay)) {
           process.stderr.write(`${OUTPUT_FILE} would be malformed. Fix benchmarks/thresholds.json or the corpus.\n`);
           process.exit(1);
@@ -400,10 +469,14 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       }
       await mkdir(dirname(target), { recursive: true });
       await writeFile(target, text);
-      process.stdout.write(`Wrote ${target} (${text.length} characters)\n`);
+      const collections = renderDashboardCollections(data);
+      for (const [path, contents] of Object.entries(collections)) {
+        await writeFile(resolve(path), contents);
+      }
+      process.stdout.write(`Wrote ${target} and collection sources (${text.length} characters)\n`);
     },
     (error: unknown) => {
-      process.stderr.write(`${(error as Error).message}\n`);
+      process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
       process.exit(1);
     },
   );

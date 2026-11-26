@@ -22,7 +22,7 @@ offing check pkg:generic/kubernetes
 
 The Kubernetes release history lists Kubernetes 1.36 as supported until its end-of-life date of 2027-06-28; after that the release no longer receives security updates or bug fixes.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

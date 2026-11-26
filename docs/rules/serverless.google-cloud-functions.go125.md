@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-functions-runtime/go125
 
 The Cloud Run functions runtime support schedule lists Go 1.25 (runtime ID go125) as deprecated on 2026-10-01 and scheduled for decommission on 2027-04-01. Google no longer offers runtime support for deployments that use it.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

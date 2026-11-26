@@ -22,7 +22,7 @@ offing check pkg:generic/google-appengine-runtime/php81
 
 The App Engine standard environment runtime support schedule lists PHP 8.1 (runtime ID php81) with end of support on 2025-12-31 and deprecation on 2026-12-31. Google no longer provides patches or support for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

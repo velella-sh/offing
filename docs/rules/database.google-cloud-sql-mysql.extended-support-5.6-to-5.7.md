@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-sql-mysql
 
 The Cloud SQL for MySQL version policy lists MySQL 5.6 and 5.7 with extended support starting 2025-02-01 and deprecation on 2028-02-01. Oracle no longer supports those release series, and Cloud SQL charges for extended support. The mysql.com lifecycle page refuses automated requests (HTTP 403), so the upstream dates are taken from the endoflife.date record for MySQL.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

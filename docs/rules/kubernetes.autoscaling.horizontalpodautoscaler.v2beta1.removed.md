@@ -22,7 +22,7 @@ offing check pkg:generic/kubernetes/autoscaling/HorizontalPodAutoscaler
 
 The Kubernetes Deprecated API Migration Guide states that the autoscaling/v2beta1 API version of HorizontalPodAutoscaler is no longer served as of v1.25, which was released on 2022-08-23.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

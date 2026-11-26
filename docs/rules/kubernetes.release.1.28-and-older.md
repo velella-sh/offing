@@ -22,7 +22,7 @@ offing check pkg:generic/kubernetes
 
 Every Kubernetes minor before 1.29 has passed its published end-of-life date; the release history page archives these lines, and the kubernetes-2 importer drafts only the five newest ended ones, so this reviewed rule covers the rest. Managed providers retire minors on their own calendars; the EKS, GKE, and AKS rules cover those schedules.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

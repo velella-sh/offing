@@ -22,7 +22,7 @@ offing check pkg:npm/crypto-js
 
 npm marks crypto-js as deprecated: "Active development of CryptoJS has been discontinued. This library is no longer maintained."
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

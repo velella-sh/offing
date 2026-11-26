@@ -46,6 +46,7 @@ const lines = [
   `**${MILESTONE.title}** · 2026-10-15 → 2027-04-15 · ${Object.keys(MONTHS).length} phases, each its own milestone, run in order${project ? ` · [project board](https://github.com/users/arminazimi/projects/${project.number})` : ""}`,
   "",
   "> This file is generated from `planning/roadmap/` by `node planning/roadmap/roadmap-md.mjs`. Edit the data, not this file.",
+  "> Roadmap plans and timelines live in the [organization roadmap](https://github.com/velella-sh/org/tree/main/offing/roadmap).",
   "> Scope changes still require an explicit decision recorded in `docs/decisions/`.",
   "",
   "## Direction",

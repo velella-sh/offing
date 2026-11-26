@@ -22,7 +22,7 @@ offing check pkg:maven/com.android.billingclient/billing
 
 The Google Play Billing Library version deprecation page states that all versions have a two-year deprecation cycle. Its support timeline table lists version 9 with a new app and update deadline of August 31, 2028 and an extension deadline of November 1, 2028.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

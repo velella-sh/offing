@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-functions-runtime/go111
 
 The Cloud Run functions runtime support schedule lists Go 1.11 (runtime ID go111) as deprecated on 2020-08-05 and decommissioned later. Google no longer provides maintenance for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

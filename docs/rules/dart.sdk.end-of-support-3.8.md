@@ -22,7 +22,7 @@ offing check pkg:generic/dart
 
 The Dart security policy commits security updates only for the most recent stable SDK release. Dart 3.8 stopped being that release when Dart 3.9 shipped on 2025-08-13.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

@@ -22,7 +22,7 @@ offing check pkg:generic/aws-aurora/mysql
 
 AWS ended standard support for Aurora MySQL version 1 (MySQL 5.6 compatible) on 2023-02-28. RDS Extended Support was not offered for this version, so it receives no further Aurora security or bug fixes. Upgrade to Aurora MySQL version 3 (MySQL 8.0 compatible) or later.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

@@ -249,10 +249,10 @@ test("the tool requires --today and refuses a malformed one", async () => {
   );
 });
 
-test("docs/dashboard/data.json is buildable with the last run's date as the reference day (CI fails when it is not)", async () => {
+test("docs/_data/dashboard.json is buildable with the last run's date as the reference day (CI fails when it is not)", async () => {
   const rendered = await renderDashboardData(".", "run-date");
   assert.ok(isWellFormedDashboardData(rendered, runDate));
   assert.equal((JSON.parse(rendered) as { referenceDay: string }).referenceDay, runDate);
-  assert.equal(OUTPUT_FILE, "docs/dashboard/data.json");
+  assert.equal(OUTPUT_FILE, "docs/_data/dashboard.json");
   await execute(process.execPath, [script, "--today", "run-date", "--check"]);
 });

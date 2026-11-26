@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-functions-runtime/go119
 
 The Cloud Run functions runtime support schedule lists Go 1.19 (runtime ID go119) as deprecated on 2024-04-30 and decommissioned on 2025-01-30. Google no longer provides maintenance for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |

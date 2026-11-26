@@ -36,7 +36,31 @@ export const GENERATED_PATHS = Object.freeze([
   { path: "docs/llms-full.txt", directory: false, target: "Build time", generator: "npm run build:llms" },
   { path: "docs/sitemap.xml", directory: false, target: "Build time", generator: "npm run build:reference" },
   { path: "docs/rules/index.md", directory: false, target: "Build time", generator: "npm run build:reference" },
-  { path: "docs/dashboard/data.json", directory: false, target: "Build time", generator: "npm run build:dashboard" },
+  { path: "docs/_data/dashboard.json", directory: false, target: "Build time", generator: "npm run build:dashboard" },
+  {
+    path: "docs/_data/dashboard-detectors.json",
+    directory: false,
+    target: "Build time",
+    generator: "npm run build:dashboard",
+  },
+  {
+    path: "docs/_data/dashboard-ecosystems.json",
+    directory: false,
+    target: "Build time",
+    generator: "npm run build:dashboard",
+  },
+  {
+    path: "docs/_data/dashboard-minimums.json",
+    directory: false,
+    target: "Build time",
+    generator: "npm run build:dashboard",
+  },
+  {
+    path: "docs/_data/dashboard-run.json",
+    directory: false,
+    target: "Build time",
+    generator: "npm run build:dashboard",
+  },
   { path: "docs/api/v1", directory: true, target: "Build time", generator: "npm run build:data-api" },
   {
     path: "src/commands/index.generated.ts",

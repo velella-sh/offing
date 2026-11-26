@@ -22,7 +22,7 @@ offing check pkg:generic/google-cloud-functions-runtime/go122
 
 The Cloud Run functions runtime support schedule lists Go 1.22 (runtime ID go122) as deprecated on 2026-01-28 and decommissioned on 2026-07-28. Google no longer provides maintenance for that runtime.
 
-[Look up another package or runtime](../lookup.html) · <form action="../lookup.html" method="get" role="search"><input type="search" name="q" placeholder="Search packages and runtimes" aria-label="Package or runtime" /> <button type="submit">Search</button></form>
+[Look up another package or runtime](../lookup/)
 
 | | |
 | --- | --- |
