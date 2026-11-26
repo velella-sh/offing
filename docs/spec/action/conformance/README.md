@@ -7,7 +7,8 @@ title: Offing Action v1 conformance
 The [v1 contract](../v1.md) is exercised on a clean tree and a tree with a dated
 GitHub Actions runtime finding. The fixtures verify a passing scan with defaults,
 the failure gate and its outputs, and local SARIF without code scanning
-permissions. The runner compares the SARIF result IDs with the JSON report.
+permissions. The workflow validates the [lifecycle SARIF profile](../../sarif/v1.md)
+and compares the SARIF result IDs with the JSON report.
 
 ## Run from a consumer repository
 
@@ -33,6 +34,17 @@ Use an isolated workflow without secrets or write permissions when checking a
 third-party candidate. The `acc-action-v1` job summary records the repository,
 selected ref, resolved commit and package version. Link the passing release
 run from the release acceptance record.
+
+## Run against an Offing release tag
+
+From the Offing repository, dispatch the workflow with the exact published
+Action tag you want to test. The workflow reads the packaged Action from the
+selected tag and records its commit and package version in the run summary.
+Replace `RELEASE_TAG` with the tag to test.
+
+```sh
+gh workflow run action-conformance.yml -f action_ref="refs/tags/RELEASE_TAG"
+```
 
 ## Run the verifier directly
 

@@ -97,6 +97,12 @@ test("the standalone v1 conformance runner verifies the failure gate, dated outp
   const result = execFileSync(process.execPath, [verifier, "gate", "failure"], { input: JSON.stringify(outputs) });
   assert.match(result.toString(), /acc-action-v1: gate passed/);
 
+  const sarif = outputs["sarif-path"];
+  assert.ok(sarif);
+  const profileChecker = resolve("docs/spec/sarif/conformance/check.mjs");
+  const profile = execFileSync(process.execPath, [profileChecker, sarif], { encoding: "utf8" });
+  assert.match(profile, /acc-sarif-profile: profile v1 passed/);
+
   const cleanRoot = await fixtureRepository();
   await writeFile(join(cleanRoot, "package.json"), JSON.stringify({ private: true }));
   const clean = await runActionFixture(cleanRoot);
