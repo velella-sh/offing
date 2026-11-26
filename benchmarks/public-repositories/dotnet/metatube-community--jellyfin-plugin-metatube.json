@@ -1,0 +1,53 @@
+{
+  "repository": "metatube-community/jellyfin-plugin-metatube",
+  "commit": "f7c1f336fc2bd3b35b82af7c6e69da09a196e3d2",
+  "ecosystem": "dotnet",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "github-actions.action-gh-release.node20",
+      "path": ".github/workflows/dotnetcore.yml",
+      "line": 52,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read .github/workflows/dotnetcore.yml:52 at the pinned commit: `uses: softprops/action-gh-release@v2`. The action ref matches the Node.js 20 rule and its versioned sources in Ebb."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/dotnetcore.yml",
+      "line": 10,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read .github/workflows/dotnetcore.yml:10 at the pinned commit: `- uses: actions/checkout@v4`. The action ref matches the Node.js 20 rule and its versioned sources in Ebb."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-dotnet.node20",
+      "path": ".github/workflows/dotnetcore.yml",
+      "line": 15,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read .github/workflows/dotnetcore.yml:15 at the pinned commit: `uses: actions/setup-dotnet@v4`. The action ref matches the Node.js 20 rule and its versioned sources in Ebb."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-python.node20",
+      "path": ".github/workflows/dotnetcore.yml",
+      "line": 20,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read .github/workflows/dotnetcore.yml:20 at the pinned commit: `uses: actions/setup-python@v5`. The action ref matches the Node.js 20 rule and its versioned sources in Ebb."
+      }
+    },
+    {
+      "ruleId": "github-actions.stale.node20",
+      "path": ".github/workflows/stale.yml",
+      "line": 11,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read .github/workflows/stale.yml:11 at the pinned commit: `- uses: actions/stale@v9`. The action ref matches the Node.js 20 rule and its versioned sources in Ebb."
+      }
+    }
+  ]
+}

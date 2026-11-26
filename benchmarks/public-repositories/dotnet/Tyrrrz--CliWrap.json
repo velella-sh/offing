@@ -1,0 +1,26 @@
+{
+  "repository": "Tyrrrz/CliWrap",
+  "commit": "4b7a3d07b9934a9d7559cb0509dde9e6b286403b",
+  "ecosystem": "dotnet",
+  "selection": "blind",
+  "expected": [
+    {
+      "ruleId": "dotnet.runtime.end-of-support-6.0",
+      "path": "CliWrap/CliWrap.csproj",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read CliWrap/CliWrap.csproj:3 at the pinned commit: `<TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0;net10.0</TargetFrameworks>`. The listed .NET target is past end of support (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-7.0",
+      "path": "CliWrap/CliWrap.csproj",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Read CliWrap/CliWrap.csproj:3 at the pinned commit: `<TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0;net10.0</TargetFrameworks>`. The listed .NET target is past end of support (https://dotnet.microsoft.com/platform/support/policy/dotnet-core)."
+      }
+    }
+  ]
+}

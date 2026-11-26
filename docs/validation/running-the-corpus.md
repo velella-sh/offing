@@ -100,7 +100,15 @@ Every report carries a `cost` block: total wall time, the summed fetch time (lar
 
 `benchmarks/thresholds.json` holds the `budget`: a wall-time limit in seconds and a fetched-bytes limit, **per job** — one shard, or one unsharded run. Going over either prints a `BUDGET` warning (a `::warning::` annotation in Actions), lists it in the report's `budgetWarnings`, and flags it in the job summary. A merged report compares its summed fetched bytes against the limit times the shard count and its wall time (the slowest shard) against the single-shard limit. A budget overrun never fails the run; correctness is decided by false positives, false negatives, and failed scans.
 
-The current limits are 600 s and 500 MB per shard, measured rather than guessed. At the 4,600 target a shard owns about 575 repositories, 8.3 times today's 70. A warm shard of 70 takes about 13 s (about two minutes at the target). A cold shard of 70 measured 107.1 s and fetched 53.3 MB here (another run of the same shard took 319.5 s on the same connection), which is about 440 MB for one target shard; decision 0015 measured 112 repositories cold in 49.8 s on an ordinary connection. The 600 s and 500 MB limits leave room for that spread, and the weekly job's timeout is 20 minutes. Tighten the budget in a pull request when a faster fetch strategy lands, and raise it only with a stated reason and a measurement.
+The limits are 600 s and 500 MB per job. For a fresh cache, use the eight-shard **Corpus** workflow in `full` mode to measure cold costs. A single local process downloads every missing repository, so it can exceed the per-job budget on an empty cache. To verify the entire corpus locally, warm the checkout cache first and then run a full offline scan:
+
+```bash
+export OFFING_CORPUS_CACHE="$HOME/.cache/offing-corpus"
+npm run corpus:warm
+npm run validate:public-repos -- --offline --output corpus-result.json
+```
+
+The weekly jobs save each shard's cache under a key derived from that shard's repository and commit pairs and the sparse checkout patterns. A change to an expected finding keeps the key. After a pin changes, the shard restores its previous compatible cache and fetches the missing entries. A failed shard does not save an incomplete cache under its new key.
 
 ## Stalled fetches
 
