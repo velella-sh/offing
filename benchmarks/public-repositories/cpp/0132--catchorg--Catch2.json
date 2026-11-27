@@ -3,5 +3,15 @@
   "commit": "08092139210881f01a34e60c5f2fd6afa0ea4024",
   "ecosystem": "cpp",
   "selection": "blind",
-  "expected": []
+  "expected": [
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/validate-header-guards.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.7 to actions/setup-python at .github/workflows/validate-header-guards.yml line 17."
+      }
+    }
+  ]
 }

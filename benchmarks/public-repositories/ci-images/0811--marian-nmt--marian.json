@@ -183,6 +183,15 @@
         "kind": "maintainer-review",
         "note": "Read src/3rd_party/spdlog/example/CMakeLists.txt:24 at this commit: `cmake_minimum_required(VERSION 3.0)` declares a minimum policy version below 3.5."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/documentation.yml",
+      "line": 24,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.7 to actions/setup-python at .github/workflows/documentation.yml line 24."
+      }
     }
   ]
 }

@@ -43,6 +43,15 @@
         "url": "https://www.ruby-lang.org/en/downloads/branches/",
         "note": "Reviewed at this commit: line 14 of .tool-versions reads `ruby 2.7.1`. Ruby 2.7 is end-of-life (https://www.ruby-lang.org/en/downloads/branches/)."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.legacy",
+      "path": ".tool-versions",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 14.13.0 at .tool-versions line 1."
+      }
     }
   ]
 }

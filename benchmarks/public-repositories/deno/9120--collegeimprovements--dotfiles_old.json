@@ -93,6 +93,15 @@
         "url": "https://www.ruby-lang.org/en/downloads/branches/",
         "note": "Reviewed at this commit: line 10 of .tool-versions reads `ruby 3.0.0`. Ruby 3.0 is end-of-life (https://www.ruby-lang.org/en/downloads/branches/)."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-20",
+      "path": ".tool-versions",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 20.3.1 at .tool-versions line 4."
+      }
     }
   ]
 }

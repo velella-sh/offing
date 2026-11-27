@@ -39,6 +39,87 @@
         "kind": "maintainer-review",
         "note": "Read pyproject.toml:9 at this commit: `requires-python = \">=3.8\"`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/test.yml",
+      "line": 101,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/test.yml line 101."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/test.yml",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/test.yml line 23."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/test.yml",
+      "line": 39,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/test.yml line 39."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/test.yml",
+      "line": 79,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/test.yml line 79."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": "pyproject.toml",
+      "line": 25,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.10 compatibility in a Trove classifier at pyproject.toml line 25."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/test.yml",
+      "line": 169,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8 to actions/setup-python at .github/workflows/test.yml line 169."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/test.yml",
+      "line": 79,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8 to actions/setup-python at .github/workflows/test.yml line 79."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.8 compatibility in a Trove classifier at pyproject.toml line 23."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 24,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.9 compatibility in a Trove classifier at pyproject.toml line 24."
+      }
     }
   ]
 }

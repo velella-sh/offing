@@ -93,6 +93,24 @@
         "kind": "maintainer-review",
         "note": "Read pyproject.toml:30 at this commit: `python = \"^3.8.0\"`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/build_and_test.yml",
+      "line": 19,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8.12 to actions/setup-python at .github/workflows/build_and_test.yml line 19."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/release.yml",
+      "line": 49,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.9 to actions/setup-python at .github/workflows/release.yml line 49."
+      }
     }
   ]
 }

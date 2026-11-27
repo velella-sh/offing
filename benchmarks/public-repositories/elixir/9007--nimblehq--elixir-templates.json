@@ -283,6 +283,15 @@
         "url": "https://github.com/elixir-lang/elixir/security/policy",
         "note": "Reviewed at this commit: line 2 of .tool-versions reads `elixir 1.14.3-otp-25`. Elixir 1.14 is outside the five most recent supported minor branches in the Elixir security policy (https://github.com/elixir-lang/elixir/security/policy). The bundled rule covers the 1.14 line."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-18",
+      "path": ".tool-versions",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 18.14.2 at .tool-versions line 3."
+      }
     }
   ]
 }

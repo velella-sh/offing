@@ -43,6 +43,15 @@
         "url": "https://github.com/erlang/otp/security/policy",
         "note": "Reviewed at this commit: line 2 of .tool-versions reads `erlang 25.1`. Erlang/OTP 25 is outside the three newest majors in the Erlang/OTP security policy (https://github.com/erlang/otp/security/policy). The bundled rule covers OTP 25."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.legacy",
+      "path": ".tool-versions",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 16.17.1 at .tool-versions line 3."
+      }
     }
   ]
 }

@@ -111,6 +111,24 @@
         "kind": "maintainer-review",
         "note": "Python 3.11 image in integration-tests/webapp/Dockerfile is a container image on the 3.11 release line. Vendor-checked by AI agent (Claude Code) under maintainer direction on 2026-11-04 against the primary vendor page https://devguide.python.org/versions/: Python 3.11 is listed with a scheduled end-of-life of 2027-10 (italic, subject to change). Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": "pyproject.toml",
+      "line": 18,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.10 compatibility in a Trove classifier at pyproject.toml line 18."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.9 compatibility in a Trove classifier at pyproject.toml line 17."
+      }
     }
   ]
 }

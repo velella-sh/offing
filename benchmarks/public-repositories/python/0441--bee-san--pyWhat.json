@@ -21,6 +21,24 @@
         "kind": "maintainer-review",
         "note": "Read pyproject.toml:11 at this commit: `python = \"^3.7\"`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/main.yaml",
+      "line": 11,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/main.yaml line 11."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/main.yaml",
+      "line": 11,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8 to actions/setup-python at .github/workflows/main.yaml line 11."
+      }
     }
   ]
 }

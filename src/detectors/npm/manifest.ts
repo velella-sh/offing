@@ -33,19 +33,17 @@ export function declaredDependencies(manifest: PackageManifest): Map<string, { r
   return declared;
 }
 
-export function propertyLine(contents: string, property: string): number {
-  const escaped = property.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const pattern = new RegExp(`^[\\t ]*["']${escaped}["']\\s*:`, "m");
-  const match = pattern.exec(contents);
-  return match ? contents.slice(0, match.index).split(/\r?\n/).length : 1;
-}
-
 /**
  * The line of `name` declared directly inside the top-level `section` object of a package.json. Keys are matched
  * by nesting depth, so the same name in another section, or nested deeper (such as an overrides block), is never
  * taken. The last occurrence wins, as it does for JSON.parse. Falls back to line 1 when the key is not found.
  */
 export function declarationLine(contents: string, section: string, name: string): number {
+  const offset = declarationOffset(contents, section, name);
+  return offset === undefined ? 1 : contents.slice(0, offset).split(/\r?\n/).length;
+}
+
+export function declarationOffset(contents: string, section: string, name: string): number | undefined {
   const token = /("(?:[^"\\]|\\.)*")(\s*:)?|[{}[\]]/g;
   let depth = 0;
   let topKey = "";
@@ -60,5 +58,5 @@ export function declarationLine(contents: string, section: string, name: string)
       else if (depth === 2 && topKey === section && key === name) found = match.index;
     }
   }
-  return found >= 0 ? contents.slice(0, found).split(/\r?\n/).length : 1;
+  return found >= 0 ? found : undefined;
 }

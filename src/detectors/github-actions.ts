@@ -13,6 +13,7 @@ import { versContains } from "@velella/ebb/vers";
 import { resolveReference, SHA_PATTERN, VERSION_PATTERN } from "./github-actions-reference.js";
 import type { ResolvedReference } from "./github-actions-reference.js";
 import { classifyDotnetVersion, setupDotnetVersions } from "./github-actions-dotnet.js";
+import { judgeSetupPython } from "./github-actions-runtime.js";
 import { classifyNodeVersion, setupNodeVersions } from "./github-actions-node.js";
 import type {
   Detector,
@@ -299,15 +300,19 @@ export class GitHubActionsDetector implements Detector {
   readonly inputs: DetectorInputs = { directories: [".github/workflows"], fileNames: ["action.yml", "action.yaml"] };
 
   async analyze(context: DetectorContext): Promise<DetectorAnalysis> {
-    const [rules, shaRegistry, workflowFiles] = await Promise.all([
+    const [rules, shaRegistry, workflowFiles, nodeRules] = await Promise.all([
       loadRegistry(),
       loadShaRegistry(),
       findWorkflowFiles(context.root),
+      loadRuntimeRules("registry/nodejs.json", "pkg:generic/nodejs", "nodejs.runtime."),
     ]);
     let dotnetRules: RegistryV2Rule[] | undefined;
-    let nodeRules: RegistryV2Rule[] | undefined;
+    let pythonRules: RegistryV2Rule[] | undefined;
     const rulesByAction = new Map(rules.map((rule) => [rule.action.toLowerCase(), rule]));
-    const findings: DetectorFinding[] = await workflowCommandFindings(context.root);
+    const findings: DetectorFinding[] = await workflowCommandFindings(
+      context.root,
+      nodeRules.find(({ id }) => id === "nodejs.runtime.legacy"),
+    );
     const unclassified: DetectorUnclassifiedReference[] = [];
 
     for (const workflowFile of workflowFiles) {
@@ -317,9 +322,10 @@ export class GitHubActionsDetector implements Detector {
         dotnetRules ??= await loadRuntimeRules("registry/dotnet.json", "pkg:generic/dotnet", "dotnet.runtime.");
         judgeSetupDotnet(contents, path, dotnetRules, findings, unclassified);
       }
-      if (/setup-node/i.test(contents)) {
-        nodeRules ??= await loadRuntimeRules("registry/nodejs.json", "pkg:generic/nodejs", "nodejs.runtime.");
-        judgeSetupNode(contents, path, nodeRules, findings, unclassified);
+      if (/setup-node/i.test(contents)) judgeSetupNode(contents, path, nodeRules, findings, unclassified);
+      if (/setup-python/i.test(contents)) {
+        pythonRules ??= await loadRuntimeRules("registry/python.json", "pkg:generic/python", "python.runtime.");
+        judgeSetupPython(contents, path, pythonRules, findings, unclassified);
       }
 
       for (const reference of parseActionReferences(contents)) {

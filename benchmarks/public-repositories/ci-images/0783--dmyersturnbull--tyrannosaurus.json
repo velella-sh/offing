@@ -165,6 +165,60 @@
         "kind": "maintainer-review",
         "note": "Read environment.yml:6 at the pinned commit: `python>=3.9,<4`. The compatibility floor admits Python 3.9, which is past end of life (https://devguide.python.org/versions/)."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/publish.yml",
+      "line": 13,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/publish.yml line 13."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/publish.yml",
+      "line": 42,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/publish.yml line 42."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/pull-test.yml",
+      "line": 16,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/pull-test.yml line 16."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/push-main.yml",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/push-main.yml line 12."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": "pyproject.toml",
+      "line": 34,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.10 compatibility in a Trove classifier at pyproject.toml line 34."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 33,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.9 compatibility in a Trove classifier at pyproject.toml line 33."
+      }
     }
   ]
 }

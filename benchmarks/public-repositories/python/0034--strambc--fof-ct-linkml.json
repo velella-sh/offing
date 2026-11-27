@@ -12,6 +12,24 @@
         "kind": "migration-commit",
         "url": "https://github.com/strambc/fof-ct-linkml/commit/e0f029a6b0a4bef8c7b18d62a74444dfaeddb906"
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/main.yaml",
+      "line": 22,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/main.yaml line 22."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/main.yaml",
+      "line": 22,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.9 to actions/setup-python at .github/workflows/main.yaml line 22."
+      }
     }
   ]
 }

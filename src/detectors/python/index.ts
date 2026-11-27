@@ -103,6 +103,7 @@ function sortedRuntimeRules(rules: readonly PythonRule[]): PythonRuntimeRule[] {
 function coveredVersion(declaration: Declaration, rule: PythonRuntimeRule): number[] | undefined {
   const line = versionPair(rule.maximumVersion);
   if (!rule.scheduled) return unsupportedVersion(declaration.value, rule.maximumVersion);
+  if (declaration.kind === "Trove classifier") return undefined;
   return line && staysOnScheduledLine(declaration, line) ? line : undefined;
 }
 

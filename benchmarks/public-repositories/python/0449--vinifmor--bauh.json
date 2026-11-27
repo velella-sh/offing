@@ -30,6 +30,51 @@
         "kind": "maintainer-review",
         "note": "Read setup.py:35 at this commit: python_requires=\">=3.5\"; the floor still admits release lines 3.7-3.9, all past end of life (https://devguide.python.org/versions/)."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": "pyproject.toml",
+      "line": 20,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.10 compatibility in a Trove classifier at pyproject.toml line 20."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 16,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.6 compatibility in a Trove classifier at pyproject.toml line 16."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.7 compatibility in a Trove classifier at pyproject.toml line 17."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 18,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.8 compatibility in a Trove classifier at pyproject.toml line 18."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 19,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.9 compatibility in a Trove classifier at pyproject.toml line 19."
+      }
     }
   ]
 }

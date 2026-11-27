@@ -45,7 +45,10 @@ requires-python = ">=3.8"
   await execute("git", ["apply", "--check", path], { cwd: root });
   await execute("git", ["apply", path], { cwd: root });
   assert.equal(await readFile(join(root, ".python-version"), "utf8"), "3.11\n");
-  assert.equal(await readFile(join(root, "pyproject.toml"), "utf8"), before.replace(">=3.9", ">=3.11"));
+  assert.equal(
+    await readFile(join(root, "pyproject.toml"), "utf8"),
+    before.replace(">=3.9", ">=3.11").replace('["Programming Language :: Python :: 3.9"]', "[]"),
+  );
   assert.deepEqual(await planFixes(await scan(root)), []);
 });
 

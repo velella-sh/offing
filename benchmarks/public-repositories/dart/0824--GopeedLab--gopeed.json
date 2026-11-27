@@ -444,6 +444,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 3 of go.mod reads `go 1.25.4`. The cited Go declaration matches a reviewed end-of-life rule."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/build.yml",
+      "line": 704,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8.18 to actions/setup-python at .github/workflows/build.yml line 704."
+      }
     }
   ]
 }

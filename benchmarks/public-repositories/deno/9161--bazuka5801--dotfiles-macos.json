@@ -33,6 +33,15 @@
         "url": "https://www.ruby-lang.org/en/downloads/branches/",
         "note": "Reviewed at this commit: line 2 of .tool-versions reads `ruby 3.2.2`. Ruby 3.2 is end-of-life (https://www.ruby-lang.org/en/downloads/branches/)."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-18",
+      "path": ".tool-versions",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 18.14.2 at .tool-versions line 1."
+      }
     }
   ]
 }

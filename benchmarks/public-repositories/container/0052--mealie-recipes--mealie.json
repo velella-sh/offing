@@ -210,6 +210,15 @@
         "kind": "maintainer-review",
         "note": "Inspected mealie-recipes/mealie@50a341ed3febc98a5a20b61fad5e74a290394f16, .github/workflows/frontend-lint.yml:32 directly on 2026-11-06: `run: echo \"::set-output name=dir::$(yarn cache dir)\"` emits the deprecated set-output command from a run step. GitHub independently documents this stdout command and its replacement at https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/. This expectation was checked against the pinned source and vendor notice, not inferred from scanner output."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/backend-tests.yml",
+      "line": 46,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.9 to actions/setup-python at .github/workflows/backend-tests.yml line 46."
+      }
     }
   ]
 }

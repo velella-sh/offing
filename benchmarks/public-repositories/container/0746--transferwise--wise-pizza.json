@@ -30,6 +30,15 @@
         "kind": "maintainer-review",
         "note": "Read Dockerfile.txt:3 at this commit: `FROM python:3.9-slim`: tag 3.9-slim is at or below the rule's 3.10-and-older bound."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/test.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8 to actions/setup-python at .github/workflows/test.yml line 17."
+      }
     }
   ]
 }

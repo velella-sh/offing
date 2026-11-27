@@ -1,4 +1,4 @@
-import { LineCounter, isMap, isScalar, isSeq, parseDocument } from "yaml";
+import { LineCounter, isMap, isScalar, isSeq, parseDocument, visit } from "yaml";
 import type { Node, Scalar, YAMLMap, YAMLSeq } from "yaml";
 
 /**
@@ -15,11 +15,15 @@ export interface SetupNodeVersion {
   expression: boolean;
 }
 
-const SETUP_NODE = /^actions\/setup-node@/i;
+export type SetupRuntime = "node" | "python";
+const SETUP_INPUT = {
+  node: { action: /^actions\/setup-node@/i, key: "node-version" },
+  python: { action: /^actions\/setup-python@/i, key: "python-version" },
+};
 const MATRIX_REFERENCE = /^\$\{\{\s*matrix\.([A-Za-z0-9_-]+)\s*\}\}$/;
 
 /** The text a scalar was written as: YAML reads `16.10` as the number 16.1, so numbers use their source. */
-function textOf(node: Node): string | undefined {
+export function runtimeInputText(node: Node): string | undefined {
   if (!isScalar(node)) return undefined;
   if (typeof node.value === "string") return node.value.trim();
   if (typeof node.value === "number") return (node.source ?? String(node.value)).trim();
@@ -27,13 +31,13 @@ function textOf(node: Node): string | undefined {
 }
 
 /** The `node-version` node of a `actions/setup-node` step, or undefined for any other step. */
-export function setupNodeInput(step: unknown): Scalar | undefined {
+function setupRuntimeInput(step: unknown, runtime: SetupRuntime): Scalar | undefined {
   if (!isMap(step)) return undefined;
   const uses = step.get("uses");
-  if (typeof uses !== "string" || !SETUP_NODE.test(uses)) return undefined;
+  if (typeof uses !== "string" || !SETUP_INPUT[runtime].action.test(uses)) return undefined;
   const inputs = step.get("with", true);
   if (!isMap(inputs)) return undefined;
-  const version = inputs.get("node-version", true) as Node | null;
+  const version = inputs.get(SETUP_INPUT[runtime].key, true);
   return version && isScalar(version) ? version : undefined;
 }
 
@@ -41,39 +45,78 @@ export function setupNodeInput(step: unknown): Scalar | undefined {
 export function matrixList(job: YAMLMap, version: Scalar): YAMLSeq | undefined {
   const key = typeof version.value === "string" ? MATRIX_REFERENCE.exec(version.value.trim())?.[1] : undefined;
   if (key === undefined) return undefined;
-  const strategy = job.get("strategy", true);
-  const matrix = isMap(strategy) ? strategy.get("matrix", true) : undefined;
+  const matrix = jobMatrix(job);
   const list = isMap(matrix) ? matrix.get(key, true) : undefined;
   return isSeq(list) ? list : undefined;
 }
 
-export function setupNodeVersions(contents: string): SetupNodeVersion[] {
-  const lineCounter = new LineCounter();
-  const document = parseDocument(contents, { lineCounter, prettyErrors: false, keepSourceTokens: true });
-  if (document.errors.length > 0 || !isMap(document.contents)) return [];
-  const jobs = document.contents.get("jobs", true);
-  if (!isMap(jobs)) return [];
+function jobMatrix(job: YAMLMap): YAMLMap | undefined {
+  const strategy = job.get("strategy", true);
+  const matrix = isMap(strategy) ? strategy.get("matrix", true) : undefined;
+  return isMap(matrix) ? matrix : undefined;
+}
 
-  const versions: SetupNodeVersion[] = [];
-  const add = (node: Node | null | undefined): void => {
-    if (!node) return;
-    const value = textOf(node);
-    if (value === undefined || value === "") return;
-    versions.push({ value, line: lineCounter.linePos(node.range?.[0] ?? 0).line, expression: value.includes("${{") });
-  };
+interface WorkflowInput {
+  version: Scalar;
+  list?: YAMLSeq;
+  restrictions: boolean;
+}
+
+export function setupRuntimeInputs(
+  contents: string,
+  runtime: SetupRuntime,
+): { lines: LineCounter; inputs: WorkflowInput[]; anchored: boolean } {
+  const lines = new LineCounter();
+  const document = parseDocument(contents, { lineCounter: lines, prettyErrors: false, keepSourceTokens: true });
+  const inputs: WorkflowInput[] = [];
+  if (document.errors.length > 0 || !isMap(document.contents)) return { lines, inputs, anchored: false };
+  const jobs = document.contents.get("jobs", true);
+  if (!isMap(jobs)) return { lines, inputs, anchored: false };
   for (const job of jobs.items) {
     if (!isMap(job.value)) continue;
     const steps = job.value.get("steps", true);
     if (!isSeq(steps)) continue;
+    const matrix = jobMatrix(job.value);
     for (const step of steps.items) {
-      const version = setupNodeInput(step);
+      const version = setupRuntimeInput(step, runtime);
       if (!version) continue;
       const list = matrixList(job.value, version);
-      if (list) for (const item of list.items) add(item as Node);
-      else add(version);
+      const restrictions = matrix?.has("include") === true || matrix?.has("exclude") === true;
+      inputs.push({ version, ...(list ? { list } : {}), restrictions });
+    }
+  }
+  let anchored = false;
+  visit(document, {
+    Alias() {
+      anchored = true;
+      return visit.BREAK;
+    },
+    Node(_key, node) {
+      if (node.anchor !== undefined) {
+        anchored = true;
+        return visit.BREAK;
+      }
+    },
+  });
+  return { lines, inputs, anchored };
+}
+
+export function setupRuntimeVersions(contents: string, runtime: SetupRuntime): SetupNodeVersion[] {
+  const { lines, inputs } = setupRuntimeInputs(contents, runtime);
+  const versions: SetupNodeVersion[] = [];
+  for (const { version, list } of inputs) {
+    for (const node of list ? list.items : [version]) {
+      if (!isScalar(node)) continue;
+      const value = runtimeInputText(node);
+      if (!value) continue;
+      versions.push({ value, line: lines.linePos(node.range?.[0] ?? 0).line, expression: value.includes("${{") });
     }
   }
   return versions;
+}
+
+export function setupNodeVersions(contents: string): SetupNodeVersion[] {
+  return setupRuntimeVersions(contents, "node");
 }
 
 /** The release line a `node-version` entry names, as the lowest and highest version it can stand for. */

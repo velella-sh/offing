@@ -57,6 +57,33 @@
         "kind": "maintainer-review",
         "note": "Read backend/Dockerfile:4 at this commit: `ENV PYTHONBUFFERED 1`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-19",
+      "path": ".tool-versions",
+      "line": 4,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 19.0.0 at .tool-versions line 4."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/backend.yml",
+      "line": 11,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/backend.yml line 11."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/backend.yml",
+      "line": 11,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8 to actions/setup-python at .github/workflows/backend.yml line 11."
+      }
     }
   ]
 }

@@ -92,6 +92,20 @@ jobs:
             node "$package/docs/spec/codemod/conformance/check.mjs" "$bin"
           } | tee -a "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-codemod-coverage
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          tarball="$(ls "$out"/*.tgz)"
+          {
+            printf '### acc-codemod-coverage\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$tarball" | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI version %s\n' "$("$bin" --version)"
+            printf -- '- Tested commit %s\n' "$GITHUB_SHA"
+            node dist/tools/codemod-coverage-smoke.js "$bin"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: acc-sbom-scan
         run: |
           set -euo pipefail

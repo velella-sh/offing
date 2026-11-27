@@ -23,6 +23,15 @@
         "url": "https://nextjs.org/support-policy",
         "note": "Reviewed at this commit: line 57 of package.json reads `\"next\": \"v14.0.4\",`. Next.js 14 is out of support (https://nextjs.org/support-policy)."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-20",
+      "path": ".tool-versions",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 20.9.0 at .tool-versions line 1."
+      }
     }
   ]
 }

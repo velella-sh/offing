@@ -3,5 +3,15 @@
   "commit": "80176490f6d04c61d10bcbc20618bd283b94ca23",
   "ecosystem": "node",
   "selection": "blind",
-  "expected": []
+  "expected": [
+    {
+      "ruleId": "nodejs.runtime.eol-18",
+      "path": ".tool-versions",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 18.11.0 at .tool-versions line 1."
+      }
+    }
+  ]
 }

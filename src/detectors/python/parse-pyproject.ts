@@ -1,3 +1,4 @@
+import { classifierDeclarations } from "./classifiers.js";
 import type { Declaration, DirectDependency, ResolvedVersions, UnknownRecord } from "./types.js";
 import {
   addDependency,
@@ -82,5 +83,5 @@ export function collectPyprojectRuntime(path: string, contents: string, document
       kind: "compatibility range",
     });
   }
-  return declarations;
+  return [...declarations, ...classifierDeclarations(path, contents, document)];
 }

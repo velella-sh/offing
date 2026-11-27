@@ -21,6 +21,51 @@
         "kind": "maintainer-review",
         "note": "Read tox.ini:2 at this commit: the envlist tests on py310 environments; Python 3.10 ended on 2026-10-01 (https://devguide.python.org/versions/). Vendor-checked by AI agent (Claude Code) under maintainer direction on 2026-11-03 against the primary vendor page https://devguide.python.org/versions/: Python 3.10 reaches end-of-life on 2026-10-01, so the >=3.10 floor includes an EOL release. The pinned file was re-fetched at the recorded commit and the cited line matches. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/run-tests.yml",
+      "line": 15,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/run-tests.yml line 15."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/run-tests.yml",
+      "line": 54,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/run-tests.yml line 54."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/run-tests.yml",
+      "line": 76,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/run-tests.yml line 76."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/typecheck.yml",
+      "line": 14,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/typecheck.yml line 14."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": "pyproject.toml",
+      "line": 35,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.10 compatibility in a Trove classifier at pyproject.toml line 35."
+      }
     }
   ]
 }

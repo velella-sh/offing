@@ -1,4 +1,5 @@
 import type { ScanResult } from "../domain.js";
+import { composePatches, labelPatch } from "./codemods/shared/edits.js";
 import { fixers } from "./registry.generated.js";
 import type { FilePatch, FixPlan, Fixer, FixerPatch, FixRefusal, Refuse } from "./types.js";
 
@@ -7,8 +8,8 @@ export * from "./registry.generated.js";
 export { renderPatches } from "./render-patches.js";
 
 /**
- * Plans every fixer over a scan and returns the patches with the fixer that produced them, ordered by file, along with
- * the findings each fixer declined and why. Both lists are deterministic.
+ * Plans every fixer and returns its patches and refusals in file order. Compatible edits can share one patch labeled
+ * with the first contributing fixer. Both lists are deterministic.
  */
 export async function planFixReport(result: ScanResult, available: Fixer[] = fixers): Promise<FixPlan> {
   const patches: FixerPatch[] = [];
@@ -24,7 +25,7 @@ export async function planFixReport(result: ScanResult, available: Fixer[] = fix
         reason,
       });
     };
-    for (const patch of await fixer.plan(result, refuse)) patches.push({ ...patch, fixer: fixer.id });
+    for (const patch of await fixer.plan(result, refuse)) patches.push(labelPatch(patch, fixer.id));
   }
   patches.sort((a, b) => a.path.localeCompare(b.path));
   refusals.sort(
@@ -35,7 +36,7 @@ export async function planFixReport(result: ScanResult, available: Fixer[] = fix
       a.fixer.localeCompare(b.fixer) ||
       a.reason.localeCompare(b.reason),
   );
-  return { patches, refusals };
+  return { patches: composePatches(patches), refusals };
 }
 
 /** Plans every fixer over a scan and returns the patches ordered by file, then fixer. */

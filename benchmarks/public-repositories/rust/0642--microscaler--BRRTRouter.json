@@ -30,6 +30,24 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 5 of dockerfiles/Dockerfile.dev-glibc reads `FROM --platform=linux/amd64 ubuntu:22.04`. Ubuntu image release line 22.04 reaches standard support end-of-life on 2027-06-01. Ubuntu 22.04 is scheduled to stop receiving standard security updates on 2027-06-01. Source: https://ubuntu.com/about/release-cycle. The pinned file was re-fetched at the recorded commit and the cited line matches. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/ci.yml",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/ci.yml line 23."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/dependabot-automerge.yml",
+      "line": 46,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/dependabot-automerge.yml line 46."
+      }
     }
   ]
 }

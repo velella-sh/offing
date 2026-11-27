@@ -57,6 +57,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: read .github/workflows/tests.yaml:170, which holds `uses: actions/cache@v4`; it matches the declared range of registry rule github-actions.cache.node20, whose sources are cited in the registry. Checked by AI agent (Claude Code) under maintainer direction on 2026-11-07 by reading the cited line in the pinned checkout. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/tests.yaml",
+      "line": 40,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.9 to actions/setup-python at .github/workflows/tests.yaml line 40."
+      }
     }
   ]
 }

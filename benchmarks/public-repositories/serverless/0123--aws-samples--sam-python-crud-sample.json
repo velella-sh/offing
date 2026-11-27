@@ -84,6 +84,15 @@
         "kind": "maintainer-review",
         "note": "Read tox.ini:2 at this commit: the envlist tests on py38; that release line is past end of life (https://devguide.python.org/versions/)."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/pythonpackage.yml",
+      "line": 12,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8 to actions/setup-python at .github/workflows/pythonpackage.yml line 12."
+      }
     }
   ]
 }

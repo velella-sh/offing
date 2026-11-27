@@ -8,6 +8,7 @@ description: "Plan deterministic repairs and verify new codemods with fixtures."
 The codemod kit checks deterministic repairs against source fixtures. Use `offing fix` to preview built-in
 repairs, or use the [codemod v1 specification](spec/codemod/v1.md) to write and test your own codemod.
 The planner produces unified diffs and records findings it declines to repair in `offing fix --json`.
+See [codemod coverage](CODEMOD_COVERAGE.md) for supported runtime and Kubernetes edits and the pinned measurement.
 
 ```bash
 offing fix --dry-run           # print the patches
@@ -33,7 +34,7 @@ npm run build
 node dist/tools/examples.js codemods/dockerfile-legacy fix
 ```
 
-`offing fix` repairs some deprecations exactly, at the lines a scan reports, and prints unified diffs that `git apply` accepts. Nothing is written unless you pass `--branch`, and no codemod uses the network or runs the scanned repository's code. A codemod rewrites a finding only when the replacement behaves identically for every input the matched shape accepts; anything else is left unchanged and listed as a refusal in `fix --json`.
+`offing fix` repairs some deprecations exactly, at the lines a scan reports, and prints unified diffs that `git apply` accepts. Nothing is written unless you pass `--branch`, and no codemod uses the network or runs the scanned repository's code. A codemod requires an exact source match and records a refusal when it cannot determine the rewrite. Runtime and API upgrades still need compatibility checks in the consuming project.
 ## node-renames
 Rewrites the Node.js deprecations that are pure renames: the old name calls the same implementation. Only the member name changes; the receiver expression and the arguments are kept byte-for-byte.
 | Rule | Before | After |

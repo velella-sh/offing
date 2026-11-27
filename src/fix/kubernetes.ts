@@ -1,17 +1,23 @@
+import { defineCodemod } from "./kit/define.js";
 import { readFile } from "node:fs/promises";
 import { isAbsolute, relative, resolve } from "node:path";
 
-import { renderDiff } from "../agent-instructions.js";
+import { looksLikeHelmTemplateOutput } from "../detectors/kubernetes/index.js";
+import { parseTemplate } from "../detectors/kubernetes/parse-helm.js";
+import { patchFor } from "./codemods/shared/edits.js";
+import type { Edit } from "./codemods/shared/edits.js";
+import { readManifest, structuralApi, structuralEdits } from "./codemods/shared/kubernetes-schema.js";
+import type { StructuralApi } from "./codemods/shared/kubernetes-schema.js";
 import { splitApiVersion } from "../detectors/kubernetes/api-version.js";
 import type { Finding, ScanResult } from "../domain.js";
-import type { FilePatch, Fixer, Refuse } from "./types.js";
+import type { FilePatch, Refuse } from "./types.js";
 
 /**
  * The removed `apiVersion` values the Kubernetes deprecation guide moves with no schema change,
  * by group/kind: the new API holds the same object, so rewriting the line is the whole migration.
- * A removed API the guide gives notable changes for (a renamed, added, or reinterpreted field,
- * for example Ingress, PodDisruptionBudget, or the workloads moving to `apps/v1`) is absent here
- * and left alone; the scan keeps reporting it. Source:
+ * Migrations with renamed, added, or reinterpreted fields use a structural codemod.
+ * This table lists the cases that need only the literal API version change.
+ * Source:
  * https://kubernetes.io/docs/reference/using-api/deprecation-guide/
  */
 const API_VERSIONS: Record<string, Record<string, string>> = {
@@ -50,13 +56,17 @@ function rewriteTarget(finding: Finding): ApiEdit | undefined {
   const from = match[1];
   if (from === undefined) return undefined;
   const parts = splitApiVersion(from);
-  const to = parts && API_VERSIONS[`${parts.group}/${match[2]}`]?.[from];
+  const kind = match[2] ?? "";
+  const structural = structuralApi(from, kind);
+  if (structural) return { from, to: structural.to, structural };
+  const to = parts && API_VERSIONS[`${parts.group}/${kind}`]?.[from];
   return to ? { from, to } : undefined;
 }
 
 interface ApiEdit {
   from: string;
   to: string;
+  structural?: StructuralApi;
 }
 
 interface Targets {
@@ -77,6 +87,10 @@ function collectTargets(result: ScanResult, refuse: Refuse | undefined): Map<str
       refuse?.(finding, refusedReason(finding));
       continue;
     }
+    if (edit.structural && !finding.replacement?.startsWith(`${edit.to} ${edit.structural.kind},`)) {
+      refuse?.(finding, "The rule no longer names the expected Kubernetes replacement.");
+      continue;
+    }
     const entry: Targets = targets.get(finding.location.path) ?? { lines: new Map(), findings: [] };
     entry.lines.set(finding.location.line, edit);
     entry.findings.push(finding);
@@ -85,9 +99,10 @@ function collectTargets(result: ScanResult, refuse: Refuse | undefined): Map<str
   return targets;
 }
 
-/** Rewrites the `apiVersion` of a removed API whose schema is unchanged; every other finding is left alone. */
-export const kubernetesApiVersionFixer: Fixer = {
+/** Rewrites literal API versions and the supported structural migrations of declared Kubernetes resources. */
+export const kubernetesApiVersionFixer = defineCodemod({
   id: "kubernetes",
+  rules: [{ id: "*", detector: "kubernetes" }],
   async plan(result, refuse) {
     const targets = collectTargets(result, refuse);
 
@@ -111,40 +126,64 @@ export const kubernetesApiVersionFixer: Fixer = {
         decline("The manifest does not end with a newline.");
         continue;
       }
-      const original = before.split("\n");
-      const text = original
-        .map((line, index) => {
-          const edit = lines.get(index + 1);
-          if (!edit) return line;
-          const match = API_VERSION_LINE.exec(line);
-          // The summary named the declaration; the line must still carry that exact value.
-          return match && match[2] === edit.from ? `${match[1]}${edit.to}${match[3]}` : line;
-        })
-        .join("\n");
-      if (text !== before) patches.push({ path, diff: renderDiff(path, before.slice(0, -1), text.slice(0, -1)) });
-      const updated = text.split("\n");
-      for (const finding of findings) {
-        const reason = refusalFor(finding, original, updated, lines);
-        if (reason !== undefined) refuse?.(finding, reason);
-      }
+      const patch = patchFor(
+        path,
+        before,
+        apiEdits(before, path, lines, findings, refuse),
+        [...lines.values()].some(({ structural }) => structural),
+      );
+      if (patch) patches.push(patch);
     }
     return patches;
   },
-};
+});
 
-/** The refusal for a finding whose line the edit left unchanged, or undefined when there is nothing to report. */
-function refusalFor(
-  finding: Finding,
-  original: readonly string[],
-  updated: readonly string[],
-  lines: ReadonlyMap<number, ApiEdit>,
-): string | undefined {
-  const line = finding.location.line;
-  if (line === undefined) return undefined;
-  const edit = lines.get(line);
-  if (edit === undefined) return undefined;
-  const index = line - 1;
-  return updated[index] === original[index] ? lineRefusal(original[index] ?? "", edit) : undefined;
+function apiEdits(
+  before: string,
+  path: string,
+  targets: ReadonlyMap<number, ApiEdit>,
+  findings: readonly Finding[],
+  refuse: Refuse | undefined,
+): Edit[] {
+  const helm = !looksLikeHelmTemplateOutput(before) && (before.includes("{{") || path.split("/").includes("templates"));
+  const template = helm ? parseTemplate(before) : [];
+  const manifest =
+    !helm && [...targets.values()].some(({ structural }) => structural) ? readManifest(before) : undefined;
+  const edits: Edit[] = [];
+  let offset = 0;
+  for (const [index, line] of before.split("\n").entries()) {
+    const edit = targets.get(index + 1);
+    if (edit) {
+      const changed = apiLineEdits(edit, line, index + 1, offset, helm, template, manifest);
+      if (typeof changed === "string") {
+        for (const finding of findings.filter(({ location }) => location.line === index + 1))
+          refuse?.(finding, changed);
+      } else edits.push(...changed);
+    }
+    offset += line.length + 1;
+  }
+  return edits;
+}
+
+function apiLineEdits(
+  edit: ApiEdit,
+  line: string,
+  number: number,
+  offset: number,
+  helm: boolean,
+  template: ReturnType<typeof parseTemplate>,
+  manifest: ReturnType<typeof readManifest> | undefined,
+): Edit[] | string {
+  const match = API_VERSION_LINE.exec(line);
+  if (!match) return "The line is not an `apiVersion` declaration.";
+  if (match[2] !== edit.from) return "The line no longer carries the API version the finding names.";
+  if (helm && (line.includes("{{") || !template.some(({ line, value }) => line === number && value === edit.from)))
+    return "The Helm apiVersion is not an unambiguous literal declaration.";
+  if (helm && edit.structural) return "The Helm resource needs a spec migration. Review the migration packet.";
+  const schema = edit.structural && manifest ? structuralEdits(manifest, number, edit.structural) : [];
+  if (typeof schema === "string") return schema;
+  const start = offset + (match[1]?.length ?? 0);
+  return [{ start, end: start + edit.from.length, replacement: edit.to }, ...schema];
 }
 
 /** Why the finding names no safe rewrite, decided from the finding itself. */
@@ -152,15 +191,12 @@ function refusedReason(finding: Finding): string {
   const match = DECLARATION.exec(finding.summary);
   const from = match?.[1];
   if (from === undefined) return "The finding does not name the declaration's API version.";
+  const kind = match?.[2];
+  if (kind === "PodSecurityPolicy")
+    return "PodSecurityPolicy has no equivalent API version. Review the migration packet for Pod Security Admission.";
+  if (kind === "CustomResourceDefinition" && from === "apiextensions.k8s.io/v1beta1")
+    return "CustomResourceDefinition v1 requires a structural schema. Review the migration packet.";
   const parts = splitApiVersion(from);
   if (!parts) return "The finding's API version could not be parsed.";
   return "The replacement needs a spec change, not only an `apiVersion` rewrite.";
-}
-
-/** Why the line was left as it is, or undefined when the line no longer carries the old value. */
-function lineRefusal(line: string, edit: ApiEdit): string | undefined {
-  const match = API_VERSION_LINE.exec(line);
-  if (!match) return "The line is not an `apiVersion` declaration.";
-  if (match[2] !== edit.from) return "The line no longer carries the API version the finding names.";
-  return undefined;
 }

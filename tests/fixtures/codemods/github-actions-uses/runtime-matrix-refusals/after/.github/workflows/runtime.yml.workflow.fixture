@@ -1,0 +1,20 @@
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 24]
+        include:
+          - node: 18
+    steps:
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+  old_only:
+    strategy:
+      matrix:
+        python: ['3.9', '3.10', '9.99']
+    steps:
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}

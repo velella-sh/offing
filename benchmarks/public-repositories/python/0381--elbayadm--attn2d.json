@@ -39,6 +39,24 @@
         "kind": "maintainer-review",
         "note": "Read .github/workflows/build_windows.yml:24 at this commit: `uses: actions/setup-python@v1`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/build_windows.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.6 to actions/setup-python at .github/workflows/build_windows.yml line 17."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/build.yml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.6 to actions/setup-python at .github/workflows/build.yml line 17."
+      }
     }
   ]
 }

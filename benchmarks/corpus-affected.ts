@@ -50,6 +50,7 @@ export const DETECTOR_ECOSYSTEMS: Readonly<Record<string, readonly string[]>> = 
   "github-actions-dotnet": ["node-actions", "dotnet"],
   "github-actions-node": ["node-actions", "node"],
   "github-actions-reference": ["node-actions"],
+  "github-actions-runtime": ["node-actions", "python"],
   "github-actions-workflow-commands": ["node-actions"],
   go: ["go"],
   java: ["java"],
@@ -162,7 +163,7 @@ export const SHARED_FILE_ECOSYSTEMS: ReadonlyArray<{ pattern: RegExp; ecosystems
     { pattern: /^src\/workspaces\.ts$/, ecosystems: ["node", "python"], reason: "workspace discovery" },
     {
       pattern: /^src\/rule-finding\.ts$/,
-      ecosystems: ["database", "deno", "dotnet", "go", "node", "node-actions", "scala", "shell"],
+      ecosystems: ["database", "deno", "dotnet", "go", "node", "node-actions", "python", "scala", "shell"],
       reason: "rule findings",
     },
     {

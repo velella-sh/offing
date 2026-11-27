@@ -149,6 +149,15 @@
         "kind": "maintainer-review",
         "note": "Read config/docker/dev/Dockerfile-dev:23 at this commit: `ENV DB_HOST db`: legacy `ENV key value` form (no `=`)."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.legacy",
+      "path": ".tool-versions",
+      "line": 2,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 8.10.0 at .tool-versions line 2."
+      }
     }
   ]
 }

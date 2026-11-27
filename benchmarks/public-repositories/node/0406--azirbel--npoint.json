@@ -39,6 +39,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 7 of package.json reads `\"node\" : \"14.17.0\"`. Legacy Node.js runtime is end-of-life. This Node.js release line is end-of-life and no longer receives security or bug fixes. Source: https://nodejs.org/en/about/eol. The pinned file was re-fetched at the recorded commit and the cited line matches. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-25",
+      "path": ".tool-versions",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 25.2.1 at .tool-versions line 1."
+      }
     }
   ]
 }

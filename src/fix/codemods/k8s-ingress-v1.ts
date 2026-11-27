@@ -5,7 +5,7 @@ import type { Document, Pair, YAMLMap, YAMLSeq } from "yaml";
 import { MAXIMUM_DOCUMENTS, MAXIMUM_INPUT_BYTES } from "../../detectors/kubernetes/parse-manifest.js";
 import type { Finding } from "../../domain.js";
 import type { FilePatch, Refuse } from "../types.js";
-import { diffFor } from "./shared/edits.js";
+import { diffFor, rememberPatchEdits } from "./shared/edits.js";
 import { readRepositoryFile } from "./shared/source.js";
 
 /**
@@ -368,6 +368,20 @@ function applyRewrites(lines: string[], rewrites: Rewrite[]): string[] {
   return [...applied, ...lines.slice(cursor)];
 }
 
+function lineEdits(file: FileRewrites) {
+  let offset = 0;
+  const positions = file.lines.map((line) => {
+    const current = offset;
+    offset += line.length + 1;
+    return current;
+  });
+  return file.rewrites.map((edit) => ({
+    start: positions[edit.start - 1] ?? file.contents.length,
+    end: positions[edit.end] ?? file.contents.length,
+    replacement: edit.lines.join("\n") + "\n",
+  }));
+}
+
 function parseSource(contents: string): Source | Refusal {
   const counter = new LineCounter();
   try {
@@ -469,7 +483,10 @@ export const kubernetesIngressV1Fixer = defineCodemod({
       if (file === undefined || file.rewrites.length === 0) continue;
       const text = applyRewrites(file.lines, file.rewrites).join("\n");
       const patch = diffFor(path, file.contents, text);
-      if (patch !== undefined) patches.push(patch);
+      if (patch !== undefined) {
+        rememberPatchEdits(patch, file.contents, lineEdits(file));
+        patches.push(patch);
+      }
     }
     return patches;
   },

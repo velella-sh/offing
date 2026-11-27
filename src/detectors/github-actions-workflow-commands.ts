@@ -4,6 +4,8 @@ import type { YAMLMap, Scalar } from "yaml";
 
 import { loadDataFile } from "@velella/ebb/data-source";
 import { validateRegistryV2 } from "@velella/ebb/registry";
+import type { RegistryV2Rule } from "@velella/ebb/registry";
+import { actionRuntimeFinding } from "./github-actions-runtime.js";
 import type { DetectorFinding } from "../sdk.js";
 import { sourceFiles } from "../source-files.js";
 
@@ -145,7 +147,9 @@ export function isWorkflowCommandPath(path: string): boolean {
   return /^\.github\/workflows\/[^/]+\.ya?ml$/i.test(path) || /(?:^|\/)action\.ya?ml$/i.test(path);
 }
 
-export async function workflowCommandFindings(root: string): Promise<DetectorFinding[]> {
+const NON_ACTION_DIRECTORIES = new Set(["fixtures", "__fixtures__", "testdata", "vendor"]);
+
+export async function workflowCommandFindings(root: string, nodeLegacy?: RegistryV2Rule): Promise<DetectorFinding[]> {
   const rules = validateRegistryV2(await loadDataFile("registry/github-actions.json")).rules;
   const files = await sourceFiles(root, { include: (language) => language === "yaml" });
   const findings: DetectorFinding[] = [];
@@ -153,7 +157,12 @@ export async function workflowCommandFindings(root: string): Promise<DetectorFin
     .filter((file) => isWorkflowCommandPath(file.path))
     .sort((a, b) => a.path.localeCompare(b.path))) {
     const contents = await readFile(file.absolutePath, "utf8");
-    for (const entry of workflowRunLines(contents, !file.path.startsWith(".github/workflows/"))) {
+    const actionMetadata = !file.path.startsWith(".github/workflows/");
+    if (actionMetadata && !file.path.split("/").some((segment) => NON_ACTION_DIRECTORIES.has(segment))) {
+      const runtime = actionRuntimeFinding(contents, file.path, nodeLegacy);
+      if (runtime) findings.push(runtime);
+    }
+    for (const entry of workflowRunLines(contents, actionMetadata)) {
       for (const command of commandsOnLine(entry.script)) {
         const rule = rules.find((rule) => rule.id === `${workflowCommandPrefix}${command}`);
         if (!rule) continue;
