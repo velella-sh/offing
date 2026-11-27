@@ -45,6 +45,10 @@ inputs:
       what the data already marks.
     required: false
     default: ""
+  release-gate-days:
+    description: Block release when a supported component reaches its lifecycle deadline by this many days from today in UTC.
+    required: false
+    default: ""
   policy:
     description: "Optional local fleet policy under path, or previously pinned GitHub/GitLab policy reference."
     required: false
@@ -215,6 +219,7 @@ runs:
         INPUT_PATHS: ${{ inputs.paths }}
         INPUT_POLICY: ${{ inputs.policy }}
         INPUT_SBOM: ${{ inputs.sbom }}
+        INPUT_RELEASE-GATE-DAYS: ${{ inputs.release-gate-days }}
         INPUT_BASELINE: ${{ inputs.baseline }}
         INPUT_BASELINE-WARN-DAYS: ${{ inputs.baseline-warn-days }}
         INPUT_ON-EXPIRED: ${{ inputs.on-expired }}

@@ -2,7 +2,7 @@
 # zsh completion for offing. Save it as _offing in a directory on $fpath, or: source <(offing completions zsh)
 _offing() {
   local -a commands
-  commands=('scan' 'baseline' 'forecast' 'forecast' 'countdown' 'plan' 'status-card' 'glance' 'lookup' 'drift' 'upgrade-check' 'inventory' 'badge' 'diff' 'drift' 'receipt' 'rollup' 'renovate-preset' 'dependabot-config' 'fix' 'check' 'check-snippet' 'guard' 'usage' 'mcp' 'data' 'watch' 'init' 'setup' 'new-detector' 'new-rule' 'rules' 'explain' 'context' 'doctor' 'report-issue' 'capabilities' 'completions' 'attest' 'codemod' 'config' 'drivers' 'fleet' 'hook' 'lineage' 'lsp' 'migrate' 'policy' 'prompt' 'recommend' 'rollback-readiness' 'timelapse' 'verify' 'wrapped')
+  commands=('scan' 'baseline' 'forecast' 'forecast' 'countdown' 'plan' 'status-card' 'glance' 'lookup' 'drift' 'upgrade-check' 'inventory' 'badge' 'diff' 'drift' 'receipt' 'rollup' 'renovate-preset' 'dependabot-config' 'fix' 'check' 'check-snippet' 'guard' 'usage' 'mcp' 'data' 'watch' 'init' 'setup' 'new-detector' 'new-rule' 'rules' 'explain' 'context' 'doctor' 'report-issue' 'capabilities' 'completions' 'attest' 'codemod' 'config' 'drivers' 'fleet' 'hook' 'lineage' 'lsp' 'migrate' 'policy' 'prompt' 'recommend' 'release-gate' 'rollback-readiness' 'timelapse' 'verify' 'wrapped')
   if (( CURRENT == 2 )); then
     compadd -a commands -- --help --version
     return
@@ -64,7 +64,8 @@ _offing() {
         migrate) _arguments '--agent' '--driver' '--from-refusals' '--replay' '--timeout-ms' '*:path:_files' ;;
         prompt) _arguments '--format' '--symbol' '*:path:_files' ;;
         recommend) _arguments '--min-days' '--as-of' '--json' '*:path:_files' ;;
-        rollback-readiness) _arguments '--candidate' '--within-days' '--json' '*:path:_files' ;;
+        release-gate) _arguments '--sbom' '--attestation' '--subject' '--repo' '--signer-workflow' '--trusted-root' '--within-days' '--support-until' '--today' '--no-data' '--json' '--format' '*:path:_files' ;;
+        rollback-readiness) _arguments '--candidate' '--within-days' '--support-until' '--today' '--no-data' '--json' '*:path:_files' ;;
         timelapse) _arguments '--from' '--to' '--svg' '--json' '--no-animation' '*:path:_files' ;;
         verify) _arguments '--data-version' '*:path:_files' ;;
         wrapped) _arguments '--year' '--svg' '--json' '--no-animation' '*:path:_files' ;;

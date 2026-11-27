@@ -31,10 +31,10 @@ test("rollback-readiness preserves three ordered candidates and accepts a zero-d
   );
 });
 
-test("rollback-readiness dispatches valid arguments and reports that comparison is unavailable", async () => {
-  const result = await runCli(["rollback-readiness", "v2.0.0", "--candidate", "v1.9.0"]);
-  assert.equal(result.code, 3);
-  assert.match(result.stderr, /comparison is not yet available/);
+test("rollback-readiness reports unresolved release refs as a usage error", async () => {
+  const result = await runCli(["rollback-readiness", "there-is-no-such-offing-release-ref", "--candidate", "v1.9.0"]);
+  assert.equal(result.code, 2);
+  assert.match(result.stderr, /single revision|Needed a single revision/i);
   assert.equal(result.stdout, "");
 });
 

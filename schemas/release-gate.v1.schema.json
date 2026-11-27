@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/release-gate.v1.schema.json",
+  "title": "Offing release gate v1",
+  "type": "object",
+  "required": ["schemaVersion", "asOf", "supportUntil", "noData", "decisions"],
+  "properties": {
+    "schemaVersion": { "const": "offing.release-gate.v1" },
+    "asOf": { "$ref": "#/$defs/date" },
+    "supportUntil": { "$ref": "#/$defs/date" },
+    "noData": { "enum": ["fail", "warn", "ignore"] },
+    "releaseRef": { "$ref": "#/$defs/text" },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/decision" }
+    }
+  },
+  "if": { "required": ["releaseRef"] },
+  "then": {
+    "properties": {
+      "decisions": {
+        "items": {
+          "properties": { "input": { "properties": { "kind": { "const": "git-ref" } } } }
+        }
+      }
+    }
+  },
+  "else": { "properties": { "decisions": { "maxItems": 1 } } },
+  "$defs": {
+    "text": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "format": "date", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "decision": {
+      "type": "object",
+      "required": ["input", "verdict", "reasons"],
+      "properties": {
+        "input": {
+          "type": "object",
+          "required": ["kind", "target"],
+          "properties": {
+            "kind": { "enum": ["path", "git-ref", "sbom", "attestation"] },
+            "target": { "$ref": "#/$defs/text" }
+          }
+        },
+        "verdict": { "enum": ["pass", "warn", "block"] },
+        "reasons": { "type": "array", "items": { "$ref": "#/$defs/reason" } }
+      }
+    },
+    "reason": {
+      "type": "object",
+      "required": ["code", "outcome", "component"],
+      "properties": {
+        "code": { "enum": ["lifecycle", "no-data"] },
+        "outcome": { "enum": ["block", "warn", "excepted"] },
+        "component": { "$ref": "#/$defs/text" },
+        "location": {
+          "type": "object",
+          "required": ["path"],
+          "properties": {
+            "path": { "$ref": "#/$defs/text" },
+            "line": { "type": "integer", "minimum": 1 },
+            "jsonPointer": { "type": "string" }
+          }
+        },
+        "ruleId": { "$ref": "#/$defs/text" },
+        "deadline": { "$ref": "#/$defs/date" },
+        "daysLeft": { "type": "integer" },
+        "sources": { "type": "array", "items": { "$ref": "#/$defs/text" } },
+        "exception": {
+          "type": "object",
+          "required": ["reason", "expires"],
+          "properties": {
+            "reason": { "$ref": "#/$defs/text" },
+            "expires": { "$ref": "#/$defs/date" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "code": { "const": "lifecycle" } } },
+          "then": { "required": ["ruleId", "deadline", "daysLeft", "sources"] }
+        },
+        {
+          "if": { "properties": { "outcome": { "const": "excepted" } } },
+          "then": { "required": ["exception"] }
+        }
+      ]
+    }
+  }
+}

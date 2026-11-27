@@ -22,6 +22,7 @@ on:
         description: Exercise every release stage without publishing
         type: boolean
         default: false
+      release_gate_fixture: {description: "Use a known blocked SBOM in a dry run", type: boolean, default: false}
 
 permissions:
   contents: read
@@ -59,6 +60,10 @@ jobs:
       - name: The tag must match package.json and point at a release branch tip that adds the Action bundle
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: bash .github/scripts/check-release-tip.sh
+      - name: Gate the candidate runtime dependency inventory
+        env:
+          USE_BLOCKED_FIXTURE: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && inputs.release_gate_fixture }}
+        run: bash .github/scripts/release-gate.sh
       - name: Publish (prepack runs npm run check)
         if: ${{ github.event_name != 'workflow_dispatch' }}
         env:
@@ -71,7 +76,6 @@ jobs:
       - name: Record dry-run stage
         if: github.event_name == 'workflow_dispatch'
         run: echo "Publish stage (npm) dry run; nothing was published." >> "$GITHUB_STEP_SUMMARY"
-
   publish-npm:
     needs: [npm-publish]
     if: ${{ !cancelled() && needs.npm-publish.result == 'success' && ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && inputs.dry_run)) }}
@@ -81,7 +85,6 @@ jobs:
       id-token: write
     with:
       dry_run: ${{ github.event_name == 'workflow_dispatch' }}
-
   verify:
     needs: [publish-npm]
     if: >-
@@ -102,7 +105,6 @@ jobs:
       contents: write
     with:
       dry_run: ${{ github.event_name == 'workflow_dispatch' }}
-
   build-binaries:
     needs: [publish-npm]
     if: >-
@@ -113,7 +115,6 @@ jobs:
     with:
       dry_run: ${{ github.event_name == 'workflow_dispatch' }}
       release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
-
   publish-tags:
     needs: [publish-npm]
     if: >-
@@ -148,7 +149,6 @@ jobs:
     with:
       dry_run: ${{ github.event_name == 'workflow_dispatch' }}
       release_sha: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.sha || '' }}
-
   publish-binaries:
     needs: [publish-npm, build-binaries]
     if: >-

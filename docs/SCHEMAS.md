@@ -172,6 +172,12 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/recommend" label="Version recommendation fields"}
 
+### Release and rollback decisions
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/release-gate.v1.schema.json)
+
+::schema-table{data="publicSchemas/release-gate" label="Release gate fields"}
+
 ### Repository scan
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/scan.v1.schema.json)

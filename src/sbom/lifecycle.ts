@@ -25,3 +25,14 @@ export async function lifecycleRules(data?: ActiveData): Promise<RegistryV2Rule[
   );
   return registries.flatMap((registry) => registry.rules);
 }
+
+export function lifecyclePackageRules(rules: readonly RegistryV2Rule[]): Map<string, RegistryV2Rule[]> {
+  const byPurl = new Map<string, RegistryV2Rule[]>();
+  for (const rule of rules) {
+    if (rule.usage?.some((usage) => usage.kind === "symbol")) continue;
+    const entries = byPurl.get(rule.purl) ?? [];
+    entries.push(rule);
+    byPurl.set(rule.purl, entries);
+  }
+  return byPurl;
+}

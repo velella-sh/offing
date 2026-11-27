@@ -50,6 +50,7 @@ complete -c offing -n __fish_use_subcommand -a migrate
 complete -c offing -n __fish_use_subcommand -a policy
 complete -c offing -n __fish_use_subcommand -a prompt
 complete -c offing -n __fish_use_subcommand -a recommend
+complete -c offing -n __fish_use_subcommand -a release-gate
 complete -c offing -n __fish_use_subcommand -a rollback-readiness
 complete -c offing -n __fish_use_subcommand -a timelapse
 complete -c offing -n __fish_use_subcommand -a verify
@@ -247,8 +248,23 @@ complete -c offing -n '__fish_seen_subcommand_from prompt' -l symbol
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l min-days
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l as-of
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l json
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l sbom
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l attestation
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l subject
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l repo
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l signer-workflow
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l trusted-root
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l within-days
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l support-until
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l today
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l no-data
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l json
+complete -c offing -n '__fish_seen_subcommand_from release-gate' -l format
 complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l candidate
 complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l within-days
+complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l support-until
+complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l today
+complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l no-data
 complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l json
 complete -c offing -n '__fish_seen_subcommand_from timelapse' -l from
 complete -c offing -n '__fish_seen_subcommand_from timelapse' -l to
