@@ -502,7 +502,7 @@ test("incremental replay verifies each admitted turn in Docker before editing an
   assert.equal(await readFile(target, "utf8"), first);
 });
 
-test("acc-guardrails exercises the prepared Autopilot replay workflow in a disposable Git repository", async (t) => {
+test("acc-guardrails exercises the prepared Autopilot replay workflow and dry run in a disposable Git repository", async (t) => {
   const root = await scratch(t);
   const recording = join(await scratch(t), "turns.json");
   const git = async (...args: string[]) => (await command("git", args, { cwd: root })).stdout.trim();
@@ -562,6 +562,15 @@ test("acc-guardrails exercises the prepared Autopilot replay workflow in a dispo
       throw error;
     }
   };
+  const initialWorktrees = await git("worktree", "list", "--porcelain");
+  const preview = await invoke(["autopilot", root, "--dry-run", "--agent", "replay"], { PATH: "" });
+  assert.equal(preview.code, 0, preview.stderr);
+  assert.match(preview.stdout, /Plan: wave 0/u);
+  assert.match(preview.stdout, /First prompt preview/u);
+  assert.doesNotMatch(preview.stdout, /Run record:/u);
+  assert.equal(await git("worktree", "list", "--porcelain"), initialWorktrees);
+  assert.equal(await git("status", "--porcelain"), "");
+
   const start = async (turn: Record<string, string>, usage?: typeof idle) => {
     await writeFile(
       recording,
