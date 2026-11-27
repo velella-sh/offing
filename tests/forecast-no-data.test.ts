@@ -28,6 +28,7 @@ test("forecast reports unclassified components and unknown npm packages with loc
     const validate = new Ajv2020({ allErrors: true }).addFormat("date", isIsoDate).compile(schema);
     const forecast = JSON.parse(result.stdout) as RepositoryForecast;
     assert.ok(validate(forecast), JSON.stringify(validate.errors));
+    assert.equal(Object.hasOwn(forecast, "predictions"), false, "without model evidence the output omits predictions");
     return forecast;
   };
 

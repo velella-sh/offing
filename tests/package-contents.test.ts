@@ -40,6 +40,14 @@ test("the npm tarball ships only the root package.json as a dependency manifest"
 
   const paths = files.map((file) => file.path);
   assert.ok(paths.includes("examples/starters/slipway/README.md"));
+  for (const path of [
+    "docs/spec/predicted-eol/conformance/check.mjs",
+    "docs/spec/predicted-eol/conformance/forecast-valid.json",
+    "docs/spec/predicted-eol/conformance/forecast-invalid.json",
+    "schemas/forecast.v1.schema.json",
+  ]) {
+    assert.ok(paths.includes(path), `${path} must ship in the tarball`);
+  }
   assert.deepEqual(
     paths.filter((path) => path.startsWith("examples/") && !path.startsWith("examples/starters/slipway/")),
     ["examples/forecast/fleet.json"],
