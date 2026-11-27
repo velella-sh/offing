@@ -2,13 +2,15 @@ import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 import process from "node:process";
 
+import { parse } from "semver";
+
 import { readRunnerText } from "./files.js";
 
 type Tool = "npm" | "pnpm" | "yarn" | "pytest" | "tox" | "go" | "maven" | "gradle" | "dotnet";
 type Command = [executable: string, ...args: string[]];
 
 interface Step {
-  tool: Tool;
+  tool: Tool | "configured";
   kind: "setup" | "install" | "build" | "test";
   command: Command;
 }
@@ -53,6 +55,12 @@ function hasNodeLock(tool: NodeTool, files: Set<string>): boolean {
   return files.has(nodeInstall[tool].lock) || (tool === "npm" && files.has("npm-shrinkwrap.json"));
 }
 
+function lockedInstallArgs(tool: NodeTool, packageManager: unknown): string[] {
+  if (tool !== "yarn") return nodeInstall[tool].args;
+  const version = typeof packageManager === "string" ? parse(packageManager.slice("yarn@".length)) : null;
+  return version && version.major >= 2 ? nodeInstall.yarn.args : ["install", "--frozen-lockfile"];
+}
+
 function addNode(plan: TestPlan, files: Set<string>, manifest: Record<string, unknown> | undefined): void {
   if (!manifest) {
     plan.notes.push("Fix package.json so its scripts can be detected.");
@@ -68,8 +76,9 @@ function addNode(plan: TestPlan, files: Set<string>, manifest: Record<string, un
     (kind) => typeof scripts[kind] === "string" && scripts[kind].trim() !== "",
   );
   if (tasks.length === 0) return;
-  if (hasNodeLock(tool, files)) plan.steps.push({ tool, kind: "install", command: [tool, ...nodeInstall[tool].args] });
-  else plan.notes.push(`Commit ${nodeInstall[tool].lock} to plan a locked ${tool} install.`);
+  if (hasNodeLock(tool, files)) {
+    plan.steps.push({ tool, kind: "install", command: [tool, ...lockedInstallArgs(tool, manifest.packageManager)] });
+  } else plan.notes.push(`Commit ${nodeInstall[tool].lock} to plan a locked ${tool} install.`);
   for (const kind of tasks) plan.steps.push({ tool, kind, command: [tool, "run", kind] });
 }
 
@@ -160,4 +169,21 @@ export async function detectTestPlan(root: string, platform = process.platform):
   if (plan.steps.length === 0)
     plan.notes.push("Point doctor --tests at a directory with a supported project manifest.");
   return plan;
+}
+
+/** A nonempty config override replaces the detected plan. Both paths only produce candidate argv. */
+export async function selectTestPlan(
+  root: string,
+  configured: readonly Readonly<Command>[] = [],
+  platform = process.platform,
+): Promise<TestPlan> {
+  if (configured.length === 0) return detectTestPlan(root, platform);
+  return {
+    steps: configured.map(([executable, ...args]) => ({
+      tool: "configured",
+      kind: "test",
+      command: [executable, ...args],
+    })),
+    notes: [],
+  };
 }

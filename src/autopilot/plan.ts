@@ -8,7 +8,7 @@ import { buildFindingPacket } from "../migrate/prompt.js";
 import { OffingError } from "../offing-error.js";
 import { buildPlan } from "../plan-build.js";
 import type { Plan } from "../plan.js";
-import { detectTestPlan } from "../test-runners/detect.js";
+import { selectTestPlan } from "../test-runners/detect.js";
 import { checkUpgrade, type UpgradeTarget } from "../upgrade/index.js";
 import { parseAutopilotConfig, type AutopilotDriver } from "./limits/config.js";
 import { childEnvironments } from "./limits/secrets.js";
@@ -69,8 +69,7 @@ export async function renderAutopilotPreview(
 ) {
   const { items, scan, selection } = plan;
   const config = (await loadConfig(root))?.autopilot ?? parseAutopilotConfig(undefined);
-  const detected = config.tests.length === 0 ? await detectTestPlan(root) : undefined;
-  const commands = detected?.steps.map((step) => step.command) ?? config.tests;
+  const { steps } = await selectTestPlan(root, config.tests);
   const upgrade = selection.target === undefined ? undefined : await checkUpgrade(root, selection.target);
   const { redact } = childEnvironments(process.env, config.driver, config.secretEnv);
   const prompt = items.length === 0 ? "No findings selected." : await renderPrompt(scan, root, selection, redact);
@@ -83,9 +82,9 @@ export async function renderAutopilotPreview(
         ? []
         : [`Upgrade target: ${upgrade.target.runtime}@${upgrade.target.version} (${upgrade.verdict})`]),
       "Planned setup, build and test commands:",
-      ...(commands.length === 0
+      ...(steps.length === 0
         ? ["  None detected."]
-        : commands.map((argv) => `  ${JSON.stringify(argv.map(redact))}`)),
+        : steps.map(({ command }) => `  ${JSON.stringify(command.map(redact))}`)),
       "First prompt preview (before codemods):",
       prompt,
     ].join("\n"),

@@ -17,8 +17,8 @@ offing autopilot . --dry-run --finding <finding-id>
 
 Waves start at zero. Select one wave or one finding. `--to` accepts the same
 runtime and version as `offing upgrade-check` and includes its verdict. The
-preview shows configured `autopilot.tests` commands when present and otherwise
-uses the static test plan. `--agent` changes the driver named in the preview.
+preview uses the same [test plan](https://velella.sh/offing/TEST_RUNNERS/) as `offing doctor --tests`.
+A nonempty `autopilot.tests` list replaces detected commands. `--agent` changes the driver named in the preview.
 
 `offing autopilot . --prepare` requires a clean Git working tree and a commit.
 It creates a temporary worktree from `HEAD` on a local `offing/autopilot/<run>`

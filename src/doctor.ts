@@ -6,9 +6,11 @@ import { fileURLToPath } from "node:url";
 
 import { satisfies } from "semver";
 
+import { parseAutopilotConfig } from "./autopilot/limits/config.js";
+import { childEnvironments } from "./autopilot/limits/secrets.js";
 import { checkAgainst, systemToolRules } from "./check-dependency.js";
-import { inspectDiscoveredConfig, renderConfigDiagnostic } from "./config-validate.js";
-import { detectTestPlan, type TestPlan } from "./test-runners/detect.js";
+import { inspectDiscoveredConfig, renderConfigDiagnostic, type ConfigValidationResult } from "./config-validate.js";
+import { selectTestPlan, type TestPlan } from "./test-runners/detect.js";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 
 export const doctorCategories = ["runtime", "package", "mcp", "skill", "plugin", "ci", "system", "config"] as const;
@@ -42,7 +44,7 @@ export interface DoctorResult {
   checks: DoctorCheck[];
   /** The tools found on this machine; present only when `--system` was requested. */
   system?: SystemTool[];
-  /** The static test/build plan, present only when `--tests` was requested. */
+  /** The candidate test/build plan, present only when `--tests` was requested. */
   tests?: TestPlan;
   privacy: {
     repositoryDataUploaded: false;
@@ -68,7 +70,7 @@ export type VersionRunner = (command: string, args: readonly string[]) => Promis
 export interface DoctorOptions {
   /** Also report the runtimes and tools installed on this machine. */
   system?: boolean;
-  /** Also show the test and build commands suggested by repository metadata. */
+  /** Also show the configured test commands or the detected test/build plan. */
   tests?: boolean;
   versionRunner?: VersionRunner;
   systemRules?: readonly RegistryV2Rule[];
@@ -410,8 +412,7 @@ function systemCheck(entry: SystemTool): DoctorCheck {
   };
 }
 
-async function configCheck(root: string): Promise<DoctorCheck | undefined> {
-  const result = await inspectDiscoveredConfig(root);
+function configCheck(result: ConfigValidationResult): DoctorCheck | undefined {
   if (!result.file) return undefined;
   const status = !result.valid ? "fail" : result.diagnostics.length > 0 ? "warning" : "pass";
   return {
@@ -425,6 +426,22 @@ async function configCheck(root: string): Promise<DoctorCheck | undefined> {
         : "The config matches the Offing schema.",
     ...(status === "pass" ? {} : { remediation: "Apply the suggested changes, then run offing config validate." }),
   };
+}
+
+async function doctorTestPlan(
+  root: string,
+  platform: NodeJS.Platform,
+  environment: NodeJS.ProcessEnv,
+  value: unknown,
+): Promise<TestPlan> {
+  if (!value || typeof value !== "object" || !("autopilot" in value)) return selectTestPlan(root, [], platform);
+  const config = parseAutopilotConfig(value.autopilot);
+  const { redact } = childEnvironments(environment, config.driver, config.secretEnv);
+  return selectTestPlan(
+    root,
+    config.tests.map(([executable, ...args]) => [redact(executable), ...args.map(redact)]),
+    platform,
+  );
 }
 
 export async function diagnoseEnvironment(root = ".", options: DoctorOptions = {}): Promise<DoctorResult> {
@@ -442,11 +459,12 @@ export async function diagnoseEnvironment(root = ".", options: DoctorOptions = {
   ];
   checks.push(pluginCheck(checks));
   checks.push(await ciCheck(context, environment));
-  const config = await configCheck(root);
+  const inspected = await inspectDiscoveredConfig(root);
+  const config = configCheck(inspected.report);
   if (config) checks.push(config);
   const system = options.system ? await diagnoseSystem(options) : undefined;
   if (system) checks.push(...system.map(systemCheck));
-  const tests = options.tests ? await detectTestPlan(root, platform) : undefined;
+  const tests = options.tests ? await doctorTestPlan(root, platform, environment, inspected.value) : undefined;
 
   return {
     schemaVersion: "offing.doctor.v1",
