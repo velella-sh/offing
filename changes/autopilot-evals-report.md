@@ -1,0 +1,1 @@
+- Recalculate Autopilot evaluation rates and medians offline from an explicitly synthetic fixture with verified failure links.
