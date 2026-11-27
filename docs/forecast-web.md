@@ -50,6 +50,36 @@ The file record gives the selected filename or identifies pasted input. A
 `no-supported-declarations` reports an input with no recognized declarations.
 The final record contains the locally generated iCalendar text and its media type.
 
+## Tool island adapter in development
+
+The forecast module accepts file bytes or pasted text from the host. It
+requests the named Ebb bundle through the host's relative data reader and
+verifies the signature and release version before using it. The file and
+paste modes process input locally. The result includes forecast records and
+a text calendar record for the host to present as a download.
+
+The `acc-forecast-island` fixture tests verify this behavior with a signed
+local dataset. Connecting the module to the public page depends on Mizzen
+0.2.8 and Lateen 0.2.6.
+
+### Refresh the signed Ebb data pin
+
+Download the JSON bundle and its `.sigstore.json` attestation from the same
+Ebb data release. Verify them with `verifyDataBundle` from
+`@velella/ebb/verify` before using the signing metadata.
+
+Use Node's `X509Certificate` on the attestation's base64 DER
+`verificationMaterial.certificate.rawBytes`. Export its P-256 public key
+as base64 SPKI DER. Convert the attestation's DER
+`messageSignature.signature` to base64 Web Crypto format by left-padding
+the two unsigned integers to 32 bytes each and concatenating them.
+[DER conversion from the previous build](https://github.com/velella-sh/offing/blob/8fd233c724e165665cd1188e9168671edd2bdf1e/web/forecast/build.ts#L22-L40)
+
+Update the file name, version, public key and signature in
+`src/forecast-tool/data.ts`. Run `npm run build:forecast-web` to verify
+both the Sigstore attestation and the embedded key and signature against
+the downloaded bytes.
+
 ## Repository link adapter in development
 
 The adapter accepts the tool host's URL value `github/<owner>/<repo>` or
@@ -68,4 +98,5 @@ A truncated or invalid tree produces an error before any file downloads.
 A branch or tag can move during a forecast. The adapter checks the Git blob
 ID of each downloaded file against the tree listing. Use a commit SHA for
 a reproducible link. A rate-limit message gives the remaining requests and
-the UTC reset time when GitHub sends those values.
+the UTC reset time when GitHub sends those values. A host can cancel the
+current adapter request with its abort signal.

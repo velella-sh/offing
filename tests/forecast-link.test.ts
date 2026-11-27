@@ -215,3 +215,49 @@ test("acc-forecast-link preserves rate and size errors when cancelling response 
   );
   assert.deepEqual(await readGitHubForecastFiles(input, empty.fetchPublic), [{ path: "package.json", contents: "" }]);
 });
+
+test("acc-forecast-link aborts an older request without fetching its remaining files", async () => {
+  const previous = new AbortController();
+  const current = new AbortController();
+  const stop = new DOMException("Superseded by the next link", "AbortError");
+  const requests: string[] = [];
+  const gate = { enter: () => {} };
+  const rawStarted = new Promise<void>((resolve) => {
+    gate.enter = resolve;
+  });
+  const contents = bytes.encode("{}");
+  const oldFiles = [blob("package-lock.json", contents), blob("package.json", contents)];
+  const newUrl = "https://api.github.com/repos/example/replacement/git/trees/HEAD?recursive=1";
+  const newRaw = "https://raw.githubusercontent.com/example/replacement/HEAD/package.json";
+  const fetchPublic: typeof fetch = async (url, init) => {
+    assert.ok(typeof url === "string");
+    const isPrevious = url.startsWith("https://api.github.com/repos/example/project/") || url.startsWith(raw);
+    const expectedSignal = isPrevious ? previous.signal : current.signal;
+    assert.equal(init?.signal, expectedSignal);
+    requests.push(url);
+    if (url === treeUrl) return tree(oldFiles);
+    if (url === newUrl) return tree([blob("package.json", contents)]);
+    if (url === newRaw) return new Response(contents);
+    assert.equal(url, `${raw}package-lock.json`);
+    return new Promise((_, reject) => {
+      expectedSignal.addEventListener("abort", () => reject(expectedSignal.reason), { once: true });
+      gate.enter();
+    });
+  };
+  const old = readGitHubForecastFiles(input, fetchPublic, previous.signal);
+  const oldCancelled = assert.rejects(old, (error: unknown) => error === stop);
+  await rawStarted;
+  previous.abort(stop);
+  await oldCancelled;
+  const result = await readGitHubForecastFiles(
+    { kind: "url", value: "github/example/replacement" },
+    fetchPublic,
+    current.signal,
+  );
+  assert.deepEqual(result, [{ path: "package.json", contents: "{}" }]);
+  await assert.rejects(
+    readGitHubForecastFiles(input, fetchPublic, previous.signal),
+    (error: unknown) => error === stop,
+  );
+  assert.deepEqual(requests, [treeUrl, `${raw}package-lock.json`, newUrl, newRaw]);
+});
