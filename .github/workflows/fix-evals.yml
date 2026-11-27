@@ -1,0 +1,41 @@
+name: fix-evals smoke
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  fixtures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+        with:
+          cache: npm
+      - name: Reproduce known green and red baselines inside pinned Docker
+        run: npm run fix-evals -- --fixtures --fixer node-buffer
+      - name: Check fixture outcomes
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFileSync } from 'node:fs';
+          const read = (name) => JSON.parse(readFileSync(`artifacts/fix-evals/${name}/evidence.json`, 'utf8'));
+          const green = read('green');
+          const red = read('red');
+          assert.equal(green.cases[0]?.metrics.buildKeptGreen, true);
+          assert.equal(green.cases[0]?.metrics.testsKeptGreen, true);
+          assert.equal(green.cases[0]?.metrics.idempotent, true);
+          assert.equal(red.excluded, 'baseline-not-green');
+          assert.equal(red.baseline.test.attempts[0].status, 'failed');
+          JS
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: fix-evals-fixture-evidence
+          path: artifacts/fix-evals
+          retention-days: 7

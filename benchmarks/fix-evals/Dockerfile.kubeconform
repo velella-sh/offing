@@ -1,0 +1,3 @@
+FROM ghcr.io/yannh/kubeconform@sha256:7426d17ca19f3731d2a6287c868005f052f2682800141f20e83d3109f5c8faa1 AS validator
+FROM docker.io/library/node@sha256:e0e989b967dacc279681ed81774b2ce9eeebbb0efb8e0c427573235bebf1eda1
+COPY --from=validator /kubeconform /usr/local/bin/kubeconform

@@ -120,6 +120,7 @@
     "benchmark:scan-cache": "npm run build --silent && node dist/benchmarks/scan-cache-speed.js",
     "bench:staleness:run": "npm run build --silent && node dist/benchmarks/agent-staleness/run.js",
     "bench:staleness:score": "npm run build --silent && node dist/benchmarks/agent-staleness/score.js",
+    "fix-evals": "npm run build --silent && node dist/benchmarks/fix-evals/index.js",
     "eval:skill-triggers": "npm run build --silent && node dist/benchmarks/skill-trigger-eval.js",
     "eval:plugins": "npm run build --silent && node dist/benchmarks/plugin-host-eval.js",
     "eval:agent-loop": "npm run build --silent && node dist/benchmarks/agent-loop/index.js",
