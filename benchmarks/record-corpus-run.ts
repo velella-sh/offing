@@ -1,7 +1,7 @@
 // Records a full corpus run: `npm run record:corpus-run`.
 //
 // It runs the whole corpus in verify mode and, only when the run is complete and clean, updates `lastFullRun`
-// in benchmarks/thresholds.json and regenerates the accuracy table in docs/VALIDATION.md, plus local
+// in benchmarks/thresholds.json, writes a dated archive, and regenerates the accuracy table in docs/VALIDATION.md, plus local
 // docs/dashboard/data.json and docs/llms-full.txt previews (both gitignored; Pages builds the published copies).
 // Tracked changes are left in the working tree for review; nothing is committed. Other flags (for example
 // --concurrency or --offline) are passed to the harness; flags that narrow the run are refused.
@@ -12,6 +12,11 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { promisify } from "node:util";
 
+import { getActiveData } from "@velella/ebb/data-source";
+import { dataInfoFrom } from "@velella/ebb/data-status";
+
+import { archiveCorpusRun, writeCorpusArchive } from "./corpus-run-archive.js";
+import type { CorpusReport } from "./corpus-result.js";
 import { loadPublicCorpus } from "./public-corpus.js";
 import { assertRecordable, buildFullRunRecord, findFilterFlag, withLastFullRun } from "./record-run.js";
 import type { RecordableReport } from "./record-run.js";
@@ -38,13 +43,15 @@ if (dirty)
   fail(
     `Refusing to record: the working tree has uncommitted changes, so the recorded commit would not describe them.\n${dirty}`,
   );
-const commit = (await run("git", ["rev-parse", "--short", "HEAD"])).stdout.trim();
+const commit = (await run("git", ["rev-parse", "HEAD"])).stdout.trim();
 const date = new Date().toISOString().slice(0, 10);
 
 const corpus = await loadPublicCorpus();
 const directory = await mkdtemp(join(tmpdir(), "offing-record-"));
 try {
   const reportPath = join(directory, "report.json");
+  process.env.OFFING_DATA_DIR ??= join(directory, "data");
+  process.env.EBB_DATA_DIR ??= process.env.OFFING_DATA_DIR;
   console.error(`Running the full corpus (${corpus.repositories.length} repositories) in verify mode...`);
   let exitCode = 0;
   try {
@@ -62,7 +69,8 @@ try {
     process.stderr.write(failure.stderr ?? "");
     process.stdout.write(failure.stdout ?? "");
   }
-  const report = JSON.parse(await readFile(reportPath, "utf8").catch(() => "{}")) as RecordableReport;
+  const report = JSON.parse(await readFile(reportPath, "utf8").catch(() => "{}")) as RecordableReport &
+    Pick<CorpusReport, "repositories">;
   if (exitCode !== 0 && report.summary === undefined)
     fail(`Refusing to record: the corpus run failed (exit ${exitCode}) before it produced a report.`);
   try {
@@ -75,6 +83,11 @@ try {
   const thresholdsText = await readFile(THRESHOLDS, "utf8");
   const thresholds = JSON.parse(thresholdsText) as Thresholds;
   const record = buildFullRunRecord(report, thresholds, { date, commit });
+  const ebb = dataInfoFrom(await getActiveData());
+  await writeCorpusArchive(".", {
+    ...archiveCorpusRun(record, ebb.version, report.repositories),
+    recordedAt: new Date().toISOString(),
+  });
   await writeFile(THRESHOLDS, withLastFullRun(thresholdsText, record));
   await run(process.execPath, [resolve("dist/tools/build-dashboard-data.js"), "--today", "run-date"]);
   await run(process.execPath, [resolve("dist/tools/coverage-matrix.js")]);
@@ -83,7 +96,7 @@ try {
     `Recorded the full run of ${date} at ${commit}: ${record.repositories} repositories, ${record.findings} findings, precision ${record.precision}, recall ${record.recall}.`,
   );
   console.log(
-    "Updated benchmarks/thresholds.json and docs/VALIDATION.md. Regenerated gitignored docs/dashboard/data.json and docs/llms-full.txt for local preview. Review the diff and commit the tracked files.",
+    "Updated benchmarks/thresholds.json, benchmarks/corpus-runs/, and docs/VALIDATION.md. Regenerated gitignored docs/dashboard/data.json and docs/llms-full.txt for local preview. Review the diff and commit the tracked files.",
   );
 } finally {
   await rm(directory, { recursive: true, force: true });

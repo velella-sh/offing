@@ -1,0 +1,251 @@
+{
+  "repository": "pandas-dev/pandas",
+  "commit": "2e218d10984e9919f0296931d92ea851c6a6faf5",
+  "ecosystem": "python",
+  "selection": "targeted",
+  "expected": [
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/32-bit-linux.yml",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/32-bit-linux.yml:23 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.upload-artifact.retired",
+      "path": ".github/workflows/32-bit-linux.yml",
+      "line": 49,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/32-bit-linux.yml:49 reads `uses: actions/upload-artifact@v3`. Retired actions/upload-artifact release. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/asv-bot.yml",
+      "line": 39,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/asv-bot.yml:39 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.github-script.node20",
+      "path": ".github/workflows/asv-bot.yml",
+      "line": 65,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/asv-bot.yml:65 reads `- uses: actions/github-script@v6`. Unsupported actions/github-script runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-python.node20",
+      "path": ".github/workflows/autoupdate-pre-commit-config.yml",
+      "line": 21,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/autoupdate-pre-commit-config.yml:21 reads `uses: actions/setup-python@v4`. Unsupported actions/setup-python runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.cache.node20",
+      "path": ".github/workflows/autoupdate-pre-commit-config.yml",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/autoupdate-pre-commit-config.yml:23 reads `uses: actions/cache@v3`. Unsupported actions/cache runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/code-checks.yml",
+      "line": 30,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/code-checks.yml:30 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-python.node20",
+      "path": ".github/workflows/code-checks.yml",
+      "line": 33,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/code-checks.yml:33 reads `uses: actions/setup-python@v4`. Unsupported actions/setup-python runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/code-checks.yml",
+      "line": 54,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/code-checks.yml:54 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/code-checks.yml",
+      "line": 113,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/code-checks.yml:113 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/code-checks.yml",
+      "line": 147,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/code-checks.yml:147 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/code-checks.yml",
+      "line": 168,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/code-checks.yml:168 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-python.node20",
+      "path": ".github/workflows/code-checks.yml",
+      "line": 174,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/code-checks.yml:174 reads `uses: actions/setup-python@v4`. Unsupported actions/setup-python runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/codeql.yml",
+      "line": 26,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/codeql.yml:26 reads `- uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/docbuild-and-upload.yml",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/docbuild-and-upload.yml:38 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.upload-artifact.retired",
+      "path": ".github/workflows/docbuild-and-upload.yml",
+      "line": 89,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/docbuild-and-upload.yml:89 reads `uses: actions/upload-artifact@v3`. Retired actions/upload-artifact release. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/macos-windows.yml",
+      "line": 47,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/macos-windows.yml:47 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/python-dev.yml",
+      "line": 63,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/python-dev.yml:63 reads `- uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-python.node20",
+      "path": ".github/workflows/python-dev.yml",
+      "line": 68,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/python-dev.yml:68 reads `uses: actions/setup-python@v4`. Unsupported actions/setup-python runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/sdist.yml",
+      "line": 38,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/sdist.yml:38 reads `- uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.setup-python.node20",
+      "path": ".github/workflows/sdist.yml",
+      "line": 43,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/sdist.yml:43 reads `uses: actions/setup-python@v4`. Unsupported actions/setup-python runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.upload-artifact.retired",
+      "path": ".github/workflows/sdist.yml",
+      "line": 60,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/sdist.yml:60 reads `uses: actions/upload-artifact@v3`. Retired actions/upload-artifact release. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.stale.node20",
+      "path": ".github/workflows/stale-pr.yml",
+      "line": 16,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/stale-pr.yml:16 reads `- uses: actions/stale@v4`. Unsupported actions/stale runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "github-actions.checkout.node20",
+      "path": ".github/workflows/ubuntu.yml",
+      "line": 141,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, .github/workflows/ubuntu.yml:141 reads `uses: actions/checkout@v3`. Unsupported actions/checkout runtime. Source: https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/."
+      }
+    },
+    {
+      "ruleId": "container.python.eol-3.10-and-older",
+      "path": "Dockerfile",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, Dockerfile:1 reads `FROM python:3.10.8`. Python image release lines 3.10 and older are end-of-life. Source: https://devguide.python.org/versions/."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "environment.yml",
+      "line": 6,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, environment.yml:6 reads `- python=3.8`. Python 3.9 and older are end-of-life. Source: https://devguide.python.org/versions/."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "setup.cfg",
+      "line": 40,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "At the pinned commit, setup.cfg:40 reads `python_requires = >=3.8`. Python 3.9 and older are end-of-life. Source: https://devguide.python.org/versions/."
+      }
+    }
+  ]
+}

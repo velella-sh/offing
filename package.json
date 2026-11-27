@@ -144,6 +144,7 @@
     "check:answer-pages": "npm run build --silent && node dist/tools/build-answer-pages.js --check",
     "build:answer-pages": "npm run build --silent && node dist/tools/build-answer-pages.js",
     "check:llms": "npm run build --silent && node dist/tools/build-llms-full.js --check",
+    "accuracy": "npm run build:dashboard",
     "build:dashboard": "npm run build --silent && node dist/tools/build-dashboard-data.js --today run-date",
     "check:dashboard": "npm run build --silent && node dist/tools/build-dashboard-data.js --today run-date --check"
   },

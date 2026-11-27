@@ -5,9 +5,13 @@
 // line, and only for the families in the file's `scope`. Unlike the main corpus, the run reports its numbers
 // and never fails the build: a mismatch is information about generalization, not a regression.
 
+import { execFileSync } from "node:child_process";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+
+import { getActiveData } from "@velella/ebb/data-source";
+import { dataInfoFrom } from "@velella/ebb/data-status";
 
 import { builtInDetectors } from "../src/detectors/index.js";
 import { scanRepository } from "../src/engine/index.js";
@@ -69,6 +73,11 @@ export function scoreHeldOut(
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
+  const run = {
+    date: new Date().toISOString().slice(0, 10),
+    commit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
+    ebbVersion: dataInfoFrom(await getActiveData()).version,
+  };
   const file = JSON.parse(await readFile(resolve("benchmarks/held-out-repositories.json"), "utf8")) as {
     scope: string[];
     repositories: HeldOutEntry[];
@@ -135,7 +144,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     if (output)
       await writeFile(
         resolve(output),
-        `${JSON.stringify({ schemaVersion: "offing.held-out-result.v1", scope: file.scope, summary, repositories: rows }, null, 2)}\n`,
+        `${JSON.stringify({ schemaVersion: "offing.held-out-result.v1", scope: file.scope, run, summary, repositories: rows }, null, 2)}\n`,
       );
   } finally {
     await rm(root, { recursive: true, force: true });

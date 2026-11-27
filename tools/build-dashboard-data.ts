@@ -17,6 +17,11 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { CORPUS_RUNS_DIR, readCorpusArchive } from "../benchmarks/corpus-run-archive.js";
+import type { ArchivedCorpusRun } from "../benchmarks/corpus-run-archive.js";
+import { buildDashboardAccuracy, HELD_OUT_RESULT_FILE, loadHeldOutResult } from "./dashboard-accuracy.js";
+import type { HeldOutResult } from "./dashboard-accuracy.js";
+
 import { corpusCounts, loadCorpusTargets, TARGETS_PATH } from "../benchmarks/corpus-targets.js";
 import type { CorpusTargets } from "../benchmarks/corpus-targets.js";
 import { loadPublicCorpus, PUBLIC_CORPUS_DIR } from "../benchmarks/public-corpus.js";
@@ -34,6 +39,9 @@ export const DETECTORS_COLLECTION_FILE = "docs/_data/dashboard-detectors.json";
 export const ECOSYSTEMS_COLLECTION_FILE = "docs/_data/dashboard-ecosystems.json";
 export const MINIMUMS_COLLECTION_FILE = "docs/_data/dashboard-minimums.json";
 export const RUN_COLLECTION_FILE = "docs/_data/dashboard-run.json";
+const ACCURACY_COLLECTION_FILE = "docs/_data/dashboard-accuracy-ecosystems.json";
+const MATURITY_COLLECTION_FILE = "docs/_data/dashboard-maturity.json";
+const COMPARISON_COLLECTION_FILE = "docs/_data/dashboard-comparison.json";
 
 /** The corpus ecosystems each detector reads, which is what its zero-finding repositories are counted over. */
 export const detectorEcosystems: Readonly<Record<string, readonly string[]>> = {
@@ -122,10 +130,11 @@ export interface DashboardData {
   schemaVersion: typeof DASHBOARD_SCHEMA;
   referenceDay: string;
   corpus: { file: string; repositories: number; ecosystems: DashboardEcosystem[] };
-  sources: { thresholds: string; corpus: string; targets: string; decision: string };
+  sources: { thresholds: string; corpus: string; targets: string; decision: string; runs: string; heldOut: string };
   /** null when benchmarks/thresholds.json records no full run. */
   run: DashboardRun | null;
   detectors: DashboardDetector[];
+  accuracy: ReturnType<typeof buildDashboardAccuracy>;
   evidenceMinimums: typeof evidenceMinimums;
   definitions: Record<string, MetricDefinition>;
   limitations: string[];
@@ -133,9 +142,9 @@ export interface DashboardData {
 
 export const limitations: readonly string[] = [
   "A precision of 1.0 means no regression against this corpus. The expected findings were written by reviewing the same commits, so it does not show that the detectors generalize to unseen repositories. See ADR 0013 and issue #740.",
-  "Only the last full run is recorded, so there is no trend: the numbers describe one run on one commit.",
+  "Trends use archived verify runs. The number of pinned repositories and the Ebb version may change between runs.",
   "Scan time is not measured here. Median and p95 scan times are printed by the corpus harness but are not recorded in a committed file, so the dashboard does not show them.",
-  "Evidence counts come from the corpus file as it is now, not as it was at the recorded run. The configured level is a promise recorded in benchmarks/thresholds.json; the earned level counts evidence only and does not check recall or blind selection, which the corpus does not record yet.",
+  "Evidence counts describe the current corpus files. Recorded run counts have their own provenance. The configured level is a promise recorded in benchmarks/thresholds.json; the earned level counts evidence only and does not check recall or blind selection, which the corpus does not record yet.",
   "A detector's configured level can be higher than its earned level: ADR 0013 lets the detectors that held the Supported label before the evidence rules existed keep it until the corpus grows.",
   "The corpus minimum is the committed floor CI enforces, not the 200-repository goal. Most buckets are below the goal, so a bucket above its minimum can still be far from 200; decision 0030 owns the goal.",
 ];
@@ -291,6 +300,8 @@ export function buildDashboardData(input: {
   corpus: readonly CorpusRepository[];
   targets: CorpusTargets;
   today: string;
+  archives?: readonly ArchivedCorpusRun[];
+  heldOut?: HeldOutResult;
 }): DashboardData {
   const { thresholds, corpus, targets, today } = input;
   const lastRun = thresholds.lastFullRun;
@@ -342,9 +353,12 @@ export function buildDashboardData(input: {
       corpus: CORPUS_FILE,
       targets: TARGETS_FILE,
       decision: DECISION_FILE,
+      runs: CORPUS_RUNS_DIR,
+      heldOut: HELD_OUT_RESULT_FILE,
     },
     run,
     detectors,
+    accuracy: buildDashboardAccuracy(thresholds, Object.keys(counts), input.archives ?? [], input.heldOut),
     evidenceMinimums,
     definitions: { ...definitions },
     limitations: [...limitations],
@@ -356,9 +370,11 @@ export async function buildDashboardDataFromRoot(root: string, today: string): P
   const thresholds = rawThresholds as Thresholds;
   const targets = await loadCorpusTargets(root);
   const corpus = (await loadPublicCorpus(root)).repositories;
+  const archives = await readCorpusArchive(root);
+  const heldOut = await loadHeldOutResult(root);
   const day = today === "run-date" ? thresholds.lastFullRun?.date : today;
   if (day === undefined) throw new Error(`--today run-date needs a lastFullRun in ${THRESHOLDS_FILE}.`);
-  return buildDashboardData({ thresholds, corpus, targets, today: day });
+  return buildDashboardData({ thresholds, corpus, targets, today: day, archives, heldOut });
 }
 
 export async function renderDashboardData(root: string, today: string): Promise<string> {
@@ -398,6 +414,7 @@ function todayArgument(args: readonly string[]): string {
 export function renderDashboardCollections(data: DashboardData): Record<string, string> {
   const detectors = data.detectors.map((detector) => ({
     id: detector.id,
+    ...data.accuracy.provenance,
     level: detector.level,
     earnedLevel: detector.earnedLevel,
     aboveEvidence:
@@ -431,6 +448,7 @@ export function renderDashboardCollections(data: DashboardData): Record<string, 
           id: "last-full-run",
           date: data.run.date,
           commit: data.run.commit,
+          ebbVersion: data.accuracy.provenance.ebbVersion,
           repositories: data.run.repositories,
           findings: data.run.findings,
           runAgeDays: data.run.runAgeDays,
@@ -442,13 +460,50 @@ export function renderDashboardCollections(data: DashboardData): Record<string, 
         },
       ]
     : [];
-  const format = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
   return {
     [DETECTORS_COLLECTION_FILE]: format(detectors),
     [ECOSYSTEMS_COLLECTION_FILE]: format(ecosystems),
     [MINIMUMS_COLLECTION_FILE]: format(minimums),
     [RUN_COLLECTION_FILE]: format(run),
+    ...renderAccuracyCollections(data),
   };
+}
+
+const format = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
+const displayScores = (scores: { precision: number | null; recall: number | null } | null) => ({
+  precision: scores?.precision ?? "not measured",
+  recall: scores?.recall ?? "not measured",
+});
+
+function renderAccuracyCollections(data: DashboardData): Record<string, string> {
+  const rows = data.accuracy.ecosystems.map(({ scores, misses, ...row }) => ({
+    ...row,
+    ...scores,
+    ...displayScores(scores),
+    misses: misses.length ? misses.join("\n") : "No archived misses for this ecosystem.",
+    trend: trendMarkdown(data.accuracy.trends[row.id] ?? [], row.id),
+  }));
+  const maturity = data.accuracy.maturity.map(({ scores, ...row }) => ({
+    ...row,
+    ...scores,
+    ...displayScores(scores),
+  }));
+  const comparison = data.accuracy.comparison.map((row) => ({ ...row, ...displayScores(row) }));
+  return {
+    [ACCURACY_COLLECTION_FILE]: format(rows),
+    [MATURITY_COLLECTION_FILE]: format(maturity),
+    [COMPARISON_COLLECTION_FILE]: format(comparison),
+  };
+}
+
+function trendMarkdown(trend: DashboardData["accuracy"]["trends"][string], id: string): string {
+  if (trend.length < 2) return "Trend requires two runs with measured precision and recall.";
+  const chart = `::line-chart{from="dashboard.accuracy.trends.${id}" category="run" value="precision,recall" title="Precision and recall by recorded run"}`;
+  const provenance = trend.map(
+    ({ run, date, commit, ebbVersion, repositories }) =>
+      `- Run ${run} · ${date} · [${commit.slice(0, 7)}](https://github.com/velella-sh/offing/commit/${commit}) · Ebb ${ebbVersion} · ${repositories} repositories`,
+  );
+  return [chart, "", ...provenance].join("\n");
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
