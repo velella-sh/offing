@@ -36,15 +36,23 @@ async function checkPublication(file, repo) {
   const { logs } = proof.testRuns[0].attempts[0];
   logs.stdout.sha256 = proof.verify.commands[0].logSha256 = hash(contents);
   logs.stdout.tail = contents;
-  proof.agentRuns[0].summary = secret;
+  proof.agentRuns[0].summary = secret + "\n" + "🧪".repeat(13_000);
+  proof.verify.commands[0].purpose = secret;
   const input = new Map([[logs.stdout.sha256, contents], [logs.stderr.sha256, ""]]);
   const { files, body } = await prepareProofPublication(proof, input, { FIXTURE_MARKER: secret }, ["FIXTURE_MARKER"]);
   const folder = join(root, "published");
   await mkdir(folder);
   assert.match(body, /Outcome — done[\s\S]*<!-- offing-proof:v1 -->/);
   assert(!body.includes(secret));
+  assert(!body.includes(hash(contents)));
+  const artifact = files.get("offing-proof.json");
+  assert(artifact);
+  assert.equal(/Artifact: `offing-proof\.json` \(SHA-256 `([a-f0-9]{64})`\)\./u.exec(body)?.[1], hash(artifact));
+  const redactedLog = "log contains [REDACTED]\n";
+  assert.equal(files.get("offing-log-" + hash(redactedLog) + ".txt"), redactedLog);
   for (const [name, text] of files) {
     assert(!text.includes(secret));
+    assert(!name.includes(hash(contents)) && !text.includes(hash(contents)));
     await writeFile(join(folder, name), text);
   }
   for (const result of verifyWithBoth(join(folder, "offing-proof.json"), repo)) {

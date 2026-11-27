@@ -1,4 +1,4 @@
-import { createReplayDriver } from "../agent-drivers/replay.js";
+import { createContainerReplayDriver } from "../agent-drivers/replay.js";
 import { loadConfig } from "../config.js";
 import { buildFindingPacket } from "../migrate/prompt.js";
 import { parseAutopilotConfig } from "./limits/config.js";
@@ -26,7 +26,7 @@ export async function prepareReplay(
   };
   const testFiles = await trackedAutopilotTestFiles(tree);
   advanceRun(run, "agent-turn");
-  const output = await createReplayDriver(file, { config, packets, testFiles, started }).run({
+  const output = await createContainerReplayDriver(file, { config, packets, testFiles, started }).run({
     worktreePath: tree,
     prompt: "",
     timeoutMs: config.budget.run.wallTimeMs,

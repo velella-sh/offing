@@ -1,5 +1,8 @@
-import { lstat, mkdtemp, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { copyFile, lstat, mkdir, mkdtemp, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
+import { performance } from "node:perf_hooks";
 
 import { createBudget, type BudgetUsage } from "../autopilot/limits/budget.js";
 import type { AutopilotConfig } from "../autopilot/limits/config.js";
@@ -60,6 +63,16 @@ async function write(path: string, content: string | Uint8Array): Promise<void> 
 }
 
 const freeTurn = { turns: 1, tokens: 0, costCents: 0 };
+
+const replayWorkerModules = [
+  "agent-drivers/replay.js",
+  "agent-drivers/contract.js",
+  "agent-drivers/result.js",
+  "autopilot/limits/budget.js",
+  "autopilot/limits/config.js",
+  "autopilot/limits/scope.js",
+  "autopilot/limits/secrets.js",
+] as const;
 
 function recordedUsage(value: unknown, count: number): BudgetUsage[] {
   if (value === undefined) return Array.from({ length: count }, () => freeTurn);
@@ -187,7 +200,122 @@ async function applyReplayTurn(
   if (stop) rejectBudget(stop);
 }
 
-export function createReplayDriver(file: string, options?: ReplayGuardrails) {
+type PlannedTurn = Awaited<ReturnType<typeof plan>>["turns"][number];
+type ReplayReceipt = { completed: number; stopped: string | null };
+type ConnectDocker = typeof import("../test-runners/docker.js").connectDocker;
+
+async function stageWorker(staging: string, turns: readonly PlannedTurn[], config: AutopilotConfig, remaining: number) {
+  const paths = new Set(turns.flatMap(({ turn }) => turn.map(([path]) => path)));
+  await mkdir(join(staging, "checkout"));
+  for (const path of paths) await mkdir(dirname(join(staging, "checkout", path)), { recursive: true });
+  for (const module of replayWorkerModules) {
+    const target = join(staging, module);
+    await mkdir(dirname(target), { recursive: true });
+    await copyFile(new URL("../" + module, import.meta.url), target);
+  }
+  await writeFile(join(staging, "package.json"), '{"type":"module"}');
+  await writeFile(
+    join(staging, "recording.json"),
+    JSON.stringify({
+      schemaVersion: "offing.agent-replay.v1",
+      turns: turns.map(({ turn }) => Object.fromEntries(turn)),
+      turnUsage: turns.map(({ usage }) => usage),
+    }),
+  );
+  await writeFile(
+    join(staging, "config.json"),
+    JSON.stringify({
+      allowedPaths: [...paths],
+      deniedPaths: [],
+      driver: "replay",
+      tests: [],
+      secretEnv: [],
+      budget: { ...config.budget, run: { ...config.budget.run, wallTimeMs: remaining } },
+    }),
+  );
+}
+
+function readReceipt(bytes: Buffer, turns: readonly PlannedTurn[]): ReplayReceipt {
+  const raw = record(JSON.parse(bytes.toString("utf8")));
+  const completed = numberOrNull(raw?.completed);
+  const stopped = raw?.stopped;
+  if (completed === null || completed > turns.length || (stopped === null && completed !== turns.length)) {
+    throw new Error("Invalid replay container receipt.");
+  }
+  if (
+    stopped !== null &&
+    (typeof stopped !== "string" || !/^(?:run|turn)\.(?:wallTimeMs|turns|tokens|costCents)$/u.test(stopped))
+  ) {
+    throw new Error("Invalid replay container stop reason.");
+  }
+  const files = new Map<string, string>();
+  for (const { turn } of turns.slice(0, completed)) {
+    for (const [path, text] of turn) files.set(path, createHash("sha256").update(text).digest("hex"));
+  }
+  const expected = [...files].sort(([left], [right]) => (left < right ? -1 : left === right ? 0 : 1));
+  if (JSON.stringify(raw?.files) !== JSON.stringify(expected))
+    throw new Error("Replay container file hashes do not match.");
+  return { completed, stopped };
+}
+
+async function replayInContainer(
+  turns: readonly PlannedTurn[],
+  options: ReplayGuardrails,
+  connect?: ConnectDocker,
+): Promise<ReplayReceipt> {
+  const runner = await import("../test-runners/docker.js");
+  const started = options.started ?? performance.now();
+  const folder = await mkdtemp(join(tmpdir(), "offing-replay-container-"));
+  try {
+    const staging = join(folder, "source");
+    await mkdir(staging);
+    const docker = await (connect ?? runner.connectDocker)(folder);
+    const image = await runner.prepareImage(docker, "npm", "");
+    const initial = Math.floor(options.config.budget.run.wallTimeMs - (performance.now() - started));
+    if (initial < 1) rejectBudget("run.wallTimeMs");
+    await stageWorker(staging, turns, options.config, initial);
+    const source = await runner.archiveTree(staging);
+    const remaining = Math.floor(options.config.budget.run.wallTimeMs - (performance.now() - started));
+    if (remaining < 1) rejectBudget("run.wallTimeMs");
+    const output: Uint8Array[] = [];
+    const result = await runner.sandbox(docker, image, source)(
+      ["node", "--input-type=module", "--eval", replayWorker],
+      {
+        signal: AbortSignal.timeout(Math.min(remaining, 120_000)),
+        stdout: (chunk) => output.push(chunk),
+        stderr: () => {},
+      },
+      false,
+    );
+    if (result.exitCode !== 0) throw new Error("The trusted replay worker failed.");
+    return readReceipt(Buffer.concat(output), turns);
+  } catch (error) {
+    if (error instanceof ReplayRefusal) throw error;
+    if (performance.now() - started >= options.config.budget.run.wallTimeMs) rejectBudget("run.wallTimeMs");
+    throw new ReplayRefusal("container-runtime-unavailable", "The pinned replay container is unavailable.");
+  } finally {
+    await rm(folder, { recursive: true, force: true });
+  }
+}
+
+async function acceptedTurns(turns: PlannedTurn[], options?: ReplayGuardrails, connect?: ConnectDocker) {
+  if (!options) return { turns, stopped: null };
+  const first = turns[0];
+  if (first) {
+    const permit = createBudget(options.config.budget, options.now, options.started).begin();
+    if ("stop" in permit) rejectBudget(permit.stop);
+    const stopped = permit.check(first.usage);
+    if (stopped) rejectBudget(stopped);
+  }
+  const receipt = await replayInContainer(turns, options, connect);
+  return { turns: turns.slice(0, receipt.completed), stopped: receipt.stopped };
+}
+
+function replayDriver(
+  file: string,
+  options: ReplayGuardrails | undefined,
+  container?: { connect: ConnectDocker | undefined },
+) {
   return {
     name: "replay",
     detect: () => Promise.resolve(true),
@@ -198,12 +326,14 @@ export function createReplayDriver(file: string, options?: ReplayGuardrails) {
       const applied = new Set<string>();
       let completed = 0;
       try {
-        const { root, turns } = await plan(file, input, guard);
+        const { root, turns: planned } = await plan(file, input, guard);
+        const { turns, stopped } = await acceptedTurns(planned, container && options, container?.connect);
         for (const { turn, usage } of turns) {
           await applyReplayTurn(root, turn, usage, guard);
           for (const [path] of turn) applied.add(path);
           completed += 1;
         }
+        if (stopped) rejectBudget(stopped);
         return {
           ...success,
           result: makeResult(driver, success, [...applied].sort(), undefined, completed),
@@ -227,3 +357,29 @@ export function createReplayDriver(file: string, options?: ReplayGuardrails) {
     },
   } satisfies AgentDriver;
 }
+
+/** Replay prerecorded changes through the in-process test adapter. */
+export function createReplayDriver(file: string, options?: ReplayGuardrails) {
+  return replayDriver(file, options);
+}
+
+/** Apply a bounded, container-verified replay of already approved edits to the private worktree. */
+export function createContainerReplayDriver(file: string, options: ReplayGuardrails, connect?: ConnectDocker) {
+  return replayDriver(file, options, { connect });
+}
+
+const replayWorker = [
+  '  import { createHash as hashEditedFile } from "node:crypto";',
+  '  import { readFile as readWorkerFile } from "node:fs/promises";',
+  '  import { createReplayDriver } from "./agent-drivers/replay.js";',
+  '  const config = JSON.parse(await readWorkerFile("./config.json", "utf8"));',
+  '  const output = await createReplayDriver("./recording.json", { config, packets: [], testFiles: [] }).run({',
+  '    worktreePath: "./checkout", prompt: "", timeoutMs: config.budget.run.wallTimeMs,',
+  "  });",
+  "  const files = [];",
+  "  for (const path of output.result.filesTouched) {",
+  '    const contents = await readWorkerFile("./checkout/" + path);',
+  '    files.push([path, hashEditedFile("sha256").update(contents).digest("hex")]);',
+  "  }",
+  "  process.stdout.write(JSON.stringify({ completed: output.result.turns, stopped: output.stopReason ?? null, files }));",
+].join("\n");
