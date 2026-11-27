@@ -11,6 +11,7 @@ export OFFING_DATA_DIR="$build_dir/cache" OFFING_DATA_VERSION=bundled
 
 prepare_cli() {
   local mode=$1
+  agent_replay_mode=''
   if [[ $mode == source ]]; then
     export OFFING_CLI="$PWD/dist/src/cli.js"
   else
@@ -27,6 +28,7 @@ prepare_cli() {
       return 1
     }
     echo "Rendering with installed Offing $version."
+    if [[ $version == 0.1.1 ]]; then agent_replay_mode=legacy; fi
   fi
   # The local build prepares fixture files. The tape's Offing commands use OFFING_CLI.
   npm run build
@@ -53,12 +55,45 @@ encode_mp4() {
   mv -- "$build_dir/$name.mp4" "docs/demos/$name.mp4"
 }
 
+render_guard_agent() {
+  local output_dir=$1
+  # The amd64 VHS 0.12.1 image also pins Chromium, ttyd, fonts and FFmpeg.
+  local renderer='ghcr.io/charmbracelet/vhs@sha256:3afed459e6d7860f6bb8b9a22ae29d5927d628dac6e30f32a250113406a348b9'
+  mkdir "$output_dir"
+  node demos/guard-agent.mjs "$OFFING_CLI" "$output_dir" "$agent_replay_mode"
+  cp demos/guard-agent.tape docs/demos/guard-agent.srt "$output_dir/"
+
+  # Record the three terminal states, then give each still frame a fixed length.
+  # Render delays and host CPU instruction sets do not affect the MP4.
+  docker run --rm --platform linux/amd64 --network none --cap-drop ALL \
+    --security-opt no-new-privileges --user "$(id -u):$(id -g)" --env HOME=/tmp \
+    --volume "$output_dir:/vhs" --entrypoint /bin/bash -i "$renderer" -es <<'RENDER'
+timeout 120s vhs guard-agent.tape
+[[ -s prompt.png && -s blocked.png && -s fallback.png ]]
+printf '%s\n' "file prompt.png" "duration 8" "file blocked.png" "duration 12" \
+  "file fallback.png" "duration 10" "file fallback.png" > frames.txt
+ffmpeg -v error -nostdin -y -cpuflags 0 -threads 1 -filter_threads 1 -f concat -i frames.txt \
+  -t 30 -vf "setsar=1,fps=30,subtitles=guard-agent.srt:force_style='FontName=DejaVu Sans,FontSize=14,BorderStyle=3,Outline=1,Shadow=0,MarginV=12'" \
+  -an -c:v libx264 -preset veryfast -pix_fmt yuv420p -threads 1 -b:v 750k -minrate 750k -maxrate 750k \
+  -bufsize 1500k -x264-params asm=0:nal-hrd=cbr -map_metadata -1 -fflags +bitexact \
+  -flags +bitexact -movflags +faststart guard-agent.mp4
+RENDER
+}
+
 check_tapes() {
     local tape name output status_file prompt_check smoke_tape
     # VHS fails on an unmet Wait, but cannot see Bash exit statuses itself.
     # The check and guard tapes assert their own expected exit code of 1.
     for tape in "$@"; do
       name=${tape##*/}
+      if [[ $name == guard-agent.tape ]]; then
+        render_guard_agent "$build_dir/agent-first"
+        render_guard_agent "$build_dir/agent-second"
+        cmp "$build_dir/agent-first/guard-agent.mp4" "$build_dir/agent-second/guard-agent.mp4"
+        cmp "$build_dir/agent-first/guard-agent.mp4" docs/demos/guard-agent.mp4
+        echo "acc-demo-tapes: guard-agent replay, refusal evidence, native fetch, and byte-identical MP4 passed."
+        continue
+      fi
       output=$(sed -n '/^Output / { s/^Output //; p; q; }' "$tape")
       if [[ -z $output ]] || {
         ! grep -qx '# Standalone recording' "$tape" &&
@@ -113,16 +148,18 @@ case ${1:-} in
   --record)
     tape=$(tape_path "${2:?pass a tape name}")
     prepare_cli release
-    vhs "$tape"
-    exit ;;
-  --agent)
-    encode_mp4 guard-agent "${2:?pass the path to the trimmed Codex capture}"
+    if [[ $tape == demos/guard-agent.tape ]]; then
+      render_guard_agent "$build_dir/agent"
+      mv -- "$build_dir/agent/guard-agent.mp4" docs/demos/guard-agent.mp4
+    else
+      vhs "$tape"
+    fi
     exit ;;
   '')
     prepare_cli release
     ;;
   *)
-    echo "Usage: bash demos/build.sh [--check [name ...] | --check-source [name ...] | --record name | --agent path]" >&2
+    echo "Usage: bash demos/build.sh [--check [name ...] | --check-source [name ...] | --record name]" >&2
     exit 2 ;;
 esac
 
@@ -138,6 +175,9 @@ for name in guard forecast; do
   encode_mp4 "$name" "$build_dir/$name-source.mp4"
   mv -- "$build_dir/$name.gif" "docs/demos/$name.gif"
 done
+
+render_guard_agent "$build_dir/agent"
+mv -- "$build_dir/agent/guard-agent.mp4" docs/demos/guard-agent.mp4
 
 # Keep the existing README image URL in sync with the forecast in this gallery.
 cp docs/demos/forecast.gif docs/assets/demos/forecast.gif
