@@ -27,6 +27,7 @@ otherwise. Records are numbered in the order they were written; this page groups
 
 | # | Title | Decision |
 | --- | --- | --- |
+| [0053](0053-agent-drivers.md) | Version the Agent Driver contract | Preserve command migrations, add explicit driver selection and publish a standalone conformance suite. |
 | [0004](0004-registry-v2.md) | Key lifecycle rules by PURL and VERS with provenance | Move every ecosystem to one `offing.registry.v2` format keyed by Package URL and VERS, with provenance on each rule. |
 | [0005](0005-lifecycle-importers.md) | Draft lifecycle rules with importers; never write the registry | Let importers draft rules from one authoritative source; a person reviews every draft and changes `registry/` in a pull request. |
 | [0006](0006-data-bundle.md) | Ship lifecycle data as a versioned, content-addressed bundle | Publish and consume lifecycle data as an `offing.data-bundle.v1` document separate from the code release. |

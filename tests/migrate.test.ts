@@ -100,3 +100,21 @@ test("migrate --from-refusals plans a separate worktree for an unhandled package
   if (receiptPath) t.after(() => rm(receiptPath, { force: true }));
   assert.equal(await git(repo, ["status", "--porcelain"]), "");
 });
+
+test("migrate can explicitly select a recorded-turn driver without changing the source checkout", async (t) => {
+  const { repo, head, findingId } = await fixture(t);
+  const recording = resolve(repo, "..", "turns.json");
+  await writeFile(
+    recording,
+    JSON.stringify({
+      schemaVersion: "offing.agent-replay.v1",
+      turns: [{ "package.json": source.replace('"request": "2.88.2"', '"axios": "1.16.0"') }],
+    }),
+  );
+  const result = await run(repo, ["migrate", findingId, "--driver", "replay", "--replay", recording]);
+  assert.match(result.stdout, /local branch offing\/migrate\//);
+  const receiptPath = /Verification result: ([^\n]+)/.exec(result.stdout)?.[1];
+  if (receiptPath) t.after(() => rm(receiptPath, { force: true }));
+  assert.equal(await git(repo, ["rev-parse", "HEAD"]), head);
+  assert.equal(await git(repo, ["status", "--porcelain"]), "");
+});

@@ -220,6 +220,24 @@ jobs:
             printf -- '- The installed CLI replayed a scoped migration and verified its local branch and receipt.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-agent-drivers
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          package="$out/npm-install/node_modules/@velella/offing"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          suite="$package/docs/spec/agent-driver"
+          "$bin" drivers list
+          "$bin" drivers test replay
+          node "$suite/conformance/check.mjs" node "$suite/example/driver.mjs"
+          {
+            printf '### acc-agent-drivers\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
+            printf -- '- Installed CLI and independent reference passed the edit, scope and timeout cases.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build the Docker image and scan the fixture
         id: docker
         run: |

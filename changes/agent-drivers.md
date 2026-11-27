@@ -1,0 +1,1 @@
+- Add a versioned local Agent Driver contract, deterministic replay, and opt-in Claude Code, Codex, Gemini CLI and Aider drivers with an independent conformance check.
