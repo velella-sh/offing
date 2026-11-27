@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "offing.campaign-state.v1",
+  "id": "synthetic-board",
+  "asOf": "2026-11-20",
+  "batching": {
+    "size": 1,
+    "concurrency": 1,
+    "minGapMinutes": 0,
+    "maxFailureRate": 0.5
+  },
+  "repositories": [
+    {
+      "host": "https://github.com",
+      "name": "example/service",
+      "commit": "1111111111111111111111111111111111111111",
+      "batch": 1,
+      "owners": [
+        "@example/platform"
+      ],
+      "deadline": null,
+      "codemods": null,
+      "checks": null,
+      "status": "merged",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-20T10:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-20T10:00:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-20T10:00:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "merged",
+          "at": "2026-11-20T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/archive",
+      "commit": "2222222222222222222222222222222222222222",
+      "batch": 2,
+      "owners": [
+        "@example/platform",
+        "@example/operations"
+      ],
+      "deadline": null,
+      "codemods": null,
+      "checks": null,
+      "status": "cancelled",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "cancelled",
+          "at": "2026-11-22T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/worker",
+      "commit": "3333333333333333333333333333333333333333",
+      "batch": 3,
+      "owners": [
+        "@example/operations",
+        "Operations <review>"
+      ],
+      "deadline": null,
+      "codemods": null,
+      "checks": null,
+      "status": "review",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-22T10:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-23T10:00:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-23T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/queued",
+      "commit": "4444444444444444444444444444444444444444",
+      "batch": 4,
+      "owners": [],
+      "deadline": null,
+      "codemods": null,
+      "checks": null,
+      "status": "queued",
+      "transitions": []
+    }
+  ],
+  "omissions": [
+    {
+      "host": "https://github.com",
+      "name": "example/unscanned",
+      "reason": "not-scanned"
+    }
+  ]
+}

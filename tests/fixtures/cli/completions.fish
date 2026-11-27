@@ -40,6 +40,7 @@ complete -c offing -n __fish_use_subcommand -a capabilities
 complete -c offing -n __fish_use_subcommand -a completions
 complete -c offing -n __fish_use_subcommand -a attest
 complete -c offing -n __fish_use_subcommand -a autopilot
+complete -c offing -n __fish_use_subcommand -a campaign-board
 complete -c offing -n __fish_use_subcommand -a campaign
 complete -c offing -n __fish_use_subcommand -a codemod
 complete -c offing -n __fish_use_subcommand -a config
@@ -223,6 +224,7 @@ complete -c offing -n '__fish_seen_subcommand_from autopilot' -l wave
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l finding
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l to
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l agent
+complete -c offing -n '__fish_seen_subcommand_from campaign-board' -l out
 complete -c offing -n '__fish_seen_subcommand_from campaign' -l fleet
 complete -c offing -n '__fish_seen_subcommand_from campaign' -l json
 complete -c offing -n '__fish_seen_subcommand_from config' -l json

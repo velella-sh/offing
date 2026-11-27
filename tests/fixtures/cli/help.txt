@@ -78,6 +78,7 @@ Usage:
   offing autopilot [path] --dry-run [--wave <n> | --finding <id>] [--to <runtime@version>] [--agent <driver>]
   offing autopilot [path] --prepare [--wave <n> | --finding <id>] [--to <runtime@version>]
   offing autopilot [path] --undo [run]
+  offing campaign-board <state.json> --out <dir>  # export recorded campaign progress
   offing campaign plan <campaign.yml> --fleet <fleet.json> [--json]  # preview a pinned migration
   offing campaign status <state.json> [--json]  # read recorded campaign state
   offing codemod test <dir>    # check a codemod and its fixtures
@@ -159,6 +160,7 @@ Examples:
   offing completions zsh > ~/.zfunc/_offing
   offing attest --subject package.tgz --sbom sbom.cdx.json > lifecycle.intoto.json
   offing autopilot . --dry-run --to nodejs@22
+  offing campaign-board state.json --out board
   offing campaign plan campaign.yml --fleet fleet.json
   offing codemod test ./my-codemod
   offing config validate

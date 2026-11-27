@@ -1,0 +1,32 @@
+title: Campaign board
+description: Recorded migration campaign progress.
+lang: en
+collections:
+  repositories:
+    source: _data/repositories.json
+    id: id
+  owners:
+    source: _data/owners.json
+    id: id
+  summary:
+    source: _data/summary.json
+    id: id
+  activity:
+    source: _data/activity.json
+    id: id
+theme:
+  name: "@velella/lateen"
+  options:
+    preset: offing
+    status:
+      values:
+        queued: { tone: neutral, label: Queued }
+        running: { tone: info, label: Running }
+        verified: { tone: positive, label: Verified }
+        review: { tone: caution, label: Awaiting review }
+        merged: { tone: positive, label: Merged }
+        closed: { tone: neutral, label: Closed }
+        failed: { tone: negative, label: Failed }
+        cancelled: { tone: neutral, label: Cancelled }
+        completed: { tone: positive, label: Completed }
+        incomplete: { tone: caution, label: Incomplete }
