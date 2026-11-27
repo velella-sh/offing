@@ -548,3 +548,49 @@ test("fleet --policy reports compliant, violating and rejected repositories with
   await writeFile(file, recording.stdout);
   assert.deepEqual(await rollupFiles([file]), parsed);
 });
+
+test("fleet captures what-if readiness at a pinned commit and the forecast replays it without the host", async (t) => {
+  const root = await workspace(t);
+  let requests = 0;
+  const lockfile = (range: string) =>
+    JSON.stringify(
+      {
+        name: "fixture",
+        lockfileVersion: 3,
+        packages: { "node_modules/example": { version: "1.0.0", engines: { node: range } } },
+      },
+      null,
+      2,
+    );
+  const origin = await localHost(t, (request, response) => {
+    requests++;
+    const url = new URL(request.url ?? "/", "http://local");
+    if (url.pathname.endsWith("/projects")) {
+      return answer(response, [
+        { path_with_namespace: "example/ready", default_branch: "main" },
+        { path_with_namespace: "example/blocked", default_branch: "main" },
+        { path_with_namespace: "example/unknown", default_branch: "main", archived: true },
+      ]);
+    }
+    if (url.pathname.endsWith("/branches/main")) return answer(response, { commit: { id: commit } });
+    assert.equal(url.searchParams.get("sha"), commit);
+    const constraint = url.pathname.includes("%2Fready/") ? ">=22" : "^18";
+    response.end(archive({ "example-pin/package-lock.json": lockfile(constraint) }));
+  });
+  const cli = (...args: string[]) =>
+    run(process.execPath, [binary, ...args], { cwd: root, env: withoutGit(join(root, "data")) });
+  const flags = ["--gitlab-url", origin, "--what-if-target", "nodejs@22", "--as-of", "2026-11-27"];
+  await assert.rejects(cli("fleet", "example", ...flags), /--what-if-target requires JSON output/);
+  const recorded = await cli("fleet", "example", "--json", ...flags);
+  await writeFile(join(root, "fleet.json"), recorded.stdout);
+  const count = requests;
+  const result = await cli("forecast", "--fleet", "fleet.json", "--target", "nodejs@22", "--json");
+  assert.equal(requests, count);
+  const [report] = JSON.parse(result.stdout).reports;
+  assert.equal(report.ready[0].name, "example/ready");
+  assert.equal(report.ready[0].commit, commit);
+  assert.equal(report.blocked[0].name, "example/blocked");
+  assert.match(report.blocked[0].reason, /excludes Node.js 22/);
+  assert.equal(report.unknown[0].name, "example/unknown");
+  assert.equal(report.unknown[0].commit, null);
+});
