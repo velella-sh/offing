@@ -4,6 +4,7 @@ import { appendFile, readFile, stat } from "node:fs/promises";
 import process from "node:process";
 import { dirname, relative, resolve } from "node:path";
 
+import { readAgentReviewEvent, reportAgentReview } from "./action-agent-review.js";
 import { publishActionFixes } from "./action-fix-pr.js";
 import { runCommentCommands } from "./action-commands.js";
 import {
@@ -721,6 +722,7 @@ async function main(): Promise<void> {
     const root = env.INPUT_PATH || workspace;
     if (await answerCommentRun(env, root)) return;
 
+    const reviewEvent = readAgentReviewEvent(env);
     const months = env.INPUT_FORECAST === "true" ? readForecastMonths(env["INPUT_FORECAST-MONTHS"]) : undefined;
     const { ctx, proposeBaselinePath } = await prepareRun(env, root, workspace);
     const outcome = await runGitHubAction({
@@ -729,7 +731,8 @@ async function main(): Promise<void> {
       ...scanOptionsFor(ctx),
       ...policyOptionsFor(ctx),
     });
-    await reportOutcome(outcome, ctx, proposeBaselinePath, months);
+    const reviewed = await reportAgentReview(outcome, env, ctx.event.pull_request, reviewEvent);
+    await reportOutcome(reviewed, ctx, proposeBaselinePath, months);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.log(`::error title=Offing failed::${commandValue(message)}`);

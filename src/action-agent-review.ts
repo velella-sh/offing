@@ -1,0 +1,209 @@
+import { matchesAgentAuthor, parseAgentAuthors } from "./agent-pr.js";
+import { daysBetween } from "./baseline.js";
+import { git } from "./diff.js";
+import type { Finding } from "./domain.js";
+import { changedLines, selectChangedAnnotations } from "./github-action/diff.js";
+import type { GitHubActionOutcome, SuggestionComment } from "./github-action/types.js";
+import { githubRequest, type PullRequestCommentTarget } from "./pr-comment.js";
+import { escapeMarkdown } from "./reporters/shared.js";
+
+type ReviewEvent = "COMMENT" | "REQUEST_CHANGES";
+
+interface AgentReviewPullRequest {
+  number?: number;
+  user?: { login?: string };
+  base?: { sha?: string; repo?: { full_name?: string } };
+  head?: { sha?: string; repo?: { full_name?: string } };
+}
+
+type Env = Record<string, string | undefined>;
+const fullSha = /^[\da-f]{40}$/u;
+const fullName = /^[\da-z-]+\/[\da-z._-]+$/iu;
+
+export function readAgentReviewEvent(env: Env): ReviewEvent | undefined {
+  if (env["INPUT_AGENT-REVIEW"] !== "true") return undefined;
+  const choice = env["INPUT_REVIEW-EVENT"] || "comment";
+  if (choice === "comment") return "COMMENT";
+  if (choice === "request-changes") return "REQUEST_CHANGES";
+  throw new Error("review-event must be comment or request-changes.");
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function verifiedBot(row: unknown, commits: ReadonlySet<string>, authors: ReadonlySet<string>): string | undefined {
+  if (!isRecord(row) || typeof row.sha !== "string" || !commits.has(row.sha)) return undefined;
+  const { committer, commit } = row;
+  if (!isRecord(committer) || !isRecord(commit) || !isRecord(commit.verification)) return undefined;
+  if (commit.verification.verified !== true || committer.type !== "Bot") return undefined;
+  const login = committer.login;
+  return typeof login === "string" && /^[-\da-z]+\[bot\]$/iu.test(login) && matchesAgentAuthor(login, authors)
+    ? login
+    : undefined;
+}
+
+async function findCommitter(
+  target: PullRequestCommentTarget,
+  root: string,
+  range: string,
+  authors: ReadonlySet<string>,
+): Promise<string | undefined> {
+  const commits = new Set(git(root, ["rev-list", "--max-count=250", range, "--"]).toString("utf8").trim().split("\n"));
+  const signal = AbortSignal.timeout(5_000);
+  for (let page = 1; page <= 3; page += 1) {
+    const batch = await githubRequest(
+      target,
+      "GET",
+      `/repos/${target.repository}/pulls/${target.pullRequest}/commits?per_page=100&page=${page}`,
+      undefined,
+      signal,
+    );
+    if (!Array.isArray(batch)) return undefined;
+    for (const row of batch) {
+      const login = verifiedBot(row, commits, authors);
+      if (login) return login;
+    }
+    if (batch.length < 100) break;
+  }
+  return undefined;
+}
+
+function safeText(value: string): string {
+  return escapeMarkdown(value).replaceAll("@", "&#64;").replaceAll("~", "\\~");
+}
+
+function sourceLink(finding: Finding): string {
+  for (const source of finding.sources) {
+    try {
+      const url = new URL(source.url);
+      if (url.protocol === "https:" || url.protocol === "http:") return `<${url.href}>`;
+    } catch {
+      continue;
+    }
+  }
+  return "Unavailable";
+}
+
+function deadlineLabel(today: string, deadline: string | undefined): string {
+  if (!deadline) return "Unavailable";
+  const days = daysBetween(today, deadline);
+  if (!Number.isFinite(days)) return "Unavailable";
+  return days < 0 ? `${-days} days overdue` : String(days);
+}
+
+function reviewComments(outcome: GitHubActionOutcome, base: string, head: string): SuggestionComment[] {
+  const { root, scannedAt, findings } = outcome.result;
+  const mergeBase = git(root, ["merge-base", base, head]).toString("utf8").trim();
+  if (!fullSha.test(mergeBase)) return [];
+  const changed = changedLines(root, `${mergeBase}..${head}`);
+  const prefix = git(root, ["rev-parse", "--show-prefix"]).toString("utf8").trimEnd();
+  return selectChangedAnnotations(findings, changed).annotated.flatMap((finding) => {
+    const { path, line } = finding.location;
+    if (line === undefined) return [];
+    return [
+      {
+        path: prefix + path,
+        line,
+        side: "RIGHT",
+        body: [
+          safeText(finding.title),
+          `Replacement: ${finding.replacement ? safeText(finding.replacement) : "Unavailable"}`,
+          `Source: ${sourceLink(finding)}`,
+          `Days left: ${deadlineLabel(scannedAt.slice(0, 10), finding.deadline)}`,
+        ].join("\n\n"),
+      },
+    ];
+  });
+}
+
+function targetFor(env: Env, pr: AgentReviewPullRequest | undefined): PullRequestCommentTarget | undefined {
+  const repository = env.GITHUB_REPOSITORY;
+  const token = env["INPUT_GITHUB-TOKEN"];
+  const number = pr?.number;
+  if (!repository || !fullName.test(repository) || pr?.base?.repo?.full_name !== repository) return undefined;
+  if (env.GITHUB_EVENT_NAME !== "pull_request" || !token || !number || !Number.isSafeInteger(number) || number < 1) {
+    return undefined;
+  }
+  return { apiUrl: env.GITHUB_API_URL ?? "https://api.github.com", repository, pullRequest: number, token };
+}
+
+async function withCommitter(
+  outcome: GitHubActionOutcome,
+  target: PullRequestCommentTarget,
+  pr: AgentReviewPullRequest | undefined,
+  range: string,
+  authors: ReadonlySet<string>,
+): Promise<GitHubActionOutcome> {
+  if (outcome.agent?.attribution?.signal === "author-login") return outcome;
+  try {
+    const login = await findCommitter(target, outcome.result.root, range, authors);
+    if (login) {
+      return {
+        ...outcome,
+        agent: {
+          author: pr?.user?.login ?? login,
+          findings: outcome.result.findings,
+          attribution: { signal: "bot-committer", login },
+        },
+      };
+    }
+  } catch {
+    console.log(
+      "::warning title=Offing could not verify agent committers::Check the GitHub pull-requests read permission.",
+    );
+  }
+  return outcome;
+}
+
+function scanRange(outcome: GitHubActionOutcome, pr: AgentReviewPullRequest | undefined) {
+  const base = pr?.base?.sha;
+  const head = pr?.head?.sha;
+  if (!base || !head || !fullSha.test(base) || !fullSha.test(head)) return undefined;
+  return outcome.diff?.base === base && outcome.diff.head === head ? { base, head } : undefined;
+}
+
+/** Runs only in the Action host, after local scanning has finished. */
+export async function reportAgentReview(
+  outcome: GitHubActionOutcome,
+  env: Env,
+  pr: AgentReviewPullRequest | undefined,
+  event: ReviewEvent | undefined,
+): Promise<GitHubActionOutcome> {
+  const verify = env["INPUT_VERIFY-AGENT-COMMITTERS"] === "true";
+  if ((!verify && !event) || outcome.result.findings.length === 0) return outcome;
+  const authors = parseAgentAuthors(env["INPUT_AGENT-AUTHORS"]);
+  const target = targetFor(env, pr);
+  const revisions = scanRange(outcome, pr);
+  if (!target || !revisions || authors.size === 0) return outcome;
+  const { base, head } = revisions;
+  const canPost = event !== undefined && pr?.head?.repo?.full_name === target.repository;
+  const attributed =
+    verify || canPost ? await withCommitter(outcome, target, pr, `${base}..${head}`, authors) : outcome;
+  if (canPost && attributed.agent) await postAgentReview(attributed, target, event, base, head);
+  return attributed;
+}
+
+async function postAgentReview(
+  outcome: GitHubActionOutcome,
+  target: PullRequestCommentTarget,
+  event: ReviewEvent,
+  base: string,
+  head: string,
+): Promise<void> {
+  try {
+    const comments = reviewComments(outcome, base, head);
+    if (comments.length === 0) return;
+    await githubRequest(
+      target,
+      "POST",
+      `/repos/${target.repository}/pulls/${target.pullRequest}/reviews`,
+      { commit_id: head, event, body: "Offing lifecycle review", comments },
+      AbortSignal.timeout(10_000),
+    );
+  } catch {
+    console.log(
+      "::warning title=Offing could not post the agent review::Check the pull request head and token permissions.",
+    );
+  }
+}

@@ -1,7 +1,5 @@
 /**
- * Posts the pull request comment and the fix-suggestion review. These are the only network calls in the
- * Action, made after the scan has finished and only when `pr-comment` or `suggest-fixes` is on; scans
- * never use the network.
+ * GitHub pull request API calls. The Action makes them after a scan for opt-in reporting.
  */
 import { FIX_SUGGESTION_MARKER, PR_COMMENT_MARKER } from "./github-action.js";
 import { limitPullRequestComment } from "./github-action/render.js";
@@ -36,11 +34,12 @@ interface ReviewComment {
   original_start_line?: number | null;
 }
 
-async function githubRequest(
+export async function githubRequest(
   target: PullRequestCommentTarget,
   method: string,
   path: string,
   body?: unknown,
+  signal?: AbortSignal,
 ): Promise<unknown> {
   const response = await fetch(`${target.apiUrl}${path}`, {
     method,
@@ -51,6 +50,7 @@ async function githubRequest(
       ...(body === undefined ? {} : { "content-type": "application/json" }),
     },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    ...(signal === undefined ? {} : { signal, redirect: "error" }),
   });
   if (!response.ok) throw new Error(`GitHub API ${method} ${path} failed with ${response.status}`);
   const text = await response.text();

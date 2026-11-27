@@ -1,0 +1,1 @@
+- Add optional verified bot attribution and inline lifecycle reviews to GitHub Action diff mode.

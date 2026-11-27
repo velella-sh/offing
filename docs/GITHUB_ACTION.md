@@ -250,6 +250,10 @@ The job summary and the existing optional PR comment include a **Stale choices t
 
 `agent-authors` takes a comma-separated list of logins. The default covers GitHub's Copilot coding agent (`Copilot`), Jules (`google-labs-jules[bot]`), Devin (`devin-ai-integration[bot]`), OpenAI Codex cloud (`chatgpt-codex-connector[bot]`), and Claude (`claude[bot]`). Matching ignores case and a leading `@`. Set `agent-authors: none` to turn the section off, or name the logins your agents author with.
 
+Set `verify-agent-committers: "true"` and give the job `pull-requests: read` to include the bot-committer signal. After the offline scan, the Action checks up to 250 commits through GitHub and accepts a matching bot account only when GitHub verifies the commit signature and the commit is in the scanned Git range. If metadata is unavailable, the usual attribution signals still apply.
+
+Set `agent-review: "true"` in diff mode with `pull-requests: write` to post one review for a recognized agent on a pull request from the same repository. The Action also checks bot committers when this review is enabled. Each comment points to an added or changed line and includes the replacement, evidence and days left when available. Findings without an inline location remain in the local report, and forks receive the job summary. The default `review-event: comment` submits an informational review. Set `review-event: request-changes` to ask for changes explicitly. Both inputs apply to the `pull_request` event. Each eligible run submits its own review.
+
 ### Comment commands
 
 Set `commands: "true"` and run the Action on `issue_comment` so a reviewer can ask about a finding or accept it without leaving the pull request. A short workflow of its own is enough; it can sit next to the scan workflow:
