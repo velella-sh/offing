@@ -228,6 +228,13 @@ test("fleet lineage links distinct authorized pinned repositories, with no effec
   assert.equal(chain?.links[1]?.repository, "acme/base");
   assert.equal(chain?.links[1]?.ruleId, debianRule);
   assert.equal(enriched.findings, standard.findings);
+  const combined = await scanFleet(host, "acme", {
+    imageLineage: true,
+    forecast: { gitlab: false, asOf: "2026-11-27" },
+  });
+  assert.equal(combined.forecastAsOf, "2026-11-27");
+  assert.ok(combined.repositoryStatus.find(({ name }) => name === "acme/base")?.forecastEvidence);
+  assert.deepEqual(combined.imageLineage, enriched.imageLineage);
   const ajv = new Ajv2020();
   const validate = ajv.compile(JSON.parse(await readFile("schemas/lineage.v1.schema.json", "utf8")));
   assert.equal(validate(enriched.imageLineage), true, JSON.stringify(validate.errors));

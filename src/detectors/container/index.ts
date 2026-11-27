@@ -12,9 +12,7 @@ import { findRootfsSnapshots } from "./rootfs.js";
 import { required } from "../../required.js";
 import { distroCodenameVersion, imageLifecycle, loadImageRules, rulesFor } from "./image-lifecycle.js";
 import type { ImageRules } from "./image-lifecycle.js";
-import { buildImageLineage, type ImageChain } from "../../lineage/index.js";
-import { readLineageInputs, type LineageDocument } from "../../lineage/inputs.js";
-import { chainEvidence } from "../../lineage/render.js";
+import { readLineageInputs, type LineageDocument, type LineageInputs } from "../../lineage/inputs.js";
 import type { RootfsOsRelease, RootfsSnapshot } from "./rootfs.js";
 
 /**
@@ -337,11 +335,29 @@ function analyzeCandidate(candidate: Candidate, context: CandidateContext): Cand
     : analyzeImage(candidate, location, context);
 }
 
-function addLineageFindings(
-  findings: readonly DetectorFinding[],
-  chains: readonly ImageChain[],
+function hasLinkEvidence(inputs: LineageInputs): boolean {
+  return (
+    inputs.builds.length > 0 ||
+    inputs.documents.some(({ stages }) =>
+      stages.some(
+        ({ copies, parent, reference, resolved }) =>
+          copies.length > 0 || parent !== undefined || reference !== resolved,
+      ),
+    )
+  );
+}
+
+async function addLineageFindings(
+  findings: DetectorFinding[],
+  inputs: LineageInputs,
   imageRules: ImageRules,
-): DetectorFinding[] {
+): Promise<DetectorFinding[]> {
+  if (!hasLinkEvidence(inputs)) return findings;
+  const [{ buildImageLineage }, { chainEvidence }] = await Promise.all([
+    import("../../lineage/index.js"),
+    import("../../lineage/render.js"),
+  ]);
+  const { chains } = buildImageLineage([inputs], imageRules);
   const result = new Map(findings.map((finding) => [finding.id, finding]));
   const rules = new Map([...imageRules.all, ...imageRules.dotnetRules].map((rule) => [rule.id, rule]));
   for (const chain of chains) {
@@ -415,8 +431,7 @@ export class ContainerDetector implements Detector {
       if (result.unclassified) unclassified.push(result.unclassified);
     }
 
-    const lineage = buildImageLineage([inputs], imageRules);
-    const linked = addLineageFindings(findings, lineage.chains, imageRules);
+    const linked = await addLineageFindings(findings, inputs, imageRules);
     linked.push(...rootfsFindings(rootfs, rules, runtimeRules));
     return { findings: linked, unclassified };
   }

@@ -1,0 +1,270 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/fleet-forecast.v1.schema.json",
+  "title": "Offing fleet forecast v1",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "offing.fleet-forecast.v1"
+    },
+    "today": {
+      "$ref": "#/$defs/day"
+    },
+    "repositoryCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "unavailable": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "type": "string",
+            "minLength": 1
+          },
+          "repository": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "host",
+          "repository"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "coverage": {
+      "$ref": "#/$defs/coverage"
+    },
+    "byOwner": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "coverage": {
+            "$ref": "#/$defs/coverage"
+          },
+          "buckets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/bucket"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        "required": [
+          "name",
+          "coverage",
+          "buckets"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "byRepository": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "coverage": {
+            "$ref": "#/$defs/coverage"
+          },
+          "buckets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/bucket"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "host": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "name",
+          "coverage",
+          "buckets",
+          "host"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "changes": {
+      "type": "object",
+      "properties": {
+        "new": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "closer": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "fixed": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        }
+      },
+      "required": [
+        "new",
+        "closer",
+        "fixed"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "today",
+    "repositoryCount",
+    "unavailable",
+    "coverage",
+    "byOwner",
+    "byRepository"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "day": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "jsonPointer": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "item": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ruleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "location": {
+          "$ref": "#/$defs/location"
+        },
+        "deadline": {
+          "$ref": "#/$defs/day"
+        },
+        "owners": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "host",
+        "repository",
+        "ruleId",
+        "location",
+        "deadline",
+        "owners"
+      ],
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "classified": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "noData": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "share": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "classified",
+        "noData",
+        "share"
+      ],
+      "additionalProperties": false
+    },
+    "bucket": {
+      "type": "object",
+      "properties": {
+        "months": {
+          "enum": [
+            3,
+            6,
+            12
+          ]
+        },
+        "until": {
+          "$ref": "#/$defs/day"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        }
+      },
+      "required": [
+        "months",
+        "until",
+        "items"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

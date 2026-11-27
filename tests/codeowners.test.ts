@@ -111,3 +111,26 @@ test("scan --by-owner groups a real scan by CODEOWNERS", async () => {
   assert.equal(text.code, 0);
   assert.match(text.stdout, /@org\/platform \(\d+\)/);
 });
+
+test("GitLab combines independent case-insensitive sections with default and overriding owners", () => {
+  const text = `
+    * @all
+    [Frontend][2] @org/frontend @reviewer
+    /web/
+    /web/index.js @specific
+    [Docs] @org/docs
+    *.md
+    ^[FRONTEND]
+    /apps/
+    [Unowned]
+    /test/
+    [Invalid
+  `;
+  const gitlab = parseCodeowners(text, "gitlab");
+  assert.deepEqual(ownersOf(gitlab, "web/readme.md"), ["@all", "@org/frontend", "@reviewer", "@org/docs"]);
+  assert.deepEqual(ownersOf(gitlab, "web/index.js"), ["@all", "@specific"]);
+  assert.deepEqual(ownersOf(gitlab, "apps/index.js"), ["@all", "@org/frontend", "@reviewer"]);
+  assert.deepEqual(ownersOf(gitlab, "test/main.ts"), ["@all"]);
+  assert.deepEqual(ownersOf(parseCodeowners(text), "web/index.js"), ["@specific"]);
+  assert.deepEqual(ownersOf(parseCodeowners(text), "web/readme.md"), []);
+});

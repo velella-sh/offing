@@ -10,6 +10,7 @@ import { renderForecastSvg } from "../forecast-svg.js";
 import { renderForecastTimeline } from "../forecast-timeline.js";
 import { renderForecastMermaid } from "../reporters.js";
 import { scanWithBuiltIns } from "../scan-builtins.js";
+import { fleetForecastFlags, runFleetForecast } from "./internal/fleet-forecast.js";
 import type { Gated } from "./runtime.js";
 import { afterGates, optionalFileOperand, preScanPhase, repositoryPhase } from "./runtime.js";
 import type { CliCommand, CommandContext } from "./types.js";
@@ -115,14 +116,17 @@ export const command: CliCommand = {
     "--data-version",
     "--ics",
     "--force",
+    ...fleetForecastFlags,
   ],
   example: "offing forecast . --months 6",
   usage: [
     "  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] [--svg [--animate] | --timeline | --json | --format mermaid]   # what reaches end of life next, by horizon",
     "  offing forecast [path] [--months <n>] [--as-of <YYYY-MM-DD>] --ics [file] [--force]   # export the forecast as a calendar",
+    "  offing forecast --fleet <organization|group|fleet.json> [--as-of <YYYY-MM-DD>] [--by owner|repository | --json | --card [--theme light|dark] | --ics <dir> | --digest <dir>]",
   ],
   usageSlots: [13, 14],
   run(args, ctx) {
+    if (args.some((arg) => fleetForecastFlags.includes(arg.split("=")[0] ?? arg))) return runFleetForecast(args, ctx);
     return afterGates("forecast", args, ctx, async (state: Gated) => {
       const early = await repositoryPhase(state, ctx);
       if (early !== undefined) return early;

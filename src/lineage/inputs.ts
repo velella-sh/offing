@@ -3,7 +3,7 @@ import { join, posix } from "node:path";
 import { LineCounter, isMap, isScalar, isSeq, parseDocument, type YAMLMap } from "yaml";
 
 import { parseCompose, type ComposeDeclaration } from "../detectors/container/parse-compose.js";
-import { parseDevcontainer, type DevcontainerDeclaration } from "../detectors/container/parse-devcontainer.js";
+import type { DevcontainerDeclaration } from "../detectors/container/parse-devcontainer.js";
 import {
   parseDockerfileBuild,
   type DockerfileDeclaration,
@@ -97,11 +97,13 @@ async function readBounded(root: string, path: string): Promise<string | undefin
   }
 }
 
-function readDocument(path: string, contents: string): LineageDocument {
+async function readDocument(path: string, contents: string): Promise<LineageDocument> {
   const name = posix.basename(path);
   if (COMPOSE.test(name)) return { kind: "compose", path, stages: [], declarations: parseCompose(contents) };
-  if (name === DEVCONTAINER)
+  if (name === DEVCONTAINER) {
+    const { parseDevcontainer } = await import("../detectors/container/parse-devcontainer.js");
     return { kind: "devcontainer", path, stages: [], declarations: parseDevcontainer(contents) };
+  }
   return { kind: "dockerfile", path, ...parseDockerfileBuild(contents) };
 }
 
@@ -206,7 +208,7 @@ export async function readLineageInputs(root: string): Promise<LineageInputs> {
   const documents = new Map<string, LineageDocument>();
   for (const path of files.documents) {
     const contents = await readBounded(root, path);
-    if (contents !== undefined) documents.set(path, readDocument(path, contents));
+    if (contents !== undefined) documents.set(path, await readDocument(path, contents));
   }
   const builds: ImageBuild[] = [];
   if (documents.size > 0) {

@@ -5,7 +5,6 @@ import { parseArgs } from "node:util";
 import { loadImageRules } from "../detectors/container/image-lifecycle.js";
 import { buildImageLineage } from "../lineage/index.js";
 import { readLineageInputs } from "../lineage/inputs.js";
-import { resolveLineageDigests } from "../lineage/registry.js";
 import { renderLineageMermaid, renderLineageText } from "../lineage/render.js";
 import type { CliCommand, CommandContext } from "./types.js";
 
@@ -39,6 +38,7 @@ async function run(args: string[], ctx: CommandContext): Promise<number> {
   const [inputs, rules] = await Promise.all([readLineageInputs(path), loadImageRules()]);
   let result = buildImageLineage([inputs], rules);
   if (values["resolve-digests"]) {
+    const { resolveLineageDigests } = await import("../lineage/registry.js");
     const tags = await resolveLineageDigests(result);
     if (tags.size > 0) result = buildImageLineage([inputs], rules, tags);
   }

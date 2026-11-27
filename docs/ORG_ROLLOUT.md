@@ -127,6 +127,11 @@ report alongside successful repositories.
 | `organization` | Caller repository owner | GitHub organization slug. |
 | `fail-on-severity` | `high` | Minimum severity that fails the final gate or `none`. |
 | `max-jobs` | `10` | Bounded repository concurrency, from 1 to 16. |
+| `forecast-digests` | `false` | Generate `offing-owner-digests` with a Markdown file for each owner. The artifact contains repository paths and owner names. Access follows the workflow run permissions. |
+
+Existing Slack and Teams webhooks receive the aggregate digest. Use the
+[fleet forecast guide](https://velella.sh/offing/FLEET_FORECAST/) to route
+owner files to the appropriate recipients in a caller-managed workflow.
 
 ## 3. Accept existing findings with a baseline
 
