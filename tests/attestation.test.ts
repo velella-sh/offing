@@ -50,6 +50,7 @@ async function statementFile(name: string, value: unknown): Promise<string> {
 
 test("attest records exact artifact bytes, the bundled Ebb content address and repository scan observations", async () => {
   await writeFile(join(root, "package.json"), '{"dependencies":{"request":"2.88.2"}}');
+  await writeFile(join(root, "mise.toml"), '[tools]\nnode = "lts"\n');
   const result = await runCli(["attest", root, "--subject", subjectFile, "--data-version", "bundled"]);
   assert.equal(result.code, 0, result.stderr);
   const value = JSON.parse(result.stdout) as LifecycleStatement;
@@ -62,6 +63,9 @@ test("attest records exact artifact bytes, the bundled Ebb content address and r
   assert.equal(value.predicate.ebb.signature, undefined);
   assert.equal(value.predicate.input, "scan");
   assert.ok(value.predicate.components.some((component) => component.purl === "pkg:npm/request"));
+  assert.ok(
+    value.predicate.noData.some(({ purl, location }) => purl === "pkg:generic/nodejs" && location === "mise.toml"),
+  );
   const file = await statementFile("scan.json", value);
   const checked = await runCli(["attest", "check", file, "--subject", digestSubject, "--today", today]);
   assert.equal(checked.code, 0, checked.stderr);
