@@ -23,5 +23,15 @@ repository-relative paths and without source excerpts. The separate
 pull request comment omits finding details successfully published inline.
 The job summary, JSON report, and policy gates use the full scan.
 
-This decision defines one submission per eligible run. Updating previous
-reviews and resolving stale threads are tracked separately in #753.
+Reruns reconcile only marked root comments whose viewer is the authenticated
+GitHub bot. Match the rule marker and current diff anchor before updating a
+comment. Resolve unmatched owned threads and add only new comments. A clean
+scan can resolve earlier threads. A complete thread inventory and the
+current base and head are required before mutation.
+
+Fork review has a separate opt-in. A permissionless `pull_request` workflow
+signals the next stage and supplies no artifacts. A read-only job checks
+trusted GitHub runner and current PR metadata, scans bounded regular Git
+blobs without checking them out, and transfers a bounded plan as job output.
+The write job rechecks provenance and publishes only informational reviews.
+It has neither Git contents permission nor access to a fork checkout.

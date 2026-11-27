@@ -11,6 +11,7 @@ import {
   type AgentReviewReport,
   type PostedReviewFindings,
 } from "./action-agent-review.js";
+import { runForkReview } from "./action-agent-review-fork.js";
 import { publishActionFixes } from "./action-fix-pr.js";
 import { runCommentCommands } from "./action-commands.js";
 import {
@@ -751,6 +752,12 @@ async function publishForecast(outcome: RunOutcome, ctx: RunContext, months?: nu
 async function main(): Promise<void> {
   try {
     const env: Env = process.env;
+    const forkMode = env["INPUT_FORK-REVIEW-MODE"] || "off";
+    if (forkMode !== "off") {
+      const plan = await runForkReview(forkMode, env);
+      if (plan !== undefined) await setOutput("fork-review-plan", plan);
+      return;
+    }
     const workspace = env.GITHUB_WORKSPACE ?? process.cwd();
     const root = env.INPUT_PATH || workspace;
     if (await answerCommentRun(env, root)) return;

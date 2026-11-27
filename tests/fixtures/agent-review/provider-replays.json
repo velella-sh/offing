@@ -1,0 +1,247 @@
+{
+  "fixtureType": "Recorded public GitHub pull request metadata and per-provider diff line classes. Source text is omitted.",
+  "cases": [
+    {
+      "provider": "Claude",
+      "observed": {
+        "pullRequest": "https://github.com/edaubert42/applai/pull/313",
+        "number": 313,
+        "login": "claude[bot]",
+        "actorType": "Bot",
+        "headRef": "agent/issue-298-secret-scan-net-diff",
+        "headCommit": "24dde8f3d77037dea45a59b66196e22efb13422d",
+        "baseRepository": "edaubert42/applai",
+        "headRepository": "edaubert42/applai",
+        "diff": {
+          "path": "tests/test_secret_scan.py",
+          "status": "added",
+          "hunks": [
+            {
+              "oldStart": 0,
+              "newStart": 1,
+              "lines": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            }
+          ],
+          "addedRanges": [
+            {
+              "start": 1,
+              "end": 148
+            }
+          ]
+        }
+      },
+      "pullRequest": {
+        "user": {
+          "login": "contributor"
+        },
+        "head": {
+          "ref": "fix/checkout"
+        }
+      },
+      "commitMessage": "Update workflow\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+      "signal": "co-author-trailer"
+    },
+    {
+      "provider": "Copilot",
+      "observed": {
+        "pullRequest": "https://github.com/ThoughtWorksInc/sbt-scala-js-map/pull/217",
+        "number": 217,
+        "login": "Copilot",
+        "actorType": "Bot",
+        "headRef": "copilot/cross-compile-sbt-1-and-sbt-2",
+        "headCommit": "59e641bc42200732a729c689e534aa1ff606a2bb",
+        "baseRepository": "ThoughtWorksInc/sbt-scala-js-map",
+        "headRepository": "ThoughtWorksInc/sbt-scala-js-map",
+        "diff": {
+          "path": "project/plugins.sbt",
+          "status": "added",
+          "hunks": [
+            {
+              "oldStart": 0,
+              "newStart": 1,
+              "lines": "A"
+            }
+          ],
+          "addedRanges": [
+            {
+              "start": 1,
+              "end": 1
+            }
+          ]
+        }
+      },
+      "pullRequest": {
+        "user": {
+          "login": "Copilot"
+        },
+        "head": {
+          "ref": "copilot/update-actions"
+        }
+      },
+      "signal": "author-login"
+    },
+    {
+      "provider": "Codex",
+      "observed": {
+        "pullRequest": "https://github.com/daisy976/test-repo/pull/3",
+        "number": 3,
+        "login": "chatgpt-codex-connector[bot]",
+        "actorType": "Bot",
+        "headRef": "sample-readme-whitespace-2026-08-21",
+        "headCommit": "67346c2945bdbb444594798ae9d9e8a531f7caf8",
+        "baseRepository": "daisy976/test-repo",
+        "headRepository": "daisy976/test-repo",
+        "diff": {
+          "path": "README.md",
+          "status": "modified",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "newStart": 1,
+              "lines": "DAA"
+            }
+          ],
+          "addedRanges": [
+            {
+              "start": 1,
+              "end": 2
+            }
+          ]
+        }
+      },
+      "pullRequest": {
+        "user": {
+          "login": "contributor"
+        },
+        "head": {
+          "ref": "fix/workflow"
+        }
+      },
+      "commit": {
+        "committer": {
+          "login": "chatgpt-codex-connector[bot]",
+          "type": "Bot"
+        },
+        "commit": {
+          "verification": {
+            "verified": true
+          }
+        }
+      },
+      "signal": "bot-committer"
+    },
+    {
+      "provider": "Jules",
+      "observed": {
+        "pullRequest": "https://github.com/sergey9519546/CREATEYOURTHUMBNAIL/pull/311",
+        "number": 311,
+        "login": "google-labs-jules[bot]",
+        "actorType": "Bot",
+        "headRef": "upgrade/code-quality-polish-5735337005813007214",
+        "headCommit": "6cc50b6956ac47b592236ac511bcbfc2ebcdcec5",
+        "baseRepository": "sergey9519546/CREATEYOURTHUMBNAIL",
+        "headRepository": "sergey9519546/CREATEYOURTHUMBNAIL",
+        "diff": {
+          "path": "src/components/ThumbnailConceptCard.tsx",
+          "status": "modified",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "newStart": 1,
+              "lines": "CCCACCC"
+            },
+            {
+              "oldStart": 79,
+              "newStart": 80,
+              "lines": "CCCDACCCDDAACDDDDDDAAAAAACCC"
+            },
+            {
+              "oldStart": 105,
+              "newStart": 106,
+              "lines": "CCCDACCC"
+            },
+            {
+              "oldStart": 147,
+              "newStart": 148,
+              "lines": "CCCDACCC"
+            }
+          ],
+          "addedRanges": [
+            {
+              "start": 4,
+              "end": 4
+            },
+            {
+              "start": 83,
+              "end": 83
+            },
+            {
+              "start": 87,
+              "end": 88
+            },
+            {
+              "start": 90,
+              "end": 95
+            },
+            {
+              "start": 109,
+              "end": 109
+            },
+            {
+              "start": 151,
+              "end": 151
+            }
+          ]
+        }
+      },
+      "pullRequest": {
+        "user": {
+          "login": "google-labs-jules[bot]"
+        },
+        "head": {
+          "ref": "update-ci"
+        }
+      },
+      "signal": "author-login"
+    },
+    {
+      "provider": "Devin",
+      "observed": {
+        "pullRequest": "https://github.com/mythiipanda/dime/pull/759",
+        "number": 759,
+        "login": "devin-ai-integration[bot]",
+        "actorType": "Bot",
+        "headRef": "devin/1795769521-er-fixes",
+        "headCommit": "24f34acedf44de636ef0bb6343435edbddcc243f",
+        "baseRepository": "mythiipanda/dime",
+        "headRepository": "mythiipanda/dime",
+        "diff": {
+          "path": "backend/analyst/http.ts",
+          "status": "modified",
+          "hunks": [
+            {
+              "oldStart": 267,
+              "newStart": 267,
+              "lines": "CCCDACCC"
+            }
+          ],
+          "addedRanges": [
+            {
+              "start": 270,
+              "end": 270
+            }
+          ]
+        }
+      },
+      "pullRequest": {
+        "user": {
+          "login": "contributor"
+        },
+        "head": {
+          "ref": "devin/update-actions"
+        }
+      },
+      "signal": "branch-prefix"
+    }
+  ]
+}

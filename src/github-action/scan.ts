@@ -100,11 +100,15 @@ function diffAttribution(root: string, range: string, options: GitHubActionOptio
   );
 }
 
-async function scanDiffMode(root: string, options: GitHubActionOptions): Promise<ScanOutcome> {
+async function scanDiffMode(
+  root: string,
+  options: GitHubActionOptions,
+  compare: typeof diffWithBuiltIns,
+): Promise<ScanOutcome> {
   if (!options.diffRange) throw new Error("mode: diff needs the base and head refs of the pull request.");
   const requested = parseRange(options.diffRange);
   const refs = reviewRange(root, requested.base, requested.head);
-  const compared = await diffWithBuiltIns(root, refs.range);
+  const compared = await compare(root, refs.range);
   const findings = await reviewFindings(root, refs, compared.introduced);
   // The diff gate judges only what the PR introduces, so no baseline and no min-support run over the whole backlog.
   const result: ScanResult = {
@@ -174,11 +178,15 @@ async function scanPathsMode(
 }
 
 /** Scans the checked-out tree, one package path, or a pull request range, depending on the inputs. */
-export async function scanInMode(root: string, options: GitHubActionOptions): Promise<ScanOutcome> {
+export async function scanInMode(
+  root: string,
+  options: GitHubActionOptions,
+  compare: typeof diffWithBuiltIns = diffWithBuiltIns,
+): Promise<ScanOutcome> {
   if (options.sbom && (options.mode === "diff" || options.paths?.length)) {
     throw new Error("sbom requires scan mode and cannot be combined with paths.");
   }
-  if (options.mode === "diff") return scanDiffMode(root, options);
+  if (options.mode === "diff") return scanDiffMode(root, options, compare);
   if (options.paths && options.paths.length > 0) return scanPathsMode(root, options, options.paths);
   const scanned = await scanOneRoot(root, options);
   return { result: scanned.result, expiredFailure: scanned.expiredFailure };

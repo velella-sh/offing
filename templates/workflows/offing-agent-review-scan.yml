@@ -1,0 +1,17 @@
+name: Offing fork review signal
+
+# Install as .github/workflows/offing-agent-review-scan.yml.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions: {}
+
+jobs:
+  signal:
+    if: github.event.pull_request.head.repo.id != github.event.pull_request.base.repo.id && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Signal a fork pull request
+        run: "true"
