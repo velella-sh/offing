@@ -265,32 +265,32 @@ Moved to [Differential testing: Differential testing against Pluto](validation/d
 Precision is true positives over true positives plus false positives; recall is true positives over true positives plus false negatives. Both come from the last full corpus run recorded in [`benchmarks/thresholds.json`](../benchmarks/thresholds.json), so a reader can regenerate every number: run `npm run record:corpus-run`, then `npm run build:coverage`. The table below is generated; a test fails when it drifts from the recorded run. `nodejs` is the Node.js runtime rules served by the npm detector. A dash means the last full run did not score that detector.
 
 <!-- accuracy-tables:start -->
-Measured on 1638 pinned repositories at commit `2fcb395` on 2026-11-15. Regenerate with `npm run build:coverage` after `npm run record:corpus-run`.
+Measured on 1641 pinned repositories at commit `d3b9e53` on 2026-11-26. Regenerate with `npm run build:coverage` after `npm run record:corpus-run`.
 
 | Detector | Maturity | True positives | False positives | False negatives | Precision | Recall |
 | --- | --- | --- | --- | --- | --- | --- |
-| android | Supported | 89 | 0 | 0 | 1.000 | 1.000 |
+| android | Supported | 172 | 0 | 0 | 1.000 | 1.000 |
 | ci-images | Supported | 64 | 0 | 0 | 1.000 | 1.000 |
 | container | Supported | 1468 | 0 | 0 | 1.000 | 1.000 |
 | cpp | Supported | 276 | 0 | 0 | 1.000 | 1.000 |
 | dart | Supported | 140 | 0 | 0 | 1.000 | 1.000 |
 | database | Supported | 61 | 0 | 0 | 1.000 | 1.000 |
 | deno | Supported | 71 | 0 | 0 | 1.000 | 1.000 |
-| dotnet | Supported | 595 | 0 | 0 | 1.000 | 1.000 |
+| dotnet | Supported | 621 | 0 | 0 | 1.000 | 1.000 |
 | elixir | Supported | 86 | 0 | 0 | 1.000 | 1.000 |
-| github-actions | Supported | 4658 | 0 | 0 | 1.000 | 1.000 |
+| github-actions | Supported | 4663 | 0 | 0 | 1.000 | 1.000 |
 | go | Supported | 169 | 0 | 0 | 1.000 | 1.000 |
-| java | Supported | 74 | 0 | 0 | 1.000 | 1.000 |
+| java | Supported | 75 | 0 | 0 | 1.000 | 1.000 |
 | kubernetes | Supported | 186 | 0 | 0 | 1.000 | 1.000 |
-| nodejs | Supported | 824 | 0 | 0 | 1.000 | 1.000 |
+| nodejs | Supported | 825 | 0 | 0 | 1.000 | 1.000 |
 | npm | Supported | 161 | 0 | 0 | 1.000 | 1.000 |
 | php | Supported | 72 | 0 | 0 | 1.000 | 1.000 |
-| python | Supported | 238 | 0 | 0 | 1.000 | 1.000 |
-| ruby | Supported | 296 | 0 | 0 | 1.000 | 1.000 |
+| python | Supported | 241 | 0 | 0 | 1.000 | 1.000 |
+| ruby | Supported | 297 | 0 | 0 | 1.000 | 1.000 |
 | rust | Supported | 131 | 0 | 0 | 1.000 | 1.000 |
 | scala | Supported | 77 | 0 | 0 | 1.000 | 1.000 |
 | serverless | Supported | 195 | 0 | 0 | 1.000 | 1.000 |
-| shell | Beta | 210 | 0 | 0 | 1.000 | 1.000 |
+| shell | Beta | 211 | 0 | 0 | 1.000 | 1.000 |
 | swift | Supported | 75 | 0 | 0 | 1.000 | 1.000 |
 | terraform | Supported | 499 | 0 | 0 | 1.000 | 1.000 |
 <!-- accuracy-tables:end -->
