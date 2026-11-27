@@ -4,6 +4,11 @@ title: Launch kit
 
 # Launch kit
 
+For setup and support, use the [forecast guide](forecast-in-30-seconds.md),
+[guard guide](guard-in-one-command.md), [coding agent guides](../guides/index.md),
+[FAQ](FAQ.md), [Offing and Ebb overview](offing-and-ebb.md), and
+[troubleshooting guide](TROUBLESHOOTING.md).
+
 Ready-to-post drafts for the Offing launch. Every claim in these drafts is
 backed by a file in this repository; the [fact check](#fact-check) maps each
 claim to its source. Adjust the first-person opening, confirm the release tag,

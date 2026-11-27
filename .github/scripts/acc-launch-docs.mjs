@@ -1,0 +1,81 @@
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { delimiter, join, resolve } from "node:path";
+
+const [installed] = process.argv.slice(2);
+if (!installed) throw new Error("Usage: node acc-launch-docs.mjs <installed offing bin>");
+const bin = resolve(installed);
+const root = mkdtempSync(join(tmpdir(), "offing-launch-guides-"));
+const env = {
+  ...process.env,
+  EBB_DATA_DIR: join(root, "ebb"),
+  OFFING_CACHE_DIR: join(root, "cache"),
+  OFFING_DATA_VERSION: "bundled",
+};
+
+function run(cwd, args, status = 0, options = {}) {
+  const result = spawnSync(bin, args, { cwd, env, encoding: "utf8", timeout: 15_000, ...options });
+  if (result.error) throw result.error;
+  assert.equal(result.status, status, `${args.join(" ")}: ${result.stderr}`);
+  return result;
+}
+
+try {
+  const forecast = join(root, "forecast");
+  cpSync(new URL("../../examples/forecast/actions-before/", import.meta.url), forecast, { recursive: true });
+  const output = run(forecast, ["forecast", ".", "--as-of", "2026-08-01", "--months", "3"]).stdout;
+  assert.match(output, /Forecast from 2026-08-01 to 2026-11-01/);
+  assert.match(output, /github-actions\.checkout\.node20\)[^\n]*\n\s+\.github\/workflows\/build\.yml:7/);
+  assert.match(run(root, ["check", "pkg:npm/express@4.18.0", "--data-version", "bundled"]).stdout, /Status: no-data/);
+  assert.match(run(root, ["check", "pkg:npm/request@2.88.2", "--data-version", "bundled"], 1).stdout, /request is deprecated/);
+  assert.match(run(root, ["data", "status", "--data-version", "bundled"]).stdout, /Source: bundled/);
+  run(root, ["--version"]);
+  run(root, ["init", "--hooks", "--list"]);
+
+  const guardBin = join(root, "bin");
+  mkdirSync(guardBin);
+  writeFileSync(join(guardBin, "npm"), "#!/bin/sh\ntouch npm-ran\n", { mode: 0o755 });
+  const guard = run(root, ["guard", "--data-version", "bundled", "npm", "install", "--dry-run", "request@2.88.2"], 1, {
+    env: { ...env, PATH: `${guardBin}${delimiter}${env.PATH}` },
+  });
+  assert.match(guard.stderr, /refused to run npm[\s\S]*https:\/\/www\.npmjs\.com\/package\/request/);
+  assert.equal(existsSync(join(root, "npm-ran")), false);
+
+  for (const [host, file] of [
+    ["claude-code", ".claude/settings.json"],
+    ["codex", ".codex/hooks.json"],
+    ["cursor", ".cursor/hooks.json"],
+  ]) {
+    const project = join(root, host);
+    mkdirSync(project);
+    run(project, ["init", "--hooks-for", host]);
+    const config = join(project, file);
+    const cursor = host === "cursor";
+    const event = cursor ? "preToolUse" : "PreToolUse";
+    const { hooks } = JSON.parse(readFileSync(config, "utf8"));
+    for (const hookEvent of [event, cursor ? "afterFileEdit" : "PostToolUse"]) {
+      const entries = cursor ? hooks[hookEvent] : hooks[hookEvent]?.flatMap((entry) => entry.hooks);
+      assert.ok(entries?.some(({ command }) => command === `offing hook ${host}`), `${host}: ${hookEvent}`);
+    }
+    const codex = host === "codex";
+    const input = JSON.stringify({
+      cwd: project,
+      hook_event_name: event,
+      tool_name: codex ? "apply_patch" : "Write",
+      tool_input: codex
+        ? { command: "*** Begin Patch\n*** Add File: test.js\n+const value = new Buffer(9);\n*** End Patch" }
+        : { file_path: "test.js", content: "const value = new Buffer(9);" },
+    });
+    const result = run(project, ["hook", host], cursor ? 0 : 2, { input });
+    if (cursor) assert.equal(JSON.parse(result.stdout).permission, "deny");
+    assert.match(cursor ? result.stdout : result.stderr, /test\.js:1[\s\S]*Buffer\.alloc/, host);
+    assert.equal(existsSync(join(project, "test.js")), false);
+    run(project, ["init", "--hooks", "--remove", "--hooks-for", host]);
+    assert.ok(!readFileSync(config, "utf8").includes(`offing hook ${host}`), host);
+  }
+  console.log("acc-launch-docs: installed forecast, dependency refusal, data status, and three host setup/replay/removal flows passed");
+} finally {
+  rmSync(root, { recursive: true, force: true });
+}
