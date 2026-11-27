@@ -30,14 +30,14 @@ Usage:
   offing diff <base>..<head> [path] [--json]   # findings a change introduced or fixed; exit 1 only when it introduced some
   offing drift [path] [--json] [--check] [--runtime <id>] [--align <release>]   # report runtime versions that disagree; --align prints a patch and writes nothing
   offing drift [path] [--json] [--check] [--runtime <id>] [--align <release>]   # report every runtime version a repository states and whether they agree
-  offing receipt [path] --before <scan.json> [--format markdown|json] [--fail-on-introduced]   # what a change resolved, left, or introduced; never runs a command
+  offing receipt [path] --before <scan.json> [--format markdown|json|verify-result] [--fail-on-introduced]   # what a change resolved, left, or introduced; never runs a command
   offing scan [path] --by-owner [--json]   # group findings by CODEOWNERS owner; files with no owner are listed as unowned
   offing scan --sbom <file|-> [--json | --format <format>]   # scan a CycloneDX, SPDX or Syft JSON SBOM
   offing rollup <report.json>... [--owners <file>] [--json | --html]   # merge saved scan reports by product and owner; reads files only
   offing renovate-preset [path]   # print Renovate packageRules for replacements and runtime pins; does not edit config
   offing dependabot-config [path]   # print a dependabot.yml that groups updates for deprecated packages; does not write files
   offing fix [path] [--dry-run] [--json]   # print patches for deterministic fixes; nothing is written
-  offing fix [path] --branch               # apply the fixes on a local offing/fix branch and commit; never pushes
+  offing fix [path] --branch [--json]      # apply the fixes on a local offing/fix branch and commit; never pushes
   offing fix [path] --show [--branch] [--no-animation]   # play the fixes as a before-and-after view; nothing is written without --branch
   offing baseline [path] [--output <file>]
   offing check <purl> [--fail-on <severity|none>] [--json]

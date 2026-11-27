@@ -108,7 +108,15 @@ test("the commands with a narrow format set reject the others by name", async ()
   );
   assert.deepEqual(await gate("receipt", empty, "--format", "markdown"), []);
   assert.deepEqual(await gate("receipt", empty, "--format", "json"), []);
-  assert.equal(await rejection("receipt", empty, "--format", "text"), "receipt supports --format markdown|json only.");
+  assert.deepEqual(await gate("receipt", empty, "--format", "verify-result"), []);
+  assert.equal(
+    await rejection("scan", empty, "--format", "verify-result"),
+    "--format verify-result is only available for the receipt command.",
+  );
+  assert.equal(
+    await rejection("receipt", empty, "--format", "text"),
+    "receipt supports --format markdown|json|verify-result only.",
+  );
 });
 
 test("the scan-only formats reject other commands, with html also allowed for rollup", async () => {
@@ -129,7 +137,10 @@ test("the scan-only formats reject other commands, with html also allowed for ro
       format,
     );
   }
-  assert.equal(await rejection("receipt", empty, "--format", "html"), "receipt supports --format markdown|json only.");
+  assert.equal(
+    await rejection("receipt", empty, "--format", "html"),
+    "receipt supports --format markdown|json|verify-result only.",
+  );
   assert.deepEqual(await gate("rollup", empty, "--format", "html"), []);
   assert.deepEqual(await gate("scan", empty, "--format", "html"), []);
   // Mermaid answers for scan and forecast only, and the other scan-only list never sees it.

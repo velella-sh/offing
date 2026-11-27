@@ -177,11 +177,18 @@ export interface ScanCoverage {
   truncated?: boolean;
 }
 
+/** Producer and checked-out Git revision observed when a scan was taken. */
+export interface ScanIdentity {
+  commit: string | null;
+  offingVersion: string | null;
+}
+
 /** The complete result of scanning one repository. */
 export interface ScanResult {
   schemaVersion: "offing.scan.v1";
   root: string;
   scannedAt: string;
+  identity?: ScanIdentity;
   findings: Finding[];
   unclassified?: UnclassifiedSummary;
   diagnostics: string[];

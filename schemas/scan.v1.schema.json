@@ -57,6 +57,16 @@
         }
       }
     },
+    "identity": {
+      "type": "object",
+      "description": "Optional producer identity in a scan. A Git HEAD does not certify a clean checkout.",
+      "additionalProperties": false,
+      "required": ["commit", "offingVersion"],
+      "properties": {
+        "commit": { "type": ["string", "null"], "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+        "offingVersion": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
     "schemaVersion": {
       "const": "offing.scan.v1"
     },

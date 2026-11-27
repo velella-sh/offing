@@ -2,6 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://velella.sh/offing/schemas/verification.v1.schema.json",
   "title": "Offing migration verification v1",
+  "deprecated": true,
+  "$comment": "Deprecated in Offing 0.1.4. Use https://velella.sh/offing/schemas/verify-result.v1.schema.json for new integrations.",
   "type": "object",
   "required": ["schemaVersion", "repositoryRoot", "findingId", "verifiedAt", "verified", "commandsExecuted", "summary", "remainingFindings", "suggestedCommands"],
   "additionalProperties": false,
@@ -38,6 +40,15 @@
       "type": "string",
       "minLength": 1,
       "description": "The receipt rendered for a pull request body, with the offing-receipt marker."
+    },
+    "verifyResult": {
+      "description": "The verification contract for the same two scans, when it fits the tool answer.",
+      "$ref": "verify-result.v1.schema.json"
+    },
+    "verifyResultUnavailable": {
+      "type": "string",
+      "const": "tool-size-limit",
+      "description": "The full verification document was omitted to preserve its integrity. Use the CLI with the saved before scan."
     },
     "more": {
       "type": "object",

@@ -1,0 +1,1 @@
+- Add a versioned verification result for receipts, branch fixes, MCP, and pull request receipts.

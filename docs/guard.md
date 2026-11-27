@@ -5,7 +5,7 @@ description: Check npm and PyPI dependencies against local lifecycle data before
 
 # Guard package installs
 
-[Agent Guard v1](spec/agent-guard/v1.md) checks a proposed dependency or file
+[Agent Guard v1](https://velella.sh/offing/spec/agent-guard/v1/) checks a proposed dependency or file
 and returns a JSON decision with the reason and any known replacement and
 source. Use it when your tool or agent controls whether the operation runs.
 

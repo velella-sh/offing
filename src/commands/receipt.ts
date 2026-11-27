@@ -6,9 +6,10 @@ import type { ScanResult, Severity } from "../domain.js";
 import { severityValues } from "../domain.js";
 import { scanRepository } from "../engine/index.js";
 import { parseBoundedJson, readBoundedFile } from "../package-files.js";
-import { buildReceipt } from "../receipt.js";
+import { buildReceipt, type Receipt } from "../receipt.js";
 import { renderReceiptMarkdown } from "../receipt-markdown.js";
-import { afterGates, repositoryPhase } from "./runtime.js";
+import { buildVerifyResult, identifyScan, isGitCommit } from "../verify-result.js";
+import { afterGates, repositoryPhase, type Gated } from "./runtime.js";
 import type { CliCommand } from "./types.js";
 
 export const command: CliCommand = {
@@ -16,7 +17,7 @@ export const command: CliCommand = {
   flags: ["--before", "--format", "--fail-on-introduced", "--json"],
   example: "offing receipt . --before before.json",
   usage: [
-    "  offing receipt [path] --before <scan.json> [--format markdown|json] [--fail-on-introduced]   # what a change resolved, left, or introduced; never runs a command",
+    "  offing receipt [path] --before <scan.json> [--format markdown|json|verify-result] [--fail-on-introduced]   # what a change resolved, left, or introduced; never runs a command",
   ],
   usageSlots: [29],
   run(args, ctx) {
@@ -24,23 +25,16 @@ export const command: CliCommand = {
       const early = await repositoryPhase(state, ctx);
       if (early !== undefined) return early;
       const receiptUsage =
-        "Usage: offing receipt [path] --before <scan.json> [--format markdown|json] [--fail-on-introduced]";
+        "Usage: offing receipt [path] --before <scan.json> [--format markdown|json|verify-result] [--fail-on-introduced]";
       const beforeIndex = state.args.indexOf("--before");
       const beforePath = beforeIndex === -1 ? undefined : state.args[beforeIndex + 1];
       if (beforePath === undefined || beforePath.startsWith("-")) return ctx.fail("usage", receiptUsage);
       if (state.positional.length > 1) return ctx.fail("usage", receiptUsage);
       const before = await readReceiptBaseline(resolve(beforePath));
       if (typeof before === "string") return ctx.fail("usage", `Cannot use --before: ${before}`, `\n${receiptUsage}`);
-      const receipt = buildReceipt(
-        before,
-        await scanRepository(resolve(state.pathArgument), builtInDetectors, { noCache: state.noCache }),
-      );
-      const reproduce = ["offing", "receipt", shellWord(state.pathArgument), "--before", shellWord(beforePath)].join(
-        " ",
-      );
-      process.stdout.write(
-        state.json ? `${JSON.stringify(receipt, null, 2)}\n` : renderReceiptMarkdown(receipt, { reproduce }),
-      );
+      const after = await scanRepository(resolve(state.pathArgument), builtInDetectors, { noCache: state.noCache });
+      const receipt = buildReceipt(before, after);
+      process.stdout.write(await renderRequestedReceipt(state, beforePath, receipt, before, after));
       if (state.args.includes("--fail-on-introduced") && receipt.counts.introduced > 0) {
         return ctx.fail(
           "policy",
@@ -51,6 +45,21 @@ export const command: CliCommand = {
     });
   },
 };
+
+async function renderRequestedReceipt(
+  state: Gated,
+  beforePath: string,
+  receipt: Receipt,
+  before: ScanResult,
+  after: ScanResult,
+): Promise<string> {
+  const verification = state.format === "verify-result";
+  if (!verification && state.json) return `${JSON.stringify(receipt, null, 2)}\n`;
+  const verifyResult = buildVerifyResult(receipt, before, await identifyScan(after));
+  if (verification) return `${JSON.stringify(verifyResult, null, 2)}\n`;
+  const reproduce = ["offing", "receipt", shellWord(state.pathArgument), "--before", shellWord(beforePath)].join(" ");
+  return renderReceiptMarkdown(receipt, { reproduce, verifyResult });
+}
 
 /** A path as a shell word, relative to the working directory so the reproduce line never carries an absolute path. */
 function shellWord(path: string): string {
@@ -125,6 +134,14 @@ function scanDataProblem(value: unknown): string | undefined {
   return undefined;
 }
 
+function isScanIdentity(value: unknown): boolean {
+  return (
+    isJsonObject(value) &&
+    (value.commit === null || isGitCommit(value.commit)) &&
+    (value.offingVersion === null || (typeof value.offingVersion === "string" && value.offingVersion.length > 0))
+  );
+}
+
 /** Why a document is not an `offing.scan.v1` report, or undefined when it matches the contract. */
 function scanReportProblem(value: unknown): string | undefined {
   if (!isJsonObject(value)) return "the document is not a JSON object.";
@@ -139,6 +156,7 @@ function scanReportProblem(value: unknown): string | undefined {
     const problem = scanFindingProblem(value.findings[index]);
     if (problem !== undefined) return `findings[${index}] ${problem}`;
   }
+  if (value.identity !== undefined && !isScanIdentity(value.identity)) return `"identity" is not a scan identity.`;
   if (value.data !== undefined) {
     const problem = scanDataProblem(value.data);
     if (problem !== undefined) return problem;
