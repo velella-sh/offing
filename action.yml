@@ -115,6 +115,10 @@ inputs:
       contents: write and pull-requests: write permissions on the job.
     required: false
     default: "false"
+  fix-pr-labels:
+    description: Comma-separated existing repository labels to add when creating or updating the fix pull request.
+    required: false
+    default: ""
   suggest-fixes:
     description: >-
       Post one pull request review whose suggestion blocks apply the deterministic fixes for findings on
@@ -188,6 +192,12 @@ outputs:
   sarif-path:
     description: Absolute runner path to the generated SARIF file, or empty unless sarif or upload-sarif is true.
     value: ${{ steps.scan.outputs.sarif-path }}
+  fix-pr-url:
+    description: URL of the fix pull request opened, updated, or closed by this run, or empty if none was changed.
+    value: ${{ steps.scan.outputs.fix-pr-url }}
+  fix-pr-number:
+    description: Decimal number of the fix pull request opened, updated, or closed by this run, or empty if none was changed.
+    value: ${{ steps.scan.outputs.fix-pr-number }}
 
 runs:
   using: composite
@@ -218,6 +228,7 @@ runs:
         INPUT_AGENT-AUTHORS: ${{ inputs.agent-authors }}
         INPUT_COMMANDS: ${{ inputs.commands }}
         INPUT_FIX-PR: ${{ inputs.fix-pr }}
+        INPUT_FIX-PR-LABELS: ${{ inputs.fix-pr-labels }}
         INPUT_TRACKING-ISSUE: ${{ inputs.tracking-issue }}
         INPUT_GITHUB-TOKEN: ${{ inputs.github-token }}
         INPUT_ATTRIBUTION: ${{ inputs.attribution }}
@@ -259,5 +270,13 @@ runs:
       with:
         name: offing-pr-receipt
         path: ${{ steps.scan.outputs.receipt-path }}
+        if-no-files-found: error
+        retention-days: 14
+    - name: Upload fix pull request evidence
+      if: always() && steps.scan.outputs.fix-pr-artifact-path != ''
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: offing-fix-pr-${{ github.run_attempt }}
+        path: ${{ steps.scan.outputs.fix-pr-artifact-path }}
         if-no-files-found: error
         retention-days: 14
