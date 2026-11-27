@@ -46,6 +46,11 @@ jobs:
           mv sbom.enriched.json sbom.cdx.json
       - name: Validate the SBOM against the CycloneDX schema and the release tree
         run: node .github/scripts/release-sbom.mjs check sbom.cdx.json --tree npm-tree.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: lifecycle-release-sbom
+          path: sbom.cdx.json
+          if-no-files-found: error
       - name: Generate and validate the VEX file from security/vex
         run: |
           node .github/scripts/release-vex.mjs generate --sbom sbom.cdx.json --statements security/vex --output vex.cdx.json
@@ -86,3 +91,23 @@ jobs:
       - name: Record dry-run stage
         if: inputs.dry_run
         run: echo "Publish stage (SBOM) generated and validated sbom.cdx.json and vex.cdx.json; nothing was attached." >> "$GITHUB_STEP_SUMMARY"
+
+  attest:
+    needs: sbom
+    uses: ./.github/workflows/release-attest.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    permissions:
+      contents: write
+      attestations: write
+      id-token: write
+    with:
+      dry_run: ${{ inputs.dry_run }}
+
+  verify-attestation:
+    needs: attest
+    if: ${{ !cancelled() && needs.attest.result == 'success' }}
+    uses: ./.github/workflows/release-verify.yml # zizmor: ignore[self-repository] -- it calls a stage of this same release pipeline
+    with:
+      dry_run: ${{ inputs.dry_run }}
+      run_notes: false
+      run_reproducible: false
+      run_lifecycle: true

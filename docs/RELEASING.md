@@ -208,7 +208,11 @@ cosign verify-blob \
   sbom.cdx.json
 ```
 
-A manual run with `dry_run` on generates and validates the SBOM and attaches nothing.
+A manual run with `dry_run` on generates and validates the SBOM.
+
+### Lifecycle attestation
+
+The release uses the SBOM to generate one [lifecycle attestation](ATTESTATION.md) for its npm tarball and five standalone binaries. The signed `lifecycle.intoto.json`, `lifecycle.sigstore.json`, `lifecycle-subjects.sha256`, and `lifecycle-evidence.sha256` accompany the release. A fresh consumer job downloads the published bytes, checks the exact tag and workflow identity with the GitHub CLI and Cosign, then verifies the lifecycle contract and subject digests independently. The release dry run exercises the unsigned statement against its candidate tarball and Linux x64 binary.
 
 ### VEX statements
 

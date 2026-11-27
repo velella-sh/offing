@@ -38,6 +38,7 @@ complete -c offing -n __fish_use_subcommand -a doctor
 complete -c offing -n __fish_use_subcommand -a report-issue
 complete -c offing -n __fish_use_subcommand -a capabilities
 complete -c offing -n __fish_use_subcommand -a completions
+complete -c offing -n __fish_use_subcommand -a attest
 complete -c offing -n __fish_use_subcommand -a config
 complete -c offing -n __fish_use_subcommand -a drivers
 complete -c offing -n __fish_use_subcommand -a fleet
@@ -57,6 +58,7 @@ complete -c offing -n __fish_use_subcommand -l version
 complete -c offing -n '__fish_seen_subcommand_from completions' -a 'bash zsh fish'
 complete -c offing -n '__fish_seen_subcommand_from data' -a 'status update'
 complete -c offing -n '__fish_seen_subcommand_from watch' -a 'add remove run list'
+complete -c offing -n '__fish_seen_subcommand_from attest' -a 'check'
 complete -c offing -n '__fish_seen_subcommand_from config' -a 'validate'
 complete -c offing -n '__fish_seen_subcommand_from drivers' -a 'list test'
 complete -c offing -n '__fish_seen_subcommand_from policy' -a 'validate explain pull'
@@ -202,6 +204,10 @@ complete -c offing -n '__fish_seen_subcommand_from doctor' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from report-issue' -l output
 complete -c offing -n '__fish_seen_subcommand_from report-issue' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from capabilities' -l json
+complete -c offing -n '__fish_seen_subcommand_from attest' -l subject
+complete -c offing -n '__fish_seen_subcommand_from attest' -l sbom
+complete -c offing -n '__fish_seen_subcommand_from attest' -l data-version
+complete -c offing -n '__fish_seen_subcommand_from attest' -l today
 complete -c offing -n '__fish_seen_subcommand_from config' -l json
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l include
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l exclude

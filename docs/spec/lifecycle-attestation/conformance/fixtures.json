@@ -1,0 +1,253 @@
+{
+  "artifact": "lifecycle attestation conformance\n",
+  "today": "2024-03-01",
+  "statement": {
+    "_type": "https://in-toto.io/Statement/v1",
+    "subject": [
+      {
+        "name": "fixture.bin",
+        "digest": {
+          "sha256": "2015aad1c8c1f44b0cda0a6df360e10a61b3bf9368cfbc43f91bcb11ba797967"
+        }
+      }
+    ],
+    "predicateType": "https://velella.sh/offing/attestation/v1/",
+    "predicate": {
+      "builtOn": "2024-02-28",
+      "offingVersion": "0.1.9",
+      "ebb": {
+        "version": "2024.02.28",
+        "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "input": "sbom",
+      "components": [
+        {
+          "purl": "pkg:npm/request",
+          "version": "2.88.2",
+          "status": "affected",
+          "rules": [
+            {
+              "ruleId": "npm.package.request.eol",
+              "event": "end-of-life",
+              "date": "2024-02-29",
+              "daysLeftAtBuild": 1,
+              "sources": [
+                "https://example.com/fixture/lifecycle"
+              ],
+              "replacement": "fetch"
+            },
+            {
+              "ruleId": "npm.package.request.deprecated",
+              "event": "deprecated",
+              "sources": [
+                "https://example.com/fixture/lifecycle"
+              ]
+            }
+          ]
+        },
+        {
+          "purl": "pkg:github/actions/checkout",
+          "version": "4",
+          "status": "not-affected",
+          "rules": []
+        }
+      ],
+      "noData": [
+        {
+          "purl": "pkg:npm/not-in-registry",
+          "version": "1.0.0"
+        },
+        {
+          "name": "component without PURL",
+          "location": "/components/3"
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "name": "valid build snapshot and leap-day re-evaluation",
+      "valid": true,
+      "expectedDaysLeft": -1,
+      "replacements": []
+    },
+    {
+      "name": "valid observation-free snapshot",
+      "valid": true,
+      "replacements": [
+        {
+          "path": [
+            "predicate",
+            "components"
+          ],
+          "value": []
+        },
+        {
+          "path": [
+            "predicate",
+            "noData"
+          ],
+          "value": []
+        }
+      ]
+    },
+    {
+      "name": "wrong statement type",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "_type"
+          ],
+          "value": "https://in-toto.io/Statement/v0.1"
+        }
+      ]
+    },
+    {
+      "name": "wrong predicate type",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "predicateType"
+          ],
+          "value": "https://example.com/wrong"
+        }
+      ]
+    },
+    {
+      "name": "short subject digest",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "subject",
+            0,
+            "digest",
+            "sha256"
+          ],
+          "value": "beef"
+        }
+      ]
+    },
+    {
+      "name": "nonexistent UTC date",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "predicate",
+            "builtOn"
+          ],
+          "value": "2024-02-30"
+        }
+      ]
+    },
+    {
+      "name": "invalid Ebb digest",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "predicate",
+            "ebb",
+            "digest"
+          ],
+          "value": "anything"
+        }
+      ]
+    },
+    {
+      "name": "inconsistent build-time day count",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "predicate",
+            "components",
+            0,
+            "rules",
+            0,
+            "daysLeftAtBuild"
+          ],
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "missing paired day count",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "predicate",
+            "components",
+            0,
+            "rules",
+            0,
+            "daysLeftAtBuild"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "untrusted URL scheme",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "predicate",
+            "components",
+            0,
+            "rules",
+            0,
+            "sources"
+          ],
+          "value": [
+            "http://example.com/evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "unexpected property in no-data observation",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "predicate",
+            "noData",
+            0,
+            "status"
+          ],
+          "value": "safe"
+        }
+      ]
+    },
+    {
+      "name": "duplicated component rule",
+      "valid": false,
+      "replacements": [
+        {
+          "path": [
+            "predicate",
+            "components",
+            0,
+            "rules",
+            1
+          ],
+          "value": {
+            "ruleId": "npm.package.request.eol",
+            "event": "end-of-life",
+            "date": "2024-02-29",
+            "daysLeftAtBuild": 1,
+            "sources": [
+              "https://example.com/fixture/lifecycle"
+            ],
+            "replacement": "fetch"
+          }
+        }
+      ]
+    }
+  ]
+}
