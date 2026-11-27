@@ -1,7 +1,7 @@
 // Stage 1 — discover: which repository files exist, which detectors claim them, and what a
 // zero-finding scan can say about coverage.
 
-import { join, resolve } from "node:path";
+import { join, relative, resolve } from "node:path";
 
 import { declaresInput, trimTrailingSlashes } from "../detector-inputs.js";
 import { COVERAGE_WALK_LIMIT } from "../domain.js";
@@ -115,8 +115,17 @@ async function listCoverageFiles(
 }
 
 /** Repository-relative paths under `root`, skipping build and vendor directories. */
-export async function listRepositoryFiles(root: string, fileSystem: ScanFileSystem): Promise<string[]> {
+export async function listRepositoryFiles(
+  root: string,
+  fileSystem: ScanFileSystem,
+  excludedDirectory?: string,
+): Promise<string[]> {
   const files: string[] = [];
+  const physicalPath = (path: string) => fileSystem.realPath?.(path).catch(() => path) ?? path;
+  const excluded =
+    excludedDirectory === undefined
+      ? undefined
+      : resolve(root, relative(await physicalPath(root), await physicalPath(excludedDirectory)));
   const walk = async (directory: string, prefix: string): Promise<void> => {
     let entries;
     try {
@@ -130,8 +139,9 @@ export async function listRepositoryFiles(root: string, fileSystem: ScanFileSyst
     entries.sort((left, right) => (left.name < right.name ? -1 : left.name > right.name ? 1 : 0));
     for (const entry of entries) {
       if (entry.isDirectory()) {
-        if (!SCAN_SKIPPED_DIRECTORIES.has(entry.name)) {
-          await walk(join(directory, entry.name), childPosixPath(prefix, entry.name));
+        const path = join(directory, entry.name);
+        if (path !== excluded && !SCAN_SKIPPED_DIRECTORIES.has(entry.name)) {
+          await walk(path, childPosixPath(prefix, entry.name));
         }
         continue;
       }

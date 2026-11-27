@@ -8,7 +8,7 @@ export const command: CliCommand = {
   usageSlots: [41],
   async run() {
     // The MCP server owns stdin and stdout until the host disconnects, so there is no exit code to return.
-    (await import("../mcp-server.js")).startMcpServer();
+    await (await import("../mcp-server.js")).startMcpServer();
     return await new Promise<number>(() => undefined);
   },
 };

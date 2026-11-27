@@ -16,6 +16,7 @@ import { registerRecommendVersion } from "./tools/recommend-version.js";
 import { registerScanRepository } from "./tools/scan-repository.js";
 import { registerScanSbom } from "./tools/scan-sbom.js";
 import { registerSimulateUpgrade } from "./tools/simulate-upgrade.js";
+import { registerStackContext } from "./tools/stack-context.js";
 import { registerVerifyMigration } from "./tools/verify-migration.js";
 
 /**
@@ -39,6 +40,7 @@ export const MCP_TOOL_REGISTRARS = [
   registerImageLineage,
   registerSimulateUpgrade,
   registerCampaignStatus,
+  registerStackContext,
 ] as const;
 
 /** Registers every MCP tool on the server. */

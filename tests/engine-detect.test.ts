@@ -6,12 +6,18 @@ import { after, afterEach, beforeEach, test } from "node:test";
 import { configureActiveData } from "@velella/ebb/data-source";
 import {
   CROSS_FILE_DETECTORS,
+  cachedRepositoryFindings,
   defaultConfidence,
   fileHashReader,
   scanRepository,
   shouldDisableCacheForDetector,
 } from "../src/engine/index.js";
-import { buildRepoFileIndex, contentHashesEqual, fingerprintsEqual } from "../src/engine/detect.js";
+import {
+  buildRepoFileIndex,
+  contentHashesEqual,
+  fingerprintsEqual,
+  readCurrentDetections,
+} from "../src/engine/detect.js";
 import { nodeFileSystem } from "../src/node-file-system.js";
 import { computeFileHash, ScanCache } from "../src/scan-cache.js";
 import type { DetectorManifest } from "../src/scan-cache.js";
@@ -79,6 +85,79 @@ test("contentHashesEqual requires matching length, path, and hash", () => {
   assert.equal(contentHashesEqual([], live), false);
   assert.equal(contentHashesEqual([{ path: "b.json", hash: "abc" }], live), false);
   assert.equal(contentHashesEqual([{ path: "a.json", hash: "zzz" }], live), false);
+});
+
+test("current detector cache reads are complete, read-only, and keyed to content", async () => {
+  const root = await scratch("current-detections");
+  const cache = new ScanCache(await scratch("current-detections-cache"));
+  const scannedAt = "2026-11-27T00:00:00.000Z";
+  const dataVersion = "fixture";
+  const path = "package.json";
+  const input = join(root, path);
+  await writeFile(input, "{}");
+  const neverScan = async () => assert.fail("reading cached evidence must not run a detector");
+  const observed = detectorOf("observed", { inputs: { fileNames: [path] }, scan: neverScan });
+  const empty = detectorOf("empty", { inputs: { fileNames: ["unused.json"] }, scan: neverScan });
+  const uncached = detectorOf("uncached", { scan: neverScan });
+  const low = findingOf({ id: "warn", detector: observed.id, location: { path } });
+  const high = findingOf({ id: "error", detector: observed.id, severity: "high", location: { path } });
+  const findings = [low, high];
+  const unclassified = [
+    { detector: observed.id, component: "tool", reference: "unknown", reason: "missing rule", location: { path } },
+  ];
+  const detectors = [empty, observed, uncached];
+  const read = () =>
+    readCurrentDetections(detectors, {
+      context: { root, scannedAt },
+      root,
+      repoFiles: [path],
+      cache,
+      fileSystem: nodeFileSystem,
+      dataVersion,
+      noCache: false,
+      getFileHash: fileHashReader(root, nodeFileSystem),
+    });
+  const readFindings = () => cachedRepositoryFindings(root, detectors, cache, scannedAt, dataVersion);
+
+  assert.equal(await read(), undefined);
+  await cache.setDetectorManifest(root, {
+    detectorId: observed.id,
+    detectorVersion: detectorVersionOf(observed),
+    dataVersion,
+    files: [{ path, hash: computeFileHash("{}") }],
+    findings,
+    unclassified,
+  });
+  assert.deepEqual(await read(), [
+    { findings: [], unclassified: [] },
+    { findings, unclassified },
+  ]);
+  assert.deepEqual(await readFindings(), [high, low]);
+  await writeFile(input, "[]");
+  assert.equal(await read(), undefined);
+  assert.equal(await readFindings(), undefined);
+});
+
+test("a fully reused per-file entry recreates the aggregate cache for a different workspace", async () => {
+  const original = await scratch("per-file-original");
+  const clone = await scratch("per-file-clone");
+  const cache = new ScanCache(await scratch("per-file-cache"));
+  await Promise.all([writeFile(join(original, "marker.txt"), "same"), writeFile(join(clone, "marker.txt"), "same")]);
+  let scans = 0;
+  const detector = detectorOf("cloned", {
+    inputs: { fileNames: ["marker.txt"] },
+    async scan() {
+      scans += 1;
+      return [detectorFinding("marker.txt")];
+    },
+  });
+  const dataVersion = "fixture";
+  const initial = await scanRepository(original, [detector], { cache, dataVersion });
+  const reused = await scanRepository(clone, [detector], { cache, dataVersion });
+  assert.equal(scans, 1);
+  assert.deepEqual(reused.findings, initial.findings);
+  const manifest = await cache.getDetectorManifest(clone, detector.id, detectorVersionOf(detector), dataVersion);
+  assert.deepEqual(manifest?.findings, reused.findings);
 });
 
 test("a detector directory with a long run of slashes is checked in linear time", () => {

@@ -175,7 +175,8 @@ test("merging into an existing file keeps every entry, prints a diff, and leaves
   const written = JSON.parse(await readFile(join(root, COPILOT_HOOKS_FILE), "utf8")) as {
     hooks: Record<string, unknown[]>;
   };
-  assert.equal(written.hooks.sessionStart!.length, 1);
+  assert.equal(written.hooks.sessionStart!.length, 2);
+  assert.deepEqual(written.hooks.sessionStart![0], { type: "command", bash: "echo session started", timeoutSec: 5 });
   assert.equal(written.hooks.postToolUse!.length, 2);
   assert.match(result.diff, /^--- a\/\.github\/hooks\/offing\.json\n\+\+\+ b\/\.github\/hooks\/offing\.json/);
   assert.equal(await readFile(join(root, ".github/copilot-instructions.md"), "utf8"), instructions);

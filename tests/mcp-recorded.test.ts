@@ -76,7 +76,15 @@ function stable(value: unknown, root: string): unknown {
   }
   if (value === null || typeof value !== "object") return value;
   if (isDataDescription(value)) return `<data: ${Object.keys(value).sort().join(", ")}>`;
-  return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, stable(item, root)]));
+  const stackContext = "schemaVersion" in value && value.schemaVersion === "offing.stack-context.v1";
+  return Object.fromEntries(
+    Object.entries(value).map(([key, item]) => [
+      key,
+      stackContext && key === "asOf" && typeof item === "string" && isIsoDate(item)
+        ? "<current day>"
+        : stable(item, root),
+    ]),
+  );
 }
 
 /** Checks that a recorded call names a tool and carries no path of the machine the recording was written on. */

@@ -130,6 +130,33 @@ export async function detectAll(detectors: readonly Detector[], options: DetectO
   return Promise.all(detectors.map(async (detector) => detectOne(detector, withIndex)));
 }
 
+/** Reuse only detector manifests whose current inputs are byte-for-byte identical. */
+export async function readCurrentDetections(
+  detectors: readonly Detector[],
+  options: DetectOptions,
+): Promise<DetectorResult[] | undefined> {
+  const indexed = { ...options, fileIndex: buildRepoFileIndex(options.repoFiles) };
+  const results = await Promise.all(
+    detectors
+      .filter((detector) => !shouldDisableCacheForDetector(detector))
+      .map(async (detector) => {
+        const files = inputFiles(detector, indexed);
+        if (files.length === 0) return { findings: [], unclassified: [] };
+        const version = detectorVersion(detector);
+        const manifest = await options.cache.getDetectorManifest(
+          options.root,
+          detector.id,
+          version,
+          options.dataVersion,
+        );
+        if (manifest === undefined || !contentHashesMatch(manifest, await describeFiles(files, options)))
+          return undefined;
+        return { findings: [...manifest.findings], unclassified: [...manifest.unclassified] };
+      }),
+  );
+  return results.every((result) => result !== undefined) ? results : undefined;
+}
+
 async function detectOne(detector: Detector, options: DetectOptions): Promise<DetectorResult> {
   assertDetectorCompatible(detector);
   if (options.noCache || shouldDisableCacheForDetector(detector)) {
@@ -336,13 +363,14 @@ async function detectPerFile(
   version: string,
 ): Promise<DetectorResult> {
   const { cached, changed } = await readCachedFiles(detector, options, version, descriptors);
-  if (changed.length === 0) return cached;
   const fresh =
-    changed.length === descriptors.length
-      ? await analyzeDetector(detector, options.context)
-      : await analyzeSubset(detector, options, changed);
-  await cacheFiles(detector, options, version, changed, fresh);
-  const result = mergeResults(cached, fresh);
+    changed.length === 0
+      ? undefined
+      : changed.length === descriptors.length
+        ? await analyzeDetector(detector, options.context)
+        : await analyzeSubset(detector, options, changed);
+  if (fresh !== undefined) await cacheFiles(detector, options, version, changed, fresh);
+  const result = fresh === undefined ? cached : mergeResults(cached, fresh);
   await options.cache.setDetectorManifest(options.root, {
     detectorId: detector.id,
     detectorVersion: version,

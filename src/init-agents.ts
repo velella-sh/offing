@@ -143,34 +143,53 @@ function initJsonHook(
   file: string,
   spec: HookJson,
   merge: HookMerge,
-  beforeWrite?: HookJson,
+  additionalHooks: readonly HookJson[] = [],
 ): Promise<InitClaudeHooksResult> {
   return hookFileResult(options, file, (before) => {
     if (before === undefined && options.remove) return undefined;
     const text = before ?? "{}\n";
     const result = merge(parseHooksJson(text, file));
-    if (options.remove) return removeHook(beforeWrite ? removeHook(text, beforeWrite) : text, spec);
+    if (options.remove) {
+      const remaining = [...additionalHooks].reverse().reduce(removeHook, text);
+      return removeHook(remaining, spec);
+    }
     const post =
       before === undefined
         ? `${JSON.stringify(result.settings ?? result.hooks ?? result.document, null, 2)}\n`
         : result.change === "unchanged"
           ? before
           : insertHook(before, spec);
-    if (!beforeWrite) return post;
-    const updated = withPreWriteHook(post, file, beforeWrite);
+    if (additionalHooks.length === 0) return post;
+    const updated = additionalHooks.reduce((content, hook) => withManagedHook(content, file, hook), post);
     return before === undefined ? `${JSON.stringify(parseHooksJson(updated, file), null, 2)}\n` : updated;
   });
 }
 
-function withPreWriteHook(text: string, file: string, spec: HookJson): string {
+function withManagedHook(text: string, file: string, spec: HookJson): string {
   const document = parseHooksJson(text, file);
-  const hooks = isRecord(document) && isRecord(document.hooks) ? document.hooks : {};
-  const entries = hooks[spec.event];
+  const scope = isRecord(document) && spec.wrapped !== false ? document.hooks : document;
+  const entries = isRecord(scope) ? scope[spec.event] : undefined;
   if (entries !== undefined && !Array.isArray(entries)) {
     throw new AgentFileError(`${file} has a "hooks.${spec.event}" value that is not an array, so it was not changed.`);
   }
   if (entries?.some((entry) => isDeepStrictEqual(entry, spec.entry))) return text;
   return insertHook(text, spec);
+}
+
+function sessionStartSpec(host: string): HookJson {
+  const command = `offing hook session-start ${host}`;
+  switch (host) {
+    case "cursor":
+      return { event: "sessionStart", entry: { command } };
+    case "copilot":
+      return { event: "sessionStart", entry: { type: "command", command } };
+    case "gemini":
+      return { event: "SessionStart", entry: { hooks: [{ name: "offing-stack-context", type: "command", command }] } };
+    case "devin":
+      return { event: "SessionStart", wrapped: false, entry: { hooks: [{ type: "command", command }] } };
+    default:
+      return { event: "SessionStart", entry: { hooks: [{ type: "command", command }] } };
+  }
 }
 
 /** Recognizes a hook this command wrote, however its launcher is spelled (`npx … offing`, a global bin, a path). */
@@ -231,10 +250,10 @@ export function withClaudeCodePostToolUse(settings: unknown): {
 
 /** Writes or merges the Claude Code post-edit hook into `.claude/settings.json`, preserving the user's hooks. */
 export async function initClaudeHooks(options: InitClaudeHooksOptions): Promise<InitClaudeHooksResult> {
-  return initJsonHook(options, CLAUDE_CODE_SETTINGS_FILE, CLAUDE_HOOK_SPEC, withClaudeCodePostToolUse, {
-    ...CLAUDE_HOOK_SPEC,
-    event: "PreToolUse",
-  });
+  return initJsonHook(options, CLAUDE_CODE_SETTINGS_FILE, CLAUDE_HOOK_SPEC, withClaudeCodePostToolUse, [
+    { ...CLAUDE_HOOK_SPEC, event: "PreToolUse" },
+    sessionStartSpec("claude-code"),
+  ]);
 }
 
 export const CODEX_HOOKS_FILE = ".codex/hooks.json";
@@ -296,10 +315,10 @@ export function withCodexPostToolUse(hooks: unknown): {
  * (<https://learn.chatgpt.com/docs/hooks>), preserving the user's hooks. The home directory is never touched.
  */
 export async function initCodexHooks(options: InitCodexHooksOptions): Promise<InitCodexHooksResult> {
-  return initJsonHook(options, CODEX_HOOKS_FILE, CODEX_HOOK_SPEC, withCodexPostToolUse, {
-    ...CODEX_HOOK_SPEC,
-    event: "PreToolUse",
-  });
+  return initJsonHook(options, CODEX_HOOKS_FILE, CODEX_HOOK_SPEC, withCodexPostToolUse, [
+    { ...CODEX_HOOK_SPEC, event: "PreToolUse" },
+    sessionStartSpec("codex"),
+  ]);
 }
 
 export const CURSOR_HOOKS_FILE = ".cursor/hooks.json";
@@ -372,10 +391,10 @@ export function withCursorAfterFileEdit(document: unknown): {
  * the hook itself only audits to stderr. The home directory is never touched.
  */
 export async function initCursorHooks(options: InitCursorHooksOptions): Promise<InitCursorHooksResult> {
-  const hooks = await initJsonHook(options, CURSOR_HOOKS_FILE, CURSOR_HOOK_SPEC, withCursorAfterFileEdit, {
-    event: "preToolUse",
-    entry: { ...CURSOR_HOOK_SPEC.entry, matcher: "Write|Edit|StrReplace" },
-  });
+  const hooks = await initJsonHook(options, CURSOR_HOOKS_FILE, CURSOR_HOOK_SPEC, withCursorAfterFileEdit, [
+    { event: "preToolUse", entry: { ...CURSOR_HOOK_SPEC.entry, matcher: "Write|Edit|StrReplace" } },
+    sessionStartSpec("cursor"),
+  ]);
   const rule = options.remove
     ? { file: CURSOR_RULES_FILE, change: "unchanged" as const, written: false, diff: "" }
     : await updateAgentFile(resolve(options.root), CURSOR_RULES_FILE, {
@@ -457,7 +476,9 @@ export function withGeminiAfterTool(settings: unknown): {
  * and hooks. The home directory is never touched.
  */
 export async function initGeminiHooks(options: InitGeminiHooksOptions): Promise<InitGeminiHooksResult> {
-  return initJsonHook(options, GEMINI_SETTINGS_FILE, GEMINI_HOOK_SPEC, withGeminiAfterTool);
+  return initJsonHook(options, GEMINI_SETTINGS_FILE, GEMINI_HOOK_SPEC, withGeminiAfterTool, [
+    sessionStartSpec("gemini"),
+  ]);
 }
 
 export const COPILOT_HOOKS_FILE = ".github/hooks/offing.json";
@@ -535,7 +556,9 @@ export function withCopilotPostToolUse(document: unknown): {
  * `offing setup` writes stays untouched.
  */
 export async function initCopilotHooks(options: InitCopilotHooksOptions): Promise<InitCopilotHooksResult> {
-  return initJsonHook(options, COPILOT_HOOKS_FILE, COPILOT_HOOK_SPEC, withCopilotPostToolUse);
+  return initJsonHook(options, COPILOT_HOOKS_FILE, COPILOT_HOOK_SPEC, withCopilotPostToolUse, [
+    sessionStartSpec("copilot"),
+  ]);
 }
 
 export const CLINE_HOOKS_FILE = ".clinerules/hooks/PostToolUse";
@@ -566,6 +589,22 @@ export async function initClineHooks(options: InitClineHooksOptions): Promise<In
           `${CLINE_HOOKS_FILE} already holds a hook Offing did not write, so it was not changed. Add "${CLINE_HOOK_COMMAND}" to it yourself.`,
         );
       return CLINE_HOOK_SCRIPT;
+    },
+    0o755,
+  );
+}
+
+/** Cline has one executable per event. Leave existing user scripts intact. */
+export function initClineSessionStart(options: InitClineHooksOptions): Promise<InitClineHooksResult> {
+  const file = ".clinerules/hooks/TaskStart";
+  const noOp = "#!/usr/bin/env bash\n";
+  const script = `${noOp}exec offing hook session-start cline\n`;
+  return hookFileResult(
+    options,
+    file,
+    (before) => {
+      if (options.remove) return before === script ? noOp : before;
+      return before === undefined || before === noOp ? script : undefined;
     },
     0o755,
   );
@@ -633,7 +672,7 @@ export function withDevinPostToolUse(document: unknown): {
  * events and hooks. The home directory is never touched.
  */
 export async function initDevinHooks(options: InitDevinHooksOptions): Promise<InitDevinHooksResult> {
-  return initJsonHook(options, DEVIN_HOOKS_FILE, DEVIN_HOOK_SPEC, withDevinPostToolUse);
+  return initJsonHook(options, DEVIN_HOOKS_FILE, DEVIN_HOOK_SPEC, withDevinPostToolUse, [sessionStartSpec("devin")]);
 }
 
 export async function initAgents(options: InitAgentsOptions): Promise<InitAgentsResult> {
