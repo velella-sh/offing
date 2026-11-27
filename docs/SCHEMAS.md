@@ -100,7 +100,13 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/finding" label="Lifecycle finding fields"}
 
-### Fix plan
+### Fleet policy
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/fleet-policy.v1.schema.json)
+
+::schema-table{data="publicSchemas/fleet-policy" label="Organization fleet policy fields"}
+
+## Fix plan
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/fix.v1.schema.json)
 

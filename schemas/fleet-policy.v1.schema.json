@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/fleet-policy.v1.schema.json",
+  "title": "Offing fleet policy v1",
+  "description": "Organization lifecycle rules, team layers, and delegated relaxation keys.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "policy"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "offing.fleet-policy.v1"
+    },
+    "allowLoosen": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "days-left",
+          "after-eol",
+          "severity",
+          "path",
+          "ecosystem",
+          "exceptions"
+        ]
+      }
+    },
+    "policy": {
+      "$ref": "#/$defs/policy"
+    },
+    "teams": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "policy"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "repositories": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)?$"
+            }
+          },
+          "policy": {
+            "$ref": "#/$defs/policy"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        },
+        "exceptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/exception"
+          }
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "minProperties": 2,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+        },
+        "days-left": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3650
+        },
+        "after-eol": {
+          "type": "boolean"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "ecosystem": {
+          "type": "string",
+          "pattern": "\\S",
+          "description": "Detector id or rule-id prefix to match."
+        },
+        "path": {
+          "type": "string",
+          "pattern": "\\S",
+          "description": "Repository-relative path or ignore-style glob."
+        }
+      }
+    },
+    "exception": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason",
+        "expires",
+        "owner"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "path"
+          ]
+        },
+        {
+          "required": [
+            "ecosystem"
+          ]
+        }
+      ],
+      "properties": {
+        "ecosystem": {
+          "type": "string",
+          "pattern": "\\S",
+          "description": "Detector id or rule-id prefix to match."
+        },
+        "path": {
+          "type": "string",
+          "pattern": "\\S",
+          "description": "Repository-relative path or ignore-style glob."
+        },
+        "reason": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "expires": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "owner": {
+          "type": "string",
+          "pattern": "\\S",
+          "description": "Owner responsible for the exception."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "offing.fleet-policy.v1",
+  "policy": {
+    "rules": [
+      {
+        "id": "runtime",
+        "days-left": 30,
+        "severity": "high"
+      }
+    ],
+    "exceptions": [
+      {
+        "owner": "@platform",
+        "reason": "scheduled migration",
+        "expires": "2034-01-10",
+        "path": "examples/"
+      }
+    ]
+  },
+  "allowLoosen": [
+    "exceptions"
+  ]
+}

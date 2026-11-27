@@ -45,6 +45,10 @@ inputs:
       what the data already marks.
     required: false
     default: ""
+  policy:
+    description: "Optional local fleet policy under path, or previously pinned GitHub/GitLab policy reference."
+    required: false
+    default: ""
   fail-on-severity:
     description: Lowest severity that fails the job (none, info, low, medium, high, or critical).
     required: false
@@ -209,6 +213,7 @@ runs:
       env:
         INPUT_PATH: ${{ inputs.path }}
         INPUT_PATHS: ${{ inputs.paths }}
+        INPUT_POLICY: ${{ inputs.policy }}
         INPUT_SBOM: ${{ inputs.sbom }}
         INPUT_BASELINE: ${{ inputs.baseline }}
         INPUT_BASELINE-WARN-DAYS: ${{ inputs.baseline-warn-days }}

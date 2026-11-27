@@ -21,6 +21,7 @@ import {
   runGitHubAction,
   suggestionComment,
 } from "./github-action.js";
+import { parseFleetPolicyInput } from "./github-action/inputs.js";
 import { prepareForecast, readForecastMonths } from "./github-action/forecast.js";
 import { compactPullRequestComment, limitPullRequestComment } from "./github-action/render.js";
 import { preparePullRequestCountdown } from "./github-action/pr-context.js";
@@ -516,7 +517,9 @@ function scanOptionsFor(ctx: RunContext): Partial<RunOptions> {
 /** The severity gate, the expiry policy, and how findings are annotated. */
 function policyOptionsFor(ctx: RunContext): Pick<RunOptions, "failOnSeverity"> & Partial<RunOptions> {
   const { env } = ctx;
+  const policy = parseFleetPolicyInput(env.INPUT_POLICY);
   return {
+    ...(policy ? { policy } : {}),
     ...(env["INPUT_BASELINE-WARN-DAYS"] ? { baselineWarnDays: Number(env["INPUT_BASELINE-WARN-DAYS"]) } : {}),
     ...(env["INPUT_ON-EXPIRED"] ? { onExpired: env["INPUT_ON-EXPIRED"] as ExpiredPolicy } : {}),
     ...(env["INPUT_MIN-SUPPORT-DAYS"] ? { minSupportDays: Number(env["INPUT_MIN-SUPPORT-DAYS"]) } : {}),

@@ -58,6 +58,8 @@ import {
   failOnSeverity,
   multiScanPhase,
   requestedLookahead,
+  resolveScanLifecyclePolicy,
+  checkPolicyReference,
   scanPolicyDay,
 } from "./internal/scan-policy.js";
 
@@ -75,6 +77,7 @@ const valueOptions = new Set([
   "--as-of",
   "--min-support-days",
   "--lookahead",
+  "--policy",
   "--baseline-warn-days",
   "--on-expired",
   "--all",
@@ -482,7 +485,7 @@ export async function runScanPipeline(command: string, args: readonly string[], 
   if (typeof gated === "number") return gated;
   const takesFindingId = command === "explain" || command === "context" || command === "report-issue";
   if (takesFindingId && !gated.findingId) return ctx.fail("usage", "Missing finding ID.", `\n${ctx.help}`);
-  const lookaheadError = checkLookahead(gated, ctx);
+  const lookaheadError = checkLookahead(gated, ctx) ?? checkPolicyReference(gated, ctx);
   if (lookaheadError !== undefined) return lookaheadError;
   if (gated.args.includes("--sbom")) {
     return preScanPhase(gated, ctx) ?? runSbomScan(gated, ctx);
@@ -516,7 +519,12 @@ async function runScanFamily(state: Gated, ctx: CommandContext): Promise<number>
   if (typeof suppressed === "number") return suppressed;
   const reviewed =
     state.command === "scan"
-      ? applyPolicy(suppressed.result, state.config?.policy, scanPolicyDay(state), requestedLookahead(state))
+      ? applyPolicy(
+          suppressed.result,
+          await resolveScanLifecyclePolicy(state, result.root, state.config),
+          scanPolicyDay(state),
+          requestedLookahead(state),
+        )
       : suppressed.result;
   const early = await printFindings(state, reviewed, asOfValue, ctx);
   if (early !== undefined) return early;

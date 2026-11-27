@@ -24,6 +24,10 @@ export function parsePathsInput(value: string): string[] {
     .filter((line) => line.length > 0);
 }
 
+export function parseFleetPolicyInput(value: string | undefined): string | undefined {
+  return value?.trim() || undefined;
+}
+
 export function parseSbomInput(
   value: string | undefined,
   mode: "scan" | "diff",

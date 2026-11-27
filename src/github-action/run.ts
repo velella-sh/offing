@@ -5,6 +5,7 @@ import { renderBadgeSvg } from "../badge.js";
 import type { Finding, ScanResult } from "../domain.js";
 import { renderJson, renderSarif } from "../reporters.js";
 import { loadConfig } from "../config.js";
+import { resolveLifecyclePolicy } from "../fleet-policy/load.js";
 import { applyPolicy, findingsAtSeverity } from "../policy.js";
 import { changedLines, planFixSuggestions, selectChangedAnnotations } from "./diff.js";
 import { parseAnnotations, parseGate } from "./inputs.js";
@@ -77,7 +78,14 @@ async function planAnnotations(
 export async function runGitHubAction(options: GitHubActionOptions): Promise<GitHubActionOutcome> {
   const root = resolve(options.root);
   const gate = parseGate(options.failOnSeverity);
-  const policy = (await loadConfig(root))?.policy;
+  const config = await loadConfig(root);
+  const policy = await resolveLifecyclePolicy({
+    root,
+    config,
+    reference: options.policy,
+    requireUnderRoot: true,
+    today: options.today ?? new Date().toISOString().slice(0, 10),
+  });
   const scanned = await scanInMode(root, options);
   const { expiredFailure, diff, packages, agent } = scanned;
   const result = applyPolicy(scanned.result, policy, options.today ?? scanned.result.scannedAt.slice(0, 10));

@@ -196,6 +196,7 @@ export interface PolicyRule extends PolicyScope {
 }
 
 export interface PolicyException extends PolicyScope {
+  owner?: string;
   reason: string;
   expires: string;
 }
