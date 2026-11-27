@@ -99,6 +99,19 @@ test("a dry run passes dry_run into every stage and publishes nothing from those
     assert.equal(workflow.on.workflow_call.inputs.dry_run?.type, "boolean", name);
   }
 
+  const publish = parse(await readFile(join(workflowsDir, "publish.yml"), "utf8"));
+  assert.equal(publish.jobs["dry-run"].if, "inputs.dry_run");
+  assert.deepEqual(publish.permissions, {});
+  assert.deepEqual(
+    Object.keys(publish.jobs)
+      .filter((name) => name !== "dry-run")
+      .sort(),
+    ["registry", "smoke", "verify-provenance"],
+  );
+  for (const name of ["registry", "smoke", "verify-provenance"]) {
+    assert.match(publish.jobs[name].if, /!inputs\.dry_run/);
+  }
+
   const action = await readFile(join(workflowsDir, "release-build-action.yml"), "utf8");
   assert.match(action, /!inputs\.dry_run/);
   assert.match(action, /git push origin "HEAD:refs\/heads\/release\/v\$VERSION"/);
