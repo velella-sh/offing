@@ -206,6 +206,18 @@ test("a rule without migration steps or sources still has help, and no help URI"
   assert.equal("helpUri" in rule, false);
 });
 
+test("empty migration arrays do not add help headings", async () => {
+  const input = JSON.parse(await readFile(resolve("tests/fixtures/sarif-scan.json"), "utf8")) as ScanResult;
+  const original = input.findings.find((item) => item.migration);
+  assert.ok(original?.migration);
+  const sarif = JSON.parse(
+    renderSarif(scan([{ ...original, migration: { ...original.migration, steps: [], verification: [] } }])),
+  );
+  const { help } = sarif.runs[0].tool.driver.rules[0];
+  assert.doesNotMatch(help.text, /Migration:|Verify:/);
+  assert.doesNotMatch(help.markdown, /\*\*(?:Migration|Verify)\*\*/);
+});
+
 test("the SARIF for the sample scan matches its snapshot", async () => {
   const input = JSON.parse(await readFile(resolve("tests/fixtures/sarif-scan.json"), "utf8")) as ScanResult;
   const expected = await readFile(resolve("tests/fixtures/sarif-scan.expected.json"), "utf8");

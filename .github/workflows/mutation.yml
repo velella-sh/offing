@@ -37,7 +37,9 @@ jobs:
           - shard: reporters
             mutate: "src/reporters.ts,src/reporters/**/*.ts"
             hash: src/reporters/**/*.ts
-            command: "node --test --test-concurrency=1 dist/tests/reporters.test.js dist/tests/reporters-golden.test.js dist/tests/chat-webhook.test.js dist/tests/codequality.test.js dist/tests/compact.test.js dist/tests/html-report.test.js dist/tests/first-run.test.js dist/tests/markdown-report.test.js dist/tests/junit-report.test.js dist/tests/sarif.test.js dist/tests/rdjson.test.js dist/tests/mermaid.test.js"
+            # Stryker's command runner reports a single synthetic test, so a changed suite needs a new cache scope.
+            cache-scope: reporters-contract
+            command: "node --test --test-concurrency=1 dist/tests/reporters.test.js dist/tests/reporters-golden.test.js dist/tests/reporter-contract.test.js dist/tests/commands-gates.test.js dist/tests/chat-webhook.test.js dist/tests/codequality.test.js dist/tests/compact.test.js dist/tests/html-report.test.js dist/tests/first-run.test.js dist/tests/markdown-report.test.js dist/tests/junit-report.test.js dist/tests/sarif.test.js dist/tests/rdjson.test.js dist/tests/mermaid.test.js"
           - shard: baseline
             mutate: src/baseline.ts
             hash: src/baseline.ts
@@ -56,9 +58,9 @@ jobs:
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: reports/stryker-incremental-${{ matrix.shard }}.json
-          key: stryker-incremental-${{ matrix.shard }}-${{ hashFiles(matrix.hash, 'stryker.config.json', 'package-lock.json') }}
+          key: stryker-incremental-${{ matrix.cache-scope || matrix.shard }}-${{ hashFiles(matrix.hash, 'stryker.config.json', 'package-lock.json') }}
           restore-keys: |
-            stryker-incremental-${{ matrix.shard }}-
+            stryker-incremental-${{ matrix.cache-scope || matrix.shard }}-
       - name: Run mutation testing on ${{ matrix.shard }}
         id: run
         env:
@@ -170,7 +172,7 @@ jobs:
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: reports/stryker-incremental-${{ matrix.shard }}.json
-          key: stryker-incremental-${{ matrix.shard }}-${{ hashFiles(matrix.hash, 'stryker.config.json', 'package-lock.json') }}
+          key: stryker-incremental-${{ matrix.cache-scope || matrix.shard }}-${{ hashFiles(matrix.hash, 'stryker.config.json', 'package-lock.json') }}
       - name: Upload the mutation report
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
