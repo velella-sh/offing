@@ -82,7 +82,7 @@ export function parseCodeowners(text: string, host: "github" | "gitlab" = "githu
   );
 }
 
-/** The owners of a path: the last rule that matches wins. Empty when no rule matches or the winning rule has no owners. */
+/** Resolves the last matching rule in each section and returns the unique owners. GitHub has one unnamed section. */
 export function ownersOf(rules: readonly CodeownersRule[], path: string): string[] {
   const normalized = path.replace(/\\/g, "/").replace(/^\.?\//, "");
   const matches = new Map<string | undefined, string[]>();

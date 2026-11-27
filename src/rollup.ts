@@ -302,11 +302,7 @@ async function readJson(path: string): Promise<unknown> {
   }
 }
 
-/**
- * Reads scan reports (`offing scan --json`) from files and merges them. A repository is named after its
- * report file or directory, so `payments.json` or `offing-report-payments.json` is `payments`.
- * `ownersFile` is a JSON object mapping repository names to owners.
- */
+/** Reads the optional JSON map of repository names to owners. */
 export async function readRollupOwners(ownersFile?: string): Promise<Record<string, string>> {
   const owners = ownersFile === undefined ? {} : await readJson(ownersFile);
   if (
@@ -320,6 +316,7 @@ export async function readRollupOwners(ownersFile?: string): Promise<Record<stri
   return owners as Record<string, string>;
 }
 
+/** Merges saved scan or fleet reports. A scan's repository name comes from its report filename or directory. */
 export async function rollupFiles(reportPaths: readonly string[], ownersFile?: string): Promise<RollupDocument> {
   if (reportPaths.length === 0) throw new RollupError("Give at least one scan report (offing scan --json).");
   const ownerByRepository = await readRollupOwners(ownersFile);
