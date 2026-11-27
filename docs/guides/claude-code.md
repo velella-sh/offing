@@ -4,7 +4,7 @@ title: Set up Offing in Claude Code
 
 # Set up Offing in Claude Code
 
-With [Offing installed](../launch/guard-in-one-command.md), configure it
+With [Offing installed](https://velella.sh/offing/launch/guard-in-one-command/), configure it
 from the project root.
 
 ```bash
@@ -18,5 +18,5 @@ In a scratch project, ask Claude Code to use its Write tool to create
 `test.js` containing `const value = new Buffer(9);`. The pre-write hook
 refuses the proposed edit and shows `Buffer.alloc` as the replacement.
 
-See the [Claude Code hook reference](../hooks/claude-code.md) for supported
+See the [Claude Code hook reference](https://velella.sh/offing/hooks/claude-code/) for supported
 tools, output, and removal.

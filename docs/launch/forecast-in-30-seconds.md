@@ -5,7 +5,7 @@ description: Find the deadlines in a repository and check them on pull requests.
 
 # Forecast your stack in 30 seconds
 
-With [Node.js 22 or newer](../INSTALL.md), run this from your repository root.
+With [Node.js 22 or newer](https://velella.sh/offing/INSTALL/), run this from your repository root.
 The first invocation may download Offing from npm.
 
 ```bash
@@ -44,5 +44,5 @@ jobs:
           fail-on-severity: high
 ```
 
-See the [forecast reference](../forecast.md) for timelines and calendar exports
-and the [Action reference](../GITHUB_ACTION.md) for reports and permissions.
+See the [forecast reference](https://velella.sh/offing/forecast/) for timelines and calendar exports
+and the [Action reference](https://velella.sh/offing/GITHUB_ACTION/) for reports and permissions.

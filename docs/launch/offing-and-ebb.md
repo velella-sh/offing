@@ -7,9 +7,9 @@ title: How Offing uses Ebb
 Ebb maintains lifecycle rules and their evidence. Offing reads a repository,
 matches its files and versions against local Ebb data, and reports what it
 found and where. Each release ships a bundled dataset. See the
-[data guide](../DATA.md) for signed updates, data pins, and the cache.
+[data guide](https://velella.sh/offing/DATA/) for signed updates, data pins, and the cache.
 
-Try the [guard example](guard-in-one-command.md) or inspect the same
+Try the [guard example](https://velella.sh/offing/launch/guard-in-one-command/) or inspect the same
 package directly.
 
 ```bash

@@ -4,7 +4,7 @@ title: Set up Offing in Codex
 
 # Set up Offing in Codex
 
-With [Offing installed](../launch/guard-in-one-command.md), configure it
+With [Offing installed](https://velella.sh/offing/launch/guard-in-one-command/), configure it
 from the project root.
 
 ```bash
@@ -18,5 +18,5 @@ In a scratch project, ask Codex to use `apply_patch` to add `test.js`
 containing `const value = new Buffer(9);`. The pre-write hook refuses the
 patch and shows `Buffer.alloc` as the replacement.
 
-See the [Codex hook reference](../hooks/codex.md) for the payload format,
+See the [Codex hook reference](https://velella.sh/offing/hooks/codex/) for the payload format,
 output, and removal.

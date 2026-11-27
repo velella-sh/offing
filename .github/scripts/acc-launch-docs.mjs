@@ -2,14 +2,19 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { delimiter, join, resolve } from "node:path";
+import { delimiter, dirname, join, resolve } from "node:path";
 
 const [installed] = process.argv.slice(2);
 if (!installed) throw new Error("Usage: node acc-launch-docs.mjs <installed offing bin>");
 const bin = resolve(installed);
 const root = mkdtempSync(join(tmpdir(), "offing-launch-guides-"));
+const home = join(root, "home");
+mkdirSync(home);
 const env = {
   ...process.env,
+  HOME: home,
+  XDG_CONFIG_HOME: join(home, ".config"),
+  PATH: [dirname(process.execPath), "/usr/bin", "/bin"].join(delimiter),
   EBB_DATA_DIR: join(root, "ebb"),
   OFFING_CACHE_DIR: join(root, "cache"),
   OFFING_DATA_VERSION: "bundled",
@@ -49,9 +54,9 @@ try {
     ["cursor", ".cursor/hooks.json"],
   ]) {
     const project = join(root, host);
-    mkdirSync(project);
-    run(project, ["init", "--hooks-for", host]);
     const config = join(project, file);
+    mkdirSync(dirname(config), { recursive: true });
+    run(project, ["init", "--hooks-for", host]);
     const cursor = host === "cursor";
     const event = cursor ? "preToolUse" : "PreToolUse";
     const { hooks } = JSON.parse(readFileSync(config, "utf8"));
