@@ -59,13 +59,11 @@ jobs:
     needs: prepare
     runs-on: ${{ matrix.os }}
     timeout-minutes: 12
-    # Offing's documented Node.js support starts at 22. Keep a separate Node 20 diagnostic.
-    continue-on-error: ${{ matrix.node == 20 }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        node: [20, 22, 24]
+        node: [22, 24]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:

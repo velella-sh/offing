@@ -61,7 +61,7 @@ A locally packed candidate on macOS arm64 reached its first forecast at these ti
 | sampleproject | 4.144 s | 4.479 s |
 | bubbletea | 4.286 s | 4.207 s |
 
-The release run measures the candidate tarball before publication and records each runner's results even when a check fails. It requires the first forecast in under 10 seconds on Linux, macOS, and Windows with Node.js 22 and 24. Node.js 20 runs as a diagnostic. Downloads and installation overlap, so the reports show the tarball download span, npm's full install phase, and the time after install separately. [First minute workflow](https://github.com/velella-sh/offing/actions/workflows/first-minute.yml)
+The release run measures the candidate tarball before publication and records each runner's results even when a check fails. It requires the first forecast in under 10 seconds on Linux, macOS, and Windows with Node.js 22 and 24. Offing requires Node.js 22 or later. Downloads and installation overlap, so the reports show the tarball download span, npm's full install phase, and the time after install separately. [First minute workflow](https://github.com/velella-sh/offing/actions/workflows/first-minute.yml)
 
 ## 2. Check one dependency before adding it
 
