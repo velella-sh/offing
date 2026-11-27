@@ -39,6 +39,7 @@ complete -c offing -n __fish_use_subcommand -a report-issue
 complete -c offing -n __fish_use_subcommand -a capabilities
 complete -c offing -n __fish_use_subcommand -a completions
 complete -c offing -n __fish_use_subcommand -a attest
+complete -c offing -n __fish_use_subcommand -a autopilot
 complete -c offing -n __fish_use_subcommand -a codemod
 complete -c offing -n __fish_use_subcommand -a config
 complete -c offing -n __fish_use_subcommand -a drivers
@@ -212,6 +213,13 @@ complete -c offing -n '__fish_seen_subcommand_from attest' -l subject
 complete -c offing -n '__fish_seen_subcommand_from attest' -l sbom
 complete -c offing -n '__fish_seen_subcommand_from attest' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from attest' -l today
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l dry-run
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l prepare
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l undo
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l wave
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l finding
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l to
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l agent
 complete -c offing -n '__fish_seen_subcommand_from config' -l json
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l include
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l exclude
