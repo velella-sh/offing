@@ -48,9 +48,11 @@ test("passes the JSON schema and the standalone checker; the checker rejects eac
   const payload = join(directory, "document.json");
   const runner = join(directory, "check.mjs");
   await writeFile(runner, await readFile(checker));
+  // Windows drive letters are case-insensitive even when their file URL spellings differ.
+  const entry = process.platform === "win32" ? runner.replace(/^([A-Z]):/, (drive) => drive.toLowerCase()) : runner;
   const run = async (document: unknown) => {
     await writeFile(payload, JSON.stringify(document));
-    return execute(process.execPath, [runner, payload], { cwd: directory });
+    return execute(process.execPath, [entry, payload], { cwd: directory });
   };
   const baseline = documentFixture();
   const ajv = new Ajv2020({ strict: false });
