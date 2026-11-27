@@ -36,7 +36,9 @@ export function testKey(test: TestIdentity): string {
 }
 
 function isCase(node: XmlElement): boolean {
-  return node.name === "testcase" && node.parent?.name === "testsuite";
+  if (node.name !== "testcase" || !node.parent) return false;
+  const { parent } = node;
+  return parent.name === "testsuite" || (parent.name === "testsuites" && !parent.parent);
 }
 
 /** Accepts bounded JUnit XML; a missing or invalid document signals fallback to the process outcome. */

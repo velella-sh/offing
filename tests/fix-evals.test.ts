@@ -1,10 +1,16 @@
 import assert from "node:assert/strict";
+import { ChildProcess } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { PassThrough } from "node:stream";
 import { test } from "node:test";
+import { setTimeout } from "node:timers/promises";
+
+import { Ajv2020 } from "ajv/dist/2020.js";
 
 import { fixers } from "../src/fix/index.js";
-import { dockerArgs } from "../benchmarks/fix-evals/docker.js";
+import { runApprovedTest } from "../src/test-runners/run.js";
+import { dockerArgs, dockerExecArgs, sandbox } from "../benchmarks/fix-evals/docker.js";
 import { evaluate, type Case, type Input, sha256 } from "../benchmarks/fix-evals/evaluate.js";
 import { summarize } from "../benchmarks/fix-evals/report.js";
 import { fixtureSource, tempSource } from "../benchmarks/fix-evals/source.js";
@@ -45,6 +51,13 @@ test("real scan and Git patch are measured, red baselines are excluded, and raw 
       ["baseline-not-green", 0, 2],
     );
     const stdout = await readFile(join(output, "green/node-buffer/test-1.stdout"));
+    const record: unknown = JSON.parse(await readFile(join(output, "green/node-buffer/test.v1.json"), "utf8"));
+    const schema: object = JSON.parse(await readFile("schemas/test-run.v1.schema.json", "utf8"));
+    const validate = new Ajv2020({ strict: false }).compile(schema);
+    assert.equal(validate(record), true, JSON.stringify(validate.errors));
+    const { files, ...evidence } = result?.checks?.test ?? assert.fail("Missing test result");
+    assert.deepEqual(record, evidence);
+    assert.equal(files[0]?.stdout, "green/node-buffer/test-1.stdout");
     assert.match(stdout.toString("utf8"), /Buffer\.from/u);
     assert.equal(result?.checks?.test?.attempts[0].logs.stdout.sha256, sha256(stdout));
     assert.equal(result?.patch.sha256, sha256(await readFile(join(output, "green/node-buffer/fix.patch"))));
@@ -118,8 +131,8 @@ test("headlines use applicable cases and carry a link back to every failure", ()
   ]);
 });
 
-test("approved Docker runner sends sources on stdin and exposes no environment or writable mounts", () => {
-  const argv = dockerArgs("unique", "docker.io/library/node@sha256:test", ["npm", "test"]);
+test("approved Docker runner isolates the worktree and keeps command arguments literal", () => {
+  const argv = dockerArgs("unique", "docker.io/library/node@sha256:test");
   for (const pair of [
     "--network none",
     "--pull=never --platform linux/amd64",
@@ -129,7 +142,103 @@ test("approved Docker runner sends sources on stdin and exposes no environment o
     assert.match(argv.join(" "), new RegExp(pair));
   }
   assert.ok(argv.includes("--read-only"));
-  assert.ok(argv.includes("-i"));
+  assert.ok(argv.includes("--detach"));
   assert.ok(!argv.includes("--mount") && !argv.includes("--volume") && !argv.includes("--env-file"));
-  assert.deepEqual(argv.slice(-3), ["sh", "npm", "test"]);
+  assert.deepEqual(dockerExecArgs("unique", ["npm", "test", "literal; arg"]), [
+    "exec",
+    "--workdir",
+    "/work/tree",
+    "unique",
+    "timeout",
+    "-k",
+    "5s",
+    "130s",
+    "npm",
+    "test",
+    "literal; arg",
+  ]);
+});
+
+test("Docker reads bounded JUnit separately from the captured command logs and removes the sandbox", async () => {
+  const report = '<testsuite><testcase name="example"/></testsuite>';
+  const archive = Buffer.from("synthetic archive");
+  const samples = [
+    { readReports: true, payload: Buffer.from(report + "\0" + report + "\0"), reports: [report, report] },
+    { readReports: true, previous: Buffer.from(report + "\0"), payload: Buffer.from(report + "\0"), reports: [] },
+    { readReports: true, payload: Buffer.from(report), reports: [] },
+    { readReports: true, payload: Buffer.from("x".repeat(1024 * 1024 + 1) + "\0"), reports: [] },
+    { readReports: true, payload: Buffer.alloc(0), reports: [] },
+    { readReports: false, payload: Buffer.from(report + "\0"), reports: undefined },
+  ];
+  for (const { readReports, previous, payload, reports } of samples) {
+    const phases: string[] = [];
+    let reads = 0;
+    const signals = new Set<AbortSignal | undefined>();
+    const docker: Parameters<typeof sandbox>[0] = (args, signal) => {
+      const phase =
+        args[0] === "exec" ? (args[1] === "-i" ? "unpack" : args[4] === "timeout" ? "test" : "read") : args[0];
+      assert.ok(phase);
+      phases.push(phase);
+      if (phase !== "rm") signals.add(signal);
+      const stdin = new PassThrough();
+      const child = Object.assign(new ChildProcess(), { stdin });
+      const result = (async () => {
+        if (phase === "unpack") {
+          const input: Buffer[] = [];
+          for await (const chunk of stdin) input.push(Buffer.from(chunk));
+          assert.deepEqual(Buffer.concat(input), archive);
+        }
+        const stdout =
+          phase === "read" ? (reads++ === 0 ? (previous ?? Buffer.alloc(0)) : payload) : Buffer.from(phase);
+        return { stdout, stderr: Buffer.from("diagnostics") };
+      })();
+      return Object.assign(result, { child });
+    };
+    const signal = AbortSignal.timeout(1000);
+    const stdout: Uint8Array[] = [];
+    const stderr: Uint8Array[] = [];
+    const result = await sandbox(docker, "image", archive)(
+      ["npm", "test"],
+      { signal, stdout: (chunk) => stdout.push(chunk), stderr: (chunk) => stderr.push(chunk) },
+      readReports,
+    );
+    assert.deepEqual(result.reports, reports);
+    assert.deepEqual(
+      phases,
+      readReports ? ["run", "unpack", "read", "test", "read", "rm"] : ["run", "unpack", "test", "rm"],
+    );
+    assert.deepEqual([...signals], [signal]);
+    assert.equal(Buffer.concat(stdout).toString(), "test");
+    assert.equal(Buffer.concat(stderr).toString(), "diagnostics");
+  }
+});
+
+test("a command deadline preserves received bytes and removes the container on a separate signal", async () => {
+  let removed = false;
+  const docker: Parameters<typeof sandbox>[0] = (args, signal) => {
+    const child = Object.assign(new ChildProcess(), { stdin: new PassThrough() });
+    const result = (async () => {
+      if (args[4] === "timeout") {
+        await setTimeout(5000, undefined, { signal }).catch((error: unknown) => {
+          throw Object.assign(new Error("Synthetic Docker cancellation", { cause: error }), {
+            stdout: Buffer.from("started"),
+            stderr: Buffer.from("waiting"),
+          });
+        });
+      }
+      if (args[0] === "rm") {
+        assert.equal(signal?.aborted, false);
+        removed = true;
+      }
+      return { stdout: Buffer.alloc(0), stderr: Buffer.alloc(0) };
+    })();
+    return Object.assign(result, { child });
+  };
+  const execute = sandbox(docker, "image", Buffer.alloc(0));
+  const result = await runApprovedTest(["npm", "test"], (command, output) => execute(command, output, false), 25);
+  assert.equal(removed, true);
+  assert.equal(result.attempts.length, 1);
+  assert.equal(result.attempts[0].status, "timed-out");
+  assert.equal(result.attempts[0].logs.stdout.tail, "started");
+  assert.equal(result.attempts[0].logs.stderr.tail, "waiting");
 });
