@@ -39,7 +39,7 @@ function argsFor(root: string): string[] {
 }
 
 test("release gate delegates to an offline verifier and evaluates only its authenticated output", {
-  // Simulate the external tool's process contract; the repository has no signed lifecycle fixture yet.
+  // Simulate the verifier's process contract to exercise malformed authenticated statements.
   skip: process.platform === "win32",
 }, async (t) => {
   const root = await mkdtemp(join(tmpdir(), "offing-gate-gh-"));
@@ -80,7 +80,9 @@ process.stdout.write(fs.readFileSync(${JSON.stringify(join(root, "verified.json"
   assert.match((await cli()).stderr, /Expected one verified lifecycle statement/);
 
   await writeFile(join(root, "verified.json"), JSON.stringify([{ ...vector.statement, predicate: null }]));
-  assert.match((await cli()).stderr, /Invalid lifecycle statement/);
+  const malformed = await cli();
+  assert.equal(malformed.code, 4);
+  assert.match(malformed.stderr, /Invalid lifecycle statement/);
 
   await writeFile(join(root, "verified.json"), JSON.stringify([vector.statement]));
   await writeFile(join(root, "artifact.bin"), "tampered artifact");
