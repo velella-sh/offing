@@ -241,11 +241,21 @@
                 "type": "string",
                 "format": "date",
                 "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "owner": {
+                "type": "string",
+                "pattern": "\\S",
+                "description": "Owner responsible for the exception."
               }
             }
           }
         }
       }
+    },
+    "extends": {
+      "type": "string",
+      "pattern": "\\S",
+      "description": "Organization fleet policy path or explicit GitHub/GitLab policy reference."
     }
   }
 }

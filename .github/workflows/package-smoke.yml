@@ -204,6 +204,26 @@ jobs:
             printf -- '- CLI and Action both failed on the named policy rule, with its expired exception in JSON.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-fleet-policy
+        working-directory: ${{ runner.temp }}
+        env:
+          OFFING_DATA_VERSION: bundled
+          OFFING_NO_CACHE: "1"
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          package="$out/npm-install/node_modules/@velella/offing"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          test -f "$package/schemas/fleet-policy.v1.schema.json"
+          node "$GITHUB_WORKSPACE/docs/spec/fleet-policy/conformance/check.mjs" "$bin"
+          node "$GITHUB_WORKSPACE/.github/scripts/acc-fleet-policy.mjs" "$bin" "$GITHUB_WORKSPACE/dist/action/index.js"
+          {
+            printf '### acc-fleet-policy\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI version %s\n' "$("$bin" --version)"
+            printf -- '- Conformance vectors, packaged schema and Action policy parity passed.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: acc-agent-migrate
         run: |
           set -euo pipefail

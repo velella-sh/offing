@@ -44,6 +44,7 @@ complete -c offing -n __fish_use_subcommand -a fleet
 complete -c offing -n __fish_use_subcommand -a hook
 complete -c offing -n __fish_use_subcommand -a lsp
 complete -c offing -n __fish_use_subcommand -a migrate
+complete -c offing -n __fish_use_subcommand -a policy
 complete -c offing -n __fish_use_subcommand -a prompt
 complete -c offing -n __fish_use_subcommand -a recommend
 complete -c offing -n __fish_use_subcommand -a rollback-readiness
@@ -57,6 +58,7 @@ complete -c offing -n '__fish_seen_subcommand_from data' -a 'status update'
 complete -c offing -n '__fish_seen_subcommand_from watch' -a 'add remove run list'
 complete -c offing -n '__fish_seen_subcommand_from config' -a 'validate'
 complete -c offing -n '__fish_seen_subcommand_from drivers' -a 'list test'
+complete -c offing -n '__fish_seen_subcommand_from policy' -a 'validate explain pull'
 complete -c offing -n '__fish_seen_subcommand_from scan check' -l fail-on -x -a 'info low medium high critical none'
 complete -c offing -n '__fish_seen_subcommand_from scan' -l format -x -a 'text json sarif rdjson compact html mermaid'
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l format -x -a 'text json sarif rdjson compact html mermaid'
@@ -70,6 +72,8 @@ complete -c offing -n '__fish_seen_subcommand_from scan' -l today
 complete -c offing -n '__fish_seen_subcommand_from scan' -l write-status
 complete -c offing -n '__fish_seen_subcommand_from scan' -l interactive
 complete -c offing -n '__fish_seen_subcommand_from scan' -l lookahead
+complete -c offing -n '__fish_seen_subcommand_from scan' -l policy
+complete -c offing -n '__fish_seen_subcommand_from scan' -l policy-online
 complete -c offing -n '__fish_seen_subcommand_from scan' -l all
 complete -c offing -n '__fish_seen_subcommand_from scan' -l by-owner
 complete -c offing -n '__fish_seen_subcommand_from scan' -l data-version
@@ -194,6 +198,7 @@ complete -c offing -n '__fish_seen_subcommand_from fleet' -l exclude
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l topic
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l repos
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l jobs
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l policy
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l gitlab
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l gitlab-url
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l include-forks
@@ -210,6 +215,8 @@ complete -c offing -n '__fish_seen_subcommand_from migrate' -l driver
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l from-refusals
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l replay
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l timeout-ms
+complete -c offing -n '__fish_seen_subcommand_from policy' -l policy
+complete -c offing -n '__fish_seen_subcommand_from policy' -l today
 complete -c offing -n '__fish_seen_subcommand_from prompt' -l format
 complete -c offing -n '__fish_seen_subcommand_from prompt' -l symbol
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l min-days

@@ -92,3 +92,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0052](0052-fix-pr-action-evidence.md) | Add evidence and branch ownership checks to fix pull requests | Add opt-in labels, PR outputs, verification evidence, and a lease-guarded bot branch update. |
 | [0048](0048-upgrade-blocker-graph.md) | Upgrade blocker graph | Add evidence-backed dependency chains and deterministic views of confirmed upgrade blockers. |
 | [0050](0050-lifecycle-policy-gates.md) | Lifecycle policy gates | Share named, expiring rules across scan interfaces and expose optional violations. |
+| [0055](0055-fleet-policy-contract.md) | Fleet policy v1 | Merge organization, team, and repository lifecycle gates with commit-pinned policy sources and line-aware precedence. |

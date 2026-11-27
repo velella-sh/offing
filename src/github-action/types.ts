@@ -71,6 +71,8 @@ export interface GitHubActionOptions {
   paths?: readonly string[];
   /** A JSON SBOM under root. Applies to scan mode only. */
   sbom?: string;
+  /** Local or already pinned organization policy selected for the scan. */
+  policy?: string;
   /** When set, also write the findings as SARIF 2.1.0 to this path, for upload to code scanning. */
   sarifPath?: string;
   /** When set, write a Shields.io endpoint JSON file for optional publication. */

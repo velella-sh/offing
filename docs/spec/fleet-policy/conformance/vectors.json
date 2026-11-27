@@ -1,0 +1,150 @@
+[
+  {
+    "name": "three layers",
+    "organization": {
+      "schemaVersion": "offing.fleet-policy.v1",
+      "policy": {
+        "rules": [
+          {
+            "id": "runtime",
+            "days-left": 30,
+            "severity": "high"
+          }
+        ]
+      },
+      "teams": {
+        "platform": {
+          "policy": {
+            "rules": [
+              {
+                "id": "runtime",
+                "days-left": 45
+              }
+            ]
+          },
+          "repositories": [
+            "repository"
+          ]
+        }
+      }
+    },
+    "repository": {
+      "rules": [
+        {
+          "id": "runtime",
+          "severity": "medium"
+        }
+      ]
+    },
+    "expected": [
+      "days-left = 45 (team",
+      "severity = \"medium\" (repository"
+    ],
+    "rule": "runtime"
+  },
+  {
+    "name": "looser rule",
+    "organization": {
+      "schemaVersion": "offing.fleet-policy.v1",
+      "policy": {
+        "rules": [
+          {
+            "id": "runtime",
+            "days-left": 30,
+            "severity": "high"
+          }
+        ]
+      }
+    },
+    "repository": {
+      "rules": [
+        {
+          "id": "runtime",
+          "days-left": 5
+        }
+      ]
+    },
+    "error": "loosens rule runtime (days-left)"
+  },
+  {
+    "name": "delegated exception",
+    "organization": {
+      "schemaVersion": "offing.fleet-policy.v1",
+      "policy": {
+        "rules": [
+          {
+            "id": "runtime",
+            "days-left": 30,
+            "severity": "high"
+          }
+        ]
+      },
+      "allowLoosen": [
+        "exceptions"
+      ]
+    },
+    "repository": {
+      "rules": [
+        {
+          "id": "runtime",
+          "severity": "medium"
+        }
+      ],
+      "exceptions": [
+        {
+          "owner": "@platform",
+          "reason": "scheduled migration",
+          "expires": "2030-01-10",
+          "path": "examples/"
+        }
+      ]
+    }
+  },
+  {
+    "name": "expired exception",
+    "organization": {
+      "schemaVersion": "offing.fleet-policy.v1",
+      "policy": {
+        "rules": [
+          {
+            "id": "runtime",
+            "days-left": 30,
+            "severity": "high"
+          }
+        ],
+        "exceptions": [
+          {
+            "owner": "@platform",
+            "reason": "scheduled migration",
+            "expires": "2029-12-31",
+            "path": "examples/"
+          }
+        ]
+      }
+    },
+    "error": "exception expired"
+  },
+  {
+    "name": "missing exception owner",
+    "organization": {
+      "schemaVersion": "offing.fleet-policy.v1",
+      "policy": {
+        "rules": [
+          {
+            "id": "runtime",
+            "days-left": 30,
+            "severity": "high"
+          }
+        ],
+        "exceptions": [
+          {
+            "reason": "scheduled migration",
+            "expires": "2030-01-10",
+            "path": "examples/"
+          }
+        ]
+      }
+    },
+    "error": "owner"
+  }
+]

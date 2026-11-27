@@ -5,7 +5,7 @@ _offing() {
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   command="${COMP_WORDS[1]}"
   if [ "$COMP_CWORD" -eq 1 ]; then
-    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions config drivers fleet hook lsp migrate prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
+    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions config drivers fleet hook lsp migrate policy prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
     return
   fi
   case "$prev" in
@@ -20,7 +20,8 @@ _offing() {
     watch) opts="add remove run list --weekly --board --json" ;;
     config) opts="validate --json" ;;
     drivers) opts="list test" ;;
-    scan) opts="--demo --sbom --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --lookahead --all --by-owner --data-version --only --exclude" ;;
+    policy) opts="validate explain pull" ;;
+    scan) opts="--demo --sbom --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --lookahead --policy --policy-online --all --by-owner --data-version --only --exclude" ;;
     baseline) opts="--output --data-version" ;;
     forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force" ;;
     forecast) opts="--months --as-of --today --timeline --json --format --data-version" ;;
@@ -60,10 +61,11 @@ _offing() {
     completions) opts="" ;;
     config) opts="--json" ;;
     drivers) opts="" ;;
-    fleet) opts="--include --exclude --topic --repos --jobs --gitlab --gitlab-url --include-forks --include-archived --json --html --format --no-cache --fail-on --progress" ;;
+    fleet) opts="--include --exclude --topic --repos --jobs --policy --gitlab --gitlab-url --include-forks --include-archived --json --html --format --no-cache --fail-on --progress" ;;
     hook) opts="--fail-on" ;;
     lsp) opts="" ;;
     migrate) opts="--agent --driver --from-refusals --replay --timeout-ms" ;;
+    policy) opts="--policy --today" ;;
     prompt) opts="--format --symbol" ;;
     recommend) opts="--min-days --as-of --json" ;;
     rollback-readiness) opts="--candidate --within-days --json" ;;

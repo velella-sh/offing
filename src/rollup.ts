@@ -18,6 +18,8 @@ export const UNOWNED = "unowned";
 type SeverityCounts = Record<Severity, number>;
 
 /** Findings counted by severity for one group, plus the repositories they come from. */
+import type { FleetPolicyCompliance } from "./fleet-policy/compliance.js";
+
 export interface RollupGroup {
   name: string;
   findings: number;
@@ -63,6 +65,7 @@ export interface FleetRepositoryStatus {
   readonly commit: string | null;
   readonly status: "scanned" | "cached" | "skipped" | "failed";
   readonly reason: string | null;
+  readonly compliance?: FleetPolicyCompliance;
 }
 
 export interface FleetResult extends Omit<RollupResult, "schemaVersion"> {
@@ -120,6 +123,21 @@ function isFleetDeadline(value: unknown): boolean {
   );
 }
 
+function isFleetCompliance(value: unknown): boolean {
+  if (value === undefined) return true;
+  const statuses = ["compliant", "violation", "invalid"];
+  const reasons = ["rule-threshold", "invalid-policy", "expired-exception", "unauthorized-override", null];
+  return (
+    isRecord(value) &&
+    typeof value.status === "string" &&
+    statuses.includes(value.status) &&
+    typeof value.policy === "string" &&
+    /^[a-f0-9]{64}$/u.test(value.policy) &&
+    isCount(value.violations) &&
+    reasons.some((reason) => reason === value.reason)
+  );
+}
+
 function isFleetStatus(value: unknown): boolean {
   return (
     isRecord(value) &&
@@ -129,7 +147,8 @@ function isFleetStatus(value: unknown): boolean {
     (value.commit === null || typeof value.commit === "string") &&
     typeof value.status === "string" &&
     fleetStatuses.has(value.status) &&
-    (value.reason === null || typeof value.reason === "string")
+    (value.reason === null || typeof value.reason === "string") &&
+    isFleetCompliance(value.compliance)
   );
 }
 
@@ -442,7 +461,9 @@ export function renderRollupText(result: RollupDocument): string {
   if (result.schemaVersion === "offing.fleet.v1") {
     lines.push("", "Fleet scan status:");
     for (const repo of result.repositoryStatus) {
-      lines.push(`  ${repo.name}: ${repo.status}${repo.reason ? ` (${repo.reason})` : ""}`);
+      lines.push(
+        `  ${repo.name}: ${repo.status}${repo.reason ? ` (${repo.reason})` : ""}${repo.compliance ? `; policy ${repo.compliance.status}` : ""}`,
+      );
     }
   }
   section("By product", result.byProduct);
@@ -557,11 +578,13 @@ function tableSection(heading: string, columns: readonly string[], rows: readonl
 
 function fleetStatusTable(result: RollupDocument): string[] {
   if (result.schemaVersion !== "offing.fleet.v1") return [];
-  const rows = result.repositoryStatus.map(
-    (repo) =>
-      `<tr><td>${escapeHtml(repo.name)}</td><td>${escapeHtml(repo.status)}</td><td>${escapeHtml(repo.reason ?? "")}</td></tr>`,
-  );
-  return tableSection("Fleet scan status", ["Repository", "Status", "Reason"], rows);
+  const includesPolicy = result.repositoryStatus.some((repo) => repo.compliance);
+  const rows = result.repositoryStatus.map((repo) => {
+    const policy = includesPolicy ? `<td>${escapeHtml(repo.compliance?.status ?? "")}</td>` : "";
+    return `<tr><td>${escapeHtml(repo.name)}</td><td>${escapeHtml(repo.status)}</td><td>${escapeHtml(repo.reason ?? "")}</td>${policy}</tr>`;
+  });
+  const columns = includesPolicy ? ["Repository", "Status", "Reason", "Policy"] : ["Repository", "Status", "Reason"];
+  return tableSection("Fleet scan status", columns, rows);
 }
 
 /**

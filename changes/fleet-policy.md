@@ -1,0 +1,1 @@
+- Apply organization and team lifecycle policy with an offline commit pin and explain where each rule value came from.
