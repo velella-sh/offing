@@ -3,6 +3,7 @@ import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test, type TestContext } from "node:test";
+import { pathToFileURL } from "node:url";
 
 import { buildBlockerGraph } from "../src/upgrade/graph.js";
 import { checkUpgrade } from "../src/upgrade/index.js";
@@ -55,7 +56,7 @@ test("npm uses actual installed copies and stable shortest root paths, with byte
   assert.deepEqual(find(report.issues, "child@1.0.0").chain, ["a-root@1.0.0", "child@1.0.0"]);
   assert.deepEqual(find(report.issues, "child@2.0.0").chain, ["b-root@1.0.0", "child@2.0.0"]);
   assert.equal(find(report.issues, "orphan@1.0.0").chain, undefined);
-  const graph = buildBlockerGraph(report);
+  const graph = await buildBlockerGraph(report);
   assert.deepEqual(
     graph.roots.map(({ dependency, unlocks }) => [dependency, unlocks]),
     [
@@ -199,4 +200,84 @@ test("graphic options reject conflicting formats and bad themes, and explicit JS
     assert.match(result.stderr, /^Usage: offing upgrade-check/);
   }
   assert.deepEqual(await run(["--format", "json"]), await run(["--json"]));
+});
+
+test("a blocker graph uses Ebb's first supporting release and keeps missing answers unknown", async (t) => {
+  const root = await fixture(t, {
+    "package-lock.json": JSON.stringify(
+      {
+        lockfileVersion: 3,
+        packages: {
+          "": { dependencies: { "@scope/known": "^1", unknown: "^1" } },
+          "node_modules/@scope/known": { version: "1.0.0", engines: { node: "<22" } },
+          "node_modules/unknown": { version: "1.0.0", engines: { node: "<22" } },
+          "node_modules/dev": { version: "1.0.0", engines: { node: "<22" }, dev: true },
+        },
+      },
+      null,
+      2,
+    ),
+  });
+  const target = { runtime: "nodejs", version: "22" };
+  const report = await checkUpgrade(root, target);
+  const module = await fixture(t, {
+    "compat.mjs": `
+      export function firstSupporting(purl, runtime, version) {
+        if (runtime !== "pkg:generic/nodejs" || version !== "22") throw new Error("Unexpected runtime lookup");
+        if (purl === "pkg:npm/%40scope/known") return { version: "2.1.0" };
+        if (purl === "pkg:npm/unknown") return "unknown";
+        throw new Error("Unexpected package lookup: " + purl);
+      }
+    `,
+  });
+  const graph = await buildBlockerGraph(report, pathToFileURL(join(module, "compat.mjs")).href);
+  assert.deepEqual(
+    graph.roots.flatMap(({ blockers }) => blockers.map(({ firstSupported }) => firstSupported)),
+    ["2.1.0", "unknown"],
+  );
+});
+
+test("dependency support uses canonical Python names and skips project-level constraints", async (t) => {
+  const root = await fixture(t, {
+    "uv.lock":
+      'version = 1\nrequires-python = "<3.13"\n[[package]]\nname = "Some_Package"\nversion = "1.0"\nresolution-markers = ["python_full_version < \'3.13\'"]',
+  });
+  const target = { runtime: "python", version: "3.13" };
+  const report = await checkUpgrade(root, target);
+  const module = await fixture(t, {
+    "compat.mjs": `
+      export function firstSupporting(purl, runtime, version) {
+        if (purl !== "pkg:pypi/some-package" || runtime !== "pkg:generic/python" || version !== "3.13") {
+          throw new Error("Unexpected compatibility lookup");
+        }
+        return "2.0";
+      }
+    `,
+  });
+  const graph = await buildBlockerGraph(report, pathToFileURL(join(module, "compat.mjs")).href);
+  assert.deepEqual(
+    graph.ungrouped.map(({ subject, firstSupported }) => [subject, firstSupported]),
+    [
+      ["Some_Package@1.0", "2.0"],
+      ["python", "unknown"],
+    ],
+  );
+});
+
+test("the graph tolerates absent Ebb readers and surfaces errors inside an available module", async (t) => {
+  const root = await fixture(t, { "package-lock.json": npmLock() });
+  const report = await checkUpgrade(root, { runtime: "nodejs", version: "22" });
+  const module = await fixture(t, {
+    "without-reader.mjs": "export const firstSupporting = undefined;",
+    "broken.mjs": 'import "./not-installed.mjs";',
+  });
+  for (const specifier of [
+    "@modelcontextprotocol/server/nonexistent-compat-test-export",
+    pathToFileURL(join(module, "without-reader.mjs")).href,
+  ]) {
+    const graph = await buildBlockerGraph(report, specifier);
+    assert.equal(graph.roots[0]?.blockers[0]?.firstSupported, "unknown");
+  }
+  await assert.rejects(buildBlockerGraph(report, "@offing-test/missing-compat"), { code: "ERR_MODULE_NOT_FOUND" });
+  await assert.rejects(buildBlockerGraph(report, pathToFileURL(join(module, "broken.mjs")).href), /not-installed\.mjs/);
 });

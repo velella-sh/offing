@@ -37,7 +37,7 @@ export function registerCheckUpgrade(server: McpServer, tools: OffingAgentTools)
             ),
           );
         const report = await checkUpgrade(resolve(path), parsed);
-        return success({ ...report, graph: buildBlockerGraph(report) });
+        return success({ ...report, graph: await buildBlockerGraph(report) });
       } catch (error) {
         return failure(error);
       }

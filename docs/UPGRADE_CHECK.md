@@ -32,8 +32,9 @@ An analyzer only runs when the repository has the files it reads. Each issue nam
 Add `--graph` to show the shortest recorded dependency paths under the verdict.
 A group count tells you how many confirmed blockers share that direct dependency.
 Blockers without a recorded path appear in their own section. Warning and
-unknown issues remain in the regular report. If the bundled Ebb data does
-not establish the first release that supports the target, the graph shows
+unknown issues remain in the regular report. The graph uses installed Ebb
+compatibility data to show the first dependency release that supports the
+target runtime. When that data is unavailable for a blocker, the graph shows
 `unknown`.
 
 ```sh

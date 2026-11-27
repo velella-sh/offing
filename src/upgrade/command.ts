@@ -83,7 +83,7 @@ export async function upgradeCheck(args: string[]): Promise<number> {
     return usage(`Cannot read ${root}.`);
   }
   const report = await checkUpgrade(root, target);
-  if (graph || format === "mermaid" || format === "svg") report.graph = buildBlockerGraph(report);
+  if (graph || format === "mermaid" || format === "svg") report.graph = await buildBlockerGraph(report);
   process.stdout.write(`${renderOutput(report, format, theme)}\n`);
   return report.verdict === "blocked" ? 1 : 0;
 }
