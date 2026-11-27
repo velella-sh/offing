@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { performance } from "node:perf_hooks";
 import { test } from "node:test";
 import { setTimeout } from "node:timers/promises";
 
@@ -162,4 +163,9 @@ test("requires a real positive timeout", async () => {
     runApprovedTest(command, async () => ({ exitCode: 0 }), 0),
     RangeError,
   );
+});
+
+test("does not retry once the caller's wall-time budget is exhausted", async () => {
+  const recorded = await runApprovedTest(command, async () => ({ exitCode: 1 }), 1_000, performance.now() - 1);
+  assert.equal(recorded.attempts.length, 1);
 });

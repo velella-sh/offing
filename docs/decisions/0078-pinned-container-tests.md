@@ -1,0 +1,13 @@
+# 0078 Explicit pinned container tests
+
+Status: Accepted
+
+## Context
+
+Doctor and Autopilot preview identify candidate test commands. An operator needs a separate action to test a reviewed checkout without giving repository commands access to the host.
+
+## Decision
+
+`offing autopilot <path> --test-only --container` explicitly selects a pinned Docker runtime. `autopilot.testRuntime: "container"` selects the same runtime for `--test-only`. Reading config alone cannot start a test. Test-only takes a clean committed snapshot, reads that snapshot's config, and reuses the Fix Evals sandbox. Configured argv replaces detected test commands. The pinned runtime receives the snapshot through a bounded stream and no host mounts, credentials, or network access. Tool-image retrieval happens before sandbox execution.
+
+Evaluate the same command from a fresh snapshot on retry. The sandbox sets `OFFING_TEST_ATTEMPT` to `1` or `2`. An earlier failing case is classified as flaky only when a report shows that the same case passed on retry. Tests without sufficient report evidence keep their exit-status result.

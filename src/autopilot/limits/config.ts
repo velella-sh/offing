@@ -21,6 +21,7 @@ export interface AutopilotConfig {
   allowedPaths?: readonly string[];
   deniedPaths: readonly string[];
   tests: readonly (readonly [string, ...string[]])[];
+  testRuntime?: "container";
   secretEnv: readonly string[];
 }
 
@@ -95,12 +96,13 @@ function testCommands(value: unknown): AutopilotConfig["tests"] {
 export function parseAutopilotConfig(value: unknown): AutopilotConfig {
   const fields = section<AutopilotConfig>(
     value,
-    ["driver", "budget", "allowedPaths", "deniedPaths", "tests", "secretEnv"],
+    ["driver", "budget", "allowedPaths", "deniedPaths", "tests", "testRuntime", "secretEnv"],
     "autopilot",
   );
   const budget = section<Budget>(fields.budget, ["run", "turn"], "autopilot.budget");
   const driver = fields.driver === undefined ? "replay" : fields.driver;
   if (!drivers.includes(driver)) invalid("autopilot.driver");
+  if (fields.testRuntime !== undefined && fields.testRuntime !== "container") invalid("autopilot.testRuntime");
   return {
     driver,
     budget: {
@@ -118,6 +120,7 @@ export function parseAutopilotConfig(value: unknown): AutopilotConfig {
       "autopilot.deniedPaths",
     ),
     tests: testCommands(fields.tests),
+    ...(fields.testRuntime === undefined ? {} : { testRuntime: fields.testRuntime }),
     secretEnv: list(
       fields.secretEnv === undefined ? [] : fields.secretEnv,
       (name) => envPattern.test(name),

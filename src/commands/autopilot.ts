@@ -14,6 +14,7 @@ import type { CliCommand } from "./types.js";
 const usage = [
   "  offing autopilot [path] --dry-run [--wave <n> | --finding <id>] [--to <runtime@version>] [--agent <driver>]",
   "  offing autopilot [path] --prepare [--replay <recording>] [--wave <n> | --finding <id>] [--to <runtime@version>]",
+  "  offing autopilot [path] --test-only [--container]",
   "  offing autopilot [path] --undo [run]",
 ];
 
@@ -89,10 +90,25 @@ function parseAutopilotArgs(args: string[]) {
 
 export const command: CliCommand = {
   name: "autopilot",
-  flags: ["--dry-run", "--prepare", "--undo", "--wave", "--finding", "--to", "--agent", "--replay"],
+  flags: [
+    "--dry-run",
+    "--prepare",
+    "--replay",
+    "--test-only",
+    "--container",
+    "--undo",
+    "--wave",
+    "--finding",
+    "--to",
+    "--agent",
+  ],
   example: "offing autopilot . --dry-run --to nodejs@22",
   usage,
   async run(args, ctx) {
+    if (args.includes("--test-only") || args.includes("--container")) {
+      const { runTestOnly } = await import("../autopilot/test-command.js");
+      return runTestOnly(args, ctx);
+    }
     let options: ReturnType<typeof parseAutopilotArgs>;
     try {
       options = parseAutopilotArgs(args);

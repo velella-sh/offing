@@ -5,18 +5,19 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 
-import { childEnvironments } from "../../src/autopilot/limits/secrets.js";
-import { MAXIMUM_INPUT_BYTES } from "../../src/detectors/dotnet/msbuild-xml.js";
-import type { runApprovedTest } from "../../src/test-runners/run.js";
+import { childEnvironments } from "../autopilot/limits/secrets.js";
+import { MAXIMUM_INPUT_BYTES } from "../detectors/dotnet/msbuild-xml.js";
 import { type Profile, profiles } from "./profiles.js";
+import type { runApprovedTest } from "./run.js";
 
 type Command = Parameters<typeof runApprovedTest>[0];
 type TestExecutor = Parameters<typeof runApprovedTest>[1];
 type CommandOutput = Parameters<TestExecutor>[1];
-export type BenchmarkExecutor = (
+export type ContainerExecutor = (
   command: Command,
   output: CommandOutput,
   collectReports: boolean,
+  attempt?: 1 | 2,
 ) => ReturnType<TestExecutor>;
 type Docker = Awaited<ReturnType<typeof connectDocker>>;
 const execute = promisify(execFile);
@@ -44,7 +45,10 @@ export async function connectDocker(config: string) {
 export async function prepareImage(docker: Docker, profile: Profile, dockerfile: string): Promise<string> {
   const { image } = profiles[profile];
   if (profile !== "kubernetes") {
-    await docker(["pull", "--platform", platform, image]);
+    const installed = await docker(["image", "inspect", "--format", "{{.Os}}/{{.Architecture}}", image]).catch(
+      () => null,
+    );
+    if (installed?.stdout.toString().trim() !== platform) await docker(["pull", "--platform", platform, image]);
     return image;
   }
   const child = docker(["build", "--platform", platform, "--network", "none", "--quiet", "-"]);
@@ -56,7 +60,7 @@ export async function prepareImage(docker: Docker, profile: Profile, dockerfile:
 }
 
 export async function archiveTree(root: string): Promise<Buffer> {
-  const { stdout } = await execute("tar", ["-cf", "-", "-C", root, "."], {
+  const { stdout } = await execute("tar", ["-cf", "-", "--no-xattrs", "--exclude=.git", "-C", root, "."], {
     env: { PATH: process.env.PATH, COPYFILE_DISABLE: "1" },
     encoding: "buffer",
     maxBuffer: 100 * 1024 * 1024,
@@ -106,6 +110,8 @@ export function dockerArgs(name: string, image: string): string[] {
     "--env",
     "PIP_NO_INDEX=1",
     "--env",
+    "COREPACK_ENABLE_NETWORK=0",
+    "--env",
     "TF_IN_AUTOMATION=1",
     "--entrypoint",
     "/bin/sh",
@@ -115,8 +121,9 @@ export function dockerArgs(name: string, image: string): string[] {
   ];
 }
 
-export function dockerExecArgs(name: string, command: Command): string[] {
-  return ["exec", "--workdir", worktree, name, "timeout", "-k", "5s", "130s", ...command];
+export function dockerExecArgs(name: string, command: Command, attempt?: 1 | 2): string[] {
+  const metadata = attempt === undefined ? [] : ["--env", "OFFING_TEST_ATTEMPT=" + attempt];
+  return ["exec", ...metadata, "--workdir", worktree, name, "timeout", "-k", "5s", "130s", ...command];
 }
 
 function commandFailure(error: unknown): { exitCode: number; stdout: Buffer; stderr: Buffer } | null {
@@ -171,8 +178,8 @@ async function captureReports(docker: Docker, name: string, signal: AbortSignal)
   return raw.every((report) => Buffer.byteLength(report) <= MAXIMUM_INPUT_BYTES) ? raw : undefined;
 }
 
-async function executeCommand(docker: Docker, name: string, command: Command, output: CommandOutput) {
-  const child = docker(dockerExecArgs(name, command), output.signal);
+async function executeCommand(docker: Docker, name: string, command: Command, output: CommandOutput, attempt?: 1 | 2) {
+  const child = docker(dockerExecArgs(name, command, attempt), output.signal);
   const result = await child.then(
     ({ stdout, stderr }) => ({ stdout, stderr, exitCode: 0 }),
     (error: unknown) => {
@@ -191,8 +198,13 @@ async function executeCommand(docker: Docker, name: string, command: Command, ou
   return result.exitCode;
 }
 
-export function sandbox(docker: Docker, image: string, source: Buffer): BenchmarkExecutor {
-  return async (command, output, collectReports) => {
+export function sandbox(
+  docker: Docker,
+  image: string,
+  source: Buffer,
+  setup: readonly Command[] = [],
+): ContainerExecutor {
+  return async (command, output, collectReports, attempt) => {
     const name = `offing-fix-eval-${randomUUID()}`;
     try {
       await docker(dockerArgs(name, image), output.signal);
@@ -203,8 +215,12 @@ export function sandbox(docker: Docker, image: string, source: Buffer): Benchmar
       unpack.child.stdin?.on("error", () => {});
       unpack.child.stdin?.end(source);
       await unpack;
+      for (const prerequisite of setup) {
+        const exitCode = await executeCommand(docker, name, prerequisite, output);
+        if (exitCode !== 0) return { exitCode };
+      }
       const previous = collectReports ? await captureReports(docker, name, output.signal) : undefined;
-      const exitCode = await executeCommand(docker, name, command, output);
+      const exitCode = await executeCommand(docker, name, command, output, attempt);
       if (!previous) return { exitCode };
       const priorReports = new Set(previous);
       const reports = await captureReports(docker, name, output.signal);

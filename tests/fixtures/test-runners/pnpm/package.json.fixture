@@ -1,1 +1,1 @@
-{"name":"runner-fixture","private":true,"scripts":{"build":"node --check tests.js","test":"node --test tests.js"}}
+{"name":"runner-fixture","private":true,"packageManager":"pnpm@10.23.0","scripts":{"build":"node --check tests.js","test":"node --test --test-reporter=tap --test-reporter=junit --test-reporter-destination=stdout --test-reporter-destination=junit.xml tests.js"}}

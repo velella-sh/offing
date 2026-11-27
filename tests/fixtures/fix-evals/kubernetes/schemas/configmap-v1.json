@@ -1,0 +1,1 @@
+{"type":"object","required":["apiVersion","kind","metadata"],"properties":{"apiVersion":{"const":"v1"},"kind":{"const":"ConfigMap"},"metadata":{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}},"data":{"type":"object","additionalProperties":{"type":"string"}}}}

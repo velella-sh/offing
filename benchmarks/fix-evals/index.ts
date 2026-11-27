@@ -6,11 +6,13 @@ import { configureActiveData, getActiveDataSync } from "@velella/ebb/data-source
 import { z } from "zod";
 
 import { fixers } from "../../src/fix/index.js";
-import { archiveTree, connectDocker, prepareImage, sandbox } from "./docker.js";
+import { archiveTree, connectDocker, prepareImage, sandbox } from "../../src/test-runners/docker.js";
+import { isProfile, type Profile } from "../../src/test-runners/profiles.js";
 import { evaluate, type Evidence, type Input, scannedAt } from "./evaluate.js";
-import { isProfile, type Profile } from "./profiles.js";
 import { summarize } from "./report.js";
+import { proveRunnerProfiles } from "./runner-fixtures.js";
 import { checkoutPublic, fixtureSource, tempSource } from "./source.js";
+import { isFixtureTool, proveTestTools } from "./tool-fixtures.js";
 
 const repositoriesPath = "benchmarks/fix-evals/repositories.json";
 const fileName = z.string().regex(/^[a-z][a-z0-9-]*$/u);
@@ -92,10 +94,33 @@ async function main(): Promise<void> {
   const { values } = parseArgs({
     options: {
       fixtures: { type: "boolean", default: false },
+      "runner-profile": { type: "string" },
+      "runner-tool": { type: "string" },
       fixer: { type: "string" },
       out: { type: "string", default: "artifacts/fix-evals" },
     },
   });
+  if (values["runner-tool"] !== undefined) {
+    const tool = values["runner-tool"];
+    if (
+      !values.fixtures ||
+      values.fixer !== undefined ||
+      values["runner-profile"] !== undefined ||
+      (tool !== "all" && !isFixtureTool(tool))
+    ) {
+      throw new Error("Use --fixtures --runner-tool <all or test tool> without --fixer or --runner-profile.");
+    }
+    await proveTestTools(tool === "all" ? undefined : tool);
+    return;
+  }
+  if (values["runner-profile"] !== undefined) {
+    const profile = values["runner-profile"];
+    if (!values.fixtures || values.fixer !== undefined || (profile !== "all" && !isProfile(profile))) {
+      throw new Error("Use --fixtures --runner-profile <all or pinned profile> without --fixer.");
+    }
+    await proveRunnerProfiles(profile === "all" ? undefined : profile);
+    return;
+  }
   const selected = fixers.filter(({ id }) => values.fixer === undefined || values.fixer === id);
   if (selected.length === 0) throw new Error(`Unknown registered fixer: ${values.fixer}`);
   await run(values.out, await inputs(values.fixtures), selected);

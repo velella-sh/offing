@@ -262,6 +262,10 @@
       "description": "Limits for an explicitly requested Autopilot run. Reading config alone starts no processes.",
       "additionalProperties": false,
       "properties": {
+        "testRuntime": {
+          "const": "container",
+          "description": "Use the pinned container by default when explicitly requesting test-only execution."
+        },
         "driver": {
           "enum": ["replay", "command", "claude", "codex", "gemini", "aider"],
           "default": "replay"

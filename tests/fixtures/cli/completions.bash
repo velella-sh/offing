@@ -63,7 +63,7 @@ _offing() {
     capabilities) opts="--json" ;;
     completions) opts="" ;;
     attest) opts="--subject --sbom --data-version --today" ;;
-    autopilot) opts="--dry-run --prepare --undo --wave --finding --to --agent --replay" ;;
+    autopilot) opts="--dry-run --prepare --replay --test-only --container --undo --wave --finding --to --agent" ;;
     campaign-board) opts="--out" ;;
     campaign) opts="--fleet --json" ;;
     codemod) opts="" ;;
