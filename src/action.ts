@@ -4,7 +4,13 @@ import { appendFile, readFile, stat } from "node:fs/promises";
 import process from "node:process";
 import { dirname, relative, resolve } from "node:path";
 
-import { readAgentReviewEvent, reportAgentReview } from "./action-agent-review.js";
+import {
+  readAgentReviewEvent,
+  reportAgentReview,
+  reviewFindingKey,
+  type AgentReviewReport,
+  type PostedReviewFindings,
+} from "./action-agent-review.js";
 import { publishActionFixes } from "./action-fix-pr.js";
 import { runCommentCommands } from "./action-commands.js";
 import {
@@ -176,11 +182,21 @@ function scanCommentBody(
   proposal: ProposedBaseline | undefined,
   forecast: string | undefined,
   countdown: PullRequestCountdown | undefined,
+  posted?: PostedReviewFindings,
 ): string {
   const { result, gateFailed, gate, diff, packages, agent } = outcome;
   const attribution = process.env.INPUT_ATTRIBUTION !== "false";
+  const findings = posted
+    ? result.findings.filter((finding) => !posted.local.has(reviewFindingKey(finding)))
+    : result.findings;
+  const reviewed = result.findings.length - findings.length;
+  const commentAgent =
+    posted && agent
+      ? { ...agent, findings: agent.findings.filter((finding) => !posted.local.has(reviewFindingKey(finding))) }
+      : agent;
+  const commentCountdown = posted && countdown ? remainingCountdown(countdown, posted.repository) : countdown;
   const body = renderComment(
-    result.findings,
+    findings,
     gateFailed,
     gate,
     result.data,
@@ -189,15 +205,26 @@ function scanCommentBody(
     diff,
     packages,
     unannotated,
-    agent,
-    countdown,
+    commentAgent,
+    commentCountdown,
+    reviewed,
   );
   const proposalNote = proposal ? `\n${renderBaselineProposal(proposal.path, proposal.baseline)}` : "";
   const forecastNote = forecast ? `\n${forecast}` : "";
   const full = `${body}${policyFailureNote(outcome)}${proposalNote}${forecastNote}`;
   return limitPullRequestComment(full, () =>
-    compactPullRequestComment(result.findings, gateFailed, gate, attribution, countdown),
+    compactPullRequestComment(findings, gateFailed, gate, attribution, commentCountdown, reviewed),
   );
+}
+
+function remainingCountdown(countdown: PullRequestCountdown, posted: ReadonlySet<string>): PullRequestCountdown {
+  const findings = countdown.findings.filter((finding) => !posted.has(reviewFindingKey(finding)));
+  return {
+    ...countdown,
+    findings,
+    timelineFindings: countdown.timelineFindings.filter((finding) => !posted.has(reviewFindingKey(finding))),
+    reviewedDated: findings.length !== countdown.findings.length,
+  };
 }
 
 function stepSummaryBody(
@@ -282,6 +309,7 @@ async function publishScanSummaries(
   ctx: RunContext,
   proposal: ProposedBaseline | undefined,
   forecast: string | undefined,
+  posted?: PostedReviewFindings,
 ): Promise<void> {
   const unannotated = unannotatedNote(outcome);
   const pr = ctx.event.pull_request;
@@ -289,7 +317,10 @@ async function publishScanSummaries(
     const countdown = await readCountdown(outcome, ctx);
     const body = scanCommentBody(outcome, unannotated, proposal, forecast, countdown);
     await writeSummary(body);
-    await postComment(body, ctx);
+    await postComment(
+      posted ? scanCommentBody(outcome, unannotated, proposal, forecast, countdown, posted) : body,
+      ctx,
+    );
     return;
   }
   await writeSummary(stepSummaryBody(outcome, unannotated, proposal, forecast));
@@ -678,18 +709,20 @@ async function prepareRun(env: Env, root: string, workspace: string): Promise<Pr
 
 /** Publishes everything one finished run reports, then fails the step when the gate failed. */
 async function reportOutcome(
-  outcome: GitHubActionOutcome,
+  review: AgentReviewReport,
   ctx: RunContext,
   proposeBaselinePath: string | undefined,
   forecastMonths: number | undefined,
 ): Promise<void> {
+  const { outcome, posted, packetDirectory } = review;
   const proposal = proposeBaselinePath === undefined ? undefined : proposedBaselineFor(outcome, proposeBaselinePath);
   for (const annotation of outcome.annotations) console.log(annotationCommand(annotation));
   warnAboutSuppressions(outcome);
   await publishOutputs(outcome);
+  if (packetDirectory) await setOutput("agent-packet-path", packetDirectory);
   const forecast = await publishForecast(outcome, ctx, forecastMonths);
-  await publishScanSummaries(outcome, ctx, proposal, forecast);
-  await postFixSuggestions(outcome, ctx.event);
+  await publishScanSummaries(outcome, ctx, proposal, forecast, posted);
+  if (!posted) await postFixSuggestions(outcome, ctx.event);
   await publishActionFixes(outcome.result, ctx.env, ctx.event.repository, ctx.fork, {
     setOutput,
     writeSummary,

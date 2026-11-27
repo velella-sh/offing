@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -8,12 +8,14 @@ import { after, test } from "node:test";
 
 import { parse as parseYaml } from "yaml";
 
+import { addReviewDetails } from "../src/action-agent-review-details.js";
 import { createBaseline, writeBaseline } from "../src/baseline.js";
 import { builtInDetectors } from "../src/detectors/index.js";
 import { scanRepository } from "../src/engine/index.js";
 import type { Finding } from "../src/domain.js";
 import { renderBadgeSvg } from "../src/badge.js";
 import { renderBadge, renderFailure, runGitHubAction } from "../src/github-action.js";
+import { validateMigrationPacket } from "../src/migration-packet.js";
 
 import { copyFixtureTree } from "./fixture-copies.js";
 
@@ -781,26 +783,35 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
   const head = git(root, ["rev-parse", "HEAD"]).trim();
   const repo = { full_name: "owner/project" };
   const eventPath = join(root, "event.json");
-  const writeEvent = (source = repo, login = "someone") =>
+  const writeEvent = (source = repo, login = "someone", revision = head) =>
     writeFile(
       eventPath,
       JSON.stringify({
-        pull_request: { number: 17, user: { login }, base: { sha: base, repo }, head: { sha: head, repo: source } },
+        pull_request: { number: 17, user: { login }, base: { sha: base, repo }, head: { sha: revision, repo: source } },
       }),
     );
   await writeEvent();
   const requests: string[] = [];
   const reviews: unknown[] = [];
+  const summaries: string[] = [];
   let verified = false;
+  let rejectReview = false;
   const server = createServer(async (request, response) => {
+    const path = new URL(request.url ?? "/", "http://fixture.invalid").pathname;
     requests.push(`${request.method} ${request.url}`);
     assert.equal(request.headers.authorization, "Bearer fixture-token");
     response.setHeader("content-type", "application/json");
     if (request.method === "POST") {
       const parts = [];
       for await (const chunk of request) parts.push(String(chunk));
-      reviews.push(JSON.parse(parts.join("")));
-      response.writeHead(201).end("{}");
+      const body = JSON.parse(parts.join(""));
+      if (path.endsWith("/reviews")) reviews.push(body);
+      else summaries.push(body.body);
+      response.writeHead(path.endsWith("/reviews") && rejectReview ? 422 : 201).end("{}");
+      return;
+    }
+    if (path.endsWith("/comments")) {
+      response.end("[]");
       return;
     }
     const row = (sha: string, signature: boolean, type = "Bot") => ({
@@ -822,6 +833,9 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
         GITHUB_EVENT_PATH: eventPath,
         GITHUB_REPOSITORY: "owner/project",
         GITHUB_API_URL: `http://127.0.0.1:${address.port}`,
+        GITHUB_SERVER_URL: "https://github.example.invalid",
+        GITHUB_RUN_ID: "42",
+        GITHUB_RUN_ATTEMPT: "2",
         INPUT_MODE: "diff",
         "INPUT_GITHUB-TOKEN": "fixture-token",
         "INPUT_FAIL-ON-SEVERITY": "none",
@@ -833,6 +847,10 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
 
   assert.equal((await execute()).code, 0);
   assert.deepEqual(requests, []);
+  await writeFile(
+    join(root, ".github", "workflows", "ci.yml"),
+    "jobs:\n  test:\n    steps:\n      - uses: actions/checkout@v4 # dirty-fixture-private\n",
+  );
   const unverified = await execute({ "INPUT_VERIFY-AGENT-COMMITTERS": "true" });
   assert.doesNotMatch(unverified.summary, /bot-committer/u);
   assert.deepEqual(requests, ["GET /repos/owner/project/pulls/17/commits?per_page=100&page=1"]);
@@ -853,6 +871,28 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
   assert.ok(first && typeof first === "object" && "comments" in first && Array.isArray(first.comments));
   assert.match(first.comments[0]?.body, /checkout.*\n\nReplacement: .+\n\nSource: <https:\/\/.+>\n\nDays left: .+/isu);
   assert.match(first.comments[1]?.body, /request.*\n\nReplacement: .+\n\nSource: <https:\/\/.+>\n\nDays left: .+/isu);
+  assert.match(first.comments[0]?.body, /```suggestion\n +- uses: actions\/checkout@v5\n```/u);
+  assert.doesNotMatch(first.comments[0]?.body, /dirty-fixture-private/u);
+  assert.match(first.comments[1]?.body, /No deterministic codemod suggestion is available on these lines\./u);
+  const packetPath = /^agent-packet-path=(.+)$/mu.exec(review.outputs)?.[1];
+  assert.ok(packetPath);
+  const filenames = await readdir(packetPath);
+  assert.equal(filenames.length, 2);
+  for (const comment of first.comments) {
+    const filename = /\x60(migration-[a-f0-9]+\.json)\x60/u.exec(comment.body)?.[1];
+    assert.ok(filename && filenames.includes(filename));
+    assert.match(
+      comment.body,
+      /Ask your agent to fix this.*offing-agent-migration-packets-2.*github\.example\.invalid\/owner\/project\/actions\/runs\/42#artifacts/u,
+    );
+    const json = await readFile(join(packetPath, filename), "utf8");
+    assert.ok(!json.includes(root));
+    assert.doesNotMatch(json, /dirty-fixture-private/u);
+    const packet = validateMigrationPacket(JSON.parse(json));
+    assert.equal(packet.repositoryRoot, ".");
+    assert.equal(packet.finding.location.path, comment.path);
+    assert.ok(packet.usages.every((usage) => usage.excerpt === ""));
+  }
   assert.deepEqual(first, {
     ...expected,
     comments: [
@@ -876,6 +916,82 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
   assert.match(invalid.stdout, /review-event must be comment or request-changes/u);
   assert.deepEqual(requests, []);
   assert.equal(reviews.length, 2);
+
+  await writeEvent(repo, "Copilot");
+  const flags = { "INPUT_AGENT-REVIEW": "true", "INPUT_PR-COMMENT": "true" };
+  const combined = await execute({ ...flags, "INPUT_SUGGEST-FIXES": "true" });
+  assert.equal(combined.code, 0);
+  assert.deepEqual(requests, [
+    "POST /repos/owner/project/pulls/17/reviews",
+    "GET /repos/owner/project/issues/17/comments?per_page=100&page=1",
+    "POST /repos/owner/project/issues/17/comments",
+  ]);
+  assert.match(
+    summaries[0] ?? "",
+    /Found \*\*2\*\* lifecycle findings.*\n\nSee the inline lifecycle review for 2 findings\./u,
+  );
+  assert.doesNotMatch(summaries[0] ?? "", /actions\/checkout|request is deprecated/u);
+  assert.match(combined.summary, /actions\/checkout/u);
+  assert.match(combined.outputs, /finding-count=2/u);
+
+  rejectReview = true;
+  const rejected = await execute(flags);
+  assert.equal(rejected.code, 0);
+  assert.match(rejected.stdout, /Offing could not post the agent review/u);
+  assert.doesNotMatch(rejected.outputs, /agent-packet-path=/u);
+  assert.match(summaries[1] ?? "", /actions\/checkout/u);
+  assert.doesNotMatch(summaries[1] ?? "", /See the inline lifecycle review/u);
+
+  await writeFile(
+    join(root, ".github", "workflows", "ci.yml"),
+    "jobs:\n  test:\n    steps:\n      - uses: actions/checkout@v4 # password=fixture-only-credential\n",
+  );
+  git(root, ["add", ".github/workflows/ci.yml"]);
+  git(root, ["commit", "-q", "-m", "add a synthetic credential to the changed line"]);
+  await writeEvent(repo, "Copilot", git(root, ["rev-parse", "HEAD"]).trim());
+  rejectReview = false;
+  const protectedReview = await execute({ "INPUT_AGENT-REVIEW": "true" });
+  assert.equal(protectedReview.code, 0);
+  assert.doesNotMatch(JSON.stringify(reviews.at(-1)), /fixture-only-credential|\x60{3}suggestion/u);
+  assert.match(JSON.stringify(reviews.at(-1)), /No deterministic codemod suggestion/u);
+
+  const meta = parseYaml(await readFile(resolve("action.yml"), "utf8")) as {
+    runs: { steps: Array<{ name: string; if?: string; uses?: string; with?: Record<string, string | number> }> };
+  };
+  const upload = meta.runs.steps.find((step) => step.name === "Upload agent migration packets");
+  assert.equal(upload?.uses, UPLOAD_ARTIFACT);
+  assert.equal(upload?.if, "always() && steps.scan.outputs.agent-packet-path != ''");
+  assert.equal(upload?.with?.name, "offing-agent-migration-packets-${{ github.run_attempt }}");
+  assert.equal(upload?.with?.path, "${{ steps.scan.outputs.agent-packet-path }}");
+  assert.equal(upload?.with?.["retention-days"], 14);
+});
+
+test("acc-ai-pr-review keeps the core comment if its optional source snapshot exceeds the path budget", async () => {
+  const root = await fixtureRepository();
+  const item: Finding = {
+    ...finding("nodejs.symbol.buffer.constructor:index.js:1", "high", "Legacy Buffer constructor", "index.js", 1),
+    usages: Array.from({ length: 250 }, (_, index) => ({
+      kind: "call",
+      language: "javascript",
+      symbol: "Buffer",
+      location: { path: `src/use-${index}.js`, line: 1 },
+      excerpt: "",
+    })),
+  };
+  const comment = { path: "index.js", line: 1, side: "RIGHT" as const, body: item.title };
+  const details = await addReviewDetails(
+    { schemaVersion: "offing.scan.v1", root, scannedAt: new Date().toISOString(), findings: [item], diagnostics: [] },
+    "unused",
+    [{ finding: item, comment }],
+    new Map(),
+    {},
+    () => false,
+  );
+  assert.deepEqual(details, {
+    comments: [
+      { ...comment, body: `${item.title}\n\nNo deterministic codemod suggestion is available on these lines.` },
+    ],
+  });
 });
 
 test("mode: diff falls back to a scan outside pull request events", async () => {

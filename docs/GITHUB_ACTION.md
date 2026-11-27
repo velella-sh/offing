@@ -254,6 +254,8 @@ Set `verify-agent-committers: "true"` and give the job `pull-requests: read` to 
 
 Set `agent-review: "true"` in diff mode with `pull-requests: write` to post one review for a recognized agent on a pull request from the same repository. The Action also checks bot committers when this review is enabled. Each comment points to an added or changed line and includes the replacement, evidence and days left when available. Findings without an inline location remain in the local report, and forks receive the job summary. The default `review-event: comment` submits an informational review. Set `review-event: request-changes` to ask for changes explicitly. Both inputs apply to the `pull_request` event. Each eligible run submits its own review.
 
+An inline comment offers a suggestion when a deterministic codemod can complete the fix in one block of changed lines. It says when no such suggestion is available. The comment names the finding’s JSON migration packet in the run’s `offing-agent-migration-packets-<attempt>` artifact. Packets use repository-relative paths, omit matched source excerpts, and are retained for 14 days. If `pr-comment` is also enabled, its countdown and findings list omit entries successfully posted in the inline review. The job summary and machine-readable report still include every finding.
+
 ### Comment commands
 
 Set `commands: "true"` and run the Action on `issue_comment` so a reviewer can ask about a finding or accept it without leaving the pull request. A short workflow of its own is enough; it can sit next to the scan workflow:

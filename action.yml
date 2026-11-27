@@ -296,6 +296,14 @@ runs:
         path: ${{ steps.scan.outputs.receipt-path }}
         if-no-files-found: error
         retention-days: 14
+    - name: Upload agent migration packets
+      if: always() && steps.scan.outputs.agent-packet-path != ''
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: offing-agent-migration-packets-${{ github.run_attempt }}
+        path: ${{ steps.scan.outputs.agent-packet-path }}
+        if-no-files-found: error
+        retention-days: 14
     - name: Upload fix pull request evidence
       if: always() && steps.scan.outputs.fix-pr-artifact-path != ''
       uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
