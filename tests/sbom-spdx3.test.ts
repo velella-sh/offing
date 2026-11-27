@@ -53,7 +53,7 @@ const rule: RegistryV2Rule = {
 };
 
 const ajv = new Ajv2020({ strict: false });
-const validate = ajv.compile(JSON.parse(await readFile("tests/fixtures/spdx/spdx-3.0.1-json-schema.json", "utf8")));
+const validate = ajv.compile(JSON.parse(await readFile("schemas/vendor/spdx-3.0.1-json-schema.json", "utf8")));
 const checker = resolve("docs/spec/lifecycle-properties/conformance/check.mjs");
 
 test("SPDX 3 enrichment preserves input and adds schema-valid annotations, source links, and document membership", () => {
