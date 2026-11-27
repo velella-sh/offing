@@ -15,9 +15,10 @@ This guide takes one person from an unconfigured organization to a weekly lifecy
 6. Offer the per-repository starter from the organization's `.github` repository.
 7. Open adoption pull requests at scale (optional).
 
-The scan itself stays local. The organization-scan workflow lists repositories and downloads artifacts through the GitHub API; each scan checks out one repository and reads its files and Offing's bundled data, with no network access. Per-repository adoption uses one `uses:` line that calls the reusable scan workflow.
-
-> The reusable workflow examples follow `main` and pin a released scanner. Pin the workflow commit SHA for a fixed revision.
+The reusable workflow builds the CLI from the explicit Offing commit you supply.
+One fleet job discovers the organization repositories, reads pinned detector
+inputs, scans them offline, and optionally posts a digest. See
+[Fleet scans](https://velella.sh/offing/FLEET/) for the local equivalent.
 
 ## Before you start
 
@@ -33,7 +34,7 @@ The caller repository is scanned like every other repository in the organization
 
 ## 1. Create a read-only organization token
 
-The workflow needs a token that can list the organization's repositories and read each repository's contents. It does not need write access to anything, and no scan ever receives the token.
+The workflow needs a token that can list the organization's repositories and read each repository's contents. It needs read access only. The fleet transport uses the token before the scanner reads local inputs.
 
 ### Fine-grained token (recommended)
 
@@ -78,7 +79,8 @@ If you omit the `github-token` secret, the workflow falls back to the caller's `
 
 ## 2. Add the caller workflow
 
-Add one workflow to the caller repository. It calls [`.github/workflows/org-scan.yml`](../.github/workflows/org-scan.yml), which lists the organization's repositories and scans each one in a bounded matrix through the first-party Offing Action. The Action version follows the workflow tag you call, so pinning the workflow pins the scanner.
+Add one workflow to the caller repository. It calls [`.github/workflows/org-scan.yml`](../.github/workflows/org-scan.yml), which runs `offing fleet` in one job. Use the same full commit SHA for the workflow ref and the
+`offing-ref` input. The job installs dependencies from the pinned lockfile.
 
 Create `.github/workflows/offing-org-scan.yml`:
 
@@ -92,13 +94,12 @@ on:
 
 permissions:
   contents: read
-  # Only needed for the Slack/Teams digest. Remove it if you do not post one.
-  actions: read
 
 jobs:
   org-scan:
-    uses: velella-sh/offing/.github/workflows/org-scan.yml@main
+    uses: velella-sh/offing/.github/workflows/org-scan.yml@<full-workflow-commit-sha>
     with:
+      offing-ref: <full-workflow-commit-sha>
       organization: your-org
       fail-on-severity: high
       max-jobs: 10
@@ -116,27 +117,16 @@ gh run list --repo your-org/your-ops-repo --workflow offing-org-scan.yml --limit
 gh run watch <run-id> --repo your-org/your-ops-repo
 ```
 
-The first run has three visible parts:
-
-- **List repositories.** One job calls `GET /orgs/<org>/repos`, skips archived and disabled repositories, and prints how many it found.
-- **Scan <repository>.** One matrix job per repository checks out its default branch and runs the Offing Action. Progress and annotations are per repository, so a failure names the repository.
-- **Send digest.** After the matrix finishes, one job builds a rollup and posts it to the configured webhooks. It is skipped when neither webhook secret is set.
-
-### Inputs
+The fleet job writes per-repository progress and a final digest, uploads
+`offing-fleet`, then applies the severity gate. Scan failures appear in the
+report alongside successful repositories.
 
 | Input | Default | Meaning |
 | --- | --- | --- |
-| `organization` | caller repository owner | The GitHub organization to scan. It must be an organization; user accounts are not supported. |
-| `fail-on-severity` | `high` | Lowest severity that fails one repository's scan job: `none`, `info`, `low`, `medium`, `high`, or `critical`. |
-| `max-jobs` | `10` | Maximum number of repositories scanned in parallel. Concurrency stays bounded while the matrix scales with the repository count. |
-
-For the first inventory run, set `fail-on-severity: none`. The workflow then finishes successfully even when repositories have findings, which makes the artifacts and digest easy to inspect. Tighten it to `high` once the backlog is triaged, or move the gate to per-repository pull-request workflows with baselines (see [step 3](#3-accept-existing-findings-with-a-baseline)).
-
-A scan job fails when a repository has findings at or above `fail-on-severity`, so the calling workflow fails if any repository crossed the gate. Matrix jobs do not cancel each other (`fail-fast: false`), so every repository is still scanned and every report is still uploaded.
-
-### If you only want an inventory
-
-Set `fail-on-severity: none` and leave the schedule as it is. The run is a weekly inventory: reports and the digest are produced, but no repository fails the workflow. Add per-repository pull-request workflows (see [step 3](#3-accept-existing-findings-with-a-baseline)) when you want a gate that blocks new findings.
+| `offing-ref` | Current commit for in-repository runs | Full Offing workflow commit SHA, required from another repository. |
+| `organization` | Caller repository owner | GitHub organization slug. |
+| `fail-on-severity` | `high` | Minimum severity that fails the final gate or `none`. |
+| `max-jobs` | `10` | Bounded repository concurrency, from 1 to 16. |
 
 ## 3. Accept existing findings with a baseline
 
@@ -235,106 +225,36 @@ npx @velella/offing scan . \
 
 ## 4. Read the report artifacts
 
-Each scan job writes a versioned JSON report and uploads it as an artifact named `offing-report-<repository>`. Artifacts are retained for 14 days.
+Download the run's `offing-fleet` artifact. It contains a single fleet
+report with per-repository branch, commit, status and failure reason.
 
-In GitHub, open the run from **Actions → Offing organization scan**, scroll to **Artifacts**, and download the artifact for one repository. It contains `offing-report.json`. The run's job summary also shows the counts per severity, the ten most severe findings, and a link to the evidence for each one.
-
-From a terminal, download every report from a run and merge them into one organization view:
-
-```bash
-gh run list --repo your-org/your-ops-repo --workflow offing-org-scan.yml --limit 1
-gh run download <run-id> --repo your-org/your-ops-repo \
-  --pattern 'offing-report-*' --dir org-reports
-npx @velella/offing rollup org-reports/*/offing-report.json
+```sh
+gh run download <run-id> --repo your-org/your-ops-repo --name offing-fleet --dir org-reports
+offing rollup org-reports/fleet.json
+offing rollup org-reports/fleet.json --owners owners.json --html > report.html
 ```
 
-The rollup reads the saved reports and nothing else, so it uses no network and does not touch the repositories. It prints totals, then counts grouped by repository, product, and owner:
-
-```text
-Offing rollup: 7 findings across 2 repositories
-
-By repository:
-  sample-api: 5 (2 high, 3 medium; nearest deadline 2020-02-11)
-  sample-web: 2 (2 high; nearest deadline 2024-07-24)
-
-By product:
-  nodejs: 3 (3 medium) in sample-api
-  github-actions: 2 (2 high) in sample-api, sample-web
-  npm: 2 (2 high) in sample-api, sample-web
-
-By owner:
-  unowned: 7 (4 high, 3 medium) in sample-api, sample-web
-```
-
-The repository name comes from the artifact directory: `org-reports/offing-report-sample-api/offing-report.json` becomes `sample-api`. A repository with no matching artifact is absent, not counted as clean.
-
-### Add owners
-
-Create an `owners.json` that maps repository names to teams, then pass it to the rollup:
-
-```json
-{
-  "sample-api": "platform",
-  "sample-web": "frontend"
-}
-```
-
-```bash
-npx @velella/offing rollup org-reports/*/offing-report.json --owners owners.json
-```
-
-A repository missing from the file is grouped under `unowned`. This is the same grouping the Slack and Teams digest uses.
-
-### Read the JSON directly
-
-The report is `offing.scan.v1` (schema: [`schemas/scan.v1.schema.json`](../schemas/scan.v1.schema.json)). Each finding names its rule, severity, exact location, deadline when the source gives one, replacement, and evidence:
-
-```json
-{
-  "schemaVersion": "offing.scan.v1",
-  "findings": [
-    {
-      "ruleId": "github-actions.checkout.node20",
-      "severity": "high",
-      "location": { "path": ".github/workflows/ci.yml", "line": 7 },
-      "deadline": "2026-09-23",
-      "replacement": "actions/checkout@v5 or later",
-      "sources": [{ "title": "GitHub changelog", "url": "https://github.blog/..." }]
-    }
-  ]
-}
-```
-
-Suppressed findings are absent from the report. A scan that used a baseline adds a `suppressions` object that says how many it hid and which entries are expiring or expired.
-
-### Optional: publish one page
-
-The same rollup renders as a self-contained HTML page:
-
-```bash
-npx @velella/offing rollup org-reports/*/offing-report.json \
-  --owners owners.json --html > org-report.html
-```
-
-[`templates/rollup/`](../templates/rollup/) packages that command as a GitHub Pages workflow. It runs after a successful organization scan, downloads the same artifacts, and publishes the page without a server. It only runs when the scan succeeds, so use `fail-on-severity: none` if you want the page even while the backlog is ungated.
-
-### Optional: developer portals
-
-To show the same lifecycle risk in Backstage, Grafana, Port, or Cortex — from one offline `export --format portal` catalog — see [Developer portals](PORTALS.md).
+Map full repository names such as `your-org/sample-api` to teams in
+`owners.json`. The same rollup command still accepts historical individual
+scan reports. The [Pages template](https://github.com/velella-sh/offing/tree/main/templates/rollup)
+reads the fleet artifact and publishes a self-contained report.
 
 ## 5. Set up the recurring digest
 
 The schedule in [step 2](#2-add-the-caller-workflow) is the recurrence. This step connects it to a chat channel.
 
-After the scan jobs finish, the reusable workflow downloads the run's `offing-report-*` artifacts and renders the same text as `offing rollup`. It lists the total findings across every repository by severity, repository, product, and owner, with each repository's nearest deadline. It posts even when some scan jobs failed, so a red run does not silence the weekly numbers.
+After scanning, the fleet job renders the report as rollup text for the
+configured webhook. It includes partial failures and sends the digest
+before enforcing the severity gate.
 
 Enable one or both webhooks by adding the secrets and passing them from the caller:
 
 ```yaml
 jobs:
   org-scan:
-    uses: velella-sh/offing/.github/workflows/org-scan.yml@main
+    uses: velella-sh/offing/.github/workflows/org-scan.yml@<full-workflow-commit-sha>
     with:
+      offing-ref: <full-workflow-commit-sha>
       organization: your-org
     secrets:
       github-token: ${{ secrets.OFFING_ORG_TOKEN }}
@@ -342,9 +262,9 @@ jobs:
       teams-webhook-url: ${{ secrets.OFFING_TEAMS_WEBHOOK }}
 ```
 
-The caller also needs `actions: read`, because the digest downloads the artifacts of its own run. Without that permission the notify job cannot read the artifacts; the scan jobs are unaffected.
+The digest reads the fleet report already present in the job.
 
-If neither webhook secret is set, the notify job is skipped entirely and no outbound request is made.
+Each webhook is called only when its corresponding secret is set.
 
 ### Set up the Slack webhook
 
@@ -482,7 +402,7 @@ Without the input, the Action reports every finding even though the baseline fil
 
 ## Limits
 
-GitHub Actions caps a matrix at 256 jobs, so an organization with more than 256 scannable repositories (archived and disabled repositories are skipped) needs call sites split into batches; call the workflow once per sub-organization. Archived and disabled repositories are skipped; forks and internal repositories are scanned unless the token cannot read them.
+One fleet job scans with bounded concurrency. Archived, disabled and forked repositories are skipped by default.
 
 Artifacts are retained for 14 days. Download or roll up a run's reports before they expire if you need a longer history, or publish the [rollup page](#optional-publish-one-page) from a workflow that runs alongside the scan.
 
@@ -504,7 +424,7 @@ Artifacts are retained for 14 days. Download or roll up a run's reports before t
 | List repositories | GitHub Actions, caller repository | `GET /orgs/<org>/repos` |
 | Scan one repository | GitHub Actions, checked-out repository | None. Files and bundled data only. |
 | Upload reports | GitHub Actions artifacts | Normal Actions artifact storage, 14 days |
-| Rollup digest | GitHub Actions, notify job | Reads local artifacts, then posts to the configured webhook |
+| Rollup digest | GitHub Actions, fleet job | Reads the local fleet report and posts to the configured webhook |
 | `offing baseline`, `offing rollup` | Your machine or CI | None. Local files only. |
 
-Only `contents: read` is needed for the scans. Add `actions: read` for the digest. The dedicated token is used only by the list job; it is never passed to a scan. Offing does not send repository contents to an Offing service, and the report can contain repository-relative paths, matched excerpts, dependency versions, and lifecycle evidence, so apply normal artifact access controls.
+The workflow needs `contents: read`. The dedicated token is used for discovery and read-only transport. Fleet reports contain repository metadata and lifecycle counts; apply normal artifact access controls.

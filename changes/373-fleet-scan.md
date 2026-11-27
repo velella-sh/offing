@@ -1,0 +1,1 @@
+- Add `offing fleet` for pinned, bounded GitHub organization and GitLab group scans with resumable caching and rollup reports.
