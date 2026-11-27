@@ -52,6 +52,7 @@ complete -c offing -n __fish_use_subcommand -a lsp
 complete -c offing -n __fish_use_subcommand -a migrate
 complete -c offing -n __fish_use_subcommand -a policy
 complete -c offing -n __fish_use_subcommand -a prompt
+complete -c offing -n __fish_use_subcommand -a proof
 complete -c offing -n __fish_use_subcommand -a recommend
 complete -c offing -n __fish_use_subcommand -a release-gate
 complete -c offing -n __fish_use_subcommand -a rollback-readiness
@@ -68,6 +69,7 @@ complete -c offing -n '__fish_seen_subcommand_from codemod' -a 'test'
 complete -c offing -n '__fish_seen_subcommand_from config' -a 'validate'
 complete -c offing -n '__fish_seen_subcommand_from drivers' -a 'list test'
 complete -c offing -n '__fish_seen_subcommand_from policy' -a 'validate explain pull'
+complete -c offing -n '__fish_seen_subcommand_from proof' -a 'verify'
 complete -c offing -n '__fish_seen_subcommand_from scan check' -l fail-on -x -a 'info low medium high critical none'
 complete -c offing -n '__fish_seen_subcommand_from scan' -l format -x -a 'text json sarif rdjson compact html mermaid'
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l format -x -a 'text json sarif rdjson compact html mermaid'
@@ -262,6 +264,7 @@ complete -c offing -n '__fish_seen_subcommand_from policy' -l policy
 complete -c offing -n '__fish_seen_subcommand_from policy' -l today
 complete -c offing -n '__fish_seen_subcommand_from prompt' -l format
 complete -c offing -n '__fish_seen_subcommand_from prompt' -l symbol
+complete -c offing -n '__fish_seen_subcommand_from proof' -l repo
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l min-days
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l as-of
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l json

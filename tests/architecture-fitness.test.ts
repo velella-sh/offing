@@ -7,6 +7,7 @@ import { after, test } from "node:test";
 import * as root from "../src/index.js";
 import * as conformance from "../src/conformance/index.js";
 import * as mcp from "../src/mcp.js";
+import * as proof from "../src/proof/publish.js";
 import * as sdk from "../src/sdk.js";
 import { BASELINE_PATH, RULES, buildGraph, findViolations, main } from "../tools/check-architecture.js";
 
@@ -128,6 +129,10 @@ const EXPORTS = {
     module: conformance,
     names: ["CONFORMANCE_API_VERSION", "ConformanceError", "runDetectorConformance"],
   },
+  "./proof": {
+    module: proof,
+    names: ["prepareProofPublication"],
+  },
   "./mcp": {
     module: mcp,
     names: [
@@ -171,6 +176,7 @@ test("public API shape: package.json exposes exactly the reviewed entry points",
       "./schemas/campaign-state.v1.schema.json",
       "./schemas/campaign.v1.schema.json",
       "./schemas/lineage.v1.schema.json",
+      "./schemas/proof.v1.schema.json",
       "./schemas/whatif.v1.schema.json",
       "./schemas/stack-context.v1.schema.json",
     ].sort(),

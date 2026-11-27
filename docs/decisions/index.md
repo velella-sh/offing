@@ -105,3 +105,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0068](0068-campaign-v1.md) | Campaign and campaign state v1 | Select pinned Fleet repositories and exchange campaign plans and state. |
 | [0069](0069-stack-context.md) | Stack context at agent session start | Publish bounded reviewed context and preserve existing write hooks. |
 | [0070](0070-campaign-board-export.md) | Campaign board export | Project recorded progress into JSON collections and a reproducible site source directory. |
+| [0071](0071-proof-bundle-v1.md) | Migration proof v1 | Verify paired scan evidence, local Git path counts, and redacted log digests. |
