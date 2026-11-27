@@ -4,6 +4,7 @@ import semver from "semver";
 import { isMap, isScalar, parseAllDocuments } from "yaml";
 
 import { readBoundedFile } from "../package-files.js";
+import { lockedChain, type LockedGraph } from "./lock-graph.js";
 import type { UpgradeAnalyzer, UpgradeIssue, UpgradeTarget } from "./types.js";
 
 const LOCKFILE = "pnpm-lock.yaml";
@@ -17,6 +18,7 @@ interface PackageEntry {
   range: string;
   line: number;
   dev: boolean;
+  chain?: string[];
 }
 
 function scalarValue(node: unknown): string | undefined {
@@ -132,6 +134,27 @@ function snapshotGraph(root: unknown): Map<string, string[]> {
   return graph;
 }
 
+/** Peer variants can differ. Retain edges common to every snapshot for the same package and version. */
+function chainGraph(root: unknown): LockedGraph {
+  const { production, dev } = importerRoots(root);
+  const graph: LockedGraph = { roots: [...production, ...dev], edges: new Map(), labels: new Map() };
+  const snapshots = mapValue(root, "snapshots") ?? mapValue(root, "packages");
+  if (!isMap(snapshots)) return graph;
+  for (const pair of snapshots.items) {
+    const parsed = packageKey(scalarValue(pair.key));
+    if (parsed === undefined) continue;
+    const key = keyOf(parsed.name, parsed.version);
+    const previous = graph.edges.get(key);
+    const dependencies = new Set<string>();
+    collect(pair.value, ["dependencies", "optionalDependencies"], dependencies);
+    graph.edges.set(
+      key,
+      previous === undefined ? dependencies : new Set([...previous].filter((id) => dependencies.has(id))),
+    );
+  }
+  return graph;
+}
+
 function reachable(roots: Set<string>, graph: Map<string, string[]>): Set<string> {
   const seen = new Set<string>();
   const queue = [...roots];
@@ -206,6 +229,7 @@ function packageEntries(
   items: readonly PackagePair[],
   line: (offset: number) => number,
   reach: Reachability | undefined,
+  graph: LockedGraph,
 ): PackageEntry[] {
   const entries: PackageEntry[] = [];
   for (const pair of items) {
@@ -214,8 +238,10 @@ function packageEntries(
     const engines = enginesNode(pair.value);
     if (engines === undefined) continue;
     const key = keyOf(parsed.name, parsed.version);
+    const chain = lockedChain(graph, key);
     entries.push({
       subject: key,
+      ...(chain === undefined ? {} : { chain }),
       key,
       range: engines.range,
       line: line(engines.line),
@@ -239,7 +265,14 @@ export function readPackages(text: string): PackageEntry[] {
     if (version === undefined || !supported(version)) continue;
     const packages = mapValue(root, "packages");
     if (!isMap(packages)) continue;
-    entries.push(...packageEntries(packages.items, line, version.startsWith("9") ? reachableFlags(root) : undefined));
+    entries.push(
+      ...packageEntries(
+        packages.items,
+        line,
+        version.startsWith("9") ? reachableFlags(root) : undefined,
+        chainGraph(root),
+      ),
+    );
   }
   return entries;
 }
@@ -280,6 +313,7 @@ export const pnpmLockAnalyzer: UpgradeAnalyzer = {
         analyzer: ANALYZER_ID,
         level,
         subject: entry.subject,
+        ...(entry.chain === undefined ? {} : { chain: entry.chain }),
         path: LOCKFILE,
         line: entry.line,
         reason: valid

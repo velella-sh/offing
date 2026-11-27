@@ -245,7 +245,7 @@ Says which release line to write today, from the bundled lifecycle data only. Pa
 | `--json` | Print the structured `offing.recommend.v1` document. |
 
 ### `upgrade-check`
-offing upgrade-check --to <runtime@version> [path] [--json]
+offing upgrade-check --to <runtime@version> [path] [--json] [--graph] [--format mermaid|svg]
 Answers from files already in the repository whether the project can move to a target runtime. It reads lockfiles and manifests only: no package manager runs, nothing is installed, and nothing is fetched.
 | `--to <runtime@version>` | Required. Target runtime and release, for example `php@8.4` or `nodejs@22`. `node`, `py`, and `golang` are accepted as runtime aliases. |
 | `[path]` | Repository root, default `.`. |

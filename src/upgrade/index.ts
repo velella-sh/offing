@@ -1,3 +1,4 @@
+import { attachManifestChains } from "./manifest-paths.js";
 import { composerLockAnalyzer } from "./composer-lock.js";
 import { goModulesAnalyzer } from "./go-modules.js";
 import { dartSdkAnalyzer } from "./dart-sdk.js";
@@ -51,6 +52,7 @@ export async function checkUpgrade(
     ran.push(analyzer.id);
     issues.push(...(await analyzer.analyze(root, target)));
   }
+  await attachManifestChains(root, issues);
   issues.sort(
     (a, b) =>
       levelOrder[a.level] - levelOrder[b.level] ||

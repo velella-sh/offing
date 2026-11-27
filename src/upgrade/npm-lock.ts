@@ -3,13 +3,16 @@ import { join } from "node:path";
 import semver from "semver";
 
 import { member, readJsonLines, type JsonNode } from "../detectors/json-lines.js";
+import { compare } from "../reporters/shared.js";
 import { readBoundedFile } from "../package-files.js";
+import { npmPaths } from "./npm-paths.js";
 import type { UpgradeAnalyzer, UpgradeIssue, UpgradeTarget } from "./types.js";
 
 const ANALYZER_ID = "npm-lock";
 const LOCKFILES = ["package-lock.json", "npm-shrinkwrap.json"] as const;
 
 interface LockPackage {
+  location: string;
   name: string;
   version: string;
   range: string;
@@ -75,6 +78,7 @@ export function readPackages(text: string): LockPackage[] {
     const declaredName = member(entry.value, "name")?.value;
     const fallbackName = entry.key.slice(entry.key.lastIndexOf("node_modules/") + "node_modules/".length);
     entries.push({
+      location: entry.key,
       name: declaredName?.kind === "string" && declaredName.value !== "" ? declaredName.value : fallbackName,
       version: version.value,
       range: node.value,
@@ -91,6 +95,28 @@ function targetVersions(version: string): string[] | undefined {
   if (/^\d+\.\d+$/.test(cleaned)) return [`${cleaned}.0`];
   const exact = semver.valid(cleaned);
   return exact === null ? undefined : [exact];
+}
+
+function identity(entry: LockPackage): string {
+  return `${entry.name}\u0000${entry.version}\u0000${entry.range}`;
+}
+
+function bestChains(entries: LockPackage[], chainFor: (path: string) => string[] | undefined): Map<string, string[]> {
+  const chains = new Map<string, string[]>();
+  for (const entry of entries) {
+    const candidate = chainFor(entry.location);
+    if (candidate === undefined) continue;
+    const key = identity(entry);
+    const previous = chains.get(key);
+    if (
+      previous === undefined ||
+      candidate.length < previous.length ||
+      (candidate.length === previous.length && compare(candidate.join("\0"), previous.join("\0")) < 0)
+    ) {
+      chains.set(key, candidate);
+    }
+  }
+  return chains;
 }
 
 /** Finds every package whose `engines.node` excludes the target Node.js release. */
@@ -124,21 +150,25 @@ export const npmLockAnalyzer: UpgradeAnalyzer = {
         continue;
       }
       if (lockfile.version !== 2 && lockfile.version !== 3) continue;
-      for (const entry of readPackages(lockfile.text)) {
-        const identity = `${entry.name}\u0000${entry.version}\u0000${entry.range}`;
-        if (seen.has(identity)) continue;
-        seen.add(identity);
+      const entries = readPackages(lockfile.text);
+      const chains = bestChains(entries, npmPaths(lockfile.text));
+      for (const entry of entries) {
+        const key = identity(entry);
+        if (seen.has(key)) continue;
+        seen.add(key);
         const valid = semver.validRange(entry.range) !== null;
         const satisfied =
           valid &&
           candidates.some((candidate) => semver.satisfies(candidate, entry.range, { includePrerelease: false }));
         if (satisfied) continue;
         const level = valid ? (entry.dev ? "warning" : "blocker") : "unknown";
+        const chain = chains.get(key);
         const subject = `${entry.name}@${entry.version}`;
         issues.push({
           analyzer: ANALYZER_ID,
           level,
           subject,
+          ...(chain === undefined ? {} : { chain }),
           path: lockfile.path,
           line: entry.line,
           reason: valid

@@ -85,3 +85,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0035](0035-one-error-model-with-stable-codes.md) | One error model with stable reason codes | Every failure carries one reason code that fixes its class and exit code; the CLI error document gains `error.reason` and MCP failures carry the code in `_meta.offing`. |
 | [0045](0045-agent-guard-protocol.md) | Agent Guard v1 protocol | Share one lifecycle decision contract across standard I/O, MCP and host hooks while preserving existing responses. |
 | [0047](0047-verify-result-contract.md) | Common verification result | Expose one versioned verification document through CLI, MCP, and pull request receipts. |
+| [0048](0048-upgrade-blocker-graph.md) | Upgrade blocker graph | Add evidence-backed dependency chains and deterministic views of confirmed upgrade blockers. |

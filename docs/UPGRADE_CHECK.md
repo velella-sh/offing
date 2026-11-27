@@ -5,7 +5,7 @@ description: "Offline, from repository files: can this project move to a target 
 
 # Upgrade check
 
-`offing upgrade-check --to <runtime@version> [path] [--json]` answers, offline and from files already in the repository, whether a project can move to a target runtime. It lists each blocker, warning, and unknown with the exact lockfile or manifest entry behind it. Agents get the same answer through the `check_upgrade` MCP tool.
+`offing upgrade-check --to <runtime@version> [path] [--json] [--graph]` answers, offline and from files already in the repository, whether a project can move to a target runtime. It lists each blocker, warning, and unknown with the exact lockfile or manifest entry behind it. Agents get the same answer through the `check_upgrade` MCP tool.
 
 ```bash
 offing upgrade-check --to php@8.4 .
@@ -26,6 +26,37 @@ An analyzer only runs when the repository has the files it reads. Each issue nam
 - `blocker`: the project will not install or run on the target.
 - `warning`: it works but is deprecated on the target.
 - `unknown`: the evidence needed to judge it is missing.
+
+## Group blockers by direct dependency
+
+Add `--graph` to show the shortest recorded dependency paths under the verdict.
+A group count tells you how many confirmed blockers share that direct dependency.
+Blockers without a recorded path appear in their own section. Warning and
+unknown issues remain in the regular report. If the bundled Ebb data does
+not establish the first release that supports the target, the graph shows
+`unknown`.
+
+```sh
+offing upgrade-check --to nodejs@22 --graph
+offing upgrade-check --to nodejs@22 --graph --json
+offing upgrade-check --to nodejs@22 --format mermaid
+offing upgrade-check --to nodejs@22 --format svg > blockers.svg
+offing upgrade-check --to nodejs@22 --format svg --theme dark > blockers-dark.svg
+```
+
+The SVGs below come from the npm lockfile example. SVG and Mermaid rendering
+use the same local graph. The exit code is still 1 for a blocked upgrade,
+including when the report is redirected to a file.
+
+![Light upgrade blocker graph for the npm lockfile example](https://velella.sh/offing/assets/upgrade-blockers/light.svg)
+
+![Dark upgrade blocker graph for the npm lockfile example](https://velella.sh/offing/assets/upgrade-blockers/dark.svg)
+
+`check_upgrade` includes the same graph in its structured response. Each issue's
+optional `chain` lists locked package identities from the direct dependency to
+the package reporting the constraint. The
+[published report schema](https://velella.sh/offing/schemas/upgrade.v1.schema.json)
+also accepts reports without a graph or chains.
 
 ## What it cannot know
 

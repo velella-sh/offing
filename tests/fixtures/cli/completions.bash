@@ -29,7 +29,7 @@ _offing() {
     glance) opts="--as-of --json" ;;
     lookup) opts="--json" ;;
     drift) opts="--json --check --runtime --align" ;;
-    upgrade-check) opts="--to --json" ;;
+    upgrade-check) opts="--to --json --graph --format --theme" ;;
     inventory) opts="--format --json --fail-on --redact" ;;
     badge) opts="--snippet --repo --branch --shields" ;;
     diff) opts="--json --data-version" ;;

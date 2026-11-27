@@ -1,0 +1,1 @@
+- Group runtime upgrade blockers by their locked dependency paths in the CLI and MCP, with Mermaid and SVG output.

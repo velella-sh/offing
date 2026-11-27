@@ -12,4 +12,4 @@ uv.lock:7  twisted@24.3.0  twisted@24.3.0 resolves only for Python versions matc
 pdm.lock:4  black@24.3.0  black@24.3.0 is in the dev group and its requires_python ">=3.9,<3.13" excludes Python 3.13.  [lockfile: requires_python: >=3.9,<3.13]
 ```
 
-The command reads `uv.lock` and `pdm.lock` only. It installs nothing, runs no project command, and uses no network.
+The command reads `uv.lock`, `pdm.lock`, and direct dependencies in `pyproject.toml`. It installs nothing, runs no project command, and uses no network.
