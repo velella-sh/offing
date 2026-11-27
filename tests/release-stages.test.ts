@@ -50,6 +50,7 @@ test("release.yml calls verify, build, publish-per-channel, and smoke stages", a
     assert.equal(orchestrator.jobs[job]?.uses, uses, job);
   }
   assert.deepEqual(orchestrator.jobs["publish-npm"]!.needs, ["npm-publish"]);
+  assert.match(orchestrator.jobs["publish-npm"]!.if ?? "", /!cancelled\(\).*needs\.npm-publish\.result == 'success'/);
   assert.deepEqual(orchestrator.jobs["publish-binaries"]!.needs, ["publish-npm", "build-binaries"]);
   assert.deepEqual(orchestrator.jobs.sbom!.needs, ["publish-binaries"]);
 
