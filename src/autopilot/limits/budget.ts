@@ -3,13 +3,14 @@ import { performance } from "node:perf_hooks";
 import type { AutopilotConfig, Limits } from "./config.js";
 
 const counters = ["turns", "tokens", "costCents"] as const;
-type Usage = Pick<Limits, (typeof counters)[number]>;
+export type BudgetUsage = Pick<Limits, (typeof counters)[number]>;
 type Stop = "invalid-usage" | "turn-active" | `${"run" | "turn"}.${keyof Limits}`;
-type Admission = { stop: Stop } | { limits: Limits; finish(usage: Usage): Stop | null };
+type Admission =
+  | { stop: Stop }
+  | { limits: Limits; check(usage: BudgetUsage): Stop | null; finish(usage: BudgetUsage): Stop | null };
 
-export function createBudget(budget: AutopilotConfig["budget"], now = () => performance.now()) {
-  const started = now();
-  const spent: Usage = { turns: 0, tokens: 0, costCents: 0 };
+export function createBudget(budget: AutopilotConfig["budget"], now = () => performance.now(), started = now()) {
+  const spent: BudgetUsage = { turns: 0, tokens: 0, costCents: 0 };
   let active = false;
   let stop: Stop | null = null;
 
@@ -32,13 +33,15 @@ export function createBudget(budget: AutopilotConfig["budget"], now = () => perf
     const turnStarted = now();
     active = true;
     let closed = false;
+    const check = (usage: BudgetUsage) => checkTurn(usage, timeLeft(), now() - turnStarted, remaining, budget.turn);
     return {
       limits,
+      check,
       finish(usage) {
         if (!active || closed) return "invalid-usage";
         closed = true;
         active = false;
-        stop = checkTurn(usage, timeLeft(), now() - turnStarted, remaining, budget.turn);
+        stop = check(usage);
         if (!stop) for (const key of counters) spent[key] += usage[key];
         return stop;
       },
@@ -49,7 +52,7 @@ export function createBudget(budget: AutopilotConfig["budget"], now = () => perf
 }
 
 function checkTurn(
-  usage: Usage,
+  usage: BudgetUsage,
   runTimeLeft: number,
   turnElapsed: number,
   remaining: Limits,

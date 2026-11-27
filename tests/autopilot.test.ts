@@ -222,7 +222,10 @@ test("invalid requests leave no worktree, and an empty plan prints no command or
   for (const [args, code] of [
     [[], 2],
     [["--prepare", "--dry-run"], 2],
+    [["--dry-run", "--replay", "recording.json"], 2],
+    [["--prepare", "--replay="], 2],
     [["--prepare", "--wave", "-1"], 2],
+    [["--prepare", "--wave=-1"], 2],
     [["--prepare", "--wave", "900"], 2],
     [["--prepare", "--finding", "unseen"], 3],
     [["--dry-run", "--wave", "0", "--finding", "unseen"], 2],

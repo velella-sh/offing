@@ -76,7 +76,7 @@ Usage:
   offing attest [path] --subject <file|sha256:...> [--sbom <file>] [--data-version <version>]
   offing attest check <statement|bundle> [--subject <file|sha256:...>] [--today <date>]
   offing autopilot [path] --dry-run [--wave <n> | --finding <id>] [--to <runtime@version>] [--agent <driver>]
-  offing autopilot [path] --prepare [--wave <n> | --finding <id>] [--to <runtime@version>]
+  offing autopilot [path] --prepare [--replay <recording>] [--wave <n> | --finding <id>] [--to <runtime@version>]
   offing autopilot [path] --undo [run]
   offing campaign-board <state.json> --out <dir>  # export recorded campaign progress
   offing campaign plan <campaign.yml> --fleet <fleet.json> [--json]  # preview a pinned migration

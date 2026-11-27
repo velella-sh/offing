@@ -1,9 +1,9 @@
 import { isIsoDate } from "@velella/ebb/registry";
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test, type TestContext } from "node:test";
 import { promisify } from "node:util";
 
@@ -16,6 +16,10 @@ import { createPathScope } from "../src/autopilot/limits/scope.js";
 import { childEnvironments } from "../src/autopilot/limits/secrets.js";
 import { inspectConfig } from "../src/config-validate.js";
 import { ConfigError, validateConfig } from "../src/config.js";
+import { buildFindingPacket } from "../src/migrate/prompt.js";
+import { renderMigrationPrompt } from "../src/migration-prompt.js";
+import { scanWithBuiltIns } from "../src/scan-builtins.js";
+import { runCli } from "./cli-runner.js";
 
 const command = promisify(execFile);
 const idle = { turns: 1, tokens: 0, costCents: 0 };
@@ -320,4 +324,142 @@ test("guarded replay retains the accepted turn and records the budget that refus
   assert.equal(output.result.turns, 1);
   assert.match(output.stderr, /budget stopped the run at run.turns/);
   assert.equal(await readFile(source, "utf8"), "first accepted turn");
+});
+
+test("acc-guardrails rolls back every write in the turn that overshoots its wall-time limit", async (t) => {
+  const worktreePath = await scratch(t);
+  const recording = join(await scratch(t), "turns.json");
+  const source = join(worktreePath, "example.txt");
+  await writeFile(source, "before");
+  await writeFile(
+    recording,
+    JSON.stringify({
+      schemaVersion: "offing.agent-replay.v1",
+      turns: [{ "example.txt": "after", "new.txt": "new" }],
+    }),
+  );
+  let clockCalls = 0;
+  const output = await createReplayDriver(recording, {
+    config: parseAutopilotConfig({ budget: { run: { wallTimeMs: 100 }, turn: { wallTimeMs: 10 } } }),
+    packets: [],
+    testFiles: ["example.txt", "new.txt"],
+    now: () => (++clockCalls < 14 ? 0 : 11),
+  }).run({ worktreePath, prompt: "", timeoutMs: 100 });
+  assert.equal(output.result.status, "blocked");
+  assert.match(output.stderr, /turn.wallTimeMs/);
+  assert.deepEqual(output.result.filesTouched, []);
+  assert.equal(await readFile(source, "utf8"), "before");
+  await assert.rejects(readFile(join(worktreePath, "new.txt")), { code: "ENOENT" });
+});
+
+test("acc-guardrails strips marked multiline values and known patterns from rendered feedback packets", async (t) => {
+  const root = await scratch(t);
+  await writeFile(join(root, "package.json"), '{"dependencies":{"request":"2.88.2"}}');
+  const scan = await scanWithBuiltIns(root, { noCache: true });
+  const finding = scan.findings[0];
+  assert.ok(finding);
+  const packet = await buildFindingPacket(scan, finding.id, root);
+  const multiline = `${marked}\nwith "quotes"`;
+  packet.finding.title = `Fix ${multiline}`;
+  packet.finding.summary = `Fix ${shaped}`;
+  const { redact } = childEnvironments({ REPLAY_SECRET: multiline }, "replay", ["REPLAY_SECRET"]);
+  const prompt = renderMigrationPrompt(packet, root, redact);
+  assert.doesNotMatch(prompt, new RegExp(marked));
+  assert.ok(!prompt.includes(shaped));
+  assert.match(prompt, /\[REDACTED\]/u);
+  const json = /```json\n([\s\S]+)\n```/u.exec(prompt)?.[1];
+  assert.ok(json);
+  assert.equal(JSON.parse(json).finding.summary, "Fix [REDACTED]");
+});
+
+test("acc-guardrails exercises the prepared Autopilot replay workflow in a disposable Git repository", async (t) => {
+  const root = await scratch(t);
+  const recording = join(await scratch(t), "turns.json");
+  const git = async (...args: string[]) => (await command("git", args, { cwd: root })).stdout.trim();
+  const manifest = JSON.stringify({ dependencies: { request: "2.88.2" }, scripts: { test: "node must-not-run.js" } });
+  await git("init", "--quiet");
+  await mkdir(join(root, "tests"));
+  await writeFile(join(root, "package.json"), manifest);
+  await writeFile(join(root, "tests", "migration.test.js"), "// before\n");
+  await writeFile(
+    join(root, ".offing.json"),
+    JSON.stringify({
+      autopilot: {
+        secretEnv: ["REPLAY_FIXTURE_SECRET"],
+        budget: { run: { tokens: 9, costCents: 10 }, turn: { costCents: 4 } },
+      },
+    }),
+  );
+  await git("add", ".");
+  await git(
+    "-c",
+    "user.name=Fixture",
+    "-c",
+    "user.email=fixture@example.invalid",
+    "-c",
+    "commit.gpgsign=false",
+    "commit",
+    "-qm",
+    "fixture",
+  );
+  const start = async (turn: Record<string, string>, usage?: typeof idle) => {
+    await writeFile(
+      recording,
+      JSON.stringify({
+        schemaVersion: "offing.agent-replay.v1",
+        turns: [turn],
+        ...(usage ? { turnUsage: [usage] } : {}),
+      }),
+    );
+    const result = await runCli(["autopilot", root, "--prepare", "--replay", recording], {
+      env: { REPLAY_FIXTURE_SECRET: marked },
+    });
+    const recordFile = /Run record: ([^\r\n]+)/u.exec(result.stdout)?.[1];
+    assert.ok(recordFile, result.stderr);
+    const raw = await readFile(recordFile, "utf8");
+    assert.ok(!raw.includes(marked) && !raw.includes(shaped));
+    const record = JSON.parse(raw);
+    const checkout = join(dirname(recordFile), "checkout");
+    t.after(async () => {
+      if (await readFile(recordFile).catch(() => undefined))
+        await runCli(["autopilot", root, "--undo", record.checkout.id]);
+    });
+    return { result, record, checkout, recordFile };
+  };
+  const undo = async (run: Awaited<ReturnType<typeof start>>) => {
+    const result = await runCli(["autopilot", root, "--undo", run.record.checkout.id]);
+    assert.equal(result.code, 0, result.stderr);
+    await assert.rejects(readFile(run.recordFile), { code: "ENOENT" });
+  };
+  for (const [edit, reason, usage] of [
+    [{ "outside.txt": "unapproved" }, "outside-path-scope"],
+    [{ ".env.ci": "blocked path" }, "outside-path-scope"],
+    [{ "package.json": marked }, "secret-turn-diff"],
+    [{ "tests/migration.test.js": shaped }, "secret-turn-diff"],
+    [{ "package.json": "{}" }, "run.tokens", { ...idle, tokens: 10 }],
+    [{ "package.json": "{}" }, "turn.costCents", { ...idle, costCents: 5 }],
+  ] as const) {
+    const run = await start(edit, usage);
+    assert.equal(run.result.code, 1);
+    assert.equal(run.record.stopReason, reason);
+    assert.deepEqual(run.record.transitions, ["scan", "plan", "agent-turn", "stopped"]);
+    assert.equal(await readFile(join(run.checkout, "package.json"), "utf8"), manifest);
+    await assert.rejects(readFile(join(run.checkout, ".env.ci")), { code: "ENOENT" });
+    await undo(run);
+  }
+  const accepted = await start({ "package.json": "{}", "tests/migration.test.js": "// after\n" });
+  assert.equal(accepted.result.code, 0);
+  assert.equal(accepted.record.stopReason, "replay-prepared");
+  assert.equal(await readFile(join(accepted.checkout, "package.json"), "utf8"), "{}");
+  assert.equal(await readFile(join(root, "package.json"), "utf8"), manifest);
+  try {
+    const refused = await runCli(["autopilot", root, "--undo", accepted.record.checkout.id]);
+    assert.equal(refused.code, 2);
+    assert.match(refused.stderr, /worktree with local changes/u);
+  } finally {
+    await writeFile(join(accepted.checkout, "package.json"), manifest);
+    await writeFile(join(accepted.checkout, "tests", "migration.test.js"), "// before\n");
+    await undo(accepted);
+  }
+  assert.equal(await git("status", "--porcelain"), "");
 });

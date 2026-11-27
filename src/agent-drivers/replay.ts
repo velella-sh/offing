@@ -1,13 +1,13 @@
-import { lstat, mkdtemp, realpath, rename, rm, writeFile } from "node:fs/promises";
+import { lstat, mkdtemp, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 
-import { createBudget } from "../autopilot/limits/budget.js";
+import { createBudget, type BudgetUsage } from "../autopilot/limits/budget.js";
 import type { AutopilotConfig } from "../autopilot/limits/config.js";
 import { createPathScope } from "../autopilot/limits/scope.js";
 import { childEnvironments } from "../autopilot/limits/secrets.js";
 import type { MigrationPacket } from "../migration-packet.js";
 import { type AgentDriver, type AgentRunInput, makeResult } from "./contract.js";
-import { readJsonFile, record, validPaths } from "./result.js";
+import { numberOrNull, readJsonFile, record, validPaths } from "./result.js";
 
 const success = {
   stdout: "",
@@ -44,7 +44,7 @@ async function destinationMode(path: string): Promise<number | undefined> {
   }
 }
 
-async function write(path: string, content: string): Promise<void> {
+async function write(path: string, content: string | Uint8Array): Promise<void> {
   const mode = await destinationMode(path);
   const temporary = await mkdtemp(join(dirname(path), ".offing-replay-"));
   const file = join(temporary, "content");
@@ -59,18 +59,80 @@ async function write(path: string, content: string): Promise<void> {
   }
 }
 
+const freeTurn = { turns: 1, tokens: 0, costCents: 0 };
+
+function recordedUsage(value: unknown, count: number): BudgetUsage[] {
+  if (value === undefined) return Array.from({ length: count }, () => freeTurn);
+  if (!Array.isArray(value) || value.length !== count) throw new Error("Invalid replay turn usage.");
+  return value.map((item: unknown) => {
+    const usage = record(item);
+    const turns = numberOrNull(usage?.turns);
+    const tokens = numberOrNull(usage?.tokens);
+    const costCents = numberOrNull(usage?.costCents);
+    if (!turns || tokens === null || costCents === null) throw new Error("Invalid replay turn usage.");
+    return { turns, tokens, costCents };
+  });
+}
+
+async function applyGuarded(
+  root: string,
+  turn: Array<[string, string]>,
+  meter: { check: () => string | null; finish: () => string | null },
+): Promise<string | null> {
+  const originals = new Map<string, Uint8Array | undefined>();
+  for (const [path] of turn) {
+    const stop = meter.check();
+    if (stop) return stop;
+    const file = join(root, path);
+    const mode = await destinationMode(file);
+    originals.set(file, mode === undefined ? undefined : await readFile(file));
+  }
+  const changed: string[] = [];
+  let accepted = false;
+  try {
+    for (const [path, content] of turn) {
+      const stop = meter.check();
+      if (stop) return stop;
+      const file = join(root, path);
+      await write(file, content);
+      changed.push(file);
+    }
+    const stop = meter.finish();
+    accepted = stop === null;
+    return stop;
+  } finally {
+    if (!accepted) {
+      for (const file of changed.reverse()) {
+        const original = originals.get(file);
+        if (original === undefined) await rm(file);
+        else await write(file, original);
+      }
+    }
+  }
+}
+
+class ReplayRefusal extends Error {
+  constructor(
+    readonly reason: string,
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
 interface ReplayGuardrails {
   config: AutopilotConfig;
   packets: readonly Pick<MigrationPacket, "affectedFiles">[];
   testFiles: readonly string[];
   environment?: NodeJS.ProcessEnv;
   now?: () => number;
+  started?: number;
 }
 
 function guardrails(options: ReplayGuardrails) {
   return {
     permits: createPathScope(options.config, options.packets, options.testFiles),
-    budget: createBudget(options.config.budget, options.now),
+    budget: createBudget(options.config.budget, options.now, options.started),
     ...childEnvironments(options.environment ?? process.env, "replay", options.config.secretEnv),
   };
 }
@@ -82,23 +144,50 @@ async function plan(file: string, input: AgentRunInput, guard?: ReturnType<typeo
   }
   const root = await realpath(input.worktreePath);
   const turns = snapshot.turns.map(edits);
+  const usage = recordedUsage(snapshot.turnUsage, turns.length);
   const paths = [...new Set(turns.flatMap((turn) => turn.map(([path]) => path)))].sort();
   const allowed = input.allowedPaths && new Set(input.allowedPaths);
   if (
     guard &&
     turns.some((turn) => turn.some(([path, content]) => guard.containsSecret(path) || guard.containsSecret(content)))
   ) {
-    throw new Error("Autopilot refused a secret in a replay turn.");
+    throw new ReplayRefusal("secret-turn-diff", "Autopilot refused a secret in a replay turn.");
   }
   for (const path of paths) {
     const inScope = guard ? guard.permits(path) && (allowed?.has(path) ?? true) : allowed?.has(path);
-    if (!inScope || !(await inside(root, path))) throw new Error(`Replay attempted a write outside its scope: ${path}`);
+    if (!inScope || !(await inside(root, path)))
+      throw new ReplayRefusal("outside-path-scope", `Replay attempted a write outside its scope: ${path}`);
     await destinationMode(join(root, path));
   }
-  return { root, turns };
+  return { root, turns: turns.map((turn, index) => ({ turn, usage: usage[index] ?? freeTurn })) };
 }
 
-export function createReplayDriver(file: string, options?: ReplayGuardrails): AgentDriver {
+function rejectBudget(stop: string): never {
+  throw new ReplayRefusal(stop, "Autopilot budget stopped the run at " + stop + ".");
+}
+
+async function applyReplayTurn(
+  root: string,
+  turn: Array<[string, string]>,
+  usage: BudgetUsage,
+  guard: ReturnType<typeof guardrails> | undefined,
+): Promise<void> {
+  if (!guard) {
+    for (const [path, content] of turn) await write(join(root, path), content);
+    return;
+  }
+  const permit = guard.budget.begin();
+  if ("stop" in permit) rejectBudget(permit.stop);
+  const check = permit.check(usage);
+  if (check) rejectBudget(check);
+  const stop = await applyGuarded(root, turn, {
+    check: () => permit.check(usage),
+    finish: () => permit.finish(usage),
+  });
+  if (stop) rejectBudget(stop);
+}
+
+export function createReplayDriver(file: string, options?: ReplayGuardrails) {
   return {
     name: "replay",
     detect: () => Promise.resolve(true),
@@ -110,15 +199,9 @@ export function createReplayDriver(file: string, options?: ReplayGuardrails): Ag
       let completed = 0;
       try {
         const { root, turns } = await plan(file, input, guard);
-        for (const turn of turns) {
-          const permit = guard?.budget.begin();
-          if (permit && "stop" in permit) throw new Error("Autopilot budget stopped the run at " + permit.stop + ".");
-          for (const [path, content] of turn) {
-            await write(join(root, path), content);
-            applied.add(path);
-          }
-          const stop = permit?.finish({ turns: 1, tokens: 0, costCents: 0 });
-          if (stop) throw new Error("Autopilot budget stopped the run at " + stop + ".");
+        for (const { turn, usage } of turns) {
+          await applyReplayTurn(root, turn, usage, guard);
+          for (const [path] of turn) applied.add(path);
           completed += 1;
         }
         return {
@@ -135,8 +218,12 @@ export function createReplayDriver(file: string, options?: ReplayGuardrails): Ag
         const result = guard
           ? makeResult(driver, output, [...applied].sort(), undefined, completed)
           : makeResult(driver, output);
-        return { ...output, result: { ...result, status: "blocked" } };
+        return {
+          ...output,
+          result: { ...result, status: "blocked" },
+          stopReason: error instanceof ReplayRefusal ? error.reason : "replay-error",
+        };
       }
     },
-  };
+  } satisfies AgentDriver;
 }

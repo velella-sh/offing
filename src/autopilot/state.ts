@@ -2,7 +2,7 @@ import type { UpgradeTarget } from "../upgrade/index.js";
 
 const transitions = {
   scan: ["plan", "stopped"],
-  plan: ["baseline-tests", "stopped"],
+  plan: ["baseline-tests", "agent-turn", "stopped"],
   "baseline-tests": ["codemods", "stopped"],
   codemods: ["agent-turn", "tests", "stopped"],
   "agent-turn": ["tests", "stopped"],
