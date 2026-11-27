@@ -136,10 +136,9 @@ inputs:
     default: "false"
   agent-authors:
     description: >-
-      Comma-separated logins whose pull requests get the agent section in the pull request comment. In diff
-      mode the comment then lists the stale choices the pull request introduced, with each replacement and
-      evidence link. Set to none to turn the section off. The default covers the Copilot coding agent,
-      Jules, Devin, OpenAI Codex cloud, and Claude.
+      Comma-separated agent logins used for attribution in diff-mode summaries and pull request comments.
+      The agent section lists the matched signal, replacement and evidence. Set to none to turn it off.
+      The default covers the Copilot coding agent, Jules, Devin, OpenAI Codex cloud, and Claude.
     required: false
     default: "Copilot, google-labs-jules[bot], devin-ai-integration[bot], chatgpt-codex-connector[bot], claude[bot]"
   github-token:

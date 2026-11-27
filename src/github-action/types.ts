@@ -103,8 +103,12 @@ export interface GitHubActionOptions {
   suggestFixes?: boolean;
   /** Raw `agent-authors` input: comma-separated logins whose pull requests get the agent section, or `none`. */
   agentAuthors?: string;
-  /** Login of the pull request author; the agent section appears only when it matches `agentAuthors`. */
+  /** Login of the pull request author, taken from the event. */
   pullRequestAuthor?: string;
+  /** Branch in the base repository, taken from the pull request event. */
+  pullRequestSameRepositoryBranch?: string;
+  /** Host-authenticated committers. Raw Git author and committer fields cannot supply this signal. */
+  pullRequestVerifiedCommitters?: readonly string[];
 }
 
 /** What an Action run produced, including the report, annotations, and whether the job should fail. */

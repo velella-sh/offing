@@ -13,9 +13,15 @@ export const DEFAULT_AGENT_AUTHORS = [
 ] as const;
 
 /** The introduced findings a pull request author is responsible for, and the login that matched. */
+export type AgentAttribution = {
+  signal: "author-login" | "bot-committer" | "co-author-trailer" | "branch-prefix";
+  login: string;
+};
+
 export interface AgentIntroducedFindings {
   author: string;
   findings: Finding[];
+  attribution?: AgentAttribution;
 }
 
 const AGENT_SECTION_LIMIT = 10;
@@ -51,14 +57,11 @@ export function matchesAgentAuthor(login: string | undefined, authors: ReadonlyS
  * The comment section for an agent-authored pull request: each introduced finding with its exact
  * location, rule title, replacement, and evidence, then the line the agent can act on.
  */
-export function renderAgentSection(findings: readonly Finding[]): string[] {
+export function renderAgentSection(findings: readonly Finding[], attribution?: AgentAttribution): string[] {
   if (findings.length === 0) return [];
-  const lines = [
-    "## Stale choices this agent introduced",
-    "",
-    "| Location | Rule | Replacement | Evidence |",
-    "|---|---|---|---|",
-  ];
+  const lines = ["## Stale choices this agent introduced", ""];
+  if (attribution) lines.push(`Agent attribution: ${attribution.signal}.`, "");
+  lines.push("| Location | Rule | Replacement | Evidence |", "|---|---|---|---|");
   for (const finding of findings.slice(0, AGENT_SECTION_LIMIT)) {
     const source = finding.sources[0];
     const location = `${finding.location.path}${finding.location.line === undefined ? "" : `:${finding.location.line}`}`;

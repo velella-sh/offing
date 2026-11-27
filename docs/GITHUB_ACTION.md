@@ -244,9 +244,11 @@ For fork pull requests, Offing writes the same report to the job summary and ski
 
 ### Agent-authored pull requests
 
-When `mode: diff` and the pull request author is a coding agent, the comment also carries a **Stale choices this agent introduced** section. It lists each finding the pull request introduced with its `path:line`, rule title, replacement, and evidence link, and closes with the line the agent can act on: "Replace these and push again; Offing will re-check." The comment is still the one Offing comment, updated on re-runs; a second comment is never posted.
+In `mode: diff`, Offing checks changed JavaScript, TypeScript and Python source lines for deprecated and removed APIs from Ebb. It also checks new direct npm dependencies in changed manifests, including standalone packages inside a repository. Findings use the pull request head commit and point to the source or declaration line.
 
-`agent-authors` takes a comma-separated list of logins. The default covers GitHub's Copilot coding agent (`Copilot`), Jules (`google-labs-jules[bot]`), Devin (`devin-ai-integration[bot]`), OpenAI Codex cloud (`chatgpt-codex-connector[bot]`), and Claude (`claude[bot]`). Matching ignores case and a leading `@`. Set `agent-authors: none` to turn the section off, or name the logins your agents author with. The author comes from the event payload, so no extra request is made; scans stay offline.
+The job summary and the existing optional PR comment include a **Stale choices this agent introduced** section when Offing recognizes an agent. The section records which signal matched and lists the finding location, replacement and evidence. Offing checks the PR author login, a recognized branch prefix in the base repository, and recognized `Co-authored-by` trailers in up to 256 commits reachable from head and absent from base. Branch and trailer matches are heuristics and grant no permissions. Scanning uses local Git objects and stays offline.
+
+`agent-authors` takes a comma-separated list of logins. The default covers GitHub's Copilot coding agent (`Copilot`), Jules (`google-labs-jules[bot]`), Devin (`devin-ai-integration[bot]`), OpenAI Codex cloud (`chatgpt-codex-connector[bot]`), and Claude (`claude[bot]`). Matching ignores case and a leading `@`. Set `agent-authors: none` to turn the section off, or name the logins your agents author with.
 
 ### Comment commands
 

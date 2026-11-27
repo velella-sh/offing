@@ -1,13 +1,16 @@
 import { resolve } from "node:path";
 
-import { matchesAgentAuthor, parseAgentAuthors } from "../agent-pr.js";
+import { parseAgentAuthors } from "../agent-pr.js";
 import type { AgentIntroducedFindings } from "../agent-pr.js";
 import type { DiffResult } from "../diff.js";
+import { parseRange } from "../diff.js";
 import type { DataInfo, Finding, ScanResult, SuppressionRef, SuppressionState } from "../domain.js";
 import { relativePosix } from "../paths.js";
 import { required } from "../required.js";
 import { diffWithBuiltIns } from "../scan-builtins.js";
 import { runScanRequest } from "../scan-request.js";
+import { agentAttribution } from "./agent-authors.js";
+import { reviewFindings, reviewRange } from "./review.js";
 import type { GitHubActionOptions, PackageScanSummary } from "./types.js";
 
 type DiffSummary = Pick<DiffResult, "base" | "head" | "fixed" | "unchanged">;
@@ -80,30 +83,47 @@ async function scanOneRoot(
   });
 }
 
+function diffAttribution(root: string, range: string, options: GitHubActionOptions) {
+  const author = options.pullRequestAuthor;
+  const sameRepositoryBranch = options.pullRequestSameRepositoryBranch;
+  const verifiedCommitters = options.pullRequestVerifiedCommitters;
+  if (author === undefined && sameRepositoryBranch === undefined && verifiedCommitters === undefined) return undefined;
+  return agentAttribution(
+    root,
+    range,
+    {
+      ...(author ? { author } : {}),
+      ...(sameRepositoryBranch ? { sameRepositoryBranch } : {}),
+      ...(verifiedCommitters ? { verifiedCommitters } : {}),
+    },
+    parseAgentAuthors(options.agentAuthors),
+  );
+}
+
 async function scanDiffMode(root: string, options: GitHubActionOptions): Promise<ScanOutcome> {
   if (!options.diffRange) throw new Error("mode: diff needs the base and head refs of the pull request.");
-  const compared = await diffWithBuiltIns(root, options.diffRange);
+  const requested = parseRange(options.diffRange);
+  const refs = reviewRange(root, requested.base, requested.head);
+  const compared = await diffWithBuiltIns(root, refs.range);
+  const findings = await reviewFindings(root, refs, compared.introduced);
   // The diff gate judges only what the PR introduces, so no baseline and no min-support run over the whole backlog.
   const result: ScanResult = {
     schemaVersion: "offing.scan.v1",
     root,
     scannedAt: new Date().toISOString(),
-    findings: compared.introduced,
+    findings,
     diagnostics: [],
   };
   const diff = {
-    base: compared.base,
-    head: compared.head,
+    base: requested.base,
+    head: requested.head,
     fixed: compared.fixed,
     unchanged: compared.unchanged,
   };
-  const author = options.pullRequestAuthor;
-  const agent =
-    compared.introduced.length > 0 &&
-    author !== undefined &&
-    matchesAgentAuthor(author, parseAgentAuthors(options.agentAuthors))
-      ? { author, findings: compared.introduced }
-      : undefined;
+  const attribution = findings.length > 0 ? diffAttribution(root, refs.range, options) : undefined;
+  const agent = attribution
+    ? { author: options.pullRequestAuthor ?? attribution.login, findings, attribution }
+    : undefined;
   return { result, expiredFailure: false, diff, ...(agent ? { agent } : {}) };
 }
 

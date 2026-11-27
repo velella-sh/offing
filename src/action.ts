@@ -130,7 +130,7 @@ interface PullRequestEvent {
     number?: number;
     user?: { login?: string };
     base?: { sha?: string; repo?: RepositoryRef };
-    head?: { sha?: string; repo?: RepositoryRef };
+    head?: { sha?: string; ref?: string; repo?: RepositoryRef };
   };
 }
 
@@ -205,7 +205,7 @@ function stepSummaryBody(
   proposal: ProposedBaseline | undefined,
   forecast: string | undefined,
 ): string {
-  const { result, gateFailed, gate, diff, packages } = outcome;
+  const { result, gateFailed, gate, diff, packages, agent } = outcome;
   const attribution = process.env.INPUT_ATTRIBUTION !== "false";
   const summary = renderSummary(
     result.findings,
@@ -217,6 +217,7 @@ function stepSummaryBody(
     diff,
     packages,
     unannotated,
+    agent,
   );
   const count = proposal?.baseline.findings.length ?? 0;
   const proposalNote = proposal
@@ -502,6 +503,7 @@ async function baselineProposalPath(
 /** What is scanned, where the results go, and what they are compared against. */
 function scanOptionsFor(ctx: RunContext): Partial<RunOptions> {
   const { env, diff, scanPaths, reportPaths } = ctx;
+  const branch = sameRepositoryPullRequestBranch(ctx.event);
   return {
     ...(scanPaths ? { paths: scanPaths } : {}),
     ...(ctx.sbom ? { sbom: ctx.sbom } : {}),
@@ -510,9 +512,16 @@ function scanOptionsFor(ctx: RunContext): Partial<RunOptions> {
     ...(diff ? { mode: "diff" as const } : {}),
     ...(diff?.diffRange ? { diffRange: diff.diffRange } : {}),
     ...(ctx.event.pull_request?.user?.login ? { pullRequestAuthor: ctx.event.pull_request.user.login } : {}),
+    ...(branch ? { pullRequestSameRepositoryBranch: branch } : {}),
     ...(env["INPUT_AGENT-AUTHORS"] !== undefined ? { agentAuthors: env["INPUT_AGENT-AUTHORS"] } : {}),
     ...(env.INPUT_BASELINE && !ctx.proposeBaseline ? { baselinePath: env.INPUT_BASELINE } : {}),
   };
+}
+
+function sameRepositoryPullRequestBranch(event: PullRequestEvent): string | undefined {
+  const head = event.pull_request?.head;
+  const base = event.pull_request?.base?.repo?.full_name;
+  return base !== undefined && head?.repo?.full_name === base ? head.ref : undefined;
 }
 
 /** The severity gate, the expiry policy, and how findings are annotated. */
