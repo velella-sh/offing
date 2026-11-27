@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { createInterface } from "node:readline";
 import { test } from "node:test";
 import { promisify } from "node:util";
 import { Ajv } from "ajv";
@@ -87,22 +88,16 @@ test("the way the registry starts the server really starts it", async () => {
   // Run exactly that command line against the built CLI and speak MCP to it.
   const child = execute(process.execPath, [resolve("dist/src/cli.js"), "mcp"], {
     timeout: 15_000,
-    killSignal: "SIGKILL",
   });
-  child.child.stdin?.write(
+  const { stdin, stdout } = child.child;
+  assert.ok(stdin && stdout);
+  // Let Node exit normally after the reply so it can flush its V8 coverage.
+  createInterface({ input: stdout }).once("line", () => stdin.end());
+  stdin.on("error", () => {}); // execFile reports an early exit.
+  stdin.write(
     `${JSON.stringify({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-11-25", capabilities: {}, clientInfo: { name: "registry-check", version: "1" } } })}\n`,
   );
-  const output = await new Promise<string>((done) => {
-    let buffer = "";
-    child.child.stdout?.on("data", (chunk: Buffer) => {
-      buffer += chunk.toString();
-      if (buffer.includes("\n")) {
-        child.child.kill("SIGKILL");
-        done(buffer);
-      }
-    });
-    child.catch(() => done(buffer));
-  });
+  const { stdout: output } = await child;
   const reply = JSON.parse(output.split("\n")[0]!) as { result: { serverInfo: { name: string } } };
   assert.equal(reply.result.serverInfo.name, "offing");
 });

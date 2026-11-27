@@ -1,0 +1,1 @@
+- Exit successfully when the MCP stdio client disconnects.
