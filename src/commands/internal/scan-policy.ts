@@ -4,8 +4,7 @@ import { severityValues } from "../../domain.js";
 import { builtInDetectors } from "../../detectors/index.js";
 import { applyScanSelection, findRepositories, renderMultiScanText, scanProjects } from "../../engine/index.js";
 import { applyPolicy, findingsAtSeverity, parseLookahead, policyViolationText } from "../../policy.js";
-import type { Gated } from "../runtime.js";
-import type { CommandContext } from "../types.js";
+import type { CommandContext, Gated } from "../types.js";
 
 export function scanPolicyDay(state: Gated): string {
   return state.optionValue("--as-of") ?? state.optionValue("--today") ?? new Date().toISOString().slice(0, 10);

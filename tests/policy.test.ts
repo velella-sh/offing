@@ -7,9 +7,9 @@ import { isIsoDate } from "@velella/ebb/registry";
 import { Ajv2020 } from "ajv/dist/2020.js";
 
 import { ConfigError, validateConfig } from "../src/config.js";
-import type { ScanResult } from "../src/domain.js";
+import type { LifecyclePolicy, ScanResult } from "../src/domain.js";
 import { renderFailure, runGitHubAction } from "../src/github-action.js";
-import { parseLookahead, type LifecyclePolicy } from "../src/policy.js";
+import { parseLookahead } from "../src/policy.js";
 import { runCli } from "./cli-runner.js";
 
 async function repository(t: TestContext): Promise<string> {
@@ -131,9 +131,13 @@ test("several repository scans apply each config and keep one JSON document", as
   await writePolicy(two, { rules: [{ id: "second", "days-left": 30 }] });
   const output = await runCli(["scan", one, two, "--today", "2027-04-01", "--json"]);
   assert.equal(output.code, 1);
-  const response = JSON.parse(output.stdout);
-  assert.equal(response.projects[0].result.policy, undefined);
-  assert.ok(response.projects[1].result.policy.violations.every(({ rule }: { rule: string }) => rule === "second"));
+  const response = JSON.parse(output.stdout) as { projects: Array<{ result: ScanResult }> };
+  assert.equal(response.projects.filter(({ result }) => result.policy === undefined).length, 1);
+  const violations = response.projects.flatMap(({ result }) => result.policy?.violations ?? []);
+  assert.deepEqual(
+    violations.map(({ rule }) => rule),
+    ["second", "second"],
+  );
   assert.match(output.stderr, /Policy rule second failed/);
 });
 

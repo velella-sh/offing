@@ -1,38 +1,18 @@
 import { applyMinSupport, parseMinSupportDays } from "@velella/ebb/min-support";
 import { daysBetween } from "./baseline.js";
 import { matchesIgnorePattern } from "./config.js";
-import type { Finding, ScanResult, Severity } from "./domain.js";
+import type {
+  Finding,
+  LifecyclePolicy,
+  PolicyException,
+  PolicyRule,
+  PolicyScope,
+  PolicyViolation,
+  ScanResult,
+  Severity,
+} from "./domain.js";
 import { severityValues } from "./domain.js";
 import { scanSelectorMatches } from "./engine/resolve.js";
-
-interface Scope {
-  ecosystem?: string;
-  path?: string;
-}
-
-export interface PolicyRule extends Scope {
-  id: string;
-  "days-left"?: number;
-  "after-eol"?: boolean;
-  severity?: Severity;
-}
-
-export interface PolicyException extends Scope {
-  reason: string;
-  expires: string;
-}
-
-export interface LifecyclePolicy {
-  rules: PolicyRule[];
-  exceptions?: PolicyException[];
-}
-
-export interface PolicyViolation {
-  rule: string;
-  findingId: string;
-  path: string;
-  expiredException?: Pick<PolicyException, "expires" | "reason">;
-}
 
 export type SeverityGate = Severity | "none";
 
@@ -53,7 +33,7 @@ export function parseLookahead(input: string): number | undefined {
   return parseMinSupportDays(String(days));
 }
 
-function matchesScope(scope: Scope, finding: Finding): boolean {
+function matchesScope(scope: PolicyScope, finding: Finding): boolean {
   return (
     (scope.ecosystem === undefined || scanSelectorMatches(scope.ecosystem, finding.detector, finding.ruleId)) &&
     (scope.path === undefined || matchesIgnorePattern([scope.path], finding.location.path))

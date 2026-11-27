@@ -1,4 +1,3 @@
-import type { PolicyViolation } from "./policy.js";
 import type {
   DataInfo,
   EvidenceSource,
@@ -182,6 +181,35 @@ export interface ScanCoverage {
 export interface ScanIdentity {
   commit: string | null;
   offingVersion: string | null;
+}
+
+export interface PolicyScope {
+  ecosystem?: string;
+  path?: string;
+}
+
+export interface PolicyRule extends PolicyScope {
+  id: string;
+  "days-left"?: number;
+  "after-eol"?: boolean;
+  severity?: Severity;
+}
+
+export interface PolicyException extends PolicyScope {
+  reason: string;
+  expires: string;
+}
+
+export interface LifecyclePolicy {
+  rules: PolicyRule[];
+  exceptions?: PolicyException[];
+}
+
+export interface PolicyViolation {
+  rule: string;
+  findingId: string;
+  path: string;
+  expiredException?: Pick<PolicyException, "expires" | "reason">;
 }
 
 /** The complete result of scanning one repository. */

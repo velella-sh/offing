@@ -52,7 +52,7 @@ import { browseFindings, canBrowse } from "../tui.js";
 import { scanSbomFile } from "../sbom-scan.js";
 import { selectorValuesSummary, unknownSelectors } from "../scan-selectors.js";
 import { classifyError, DEFAULT_REASONS, type ErrorCode } from "../offing-error.js";
-import { EXIT_CODES, type CommandContext, type FailureClass } from "./types.js";
+import { EXIT_CODES, type CommandContext, type FailureClass, type Gated, type Prepared } from "./types.js";
 import {
   checkLookahead,
   failOnSeverity,
@@ -61,7 +61,7 @@ import {
   scanPolicyDay,
 } from "./internal/scan-policy.js";
 
-export type { FailureClass };
+export type { FailureClass, Gated, Prepared };
 export { EXIT_CODES };
 
 const valueOptions = new Set([
@@ -138,28 +138,6 @@ export function createCommandContext(
     },
   };
   return ctx;
-}
-
-export interface Prepared {
-  readonly command: string;
-  readonly args: string[];
-  readonly positional: string[];
-  readonly findingId: string | undefined;
-  readonly pathArgument: string;
-  readonly demo: boolean;
-  readonly config: OffingConfig | undefined;
-  readonly dataVersionFlag: string | undefined;
-  readonly dataVersionIndex: number;
-  readonly format: string | undefined;
-  readonly formatIndex: number;
-  optionValue(name: string): string | undefined;
-  optionValues(name: string): string[];
-}
-
-export interface Gated extends Prepared {
-  readonly json: boolean;
-  readonly noCache: boolean;
-  readonly selection: ScanSelection | undefined;
 }
 
 /** Optional file operands end at the next flag. A lone dash represents stdout. */

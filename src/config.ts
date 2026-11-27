@@ -2,10 +2,9 @@ import { isIsoDate } from "@velella/ebb/registry";
 import { readFile, stat } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 
-import type { ScanResult, Severity } from "./domain.js";
+import type { LifecyclePolicy, PolicyException, PolicyRule, ScanResult, Severity } from "./domain.js";
 import { severityValues } from "./domain.js";
 import { OffingError } from "./offing-error.js";
-import type { LifecyclePolicy, PolicyException, PolicyRule } from "./policy.js";
 
 export const CONFIG_FILE_NAME = ".offing.json";
 
