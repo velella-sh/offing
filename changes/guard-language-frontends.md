@@ -1,0 +1,1 @@
+- Compress the vendored Tree-sitter payloads to reduce the npm download size while bundling the Go, Java and C# grammars.

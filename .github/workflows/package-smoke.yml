@@ -356,6 +356,11 @@ jobs:
             printf -- '- Installed CLI and independent reference passed the edit, scope and timeout cases.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-guard-coverage
+        run: |
+          package="$RUNNER_TEMP/package-smoke/npm-install/node_modules/@velella/offing"
+          OFFING_GUARD_FRONTENDS_MODULE="$package/dist/src/usage/parsers.js" node --test dist/tests/check-snippet-guard-frontends.test.js
+
       - name: acc-forecast-link
         run: node --test dist/tests/forecast-link.test.js
 

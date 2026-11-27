@@ -52,7 +52,10 @@ test("maps source languages to grammars", () => {
   assert.equal(grammarFor("javascript", "a.jsx"), "javascript");
   assert.equal(grammarFor("typescript", "a.ts"), "typescript");
   assert.equal(grammarFor("typescript", "A.TSX"), "tsx");
-  assert.equal(grammarFor("go", "a.go"), undefined);
+  assert.equal(grammarFor("go", "a.go"), "go");
+  assert.equal(grammarFor("java", "A.JAVA"), "java");
+  assert.equal(grammarFor("csharp", "a.cs"), "csharp");
+  assert.equal(grammarFor("ruby", "a.rb"), undefined);
 });
 
 test("locates every offset in its own line, including blank ones", () => {

@@ -10,6 +10,7 @@ import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { brotliCompressSync, brotliDecompressSync } from "node:zlib";
 
 export const VENDOR_DIRECTORY = resolve("src/usage/vendor/tree-sitter");
 export const MANIFEST_FILE = "manifest.json";
@@ -24,15 +25,27 @@ export interface TreeSitterWasmFile {
   bytes: number;
   /** Lowercase hex SHA-256 of the decoded payload. */
   sha256: string;
+  /** Release and license of an independently vendored grammar. */
+  origin?: GrammarOrigin;
+}
+
+export interface GrammarOrigin {
+  source: string;
+  version: string;
+  revision: string;
+  license: "MIT";
+  licenseFile: string;
+  licenseSha256: string;
 }
 
 export interface TreeSitterWasmManifest {
   schemaVersion: string;
   package: string;
   version: string;
-  /** Pinned upstream tarball; the source of every payload below. */
+  /** Pinned upstream runtime tarball, also the source of files without a per-file origin. */
   source: string;
   license: string;
+  encoding?: "brotli-base64";
   files: TreeSitterWasmFile[];
 }
 
@@ -42,14 +55,15 @@ export interface VerificationResult {
   problems: string[];
 }
 
-/** Decodes a committed payload. Base64 decoders ignore the line breaks the sync tool writes. */
-export function decodePayload(encoded: string): Uint8Array {
-  return new Uint8Array(Buffer.from(encoded, "base64"));
+/** Decodes the committed text, including the plain base64 used by older manifests. */
+export function decodePayload(encoded: string, encoding: "base64" | "brotli-base64" = "brotli-base64"): Uint8Array {
+  const bytes = Buffer.from(encoded, "base64");
+  return encoding === "brotli-base64" ? brotliDecompressSync(bytes) : bytes;
 }
 
 /** Deterministic text form: base64 wrapped at 120 columns with a trailing newline. */
 export function encodePayload(bytes: Uint8Array): string {
-  const encoded = Buffer.from(bytes).toString("base64");
+  const encoded = brotliCompressSync(bytes).toString("base64");
   const lines = encoded.match(/.{1,120}/g) ?? [];
   return `${lines.join("\n")}\n`;
 }
@@ -62,6 +76,22 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function isOrigin(value: unknown): value is GrammarOrigin {
+  return (
+    isRecord(value) &&
+    typeof value.source === "string" &&
+    value.source.startsWith("https://github.com/tree-sitter/") &&
+    typeof value.version === "string" &&
+    typeof value.revision === "string" &&
+    /^[a-f0-9]{40}$/.test(value.revision) &&
+    value.license === "MIT" &&
+    typeof value.licenseFile === "string" &&
+    /^LICENSE-(?:go|java|csharp)$/.test(value.licenseFile) &&
+    typeof value.licenseSha256 === "string" &&
+    /^[a-f0-9]{64}$/.test(value.licenseSha256)
+  );
+}
+
 function isWasmFile(value: unknown): value is TreeSitterWasmFile {
   return (
     isRecord(value) &&
@@ -72,7 +102,8 @@ function isWasmFile(value: unknown): value is TreeSitterWasmFile {
     typeof value.bytes === "number" &&
     Number.isSafeInteger(value.bytes) &&
     typeof value.sha256 === "string" &&
-    /^[a-f0-9]{64}$/.test(value.sha256)
+    /^[a-f0-9]{64}$/.test(value.sha256) &&
+    (value.origin === undefined || isOrigin(value.origin))
   );
 }
 
@@ -87,14 +118,30 @@ export async function readManifest(directory: string): Promise<TreeSitterWasmMan
     typeof raw.version !== "string" ||
     typeof raw.source !== "string" ||
     typeof raw.license !== "string" ||
+    (raw.encoding !== undefined && raw.encoding !== "brotli-base64") ||
     !raw.files.every(isWasmFile)
   ) {
     throw new Error(`${MANIFEST_FILE} is not a valid offing.tree-sitter-wasm.v1 manifest.`);
   }
-  return raw as unknown as TreeSitterWasmManifest;
+  return {
+    schemaVersion: raw.schemaVersion,
+    package: raw.package,
+    version: raw.version,
+    source: raw.source,
+    license: raw.license,
+    ...(raw.encoding === undefined ? {} : { encoding: raw.encoding }),
+    files: raw.files,
+  };
 }
 
-/** Reads every payload, decodes it, and compares size and SHA-256 with the manifest. */
+async function verifyLicense(directory: string, origin: GrammarOrigin): Promise<string | undefined> {
+  const bytes = await readFile(join(directory, origin.licenseFile)).catch(() => undefined);
+  if (!bytes) return `${origin.licenseFile}: cannot read grammar license`;
+  if (sha256(bytes) !== origin.licenseSha256) return `${origin.licenseFile}: SHA-256 differs from the manifest`;
+  return undefined;
+}
+
+/** Reads every payload and license and verifies the recorded size and SHA-256. */
 export async function verifyVendor(directory = VENDOR_DIRECTORY): Promise<VerificationResult> {
   const manifest = await readManifest(directory);
   const problems: string[] = [];
@@ -105,9 +152,9 @@ export async function verifyVendor(directory = VENDOR_DIRECTORY): Promise<Verifi
     expected.add(file.file);
     let bytes: Uint8Array;
     try {
-      bytes = decodePayload(await readFile(join(directory, file.file), "utf8"));
+      bytes = decodePayload(await readFile(join(directory, file.file), "utf8"), manifest.encoding ?? "base64");
     } catch (error) {
-      problems.push(`${file.file}: cannot read payload (${(error as NodeJS.ErrnoException).code ?? String(error)})`);
+      problems.push(`${file.file}: cannot read payload (${String(error)})`);
       continue;
     }
     if (bytes.byteLength !== file.bytes) {
@@ -116,6 +163,10 @@ export async function verifyVendor(directory = VENDOR_DIRECTORY): Promise<Verifi
     }
     const digest = sha256(bytes);
     if (digest !== file.sha256) problems.push(`${file.file}: sha256 ${digest}, manifest records ${file.sha256}`);
+    if (file.origin) {
+      const problem = await verifyLicense(directory, file.origin);
+      if (problem) problems.push(problem);
+    }
   }
 
   for (const entry of await readdir(directory)) {
@@ -146,7 +197,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   main(process.argv.slice(2)).then(
     (code) => process.exit(code),
     (error: unknown) => {
-      process.stderr.write(`${(error as Error).message}\n`);
+      process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
       process.exit(2);
     },
   );

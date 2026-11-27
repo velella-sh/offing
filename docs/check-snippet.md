@@ -76,3 +76,19 @@ A replacement can be a code fragment, a version, or an environment-file name. Re
 ## Agent hooks
 
 Install or refresh the [edit hooks](HOOKS.md) to check proposed writes in Claude Code, Codex, or Cursor. Findings at or above the hook gate (`medium` by default) block the tool call and include any replacement. The hook checks full writes and edits it can reconstruct from the host's payload. An unreadable source file, an unsupported payload, or an unavailable check lets the tool proceed.
+
+## Go, Java and C# syntax frontends
+
+The internal frontends extract imports and syntactic call candidates from
+Go, Java and C# snippets. They load the grammar for the file extension
+on first use and reuse it during the process. The focused
+`acc-guard-coverage` fixtures exercise them from the installed npm package
+and report cold and warm parser times.
+
+The frontend output records names and locations for later rule matching.
+Go supports package aliases and dot imports. Java supports type, static
+and wildcard imports, qualified invocations and constructors. C# supports
+namespace, alias, global and static `using` directives and member calls.
+These are syntactic candidates. Project-wide type resolution, local
+shadowing and cross-file imports require additional analysis. User-facing
+lifecycle findings depend on the corresponding Ebb rules and guard wiring.

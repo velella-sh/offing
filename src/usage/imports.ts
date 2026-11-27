@@ -120,7 +120,7 @@ export function csharpImports(lines: readonly string[], maskedLines: readonly st
 }
 
 /** The identifier a Go import path binds by default: its last element, skipping a `/vN` major-version suffix. */
-function goPackageName(path: string): string {
+export function goPackageName(path: string): string {
   const parts = path.split("/");
   let name = parts[parts.length - 1] ?? "";
   if (/^v\d+$/.test(name) && parts.length > 1) name = parts[parts.length - 2] ?? "";

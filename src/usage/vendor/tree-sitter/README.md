@@ -1,6 +1,6 @@
 # Vendored tree-sitter WASM (trimmed)
 
-Runtime and grammars taken from [`@vscode/tree-sitter-wasm@0.3.1`](https://www.npmjs.com/package/@vscode/tree-sitter-wasm) (MIT). Only the pieces Offing loads are kept:
+The runtime and the JavaScript, TypeScript, TSX and Python grammars come from [`@vscode/tree-sitter-wasm@0.3.1`](https://www.npmjs.com/package/@vscode/tree-sitter-wasm) (MIT). Offing vendors the following payloads.
 
 | File | Role |
 |---|---|
@@ -11,13 +11,23 @@ Runtime and grammars taken from [`@vscode/tree-sitter-wasm@0.3.1`](https://www.n
 | `tree-sitter-typescript.wasm.b64` | TypeScript grammar |
 | `tree-sitter-tsx.wasm.b64` | TSX grammar |
 | `tree-sitter-python.wasm.b64` | Python grammar |
-| `manifest.json` | Upstream package, tarball URL, and decoded SHA-256 and size of every payload |
+| `tree-sitter-go.wasm.b64` | Go grammar |
+| `tree-sitter-java.wasm.b64` | Java grammar |
+| `tree-sitter-csharp.wasm.b64` | C# grammar |
+| `LICENSE-go`, `LICENSE-java`, `LICENSE-csharp` | Licenses at the pinned grammar revisions |
+| `manifest.json` | Upstream releases, decoded SHA-256, sizes and grammar license hashes |
 
-Unused grammars from that package (C++, C#, Ruby, …) are not shipped. Making the npm package optional would fall back to the regex scanner and change scan results, so Offing vendors this fixed subset instead.
+The additional grammars come from the official pinned releases.
+[Go v0.25.0](https://github.com/tree-sitter/tree-sitter-go/releases/tag/v0.25.0) ·
+[Java v0.23.5](https://github.com/tree-sitter/tree-sitter-java/releases/tag/v0.23.5) ·
+[C# v0.24.0](https://github.com/tree-sitter/tree-sitter-c-sharp/releases/tag/v0.24.0)
 
 ## Why the payloads are text
 
-The WebAssembly modules are committed as base64 text, not as `.wasm` binaries, so the repository contains no binary artifacts (OpenSSF Scorecard's Binary-Artifacts check) and every vendored byte is reviewable in a diff. `src/usage/tree-sitter.ts` decodes each payload in memory and hands the bytes to the runtime; scans never read a `.wasm` file and never use the network.
+The WebAssembly modules are stored as Brotli-compressed base64 text to fit
+the npm tarball budget and the repository's text artifact checks.
+`src/usage/tree-sitter.ts` decodes the runtime and requested grammar in
+memory. Each grammar loads independently when first requested.
 
 `manifest.json` is the record of where each payload came from:
 
@@ -27,16 +37,23 @@ The WebAssembly modules are committed as base64 text, not as `.wasm` binaries, s
 
 ## Refresh
 
+Install the pinned runtime in the development checkout. Stage each
+grammar's official WebAssembly asset under the `upstream` filename
+in `manifest.json`. Stage each license from the recorded commit under
+its `licenseFile` name. The sync checks those input digests before
+encoding the payloads.
+
 ```bash
-npm install --no-save --package-lock=false @vscode/tree-sitter-wasm@0.3.1
+npm install --no-save --package-lock=false --ignore-scripts @vscode/tree-sitter-wasm@0.3.1
 npm run build
-node dist/tools/sync-tree-sitter-wasm.js
+node dist/tools/sync-tree-sitter-wasm.js /path/to/pinned-release-assets
 node dist/tools/verify-tree-sitter-wasm.js
 ```
 
-`tools/sync-tree-sitter-wasm.ts` pins the version. It verifies the installed bytes against the committed manifest when the version is unchanged, writes the base64 payloads and manifest, and removes the binary form a previous sync may have left behind. Bumping the pin means changing `PINNED_VERSION` in the script, running it, and reviewing the new hashes it records in `manifest.json` in the same pull request.
-
-`tools/verify-tree-sitter-wasm.ts` decodes every committed payload, checks its size and SHA-256 against `manifest.json`, and reports stray `.wasm` files. It is offline and runs in the test suite; run it directly with `node dist/tools/verify-tree-sitter-wasm.js`.
+The offline verifier checks the decoded sizes and SHA-256 digests,
+the separately pinned licenses, and the expected text payloads. To update
+a source, change its pin in `tools/sync-tree-sitter-wasm.ts` and review
+the regenerated manifest.
 
 ## Local patch to the runtime
 

@@ -13,11 +13,17 @@ const NESTED_MANIFEST =
 
 const TREE_SITTER_VENDOR_FILES = new Set([
   "LICENSE",
+  "LICENSE-csharp",
+  "LICENSE-go",
+  "LICENSE-java",
   "README.md",
   "manifest.json",
   "tree-sitter.d.ts",
   "tree-sitter.cjs",
   "tree-sitter.wasm.b64",
+  "tree-sitter-csharp.wasm.b64",
+  "tree-sitter-go.wasm.b64",
+  "tree-sitter-java.wasm.b64",
   "tree-sitter-javascript.wasm.b64",
   "tree-sitter-python.wasm.b64",
   "tree-sitter-tsx.wasm.b64",
@@ -39,6 +45,11 @@ test("the npm tarball ships only the root package.json as a dependency manifest"
   assert.deepEqual(nested, [], "fixture and example manifests must stay out of the published tarball");
 
   const paths = files.map((file) => file.path);
+  const vendorPath = "dist/src/usage/vendor/tree-sitter/";
+  for (const name of TREE_SITTER_VENDOR_FILES) {
+    assert.ok(paths.includes(vendorPath + name), `${name} must ship in the tarball`);
+  }
+
   assert.ok(paths.includes("examples/starters/slipway/README.md"));
   for (const path of [
     "docs/spec/predicted-eol/conformance/check.mjs",
