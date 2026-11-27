@@ -48,7 +48,8 @@ Save fleet input explicitly with `--forecast-input`. The regular aggregate
 fleet report omits path and ownership evidence. A saved recording works
 offline and uses the captured day unless you pass `--as-of YYYY-MM-DD`.
 Changing the day selects a different window over the evidence already
-recorded. To scan the host at that day, pass `--as-of` when recording.
+recorded. Pass `--as-of` when recording to evaluate the pinned default-branch
+commits against that lifecycle reference day.
 `--previous` reports new findings, dates that moved earlier or entered a
 nearer bucket, and active findings absent from a complete current scan of the
 same repository. Comparison uses the host, repository, rule and exact location.
