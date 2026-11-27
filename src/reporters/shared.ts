@@ -46,7 +46,9 @@ export function displayLocation(location: SourceLocation): string {
   return location.line ? `${location.path}:${location.line}` : location.path;
 }
 
-export const compare = (left: string, right: string): number => (left < right ? -1 : left > right ? 1 : 0);
+export function compare(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
 
 /** The one order every machine-readable reporter uses, so the same scan always lists findings the same way. */
 export function findingOrder(left: Finding, right: Finding): number {

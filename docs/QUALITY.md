@@ -159,7 +159,7 @@ change without tests fails the floor.
 
 ## 7. Mutation score
 
-**Target.** On the mutated core (`src/engine/`, `src/baseline.ts`, `src/diff.ts`, `src/vers/**/*.ts`) and the reporters
+**Target.** On the mutated core (`src/engine/`, `src/baseline.ts`, `src/diff.ts`) and the reporters
 (`src/reporters.ts`, `src/reporters/**/*.ts`), each
 file's score may not fall below the value in
 [`benchmarks/mutation-baseline.json`](../benchmarks/mutation-baseline.json), and the overall score stays at **60% or
