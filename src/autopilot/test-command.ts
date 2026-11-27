@@ -96,7 +96,9 @@ function replayResult(run: AutopilotRun, location: { tree: string; branch: strin
   if (run.replay?.remaining !== undefined) {
     const verification = run.replay.resume === 0 ? "final" : `resume-${run.replay.resume}`;
     lines.push(`Wave findings: ${run.replay.remaining} remaining, ${run.replay.introduced} introduced.`);
-    lines.push(`Verification: ${join(dirname(location.record), verification + "-verify-result.json")}`);
+    const recordDirectory = dirname(location.record);
+    const verificationPath = join(recordDirectory, verification + "-verify-result.json");
+    lines.push(`Verification: ${verificationPath}`);
   }
   lines.push(`After review, remove the worktree, then use git branch -D ${location.branch} to discard the branch.`);
   process.stdout.write(lines.join("\n") + "\n");

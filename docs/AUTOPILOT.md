@@ -29,7 +29,7 @@ Use preparation to inspect the branch before you request test execution.
 trusted recording as data in the prepared checkout. The replay launches
 no agent or repository commands. The default edit scope is the selected
 migration packets’ files and tracked test files. GitHub workflows, dotenv
-files, private keys, and lockfiles remain protected even with an explicit
+files, private keys, lockfiles and Offing configuration remain protected even with an explicit
 allowlist. Replay refuses recorded secret text and records the stopping
 guard in the run record.
 
