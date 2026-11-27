@@ -27,3 +27,9 @@ offing forecast --fleet fleet.json --target nodejs@22 --json
 The first command collects evidence while reading the pinned tree over the configured fleet host. The second reads the file offline. Each repository is assigned to one verdict for each target, with its saved commit and reason. A missing or stale observation stays unknown.
 
 The MCP tool `simulate_upgrade` takes `repository_path`, `targets`, and optionally `as_of`, `months`, and `effort`. See the [v1 specification](spec/what-if/v1.md) for field meanings and conformance.
+
+## Benchmark
+
+The What-if benchmark compares verdicts and blockers with runtime constraints
+from pinned public upgrade PRs. It includes the observed disagreements and
+instructions to reproduce the scores. [Corpus, results, and reproduction](https://github.com/velella-sh/offing/tree/main/benchmarks/what-if)

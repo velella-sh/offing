@@ -1,0 +1,2686 @@
+[
+  {
+    "repository": "acmuta/mavgrades",
+    "pullRequest": 75,
+    "mergedOn": "2026-10-06",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": "20.x",
+      "after": "22.x"
+    },
+    "base": {
+      "commit": "b869096e57d6cc20963744080b77507ec376e9e5",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "a773d0fb55b01cf49f0818cd486f6d9b2bb936d12ab7495210cd8937125a84a8"
+        },
+        {
+          "path": "package.json",
+          "sha256": "a1d9577a76da1a78a07cdb6b8a39edc15a196aa9bcc8046c8fed43814eff9d22"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package.json",
+          "subject": "nodejs",
+          "constraint": "20.x"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "8b662b1f6e45161642a07e023b0dc1a923f6f57b",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "935cdb79b91c8fe0e95e86648e2324b027ceb1b49f0fae5eb7f6165505c2b62f"
+        },
+        {
+          "path": "package.json",
+          "sha256": "c8bd02de8f44e55197128cccf8d8bb23925b25d21b8158a755607a3a8f37b1a3"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "Asandhu402/BabyMind",
+    "pullRequest": 69,
+    "mergedOn": "2026-11-06",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.10",
+      "after": ">=3.13"
+    },
+    "base": {
+      "commit": "c9b5afbd0a019494ea807788df81663f9dc277af",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "0b9cbbee8fee16f36378433d1c0d9503160b603176e0879a5bfcae99c17cc08e"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "ba4cbbaf5fe097aedb97f187d47d0a246682ebc9",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "c7c651c33fb5cc03849b43f63fe29d2334e1e8278e2309a473589e3c3f5f88be"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "bigcapitalhq/bigcapital",
+    "pullRequest": 1761,
+    "mergedOn": "2026-11-27",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "18.16.1",
+      "after": "22"
+    },
+    "base": {
+      "commit": "c1ccf75b719a23dc8a8c93b8a2f48f8ea3f53b86",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "58e44b0e62ee8d24fc8f50a2c37993d1f4fa78421cba00ff8db051dc5b8b4c38"
+        },
+        {
+          "path": "package.json",
+          "sha256": "4f2e8e7a1c12cfc8123911b3120c1c89dda656b883d2966b272f444ab29a30ce"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package.json",
+          "subject": "nodejs",
+          "constraint": "16.x || 17.x || 18.x"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "a49bcec7117341e2b0d56319683015c7dc77b934",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+        },
+        {
+          "path": "package.json",
+          "sha256": "3b1b31dfe1379e6143263830105a135b2d86bb4a6c69d1498b4217bf127c18aa"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "bigcommerce/bigpay-client-js",
+    "pullRequest": 475,
+    "mergedOn": "2026-08-04",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "20",
+      "after": "22"
+    },
+    "base": {
+      "commit": "324082bd35578f1b74e839268255e1c95217c1a8",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "5378796307535df3ec8d8b15a2e2dc5641419c3d3060cfe32238c0fa973f7aa3"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "1133b5d9f2307b5b674430238aae9f5a6204b43976c7f6297f28e6f2167f5d42"
+        },
+        {
+          "path": "package.json",
+          "sha256": "7b5b19b4eeeaa0705738756a06e690639853bd8049f8630c15da443f6e6237c7"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "69c12eaadbfb77bae1243df7cf8b06c5efa5d538",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "1133b5d9f2307b5b674430238aae9f5a6204b43976c7f6297f28e6f2167f5d42"
+        },
+        {
+          "path": "package.json",
+          "sha256": "7b5b19b4eeeaa0705738756a06e690639853bd8049f8630c15da443f6e6237c7"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "bitfinexcom/bfx-api-mock-srv",
+    "pullRequest": 60,
+    "mergedOn": "2026-11-09",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": ">=7.6.0",
+      "after": ">=22.0.0"
+    },
+    "base": {
+      "commit": "27ac459d6e29cf68ea8842d9048db2b1053fcdd4",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "8764125fa0b5b061ed6e815bbaf9b96e6642be57186e48abf8ee497b90a32bc3"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "99c70eac15a9ec2303bdbffcb3c963d4a1007ccc",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "4321665a099b593314033605003296a120d37def11197b39d5bda8bf2fc71b95"
+        },
+        {
+          "path": "package.json",
+          "sha256": "ceb684bbdfcdb5072e3f411c39074e184af87247121da7302861a77a917f5789"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "bulga138/taco",
+    "pullRequest": 2,
+    "mergedOn": "2026-04-20",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": ">=20.0.0",
+      "after": ">=22.0.0"
+    },
+    "base": {
+      "commit": "4f6fabe0b54c2f53e87c7bcad93a505d575d8711",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "2f07f9d41ad6331cd0da7cddba3fea6ecb6ba0260ca72edaff54d510e38962bb"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "80d26c136c696efaf4b5b103b5f82384fa03d4d4",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "d498e04b55150f66930c7679d2b991dda2cf5dd8019b36113f484715dfd86281"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "cal-itp/benefits",
+    "pullRequest": 4318,
+    "mergedOn": "2026-11-24",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.12",
+      "after": ">=3.14"
+    },
+    "base": {
+      "commit": "94b79367d4812a101b4b52d4c35895ec13d75e10",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "bcd00420e22e062e20da3766a4e0acd186225796d3ec9c10fb5dc84c6484f2ef"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "d634dc3e0ff9b1eefe179d0fb1f6f3ecc6a5d7da",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "fc59c4a2a2b477500efee7afa5e1dfb004474fa9c7976a435bd5acd3d2dd1f73"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "cal-itp/eligibility-api",
+    "pullRequest": 124,
+    "mergedOn": "2026-11-05",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.9",
+      "after": ">=3.14"
+    },
+    "base": {
+      "commit": "03656ccfc46c20e09df0e5b7ca5a9fa8c37a9cd6",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "2398d2146b862b628f5631c944670ef69cc8bf9aa7393f872584b34e7bcc7fed"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "3dd80c859be576f2f97cc2b4f3de7b1a1c937e4c",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "8de0eade3a98e9ce950662c5507768043f5e993ccaea732b03dd2669b581730e"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "cal-itp/eligibility-server",
+    "pullRequest": 630,
+    "mergedOn": "2026-11-10",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.9",
+      "after": ">=3.14"
+    },
+    "base": {
+      "commit": "bfe58c7ab45bd1e110ebc40047c96af5a6248088",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "9da5a0358989c49e0e795fd818e122294c796b1b905de447dbaad64d18261a96"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "b390345a71ca97e8fea7b557f79bd786b6aa853d",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "f8a8f6fb763de17b647c007c975a4e2bd531fbd7084aa108618970ec54201f93"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "carkod/binbot",
+    "pullRequest": 1203,
+    "mergedOn": "2026-11-11",
+    "target": "python@3.12.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.11",
+      "after": "3.12"
+    },
+    "base": {
+      "commit": "5486cb80c73035ee715530a3052c5e46b7cee5a9",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "49a506dd32096b010d75205acf3430c9ae6c40351888129499e5a5e487126c93"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "3936b17685c733a19e340a5ea83df9538fb78e70346eae33aee94a6857de3846"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "cf1b38b59a47dff98afa1bcf82a07bca594ab5d5",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "d82b16e64684f9e5500b4b300825e7b10d83096b4157308203480e270ecea978"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "carkod/pybinbot",
+    "pullRequest": 129,
+    "mergedOn": "2026-11-11",
+    "target": "python@3.12.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.11",
+      "after": "3.12"
+    },
+    "base": {
+      "commit": "87b6f7b1aed77f6e8db13b7dfa7ae598750ae998",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "49a506dd32096b010d75205acf3430c9ae6c40351888129499e5a5e487126c93"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "57987fb5e8105cf35f530adf3e63c0cc3c731505b405a2a4aedb6c76184ee0e7"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "5332c55a16307eed74f6f769e93ce84424f75f42",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "8a1e5be89ca006d33be056a38de9f02e82c1f1d9f3ef31d88653ef5b84f4a46c"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "CAVEconnectome/AnnotationEngine",
+    "pullRequest": 66,
+    "mergedOn": "2026-11-26",
+    "target": "python@3.12.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.9,<3.10",
+      "after": "==3.12.*"
+    },
+    "base": {
+      "commit": "35add87d750e2a4a69e2580c324b19cdbb9501e2",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "1be6d3a88fd8628af8b2e20cf459320e1efdedfcaa6986db95f0a47a12bbdc80"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "pyproject.toml",
+          "subject": "python",
+          "constraint": ">=3.9,<3.10"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "c0482b89178ad1cde4584cfba57d9736f57e98e9",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "1f42ffd56da5a760b043baf5c78a313b5f9c080f459d6c4f7d5e4f882f90c656"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "CERNDocumentServer/cds-rdm",
+    "pullRequest": 1068,
+    "mergedOn": "2026-11-17",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.9",
+      "after": "~=3.14.0"
+    },
+    "base": {
+      "commit": "f8d73334ba6d89184aa44bfc6bca45831003ffe0",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "053ed5c4621033a0f3f1633bdf6ebbe5aa6d2e7204cd29bb57872298d8cd483c"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "520e678f29d95546f4ba1205df4be2d5ea16bd45",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "b151d572b3c91e6c1bb6e07193b3289656ef80617644add230710a52d9f18f89"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "daniel-sabin/pigeon",
+    "pullRequest": 5,
+    "mergedOn": "2026-11-24",
+    "target": "nodejs@24.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "20",
+      "after": "24"
+    },
+    "base": {
+      "commit": "b973180667164d152ae15978439cf5cbed671fad",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "5378796307535df3ec8d8b15a2e2dc5641419c3d3060cfe32238c0fa973f7aa3"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "da52fdcd6fb556d8a0f896e4fdf0694b5e32b3ca",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "DataBiosphere/bard",
+    "pullRequest": 114,
+    "mergedOn": "2026-10-23",
+    "target": "nodejs@22.23.4",
+    "witness": {
+      "path": ".node-version",
+      "before": "v20.13.1",
+      "after": "v22.23.4"
+    },
+    "base": {
+      "commit": "9d02aa897e45cc344ae4bf1abd0790b7e242d265",
+      "files": [
+        {
+          "path": ".node-version",
+          "sha256": "cc3da1f70e0f67962a6e3db12853e3e61bd4694c5ff7b36cc91df6b665b9ff8f"
+        },
+        {
+          "path": "package.json",
+          "sha256": "d19a3ec1e228492f77a6f59cec4cae9235a54dbcc9bb1c64b608fdd6918d82a9"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "b1d17aa242caa1cdbc8a538923376a97e71ca82a",
+      "files": [
+        {
+          "path": ".node-version",
+          "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+        },
+        {
+          "path": "package.json",
+          "sha256": "d19a3ec1e228492f77a6f59cec4cae9235a54dbcc9bb1c64b608fdd6918d82a9"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "DecaturMakers/machine-access-control",
+    "pullRequest": 138,
+    "mergedOn": "2026-05-08",
+    "target": "python@3.13.12",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.12.9",
+      "after": "3.13.12"
+    },
+    "base": {
+      "commit": "8e8f32734708aa3d567057bfbb567c6fb0dfd60c",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "7c31b8cce5796f169ade750a43dfa5f9fb4c326e90aab5c8e83189b0f6011eb8"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "6ade9c73ab58eaf94cd9f30dd94b51a52f264264a6de19132880c14bd9099226"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "b7bbad1a423b65a2e873b98c06511b7fafe2dfe4",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "40411dc2c2726b4c7024d38318dd8df45c528b49491efb45939dd4a829847d94"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "0c452d96c8ff16098532cc9ac9a814e8a57f3749532f5a0f38b80f1c6227f317"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "devemberx/mcp-server-polarion",
+    "pullRequest": 49,
+    "mergedOn": "2026-05-26",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.12",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "b6f2d5a3e5d2c04f2870b174fad26843a65d9dbd",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "4234aa4c77214a904d86fed5bf8415ecf6cefe2be2cee0e13ac443464c9e81ae"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "97ac154269be58d38da633da489dece9ee1aeba4",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "0857d859d4cfd5ed8fe1dc7a17c836b0aaf7229920804387538df2039a8c45e1"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "doismellburning/etcc-csv-scrape",
+    "pullRequest": 15,
+    "mergedOn": "2026-11-26",
+    "target": "python@3.14.6",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.11.4",
+      "after": "3.14.6"
+    },
+    "base": {
+      "commit": "0ede1f24342a2ffec02ac80d4f366a7b68ed01f8",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "1851851e6a541d616fdb14be3375bc12e52606005675ab1eb97b057794227321"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "751415ed84f20e1f426fa44a8d3783eace9372b9",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "3a55324cbeddc91df012407d051dad08c88624c95a82fbdb856728729fbd14ab"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "evil-tim/monitor-mcp",
+    "pullRequest": 3,
+    "mergedOn": "2026-10-31",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.13",
+      "after": ">=3.14"
+    },
+    "base": {
+      "commit": "7adfac00e2497b85d3d52851bf74f93b1725db13",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "c3a4c0c12765b05746fcdcec0356a691bb0f5938af880fbb2ba2c42885905bf6"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "8d751d4c58132cdea90a97d8f6abf516fed44959",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "c0f2f25cae1477ffe3b2ce316a25f09ee340de206987ea9481b98291ebdfc4bc"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "flowsni/flipwise",
+    "pullRequest": 9,
+    "mergedOn": "2026-11-12",
+    "target": "nodejs@24.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "22",
+      "after": "24"
+    },
+    "base": {
+      "commit": "d482ec46d730a26307d25590a6858f0a97578fbf",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "5f15d5f8751bcf50844f717519b82c1e5d837cd5baf2a05dd268038726137880"
+        },
+        {
+          "path": "package.json",
+          "sha256": "134e89a1bf65b7aa4c3af921f69f9981659d584909c721b7e962c7108e6a7efc"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "01e70332d75f5b931c05b37f5359926334196001",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "e3ed360432adafe2ebdb2f59e7f487f07e2d1373505636c32d812946ecdf5f72"
+        },
+        {
+          "path": "package.json",
+          "sha256": "cb407d658f2835234153bfee0ec0eeda405ef7c5230c34a12bbfbf943a67526e"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "fr-eed/macos-incontrol-controller-patch",
+    "pullRequest": 6,
+    "mergedOn": "2026-11-12",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.9",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "8dabf095f3458f828a86a275b37a664ed7934b7c",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "04125177931fbd4afa4af7296dbdc95e9f209268cb4518f08aa568aa503993a2"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "9a8a388a818e1f29dda943f0393067973e6e28e1",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "bfc2b0ad56af9e8c741a043a8e20aed4a4a1b6e7084f3f37634f2070030078d5"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "HSLdevcom/hsl-map-generator-server",
+    "pullRequest": 124,
+    "mergedOn": "2026-10-25",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "v16.14.0",
+      "after": "22"
+    },
+    "base": {
+      "commit": "9c5a4347b51c2887dbd409454ffa1132b7b933cf",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "fec31aba11e8c2153838c211311972e990161ba2a658e638df080fa3fd7ec120"
+        },
+        {
+          "path": "package.json",
+          "sha256": "055769e052b670c017fffd2abc2ed5fc3ed0c60c6fc3b9ca3a0a3c2ec7b036b8"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "00a3d39ab1d6cf4da748defad1149d642c31ffb5",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+        },
+        {
+          "path": "package.json",
+          "sha256": "fcd48fbfd50ccdef62f5f0c5ab12377c109654fcd65427992cdab33fdbda00b6"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package.json",
+          "subject": "nodejs",
+          "constraint": ">=22.12.0"
+        }
+      ]
+    }
+  },
+  {
+    "repository": "HSLdevcom/hsl-map-matcher",
+    "pullRequest": 11,
+    "mergedOn": "2026-10-27",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "v18.20.4",
+      "after": "22"
+    },
+    "base": {
+      "commit": "ccd61c0f3d8ba7dacdad618ae5760b145303a5c7",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "593764ae7aa0b416ad8ca2dad0d87bde031426b40b5eb7563eb95a15b4b47b64"
+        },
+        {
+          "path": "package.json",
+          "sha256": "568d5ad9f1cf4f93e21fc23fe59c64dc6c4e4e5b3b9d841cf30827576f87c1db"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "027aa8808dcda3921dea06bd7a235baeaf8ea6b8",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+        },
+        {
+          "path": "package.json",
+          "sha256": "5c225a6ccec08718a9456bdb96646f3b0c07ac81d86b0bb93b213a9cba4506a1"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package.json",
+          "subject": "nodejs",
+          "constraint": ">=22.12.0"
+        }
+      ]
+    }
+  },
+  {
+    "repository": "HSLdevcom/hsl-map-publisher-ui",
+    "pullRequest": 170,
+    "mergedOn": "2026-10-25",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "20",
+      "after": "22"
+    },
+    "base": {
+      "commit": "ebb2430c9c68ab2c8544e9aa47d80ce7767bf8cf",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "5378796307535df3ec8d8b15a2e2dc5641419c3d3060cfe32238c0fa973f7aa3"
+        },
+        {
+          "path": "package.json",
+          "sha256": "840aba447d3b0f533f81719cfbaaefae91e23706eec25eaa52eb3cbc957b4fc6"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "e1bc0b52a89d83503aee964da06047a9f9e8b5e2",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+        },
+        {
+          "path": "package.json",
+          "sha256": "a64c03c9c77809340fc2d6eaa0f3441abdba60f31f2972eb31d9b9e7751139ab"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "HSLdevcom/hsl-map-site",
+    "pullRequest": 49,
+    "mergedOn": "2026-10-25",
+    "target": "nodejs@22.12.0",
+    "witness": {
+      "path": "package.json",
+      "before": ">=8.0.0",
+      "after": ">=22.12.0"
+    },
+    "base": {
+      "commit": "9453b5b82a0972755f3e937804436a1d2c1967c9",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "3003f132a165c0a7bd838a6b8237796f0c19c179b5b5f92372062d41661bcdf9"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "53c42137fee27821d229e368e2cd248d345fdbd7",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "a7d0a8abd707fea135428fb5d1dc9c349e7f20bd4a0747e3578750d56989e332"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "hykzr/sk4n",
+    "pullRequest": 7,
+    "mergedOn": "2026-11-21",
+    "target": "python@3.12.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.11",
+      "after": ">=3.12"
+    },
+    "base": {
+      "commit": "7cafb7a8895813e815eada1e9ccc0f7afd1ddf11",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "57d96afbccec48641f8507f08c76e20367c8ddffa20b59827e6949cfb5cb0b91"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "1cc521325f2d4c76d0ea9a5b6bc2d05b6a1c7cd6",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "7e648946c5badcdd79bf30b20ae67fc3593209cca2f3ad77a4b55707893d2b2f"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "iliksis/tthub",
+    "pullRequest": 143,
+    "mergedOn": "2026-11-18",
+    "target": "nodejs@24.22.3",
+    "witness": {
+      "path": ".node-version",
+      "before": "22.15.0",
+      "after": "24.22.3"
+    },
+    "base": {
+      "commit": "0e9374d19720052907fdd87b6081af9292af6eed",
+      "files": [
+        {
+          "path": ".node-version",
+          "sha256": "e1677620f62097e30fac6695180333d8eb9ead4fe5b1d1d6e01b76e049780059"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "41d13e3ac65f04adec97d8b8cdf50cccd10ff09dc21efd35e550543da7eb0572"
+        },
+        {
+          "path": "package.json",
+          "sha256": "1cb7f7b876b674d7ab6ed28aa6bc6c4ed2966243abcaef28bac4b04ea16e79a6"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "1c062ee9e880fd2440ce2dd7e14082a5870be0a0",
+      "files": [
+        {
+          "path": ".node-version",
+          "sha256": "584f19ccde29925286e32f566a2aa06c89efb4e2eb2bb2fc9ea5d56e2d190ac4"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "41d13e3ac65f04adec97d8b8cdf50cccd10ff09dc21efd35e550543da7eb0572"
+        },
+        {
+          "path": "package.json",
+          "sha256": "1cb7f7b876b674d7ab6ed28aa6bc6c4ed2966243abcaef28bac4b04ea16e79a6"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "italia/padigitale2026.gov.it",
+    "pullRequest": 299,
+    "mergedOn": "2026-11-26",
+    "target": "nodejs@24.22.3",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "v22.17.1",
+      "after": "v24.22.3"
+    },
+    "base": {
+      "commit": "11c60086430c3b3cafba39ea2f0b7d57740d6b8e",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "d9bea2b79b73a441e28f257a833d185d94e6b661219571bab50086e613232a6b"
+        },
+        {
+          "path": "package.json",
+          "sha256": "ec8232c30bf92d68fc4c87ef115b11c40fd5f7464eec70e803c88c407e31d80c"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package.json",
+          "subject": "nodejs",
+          "constraint": "22.x"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "8798c8330ef2f75d13cc26fc1e30df8a6b1b32d7",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14"
+        },
+        {
+          "path": "package.json",
+          "sha256": "1c0b081f59198d06e6a035d2436e151ba8d7ac971e80957061e623a4ac15f315"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "juspay/hyperswitch-saleor-payment-app",
+    "pullRequest": 92,
+    "mergedOn": "2026-10-30",
+    "target": "nodejs@22.23.4",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "20.12",
+      "after": "22.23.4"
+    },
+    "base": {
+      "commit": "68ec5afc26f1673dd474890eab5d4dbeec18d23b",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "c591862d413f129771b944d98cedd34fdf1cc1d75b1ee299ea2efe7c32752b5d"
+        },
+        {
+          "path": "package.json",
+          "sha256": "82f1c4f1b0874cf18331c569f5bd6a02b99c9db363dce9fc7cd66d79d00c71d5"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "59b828d2f94a4e9e1eb0c7b5dc7a4684ff950ca0",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "0c4bf84f9bedd485b2c4eac05f59e35addc86ce7dbf0d90435528e04384c6314"
+        },
+        {
+          "path": "package.json",
+          "sha256": "655de97ef56fcbaa22766cb56764510f1f9e34e6d2134cfb26452a89f8917414"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "kevinofsydney/fight-analyser",
+    "pullRequest": 4,
+    "mergedOn": "2026-11-09",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.12",
+      "after": "3.14"
+    },
+    "base": {
+      "commit": "a7e516a4a5a75e8cb6c4b9d9c9cf465250c668c4",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "f7b6daed0ae37296254eeceb1b40ace8d67ca39627cd9028b61c0822829a4489"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "41b579aa653e52af9b996a18f2d6bf671a1ba0b4",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "a876e0b10411037a012498b9fe18d9bc1df32ed8b722a13564dc944ddcfd9135"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "a39c538ab101be80459ecb8ff1a1ce38481be337810fe17e4b3e2879fbf68239"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "kleros/escrow-v2",
+    "pullRequest": 186,
+    "mergedOn": "2026-10-23",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "20",
+      "after": "22"
+    },
+    "base": {
+      "commit": "21c4e099399f09e4fb45370401d0d9458833bdf6",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "5378796307535df3ec8d8b15a2e2dc5641419c3d3060cfe32238c0fa973f7aa3"
+        },
+        {
+          "path": "package.json",
+          "sha256": "1747b94f4ceb498fb53fa374739094880b5db85d73c7058f968770d14719280d"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "8bc2e45f3feacaac84064f308dc9f8626b1a270e",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+        },
+        {
+          "path": "package.json",
+          "sha256": "a9b9ca1511d514ca2b176f735c7cbb365e097f59c193f8628758f10544316617"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "magda-io/magda-embedding-api",
+    "pullRequest": 5,
+    "mergedOn": "2026-10-27",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": ">=18.19.0",
+      "after": ">=22.0.0"
+    },
+    "base": {
+      "commit": "527485d1b178c77d0f21531030560a66e63818c9",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "86ed995ae239fd1d9f1d9383b14528d9773146e262df2661fbdc217d8d7df6f5"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "53cbd9348f594a286fa86933d769dda4ed164761",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "1378b7239db7b261d0afa5a464631216deb7152258d8a4dacbc33e3ef0aae533"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "magda-io/magda-minion-broken-link",
+    "pullRequest": 13,
+    "mergedOn": "2026-10-27",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": ">=18.19.0",
+      "after": ">=22.0.0"
+    },
+    "base": {
+      "commit": "ecafafabb14aa2f75c9889bbe02b7d208203c91b",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "e88b8555bdf1e96290b9b86a75729c653e2c47827ba697ffac85b6d94f791dcd"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "16ac043b2fae65adfbd335642e38641bc8d09d49",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "d1af61cba2059e014dc5062d8bfcdce0990dd7e60547ee4059b83ba8606a87d8"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "maltewinckler/swen",
+    "pullRequest": 119,
+    "mergedOn": "2026-08-14",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.11",
+      "after": ">=3.13"
+    },
+    "base": {
+      "commit": "f12ec9f645e3d6d8691762d67e52fec9d7ac0235",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "7b808215c69100759214f2212ce7f8f8977fed9554b0f3e870453ebcb2584b7b"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "6c8b06ca5072b41f380cf281985f6b15970ce630",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "22a4a3a5e62b93c43a4e09f3f8c1930d275f7e5af57630651989fa075a8f2e2f"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "mandmboo/guestbook-face-worker",
+    "pullRequest": 2,
+    "mergedOn": "2026-07-04",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": "20.x",
+      "after": "22.x"
+    },
+    "base": {
+      "commit": "7bd65cf32434aeb5b3eaa19dca89e99232f98e76",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "56d7d2091b3487fcedd2ebb7f211293fd25531d528da21e052919f84d033143d"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package.json",
+          "subject": "nodejs",
+          "constraint": "20.x"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "6eb1ee773e2320e5a2956412a31b25d46a845e9d",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "495ba7c43e34834cef26d79e1fa7889019c394dc5ee3b4cdd9a5af12aef470a1"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "maykinmedia/open-inwoner",
+    "pullRequest": 2500,
+    "mergedOn": "2026-05-18",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.12",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "acfcc9437a25b8db5d907817061ac4373633c003",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "7d9caba6e5da84c1bbfd04ad9ab425f56cf70fc064692c86442b40e6cbd6cf7b"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "pyproject.toml",
+          "subject": "python",
+          "constraint": "== 3.12"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "27e040f062d1acbbcefe1a04ef4b49e65b7291bf",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "e872c043f71ebb11ab70d40d587ed0915fb509388dc5452ea883cf8acd8e2c3f"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "MetaMask/github-tools",
+    "pullRequest": 313,
+    "mergedOn": "2026-11-17",
+    "target": "nodejs@24.22.3",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "v22.23.4",
+      "after": "24.22.3"
+    },
+    "base": {
+      "commit": "bb203b4a333f5713c24de06f52e357c46deac193",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+        },
+        {
+          "path": "package.json",
+          "sha256": "0fae5af4288c09c0fcd5d2c455f5ecc1112e79834f0aac16ce4daa7619192b6a"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "9ed058e8faa33d535b39fce8af3dc36980703a89",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "584f19ccde29925286e32f566a2aa06c89efb4e2eb2bb2fc9ea5d56e2d190ac4"
+        },
+        {
+          "path": "package.json",
+          "sha256": "3a7a8a5f45982a380e27a1819fb5d0b43cc6d2ee1b1e2ca71f812c637bbd7704"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "mnckapilan/kural-tab",
+    "pullRequest": 60,
+    "mergedOn": "2026-11-14",
+    "target": "nodejs@24.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "22.16.0",
+      "after": "24"
+    },
+    "base": {
+      "commit": "b1d3043a5c75a3b7813e22a0ae0e1b4302f2716e",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "177d20030d4dcc37eae9ef92865ec54dadce60e8f19e9a34a5d4f37502195a36"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "dac143217023af5858d0968ffe8f7682562c3a2865126c1c51700b24cb37c10d"
+        },
+        {
+          "path": "package.json",
+          "sha256": "0dba3ce2d973bb27219eb9629ff71cdf5b13f2199df2aaacc074ee968e373eb0"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "e3484664354642394f2c5b6c449263ffb17268bb",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "dac143217023af5858d0968ffe8f7682562c3a2865126c1c51700b24cb37c10d"
+        },
+        {
+          "path": "package.json",
+          "sha256": "0dba3ce2d973bb27219eb9629ff71cdf5b13f2199df2aaacc074ee968e373eb0"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "Nebulis/blog",
+    "pullRequest": 211,
+    "mergedOn": "2026-11-01",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "v20.11.0",
+      "after": "22"
+    },
+    "base": {
+      "commit": "1b97d4aeb0f8044fbfa49fac70a5b7999a064107",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "7bf56c5e5fe63a0c08c9abf92331d4885c935278e919a5a89f0b2191a968c5d7"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "10a7fbcb83c21638f4071d5eac4e837a92fb939674937963db35452eeb59cb78"
+        },
+        {
+          "path": "package.json",
+          "sha256": "9ed454e6a88619f8a5c26c8179f6ace4fae1c7e1d3cbf8e661aaaa996786a613"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "c34bfbeb6ed5627635e75db02f9a20e51d5126ea",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "b543e2f308ecf88422c1ad521bd559927ccf3b6b7b7808526fac30c0112c6209"
+        },
+        {
+          "path": "package.json",
+          "sha256": "7f17f317c1cd9465216626a137fd5e393971bae438f6c9ba670ab02194cec317"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "open-contracting/collect-generic",
+    "pullRequest": 60,
+    "mergedOn": "2026-10-30",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.10",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "c7fff4d568df4072bc1b0bdc16dd7670f511881e",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "7a41a41354ab8049091ef1a00253ca00567f5a1d3f9aef5502c0b4b5ce9ae707"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "5215ccf332369d46813ca4574bb6670be3113e8ac6c7a1d0794bcff9ec4fc73a"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "94e5e127407193ed2c5b9e6640cb42d4f48083ef",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "ea0d783d1d75d26b1aba49ee80d38689c4e1947809b1660d6e1f7e5a1545bf44"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "open-contracting/cove-oc4ids",
+    "pullRequest": 221,
+    "mergedOn": "2026-10-30",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.11",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "92d7a0ae9f43e28460f01b59dbec572f0d629aa1",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "49a506dd32096b010d75205acf3430c9ae6c40351888129499e5a5e487126c93"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "d51d3ced513f3bbfdb75e7b86665915cbc33564fe189736753e7a1978a998d52"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "17a95d2fc76c7b79c2137d15a2cfcc329d46cad4",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "d51d3ced513f3bbfdb75e7b86665915cbc33564fe189736753e7a1978a998d52"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "open-contracting/data-registry",
+    "pullRequest": 523,
+    "mergedOn": "2026-10-30",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.11",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "68fd611a0d69d0a34979118cffb483552f438619",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "49a506dd32096b010d75205acf3430c9ae6c40351888129499e5a5e487126c93"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "c351be1c4e917a08d9623c22d420ad294d63ab3f0677f8d0c3eb57a27867ddaf"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "d71aba2d7a822eaf3546f06849612e7504623c1c",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "c351be1c4e917a08d9623c22d420ad294d63ab3f0677f8d0c3eb57a27867ddaf"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "open-contracting/digitalbuying",
+    "pullRequest": 78,
+    "mergedOn": "2026-10-30",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.11",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "3fee9a353441aa8776e50f589d5e039565e7e484",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "49a506dd32096b010d75205acf3430c9ae6c40351888129499e5a5e487126c93"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "22dd55c0a397b1223356ad94f6c37b015d1b28f6913342512b5cae154e77806b"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "62769ce6113bf6fb51d175b28e193abaf6fe1cd5",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "22dd55c0a397b1223356ad94f6c37b015d1b28f6913342512b5cae154e77806b"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "open-contracting/kingfisher-process",
+    "pullRequest": 516,
+    "mergedOn": "2026-10-30",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.11",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "799210e2df6f5e8aa19d03a81c2e37073363187c",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "49a506dd32096b010d75205acf3430c9ae6c40351888129499e5a5e487126c93"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "3dbe7a5df8e8feb05f7e449e83e5e687e4a519329311202146a86ecf990b9ca1"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "73448d73968a37b028a62113e34a60786c688525",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "3dbe7a5df8e8feb05f7e449e83e5e687e4a519329311202146a86ecf990b9ca1"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "open-contracting/kingfisher-summarize",
+    "pullRequest": 273,
+    "mergedOn": "2026-10-30",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.10",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "583edfdb1e379ff2c505342549b08e33150be6de",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "7a41a41354ab8049091ef1a00253ca00567f5a1d3f9aef5502c0b4b5ce9ae707"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "e4c5325c49d0580daf6bf2d94768cf3494ff3ae74cdd00d562fb9f2e7b6db395"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "7894258286341f83ca594efc9e57ee8624145eb9",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "a9b17ed0ddb534504843b46bcf08bd420ae71538859163eb7581001c3c12bc5f"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "open-contracting/pelican-backend",
+    "pullRequest": 185,
+    "mergedOn": "2026-10-30",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.11",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "9caa0b4e82a6be61ef56618b6fcf50ce211d959c",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "49a506dd32096b010d75205acf3430c9ae6c40351888129499e5a5e487126c93"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "8d58d6d2773ad1de525e5d12cd3a7890e2c39050b299ced7c9ea793fd391849a"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "6e66022620a2a3f6e318bd7d4bc12deca1d0f28d",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "8d58d6d2773ad1de525e5d12cd3a7890e2c39050b299ced7c9ea793fd391849a"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "open-contracting/pelican-frontend",
+    "pullRequest": 321,
+    "mergedOn": "2026-10-30",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.11",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "c0a2d5180d6b9d660203ab975624f2825025f068",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "49a506dd32096b010d75205acf3430c9ae6c40351888129499e5a5e487126c93"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "eab64ef18b8fd5cb4c86e6f98a808531dd5c6a0a7c2defbb0686a4b6b57502af"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "d8b1116eb47b6397e226d66d7e76f271697a9949",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "eab64ef18b8fd5cb4c86e6f98a808531dd5c6a0a7c2defbb0686a4b6b57502af"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "open-feature/toggle-shop",
+    "pullRequest": 45,
+    "mergedOn": "2026-11-09",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "v20",
+      "after": "22"
+    },
+    "base": {
+      "commit": "2ce902515ef90de13641426239e7cdcf969f2674",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "947162f1b37ea74e53f6086a197d6c749c6f094020cd0bc236d496c3754ce80c"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "c0a3eef4156a5a4dd661c2dfa6719b81a31d1db2ebc82b1d51559765401bbd86"
+        },
+        {
+          "path": "package.json",
+          "sha256": "94b9130aead0ff27d81b1d2fdc38a724a6404e7e8f505cce0cf8f96a8954953d"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package-lock.json",
+          "subject": "@img/sharp-win32-ia32@0.35.3",
+          "constraint": "^20.9.0"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "9cc03471c6f8a1683bbd613658c6a1130fbeb4d8",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "785f3ec7eb32f30b90cd0fcf3657d388b5ff4297f2f9716ff66e9b69c05ddd09"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "094978844a674628cac30319f3eff95a2d3a323b20644644a199ef861f5b506b"
+        },
+        {
+          "path": "package.json",
+          "sha256": "0ee94d515c2386115013d6973c9c1c96ad390f625e3ab19d6c08efc6933c3431"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package-lock.json",
+          "subject": "@img/sharp-win32-ia32@0.35.3",
+          "constraint": "^20.9.0"
+        }
+      ]
+    }
+  },
+  {
+    "repository": "openstates/openstates.org",
+    "pullRequest": 467,
+    "mergedOn": "2026-11-20",
+    "target": "python@3.13.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.9.13",
+      "after": "3.13"
+    },
+    "base": {
+      "commit": "01855c556e7cb4cd6673393723f94f133efc4008",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "b0206fb6fb0a2e6bdf7f64a5117d7a4d9d9bd27531564df5a94b1bc354d04400"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "3821d48391445bc75a5cebd7f9cd5f3906ae62159ffc8e410b835e8f37b2fe9b"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "22bf4d0060273e3d5324fd7de6a27ce3b8624acb",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "0698b674942f4024bfee788075dd9a6a1a1acede4e4a6d840a8616c5c9c886f9"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "oslokommune/okr-tracker",
+    "pullRequest": 1166,
+    "mergedOn": "2026-09-21",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": "20",
+      "after": "22"
+    },
+    "base": {
+      "commit": "8abe97c5504943ab9da1bb20e2e36a19f97ee172",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "78e19b6f0a7203986412617833739314ec62ad41a3bc118a7c5a6d93f14439a8"
+        },
+        {
+          "path": "package.json",
+          "sha256": "93c09acc8d3d4c7a391d6d5b8a1e8122eb5c798ca37337acf32eafb17e1f67a9"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package.json",
+          "subject": "nodejs",
+          "constraint": "20"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "69e548a1ffa3a1d1a32f9f6d2bba9d59147d94bd",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "816cb5b7a33bf6aa753d0e6eab75eb0c80fdb66715776d640f99d2d3b2f56594"
+        },
+        {
+          "path": "package.json",
+          "sha256": "fdd1cf99e0be18089efa0cf9df0ad7c3a678126717ff43ce4dd83b0d6e649df2"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "peterklijn/casambi-mqtt",
+    "pullRequest": 81,
+    "mergedOn": "2026-10-31",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.13",
+      "after": "3.14"
+    },
+    "base": {
+      "commit": "8ee8baeba495d230c7c2be923c2f6f4fa0ce8ba3",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "78be58711df679664bea9b52de5b79a5cabfbff5",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "a876e0b10411037a012498b9fe18d9bc1df32ed8b722a13564dc944ddcfd9135"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "PetreHoffmann/PodmanManager",
+    "pullRequest": 6,
+    "mergedOn": "2026-11-02",
+    "target": "nodejs@24.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": ">=22",
+      "after": ">=24"
+    },
+    "base": {
+      "commit": "1150413af011d90db9baa22af559b63e2b92233d",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "65bcaa02091f74032ea7493d1a9a3bc1da313cc48f4917b3c4274c75ee6941ce"
+        },
+        {
+          "path": "package.json",
+          "sha256": "a065bd6fe34b8c624852dc77881612c5066e80545aeed26aa0209d633cb7288d"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package-lock.json",
+          "subject": "@img/sharp-win32-ia32@0.35.5",
+          "constraint": "^20.9.0"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "37b54630e905d2e8b01ca6335308945af364ebcf",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "80b4c0e86b39238c4ccee254389ac6a26a1c028b2ac86900ebae364644555284"
+        },
+        {
+          "path": "package.json",
+          "sha256": "41e9534e5319f47dc84cd8558081f935e0302541eceb953fe8aa8d0450f4ce28"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package-lock.json",
+          "subject": "@img/sharp-win32-ia32@0.35.5",
+          "constraint": "^20.9.0"
+        }
+      ]
+    }
+  },
+  {
+    "repository": "pitsecommerce-beep/orkesta-cold-calling",
+    "pullRequest": 3,
+    "mergedOn": "2026-07-23",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": ">=20.0.0",
+      "after": ">=22.0.0"
+    },
+    "base": {
+      "commit": "049695033c2ef351e4fe7f4310c6ba8aec84c96d",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "2fcf62a0082aed9822b16755538579a5566433272e88ca708b813546dcda18bd"
+        },
+        {
+          "path": "package.json",
+          "sha256": "241f586542cb4a5401c5bbddfd21a796a4457d5acfe73565684b26f09dbd134f"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "68e6027bf721058bc2a407ed3c04bc34dbc525ce",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "2fcf62a0082aed9822b16755538579a5566433272e88ca708b813546dcda18bd"
+        },
+        {
+          "path": "package.json",
+          "sha256": "2a274a6e0fd620006ab806dd85520e5c9e0fc90957921c634e6016dbb539880f"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "safe-global/safe-decoder-service",
+    "pullRequest": 408,
+    "mergedOn": "2026-11-19",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.13",
+      "after": ">=3.14"
+    },
+    "base": {
+      "commit": "0ce39f40219948e0665c2743df5782677b95dcad",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "a5781ddc7689d1f337fa71b98626af719897eab608a58d4a2307bc4787f22875"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "575cdef2f9bdd220076ed1669a536bd9911e3e64",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "65b80c9b1dbcba1d548e899ea7b2b46b173c4831a79200c1bca7599eabc33ebf"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "safe-global/safe-transaction-service",
+    "pullRequest": 3122,
+    "mergedOn": "2026-11-19",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.13",
+      "after": ">=3.14"
+    },
+    "base": {
+      "commit": "b05324600cf33caa27f9a6c4bb2bf76264376eaa",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "b2f6b124128e802d910beb0ad8c16aaff06785f2643daa1dd47fde9ad3547397"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "76965891f16b1988a53a281e10f9766f68a7116a",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "70a0c726814732fd6df36c9b841b0d157315f86e2de9f4f2470adfc56bf1b34d"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "skohub-io/skohub-reconcile",
+    "pullRequest": 39,
+    "mergedOn": "2026-11-04",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": ">=18.0.0",
+      "after": ">=22.0.0"
+    },
+    "base": {
+      "commit": "eb891a6f90ab037c1957cadd32dd11f2e77ffb10",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "5eff686d5828f592979ae8ec2f9eefc67562c887417a7459720b581870f0ff63"
+        },
+        {
+          "path": "package.json",
+          "sha256": "4e4118fcba73d342a6e64ea55fd2f56be8e5ada500301528d1710f5a7c9b9266"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "54f02ad5ab98365daa0ecef218ac5476ab1eb086",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "677b21e1c87728e64ffda8d4a0db8f85b70dab9625168f9c65164204fb26d925"
+        },
+        {
+          "path": "package.json",
+          "sha256": "f5a824ac0494c30b162ab48e7552810d1cac6db617dfcfb4fdccf8d53b000293"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "SMABoundless/openalex-mcp-app",
+    "pullRequest": 1,
+    "mergedOn": "2026-11-24",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": "20.x",
+      "after": "22.x"
+    },
+    "base": {
+      "commit": "138c28340d0b56aa7e50646a113eb068cabd0bf2",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "110b4018b807e1f60fcfa1aa932eca55a507ddd7d3af2418d778b0f6d237b21d"
+        },
+        {
+          "path": "package.json",
+          "sha256": "217086ad069180588686352483208ecae8173a3ec3cbef637b3b2d2e9e6f34fe"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package.json",
+          "subject": "nodejs",
+          "constraint": "20.x"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "d4d2b880bb5ab97b64fbf910c06bdd3cd63d0ad3",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "f7eceb57ac5f6c4c8335dce171d40c8a1c89d83a47ebc061e7612371edf9a61a"
+        },
+        {
+          "path": "package.json",
+          "sha256": "1b5e4f78288e022d9710803b5008eac785710c370b8cb62b30e1f5141cb471e3"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "smhenderson89/NameDistance_NextJS",
+    "pullRequest": 15,
+    "mergedOn": "2025-08-20",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": "package.json",
+      "before": "20.0.0",
+      "after": "22.0.0"
+    },
+    "base": {
+      "commit": "c6c525b6722a94a376bd50786a0277e882ca20b3",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "fb1734d3b0f9512a883120775b2ad9d106b485ae32fe997cea57478b4ad4bd15"
+        },
+        {
+          "path": "package.json",
+          "sha256": "01c753c8ae4851b4c4a9e1b862e56facc32c1ec9ced2a61e96e2364880920855"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package.json",
+          "subject": "nodejs",
+          "constraint": "20.0.0"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "efa870597d4a5be344b85febc4d5a2f39e7d4b8a",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "fb1734d3b0f9512a883120775b2ad9d106b485ae32fe997cea57478b4ad4bd15"
+        },
+        {
+          "path": "package.json",
+          "sha256": "abad876f2e06675e298674fd8e216e7de92618600a569219dc7992d7378d722f"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "snyk/kubernetes-monitor",
+    "pullRequest": 1583,
+    "mergedOn": "2025-05-29",
+    "target": "nodejs@22.0.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "18",
+      "after": "22"
+    },
+    "base": {
+      "commit": "037d5218f8abca063a9ac97e351010f309c7ae93",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "7ee29791fc17e986b97128845622b077fb45e349fdb80523fac9dba879b4ad60"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "6daee0ab29e0af047e4ec309959aaeaf5135e27280cc36dd3420c7d5226ff890"
+        },
+        {
+          "path": "package.json",
+          "sha256": "6857df3380c25ba30f405db421899c974b09d8ab3483bc93ab275789a2886df2"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package-lock.json",
+          "subject": "shescape@1.7.4",
+          "constraint": "^10.13.0 || ^12 || ^14 || ^16 || ^18 || ^19 || ^20"
+        }
+      ]
+    },
+    "merged": {
+      "commit": "2ebad409e500b2c1f7e81e5e0b3c083d7f8602ff",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "dee9ec479ad5e6dc155ca0d791f4839c957cd49e19b310553ec086497443bba7"
+        },
+        {
+          "path": "package.json",
+          "sha256": "916855787da09a6f7c4d84818b37429254d7abac585812d77ef8842803843579"
+        }
+      ],
+      "verdict": "blocked",
+      "blockers": [
+        {
+          "path": "package-lock.json",
+          "subject": "shescape@1.7.4",
+          "constraint": "^10.13.0 || ^12 || ^14 || ^16 || ^18 || ^19 || ^20"
+        }
+      ]
+    }
+  },
+  {
+    "repository": "the-blue-alliance/the-blue-alliance",
+    "pullRequest": 11311,
+    "mergedOn": "2026-11-09",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": ".python-version",
+      "before": "3.13",
+      "after": "3.14"
+    },
+    "base": {
+      "commit": "f4b248f8b4010c5af0823925ade30cb4a48fc126",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "02e735b3dfe1c32833eb550b7ff8ffa17f5f2bc3fa1e7bae61a8f5a3883ce398"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "64e9031ac8511f6936358264a848694fef5944305076582c43f6f4470c204cc4"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "8e39cccc30c7116bc4915a51f9ed3dfda2c5ab66",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "a876e0b10411037a012498b9fe18d9bc1df32ed8b722a13564dc944ddcfd9135"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "f49474e39cc9f4e48d9dec9e4b57d36da0e3e2f60485a2cf59ae64b9640ba556"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "themaxgross/company",
+    "pullRequest": 8,
+    "mergedOn": "2026-11-12",
+    "target": "nodejs@24.0.0",
+    "witness": {
+      "path": ".node-version",
+      "before": "22.22.0",
+      "after": "24"
+    },
+    "base": {
+      "commit": "00a19fb7929ba04d49f8d40f798553192b3f02a7",
+      "files": [
+        {
+          "path": ".node-version",
+          "sha256": "20a3d543b194c03a2a93aa348ba8112a906a9086e8672d28ea583642b6eb35e6"
+        },
+        {
+          "path": "package.json",
+          "sha256": "1fc2815e35cf364082b254a2003707641f97844d3fccbbb96e8063ffd3ed126a"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "1122c3105dd46437d96c0088cadfce381cda4e49",
+      "files": [
+        {
+          "path": ".node-version",
+          "sha256": "c2356069e9d1e79ca924378153cfbbfb4d4416b1f99d41a2940bfdb66c5319db"
+        },
+        {
+          "path": "package.json",
+          "sha256": "0fa69366db4e45aaa6128e3eb12b997759b277ca701d94bf9d768886d16a8e65"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "trailofbits/algo",
+    "pullRequest": 15084,
+    "mergedOn": "2026-11-12",
+    "target": "python@3.12.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.11",
+      "after": ">=3.12"
+    },
+    "base": {
+      "commit": "0f8e65d564916d2a3e9e3aa1fd7b83694c2bd59f",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "92f79a402fee204f814e23bb7168a792da496663b4c9cccd58112e014035f690"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "caad2b21dc81050eacbaac23456e241ab4ff182d",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "0f639e183158c229dc1a36b22d0c917f6847afaebf108313eb766c3ced9f82c4"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "voxpelli/node-installed-check-core",
+    "pullRequest": 152,
+    "mergedOn": "2026-08-03",
+    "target": "nodejs@22.22.2",
+    "witness": {
+      "path": "package.json",
+      "before": ">=18.6.0",
+      "after": "^22.22.2 || ^24.15.0 || >=26.0.0"
+    },
+    "base": {
+      "commit": "0473213699d3ea5698cfb7cad45d2eec30fbec05",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "a49c718a5a6bbda1465144682e8751870db00f85c2db5fba58d7fa63d3b7e579"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "d18ce2fd0dbfe6b234e698f021fedb90fb23406d",
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "34c9ba4424a124d8e0e7b05d5a7cca83550935ca99be59a5720452db41ab1afd"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "web-scrobbler/web-scrobbler.github.io",
+    "pullRequest": 338,
+    "mergedOn": "2026-11-13",
+    "target": "nodejs@24.22.3",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "20.18.3",
+      "after": "24.22.3"
+    },
+    "base": {
+      "commit": "e9ad84005c2aeb42e0914a422a52d2d5605b74a0",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "8cf259f6109a93539494804b4b5cc9e714b7e9628e98d55358cd4799b86fd9e3"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "23e067f813b578c75e7efe22ca564a5a5ca92ef009b224fecb6fd4d0adce038c"
+        },
+        {
+          "path": "package.json",
+          "sha256": "59b66bc3f3a791b6f4bbaab7455128dec68834f5c7a34b3be643e8a5ea6bae3b"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "70ef7f0a6ee8b759a79b7e37054af6f1b06f0b1e",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "584f19ccde29925286e32f566a2aa06c89efb4e2eb2bb2fc9ea5d56e2d190ac4"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "b7bf302f5c95dc3e2aad24a4b7313168c34abf27c47e6d6a617257f9dbb0a62e"
+        },
+        {
+          "path": "package.json",
+          "sha256": "59b66bc3f3a791b6f4bbaab7455128dec68834f5c7a34b3be643e8a5ea6bae3b"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "yukinmax/motu-bridge",
+    "pullRequest": 15,
+    "mergedOn": "2026-11-25",
+    "target": "python@3.14.0",
+    "witness": {
+      "path": "pyproject.toml",
+      "before": ">=3.11",
+      "after": ">=3.14"
+    },
+    "base": {
+      "commit": "d8659607db44d54c75e792bd21a4258abe51d6ee",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "72d6132846b16027f4c7b1b385f5d4a2191cb05b31a90c3391fad8c616f41df1"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "fa9e5667a3ac8303b92e41792cf49b8ac53b64c7",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "be38b21b2fb98e6dd9efe26b347fba4998749bffccb728460000a9c0a407a785"
+        }
+      ],
+      "verdict": "ready",
+      "blockers": []
+    }
+  },
+  {
+    "repository": "ZzAve/teambalance",
+    "pullRequest": 320,
+    "mergedOn": "2026-04-11",
+    "target": "nodejs@22.13.0",
+    "witness": {
+      "path": ".nvmrc",
+      "before": "20.20.2",
+      "after": "v22.13.0"
+    },
+    "base": {
+      "commit": "24c9e551ed0dac08a6c51cd241fe630460fb79e9",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "75053fb82fe4512318dd99556daf58b862fb81c96cf1153249b75f8116edf440"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "1ee2a8eaf8353c1b8fc214ee93121b1cfef762c5b2b344292a71da937a931ff0"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    },
+    "merged": {
+      "commit": "410295c5bd43861e8ac0c860f356f9bfb54cbb67",
+      "files": [
+        {
+          "path": ".nvmrc",
+          "sha256": "eedf4a8e103f4e071c070963a242093d56e05a04ee224d6bf3960ea171110c91"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "1ee2a8eaf8353c1b8fc214ee93121b1cfef762c5b2b344292a71da937a931ff0"
+        }
+      ],
+      "verdict": "unknown",
+      "blockers": []
+    }
+  }
+]
