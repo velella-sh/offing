@@ -187,6 +187,23 @@ jobs:
             printf -- '- CLI and MCP blocker graph parity, Mermaid and both SVG themes passed.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-policy
+        working-directory: ${{ runner.temp }}
+        env:
+          OFFING_DATA_VERSION: bundled
+          OFFING_NO_CACHE: "1"
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          node "$GITHUB_WORKSPACE/.github/scripts/acc-policy.mjs" "$bin" "$GITHUB_WORKSPACE/dist/action/index.js"
+          {
+            printf '### acc-policy\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI version %s\n' "$("$bin" --version)"
+            printf -- '- CLI and Action both failed on the named policy rule, with its expired exception in JSON.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build the Docker image and scan the fixture
         id: docker
         run: |

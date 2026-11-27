@@ -1,0 +1,1 @@
+- Add named lifecycle policy rules, expiring exceptions, and `offing scan --lookahead` gates.

@@ -183,12 +183,42 @@ export interface ScanIdentity {
   offingVersion: string | null;
 }
 
+export interface PolicyScope {
+  ecosystem?: string;
+  path?: string;
+}
+
+export interface PolicyRule extends PolicyScope {
+  id: string;
+  "days-left"?: number;
+  "after-eol"?: boolean;
+  severity?: Severity;
+}
+
+export interface PolicyException extends PolicyScope {
+  reason: string;
+  expires: string;
+}
+
+export interface LifecyclePolicy {
+  rules: PolicyRule[];
+  exceptions?: PolicyException[];
+}
+
+export interface PolicyViolation {
+  rule: string;
+  findingId: string;
+  path: string;
+  expiredException?: Pick<PolicyException, "expires" | "reason">;
+}
+
 /** The complete result of scanning one repository. */
 export interface ScanResult {
   schemaVersion: "offing.scan.v1";
   root: string;
   scannedAt: string;
   identity?: ScanIdentity;
+  policy?: { violations: PolicyViolation[] };
   findings: Finding[];
   unclassified?: UnclassifiedSummary;
   diagnostics: string[];

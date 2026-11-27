@@ -1,3 +1,4 @@
+import { isIsoDate } from "@velella/ebb/registry";
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -33,7 +34,7 @@ test("JSON Schema: schemas/config.v1.schema.json validates valid configurations 
   const schemaText = await readFile(resolve("schemas/config.v1.schema.json"), "utf8");
   const schema = JSON.parse(schemaText);
   const ajv = new Ajv2020({ allErrors: true, allowUnionTypes: true });
-  const validate = ajv.compile(schema);
+  const validate = ajv.addFormat("date", isIsoDate).compile(schema);
 
   assert.equal(validate({}), true, "empty config should be valid");
 

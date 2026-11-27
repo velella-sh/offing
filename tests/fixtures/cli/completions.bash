@@ -19,7 +19,7 @@ _offing() {
     data) opts="status update --json --data-version" ;;
     watch) opts="add remove run list --weekly --board --json" ;;
     config) opts="validate --json" ;;
-    scan) opts="--demo --sbom --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --all --by-owner --data-version --only --exclude" ;;
+    scan) opts="--demo --sbom --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --lookahead --all --by-owner --data-version --only --exclude" ;;
     baseline) opts="--output --data-version" ;;
     forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force" ;;
     forecast) opts="--months --as-of --today --timeline --json --format --data-version" ;;
