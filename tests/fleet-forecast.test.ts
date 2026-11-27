@@ -87,6 +87,7 @@ test("compares windows without claiming an expired, later or unscanned finding w
     [
       repo("app", [
         observation("same", "2025-09-01"),
+        observation("moves-bucket", "2025-04-12"),
         observation("moved", "2025-05-24"),
         observation("fixed", "2025-08-30", ["@gone"]),
         observation("expired", today),
@@ -100,6 +101,7 @@ test("compares windows without claiming an expired, later or unscanned finding w
   const observed = [
     repo("app", [
       observation("same", "2025-09-01"),
+      observation("moves-bucket", "2025-04-12"),
       observation("moved", "2025-02-01"),
       observation("added", "2025-04-01"),
       observation("later", "2027-01-01"),
@@ -111,7 +113,7 @@ test("compares windows without claiming an expired, later or unscanned finding w
   const changes = compareFleetForecast(previous, current, observed);
   assert.deepEqual(
     changeKinds.map((kind) => changes[kind].map(({ ruleId }) => ruleId)),
-    [["added"], ["moved"], ["fixed"]],
+    [["added"], ["moved", "moves-bucket"], ["fixed"]],
   );
   assert.match(renderFleetForecastText({ ...current, changes }, "owner"), /fixed: 1/);
   assert.ok([...renderFleetDigests({ ...current, changes }).values()].some((text) => text.includes("## Fixed")));

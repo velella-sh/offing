@@ -419,6 +419,7 @@ test("fleet forecast acceptance records exact CODEOWNERS and works from an offli
   await writeFile(saved, online.stdout);
   const compared = JSON.parse((await offline("--json", "--previous", saved)).stdout);
   assert.deepEqual(compared.changes, { new: [], closer: [], fixed: [] });
+  await assert.rejects(offline("--previous", saved, "--as-of", "2024-12-31"), /previous forecast cannot be newer/);
   assert.match((await offline("--by", "repository")).stdout, /example\/app/u);
   const card = await offline("--card", "--theme", "dark");
   assert.match(card.stdout, /Nearest deadline: 2025-04-30/u);
@@ -437,6 +438,21 @@ test("fleet forecast acceptance records exact CODEOWNERS and works from an offli
   await assert.rejects(offline("--ics", "calendars"), /Choose a new, writable output directory/);
   await assert.rejects(offline("--card", "--by", "owner"), /--by accepts/);
   await assert.rejects(offline("--gitlab"), /Apply GitLab options/);
+  await assert.rejects(offline("--json", "--card"), /Choose one of/);
+  await assert.rejects(offline("--theme", "dark"), /--theme accepts/);
+  await assert.rejects(offline("--today", asOf, "--as-of", asOf), /either --as-of or --today/);
+  await assert.rejects(offline("--as-of", "2025-02-29"), /needs a date/);
+  await assert.rejects(offline("--previous", "absent.json"), /Cannot read forecast JSON/);
+  await assert.rejects(offline("--previous", "fleet.json"), /previous file must be/);
+  await assert.rejects(offline("--owners", "fleet.json"), /mapping repository names/);
+  await assert.rejects(cli("forecast", "--by", "owner"), /--fleet needs an organization/);
+  await assert.rejects(offline("--ics"), /missing option value/);
+  await assert.rejects(cli("forecast", "--fleet", "https://outside.invalid/"), /Give a GitHub organization/);
+  await assert.rejects(cli("fleet", "example", "--forecast-input"), /requires JSON output/);
+  await assert.rejects(cli("fleet", "example", "--as-of", asOf), /requires --forecast-input/);
+  const aggregateFile = join(root, "aggregate.json");
+  await writeFile(aggregateFile, redacted.stdout);
+  await assert.rejects(cli("forecast", "--fleet", aggregateFile), /--forecast-input/);
   assert.equal(requests, recordedRequests);
   const canonical = {
     ...captured,
