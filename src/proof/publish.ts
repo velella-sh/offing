@@ -1,4 +1,5 @@
 import { childEnvironments } from "../autopilot/limits/secrets.js";
+import { buildAutopilotProof, type AutopilotProofEvidence } from "./build.js";
 import {
   checkedProof,
   checkSummary,
@@ -13,11 +14,12 @@ import {
 } from "./document.js";
 
 export type { Proof } from "./document.js";
+export type { AutopilotProofEvidence } from "./build.js";
 
 const marker = "<!-- offing-proof:v1 -->";
 const inlineBytes = 48 * 1024;
 
-function renderSummary(proof: Proof): string {
+function renderSummary(proof: Proof, recorded: boolean): string {
   const turns = proof.agentRuns.map((run) => run.turns);
   const testStatuses = proof.testRuns.map(({ attempts }) => attempts.at(-1)?.status);
   const passed = testStatuses.filter((status) => status === "passed").length;
@@ -25,21 +27,29 @@ function renderSummary(proof: Proof): string {
   const knownTurns = turns.reduce((sum: bigint, value) => sum + BigInt(value ?? 0), 0n);
   const unknown = turns.filter((value) => value === null).length;
   const cost = costUsd === null ? "unreported" : `USD ${costUsd}`;
+  const details = recorded ? [renderVerificationSummary(proof)] : [];
   return [
     "## Offing migration proof",
     "",
     `- Outcome — ${proof.outcome} (verification ${proof.verify.verdict})`,
     `- Agent runs — ${turns.length}, ${knownTurns} reported turns, ${unknown} runs with unreported turns`,
     `- Test runs — ${passed} passed of ${testStatuses.length}`,
+    ...details,
     `- Budget used — ${elapsedMs} ms, ${cost}`,
   ].join("\n");
 }
 
-function renderBody(proof: Proof, json: string): string {
+function renderVerificationSummary(proof: Proof): string {
+  const counts = { passed: 0, failed: 0, skipped: 0, "not-run": 0 };
+  for (const { status } of proof.verify.commands) counts[status] += 1;
+  return `- Verification commands — ${counts.passed} passed, ${counts.failed} failed, ${counts.skipped} skipped, ${counts["not-run"]} not run`;
+}
+
+function renderBody(proof: Proof, json: string, recorded: boolean): string {
   const fenced = "```json\n" + json + "```\n";
   const evidence =
     Buffer.byteLength(fenced) <= inlineBytes ? fenced : `Artifact: \`${PROOF_FILE}\` (SHA-256 \`${digest(json)}\`).\n`;
-  return `${renderSummary(proof)}\n\n${marker}\n${evidence}`;
+  return `${renderSummary(proof, recorded)}\n\n${marker}\n${evidence}`;
 }
 
 function omitTails(proof: Proof): void {
@@ -51,9 +61,15 @@ function omitTails(proof: Proof): void {
   }
 }
 
-function protectLogs(proof: Proof, source: ReadonlyMap<string, string>, redact: (text: string) => string) {
+function protectLogs(
+  proof: Proof,
+  source: ReadonlyMap<string, string>,
+  redact: (text: string) => string,
+  limit: number,
+) {
   const protectedDigests = new Map<string, string>();
   const files = new Map<string, string>();
+  let totalBytes = 0;
   omitTails(proof);
   for (const { sha256, label } of logEvidence(proof)) {
     if (protectedDigests.has(sha256)) continue;
@@ -62,10 +78,14 @@ function protectLogs(proof: Proof, source: ReadonlyMap<string, string>, redact: 
       throw invalid(`Expected matching source log evidence for ${label}.`);
     }
     const safe = redact(log);
-    if (Buffer.byteLength(safe) > MAX_LOG_BYTES) throw invalid(`Redacted log exceeds the limit for ${label}.`);
+    const size = Buffer.byteLength(safe);
+    if (size > MAX_LOG_BYTES) throw invalid(`Redacted log exceeds the limit for ${label}.`);
     const safeDigest = digest(safe);
+    const name = logName(safeDigest);
+    if (!files.has(name)) totalBytes += size;
+    if (totalBytes > limit) throw invalid("Redacted proof exceeds the total log limit.");
     protectedDigests.set(sha256, safeDigest);
-    files.set(logName(safeDigest), safe);
+    files.set(name, safe);
   }
   return { protectedDigests, files };
 }
@@ -88,10 +108,32 @@ export async function prepareProofPublication(
   source: NodeJS.ProcessEnv,
   secretEnv: readonly string[],
 ): Promise<{ body: string; files: ReadonlyMap<string, string> }> {
+  return publish(proof, logs, source, secretEnv, false);
+}
+
+/** Build a redacted proof from a terminal Autopilot record and its companion verification evidence. */
+export async function prepareAutopilotProofPublication(
+  run: unknown,
+  evidence: AutopilotProofEvidence,
+  logs: ReadonlyMap<string, string>,
+  source: NodeJS.ProcessEnv,
+  secretEnv: readonly string[],
+): Promise<{ body: string; files: ReadonlyMap<string, string> }> {
+  const built = await buildAutopilotProof(run, evidence, logs);
+  return publish(built.proof, built.logs, source, secretEnv, true);
+}
+
+async function publish(
+  proof: Proof,
+  logs: ReadonlyMap<string, string>,
+  source: NodeJS.ProcessEnv,
+  secretEnv: readonly string[],
+  recorded: boolean,
+) {
   const checked = structuredClone(await checkedProof(proof));
   checkSummary(checked);
   const { redact } = childEnvironments(source, "replay", secretEnv);
-  const { protectedDigests, files } = protectLogs(checked, logs, redact);
+  const { protectedDigests, files } = protectLogs(checked, logs, redact, recorded ? MAX_LOG_BYTES * 2 : Infinity);
   replaceDigests(checked, protectedDigests);
   const redacted = JSON.stringify(
     checked,
@@ -107,5 +149,5 @@ export async function prepareProofPublication(
     ) + "\n";
   if (Buffer.byteLength(json) > MAX_PROOF_BYTES) throw invalid("Redacted proof exceeds the 8 MiB limit.");
   files.set(PROOF_FILE, json);
-  return { body: renderBody(safe, json), files };
+  return { body: renderBody(safe, json, recorded), files };
 }

@@ -5,6 +5,7 @@ import type { ValidateFunction } from "ajv";
 import { Ajv2020 } from "ajv/dist/2020.js";
 
 import type { AgentResult } from "../agent-drivers/contract.js";
+import type { AutopilotRun } from "../autopilot/state.js";
 import { OffingError } from "../offing-error.js";
 import { findPackageFile } from "../package-files.js";
 import type { runApprovedTest } from "../test-runners/run.js";
@@ -31,30 +32,34 @@ export const logName = (sha256: string): string => `offing-log-${sha256}.txt`;
 export const invalid = (message: string): OffingError => new OffingError("invalid-input", message);
 export const mismatch = (message: string): OffingError => new OffingError("policy-failed", message);
 
-let validator: Promise<ValidateFunction<Proof>> | undefined;
-async function loadValidator(): Promise<ValidateFunction<Proof>> {
+let validator: Promise<Ajv2020> | undefined;
+async function loadValidator(): Promise<Ajv2020> {
   const ajv = new Ajv2020({ ownProperties: true, strictTuples: false });
-  for (const stem of ["verify-result", "test-run", "agent-run", "proof"]) {
+  for (const stem of ["verify-result", "test-run", "agent-run", "proof", "autopilot-run"]) {
     const path = await findPackageFile(`schemas/${stem}.v1.schema.json`, import.meta.url);
     const schema: unknown = JSON.parse(await readFile(path, "utf8"));
     if (!schema || typeof schema !== "object" || Array.isArray(schema))
       throw new Error("Expected a packaged proof schema.");
     ajv.addSchema(schema, stem);
   }
-  const check = ajv.getSchema<Proof>("proof");
-  if (!check) throw new Error("Expected packaged proof schema.");
-  return check;
+  return ajv;
 }
 
-export async function checkedProof(value: unknown): Promise<Proof> {
-  const check = await (validator ??= loadValidator());
+async function validate<T>(stem: string, value: unknown): Promise<T> {
+  const ajv = await (validator ??= loadValidator());
+  const check: ValidateFunction<T> | undefined = ajv.getSchema<T>(stem);
+  if (!check) throw new Error("Expected packaged evidence schema.");
   if (!check(value)) {
     const issue = check.errors?.[0];
     // An invalid input can put secret material in a property name. Report only the validation keyword.
-    throw invalid(`Invalid proof schema (${issue?.keyword ?? "invalid document"}).`);
+    throw invalid(`Invalid ${stem} schema (${issue?.keyword ?? "invalid document"}).`);
   }
   return value;
 }
+
+export const checkedProof = (value: unknown): Promise<Proof> => validate("proof", value);
+export const checkedAutopilotRun = (value: unknown): Promise<AutopilotRun> => validate("autopilot-run", value);
+export const checkedVerifyResult = (value: unknown): Promise<VerifyResult> => validate("verify-result", value);
 
 export function checkSummary({ range, verify }: Proof): void {
   if (verify.before.commit !== range.base || verify.after.commit !== range.head) {
@@ -76,7 +81,7 @@ export function checkSummary({ range, verify }: Proof): void {
 
 function validCommandEvidence({ status, exitCode, logSha256 }: VerifyResult["commands"][number]): boolean {
   if (status === "passed") return exitCode === 0 && logSha256 !== null;
-  if (status === "failed") return exitCode !== null && exitCode > 0 && logSha256 !== null;
+  if (status === "failed") return logSha256 !== null;
   return exitCode === null && logSha256 === null;
 }
 

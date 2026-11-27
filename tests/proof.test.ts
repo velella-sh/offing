@@ -7,8 +7,15 @@ import process from "node:process";
 import { test, type TestContext } from "node:test";
 import { pathToFileURL } from "node:url";
 
+import { advanceRun, startRun } from "../src/autopilot/state.js";
 import { digest, logName, PROOF_FILE } from "../src/proof/document.js";
-import { prepareProofPublication, type Proof } from "../src/proof/publish.js";
+import {
+  prepareAutopilotProofPublication,
+  prepareProofPublication,
+  type AutopilotProofEvidence,
+  type Proof,
+} from "../src/proof/publish.js";
+import { runApprovedTest } from "../src/test-runners/run.js";
 import { runCli } from "./cli-runner.js";
 
 interface Fixture {
@@ -202,4 +209,180 @@ test("PR proof falls back to named, hashed JSON for oversized UTF-8 and reports 
   assert.match(body, /Test runs — 0 passed of 1\n- Budget used — 30 ms, USD 0/);
   assert.ok(body.endsWith(`Artifact: \`offing-proof.json\` (SHA-256 \`${digest(artifact)}\`).\n`));
   assert.ok(!body.includes("\`\`\`"));
+});
+
+test("publishes green and stopped PR bodies from recorded state, tested commands, and real Git objects", async (t) => {
+  const { proof, root, repo } = await sample(t);
+  for (const outcome of ["done", "stopped"] as const) {
+    const marker = "synthetic receipt fixture secret";
+    const stdout = "fixture stdout\n";
+    const stderr = outcome === "done" ? "" : "fixture stderr with " + marker;
+    const exit = outcome === "done" ? 0 : 7;
+    const argv = ["fixture", "test"];
+    const testRun = await runApprovedTest(
+      ["fixture", "test"],
+      async (_, sink) => {
+        sink.stdout(Buffer.from(stdout));
+        sink.stderr(Buffer.from(stderr));
+        return { exitCode: exit };
+      },
+      500,
+    );
+    const run = startRun("prepare");
+    run.checkout = { id: "Fixtur", branch: "offing/autopilot/Fixtur", baseCommit: proof.range.base };
+    for (const phase of ["plan", "baseline-tests", "codemods", "agent-turn", "tests", "verify"] as const)
+      advanceRun(run, phase);
+    advanceRun(run, outcome === "done" ? "done" : { stop: "fixture-failed" });
+    const record = join(root, outcome + ".run.json");
+    await writeFile(record, JSON.stringify(run));
+    const verify = structuredClone(proof.verify);
+    verify.commands = [
+      { command: argv.join(" "), purpose: "Checked", status: "not-run", exitCode: null, logSha256: null },
+      { command: "fixture skipped", purpose: "Skipped", status: "not-run", exitCode: null, logSha256: null },
+      { command: "fixture future", purpose: "Waiting", status: "not-run", exitCode: null, logSha256: null },
+    ];
+    const evidence: AutopilotProofEvidence = {
+      repo,
+      verify,
+      testRuns: [testRun],
+      agentRuns: proof.agentRuns,
+      budget: { elapsedMs: 30, costUsd: outcome === "done" ? 0 : null },
+      tools: proof.tools,
+      commandResults: [
+        { commandIndex: 0, testRunIndex: 0 },
+        { commandIndex: 1, testRunIndex: null },
+      ],
+    };
+    const source = new Map([
+      [digest(stdout), stdout],
+      [digest(stderr), stderr],
+    ]);
+    const stored = JSON.parse(await readFile(record, "utf8")) as unknown;
+    const { body, files } = await prepareAutopilotProofPublication(stored, evidence, source, { TEST_MARKER: marker }, [
+      "TEST_MARKER",
+    ]);
+    const file = files.get(PROOF_FILE);
+    assert.ok(file);
+    const output = JSON.parse(file) as Proof;
+    const display = body.split("\n\n<!-- offing-proof:v1 -->")[0] + "\n";
+    assert.equal(display, await readFile(join("tests/fixtures/proof", outcome + ".md"), "utf8"));
+    assert.ok(body.includes(file));
+    assert.deepEqual(output.range, proof.range);
+    assert.deepEqual(output.diff, proof.diff);
+    assert.deepEqual(output.agentRuns, evidence.agentRuns);
+    assert.equal(output.testRuns[0]?.attempts.at(-1)?.exitCode, exit);
+    const combined = "[stdout]\n" + stdout + "\n[stderr]\n" + stderr.replace(marker, "[REDACTED]");
+    assert.deepEqual(
+      output.verify.commands.map(({ status, exitCode, logSha256 }) => [status, exitCode, logSha256]),
+      [
+        [outcome === "done" ? "passed" : "failed", exit, digest(combined)],
+        ["skipped", null, null],
+        ["not-run", null, null],
+      ],
+    );
+    assert.equal(files.get(logName(digest(combined))), combined);
+    assert.equal(evidence.verify.commands[0]?.status, "not-run");
+    const folder = join(root, outcome);
+    await mkdir(folder);
+    for (const [name, contents] of files) {
+      assert.ok(!contents.includes(marker));
+      await writeFile(join(folder, name), contents);
+    }
+    const result = await runCli(["proof", "verify", join(folder, PROOF_FILE), "--repo", repo]);
+    assert.equal(result.code, 0, result.stderr);
+    if (outcome === "done") {
+      await assert.rejects(
+        prepareAutopilotProofPublication(
+          stored,
+          {
+            ...evidence,
+            testRuns: [],
+            commandResults: [{ commandIndex: 1, testRunIndex: null }],
+          },
+          source,
+          {},
+          [],
+        ),
+        /completed run requires passing verification and a passing recorded test/,
+      );
+      const stopped = { ...run, state: "stopped", transitions: ["scan", "plan", "stopped"], stopReason: "preflight" };
+      const early = await prepareAutopilotProofPublication(
+        stopped,
+        { ...evidence, agentRuns: [], testRuns: [], commandResults: [] },
+        new Map(),
+        {},
+        [],
+      );
+      assert.match(early.body, /Outcome — stopped[\s\S]*Test runs — 0 passed of 0/);
+      await assert.rejects(
+        prepareAutopilotProofPublication({ ...stopped, mode: "dry-run" }, evidence, source, {}, []),
+        /dry run cannot provide checkout/,
+      );
+    }
+    await assert.rejects(prepareAutopilotProofPublication(stored, evidence, new Map(), {}, []), /source log/);
+    const duplicate = { commandIndex: 0, testRunIndex: 0 };
+    await assert.rejects(
+      prepareAutopilotProofPublication(stored, { ...evidence, commandResults: [duplicate, duplicate] }, source, {}, []),
+      /repeated verification command/,
+    );
+    if (outcome === "stopped") {
+      const junitFailure = structuredClone(testRun);
+      const attempt = junitFailure.attempts.at(-1);
+      assert.ok(attempt);
+      attempt.exitCode = 0;
+      attempt.totals = { tests: 1, passed: 0, failed: 1, skipped: 0 };
+      const published = await prepareAutopilotProofPublication(
+        stored,
+        { ...evidence, testRuns: [junitFailure] },
+        source,
+        {},
+        [],
+      );
+      const json = published.files.get(PROOF_FILE);
+      assert.ok(json);
+      const result = JSON.parse(json) as Proof;
+      assert.equal(result.verify.commands[0]?.status, "failed");
+      assert.equal(result.verify.commands[0]?.exitCode, 0);
+    }
+    await assert.rejects(
+      prepareAutopilotProofPublication(
+        stored,
+        {
+          ...evidence,
+          commandResults: [{ commandIndex: 1, testRunIndex: 0 }],
+        },
+        source,
+        {},
+        [],
+      ),
+      /linked test run argv/,
+    );
+    await assert.rejects(
+      prepareAutopilotProofPublication(
+        {
+          ...run,
+          transitions: ["scan", outcome],
+        },
+        evidence,
+        source,
+        {},
+        [],
+      ),
+      outcome === "done" ? /invalid transition/ : /recorded Autopilot turns/,
+    );
+    const reversed = { ...run, checkout: { ...run.checkout, baseCommit: proof.range.head } };
+    await assert.rejects(
+      prepareAutopilotProofPublication(
+        reversed,
+        {
+          ...evidence,
+          verify: { ...verify, before: verify.after, after: verify.before },
+        },
+        source,
+        {},
+        [],
+      ),
+      /must be an ancestor/,
+    );
+  }
 });

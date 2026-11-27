@@ -131,7 +131,7 @@ const EXPORTS = {
   },
   "./proof": {
     module: proof,
-    names: ["prepareProofPublication"],
+    names: ["prepareAutopilotProofPublication", "prepareProofPublication"],
   },
   "./mcp": {
     module: mcp,

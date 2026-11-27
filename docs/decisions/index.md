@@ -110,3 +110,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0070](0070-campaign-board-export.md) | Campaign board export | Project recorded progress into JSON collections and a reproducible site source directory. |
 | [0071](0071-proof-bundle-v1.md) | Migration proof v1 | Verify paired scan evidence, local Git path counts, and redacted log digests. |
 | [0076](0076-fleet-schema-package-export.md) | Export the fleet v1 schema from npm | Let consumers validate the installed CLI's output against the npm package's version of the schema. |
+| [0077](0077-recorded-autopilot-proof.md) | Build proof v1 from a recorded Autopilot run | Publish a local commit range and linked test outcomes with verified, redacted log digests. |

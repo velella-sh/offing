@@ -75,6 +75,7 @@ function checkRange(proof) {
     const message = `Proof ${label} commit is unavailable.`;
     requireEvidence(git(["rev-parse", "--verify", "--end-of-options", commit + "^{commit}"], message).trim() === commit, message);
   }
+  git(["merge-base", "--is-ancestor", base, head], "Proof base commit must be an ancestor of its head commit.");
   const statuses = git(
     ["diff-tree", "--no-commit-id", "--no-ext-diff", "--no-textconv", "--no-renames", "--no-relative", "--no-color", "--ignore-submodules=none",
       "--name-status", "-r", "-z", base, head, "--"],
@@ -128,7 +129,7 @@ try {
   for (const [index, command] of proof.verify.commands.entries()) {
     const { status, exitCode, logSha256 } = command;
     const valid = status === "passed" ? exitCode === 0 && logSha256 !== null
-      : status === "failed" ? exitCode > 0 && logSha256 !== null
+      : status === "failed" ? logSha256 !== null
       : exitCode === null && logSha256 === null;
     requireEvidence(valid, `Inconsistent evidence for verification command ${index + 1}.`);
   }
