@@ -1,0 +1,1 @@
+- Add `offing migrate` to run a local agent against a scoped migration packet and record the result on a reviewable Git branch.

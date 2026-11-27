@@ -13,24 +13,18 @@
  * Scoring is pure and offline: it never runs the agent, never scans, and never uses the network.
  */
 
-import { posix } from "node:path";
+import { allowedChangePaths, comparePaths, normalizePath } from "../../src/migrate/scope.js";
+
+export { allowedChangePaths } from "../../src/migrate/scope.js";
 
 import type { ConditionResult, MigrationCondition, MigrationTask } from "./run.js";
-
-/** Lockfiles that update when the matching manifest in the same directory changes. */
-const COMPANION_LOCKFILES: Readonly<Record<string, readonly string[]>> = {
-  "Cargo.toml": ["Cargo.lock"],
-  "go.mod": ["go.sum"],
-  "package.json": ["package-lock.json", "yarn.lock", "pnpm-lock.yaml", "bun.lock", "bun.lockb", "npm-shrinkwrap.json"],
-  "composer.json": ["composer.lock"],
-  Gemfile: ["Gemfile.lock"],
-};
 
 export interface MigrationScoreInput {
   findingPath: string;
   /** Paths named by the task's expected end-state checks. */
   checkPaths: readonly string[];
   findingResolved: boolean;
+  noNewFinding?: boolean;
   verificationPassed: boolean;
   changedFiles: readonly string[];
   /**
@@ -69,39 +63,6 @@ export interface MigrationScoreRates {
   noUnrelatedChanges: number;
 }
 
-function normalizePath(path: string): string {
-  return path.replaceAll("\\", "/");
-}
-
-/** Byte-wise path order so scores stay identical across locales. */
-function comparePaths(left: string, right: string): number {
-  return left < right ? -1 : left > right ? 1 : 0;
-}
-
-function companionLockfiles(manifestPath: string): string[] {
-  const normalized = normalizePath(manifestPath);
-  const companions = COMPANION_LOCKFILES[posix.basename(normalized)];
-  if (companions === undefined) return [];
-  const directory = posix.dirname(normalized);
-  return companions.map((name) => (directory === "." ? name : posix.join(directory, name)));
-}
-
-/** Paths the agent may change without failing the unrelated-changes criterion. */
-export function allowedChangePaths(input: {
-  findingPath: string;
-  checkPaths?: readonly string[];
-  relatedPaths?: readonly string[];
-}): string[] {
-  const seeds = new Set<string>();
-  for (const path of [input.findingPath, ...(input.checkPaths ?? []), ...(input.relatedPaths ?? [])]) {
-    const normalized = normalizePath(path);
-    if (normalized.length === 0) continue;
-    seeds.add(normalized);
-    for (const companion of companionLockfiles(normalized)) seeds.add(companion);
-  }
-  return [...seeds].sort(comparePaths);
-}
-
 /**
  * Score one migration attempt against the three objective criteria.
  * Rates and comparisons across agents belong in the published report (#245), not here.
@@ -125,20 +86,24 @@ export function scoreMigration(input: MigrationScoreInput): MigrationScore {
     verificationPassed,
     noUnrelatedChanges,
     unrelatedFiles,
-    success: findingResolved && verificationPassed && noUnrelatedChanges,
+    success: findingResolved && input.noNewFinding !== false && verificationPassed && noUnrelatedChanges,
   };
 }
+
+type ConditionForScoring = Pick<ConditionResult, "expectedEndState" | "verification" | "diff"> &
+  Partial<Pick<ConditionResult, "findingResolved" | "noNewFinding">>;
 
 /** Score one harness condition using the task's finding and end-state paths. */
 export function scoreCondition(
   task: Pick<MigrationTask, "finding" | "expectedEndState">,
-  condition: Pick<ConditionResult, "expectedEndState" | "verification" | "diff">,
+  condition: ConditionForScoring,
   options?: { relatedPaths?: readonly string[] },
 ): MigrationScore {
   return scoreMigration({
     findingPath: task.finding.path,
     checkPaths: task.expectedEndState.checks.map((check) => check.path),
-    findingResolved: condition.expectedEndState.passed,
+    findingResolved: condition.findingResolved ?? condition.expectedEndState.passed,
+    ...(condition.noNewFinding === undefined ? {} : { noNewFinding: condition.noNewFinding }),
     verificationPassed: condition.verification.passed,
     changedFiles: condition.diff.changedFiles,
     ...(options?.relatedPaths === undefined ? {} : { relatedPaths: options.relatedPaths }),
@@ -150,7 +115,7 @@ export function scoreMigrationRun(
   task: Pick<MigrationTask, "id" | "finding" | "expectedEndState">,
   result: {
     taskId: string;
-    conditions: ReadonlyArray<Pick<ConditionResult, "condition" | "expectedEndState" | "verification" | "diff">>;
+    conditions: ReadonlyArray<ConditionForScoring & Pick<ConditionResult, "condition">>;
   },
   options?: { relatedPaths?: readonly string[] },
 ): MigrationRunScore {

@@ -1,0 +1,618 @@
+{
+  "agent": {
+    "name": "Codex CLI",
+    "version": "0.171.0-alpha.13.2",
+    "model": "gpt-6.2-sol"
+  },
+  "verificationProfile": {
+    "scope": "Pinned source, a full Offing rescan, git diff --check, and expected end-state checks repeated in a read-only Node container with the network disabled.",
+    "image": "docker.io/library/node@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5",
+    "projectVerificationStatus": "not-run"
+  },
+  "plannedTasks": 40,
+  "measuredTasks": 16,
+  "conditions": {
+    "baseline": {
+      "attempts": 16,
+      "successful": 12
+    },
+    "packet": {
+      "attempts": 16,
+      "successful": 14
+    }
+  },
+  "cases": [
+    {
+      "taskId": "2dust-androidlibv2raylite-checkout",
+      "repository": "https://github.com/2dust/AndroidLibV2rayLite",
+      "commit": "a51ab9fc8b39997f229011de39d4da5bead099d7",
+      "startedAt": "2026-11-27T00:53:11.233Z",
+      "finishedAt": "2026-11-27T00:53:55.289Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 23110,
+          "wallMs": 23737,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/main.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 19679,
+          "wallMs": 20286,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/main.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "arnaud-eb-blockchain-project-pycrypto",
+      "repository": "https://github.com/arnaud-eb/blockchain-project",
+      "commit": "c3eba626a2df0e428f124865b8d932da21854295",
+      "startedAt": "2026-11-27T01:10:01.827Z",
+      "finishedAt": "2026-11-27T01:10:55.692Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 23369,
+          "wallMs": 23660,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": ["requirements.txt"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 29949,
+          "wallMs": 30181,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": ["requirements.txt", "wallet.py"],
+          "noUnrelatedChanges": false,
+          "success": false
+        }
+      ]
+    },
+    {
+      "taskId": "atlasconsulting-bedita-sdk-js-setup-node",
+      "repository": "https://github.com/atlasconsulting/bedita-sdk-js",
+      "commit": "bbbc7e257e1d353ae054d1809ed7a1d640f2ee7d",
+      "startedAt": "2026-11-27T01:08:18.240Z",
+      "finishedAt": "2026-11-27T01:09:14.199Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 26936,
+          "wallMs": 27325,
+          "findingResolved": false,
+          "noNewFinding": true,
+          "staticVerificationPassed": false,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/main.yml"],
+          "noUnrelatedChanges": true,
+          "success": false
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 28344,
+          "wallMs": 28609,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/main.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "avonrylew-environment-checkout",
+      "repository": "https://github.com/avonrylew/environment",
+      "commit": "4ed9413038d47019c1e11bd4a159f28f9739611c",
+      "startedAt": "2026-11-27T01:00:12.401Z",
+      "finishedAt": "2026-11-27T01:00:59.207Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 25413,
+          "wallMs": 25677,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build-node.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 20856,
+          "wallMs": 21100,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build-node.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "burakince-burakince-github-io-setup-node",
+      "repository": "https://github.com/burakince/burakince.github.io",
+      "commit": "c057038a595447a509ae527bddace0490d7ad8d5",
+      "startedAt": "2026-11-27T01:06:49.885Z",
+      "finishedAt": "2026-11-27T01:07:33.687Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 21000,
+          "wallMs": 21317,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/pages.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22183,
+          "wallMs": 22455,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/pages.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "carloscuesta-gitmoji-cli-setup-node",
+      "repository": "https://github.com/carloscuesta/gitmoji-cli",
+      "commit": "a0770469740dd2ef3ce8270e1f29564db7a538a9",
+      "startedAt": "2026-11-27T01:05:03.404Z",
+      "finishedAt": "2026-11-27T01:06:00.634Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 30611,
+          "wallMs": 31121,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ci.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 25252,
+          "wallMs": 25936,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ci.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "community-charts-community-charts-github-io-setup-node",
+      "repository": "https://github.com/community-charts/community-charts.github.io",
+      "commit": "8903a5a425347c269173fe7e2ec71adfac1946b9",
+      "startedAt": "2026-11-27T01:09:14.272Z",
+      "finishedAt": "2026-11-27T01:10:01.755Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 23968,
+          "wallMs": 24391,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/deploy.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22754,
+          "wallMs": 23056,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/deploy.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "dipakparmar-docs-diary-setup-node",
+      "repository": "https://github.com/dipakparmar/docs-diary",
+      "commit": "84901a777309997b2c2ebc9908909dc2b803d8c8",
+      "startedAt": "2026-11-27T01:07:33.761Z",
+      "finishedAt": "2026-11-27T01:08:18.166Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 21666,
+          "wallMs": 22297,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/release.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 21552,
+          "wallMs": 22072,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/release.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "fabasoad-broadsage-scorecard-action-checkout",
+      "repository": "https://github.com/fabasoad/broadsage-scorecard-action",
+      "commit": "d984aee64316072a5b66ccb1362334593d8d4de5",
+      "startedAt": "2026-11-27T00:59:26.998Z",
+      "finishedAt": "2026-11-27T01:00:12.324Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22098,
+          "wallMs": 22363,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/release.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22705,
+          "wallMs": 22940,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/release.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "ffflorian-sortjson-com-setup-node",
+      "repository": "https://github.com/ffflorian/sortjson.com",
+      "commit": "eb7564292ef4839442108cdfd0b7b6c39aa7cb26",
+      "startedAt": "2026-11-27T01:06:00.934Z",
+      "finishedAt": "2026-11-27T01:06:49.797Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22003,
+          "wallMs": 23162,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build_test_deploy.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 25295,
+          "wallMs": 25571,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build_test_deploy.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "mdn-browser-compat-data-setup-node",
+      "repository": "https://github.com/mdn/browser-compat-data",
+      "commit": "5d536f1d651e772d7ed3ce59c25b5f8599ed5b68",
+      "startedAt": "2026-11-27T01:04:14.484Z",
+      "finishedAt": "2026-11-27T01:05:03.283Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22161,
+          "wallMs": 23630,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/add-push-artifacts.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 24180,
+          "wallMs": 24885,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/add-push-artifacts.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "mdn-mdn-http-observatory-setup-node",
+      "repository": "https://github.com/mdn/mdn-http-observatory",
+      "commit": "1c41f2043a03c3ab953a65cf184b7fa6b8c2af2f",
+      "startedAt": "2026-11-27T01:01:46.389Z",
+      "finishedAt": "2026-11-27T01:02:37.771Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 25301,
+          "wallMs": 25797,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build-and-test.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 25140,
+          "wallMs": 25550,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build-and-test.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "ms-dev01-sample-blogapp-checkout",
+      "repository": "https://github.com/ms-dev01/sample-blogapp",
+      "commit": "1558502890d1eb30f8cb1126796c8448557f55bb",
+      "startedAt": "2026-11-27T01:00:59.284Z",
+      "finishedAt": "2026-11-27T01:01:46.317Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 24664,
+          "wallMs": 24956,
+          "findingResolved": false,
+          "noNewFinding": true,
+          "staticVerificationPassed": false,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ci.yml"],
+          "noUnrelatedChanges": true,
+          "success": false
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 21792,
+          "wallMs": 22043,
+          "findingResolved": false,
+          "noNewFinding": true,
+          "staticVerificationPassed": false,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ci.yml"],
+          "noUnrelatedChanges": true,
+          "success": false
+        }
+      ]
+    },
+    {
+      "taskId": "natlibfi-ekirjasto-ios-core-checkout",
+      "repository": "https://github.com/NatLibFi/ekirjasto-ios-core",
+      "commit": "97c3c08c49c4c6d08fecd6955918ee743040d94c",
+      "startedAt": "2026-11-27T00:54:39.864Z",
+      "finishedAt": "2026-11-27T00:55:24.732Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 23995,
+          "wallMs": 24502,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ios-main.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 19643,
+          "wallMs": 20208,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ios-main.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "symfony-demo-checkout",
+      "repository": "https://github.com/symfony/demo",
+      "commit": "e28fadcbd64227cec50bbeb14a9907e36aebffe4",
+      "startedAt": "2026-11-27T00:53:55.612Z",
+      "finishedAt": "2026-11-27T00:54:39.759Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22849,
+          "wallMs": 23595,
+          "findingResolved": false,
+          "noNewFinding": true,
+          "staticVerificationPassed": false,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/lint.yaml"],
+          "noUnrelatedChanges": true,
+          "success": false
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 20149,
+          "wallMs": 20462,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/lint.yaml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "vmorkhat-skills-github-pages-checkout",
+      "repository": "https://github.com/vmorkhat/skills-github-pages",
+      "commit": "c28d0a5a71ab7fad2310efcbb181142e90ced925",
+      "startedAt": "2026-11-27T00:58:34.786Z",
+      "finishedAt": "2026-11-27T00:59:26.862Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 26420,
+          "wallMs": 27186,
+          "findingResolved": false,
+          "noNewFinding": true,
+          "staticVerificationPassed": false,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/0-welcome.yml"],
+          "noUnrelatedChanges": true,
+          "success": false
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 24522,
+          "wallMs": 24798,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/0-welcome.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    }
+  ]
+}

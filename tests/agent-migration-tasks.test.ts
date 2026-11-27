@@ -20,6 +20,7 @@ interface MigrationTask {
   expectedEndState: { description: string; checks: TaskCheck[] };
   verification: string[];
   migrationEvidence: { commit: string; summary: string };
+  evidenceSource?: "upstream-migration";
 }
 
 interface TasksFile {
@@ -53,13 +54,15 @@ function registryRuleIds(): Set<string> {
   return ids;
 }
 
-test("the agent migration tasks define 20 pinned corpus findings", () => {
+test("the expanded migration tasks preserve pinned corpus findings and cite upstream changes", () => {
   const file = tasksFile();
   assert.equal(file.schemaVersion, "offing.agent-migrations.v1");
-  assert.equal(file.tasks.length, 20);
+  assert.ok(file.tasks.length >= 40);
 
+  const corpusTasks = file.tasks.filter((task) => task.evidenceSource === undefined);
+  assert.ok(corpusTasks.length >= 20);
   const repositories = corpus();
-  for (const task of file.tasks) {
+  for (const task of corpusTasks) {
     const slug = new URL(task.repository).pathname.replace(/^\//, "");
     const entry = repositories.find((candidate) => candidate.repository === slug);
     assert.ok(entry, `${task.id} names ${task.repository}, which is not in the public corpus`);
