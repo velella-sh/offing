@@ -1,8 +1,8 @@
 import { forecastWeather, renderForecastText } from "../../src/forecast-core.js";
 import type { RepositoryForecast } from "../../src/forecast-core.js";
-import { renderForecastIcs } from "../../src/forecast-ics.js";
+import { calendarRecord } from "../../src/forecast-tool/records.js";
 import { loadData } from "./data.js";
-import { createReport } from "./report.js";
+import { createReport } from "../../src/forecast-tool/report.js";
 
 const maxBytes = 5 * 1024 * 1024;
 
@@ -112,11 +112,11 @@ dropArea.addEventListener("drop", (event) => {
 });
 element("calendar").addEventListener("click", () => {
   if (!active) return;
-  const calendar = renderForecastIcs(active.forecast, active.replacements);
-  const url = URL.createObjectURL(new Blob([calendar], { type: "text/calendar;charset=utf-8" }));
+  const { content, mediaType, name } = calendarRecord(active);
+  const url = URL.createObjectURL(new Blob([content], { type: mediaType }));
   const link = document.createElement("a");
   link.href = url;
-  link.download = "offing-forecast.ics";
+  link.download = name;
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 0);
 });

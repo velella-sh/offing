@@ -1,9 +1,9 @@
 import { LineCounter, isMap, isScalar, isSeq, parseDocument } from "yaml";
 import type { YAMLMap } from "yaml";
 
-import { classifyDotnetVersion, setupDotnetVersions } from "../../src/detectors/github-actions-dotnet.js";
-import { classifyNodeVersion, matrixList, setupNodeVersions } from "../../src/detectors/github-actions-node.js";
-import { resolveReference } from "../../src/detectors/github-actions-reference.js";
+import { classifyDotnetVersion, setupDotnetVersions } from "../detectors/github-actions-dotnet.js";
+import { classifyNodeVersion, matrixList, setupNodeVersions } from "../detectors/github-actions-node.js";
+import { resolveReference } from "../detectors/github-actions-reference.js";
 import { reference } from "./references.js";
 import type { Reference } from "./references.js";
 
@@ -26,7 +26,8 @@ function actionRef(step: YAMLMap, path: string, lines: LineCounter, versions: Ac
 }
 
 function pythonRefs(step: YAMLMap, job: YAMLMap, path: string, lines: LineCounter): Reference[] {
-  if (!/^actions\/setup-python@/i.test(String(step.get("uses") ?? ""))) return [];
+  const uses = step.get("uses");
+  if (typeof uses !== "string" || !/^actions\/setup-python@/i.test(uses)) return [];
   const inputs = step.get("with", true);
   const input = isMap(inputs) ? inputs.get("python-version", true) : undefined;
   if (!isScalar(input)) return [];

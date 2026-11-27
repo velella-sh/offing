@@ -1,8 +1,8 @@
 import semver from "semver";
 
-import { classifyNodeVersion } from "../../src/detectors/github-actions-node.js";
-import { packageNameFromNodeModulesPath } from "../../src/detectors/npm/lockfiles/package-lock.js";
-import { declarationLine, declaredDependencies, parsePackageManifest } from "../../src/detectors/npm/manifest.js";
+import { classifyNodeVersion } from "../detectors/github-actions-node.js";
+import { packageNameFromNodeModulesPath } from "../detectors/npm/lockfiles/package-lock.js";
+import { declarationLine, declaredDependencies, parsePackageManifest } from "../detectors/npm/manifest.js";
 import { record, reference } from "./references.js";
 import type { Reference } from "./references.js";
 
