@@ -1,17 +1,15 @@
 import assert from "node:assert/strict";
 import { execFile, spawnSync } from "node:child_process";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { test, type TestContext } from "node:test";
+import { mock, test, type TestContext } from "node:test";
 import { promisify } from "node:util";
 
 import { createReplayDriver } from "../src/agent-drivers/replay.js";
 import { acceptsBaseline, replayLoopPrompt, testsPass } from "../src/autopilot/plan.js";
-import { resumeReplayLoop, runReplayLoop } from "../src/autopilot/replay.js";
-import { startRun, type AutopilotRun } from "../src/autopilot/state.js";
-import { resumeAutopilotWorktree, withAutopilotWorktree } from "../src/autopilot/worktree.js";
-import { replayProgressLine } from "../src/autopilot/test-command.js";
+import { runReplayLoopCommand } from "../src/autopilot/test-command.js";
+import { createCommandContext } from "../src/commands/runtime.js";
 import { buildAutopilotProof } from "../src/proof/build.js";
 import { checkedAutopilotRun, checkedVerifyResult, digest } from "../src/proof/document.js";
 import { runApprovedTest } from "../src/test-runners/run.js";
@@ -43,33 +41,37 @@ process.exitCode = report.exitCode;
 `;
 const useDocker = process.env.OFFING_AUTOPILOT_LOOP_DOCKER === "1";
 
-async function runFixtureReplay(root: string, file: string, extra: readonly string[], docker: boolean) {
+async function runFixtureReplay(
+  root: string,
+  file: string,
+  extra: readonly string[],
+  docker: boolean,
+  runTests: typeof runFixtureTest,
+) {
+  const args = [root, "--run-replay", file, ...extra];
   if (docker) {
-    const args = ["autopilot", root, "--run-replay", file, ...extra];
     const cli = process.env.OFFING_AUTOPILOT_LOOP_CLI;
-    if (!cli) return runCli(args);
-    const execution = spawnSync(process.execPath, [cli, ...args], { encoding: "utf8" });
+    if (!cli) return runCli(["autopilot", ...args]);
+    const execution = spawnSync(process.execPath, [cli, "autopilot", ...args], { encoding: "utf8" });
     if (execution.error) throw execution.error;
     return { code: execution.status, stdout: execution.stdout, stderr: execution.stderr };
   }
-  const output: string[] = [];
-  const options = {
-    file,
-    selection: {},
-    allowedBaseline: new Set(extra.filter((arg) => arg !== "--allow-red-baseline")),
-    started: performance.now(),
-    createReplay: createReplayDriver,
-    report: (run: AutopilotRun) => output.push(replayProgressLine(run)),
-  };
-  const resume = extra[0] === "--resume" && extra[1];
-  const requested = resume
-    ? await resumeAutopilotWorktree(root, resume, async (tree, checkout, run, before) => {
-        await resumeReplayLoop(tree, checkout, run, options, before, runFixtureTest);
-      })
-    : await startFixtureReplay(root, options);
-  const { run, location } = requested;
-  output.push(`Branch: ${location.branch}`, `Run record: ${location.record}`);
-  return { code: run.state === "done" ? 0 : 1, stdout: output.join("\n") + "\n", stderr: "" };
+  let stdout = "";
+  const write = process.stdout.write;
+  const capture = mock.method(process.stdout, "write", (chunk: unknown, ...params: unknown[]) => {
+    if (typeof chunk !== "string") return Reflect.apply(write, process.stdout, [chunk, ...params]);
+    stdout += chunk;
+    return true;
+  });
+  try {
+    const code = await runReplayLoopCommand(args, createCommandContext(args, ""), () => ({}), {
+      createReplay: createReplayDriver,
+      runTests,
+    });
+    return { code, stdout, stderr: "" };
+  } finally {
+    capture.mock.restore();
+  }
 }
 
 async function runFixtureTest(checkout: string, deadline: number) {
@@ -81,14 +83,6 @@ async function runFixtureTest(checkout: string, deadline: number) {
   ];
 }
 
-async function startFixtureReplay(root: string, options: Parameters<typeof runReplayLoop>[3]) {
-  const run = startRun("prepare");
-  const location = await withAutopilotWorktree(root, run, async (tree, checkout) => {
-    await runReplayLoop(tree, checkout, run, options, runFixtureTest);
-  });
-  return { run, location };
-}
-
 const manifest = JSON.stringify({
   name: "loop-fixture",
   scripts: { test: "node tests/check.cjs" },
@@ -96,7 +90,10 @@ const manifest = JSON.stringify({
 });
 const repairedManifest = JSON.stringify({ name: "loop-fixture", scripts: { test: "node tests/check.cjs" } });
 
-async function fixture(t: TestContext, { approveTests = true, withProfile = true, docker = useDocker } = {}) {
+async function fixture(
+  t: TestContext,
+  { approveTests = true, withProfile = true, docker = useDocker, runTests = runFixtureTest } = {},
+) {
   const directory = await mkdtemp(join(tmpdir(), "offing-loop-tests-"));
   const root = join(directory, "repository");
   const recording = join(directory, "turns.json");
@@ -143,7 +140,7 @@ async function fixture(t: TestContext, { approveTests = true, withProfile = true
     base,
     async run(turns: Record<string, string>[], ...extra: string[]) {
       await writeFile(recording, JSON.stringify({ schemaVersion: "offing.agent-replay.v1", turns }));
-      const result = await runFixtureReplay(root, recording, extra, docker);
+      const result = await runFixtureReplay(root, recording, extra, docker, runTests);
       const file = /Run record: ([^\r\n]+)/u.exec(result.stdout)?.[1];
       assert.ok(file, "Run record: " + result.stderr + result.stdout);
       const tree = join(dirname(file), "checkout");
@@ -151,6 +148,7 @@ async function fixture(t: TestContext, { approveTests = true, withProfile = true
       return {
         result,
         tree,
+        recordFile: file,
         record: JSON.parse(await readFile(file, "utf8")),
         async evidence(name: string) {
           return JSON.parse(await readFile(join(dirname(file), name), "utf8"));
@@ -270,7 +268,14 @@ test("acc-autopilot-loop stops repeating the same fixture failures and diff befo
 });
 
 test("Autopilot loop rejects invalid options before creating a worktree", async () => {
-  assert.equal((await runCli(["autopilot", resolve("."), "--run-replay=", "--allow-red-baseline", ""])).code, 2);
+  const examples = [
+    ["--run-replay=", "--allow-red-baseline", ""],
+    ["--run-replay", "turns.json", "--agent", "command"],
+    ["--run-replay", "turns.json", "--resume", "123456", "--wave", "0"],
+    ["--run-replay", "turns.json", "--resume", "123456", "--allow-red-baseline", "override"],
+    ["--run-replay", "turns.json", "--resume", "invalid"],
+  ];
+  for (const args of examples) assert.equal((await runCli(["autopilot", resolve("."), ...args])).code, 2);
 });
 
 test("Autopilot loop requires explicit committed test approval before starting a container", async (t) => {
@@ -407,4 +412,73 @@ test("resuming replay does not replenish its turn budget", async (t) => {
   assert.equal(continued.record.replay.usage.turns, 4);
   assert.equal(await git(continued.tree, "log", "-1", "--format=%s"), "chore: replay Autopilot turn 4");
   assert.equal(await readFile(join(continued.tree, "tests/state.txt"), "utf8"), "four\n");
+});
+
+test("a failed baseline backend or codemod preserves the recorded state without running agent turns", async (t) => {
+  const cases = [
+    { step: "baseline", reason: "container-tests-unavailable", commit: false },
+    { step: "codemod", reason: "codemod-error", commit: false },
+    { step: "codemod-tests", reason: "container-tests-unavailable", commit: true },
+  ];
+  for (const { step, reason, commit } of cases) {
+    const project = await fixture(t, {
+      docker: false,
+      async runTests(tree, deadline) {
+        const dockerfile = await readFile(join(tree, "Dockerfile"), "utf8");
+        if (step === "baseline" || (step === "codemod-tests" && dockerfile.includes("LABEL"))) {
+          throw new Error("Unavailable fixture backend.");
+        }
+        if (step === "codemod") await writeFile(join(dirname(tree), "codemods.patch"), "existing fixture patch");
+        return runFixtureTest(tree, deadline);
+      },
+    });
+    const stopped = await project.run([greenTurn], ...redBaseline);
+    assert.equal(stopped.record.stopReason, reason);
+    assert.equal(stopped.record.replay.turn, 0);
+    assert.equal((await git(stopped.tree, "rev-parse", "HEAD")) !== project.base, commit);
+  }
+});
+
+test("resume rejects invalid records, conflicting resumes, and changed policy before applying another edit", async (t) => {
+  const project = await fixture(t, { docker: false });
+  const stopped = await project.run([{ "tests/state.txt": "first\n" }], ...redBaseline);
+  const args = ["--resume", stopped.record.checkout.id];
+  const resume = () => project.run([greenTurn], ...args);
+  await writeFile(stopped.recordFile, "{}", { mode: 0o600 });
+  await assert.rejects(resume, /Invalid Autopilot run record/u);
+  await writeFile(stopped.recordFile, JSON.stringify(stopped.record));
+  const lock = join(dirname(stopped.recordFile), "resume.lock");
+  await writeFile(lock, "");
+  await assert.rejects(resume, /already has a resume lock/u);
+  await unlink(lock);
+  await writeFile(
+    stopped.recordFile,
+    JSON.stringify({
+      ...stopped.record,
+      replay: { ...stopped.record.replay, context: "0".repeat(64) },
+    }),
+  );
+  await assert.rejects(resume, /original policy and lifecycle data/u);
+  await writeFile(stopped.recordFile, JSON.stringify(stopped.record));
+  const completed = await resume();
+  assert.equal(completed.record.state, "done");
+  await assert.rejects(resume, /stopped at the end of its recording/u);
+});
+
+test("a resumed run preserves its previous turn when the test backend becomes unavailable", async (t) => {
+  let unavailable = false;
+  const project = await fixture(t, {
+    docker: false,
+    async runTests(tree, deadline) {
+      if (unavailable) throw new Error("Unavailable fixture backend.");
+      return runFixtureTest(tree, deadline);
+    },
+  });
+  const stopped = await project.run([{ "tests/state.txt": "first\n" }], ...redBaseline);
+  const head = await git(stopped.tree, "rev-parse", "HEAD");
+  unavailable = true;
+  const result = await project.run([greenTurn], "--resume", stopped.record.checkout.id);
+  assert.equal(result.record.stopReason, "container-tests-unavailable");
+  assert.equal(result.record.replay.turn, 1);
+  assert.equal(await git(result.tree, "rev-parse", "HEAD"), head);
 });

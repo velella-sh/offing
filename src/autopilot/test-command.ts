@@ -84,7 +84,7 @@ function parseLoop(args: string[], select: SelectPlan) {
   };
 }
 
-export function replayProgressLine(run: AutopilotRun): string {
+function replayProgressLine(run: AutopilotRun): string {
   const { replay } = run;
   const used = replay?.usage ?? { turns: 0, tokens: 0, costCents: 0 };
   return `${run.state}: turn ${replay?.turn ?? 0}; budget used ${used.turns} turns, ${used.tokens} tokens, ${used.costCents} cents, ${replay?.elapsedMs ?? 0} ms; tests ${replay?.tests ?? "pending"}.`;
@@ -105,7 +105,17 @@ function replayResult(run: AutopilotRun, location: { tree: string; branch: strin
   return run.state === "done" ? 0 : 1;
 }
 
-export async function runReplayLoopCommand(args: string[], ctx: CommandContext, select: SelectPlan): Promise<number> {
+interface ReplayBackend {
+  createReplay: NonNullable<Parameters<typeof runReplayLoop>[3]["createReplay"]>;
+  runTests: NonNullable<Parameters<typeof runReplayLoop>[4]>;
+}
+
+export async function runReplayLoopCommand(
+  args: string[],
+  ctx: CommandContext,
+  select: SelectPlan,
+  backend?: ReplayBackend,
+): Promise<number> {
   let options: ReturnType<typeof parseLoop>;
   try {
     options = parseLoop(args, select);
@@ -114,6 +124,7 @@ export async function runReplayLoopCommand(args: string[], ctx: CommandContext, 
   }
   const loop = {
     ...options,
+    ...(backend && { createReplay: backend.createReplay }),
     started: performance.now(),
     report: (run: AutopilotRun) => process.stdout.write(replayProgressLine(run) + "\n"),
   };
@@ -122,14 +133,14 @@ export async function runReplayLoopCommand(args: string[], ctx: CommandContext, 
       options.root,
       options.resume,
       async (tree, checkout, run, before) => {
-        await resumeReplayLoop(tree, checkout, run, loop, before);
+        await resumeReplayLoop(tree, checkout, run, loop, before, backend?.runTests);
       },
     );
     return replayResult(run, location);
   }
   const run = startRun("prepare");
   const location = await withAutopilotWorktree(options.root, run, async (tree, checkout) => {
-    await runReplayLoop(tree, checkout, run, loop);
+    await runReplayLoop(tree, checkout, run, loop, backend?.runTests);
   });
   return replayResult(run, location);
 }
