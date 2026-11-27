@@ -140,6 +140,11 @@ export const FIXTURE_ECOSYSTEMS: Readonly<Record<string, readonly string[]>> = {
 export const SHARED_FILE_ECOSYSTEMS: ReadonlyArray<{ pattern: RegExp; ecosystems: readonly string[]; reason: string }> =
   [
     {
+      pattern: /^src\/lineage\/(?:index|inputs|render)\.ts$/,
+      ecosystems: ["container"],
+      reason: "container image lineage",
+    },
+    {
       pattern: /^src\/source-usage\.ts$|^src\/usage\//,
       ecosystems: ["android", "dart", "dotnet", "go", "java", "node", "php", "python", "ruby", "rust", "swift"],
       reason: "source usage mapping",

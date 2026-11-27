@@ -1,4 +1,4 @@
-import { escapeMermaid } from "../mermaid.js";
+import { escapeMermaidLabel } from "../mermaid.js";
 import type { UpgradeBlocker, UpgradeGraph, UpgradeTarget } from "./types.js";
 
 function headline(target: UpgradeTarget, graph: UpgradeGraph): string {
@@ -30,12 +30,8 @@ export function renderBlockerTree(target: UpgradeTarget, graph: UpgradeGraph): s
   return output;
 }
 
-function mermaidLabel(value: string): string {
-  return escapeMermaid(value).replace(/["<>&]/g, (character) => "#" + character.charCodeAt(0) + ";");
-}
-
 export function renderBlockerMermaid(target: UpgradeTarget, graph: UpgradeGraph): string {
-  const root = (id: string, label: string) => id + '["' + mermaidLabel(label) + '"]';
+  const root = (id: string, label: string) => id + '["' + escapeMermaidLabel(label) + '"]';
   const lines = ["flowchart TD", "  " + root("target", headline(target, graph))];
   for (const [index, group] of groups(graph).entries()) {
     const branch = "root" + index;

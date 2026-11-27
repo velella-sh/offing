@@ -57,6 +57,26 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 2 of rust-toolchain.toml reads `channel = \"1.93.0\"`. Rust 1.98 and older are no longer supported. The Rust project only provides support and security updates for the most recent stable release, so a release line is unsupported once the next stable release ships. Rust 1.99 was released on 2026-10-01. Source: https://www.rust-lang.org/policies/security. The pinned file was re-fetched at the recorded commit and the cited line matches. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "container.alpine.eol-3.20-and-older",
+      "path": "k8-util/docker/fluvio.Dockerfile",
+      "line": 2,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "k8-util/docker/fluvio.Dockerfile:2. The empty ARCH default leaves the explicit alpine:3.14 base.",
+        "url": "https://github.com/fluvio-community/fluvio/blob/52673942c1c7364f36f2e05da972436f761243cd/k8-util/docker/fluvio.Dockerfile#L1-L2"
+      }
+    },
+    {
+      "ruleId": "container.ubuntu.eol-22.04",
+      "path": "dev-tools/smartmodule.Dockerfile",
+      "line": 15,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "dev-tools/smartmodule.Dockerfile:15. The empty ARCH default leaves the explicit ubuntu:22.04 base.",
+        "url": "https://github.com/fluvio-community/fluvio/blob/52673942c1c7364f36f2e05da972436f761243cd/dev-tools/smartmodule.Dockerfile#L14-L15"
+      }
     }
   ]
 }

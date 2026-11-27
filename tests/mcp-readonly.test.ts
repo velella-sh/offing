@@ -150,6 +150,7 @@ test("no tool, resource, or prompt changes the repository tree", async () => {
 
     const calls = {
       scan_repository: { repository_path: root },
+      image_lineage: { repository_path: root },
       scan_sbom: { sbom_path: sbom },
       list_deprecations: { repository_path: root },
       explain_deprecation: { finding_id: findingId, repository_path: root },

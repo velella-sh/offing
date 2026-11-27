@@ -83,6 +83,16 @@
         "url": "https://www.ruby-lang.org/en/downloads/branches/",
         "note": "Reviewed at this commit: line 403 of Gemfile.lock reads `ruby 3.2.2p53`. Ruby 3.2 is end-of-life (https://www.ruby-lang.org/en/downloads/branches/)."
       }
+    },
+    {
+      "ruleId": "container.ruby.eol-3.2-and-older",
+      "path": "Dockerfile",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Dockerfile:5. RUBY_VERSION=3.2.2 supplies the ruby:3.2.2-slim base.",
+        "url": "https://github.com/stadacone/orenda/blob/feaa6ce97ecebc1bde639624391c2d70e524c680/Dockerfile#L4-L5"
+      }
     }
   ]
 }

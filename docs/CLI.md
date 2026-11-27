@@ -339,6 +339,13 @@ Writes the current findings as accepted findings, carrying the history forward f
 | --- | --- |
 | `--output <file>` | Destination file. Default `.offing-baseline.json`. |
 
+### `lineage`
+
+Run `offing lineage [path]` to trace container image bases and build stages.
+Use `--json` for the versioned graph, `--format mermaid` for a flowchart, or
+`--resolve-digests` to allow optional public registry lookups for digest-only
+references. [Container image lineage](LINEAGE.md)
+
 ## Supply-chain checks
 
 ### `check`

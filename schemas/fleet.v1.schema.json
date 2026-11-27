@@ -42,6 +42,23 @@
         "$ref": "#/$defs/deadline"
       }
     },
+    "imageLineage": {
+      "description": "Optional lineage document governed by lineage.v1.schema.json.",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "offing.lineage.v1"
+        },
+        "chains": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "chains"
+      ],
+      "additionalProperties": false
+    },
     "repositoryStatus": {
       "type": "array",
       "items": {

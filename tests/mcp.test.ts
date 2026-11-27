@@ -543,6 +543,7 @@ test("every tool advertises an outputSchema, and its structured content validate
     const findingId = (scan.structuredContent as { findings: Array<{ id: string }> }).findings[0]!.id;
     const calls: Array<[string, Record<string, unknown>]> = [
       ["scan_repository", { repository_path: root }],
+      ["image_lineage", { repository_path: root }],
       ["scan_sbom", { sbom_path: resolve("examples/sbom/image.cdx.json") }],
       ["list_deprecations", { repository_path: root }],
       ["explain_deprecation", { finding_id: findingId, repository_path: root }],

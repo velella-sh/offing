@@ -48,6 +48,16 @@
         "kind": "maintainer-review",
         "note": "Reviewed line 23 of tests/go.mod at this commit: `github.com/golang/protobuf v1.5.4`. The module page at https://pkg.go.dev/github.com/golang/protobuf marks github.com/golang/protobuf deprecated in favour of google.golang.org/protobuf, which is why the require line is retired."
       }
+    },
+    {
+      "ruleId": "container.golang.eol-1.25-and-older",
+      "path": "tests/antithesis/config/Dockerfile",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "tests/antithesis/config/Dockerfile:3. GO_VERSION=1.25.5 supplies the golang:1.25.5 builder base.",
+        "url": "https://github.com/etcd-io/etcd/blob/1573d59416efa220421c451f5266b24a5d8374ef/tests/antithesis/config/Dockerfile#L1-L3"
+      }
     }
   ]
 }

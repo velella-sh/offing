@@ -6063,5 +6063,286 @@
         }
       }
     }
+  },
+  {
+    "name": "image_lineage",
+    "title": "Trace container image lineage",
+    "description": "Call when you need to trace which container bases or build stages a Dockerfile, Compose service, or dev container uses. Reads only local files and returns offing.lineage.v1 with exact file and line evidence, reviewed lifecycle matches, and unresolved references.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "repository_path": {
+          "default": ".",
+          "description": "Local path to the repository. Defaults to the server working directory.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://velella.sh/offing/schemas/lineage.v1.schema.json",
+      "title": "Offing container image lineage v1",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "offing.lineage.v1"
+        },
+        "chains": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "image": {
+                "type": "string",
+                "minLength": 1
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "stage": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              },
+              "repository": {
+                "type": "string",
+                "minLength": 1
+              },
+              "links": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 128,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "resolvedReference": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "path": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "line": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "stage": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "minLength": 1
+                    },
+                    "repository": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "digest": {
+                      "type": "string",
+                      "pattern": "^sha256:[a-f0-9]{64}$"
+                    },
+                    "relationship": {
+                      "enum": [
+                        "from",
+                        "copy",
+                        "image",
+                        "os"
+                      ]
+                    },
+                    "parents": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 127
+                      }
+                    },
+                    "status": {
+                      "enum": [
+                        "deprecated",
+                        "end-of-support",
+                        "end-of-life",
+                        "removed",
+                        "scheduled-end-of-life",
+                        "unknown",
+                        "no-data",
+                        "not-applicable"
+                      ]
+                    },
+                    "ruleId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "deadline": {
+                      "type": "string",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "baseOs": {
+                      "const": "no-data"
+                    },
+                    "matchingTags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$"
+                      },
+                      "minItems": 1,
+                      "uniqueItems": true
+                    },
+                    "tagLookupIncomplete": {
+                      "const": true
+                    },
+                    "producer": {
+                      "type": "object",
+                      "properties": {
+                        "path": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "line": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "source": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "repository": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "commit": {
+                          "type": "string",
+                          "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "line"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "reference",
+                    "path",
+                    "line",
+                    "stage",
+                    "relationship",
+                    "parents",
+                    "status"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "truncated": {
+                "const": true
+              }
+            },
+            "required": [
+              "image",
+              "path",
+              "line",
+              "stage",
+              "links"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "more": {
+          "type": "object",
+          "required": [
+            "truncated",
+            "hint",
+            "omitted",
+            "estimatedTokens"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "truncated": {
+              "const": true,
+              "description": "Always true: the answer was cut to fit the size cap."
+            },
+            "hint": {
+              "type": "string",
+              "minLength": 1,
+              "description": "How to read what was left out."
+            },
+            "omitted": {
+              "type": "array",
+              "description": "One entry per array that lost elements. A path with [] sums every array at that position, including those inside elements that were left out.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "path",
+                  "shown",
+                  "total"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?(\\.[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?)*$",
+                    "description": "Where the array sits, such as findings or findings[].usages."
+                  },
+                  "shown": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Elements in the answer as returned."
+                  },
+                  "total": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Elements in the full answer."
+                  }
+                }
+              }
+            },
+            "clipped": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Path of every text that was shortened; it ends with a truncation marker."
+            },
+            "estimatedTokens": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Size of the answer as returned: three characters of JSON text count as one token."
+            }
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "chains"
+      ],
+      "additionalProperties": false
+    }
   }
 ]

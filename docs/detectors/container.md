@@ -49,20 +49,20 @@ A tag is read as a release line when it starts with a version and carries only a
 
 These are reported as [unclassified references](../DETECTORS.md#unclassified-references) (with file and line), never as findings and never guessed:
 
-- a tag that is a build argument or variable, such as `node:${NODE_VERSION}` (Offing does not expand it; `$BASE_IMAGE` is skipped entirely because the image is unknown);
+- a tag that still needs a build argument or variable, such as `node:${NODE_VERSION}` without a global default;
 - `latest`, no tag, or a digest with no tag;
 - a floating tag that spans supported and unsupported versions: `mysql:8` can mean 8.0 or 8.4, so it is not flagged, while `mysql:8.0` is;
 - a tag with a suffix Offing does not recognize, such as `node:20-custom-build`.
 
-Nothing is reported for `scratch`, a `FROM` that names an earlier stage, comments, `RUN` strings, Compose services built from a local Dockerfile (`build:`), Compose keys other than `services.*.image` (`container_name`, `labels`, extension fields), YAML aliases, or invalid files.
+A stage alias and `scratch` have no lifecycle of their own. A stage used by a final image can contribute a base through `FROM` or `COPY --from`. No findings are reported for comments, `RUN` strings, Compose services built from a local Dockerfile (`build:`), Compose keys other than `services.*.image` (`container_name`, `labels`, extension fields), YAML aliases, or invalid files.
 
 ## Known limits and false-positive boundaries
 
 - An image kept on an old release line **on purpose** (for example a compatibility test against `mysql:5`) is still reported. The rule states a vendor fact; whether the old version is intended is for the repository to decide, for example with a [baseline](../../README.md).
-- A base image's tag does not reveal the operating system inside it. The OS is judged only when the image filesystem itself is scanned.
+- The bundled data has no implied base OS for official-image tags. An explicit distro image or the scanned image filesystem can supply OS evidence. The [lineage report](../LINEAGE.md) shows the chain and missing data.
 - A `docker save` image archive is not a root filesystem, so it is not read; export or unpack the image first. Package databases (`dpkg`, `apk`, `rpm`) are not read, so a runtime installed only as a distro package without a versioned path is not detected.
 - Only the `ubuntu`, `debian`, and `alpine` OS IDs are matched. Another distribution, or an `os-release` without a usable version, produces no OS finding.
-- Kubernetes manifests, Helm charts, Terraform, CI files, `docker buildx bake` files, and image registries are not read.
+- For lineage, the detector reads literal `docker/build-push-action` build declarations under `.github/workflows`. Kubernetes manifests, Helm charts, Terraform, `docker buildx bake` files, and registries are outside this scan.
 - `postgres` and `mysql` upgrades need a data migration; the rule's migration guidance says so, but Offing cannot check the data.
 
 ## Data

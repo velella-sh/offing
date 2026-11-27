@@ -6,8 +6,7 @@ import { required } from "../../required.js";
  * Dockerfile, *.Dockerfile, and Containerfile.
  *
  * Literal, well-formed image references are returned as `image` declarations. References
- * that need build arguments or variables are returned as `dynamic` so a
- * detector can report them as unclassified; they are never expanded. `scratch`,
+ * that need build arguments without literal defaults are returned as `dynamic`. `scratch`,
  * references to earlier stages, comments, and unsupported `RUN` commands produce nothing. The parser
  * never evaluates contents or executes tools.
  *
@@ -66,10 +65,32 @@ interface LogicalLine {
   spans: Array<{ start: number; line: number }>;
 }
 
+interface HereDocument {
+  delimiter: string;
+  stripTabs: boolean;
+}
+
+/** Read common Dockerfile heredoc starts outside quoted operands. Their bodies are file data. */
+function heredocStarts(text: string): HereDocument[] {
+  if (!/^(?:RUN|COPY|ADD)\s/i.test(text)) return [];
+  const tokens =
+    /"(?:\\.|[^"\\])*"|'[^']*'|(?<![<\\])<<(?!<)(-?)\s*(?:"([A-Za-z0-9_.-]+)"|'([A-Za-z0-9_.-]+)'|([A-Za-z0-9_.-]+))(?=\s|$)/g;
+  return [...text.matchAll(tokens)].flatMap((match) => {
+    const delimiter = match[2] ?? match[3] ?? match[4];
+    return delimiter ? [{ delimiter, stripTabs: match[1] === "-" }] : [];
+  });
+}
+
 function logicalLines(contents: string): LogicalLine[] {
   const result: LogicalLine[] = [];
   let pending: LogicalLine | undefined;
+  let heredocs: HereDocument[] = [];
   for (const [index, raw] of contents.split(/\r?\n/).entries()) {
+    const heredoc = heredocs[0];
+    if (heredoc !== undefined) {
+      if ((heredoc.stripTabs ? raw.replace(/^\t+/, "") : raw) === heredoc.delimiter) heredocs.shift();
+      continue;
+    }
     if (raw.length > MAXIMUM_LINE_LENGTH) {
       pending = undefined;
       continue;
@@ -86,6 +107,7 @@ function logicalLines(contents: string): LogicalLine[] {
     }
     if (!continued) {
       result.push(pending);
+      heredocs = heredocStarts(pending.text);
       pending = undefined;
     }
   }
@@ -174,30 +196,111 @@ function legacyInstructions(
   return [{ kind: "legacy-env", key, value, line: logical.line }];
 }
 
+export interface DockerfileStage {
+  readonly name: string;
+  readonly reference: string;
+  readonly resolved: string;
+  readonly line: number;
+  readonly parent?: number;
+  readonly copies: Array<{ reference: string; line: number; stage?: number }>;
+  readonly sourceLabels: string[];
+}
+
+const ARG_NAME = "[A-Za-z_][A-Za-z0-9_]*";
+const ARG = new RegExp(`^ARG\\s+(${ARG_NAME})(?:=(.*))?$`, "i");
+const VARIABLE = new RegExp(`\\$(?:\\{(${ARG_NAME})\\}|(${ARG_NAME}))`, "g");
+
+function expandArguments(value: string, defaults: ReadonlyMap<string, string>): string {
+  return value.replace(VARIABLE, (token: string, braced?: string, bare?: string) => {
+    return defaults.get(braced ?? bare ?? "") ?? token;
+  });
+}
+
+function readArgument(text: string, defaults: Map<string, string>): void {
+  const match = ARG.exec(text);
+  if (!match?.[1] || match[2] === undefined) return;
+  const quoted = /^(["'])([^"']*)\1$/.exec(match[2]);
+  const value = quoted?.[2] ?? match[2];
+  if (!/^[^\s"'\\`]*$/.test(value)) return;
+  defaults.set(match[1], quoted?.[1] === "'" ? value : expandArguments(value, defaults));
+}
+
+function startStage(
+  logical: LogicalLine,
+  defaults: ReadonlyMap<string, string>,
+  names: ReadonlyMap<string, number>,
+  index: number,
+): DockerfileStage | undefined {
+  const from = /^FROM\s+(?:--[^\s]+\s+)*(\S+)(?:\s+AS\s+([A-Za-z0-9_.-]+))?$/i.exec(logical.text);
+  if (!from?.[1]) return undefined;
+  const resolved = expandArguments(from[1], defaults);
+  const parent = names.get(resolved.toLowerCase());
+  return {
+    name: from[2] ?? String(index),
+    reference: from[1],
+    resolved,
+    line: logical.line,
+    copies: [],
+    sourceLabels: [],
+    ...(parent === undefined ? {} : { parent }),
+  };
+}
+
+function stageDetails(logical: LogicalLine, stage: DockerfileStage, names: ReadonlyMap<string, number>): void {
+  const { text, line } = logical;
+  const copy = /^COPY\s+(?:--[^\s]+\s+)*?--from=(\S+)\s+/i.exec(text)?.[1];
+  if (copy !== undefined) {
+    const dependency = names.get(copy.toLowerCase());
+    stage.copies.push({ reference: copy, line, ...(dependency === undefined ? {} : { stage: dependency }) });
+  }
+  const labels = /^LABEL\s+(.+)$/i.exec(text)?.[1];
+  if (labels === undefined) return;
+  const assignments = /(?:^|\s)([^\s=]+)=(?:"((?:\\.|[^"\\])*)"|'([^']*)'|([^\s]+))/g;
+  for (const match of labels.matchAll(assignments)) {
+    if (match[1] !== "org.opencontainers.image.source") continue;
+    const source = match[2] ?? match[3] ?? match[4];
+    if (source && !isInterpolated(source)) stage.sourceLabels.push(source);
+  }
+}
+
+function addStageDeclaration(stage: DockerfileStage, declarations: DockerfileDeclaration[]): void {
+  const { resolved: value, line } = stage;
+  if (stage.parent !== undefined || value.toLowerCase() === "scratch") return;
+  if (isInterpolated(value)) declarations.push({ kind: "dynamic", value: stage.reference, line });
+  else if (parseImageReference(value)) declarations.push({ kind: "image", value, line });
+}
+
+/** Parse instructions and the exact stage dependencies using the same bounded logical lines. */
+export function parseDockerfileBuild(
+  contents: string,
+  resolveDefaults = true,
+): {
+  declarations: DockerfileDeclaration[];
+  stages: DockerfileStage[];
+} {
+  const declarations: DockerfileDeclaration[] = [];
+  const stages: DockerfileStage[] = [];
+  if (Buffer.byteLength(contents, "utf8") > MAXIMUM_INPUT_BYTES) return { declarations, stages };
+  const defaults = new Map<string, string>();
+  const names = new Map<string, number>();
+  for (const logical of logicalLines(contents)) {
+    declarations.push(...runtimePins(logical), ...legacyInstructions(logical));
+    const current = stages.at(-1);
+    if (resolveDefaults && current === undefined) readArgument(logical.text, defaults);
+    const stage = startStage(logical, defaults, names, stages.length);
+    if (stage === undefined) {
+      if (current) stageDetails(logical, current, names);
+      continue;
+    }
+    addStageDeclaration(stage, declarations);
+    names.set(String(stages.length), stages.length);
+    names.set(stage.name.toLowerCase(), stages.length);
+    stages.push(stage);
+  }
+  return { declarations, stages };
+}
+
 /** Parse `FROM`, supported `RUN`, and deprecated syntax instructions without file, network, or process I/O. */
 export function parseDockerfile(contents: string): DockerfileDeclaration[] {
-  if (Buffer.byteLength(contents, "utf8") > MAXIMUM_INPUT_BYTES) return [];
-
-  const declarations: DockerfileDeclaration[] = [];
-  const stages = new Set<string>();
-  for (const logical of logicalLines(contents)) {
-    const { text, line } = logical;
-    declarations.push(...runtimePins(logical), ...legacyInstructions(logical));
-    const match = text.match(/^FROM\s+(.*)$/i);
-    if (!match) continue;
-    const imageText = required(match[1], "FROM image");
-    const words = imageText.split(/\s+/).filter((word) => word.length > 0);
-    while (words[0]?.startsWith("--")) words.shift();
-    const image = words[0];
-    if (!image) continue;
-
-    const stage = words[1]?.toUpperCase() === "AS" ? words[2] : undefined;
-    const reference = image.toLowerCase();
-    if (stage) stages.add(stage.toLowerCase());
-
-    if (reference === "scratch" || (stages.has(reference) && reference !== stage?.toLowerCase())) continue;
-    if (isInterpolated(image)) declarations.push({ kind: "dynamic", value: image, line });
-    else if (parseImageReference(image)) declarations.push({ kind: "image", value: image, line });
-  }
-  return declarations;
+  return parseDockerfileBuild(contents, false).declarations;
 }

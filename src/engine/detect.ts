@@ -39,6 +39,7 @@ export const CROSS_FILE_DETECTORS = new Set([
   "android",
   "cpp",
   "database",
+  "container",
 ]);
 
 /**

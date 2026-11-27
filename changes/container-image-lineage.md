@@ -1,0 +1,1 @@
+- Add offline container image lineage to the CLI, MCP, and container scan evidence, with opt-in public digest lookups and cross-repository fleet links.
