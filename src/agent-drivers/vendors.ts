@@ -1,6 +1,8 @@
-import { lstat, readFile } from "node:fs/promises";
+import { lstat, mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
+import type { Limits } from "../autopilot/limits/config.js";
 import { git } from "../migrate/worktree.js";
 import { type AgentDriver, type AgentRunInput, makeResult, withRunFiles } from "./contract.js";
 import { runProcess } from "./process.js";
@@ -200,3 +202,88 @@ function vendorDriver(name: string, vendor: Vendor): AgentDriver {
 }
 
 export const installedDrivers = Object.entries(vendors).map(([name, vendor]) => vendorDriver(name, vendor));
+
+const actionClaudeVersion = "2.1.330";
+const proposalSchema = {
+  type: "object",
+  additionalProperties: false,
+  required: ["edits"],
+  properties: {
+    edits: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["path", "content"],
+        properties: { path: { type: "string" }, content: { type: "string" } },
+      },
+    },
+  },
+};
+
+function parseProposalOutput(stdout: string) {
+  try {
+    return record(JSON.parse(stdout));
+  } catch {
+    return undefined;
+  }
+}
+
+function proposalArgs(limit: Limits): string[] {
+  return [
+    "--print",
+    "--restricted",
+    "--strict-mcp-config",
+    "--mcp-config",
+    '{"mcpServers":{}}',
+    "--tools",
+    "",
+    "--disallowedTools",
+    "mcp__*",
+    "--no-session-persistence",
+    "--output-format",
+    "json",
+    "--json-schema",
+    JSON.stringify(proposalSchema),
+    "--max-turns",
+    String(limit.turns),
+    "--max-budget-usd",
+    String(limit.costCents / 100),
+  ];
+}
+
+/** A tool-free proposal has no access to the checkout or tools that execute repository content. */
+export async function proposeClaudeEdits(prompt: string, limit: Limits, key: string, path: string | undefined) {
+  const started = performance.now();
+  const directory = await mkdtemp(join(tmpdir(), "offing-action-claude-"));
+  const env = { ...(path ? { PATH: path } : {}), HOME: directory };
+  try {
+    const options = { cwd: directory, replaceEnv: true, env, timeoutMs: Math.min(5_000, limit.wallTimeMs) };
+    const version = await runProcess("claude", ["--version"], options);
+    if (version.exitCode !== 0 || version.stdout.match(/\b\d+\.\d+\.\d+(?:-[\w.]+)?\b/)?.[0] !== actionClaudeVersion) {
+      return { stop: "install-pinned-claude-code" } as const;
+    }
+    if (performance.now() - started >= limit.wallTimeMs) return undefined;
+    const output = await runProcess("claude", proposalArgs(limit), {
+      ...options,
+      env: { ...env, ANTHROPIC_API_KEY: key },
+      input: prompt,
+      timeoutMs: Math.max(1, limit.wallTimeMs - Math.ceil(performance.now() - started)),
+      outputLimit: 256 * 1024,
+    });
+    if (output.exitCode !== 0) return undefined;
+    const raw = parseProposalOutput(output.stdout);
+    if (raw?.subtype !== "success" || raw.is_error !== false) return undefined;
+    const details = readMetrics("claude", output.stdout);
+    const result = makeResult(
+      { name: "claude", version: actionClaudeVersion },
+      output,
+      [],
+      details.usage,
+      details.turns,
+    );
+    return { edits: record(raw.structured_output)?.edits, result };
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+}

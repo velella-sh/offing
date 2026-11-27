@@ -1,0 +1,1 @@
+- Add an opt-in Claude Code migration driver to the GitHub Action with scoped edits, approved Docker tests and a single workflow-selected credential.

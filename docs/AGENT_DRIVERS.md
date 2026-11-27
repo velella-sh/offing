@@ -50,6 +50,41 @@ Codex JSONL and Gemini JSON supply reported token counts. Aider's current
 message-file mode provides human-readable usage, so its structured metrics
 are `null`.
 
+## Claude Code for Action Autopilot
+
+Use a Linux runner on the trusted default branch of a non-fork repository with a
+`workflow_dispatch` trigger, `contents: read`, a clean checkout with
+`persist-credentials: false`, and Docker. Configure an approved
+`autopilot.tests` list in the committed Offing configuration. Install the
+supported CLI before the Offing step.
+
+```yaml
+- name: Install the pinned migration driver
+  env:
+    DRIVER_DIR: ${{ runner.temp }}/offing-action-driver
+  shell: bash
+  run: |
+    npm install --prefix "$DRIVER_DIR" --no-audit --no-fund @anthropic-ai/claude-code@2.1.330
+    "$DRIVER_DIR/node_modules/.bin/claude" --version
+    printf '%s\n' "$DRIVER_DIR/node_modules/.bin" >> "$GITHUB_PATH"
+
+- name: Run a local Autopilot wave
+  uses: velella-sh/offing@<reviewed-ref-with-autopilot>
+  env:
+    OFFING_ACTION_AUTOPILOT: "true"
+    OFFING_ACTION_AUTOPILOT_SECRET_NAME: MIGRATION_AGENT_KEY
+    OFFING_ACTION_AUTOPILOT_KEY: ${{ secrets.MIGRATION_AGENT_KEY }}
+```
+
+Use the same secret name in both lines. The Action reads only the value wired
+to its step and passes it to the pinned driver as `ANTHROPIC_API_KEY` in a
+fresh environment. Claude Code proposes replacements for scoped text files
+with command and file tools disabled. Offing checks paths, secret content
+and the reported budget before applying edits in its own worktree. Tests
+run separately in pinned Docker. The resulting branch is local to the
+runner. Claude Code's spend limit is an estimate. Use provider-side budget
+controls for the key.
+
 ## Replay recorded turns
 
 Each replay turn is an object mapping an approved repository-relative path

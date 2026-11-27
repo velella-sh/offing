@@ -3,6 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 import type { ErrorObject, ValidateFunction } from "ajv";
+import { Ajv2020 } from "ajv/dist/2020.js";
 import { printParseErrorCode, visit, type JSONPath } from "jsonc-parser";
 
 import { CONFIG_FILE_NAME, findConfigFile } from "./config.js";
@@ -35,7 +36,6 @@ type InspectedSource = { diagnostics: ConfigDiagnostic[]; value?: unknown };
 let schemaValidator: Promise<ValidateFunction<unknown>> | undefined;
 
 async function compileSchema(): Promise<ValidateFunction<unknown>> {
-  const { Ajv2020 } = await import("ajv/dist/2020.js");
   const path = await findPackageFile("schemas/config.v1.schema.json", import.meta.url);
   const schema: unknown = JSON.parse(await readFile(path, "utf8"));
   if (typeof schema !== "object" || schema === null || Array.isArray(schema)) {
