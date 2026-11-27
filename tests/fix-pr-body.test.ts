@@ -37,7 +37,7 @@ const input = {
   refusals: [
     {
       fixer: "runtime",
-      findingId: "test'quote",
+      findingId: "test'quote|file",
       ruleId: "runtime",
       path: "package.json",
       reason: "No supported version",
@@ -59,6 +59,7 @@ test("the evidence table comes before the receipt, fixer groups, and artifact-ba
   assert.ok(body.indexOf("| Finding") < body.indexOf("## Offing receipt"));
   assert.match(body, /`actions` · `\.github\/workflows\/ci\.yml`, `build\.yml`/);
   assert.match(body, /`runtime` · No supported version · `offing context /);
+  assert.ok(body.includes("quote|file"));
   const fenced = body.split(VERIFY_RESULT_MARKER + "\n```json\n")[1]?.split("\n```")[0];
   assert.ok(fenced);
   assert.deepEqual(JSON.parse(fenced), verification);

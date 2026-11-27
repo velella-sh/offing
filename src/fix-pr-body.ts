@@ -34,7 +34,7 @@ function cell(value: string): string {
 }
 
 function code(value: string): string {
-  const flat = value.replace(/[\r\n]+/g, " ").replaceAll("|", "\\|");
+  const flat = value.replace(/[\r\n]+/g, " ");
   const longest = (flat.match(/`+/g) ?? []).reduce((max, run) => Math.max(max, run.length), 0);
   const fence = "`".repeat(longest + 1);
   const pad = flat.startsWith("`") || flat.endsWith("`") ? " " : "";
@@ -55,7 +55,7 @@ function fixRows(input: FixPullRequestBody, limit: number): string[] {
   for (const finding of input.fixed.slice(0, limit)) {
     const { path, line } = finding.location;
     rows.push(
-      `| ${cell(finding.title)} | ${code(line === undefined ? path : `${path}:${line}`)} | ${evidence(finding)} |`,
+      `| ${cell(finding.title)} | ${code((line === undefined ? path : `${path}:${line}`).replaceAll("|", "\\|"))} | ${evidence(finding)} |`,
     );
   }
   return rows;

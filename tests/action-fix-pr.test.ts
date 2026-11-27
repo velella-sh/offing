@@ -381,7 +381,18 @@ test("existing bot PRs update with checkout's original shallow history default",
     const before = await scanRepository(root, builtInDetectors);
     assert.equal((await publishFixPullRequest(before, target(root))).status, "opened");
     const shallow = join(await scratch("offing-fix-shallow-"), "repo");
-    git(root, ["clone", "-q", "--depth", "1", "--branch", "main", pathToFileURL(remote).href, shallow]);
+    git(root, [
+      "-c",
+      "core.autocrlf=false",
+      "clone",
+      "-q",
+      "--depth",
+      "1",
+      "--branch",
+      "main",
+      pathToFileURL(remote).href,
+      shallow,
+    ]);
     assert.equal(git(shallow, ["rev-parse", "--is-shallow-repository"]).trim(), "true");
     const scanned = await scanRepository(shallow, builtInDetectors);
     assert.equal((await publishFixPullRequest(scanned, target(shallow))).status, "updated");
