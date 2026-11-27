@@ -53,6 +53,7 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0037](0037-recommend-version-from-bundled-data.md) | Recommend a release line from bundled data only | Add `recommend_version` and `offing recommend`: the newest unended line whose end date is at least 180 days away, from bundled rules only; `no-data` is explicit and never says "latest". |
 | [0036](0036-corpus-schema-deno-elixir.md) | Add Deno and Elixir to the public validation schema | Add `deno` and `elixir` to the published corpus ecosystem enum when those detectors gain a public corpus. The change is additive. |
 | [0034](0034-detector-limits-in-the-sdk.md) | Publish the detector limits in the SDK | Export `DETECTOR_LIMITS` and its `DetectorLimits` type so the file-size, depth, and vendored-directory bounds are part of the typed detector contract and conformance reads them from there. |
+| [0072](0072-browser-forecast-records.md) | Browser forecast records v1 | Share deterministic browser forecast output and the calendar with renderers through a versioned record schema. |
 
 ## Adoption
 

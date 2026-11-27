@@ -1,8 +1,8 @@
-import { collectPyprojectDependencies, collectPyprojectRuntime } from "../../src/detectors/python/parse-pyproject.js";
-import type { DirectDependency } from "../../src/detectors/python/types.js";
-import { parseRequirement, parseTomlDocument } from "../../src/detectors/python/shared.js";
-import { compareVersions, matchesSpecifier, parseVersion } from "../../src/upgrade/pep440.js";
-import type { ParsedVersion } from "../../src/upgrade/pep440.js";
+import { collectPyprojectDependencies, collectPyprojectRuntime } from "../detectors/python/parse-pyproject.js";
+import type { DirectDependency } from "../detectors/python/types.js";
+import { parseRequirement, parseTomlDocument } from "../detectors/python/shared.js";
+import { compareVersions, matchesSpecifier, parseVersion } from "../upgrade/pep440.js";
+import type { ParsedVersion } from "../upgrade/pep440.js";
 import { reference } from "./references.js";
 import type { Reference } from "./references.js";
 

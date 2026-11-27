@@ -36,3 +36,16 @@ supported explicit minimum. It does not resolve dependencies, follow requirement
 evaluate Python environment markers or execute workflow expressions. Source-level rules,
 unlisted packages, and lifecycle events without dates may require further investigation.
 Use the [terminal forecast](forecast.md) to scan a full repository.
+
+## Forecast records
+
+[Browser forecast records v1](https://velella.sh/offing/schemas/forecast-records.v1.schema.json)
+defines the output of the shared forecast module. The first record gives the UTC
+date range, Ebb data version, weather and counts. Each time bucket precedes the
+findings it contains. A finding's `bucketUntil` identifies its bucket, and its
+`source` links to the lifecycle evidence.
+
+The file record gives the selected filename or identifies pasted input. A
+`no-data` notice names an unclassified reference and explains the gap.
+`no-supported-declarations` reports an input with no recognized declarations.
+The final record contains the locally generated iCalendar text and its media type.
