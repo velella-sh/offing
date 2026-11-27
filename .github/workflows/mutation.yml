@@ -27,6 +27,14 @@ jobs:
     # few seconds per mutant at four workers. That leaves a wide margin under this cap;
     # the previous single job was cancelled at 90 minutes.
     timeout-minutes: 45
+    env:
+      REPORTER_TEST_COMMAND: >-
+        node --test --test-concurrency=1
+        dist/tests/reporters.test.js dist/tests/reporters-golden.test.js
+        dist/tests/reporter-contract.test.js dist/tests/commands-gates.test.js
+        dist/tests/chat-webhook.test.js dist/tests/codequality.test.js dist/tests/compact.test.js
+        dist/tests/html-report.test.js dist/tests/first-run.test.js dist/tests/markdown-report.test.js
+        dist/tests/junit-report.test.js dist/tests/sarif.test.js dist/tests/rdjson.test.js dist/tests/mermaid.test.js
     strategy:
       fail-fast: false
       matrix:
@@ -35,9 +43,15 @@ jobs:
             mutate: src/engine/**/*.ts
             hash: src/engine/**/*.ts
           - shard: reporters
-            mutate: "src/reporters.ts,src/reporters/**/*.ts"
+            mutate: "src/reporters.ts,src/reporters/**/*.ts,!src/reporters/html.ts,!src/reporters/shared.ts,!src/reporters/text.ts"
             hash: src/reporters/**/*.ts
-            command: "node --test --test-concurrency=1 dist/tests/reporters.test.js dist/tests/reporters-golden.test.js dist/tests/chat-webhook.test.js dist/tests/codequality.test.js dist/tests/compact.test.js dist/tests/html-report.test.js dist/tests/first-run.test.js dist/tests/markdown-report.test.js dist/tests/junit-report.test.js dist/tests/sarif.test.js dist/tests/rdjson.test.js dist/tests/mermaid.test.js"
+            # Stryker's command runner reports a single synthetic test, so a changed suite needs a new cache scope.
+            cache-scope: reporters-contract
+            reporter-tests: true
+          - shard: reporters-text-html
+            mutate: "src/reporters/html.ts,src/reporters/shared.ts,src/reporters/text.ts"
+            hash: src/reporters/**/*.ts
+            reporter-tests: true
           - shard: baseline
             mutate: src/baseline.ts
             hash: src/baseline.ts
@@ -56,17 +70,17 @@ jobs:
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: reports/stryker-incremental-${{ matrix.shard }}.json
-          key: stryker-incremental-${{ matrix.shard }}-${{ hashFiles(matrix.hash, 'stryker.config.json', 'package-lock.json') }}
+          key: stryker-incremental-${{ matrix.cache-scope || matrix.shard }}-${{ hashFiles(matrix.hash, 'stryker.config.json', 'package-lock.json') }}
           restore-keys: |
-            stryker-incremental-${{ matrix.shard }}-
+            stryker-incremental-${{ matrix.cache-scope || matrix.shard }}-
       - name: Run mutation testing on ${{ matrix.shard }}
         id: run
         env:
           MUTATE: ${{ matrix.mutate }}
           SHARD: ${{ matrix.shard }}
-          # The reporters shard runs the reporter tests; every other shard runs the core tests, so a shard
+          # The reporter shards run the reporter tests; the other shards run the core tests, so a shard
           # does not pay for suites that cannot reach its files.
-          TEST_COMMAND: ${{ matrix.command || 'node --test --test-concurrency=1 dist/tests/engine.test.js dist/tests/engine-discover.test.js dist/tests/engine-detect.test.js dist/tests/engine-resolve.test.js dist/tests/engine-report.test.js dist/tests/baseline.test.js dist/tests/diff.test.js' }}
+          TEST_COMMAND: ${{ matrix.reporter-tests && env.REPORTER_TEST_COMMAND || 'node --test --test-concurrency=1 dist/tests/engine.test.js dist/tests/engine-discover.test.js dist/tests/engine-detect.test.js dist/tests/engine-resolve.test.js dist/tests/engine-report.test.js dist/tests/baseline.test.js dist/tests/diff.test.js' }}
         run: |
           set -euo pipefail
           start=$(date +%s)
@@ -170,7 +184,7 @@ jobs:
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: reports/stryker-incremental-${{ matrix.shard }}.json
-          key: stryker-incremental-${{ matrix.shard }}-${{ hashFiles(matrix.hash, 'stryker.config.json', 'package-lock.json') }}
+          key: stryker-incremental-${{ matrix.cache-scope || matrix.shard }}-${{ hashFiles(matrix.hash, 'stryker.config.json', 'package-lock.json') }}
       - name: Upload the mutation report
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7

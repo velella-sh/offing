@@ -108,6 +108,11 @@ test("the page makes no external requests", () => {
   assert.ok(!/src\s*=/i.test(html) && !/@import|url\(/i.test(html));
 });
 
+test("the finding location preserves a JSON pointer", () => {
+  const html = renderHtml(scan([finding({ location: { path: "package.json", jsonPointer: "/engines/node" } })]));
+  assert.ok(html.includes("package.json#/engines/node"));
+});
+
 test("the summary row counts every severity, most severe first", () => {
   const result = scan([
     finding({ id: "critical-1", severity: "critical" }),
@@ -211,7 +216,8 @@ test("a forecast adds the Next 12 months section above the findings, with a text
   assert.match(html, /<svg [^>]*class="offing-forecast"/);
   assert.ok(html.indexOf('<section class="forecast">') < html.indexOf("<article"), "the section is above the findings");
   assert.ok(html.includes("Node.js 18 end of life") && html.includes("Python 3.8 end of life"));
-  assert.ok(html.includes("affects 1 finding") && html.includes("does not affect this repository"));
+  assert.ok(html.includes("2 events from 2026-10-16 to 2027-10-16, 1 affecting this repository"));
+  assert.ok(html.includes("affects 1 finding <code>") && html.includes("does not affect this repository"));
   assert.ok(html.includes("<ul>") && html.includes("<code>2027-01-15</code>"));
   assert.ok(
     html.includes('<li class="high"><code>2027-01-15</code> <span class="badge">High</span>'),

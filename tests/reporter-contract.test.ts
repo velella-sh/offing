@@ -45,6 +45,10 @@ test("usage errors still list formats in the historical order", () => {
   assert.equal(formatExpectedList([]), "");
   assert.equal(formatExpectedList(["json"]), "json");
   assert.equal(formatExpectedList(["json", "text"]), "json or text");
+  const sparse = Array<string>(2);
+  assert.equal(formatExpectedList(sparse), "");
+  sparse[0] = "json";
+  assert.equal(formatExpectedList(sparse), "json");
   assert.equal(
     formatExpectedList(),
     "text, json, markdown, junit, sarif, rdjson, codequality, compact, html, slack, teams, webhook, or mermaid",
