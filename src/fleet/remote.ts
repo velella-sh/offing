@@ -6,7 +6,7 @@ import { fetchSparseTree, isMissingGit } from "./git.js";
 import { FleetHostError, type FleetHost, type FleetRepository, type FleetSelection } from "./host.js";
 import { fleetClient, fleetJson } from "./http.js";
 
-const SIMPLE_SEGMENT = /^[A-Za-z0-9_][A-Za-z0-9_.-]*$/;
+const SIMPLE_SEGMENT = /^[A-Za-z0-9_.-]+$/;
 const GITHUB_API = "https://api.github.com/";
 const GITHUB_ORIGIN = "https://github.com/";
 const execute = promisify(execFile);

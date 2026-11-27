@@ -287,6 +287,7 @@ test("fleet follows GitHub pagination, retries API limits, filters forks and com
   assert.match(api?.commit ?? "", pattern);
   assert.equal(api?.status, "scanned");
   assert.equal(result.repositoryStatus.filter(({ status }) => status === "skipped").length, 49);
+  assert.equal(result.repositoryStatus.find(({ name }) => name === "example/.github")?.status, "skipped");
   const local = await scanWithBuiltIns(repoPath, { noCache: true });
   const equivalent = rollup([{ repository: "example/api", report: local }]);
   assert.equal(result.findings, equivalent.findings);

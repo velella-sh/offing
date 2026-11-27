@@ -192,7 +192,7 @@ test("scans, checks, MCP-style tools, status, and signature verification make no
   assert.deepEqual(trap.calls, []);
 });
 
-test("every command except data update is offline when run as a real process with a cache present", async () => {
+test("local CLI commands stay offline when run as real processes with a cache present", async () => {
   const project = await projectWithEverything();
   const cache = await cacheWithUnverifiableBundle();
   const logDirectory = await scratch("log");
