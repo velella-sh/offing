@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { after, test } from "node:test";
@@ -770,6 +771,111 @@ test("acc-ai-pr-review reports committed source and dependency findings through 
       ["python.symbol.imp.reload", "example.py", 2],
     ],
   );
+});
+
+test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned reviews on changed lines", async (t) => {
+  const { root, base } = await gitRepositoryWithFinding();
+  await writeFile(join(root, "package.json"), '{\n  "dependencies": { "request": "2.88.2" }\n}\n');
+  git(root, ["add", "package.json"]);
+  git(root, ["commit", "-q", "-m", "add a deprecated package"]);
+  const head = git(root, ["rev-parse", "HEAD"]).trim();
+  const repo = { full_name: "owner/project" };
+  const eventPath = join(root, "event.json");
+  const writeEvent = (source = repo, login = "someone") =>
+    writeFile(
+      eventPath,
+      JSON.stringify({
+        pull_request: { number: 17, user: { login }, base: { sha: base, repo }, head: { sha: head, repo: source } },
+      }),
+    );
+  await writeEvent();
+  const requests: string[] = [];
+  const reviews: unknown[] = [];
+  let verified = false;
+  const server = createServer(async (request, response) => {
+    requests.push(`${request.method} ${request.url}`);
+    assert.equal(request.headers.authorization, "Bearer fixture-token");
+    response.setHeader("content-type", "application/json");
+    if (request.method === "POST") {
+      const parts = [];
+      for await (const chunk of request) parts.push(String(chunk));
+      reviews.push(JSON.parse(parts.join("")));
+      response.writeHead(201).end("{}");
+      return;
+    }
+    const row = (sha: string, signature: boolean, type = "Bot") => ({
+      sha,
+      committer: { type, login: "chatgpt-codex-connector[bot]" },
+      commit: { verification: { verified: signature } },
+    });
+    response.end(JSON.stringify([row(base, true), row(head, false), row(head, true, "User"), row(head, verified)]));
+  });
+  await new Promise<void>((ready) => server.listen(0, "127.0.0.1", ready));
+  t.after(async () => new Promise<void>((ready) => server.close(() => ready())));
+  const address = server.address();
+  assert.ok(address && typeof address === "object");
+  const execute = (settings: Record<string, string> = {}) =>
+    runActionFixture(
+      root,
+      {
+        GITHUB_EVENT_NAME: "pull_request",
+        GITHUB_EVENT_PATH: eventPath,
+        GITHUB_REPOSITORY: "owner/project",
+        GITHUB_API_URL: `http://127.0.0.1:${address.port}`,
+        INPUT_MODE: "diff",
+        "INPUT_GITHUB-TOKEN": "fixture-token",
+        "INPUT_FAIL-ON-SEVERITY": "none",
+        OFFING_DATA_VERSION: "bundled",
+        ...settings,
+      },
+      process.env.OFFING_ACTION_FOR_REVIEW_TEST,
+    );
+
+  assert.equal((await execute()).code, 0);
+  assert.deepEqual(requests, []);
+  const unverified = await execute({ "INPUT_VERIFY-AGENT-COMMITTERS": "true" });
+  assert.doesNotMatch(unverified.summary, /bot-committer/u);
+  assert.deepEqual(requests, ["GET /repos/owner/project/pulls/17/commits?per_page=100&page=1"]);
+  verified = true;
+  const review = await execute({ "INPUT_AGENT-REVIEW": "true" });
+  assert.equal(review.code, 0);
+  assert.match(review.summary, /Agent attribution: bot-committer/u);
+  assert.deepEqual(requests.slice(1), [
+    "GET /repos/owner/project/pulls/17/commits?per_page=100&page=1",
+    "POST /repos/owner/project/pulls/17/reviews",
+  ]);
+  const expected = {
+    commit_id: head,
+    event: "COMMENT",
+    body: "Offing lifecycle review",
+  };
+  const first = reviews[0];
+  assert.ok(first && typeof first === "object" && "comments" in first && Array.isArray(first.comments));
+  assert.match(first.comments[0]?.body, /checkout.*\n\nReplacement: .+\n\nSource: <https:\/\/.+>\n\nDays left: .+/isu);
+  assert.match(first.comments[1]?.body, /request.*\n\nReplacement: .+\n\nSource: <https:\/\/.+>\n\nDays left: .+/isu);
+  assert.deepEqual(first, {
+    ...expected,
+    comments: [
+      { path: ".github/workflows/ci.yml", line: 4, side: "RIGHT", body: first.comments[0]?.body },
+      { path: "package.json", line: 2, side: "RIGHT", body: first.comments[1]?.body },
+    ],
+  });
+
+  await writeEvent(repo, "Copilot");
+  requests.length = 0;
+  assert.equal((await execute({ "INPUT_AGENT-REVIEW": "true", "INPUT_REVIEW-EVENT": "request-changes" })).code, 0);
+  assert.deepEqual(requests, ["POST /repos/owner/project/pulls/17/reviews"]);
+  assert.deepEqual(reviews[1], { ...first, event: "REQUEST_CHANGES" });
+
+  requests.length = 0;
+  await execute({ "INPUT_AGENT-REVIEW": "true", GITHUB_EVENT_NAME: "pull_request_target" });
+  await writeEvent({ full_name: "fork/project" }, "Copilot");
+  await execute({ "INPUT_AGENT-REVIEW": "true", "INPUT_REVIEW-EVENT": "request-changes" });
+  const invalid = await execute({ "INPUT_AGENT-REVIEW": "true", "INPUT_REVIEW-EVENT": "approve" });
+  assert.equal(invalid.code, 1);
+  assert.match(invalid.stdout, /review-event must be comment or request-changes/u);
+  assert.deepEqual(requests, []);
+  assert.equal(reviews.length, 2);
 });
 
 test("mode: diff falls back to a scan outside pull request events", async () => {
