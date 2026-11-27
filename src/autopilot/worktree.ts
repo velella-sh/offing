@@ -24,14 +24,7 @@ function restrictedGit(): Git {
     GIT_NO_LAZY_FETCH: "1",
     GIT_OPTIONAL_LOCKS: "0",
   };
-  const flags = [
-    "-c",
-    `core.hooksPath=${process.platform === "win32" ? "NUL" : "/dev/null"}`,
-    "-c",
-    "core.fsmonitor=false",
-    "-c",
-    "submodule.recurse=false",
-  ];
+  const flags = ["-c", "core.fsmonitor=false", "-c", "submodule.recurse=false"];
   return (root, ...args) => git(root, [...flags, ...args], undefined, env);
 }
 
@@ -51,7 +44,8 @@ async function withoutFilters(git: Git, root: string): Promise<Git> {
 async function repositoryRoot(git: Git, path: string): Promise<string> {
   const root = await git(path, "rev-parse", "--show-toplevel").catch(() => "");
   if (!root) throw new OffingError("invalid-argument", "Autopilot requires a Git working tree.");
-  return realpath(root.slice(0, -1));
+  const endingLength = process.platform === "win32" && root.endsWith("\r\n") ? 2 : 1;
+  return realpath(root.slice(0, -endingLength));
 }
 
 function dirtyTree(): never {
@@ -66,6 +60,11 @@ function runLocation(directory: string, id: string) {
     branch: branchPrefix + id,
     id,
   };
+}
+
+function withoutHooks(git: Git, recordPath: string): Git {
+  // The private record path is absent during preparation and a regular file during undo.
+  return (cwd, ...args) => git(cwd, "-c", `core.hooksPath=${recordPath}`, ...args);
 }
 
 async function saveRecord(file: string, run: AutopilotRun): Promise<void> {
@@ -99,12 +98,13 @@ async function deleteRunBranch(git: Git, root: string, branch: string, baseCommi
 export async function withAutopilotWorktree(path: string, run: AutopilotRun, prepare: (tree: string) => Promise<void>) {
   const localGit = restrictedGit();
   const root = await repositoryRoot(localGit, path);
-  const git = await withoutFilters(localGit, root);
-  if (await git(root, "status", "--porcelain", "--untracked-files=all", "--ignore-submodules=none")) dirtyTree();
-  const baseCommit = (await git(root, "rev-parse", "--verify", "HEAD^{commit}").catch(() => "")).trim();
+  const inspectGit = await withoutFilters(localGit, root);
+  if (await inspectGit(root, "status", "--porcelain", "--untracked-files=all", "--ignore-submodules=none")) dirtyTree();
+  const baseCommit = (await inspectGit(root, "rev-parse", "--verify", "HEAD^{commit}").catch(() => "")).trim();
   if (!baseCommit) throw new OffingError("invalid-argument", "Autopilot requires a committed Git HEAD.");
   const directory = await mkdtemp(join(await realpath(tmpdir()), prefix));
   const location = runLocation(directory, basename(directory).slice(prefix.length));
+  const git = withoutHooks(inspectGit, location.record);
   let branchCreated = false;
   let treeCreated = false;
   try {
@@ -167,14 +167,15 @@ async function registeredTrees(git: Git, root: string, temporary: string) {
 export async function undoAutopilotWorktree(path: string, id: string | undefined): Promise<string> {
   const localGit = restrictedGit();
   const root = await repositoryRoot(localGit, path);
-  const git = await withoutFilters(localGit, root);
-  const trees = await registeredTrees(git, root, await realpath(tmpdir()));
+  const inspectGit = await withoutFilters(localGit, root);
+  const trees = await registeredTrees(inspectGit, root, await realpath(tmpdir()));
   const location = id === undefined && trees.length === 1 ? trees[0] : trees.find((tree) => tree.id === id);
   if (!location) {
     const detail =
       trees.length > 1 && id === undefined ? ` Choose a run ID: ${trees.map((tree) => tree.id).join(", ")}.` : "";
     throw new OffingError("invalid-argument", `No unique prepared Autopilot worktree found.${detail}`);
   }
+  const git = withoutHooks(inspectGit, location.record);
   const baseCommit = await readBaseCommit(location).catch(() => undefined);
   if (
     !baseCommit ||

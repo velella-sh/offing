@@ -16,8 +16,10 @@ const execute = promisify(execFile);
 const git = async (cwd: string, ...args: string[]) => (await execute("git", args, { cwd })).stdout.trim();
 
 async function repository(t: TestContext, withGit = true) {
-  const root = await mkdtemp(join(tmpdir(), "offing-autopilot-fixture-"));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  const directory = await mkdtemp(join(tmpdir(), "offing-autopilot-fixture-"));
+  const root = join(directory, process.platform === "win32" ? "repo with spaces" : "repo with trailing space ");
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(root);
   if (withGit) await git(root, "init", "--quiet");
   await writeFile(
     join(root, "package.json"),
