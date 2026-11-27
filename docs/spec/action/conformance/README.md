@@ -14,8 +14,10 @@ and compares the SARIF result IDs with the JSON report.
 
 Add the following job to a workflow and select a tag or commit that implements
 the v1 contract. Use a release tag to test the packaged Action or set
-`build: true` to test a source revision. To pin the checker as well, replace
-`main` in the reusable workflow ref with a reviewed commit SHA and pass it as `contract_ref`.
+`build: true` to test a source revision. On GitHub.com, the checker defaults
+to the reusable workflow's own commit. Pin the workflow ref to a reviewed SHA
+to pin both, or set `contract_ref` to select a different checker explicitly.
+On GitHub Enterprise Server, set `contract_ref` to pin the checker independently.
 
 ```yaml
 name: Offing Action conformance
@@ -32,8 +34,18 @@ jobs:
 
 Use an isolated workflow without secrets or write permissions when checking a
 third-party candidate. The `acc-action-v1` job summary records the repository,
-selected ref, resolved commit and package version. Link the passing release
+selected ref, resolved Action and checker commits, and package version. Link the passing release
 run from the release acceptance record.
+
+## Exercise the reusable workflow from Offing source
+
+The Package Smoke workflow can invoke the same reusable workflow on an Offing branch.
+It builds the Action from that branch and runs the clean, severity-gate and local SARIF
+checks in the caller's workflow. Select the candidate branch in place of `BRANCH`.
+
+```sh
+gh workflow run package-smoke.yml --ref BRANCH -f action_conformance_only=true
+```
 
 ## Run against an Offing release tag
 
