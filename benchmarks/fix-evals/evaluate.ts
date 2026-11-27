@@ -7,10 +7,10 @@ import { compareFindings } from "../../src/diff.js";
 import { scanRepository } from "../../src/engine/index.js";
 import { type Fixer, planFixReport, renderPatches } from "../../src/fix/index.js";
 import { runApprovedTest } from "../../src/test-runners/run.js";
+import type { BenchmarkExecutor } from "./docker.js";
 import { type Profile, profiles } from "./profiles.js";
 import { applyDiff, tempSource } from "./source.js";
 
-type Executor = Parameters<typeof runApprovedTest>[1];
 type Command = Parameters<typeof runApprovedTest>[0];
 type Run = Awaited<ReturnType<typeof runApprovedTest>>;
 
@@ -59,7 +59,7 @@ export const sha256 = (bytes: Buffer | string): string => createHash("sha256").u
 interface Options {
   output: string;
   fixers: Fixer[];
-  backend: (profile: Profile, root: string) => Promise<Executor>;
+  backend: (profile: Profile, root: string) => Promise<BenchmarkExecutor>;
 }
 
 async function recordFile(root: string, file: string, bytes: Buffer | string): Promise<void> {
@@ -67,7 +67,13 @@ async function recordFile(root: string, file: string, bytes: Buffer | string): P
   await writeFile(join(root, file), bytes, { flag: "wx" });
 }
 
-async function recordCheck(command: Command, execute: Executor, output: string, prefix: string): Promise<Check> {
+async function recordCheck(
+  command: Command,
+  execute: BenchmarkExecutor,
+  output: string,
+  prefix: string,
+  collectReports = false,
+): Promise<Check> {
   const files: Check["files"] = [];
   const run = await runApprovedTest(
     command,
@@ -80,7 +86,11 @@ async function recordCheck(command: Command, execute: Executor, output: string, 
       const fileBase = `${prefix}-${files.length + 1}`;
       const paths = { stdout: `${fileBase}.stdout`, stderr: `${fileBase}.stderr` };
       try {
-        return await execute(approved, { signal: sink.signal, stdout: capture("stdout"), stderr: capture("stderr") });
+        return await execute(
+          approved,
+          { signal: sink.signal, stdout: capture("stdout"), stderr: capture("stderr") },
+          collectReports,
+        );
       } finally {
         for (const channel of ["stdout", "stderr"] as const) {
           await recordFile(output, paths[channel], Buffer.concat(captures[channel]));
@@ -90,6 +100,7 @@ async function recordCheck(command: Command, execute: Executor, output: string, 
     },
     120_000,
   );
+  await recordFile(output, `${prefix}.v1.json`, `${JSON.stringify(run, null, 2)}\n`);
   return { ...run, files };
 }
 
@@ -98,7 +109,7 @@ async function verify(input: Input, options: Options, root: string, prefix: stri
   const execute = await options.backend(input.profile, root);
   const build = await recordCheck(profile.build, execute, options.output, `${prefix}/build`);
   const test =
-    "test" in profile ? await recordCheck(profile.test, execute, options.output, `${prefix}/test`) : undefined;
+    "test" in profile ? await recordCheck(profile.test, execute, options.output, `${prefix}/test`, true) : undefined;
   return { build, ...(test === undefined ? {} : { test }) };
 }
 
