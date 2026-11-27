@@ -9,6 +9,20 @@ export interface ForecastSignature {
   signature: string;
 }
 
+export interface ForecastDataRelease extends ForecastSignature {
+  file: string;
+  version: string;
+}
+
+/** P-256 metadata from Ebb's Sigstore-verified data-v2026.11.11 release. */
+export const forecastDataRelease = Object.freeze<ForecastDataRelease>({
+  file: "ebb-data-2026.11.11.json",
+  version: "2026.11.11",
+  publicKey:
+    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAo1P6vAF+i9CGBdoCGetyHlf+8mYs0t8DRdXXaIZVEnghewi5gkN+wUUjXfIBz/jc6gw45ye+RqB9dcbn7Gk5w==",
+  signature: "dOwXzvpzNRNF4Or/Eqv2fPRCVBcd/8o5evkSPoaUktLeN98ES//2YsmA7pRk3LVNefV9r9HB9npaxHJyxJt0Wg==",
+});
+
 export interface ForecastData {
   version: string;
   rules: RegistryV2Rule[];
@@ -35,7 +49,10 @@ function parseActionVersions(value: unknown): ActionVersions {
 }
 
 /** Verify the release bytes with the Ebb signing key authenticated during the site build. */
-export async function verifyBundle(bytes: ArrayBuffer, release: ForecastSignature): Promise<ForecastData> {
+export async function verifyBundle(
+  bytes: ArrayBuffer | Uint8Array<ArrayBuffer>,
+  release: ForecastSignature,
+): Promise<ForecastData> {
   const key = await crypto.subtle.importKey(
     "spki",
     base64(release.publicKey),
@@ -60,4 +77,20 @@ export async function verifyBundle(bytes: ArrayBuffer, release: ForecastSignatur
     (name) => validateRegistryV2(files[`registry/${name}.json`]).rules,
   );
   return { version, rules, actionVersions: parseActionVersions(files["registry/github-actions-shas.json"]) };
+}
+
+/** Read only the signed release asset declared by the host. */
+export async function loadForecastData(
+  read: (name: string) => Promise<Uint8Array>,
+  release = forecastDataRelease,
+  signal?: AbortSignal,
+): Promise<ForecastData> {
+  signal?.throwIfAborted();
+  if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/u.test(release.file)) throw new Error("Expected a relative Ebb data filename.");
+  const bytes = await read(release.file);
+  signal?.throwIfAborted();
+  const bundle = await verifyBundle(Uint8Array.from(bytes), release);
+  signal?.throwIfAborted();
+  if (bundle.version !== release.version) throw new Error("The signed Ebb data version does not match the release.");
+  return bundle;
 }

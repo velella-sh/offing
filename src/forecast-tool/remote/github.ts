@@ -90,27 +90,39 @@ async function rateLimitError(response: Response): Promise<Error | undefined> {
   return new Error(`GitHub rate limit reached. Remaining requests: ${count}. Reset time: ${reset}.${retry}`);
 }
 
-async function get(fetchPublic: typeof fetch, url: string, subject: string): Promise<Response> {
+async function get(fetchPublic: typeof fetch, url: string, subject: string, signal?: AbortSignal): Promise<Response> {
+  signal?.throwIfAborted();
   let response: Response;
   try {
-    response = await fetchPublic(url, { ...request });
+    response = await fetchPublic(url, { ...request, ...(signal ? { signal } : {}) });
   } catch {
+    signal?.throwIfAborted();
     throw new Error(`Could not fetch ${subject} from GitHub.`);
   }
+  signal?.throwIfAborted();
   if (response.ok) return response;
   const error =
     (await rateLimitError(response)) ?? new Error(`Could not fetch ${subject} from GitHub (HTTP ${response.status}).`);
   await response.body?.cancel().catch(() => undefined);
+  signal?.throwIfAborted();
   throw error;
 }
 
-async function readFile(fetchPublic: typeof fetch, repoAtRef: string, file: TreeFile): Promise<ForecastFile> {
+async function readFile(
+  fetchPublic: typeof fetch,
+  repoAtRef: string,
+  file: TreeFile,
+  signal?: AbortSignal,
+): Promise<ForecastFile> {
   const path = file.path.split("/").map(encodeURIComponent).join("/");
-  const response = await get(fetchPublic, `${raw}/${repoAtRef}/${path}`, file.path);
+  const response = await get(fetchPublic, `${raw}/${repoAtRef}/${path}`, file.path, signal);
   const bytes = await readBounded(response, file.size, file.path);
+  signal?.throwIfAborted();
   if (bytes.byteLength !== file.size || (await gitBlobSha(bytes)) !== file.sha) {
+    signal?.throwIfAborted();
     throw new Error(`GitHub file changed while reading ${file.path}. Retry or use a commit SHA.`);
   }
+  signal?.throwIfAborted();
   try {
     return { path: file.path, contents: decoder.decode(bytes) };
   } catch {
@@ -131,15 +143,18 @@ function parseTree(bytes: Uint8Array): unknown {
 export async function readGitHubForecastFiles(
   input: { kind: "url"; value: string },
   fetchPublic: typeof fetch,
+  signal?: AbortSignal,
 ): Promise<ForecastFile[]> {
+  signal?.throwIfAborted();
   const { owner, repo, ref } = parseGitHubForecastInput(input.value);
   const encodedRef = encodeURIComponent(ref);
   const url = `${api}/repos/${owner}/${repo}/git/trees/${encodedRef}?recursive=1`;
-  const response = await get(fetchPublic, url, "the repository tree");
+  const response = await get(fetchPublic, url, "the repository tree", signal);
   const tree = parseTree(await readBounded(response, maxTreeBytes, "GitHub repository tree"));
   const files: ForecastFile[] = [];
   for (const file of selectFiles(tree)) {
-    files.push(await readFile(fetchPublic, `${owner}/${repo}/${encodedRef}`, file));
+    files.push(await readFile(fetchPublic, `${owner}/${repo}/${encodedRef}`, file, signal));
   }
+  signal?.throwIfAborted();
   return files;
 }

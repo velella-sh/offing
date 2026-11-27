@@ -1,4 +1,3 @@
-import { X509Certificate } from "node:crypto";
 import { copyFile, mkdir, writeFile } from "node:fs/promises";
 import { isBuiltin } from "node:module";
 import { join } from "node:path";
@@ -6,10 +5,10 @@ import { join } from "node:path";
 import { verifyDataBundle } from "@velella/ebb/verify";
 import { build } from "esbuild";
 
+import { forecastDataRelease, verifyBundle } from "../../src/forecast-tool/data.js";
 import { checkWebSize } from "../../tools/web-size.js";
 
-const version = "2026.11.11";
-const file = `ebb-data-${version}.json`;
+const { version, file } = forecastDataRelease;
 const url = `https://github.com/velella-sh/ebb/releases/download/data-v${version}/${file}`;
 const source = "web/forecast";
 
@@ -19,47 +18,17 @@ async function download(address: string): Promise<ArrayBuffer> {
   return response.arrayBuffer();
 }
 
-/** The P-256 Sigstore signature is DER encoded. Web Crypto expects fixed-width r and s. */
-function webSignature(encoded: string): string {
-  const der = Buffer.from(encoded, "base64");
-  if (der[0] !== 0x30 || der[1] !== der.length - 2) throw new Error("Expected an ECDSA signature sequence.");
-  const raw = Buffer.alloc(64);
-  let offset = 2;
-  for (const destination of [0, 32]) {
-    const length = der[offset + 1] ?? 0;
-    const start = offset + 2;
-    if (der[offset] !== 0x02 || length < 1 || length > 33 || start + length > der.length) {
-      throw new Error("Expected a P-256 signature integer.");
-    }
-    const integer = der.subarray(start + Math.max(0, length - 32), start + length);
-    integer.copy(raw, destination + 32 - integer.length);
-    offset = start + length;
-  }
-  if (offset !== der.length) throw new Error("Unexpected bytes after the ECDSA signature.");
-  return raw.toString("base64");
-}
-
-async function getRelease() {
-  const [artifact, signatureBytes] = await Promise.all([download(url), download(`${url}.sigstore.json`)]);
+async function getRelease(): Promise<Uint8Array> {
+  const [artifact, signature] = await Promise.all([download(url), download(`${url}.sigstore.json`)]);
   const bytes = new Uint8Array(artifact);
-  const signatureJson = new TextDecoder().decode(signatureBytes);
-  const { bundle } = verifyDataBundle(bytes, signatureJson);
+  const { bundle } = verifyDataBundle(bytes, new TextDecoder().decode(signature));
   if (bundle.manifest.version !== version) throw new Error("The signed Ebb data version does not match the release.");
-
-  const sigstore = JSON.parse(signatureJson) as {
-    verificationMaterial: { certificate: { rawBytes: string } };
-    messageSignature: { signature: string };
-  };
-  const certificate = new X509Certificate(Buffer.from(sigstore.verificationMaterial.certificate.rawBytes, "base64"));
-  if (certificate.publicKey.asymmetricKeyDetails?.namedCurve !== "prime256v1") {
-    throw new Error("Expected an Ebb P-256 signing certificate.");
-  }
-  const publicKey = certificate.publicKey.export({ type: "spki", format: "der" }).toString("base64");
-  return { bytes, release: { file, publicKey, signature: webSignature(sigstore.messageSignature.signature) } };
+  await verifyBundle(bytes, forecastDataRelease);
+  return bytes;
 }
 
 async function buildPage(directory: string): Promise<void> {
-  const { bytes, release } = await getRelease();
+  const bytes = await getRelease();
   await build({
     entryPoints: [join(source, "app.ts")],
     outfile: join(directory, "app.js"),
@@ -68,7 +37,6 @@ async function buildPage(directory: string): Promise<void> {
     platform: "browser",
     target: "es2022",
     minify: true,
-    define: { EBB_RELEASE: JSON.stringify(release) },
     plugins: [
       {
         name: "no-node-builtins",

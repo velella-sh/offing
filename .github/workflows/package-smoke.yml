@@ -361,6 +361,9 @@ jobs:
           package="$RUNNER_TEMP/package-smoke/npm-install/node_modules/@velella/offing"
           OFFING_GUARD_FRONTENDS_MODULE="$package/dist/src/usage/parsers.js" node --test dist/tests/check-snippet-guard-frontends.test.js
 
+      - name: acc-forecast-island
+        run: node --test dist/tests/forecast-tool-records.test.js
+
       - name: acc-forecast-link
         run: node --test dist/tests/forecast-link.test.js
 
