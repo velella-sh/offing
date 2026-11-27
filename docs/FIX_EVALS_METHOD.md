@@ -1,0 +1,85 @@
+---
+title: Fix evaluation method
+description: How Offing measures deterministic fixes against pinned source trees and isolated builds and tests.
+---
+
+# Fix evaluation method
+
+Use a clean Offing source checkout with its locked dependencies installed and a local Docker daemon. Each run
+writes to a new directory.
+
+```bash
+npm run fix-evals
+npm run fix-evals -- --fixer github-actions-uses --out artifacts/fix-evals-actions
+npm run fix-evals -- --fixtures --fixer node-buffer --out artifacts/fix-evals-fixtures
+```
+
+The default run uses the public candidate list in
+[`benchmarks/fix-evals/repositories.json`](https://github.com/velella-sh/offing/blob/main/benchmarks/fix-evals/repositories.json).
+It is a pilot selection. The release cohort requires at least 60 distinct public repositories and at least one
+eligible case per registered fixer.
+
+## Selection and isolation
+
+A candidate identifies a public GitHub repository, a full commit SHA, and the build or validation profile. An eligible
+repository must produce a patch with the current Offing registry and have a passing baseline for every check that
+profile defines. Static validators only score plans whose patched paths are all in the validation scope. The evidence lists candidates with no patch and those whose baseline failed or timed out. A failing
+or timed-out baseline is retained with its first attempt and any retry. Retrying never promotes a failed baseline.
+
+The harness fetches pinned Git objects over HTTPS and no application credentials are forwarded. Trees containing
+links or submodules are outside the supported snapshot format. It scans snapshots with bundled Ebb data at the
+recorded reference time. Each fixer is evaluated on its own copy of the same tree. A failure in one patch never
+changes the source for another fixer. Fixture mode is for checking the harness. Its runs do not count as public
+repositories or supply release figures.
+
+Build and test commands are defined by the harness. Each check or retry starts on a fresh copy streamed to a Linux
+x86-64 container. Tool images are pinned by digest. Containers run as an unprivileged user with a read-only root,
+bounded CPU, memory, process count and run time, no network or host mounts, and temporary writable working space.
+The only environment added by the harness contains fixed tool settings. Git fetches and tool image resolution happen
+before container execution. Offing's normal scan and fix commands remain read-only with respect to repository
+execution.
+
+| Profile | Build or validation | Test |
+| --- | --- | --- |
+| npm | Offline locked install, then `npm run build` | Offline locked install, then `npm test` |
+| Python | Compile Python sources | Standard-library unittest discovery |
+| Go | Build using vendored modules | Test using vendored modules |
+| Java | Offline Maven package using a repository under `.m2/repository` | Offline Maven test using the same repository |
+| Terraform | `terraform validate` | No separate check |
+| Kubernetes | `kubeconform` with pinned inputs in `manifests/` and `schemas/` | No separate check |
+| GitHub Actions | `actionlint` over workflow files | No separate check |
+
+The offline profiles exclude projects whose commands require missing dependencies, registries, live services, or
+unavailable fixtures. Use versioned vendored materials in the pinned source. Validation profiles do not run workflow
+jobs or deploy resources.
+
+## Metrics
+
+A case means one eligible repository and one registered fixer that planned at least one patch. There is never more
+than one case for the same fixer in one repository. Every rate is the number of successful cases divided by the number
+of applicable cases for that metric. Excluded candidates contribute neither. The summary includes the numerator
+and denominator and displays percentages only when there are at least five applicable cases. It lists every registered
+fixer, including those with zero cases, and links failed metrics back to their case evidence.
+
+| Metric | A case passes when |
+| --- | --- |
+| Deterministic | Two independent scans of the original tree and plans produce the same patch bytes. Every case is applicable. |
+| Applied | The patch applies to a clean copy with `git apply`. Every case is applicable. |
+| Resolved | Every original scan finding on a patched path is gone after the patch. This is applicable when the patch applied and the scanner emitted an original finding on a patched path. Source-only codemods can have no such finding. |
+| No new finding | A fresh post-patch scan introduces no finding according to the same fingerprint comparison as `offing diff`. This is applicable after successful application. |
+| Idempotent | The same fixer plans no patch on the patched copy. This is applicable after successful application. |
+| Build kept green | The first post-patch build or validation exits successfully. This is applicable after successful application. |
+| Tests kept green | The first post-patch test exits successfully. This is applicable after successful application when the profile defines a test. |
+
+## Evidence
+
+`report.json` records the Offing source commit, bundled Ebb version, scan reference time, image identifiers, exclusion
+reasons, counts, and failed metrics. Each candidate's `evidence.json` records its pinned commit, approved check
+arguments, attempt statuses, and stream hashes. The adjacent raw stdout, stderr, and patch files contain the bytes
+used for SHA-256. For example, use `shasum -a 256 artifacts/fix-evals/<candidate>/<fixer>/build-1.stdout` to
+check one log against its attempt. Raw output may contain text printed by an evaluated repository. Inspect it as
+data. An infrastructure failure aborts the run without a summary so partial output cannot be mistaken for a complete
+run. Individual command output and source archive sizes are bounded.
+
+The deterministic report is separate from the agent-assisted evaluation. The release page and its comparison
+require the completed public cohort and the independently verified agent results.
