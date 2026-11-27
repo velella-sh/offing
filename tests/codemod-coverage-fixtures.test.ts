@@ -123,3 +123,27 @@ test("runtime edits reject workflows carrying YAML anchors or aliases", async (t
   assert.equal(plan.refusals.length, 2);
   assert.ok(plan.refusals.every(({ reason }) => /YAML anchors or aliases/.test(reason)));
 });
+
+test("classifier arrays preserve long comments containing repeated hash characters", async (t) => {
+  t.after(cleanup);
+  const text = [
+    "[project]",
+    'name = "test"',
+    "classifiers = [",
+    "  # " + "#".repeat(2000) + " keep this explanation",
+    '  "Programming Language :: Python :: 3.9",',
+    '  "Programming Language :: Python :: 3.11",',
+    "  # " + "#".repeat(2000) + " keep this one too",
+    "]",
+    "",
+  ].join("\n");
+  const root = await repository({ "pyproject.toml": text });
+  const result = await scan(root);
+  const plan = await planFixReport(result);
+  assert.equal(plan.patches.length, 1);
+  await applyPatches(root, plan.patches);
+  assert.equal(
+    await readFile(join(root, "pyproject.toml"), "utf8"),
+    text.replace('  "Programming Language :: Python :: 3.9",\n', ""),
+  );
+});

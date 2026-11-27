@@ -5,8 +5,7 @@ import type { Declaration, UnknownRecord } from "./types.js";
 import { asRecord } from "./shared.js";
 
 const CLASSIFIER = /^Programming Language :: Python :: (\d+\.\d+)$/;
-const ITEM = /\s*(?:#[^\r\n]*\s*)*(?:"(?:[^"\\\r\n]|\\.)*"|'[^'\r\n]*')\s*(?:#[^\r\n]*\s*)?(,|(?=\]))/y;
-const VALUE = /"(?:[^"\\\r\n]|\\.)*"|'[^'\r\n]*'/;
+const ITEM = /"(?:[^"\\\r\n]|\\.)*"|'[^'\r\n]*'/y;
 
 export interface ClassifierEntry {
   text: string;
@@ -20,34 +19,52 @@ export interface ClassifierList {
   entries: ClassifierEntry[];
 }
 
+function skipTrivia(contents: string, start: number): number {
+  let cursor = start;
+  while (cursor < contents.length) {
+    const next = contents.charAt(cursor);
+    if (next === "#") {
+      const newline = contents.indexOf("\n", cursor);
+      cursor = newline < 0 ? contents.length : newline + 1;
+    } else if (/\s/.test(next)) {
+      cursor += 1;
+    } else {
+      break;
+    }
+  }
+  return cursor;
+}
+
+function newlines(contents: string, start: number, end: number): number {
+  let count = 0;
+  for (let index = start; index < end; index += 1) if (contents.charAt(index) === "\n") count += 1;
+  return count;
+}
+
 function listAt(contents: string, offset: number, line: number): ClassifierList | undefined {
-  const opening = /^[^\S\r\n]*classifiers\s*=\s*\[/.exec(contents.slice(offset));
+  const opening = /^[ \t]*classifiers[ \t]*=[ \t]*\[/.exec(contents.slice(offset));
   if (!opening) return undefined;
   const entries: ClassifierEntry[] = [];
   let cursor = offset + opening[0].length;
-  let currentLine = line + (opening[0].match(/\n/g)?.length ?? 0);
-  ITEM.lastIndex = cursor;
-  for (let match = ITEM.exec(contents); match; match = ITEM.exec(contents)) {
-    const relevant = match[0].replace(/^[\s]*(?:#[^\r\n]*\s*)*/, "");
-    const value = VALUE.exec(relevant);
-    if (!value) return undefined;
-    const text = stringValue(value[0]);
+  let currentLine = line;
+  while (cursor < contents.length) {
+    const start = skipTrivia(contents, cursor);
+    if (contents.charAt(start) === "]") return { entries };
+    ITEM.lastIndex = start;
+    const token = ITEM.exec(contents);
+    const text = token ? stringValue(token[0]) : undefined;
     if (text === undefined) return undefined;
-    const start = cursor + match[0].length - relevant.length;
-    const end = start + value[0].length;
-    const preceding = contents.slice(cursor, start);
-    entries.push({
-      text,
-      start,
-      end,
-      ...(match[1] === "," ? { comma: ITEM.lastIndex - 1 } : {}),
-      line: currentLine + (preceding.match(/\n/g)?.length ?? 0),
-    });
-    currentLine += match[0].match(/\n/g)?.length ?? 0;
-    cursor = ITEM.lastIndex;
-    if (match[1] !== ",") break;
+    const end = ITEM.lastIndex;
+    const separator = skipTrivia(contents, end);
+    const marker = contents.charAt(separator);
+    if (marker !== "," && marker !== "]") return undefined;
+    currentLine += newlines(contents, cursor, start);
+    entries.push({ text, start, end, line: currentLine, ...(marker === "," ? { comma: separator } : {}) });
+    if (marker === "]") return { entries };
+    currentLine += newlines(contents, end, separator);
+    cursor = separator + 1;
   }
-  return /^(?:\s|#[^\r\n]*)*\]/.test(contents.slice(cursor)) ? { entries } : undefined;
+  return undefined;
 }
 
 function classifierLists(contents: string, document: UnknownRecord): ClassifierList[] {
