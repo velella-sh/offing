@@ -2,8 +2,8 @@ import type { LifecycleFinding } from "@velella/ebb/domain";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 import { versContains } from "@velella/ebb/vers";
 
-import type { UnclassifiedReference } from "../../src/domain.js";
-import { buildForecastReport } from "../../src/forecast-core.js";
+import type { UnclassifiedReference } from "../domain.js";
+import { buildForecastReport } from "../forecast-core.js";
 import { parseNpm } from "./parse-lock.js";
 import { parsePyproject, parseRequirements } from "./parse-python.js";
 import { parseWorkflow } from "./parse-workflow.js";

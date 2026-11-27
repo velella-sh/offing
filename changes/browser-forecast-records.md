@@ -1,0 +1,1 @@
+- Define browser forecast records v1 for dated findings, coverage notices and calendar downloads.

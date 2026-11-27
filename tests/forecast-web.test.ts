@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 
-import { parseNpm } from "../web/forecast/parse-lock.js";
-import { parsePyproject, parseRequirements } from "../web/forecast/parse-python.js";
-import { parseWorkflow } from "../web/forecast/parse-workflow.js";
+import { parseNpm } from "../src/forecast-tool/parse-lock.js";
+import { parsePyproject, parseRequirements } from "../src/forecast-tool/parse-python.js";
+import { parseWorkflow } from "../src/forecast-tool/parse-workflow.js";
 
 function read(path: string): Promise<string> {
   return readFile(path, "utf8");
