@@ -21,6 +21,14 @@ on:
 permissions: {}
 
 jobs:
+  dry-run:
+    # The orchestrator waits for a successful publish-npm stage before building release artifacts.
+    if: inputs.dry_run
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - run: echo "Dry run skipped npm and MCP Registry operations." >> "$GITHUB_STEP_SUMMARY"
+
   # Runs on a fresh machine against what is on the registry, not against this checkout, so a package that
   # installs but does not work (like 0.1.0, which shipped no `offing` bin) fails the release.
   smoke:

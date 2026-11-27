@@ -73,6 +73,8 @@ Usage:
   offing capabilities [--json]
   offing completions <bash|zsh|fish>   # print a shell completion script
   offing lsp
+  offing attest [path] --subject <file|sha256:...> [--sbom <file>] [--data-version <version>]
+  offing attest check <statement|bundle> [--subject <file|sha256:...>] [--today <date>]
   offing codemod test <dir>    # check a codemod and its fixtures
   offing config validate [path] [--json]
   offing drivers list
@@ -144,6 +146,7 @@ Examples:
   offing report-issue <finding-id> . --output issue.md
   offing capabilities --json
   offing completions zsh > ~/.zfunc/_offing
+  offing attest --subject package.tgz --sbom sbom.cdx.json > lifecycle.intoto.json
   offing codemod test ./my-codemod
   offing config validate
   offing drivers test replay

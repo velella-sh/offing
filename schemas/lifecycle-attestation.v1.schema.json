@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/lifecycle-attestation.v1.schema.json",
+  "title": "Offing in-toto lifecycle attestation v1",
+  "description": "An unsigned in-toto Statement v1 that binds an artifact to lifecycle evidence evaluated on the UTC build date.",
+  "type": "object",
+  "required": ["_type", "subject", "predicateType", "predicate"],
+  "properties": {
+    "_type": { "const": "https://in-toto.io/Statement/v1" },
+    "subject": { "type": "array", "minItems": 1, "maxItems": 1024, "items": { "$ref": "#/$defs/subject" } },
+    "predicateType": { "const": "https://velella.sh/offing/attestation/v1/" },
+    "predicate": { "$ref": "#/$defs/predicate" }
+  },
+  "$defs": {
+    "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "sha256": { "type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$" },
+    "https": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "minLength": 10,
+      "maxLength": 10,
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "purl": { "type": "string", "pattern": "^pkg:[a-z][a-z0-9.+-]*/[^\\s@?#]+$(?![\\s\\S])" },
+    "subject": {
+      "type": "object",
+      "required": ["digest"],
+      "properties": {
+        "name": { "$ref": "#/$defs/text" },
+        "digest": {
+          "type": "object",
+          "required": ["sha256"],
+          "properties": { "sha256": { "$ref": "#/$defs/sha256" } },
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issuer", "identity"],
+      "properties": {
+        "issuer": { "$ref": "#/$defs/https" },
+        "identity": { "$ref": "#/$defs/https" },
+        "bundleUrl": { "$ref": "#/$defs/https" }
+      }
+    },
+    "ebb": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "digest"],
+      "properties": {
+        "version": { "$ref": "#/$defs/text" },
+        "digest": { "type": "string", "minLength": 71, "maxLength": 71, "pattern": "^sha256:[0-9a-f]{64}$" },
+        "signature": { "$ref": "#/$defs/signature" }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ruleId", "event", "sources"],
+      "dependentRequired": {
+        "date": ["daysLeftAtBuild"],
+        "daysLeftAtBuild": ["date"]
+      },
+      "properties": {
+        "ruleId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$(?![\\s\\S])" },
+        "event": { "enum": ["deprecated", "end-of-support", "end-of-life", "removed", "scheduled-end-of-life"] },
+        "date": { "$ref": "#/$defs/date" },
+        "daysLeftAtBuild": { "type": "integer" },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/https" }
+        },
+        "replacement": { "$ref": "#/$defs/text" }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "purl": { "$ref": "#/$defs/purl" },
+        "name": { "$ref": "#/$defs/text" },
+        "version": { "$ref": "#/$defs/text" },
+        "location": { "$ref": "#/$defs/text" }
+      },
+      "oneOf": [{ "required": ["purl"] }, { "required": ["name"] }],
+      "dependentRequired": { "version": ["purl"] }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purl", "status", "rules"],
+      "properties": {
+        "purl": { "$ref": "#/$defs/purl" },
+        "version": { "$ref": "#/$defs/text" },
+        "location": { "$ref": "#/$defs/text" },
+        "status": { "enum": ["affected", "not-affected", "version-dependent"] },
+        "rules": { "type": "array", "items": { "$ref": "#/$defs/rule" } }
+      },
+      "if": { "properties": { "status": { "const": "not-affected" } } },
+      "then": { "properties": { "rules": { "type": "array", "maxItems": 0 } } },
+      "else": { "properties": { "rules": { "type": "array", "minItems": 1 } } }
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["builtOn", "offingVersion", "ebb", "input", "components", "noData"],
+      "properties": {
+        "builtOn": { "$ref": "#/$defs/date" },
+        "offingVersion": { "$ref": "#/$defs/text" },
+        "ebb": { "$ref": "#/$defs/ebb" },
+        "input": { "enum": ["scan", "sbom"] },
+        "components": { "type": "array", "items": { "$ref": "#/$defs/component" } },
+        "noData": { "type": "array", "items": { "$ref": "#/$defs/identity" } }
+      }
+    }
+  }
+}

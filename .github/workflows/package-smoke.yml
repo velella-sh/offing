@@ -393,3 +393,28 @@ jobs:
             }
             console.log(`All three channels agree on ${expected} findings.`);
           '
+
+      - name: acc-lifecycle-attestation
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          package="$out/npm-install/node_modules/@velella/offing"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          tarballs=("$out"/*.tgz)
+          test "${#tarballs[@]}" = 1
+          tarball="${tarballs[0]}"
+          suite="$package/docs/spec/lifecycle-attestation"
+          test -f "$package/schemas/lifecycle-attestation.v1.schema.json"
+          test -f "$package/templates/workflows/offing-attest.yml"
+          "$bin" attest --subject "$tarball" --sbom "$GITHUB_WORKSPACE/tests/fixtures/attestation/bom.cdx.json" \
+            --data-version bundled > lifecycle.intoto.json
+          "$bin" attest check lifecycle.intoto.json --subject "$tarball"
+          node "$suite/conformance/check.mjs" --suite node "$suite/example/verify.mjs"
+          node "$suite/example/verify.mjs" lifecycle.intoto.json "$tarball"
+          {
+            printf '### acc-lifecycle-attestation\n\n'
+            printf -- '- Candidate artifact SHA-256 %s\n' "$(sha256sum "$tarball" | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
+            printf -- '- Unsigned statement, packaged schema and template, and standalone conformance verified.\n'
+          } >> "$GITHUB_STEP_SUMMARY"

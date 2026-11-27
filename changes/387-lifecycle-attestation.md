@@ -1,0 +1,1 @@
+- Add `offing attest` to bind artifact SHA-256 digests to lifecycle evidence and re-evaluate attested deadlines offline.

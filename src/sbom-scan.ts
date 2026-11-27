@@ -87,24 +87,29 @@ function outsideRoot(relative: string): boolean {
   return relative === ".." || relative.startsWith("../") || isAbsolute(relative);
 }
 
-/** Scan a local file or stdin without executing a generator or accessing the network. */
-export async function scanSbomFile(file: string, root = process.cwd(), workspaceOnly = false): Promise<ScanResult> {
+/** Read the same bounded, local SBOM JSON accepted by sbom-scan. */
+export async function readSbomDocument(file: string, root = process.cwd(), workspaceOnly = false): Promise<unknown> {
   const absolute = resolve(root, file);
-  const relative = relativePosix(root, absolute);
-  let input: unknown;
   try {
     if (file === "-" && workspaceOnly) throw new Error("The Action requires a workspace file.");
     if (workspaceOnly && outsideRoot(relativePosix(await realpath(root), await realpath(absolute)))) {
       throw new Error("The SBOM must be inside the scan root.");
     }
     if (file !== "-" && !(await stat(absolute)).isFile()) throw new Error("Expected a regular SBOM file.");
-    input = await readInput(file === "-" ? process.stdin : createReadStream(absolute));
+    return await readInput(file === "-" ? process.stdin : createReadStream(absolute));
   } catch (error) {
     throw new OffingError(
       "invalid-sbom",
       `Cannot read SBOM ${file}: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
+}
+
+/** Scan a local file or stdin without executing a generator or accessing the network. */
+export async function scanSbomFile(file: string, root = process.cwd(), workspaceOnly = false): Promise<ScanResult> {
+  const input = await readSbomDocument(file, root, workspaceOnly);
+  const absolute = resolve(root, file);
+  const relative = relativePosix(root, absolute);
   if (file === "-") return scanSbom(input, root, "stdin.sbom.json");
   if (outsideRoot(relative)) return scanSbom(input, dirname(absolute), basename(absolute));
   return scanSbom(input, root, relative);

@@ -1,0 +1,76 @@
+# Copy to .github/workflows/offing-attest.yml in your project.
+# This example packs an npm project. Replace the pack step and pass --sbom for your actual build.
+name: Lifecycle attestation
+
+on:
+  workflow_dispatch:
+    inputs:
+      offing_version:
+        description: Exact published Offing version with the attest command
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Pack and generate the unsigned statement
+        env:
+          OFFING_VERSION: ${{ inputs.offing_version }}
+        run: |
+          set -euo pipefail
+          [[ "$OFFING_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9a-zA-Z.-]+)?$ ]]
+          mkdir -p "$RUNNER_TEMP/lifecycle"
+          npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/lifecycle"
+          mv "$RUNNER_TEMP/lifecycle/"*.tgz "$RUNNER_TEMP/lifecycle/artifact.tgz"
+          npm exec --yes --package="@velella/offing@$OFFING_VERSION" --             offing attest --subject "$RUNNER_TEMP/lifecycle/artifact.tgz" --data-version bundled             > "$RUNNER_TEMP/lifecycle/lifecycle.intoto.json"
+          jq -e '.predicate' "$RUNNER_TEMP/lifecycle/lifecycle.intoto.json" > "$RUNNER_TEMP/lifecycle/predicate.json"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: lifecycle-input
+          path: ${{ runner.temp }}/lifecycle/
+          if-no-files-found: error
+
+  attest:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: lifecycle-input
+      - name: Sign the lifecycle predicate for these artifact bytes
+        id: attest
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: artifact.tgz
+          predicate-type: https://velella.sh/offing/attestation/v1/
+          predicate-path: predicate.json
+      - name: Stage the verification bundle
+        env:
+          BUNDLE: ${{ steps.attest.outputs.bundle-path }}
+        run: cp -- "$BUNDLE" lifecycle.sigstore.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: lifecycle-attested-artifact
+          path: |
+            artifact.tgz
+            lifecycle.intoto.json
+            lifecycle.sigstore.json
+          if-no-files-found: error
