@@ -355,6 +355,20 @@ jobs:
             printf -- '- Pinned host, offline recording, ownership, schema, card, ICS and Markdown passed.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-campaigns
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          package="$out/npm-install/node_modules/@velella/offing"
+          node "$GITHUB_WORKSPACE/.github/scripts/acc-campaigns.mjs" "$bin" "$package"
+          {
+            printf '### acc-campaigns\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
+            printf -- '- Offline campaign plan, state, MCP and standalone checker passed.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build the Docker image and scan the fixture
         id: docker
         run: |

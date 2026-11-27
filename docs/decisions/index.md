@@ -101,3 +101,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0064](0064-autopilot-guardrails-config.md) | Autopilot guardrails configuration | Add optional budgets, path controls, test argv and secret names to config v1. |
 | [0066](0066-autopilot-run-state.md) | Autopilot run state | Record phase transitions, the selected migration wave and an optional isolated checkout. |
 | [0067](0067-what-if-runtime-simulation.md) | Runtime upgrade simulation | Project proven runtime pins and record static fleet readiness. |
+| [0068](0068-campaign-v1.md) | Campaign and campaign state v1 | Select pinned Fleet repositories and exchange campaign plans and state. |

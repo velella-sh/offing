@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/campaign.v1.schema.json",
+  "title": "Campaign",
+  "description": "A versioned offline campaign specification.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "offing.campaign.v1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date"
+    },
+    "select": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "ruleId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^[a-z0-9][a-z0-9._-]*$"
+            }
+          },
+          "required": [
+            "ruleId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "release": {
+              "type": "object",
+              "properties": {
+                "product": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64,
+                  "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+                },
+                "line": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 30,
+                  "pattern": "^[0-9]+(?:\\.[0-9]+){0,2}$"
+                }
+              },
+              "required": [
+                "product",
+                "line"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "release"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "upgradeTarget": {
+              "type": "object",
+              "properties": {
+                "runtime": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64,
+                  "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 30,
+                  "pattern": "^[0-9]+(?:\\.[0-9]+){0,2}$"
+                }
+              },
+              "required": [
+                "runtime",
+                "version"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "upgradeTarget"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "include": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1024,
+        "pattern": "^(?:(?:https://(?:[a-zA-Z0-9][a-zA-Z0-9.-]*|\\[[0-9a-fA-F:]+\\])|http://(?:localhost|127\\.0\\.0\\.1|\\[::1\\]))(?::[0-9]+)?/)?[A-Za-z0-9_][A-Za-z0-9_.%~-]*(?:/[A-Za-z0-9_][A-Za-z0-9_.%~-]*)+$"
+      },
+      "uniqueItems": true
+    },
+    "exclude": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1024,
+        "pattern": "^(?:(?:https://(?:[a-zA-Z0-9][a-zA-Z0-9.-]*|\\[[0-9a-fA-F:]+\\])|http://(?:localhost|127\\.0\\.0\\.1|\\[::1\\]))(?::[0-9]+)?/)?[A-Za-z0-9_][A-Za-z0-9_.%~-]*(?:/[A-Za-z0-9_][A-Za-z0-9_.%~-]*)+$"
+      },
+      "uniqueItems": true
+    },
+    "batching": {
+      "$ref": "#/$defs/batching"
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "runtime": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "version": {
+          "type": "string",
+          "maxLength": 30,
+          "pattern": "^[0-9]+(?:\\.[0-9]+){0,2}$"
+        }
+      },
+      "required": [
+        "runtime",
+        "version"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "asOf",
+    "select",
+    "batching"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "batching": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "concurrency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "minGapMinutes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10080
+        },
+        "maxFailureRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "size",
+        "concurrency",
+        "minGapMinutes",
+        "maxFailureRate"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

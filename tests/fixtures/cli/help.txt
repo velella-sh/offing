@@ -78,6 +78,8 @@ Usage:
   offing autopilot [path] --dry-run [--wave <n> | --finding <id>] [--to <runtime@version>] [--agent <driver>]
   offing autopilot [path] --prepare [--wave <n> | --finding <id>] [--to <runtime@version>]
   offing autopilot [path] --undo [run]
+  offing campaign plan <campaign.yml> --fleet <fleet.json> [--json]  # preview a pinned migration
+  offing campaign status <state.json> [--json]  # read recorded campaign state
   offing codemod test <dir>    # check a codemod and its fixtures
   offing config validate [path] [--json]
   offing drivers list
@@ -86,6 +88,7 @@ Usage:
   offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs
   offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>] [--image-lineage --json]
   offing fleet <organization|group> --json --forecast-input [--as-of <YYYY-MM-DD>]   # save private forecast evidence
+  offing fleet <organization|group> --json --campaign-input [--as-of <YYYY-MM-DD>]   # save private planning evidence
   offing fleet <organization|group> --json --what-if-target <runtime@version> [--as-of <YYYY-MM-DD>]
   offing forecast --fleet <organization|group|fleet.json> [--as-of <YYYY-MM-DD>] [--by owner|repository | --json | --card [--theme light|dark] | --ics <dir> | --digest <dir>]
   offing forecast [path] --target <runtime@version> [--target <runtime@version>] [--effort] [--format markdown|json]
@@ -156,6 +159,7 @@ Examples:
   offing completions zsh > ~/.zfunc/_offing
   offing attest --subject package.tgz --sbom sbom.cdx.json > lifecycle.intoto.json
   offing autopilot . --dry-run --to nodejs@22
+  offing campaign plan campaign.yml --fleet fleet.json
   offing codemod test ./my-codemod
   offing config validate
   offing drivers test replay

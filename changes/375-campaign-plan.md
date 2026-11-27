@@ -1,0 +1,1 @@
+- Plan pinned migration campaigns from a Fleet recording and read saved campaign state through CLI and MCP.
