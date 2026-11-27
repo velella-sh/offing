@@ -51,10 +51,11 @@ test("local organization, CODEOWNERS, and repository fields retain the effective
   assert.equal(result?.rules[0]?.origins["days-left"]?.layer, "team");
   assert.equal(result?.rules[0]?.origins.severity?.layer, "repository");
   assert.equal(result?.rules[0]?.origins.severity?.line, 7);
-  const mapped = await loadFleetPolicy({ root, config, today, repository: "explicit" });
+  const mapped = await loadFleetPolicy({ root, config, today, repository: "example/explicit" });
   assert.equal(mapped?.policy.rules[0]?.["days-left"], 60);
   const policy = await parseFleetPolicy(json(organization), "org.json");
   assert.equal(pickTeam(policy, "unknown", []), undefined);
+  assert.equal(pickTeam(policy, "unknown", ["@example/platform/path"]), undefined);
   assert.throws(
     () => pickTeam(policy, "repo", ["@example/platform", "@example/mapped"]),
     /multiple fleet policy teams/,
@@ -253,4 +254,12 @@ test("fleet compliance preserves status and policy identity while hiding private
   const expired = await fleetPolicyCompliance(report, options);
   assert.equal(expired.reason, "expired-exception");
   assert.doesNotMatch(JSON.stringify(expired), /private|secret/);
+});
+
+test("published policy templates validate with an active organization and team example", async () => {
+  for (const name of ["organization", "team", "exceptions"]) {
+    const path = `templates/fleet-policy/${name}.json`;
+    const policy = await parseFleetPolicy(await readFile(path, "utf8"), path);
+    assert.ok(policy.document.policy.rules?.some(({ id }) => id === "runtime"));
+  }
 });

@@ -1,3 +1,4 @@
+import { isIsoDate } from "@velella/ebb/registry";
 import { realpath } from "node:fs/promises";
 import { basename, dirname, isAbsolute, relative, resolve } from "node:path";
 
@@ -74,6 +75,7 @@ async function readOrganization(source: string, options: FleetPolicyOptions, roo
 export async function loadFleetPolicy(options: FleetPolicyOptions): Promise<EffectivePolicy | undefined> {
   const source = options.reference ?? options.config?.extends;
   if (!source) return undefined;
+  if (!isIsoDate(options.today)) throw new ConfigError("Fleet policy evaluation requires a UTC date (YYYY-MM-DD).");
   const root = await realpath(options.root);
   const organization = await readOrganization(source, options, root);
   const team = pickTeam(

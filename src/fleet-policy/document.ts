@@ -82,9 +82,12 @@ export function makePolicyLayer(
 export function pickTeam(located: LocatedPolicy, repository: string, owners: readonly string[]): string | undefined {
   const teams = located.document.teams ?? {};
   const names = Object.keys(teams);
-  const explicit = names.filter((name) => teams[name]?.repositories?.includes(repository));
+  const leaf = repository.split("/").at(-1) ?? repository;
+  const explicit = names.filter((name) =>
+    teams[name]?.repositories?.some((entry) => entry === repository || entry === leaf),
+  );
   const fromOwners = names.filter((name) =>
-    owners.some((owner) => owner.startsWith("@") && owner.split("/")[1] === name),
+    owners.some((owner) => /^@[^/]+\/[^/]+$/.test(owner) && owner.split("/")[1] === name),
   );
   const matches = explicit.length ? explicit : fromOwners;
   if (matches.length > 1) {
