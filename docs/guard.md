@@ -5,6 +5,22 @@ description: Check npm and PyPI dependencies against local lifecycle data before
 
 # Guard package installs
 
+[Agent Guard v1](spec/agent-guard/v1.md) checks a proposed dependency or file
+and returns a JSON decision with the reason and any known replacement and
+source. Use it when your tool or agent controls whether the operation runs.
+
+```sh
+printf '%s\n' '{"schemaVersion":"offing.agent-guard.request.v1","purl":"pkg:npm/request@2.88.2"}' |
+  offing guard --protocol
+```
+
+The command exits zero for a completed decision. Read `decision` to apply
+`allow`, `warn`, or `block`. An invalid request or failed check exits
+nonzero. MCP clients can pass the same object to `agent_guard` and read
+the verdict from `structuredContent`.
+
+## Run an install through the guard
+
 Put `offing guard` before a supported install command. Offing checks the named registry packages against its local Ebb data. If the gate allows the install, Offing runs the manager from your PATH with its original arguments and returns the manager's exit code.
 
 | Manager command | Example |

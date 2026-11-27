@@ -40,7 +40,7 @@ _offing() {
         fix) _arguments '--dry-run' '--show' '--no-animation' '--data-version' '*:path:_files' ;;
         check) _arguments '--fail-on' '--json' '--format' '--data-version' '*:path:_files' ;;
         check-snippet) _arguments '--path' '--json' '*:path:_files' ;;
-        guard) _arguments '--fail-on' '--allow' '--force' '--verbose' '--data-version' '*:path:_files' ;;
+        guard) _arguments '--fail-on' '--allow' '--force' '--verbose' '--data-version' '--protocol' '*:path:_files' ;;
         usage) _arguments '--file' '--json' '*:path:_files' ;;
         mcp) _arguments  '*:path:_files' ;;
         init) _arguments '--agents' '--hooks' '--personal' '--hooks-for' '--list' '--remove' '--file' '--fail-on' '--yes' '--dry-run' '*:path:_files' ;;

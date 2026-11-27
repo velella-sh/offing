@@ -336,6 +336,36 @@
       "prompt": "Instead of guessing from memory, which Ruby version should we write into the Gemfile?",
       "tool": "recommend_version",
       "reason": "A line to write."
+    },
+    {
+      "id": "agent-guard-dependency",
+      "prompt": "Use the Agent Guard protocol for a verdict before adding request.",
+      "tool": "agent_guard",
+      "reason": "The caller needs the transport-independent guard verdict."
+    },
+    {
+      "id": "agent-guard-snippet",
+      "prompt": "Get an Agent Guard protocol verdict for the Dockerfile I propose writing.",
+      "tool": "agent_guard",
+      "reason": "The caller needs the transport-independent guard verdict."
+    },
+    {
+      "id": "agent-guard-policy",
+      "prompt": "I need an allow, warn or block decision in Agent Guard protocol v1.",
+      "tool": "agent_guard",
+      "reason": "The caller needs the transport-independent guard verdict."
+    },
+    {
+      "id": "agent-guard-evidence",
+      "prompt": "Show the evidence behind the Agent Guard protocol verdict for this operation.",
+      "tool": "agent_guard",
+      "reason": "The caller needs the transport-independent guard verdict."
+    },
+    {
+      "id": "agent-guard-threshold",
+      "prompt": "Can the Agent Guard protocol check the operation with a critical threshold?",
+      "tool": "agent_guard",
+      "reason": "The caller needs the transport-independent guard verdict."
     }
   ]
 }

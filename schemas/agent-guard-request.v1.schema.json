@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/agent-guard-request.v1.schema.json",
+  "title": "Agent Guard request v1",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "offing.agent-guard.request.v1"
+    },
+    "purl": {
+      "type": "string",
+      "pattern": "^pkg:"
+    },
+    "snippet": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^(?![A-Za-z]:)(?:(?!\\.{1,2}(?:/|$))[^/\\\\\\u0000]+/)*(?!\\.{1,2}$)[^/\\\\\\u0000]+$"
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 1000000
+        }
+      },
+      "required": [
+        "path",
+        "content"
+      ],
+      "additionalProperties": false
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "failOn": {
+          "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical",
+            "none"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion"
+  ],
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "required": [
+        "purl"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "language"
+            ]
+          },
+          {
+            "required": [
+              "snippet"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "required": [
+        "snippet"
+      ],
+      "not": {
+        "required": [
+          "purl"
+        ]
+      }
+    }
+  ]
+}

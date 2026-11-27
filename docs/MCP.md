@@ -162,6 +162,7 @@ The pointer is published as `more.v1.schema.json`. Every tool schema carries the
 | `check_dependency` | `purl`, `version?` | `offing.check.v1` (`check.v1.schema.json`) | Check one package before adding it; reads no repository. When a rule names a replacement, it is the first field of the answer and `status` the second. |
 | `check_upgrade` | `target`, `path?` | `offing.upgrade.v1` (`upgrade.v1.schema.json`) | Whether the project can move to a target runtime, from lockfiles and manifests; `unknown` means no evidence was found, not that the upgrade is safe. |
 | `check_snippet` | `path`, `content` | `offing.check-snippet.v1` (`check-snippet.v1.schema.json`) | What Offing flags in one snippet before it is written, checked in an isolated temporary directory; locations are relative to the snippet. Call it before writing package manifests, Dockerfiles, CI workflows, and Kubernetes manifests, and Node.js or Python code that calls an API. Reads no repository. |
+| `agent_guard` | [Guard v1 request fields](spec/agent-guard/v1.md#request) | `offing.agent-guard.response.v1` (`agent-guard-response.v1.schema.json`) | Return an allow, warn, or block decision for a proposed operation with its evidence. |
 | `forecast_repository` | `repository_path?`, `months?`, `as_of?` | `ebb.forecast.v1` (`forecast.v1.schema.json`) | What reaches a dated end of life in the coming months: buckets by how many months away each event is, listing the events that affect this repository, then the same events by month. |
 | `recommend_version` | `product`, `minimumSupportDays?`, `as_of?` | `offing.recommend.v1` (`recommend.v1.schema.json`) | Which release line to write today (a name such as `node`, or a Package URL), from bundled lifecycle data only: the recommended line and its end date, alternatives, lines to avoid, and sources. `no-data` is not a statement that any version is safe. |
 | `plan_migrations` | `repository_path?` | `offing.plan.v1` (`plan.v1.schema.json`) | Migration plan: waves of independent tasks a coordinating agent can hand out. |
@@ -172,12 +173,12 @@ One recorded request and answer for each tool is in [`tests/fixtures/mcp/`](http
 
 ### How the descriptions were measured
 
-Tool selection was measured with the eval in `benchmarks/skill-trigger-eval.ts`, on 56 prompts that each name a task one tool answers, five or six per tool ([`benchmarks/mcp-tool-selection.json`](https://github.com/velella-sh/offing/tree/main/benchmarks/mcp-tool-selection.json)). No host and no model took part. The measurement is a lexical stand-in: it ranks the eleven tools by the words a prompt shares with their name, title, and description, a word counting for more the fewer tools use it. A prompt counts as selected when its tool ranks first alone.
+Tool selection was measured with the eval in `benchmarks/skill-trigger-eval.ts`, on 56 prompts that each named a task one tool answered, five or six per tool ([`benchmarks/mcp-tool-selection.json`](https://github.com/velella-sh/offing/tree/main/benchmarks/mcp-tool-selection.json)). No host and no model took part. The measurement is a lexical stand-in: it ranks the tools by the words a prompt shares with their name, title, and description, a word counting for more the fewer tools use it. A prompt counts as selected when its tool ranks first alone.
 
 | Descriptions | Selected | Expected tool among the first three | Mean rank of the expected tool, of 11 |
 | --- | ---: | ---: | ---: |
 | Before: `main` at `e502f98` | 29 of 56, 51.8% | 41 of 56, 73.2% | 2.91 |
-| After: the descriptions on this page | 32 of 56, 57.1% | 46 of 56, 82.1% | 2.04 |
+| After: revised descriptions before Agent Guard v1 | 32 of 56, 57.1% | 46 of 56, 82.1% | 2.04 |
 
 | Prompts whose tool ranked first | Before | After |
 | --- | ---: | ---: |
@@ -197,7 +198,9 @@ Read the numbers for what they measure, which is the wording and nothing else. T
 
 The trigger evals did not move, because they classify a prompt by its words alone and read no description: scan-and-migrate has recall 1.00 and a false-trigger rate of 0.00 on 114 prompts, check-before-add 1.00 and 0.00 on 54, and upgrade-runtime-action 1.00 and 0.00 on 42.
 
-To take both numbers again:
+The corpus now includes five Agent Guard v1 prompts. With the current tool list, 37 of 61 prompts rank their expected tool first, including all five Agent Guard prompts.
+
+To score the current corpus against the current and historical tool lists:
 
 ```sh
 npm run build --silent
@@ -206,7 +209,7 @@ git show e502f98:tests/fixtures/mcp-tool-schemas.json > /tmp/tools-before.json
 node dist/benchmarks/skill-trigger-eval.js --tools /tmp/tools-before.json
 ```
 
-The `toolSelection` section of each output holds the numbers. The ranking and the selection rule were fixed before the first run and did not change; the last two columns were added to the output after it. The corpus was written after the descriptions and before the first run, and it was not changed afterwards. Do not rewrite a description to raise the number: change one only when a user would phrase the task the way a missed prompt does.
+The `toolSelection` section of each output holds the numbers. The ranking and the selection rule were fixed before the first run and did not change; the last two columns were added to the output after it. The original 56 prompts were written after the descriptions and before the first run. The Agent Guard prompts were appended with the new tool. Do not rewrite a description to raise the number: change one only when a user would phrase the task the way a missed prompt does.
 
 `check_upgrade` takes `target` as `runtime@version`, for example `php@8.4`, and reads only files already in the repository. It never installs a runtime, runs Composer, or uses the network. When no analyzer finds evidence for that runtime, the verdict is `unknown` and the tool says so; that is not a statement that the upgrade is safe.
 
@@ -282,7 +285,7 @@ You can see all of it in the MCP Inspector:
 npx @modelcontextprotocol/inspector npx --yes @velella/offing mcp
 ```
 
-The Tools tab lists the eleven tools with their output schemas, Resources lists the rules (and findings after a scan) and the two templates, and Prompts lists `migrate-finding`.
+The Tools tab lists the tools with their output schemas, Resources lists the rules (and findings after a scan) and the two templates, and Prompts lists `migrate-finding`.
 
 ## Checking a dependency before adding it
 

@@ -16,6 +16,18 @@ The public schemas cover documented entry points and exported documents.
 The configuration and baseline schemas also describe files consumers can supply.
 Vendor schemas keep the compatibility policies of their respective standards.
 
+### Agent Guard request
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/agent-guard-request.v1.schema.json)
+
+::schema-table{data="publicSchemas/agent-guard-request" label="Agent Guard request fields"}
+
+### Agent Guard response
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/agent-guard-response.v1.schema.json)
+
+::schema-table{data="publicSchemas/agent-guard-response" label="Agent Guard response fields"}
+
 ### Accepted findings baseline
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/baseline.v1.schema.json)

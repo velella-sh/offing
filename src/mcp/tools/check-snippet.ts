@@ -2,7 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
 
 import type { OffingAgentTools } from "../../agent-tools.js";
-import { checkSnippet } from "../../check-snippet.js";
+import { assessGuardSnippet } from "../../agent-guard.js";
 import { failure, registerMcpTool, success } from "../tool-support.js";
 
 /** Registers `check_snippet`: one intended file, checked in an isolated temporary directory. */
@@ -23,7 +23,7 @@ export function registerCheckSnippet(server: McpServer, tools: OffingAgentTools)
     }),
     async handler(_context, { path, content }) {
       try {
-        return success(await checkSnippet({ path, content }));
+        return success((await assessGuardSnippet({ path, content })).check);
       } catch (error) {
         return failure(error);
       }

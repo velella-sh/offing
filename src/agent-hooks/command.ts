@@ -2,6 +2,7 @@ import process from "node:process";
 
 import { configureActiveData } from "@velella/ebb/data-source";
 
+import { meetsGuardThreshold, type AgentGuardGate } from "../agent-guard.js";
 import { builtInDetectors } from "../detectors/index.js";
 import type { Detector } from "../sdk.js";
 import { severityValues, type Finding, type ScanResult, type Severity } from "../domain.js";
@@ -17,15 +18,7 @@ export const HOOK_TIMEOUT_MS = 10_000;
 /** The default gate: findings below `medium` are noise for a file the agent is still editing. */
 export const DEFAULT_HOOK_GATE: Severity = "medium";
 
-const severityRank: Record<Severity, number> = {
-  info: 0,
-  low: 1,
-  medium: 2,
-  high: 3,
-  critical: 4,
-};
-
-export type HookGate = Severity | "none";
+export type HookGate = AgentGuardGate;
 
 export interface HookOptions {
   /** Host adapters to translate with; the built-in list by default. */
@@ -69,8 +62,7 @@ export function findingsAtGate(
   edit: Parameters<typeof findingsForEdit>[1],
 ): Finding[] {
   if (gate === "none") return [];
-  const minimum = severityRank[gate];
-  return findingsForEdit(findings, edit).filter((finding) => severityRank[finding.severity] >= minimum);
+  return findingsForEdit(findings, edit).filter((finding) => meetsGuardThreshold(finding.severity, gate));
 }
 
 function withTimeout<T>(operation: Promise<T>, timeoutMs: number): Promise<T | undefined> {
@@ -120,12 +112,9 @@ export async function hookResponse(
     const env = options.env ?? process.env;
     const timeout = options.timeoutMs ?? HOOK_TIMEOUT_MS;
     if (args.gate === "none") return failOpen;
-    const minimum = severityRank[args.gate];
     if (isPreWrite(args.host, payload)) {
       const { preWriteResponse } = await import("./pre-write.js");
-      const check = preWriteResponse(args.host, payload, env, (findings) =>
-        findings.filter((finding) => severityRank[finding.severity] >= minimum),
-      );
+      const check = preWriteResponse(args.host, payload, env, args.gate);
       return (await withTimeout(check, timeout)) ?? failOpen;
     }
     const edit = adapter.parse(payload, env);

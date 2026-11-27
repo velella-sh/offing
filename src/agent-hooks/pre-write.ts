@@ -2,7 +2,8 @@ import { constants } from "node:fs";
 import { lstat, open, realpath } from "node:fs/promises";
 import { dirname, isAbsolute, resolve } from "node:path";
 
-import { checkSnippet, MAX_SNIPPET_CONTENT_BYTES, snippetInputProblem } from "../check-snippet.js";
+import { assessGuardSnippet, meetsGuardThreshold, type AgentGuardGate } from "../agent-guard.js";
+import { MAX_SNIPPET_CONTENT_BYTES, snippetInputProblem } from "../check-snippet.js";
 import type { Finding } from "../domain.js";
 import { relativePosix } from "../paths.js";
 import { codexFeedbackText } from "./codex.js";
@@ -124,7 +125,12 @@ async function pendingFiles(
   return content === undefined ? [] : [{ path, content }];
 }
 
-async function proposedFindings(host: string, payload: unknown, env: NodeJS.ProcessEnv): Promise<Finding[]> {
+async function proposedFindings(
+  host: string,
+  payload: unknown,
+  env: NodeJS.ProcessEnv,
+  gate: AgentGuardGate,
+): Promise<Finding[]> {
   const event = record(payload);
   const input = record(event?.tool_input);
   const fallback =
@@ -136,9 +142,12 @@ async function proposedFindings(host: string, payload: unknown, env: NodeJS.Proc
   const findings: Finding[] = [];
   for (const { path, content } of await pendingFiles(root, host, event?.tool_name, input)) {
     if (snippetInputProblem(path, content)) continue;
-    const result = await checkSnippet({ path, content });
-    for (const { replacement, ...finding } of result.findings) {
-      findings.push(replacement === null ? finding : { ...finding, replacement });
+    const { check, response } = await assessGuardSnippet({ path, content }, gate);
+    if (response.decision !== "block") continue;
+    for (const { replacement, ...finding } of check.findings) {
+      if (meetsGuardThreshold(finding.severity, gate)) {
+        findings.push(replacement === null ? finding : { ...finding, replacement });
+      }
     }
   }
   return findings;
@@ -148,9 +157,9 @@ export async function preWriteResponse(
   host: string,
   payload: unknown,
   env: NodeJS.ProcessEnv,
-  gate: (findings: readonly Finding[]) => Finding[],
+  gate: AgentGuardGate,
 ): Promise<HookResponse> {
-  const findings = gate(await proposedFindings(host, payload, env));
+  const findings = await proposedFindings(host, payload, env, gate);
   if (!findings.length) return failOpen;
   const reason = codexFeedbackText(findings);
   if (host === "cursor") {

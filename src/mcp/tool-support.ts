@@ -5,7 +5,7 @@ import type { OffingAgentTools } from "../agent-tools.js";
 import { classifyError, EXIT_CODES } from "../offing-error.js";
 import { estimateTokens, limitToolAnswer, MAX_TOOL_TOKENS, serialized } from "./limit.js";
 import { type JsonObject, toolOutputSchema } from "./output-schema.js";
-import { MCP_TOOL_ANNOTATIONS, MCP_TOOL_MORE_HINTS, type McpToolName } from "./tool-names.js";
+import { MCP_TOOL_ANNOTATIONS, MCP_TOOL_MORE_HINTS } from "./tool-names.js";
 
 /** Input every repository-scoped tool shares. */
 export const repositoryInput = {
@@ -82,7 +82,7 @@ export function registerMcpTool<Shape extends z.ZodRawShape>(
   server: McpServer,
   tools: OffingAgentTools,
   config: {
-    name: McpToolName;
+    name: keyof typeof MCP_TOOL_MORE_HINTS;
     title: string;
     description: string;
     inputSchema: z.ZodObject<Shape>;

@@ -147,6 +147,7 @@ complete -c offing -n '__fish_seen_subcommand_from guard' -l allow
 complete -c offing -n '__fish_seen_subcommand_from guard' -l force
 complete -c offing -n '__fish_seen_subcommand_from guard' -l verbose
 complete -c offing -n '__fish_seen_subcommand_from guard' -l data-version
+complete -c offing -n '__fish_seen_subcommand_from guard' -l protocol
 complete -c offing -n '__fish_seen_subcommand_from usage' -l file
 complete -c offing -n '__fish_seen_subcommand_from usage' -l json
 complete -c offing -n '__fish_seen_subcommand_from data' -l json

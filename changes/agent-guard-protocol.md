@@ -1,0 +1,1 @@
+- Added Agent Guard v1, a shared lifecycle decision for CLI, MCP, and agent hooks, with standalone conformance checks.
