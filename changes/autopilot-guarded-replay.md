@@ -1,0 +1,1 @@
+- Prepare recorded Autopilot edits in an isolated checkout with exact path, budget and secret guards, and record the reason a replay stops.

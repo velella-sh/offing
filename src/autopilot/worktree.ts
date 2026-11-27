@@ -28,6 +28,18 @@ function restrictedGit(): Git {
   return (root, ...args) => git(root, [...flags, ...args], undefined, env);
 }
 
+/** The default scope only admits exact, tracked test files. No command runs to discover them. */
+export async function trackedAutopilotTestFiles(root: string): Promise<string[]> {
+  const files = await restrictedGit()(root, "ls-files", "-z");
+  return files
+    .split("\0")
+    .filter(
+      (path) =>
+        /(?:^|\/)(?:tests?|__tests__|spec)\//u.test(path) ||
+        /(?:^|\/)(?:test_[^/]+|[^/]+[._-](?:test|spec))\.[^./]+$/u.test(path),
+    );
+}
+
 async function withoutFilters(git: Git, root: string): Promise<Git> {
   const keys = await git(root, "config", "--null", "--name-only", "--list");
   const filters = new Set<string>();

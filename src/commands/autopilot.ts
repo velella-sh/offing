@@ -5,6 +5,7 @@ import { parseArgs } from "node:util";
 
 import { parseAutopilotConfig } from "../autopilot/limits/config.js";
 import { planAutopilot, renderAutopilotPreview } from "../autopilot/plan.js";
+import { prepareReplay } from "../autopilot/replay.js";
 import { advanceRun, startRun } from "../autopilot/state.js";
 import { runIdPattern, undoAutopilotWorktree, withAutopilotWorktree } from "../autopilot/worktree.js";
 import { parseUpgradeTarget } from "../upgrade/index.js";
@@ -12,7 +13,7 @@ import type { CliCommand } from "./types.js";
 
 const usage = [
   "  offing autopilot [path] --dry-run [--wave <n> | --finding <id>] [--to <runtime@version>] [--agent <driver>]",
-  "  offing autopilot [path] --prepare [--wave <n> | --finding <id>] [--to <runtime@version>]",
+  "  offing autopilot [path] --prepare [--replay <recording>] [--wave <n> | --finding <id>] [--to <runtime@version>]",
   "  offing autopilot [path] --undo [run]",
 ];
 
@@ -40,6 +41,12 @@ function undoArguments(positionals: string[]) {
   return { mode: "undo" as const, root: resolve(singleId ? "." : (first ?? ".")), id };
 }
 
+function replayPath(recording: string | undefined, prepare: boolean | undefined): string | undefined {
+  if (recording === undefined) return undefined;
+  if (!prepare || !recording.trim()) throw new Error("--replay needs a recording path and --prepare.");
+  return resolve(recording);
+}
+
 function parseAutopilotArgs(args: string[]) {
   const { positionals, values } = parseArgs({
     args,
@@ -47,6 +54,7 @@ function parseAutopilotArgs(args: string[]) {
     options: {
       "dry-run": { type: "boolean" },
       prepare: { type: "boolean" },
+      replay: { type: "string" },
       undo: { type: "boolean" },
       wave: { type: "string" },
       finding: { type: "string" },
@@ -56,6 +64,7 @@ function parseAutopilotArgs(args: string[]) {
   });
   const modes = [values["dry-run"], values.prepare, values.undo].filter(Boolean);
   if (modes.length !== 1) throw new Error("Choose --dry-run, --prepare, or --undo.");
+  const replay = replayPath(values.replay, values.prepare);
   if (values.undo) {
     if (
       values.wave !== undefined ||
@@ -74,12 +83,13 @@ function parseAutopilotArgs(args: string[]) {
     root: resolve(positionals[0] ?? "."),
     selection: planArguments(values.wave, values.finding, values.to),
     driver: values.agent === undefined ? undefined : parseAutopilotConfig({ driver: values.agent }).driver,
+    replay,
   };
 }
 
 export const command: CliCommand = {
   name: "autopilot",
-  flags: ["--dry-run", "--prepare", "--undo", "--wave", "--finding", "--to", "--agent"],
+  flags: ["--dry-run", "--prepare", "--undo", "--wave", "--finding", "--to", "--agent", "--replay"],
   example: "offing autopilot . --dry-run --to nodejs@22",
   usage,
   async run(args, ctx) {
@@ -105,11 +115,23 @@ export const command: CliCommand = {
       process.stdout.write(`${preview}\nTransitions: ${run.transitions.join(" → ")}.\n`);
       return 0;
     }
+    let prepared = true;
+    const started = performance.now();
     const location = await withAutopilotWorktree(root, run, async (tree) => {
-      await planAutopilot(tree, run, options.selection);
+      const plan = await planAutopilot(tree, run, options.selection);
+      if (options.replay) {
+        prepared = await prepareReplay(tree, options.replay, run, started, plan);
+        return;
+      }
       advanceRun(run, "baseline-tests");
       advanceRun(run, { stop: "isolated-test-runner-unavailable" });
     });
+    if (options.replay) {
+      process.stdout.write(
+        `Replay ${prepared ? "prepared" : "stopped"} (${run.stopReason}) in ${location.tree}.\nRun record: ${location.record}\n`,
+      );
+      return prepared ? 0 : 1;
+    }
     process.stdout.write(
       `Prepared ${location.branch} in ${location.tree}. Test execution is unavailable.\nRun record: ${location.record}\n`,
     );

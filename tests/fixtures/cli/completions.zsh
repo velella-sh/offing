@@ -58,7 +58,7 @@ _offing() {
         doctor) _arguments '--system' '--tests' '--json' '--data-version' '*:path:_files' ;;
         report-issue) _arguments '--output' '--data-version' '*:path:_files' ;;
         capabilities) _arguments '--json' '*:path:_files' ;;
-        autopilot) _arguments '--dry-run' '--prepare' '--undo' '--wave' '--finding' '--to' '--agent' '*:path:_files' ;;
+        autopilot) _arguments '--dry-run' '--prepare' '--undo' '--wave' '--finding' '--to' '--agent' '--replay' '*:path:_files' ;;
         campaign-board) _arguments '--out' '*:path:_files' ;;
         campaign) _arguments '--fleet' '--json' '*:path:_files' ;;
         fleet) _arguments '--include' '--exclude' '--topic' '--repos' '--jobs' '--policy' '--gitlab' '--gitlab-url' '--include-forks' '--include-archived' '--json' '--image-lineage' '--html' '--format' '--no-cache' '--fail-on' '--progress' '--forecast-input' '--campaign-input' '--what-if-target' '--as-of' '*:path:_files' ;;

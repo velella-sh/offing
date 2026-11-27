@@ -137,7 +137,7 @@ test("proof only opens regular sibling logs and hashes their exact bytes", async
   assert.match((await runCli(["proof", "verify", valid, "--repo", repo])).stderr, /SHA-256 disagrees.*stdout/);
 });
 
-test("PR proof redacts source evidence before rendering or returning any publication files", async (t) => {
+test("acc-guardrails redacts source evidence before rendering a PR or returning publication files", async (t) => {
   const { proof, root, repo } = await sample(t);
   const run = proof.testRuns[0];
   const agent = proof.agentRuns[0];

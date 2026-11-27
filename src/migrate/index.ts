@@ -3,6 +3,8 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
+import { childEnvironments } from "../autopilot/limits/secrets.js";
+import { loadConfig } from "../config.js";
 import { builtInDetectors } from "../detectors/index.js";
 import type { Finding, ScanResult } from "../domain.js";
 import { scanRepository } from "../engine/index.js";
@@ -121,7 +123,12 @@ async function migrateFinding(
   try {
     await prepareWorktree(repository.root, repository.head, worktree);
     const before = await identifyScan(await scan(worktree));
-    const { prompt, affectedFiles } = await buildFindingPrompt(before, finding.id, worktree);
+    const redact = childEnvironments(
+      process.env,
+      "replay",
+      (await loadConfig(worktree))?.autopilot?.secretEnv ?? [],
+    ).redact;
+    const { prompt, affectedFiles } = await buildFindingPrompt(before, finding.id, worktree, redact);
     const instructions =
       "Leave edits uncommitted in this checkout. Do not publish or change other checkouts. Offing will rescan and record the local receipt.\n\n";
     const result = await options.agent.run({
@@ -134,7 +141,7 @@ async function migrateFinding(
       const failure = result.timedOut
         ? "The agent command timed out."
         : `The agent command failed (${result.exitCode ?? result.signal}).`;
-      const detail = result.stderr.trim();
+      const detail = redact(result.stderr).trim();
       return { findingId: finding.id, branch, resolved: false, error: detail ? `${failure}\n${detail}` : failure };
     }
     if ((await git(["rev-parse", "HEAD"], worktree)).trim() !== repository.head) {

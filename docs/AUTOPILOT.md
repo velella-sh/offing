@@ -26,6 +26,22 @@ branch and prints the path to its [run record](SCHEMAS.md#autopilot-run).
 The record ends at a stop before test execution. Review the branch and plan
 locally while the isolated test backend is pending.
 
+`offing autopilot . --prepare --replay /path/to/turns.json` applies a
+trusted recording as data in the prepared checkout. The replay launches
+no agent or repository commands. The default edit scope is the selected
+migration packets’ files and tracked test files. GitHub workflows, dotenv
+files, private keys, and lockfiles remain protected even with an explicit
+allowlist. Replay refuses recorded secret text and records the stopping
+guard in the run record.
+
+A recording uses `offing.agent-replay.v1` with a `turns` array of
+path-to-text objects. An optional `turnUsage` array supplies one object
+with integer `turns`, `tokens` and `costCents` per recorded turn for
+reproducing budget decisions. Older recordings count as one turn with
+zero tokens and cost per edit object. An over-budget turn leaves the
+previously accepted edits intact. A prepared replay still needs separate
+test execution and verification.
+
 ```sh
 offing autopilot . --undo <run>
 ```
