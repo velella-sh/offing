@@ -42,7 +42,7 @@ test("the npm tarball ships only the root package.json as a dependency manifest"
   assert.ok(paths.includes("examples/starters/slipway/README.md"));
   assert.deepEqual(
     paths.filter((path) => path.startsWith("examples/") && !path.startsWith("examples/starters/slipway/")),
-    [],
+    ["examples/forecast/fleet.json"],
   );
   assert.ok(
     paths.some((path) => path.endsWith("usage/vendor/tree-sitter/tree-sitter-python.wasm.b64")),
