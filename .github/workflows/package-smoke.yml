@@ -82,6 +82,17 @@ jobs:
           node .github/scripts/acc-sbom-scan.mjs "$out"/*.tgz \
             "$out/npm-install/node_modules/.bin/offing" dist/action/index.js
 
+      - name: acc-lifecycle-sbom
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          {
+            printf '### acc-lifecycle-sbom\n\n'
+            node "$GITHUB_WORKSPACE/.github/scripts/acc-lifecycle-sbom.mjs" "$bin"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
       - name: acc-version-files
         working-directory: ${{ runner.temp }}
         run: |

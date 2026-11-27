@@ -1,11 +1,11 @@
 ---
 title: "Standards support"
-description: "Offing keys every rule by Package URL (PURL) and VERS, exports and ingests CLE, enriches CycloneDX SBOMs, and emits SARIF."
+description: "Offing keys every rule by Package URL (PURL) and VERS, exports and ingests CLE, enriches CycloneDX and SPDX SBOMs, and emits SARIF."
 ---
 
 # Standards support
 
-Offing keys every lifecycle rule by [Package URL](https://github.com/package-url/purl-spec) (PURL) and [VERS](https://github.com/package-url/purl-spec/blob/master/VERSION-RANGE-SPEC.rst). It exports and ingests CLE, enriches CycloneDX SBOMs, and emits SARIF. CycloneDX and SPDX **input** checking exists only as an internal library API today — no CLI, GitHub Action, MCP tool, or detector exposes it. Scans stay offline: they read repository files and bundled (or pinned) data only.
+Offing keys every lifecycle rule by [Package URL](https://github.com/package-url/purl-spec) (PURL) and [VERS](https://github.com/package-url/purl-spec/blob/master/VERSION-RANGE-SPEC.rst). It exports and ingests CLE, enriches CycloneDX and SPDX SBOMs, and emits SARIF. SBOM scanning is available through the CLI, GitHub Action and MCP. Scans stay offline: they read repository files and bundled (or pinned) data only.
 
 ## Support table
 
@@ -15,8 +15,10 @@ Offing keys every lifecycle rule by [Package URL](https://github.com/package-url
 | [VERS](https://github.com/package-url/purl-spec/blob/master/VERSION-RANGE-SPEC.rst) | Affected version ranges | Supported | Every rule’s `vers`; CLE `versions[].range`; matching in scans, checks, and CycloneDX enrichment |
 | [CLE (ECMA-428)](https://ecma-international.org/publications-and-standards/standards/ecma-428/) | Lifecycle interchange | Supported | Export: `offing export --format cle`. Ingest: maintainer `cle.json` in installed packages during `offing scan` |
 | [CycloneDX](https://cyclonedx.org/) | SBOM enrichment | Supported | `offing sbom enrich <bom.json>` (JSON 1.3–1.6) |
-| [CycloneDX](https://cyclonedx.org/) | SBOM input | Library API only (no CLI command yet) | No command, Action, or MCP tool exposes it yet |
-| [SPDX](https://spdx.dev/) | SBOM input | Library API only (no CLI command yet) | No command, Action, or MCP tool exposes it yet |
+| [CycloneDX](https://cyclonedx.org/) | SBOM input | Supported (JSON 1.3–1.7) | `offing scan --sbom <file\|->`, Action input `sbom`, MCP `scan_sbom` |
+| [SPDX](https://spdx.dev/) | SBOM enrichment | Supported (2.3 JSON and 3.0.1 compact JSON-LD) | `offing sbom enrich <bom.json>` |
+| [SPDX](https://spdx.dev/) | SBOM input | Supported (2.3 JSON) | `offing scan --sbom <file\|->`, Action input `sbom`, MCP `scan_sbom` |
+| [Syft](https://github.com/anchore/syft) | SBOM input | Supported (Syft JSON) | `offing scan --sbom <file\|->`, Action input `sbom`, MCP `scan_sbom` |
 | [SARIF 2.1.0](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html) | Findings output | Supported | `offing scan --format sarif`; GitHub Action `upload-sarif: true` |
 | [OpenEoX](https://github.com/oasis-tcs/openeox) | Vendor EOL policy | Not read | [Decision 0017](decisions/0017-openeox-ingestion.md): CLE remains the interchange target until the OpenEoX Core Schema is final |
 
@@ -54,7 +56,7 @@ Only dated component-level `end-of-support`, `end-of-life`, and `scheduled-end-o
 
 ## CycloneDX
 
-**Enrich.** Add official `cdx:lifecycle` milestone properties and evidence URLs to a copy of a CycloneDX JSON BOM. The input file is never modified. Spec versions 1.3 through 1.6 are accepted. Components match by PURL (and version from the PURL or the component `version` field) against the same offline rules as dependency checks. Undated, symbol-only, and version-dependent claims are not written as milestones.
+**Enrich.** Add official `cdx:lifecycle` milestone properties, Offing rule and evidence properties, and source references to a copy of a CycloneDX JSON BOM. The input file is never modified. Spec versions 1.3 through 1.6 are accepted. Components match by PURL (and version from the PURL or the component `version` field) against the same offline rules as dependency checks. Undated, symbol-only, and version-dependent claims are not written as milestones.
 
 ```bash
 offing sbom enrich bom.json > bom.enriched.json
@@ -65,9 +67,7 @@ Example property names Offing may add:
 - `cdx:lifecycle:milestone:endOfSupport`
 - `cdx:lifecycle:milestone:endOfLife`
 
-**Input.** Internal API only: `scanCycloneDx` / `scanCycloneDxFile` in `src/sbom/input.ts`. Nothing in the CLI, GitHub Action, MCP server, or any detector calls these functions, so there is no user-facing command to check a CycloneDX BOM today.
-
-The library function checks each component that carries a `purl` with the same offline dependency API as `offing check`. Nested and metadata components are included; components without a PURL are skipped. Results stay explicit for `no-data` and version-dependent cases. Each result’s `location` is a JSON Pointer to that component (for example `/components/0` or `/metadata/component`). A version embedded in the PURL wins over the component’s `version` field. Spec versions 1.3 through 1.6 are accepted.
+**Input.** Use `offing scan --sbom <file|->`, the Action input `sbom`, or MCP tool `scan_sbom`. Findings locate components by JSON Pointer. CycloneDX scan accepts versions 1.3 through 1.7 and can read nested components and the metadata component. Components without PURLs appear in the missing-PURL inventory.
 
 ```json
 {
@@ -86,9 +86,9 @@ The library function checks each component that carries a `purl` with the same o
 
 ## SPDX
 
-Internal API only: `scanSpdx` / `scanSpdxFile` in `src/sbom/input.ts`. Nothing in the CLI, GitHub Action, MCP server, or any detector calls these functions, so there is no user-facing command to check an SPDX document today.
+**Enrich.** Use `offing sbom enrich <bom.json>` for legacy SPDX 2.3 package annotations or SPDX 3.0.1 compact JSON-LD graph annotations. The evidence properties and standalone checker are documented in [Lifecycle properties v1](https://velella.sh/offing/spec/lifecycle-properties/v1/).
 
-The library function checks **SPDX 2.3 JSON** packages. For each package, it looks at `externalRefs` whose `referenceType` is `purl` (case-insensitive). A version in the PURL wins over `versionInfo`. Packages and refs without a PURL are skipped. The document is never written. Each result’s `location` is a JSON Pointer to the matched external reference (for example `/packages/0/externalRefs/0`); `spdxId` is set when the package has an `SPDXID`.
+**Input.** Use the SBOM scanning interfaces for SPDX 2.3 JSON. Offing checks package `externalRefs` with a PURL reference type. A version in the PURL takes precedence over `versionInfo`. Findings locate the package by JSON Pointer.
 
 ```json
 {
@@ -121,7 +121,6 @@ offing scan . --format sarif > offing.sarif
 ## What Offing does not do with these standards
 
 - Scans never fetch CLE, SBOMs, or OpenEoX over the network.
-- There is no CLI, GitHub Action, or MCP command that checks a CycloneDX or SPDX SBOM as input; those helpers stay internal in `src/sbom/input.ts`.
 - CLE export does not invent end-of-life claims for soft deprecations or API removals.
 - CycloneDX enrichment never removes existing BOM fields; it only adds properties and documentation references.
 - OpenEoX documents are not ingested; see [Decision 0017](decisions/0017-openeox-ingestion.md).

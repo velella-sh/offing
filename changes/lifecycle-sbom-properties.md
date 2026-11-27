@@ -1,0 +1,1 @@
+- Add versioned CycloneDX lifecycle evidence properties and SPDX 3.0.1 annotations to `offing sbom enrich`.

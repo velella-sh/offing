@@ -1,5 +1,5 @@
 # Release stage: generate the CycloneDX SBOM from the production dependency tree, validate it against
-# the CycloneDX 1.5 schema, derive the VEX file from the reviewed statements in security/vex, validate
+# the CycloneDX 1.5 schema and lifecycle profile, derive the VEX file from the reviewed statements in security/vex, validate
 # that too, sign both keylessly, and attach them to the GitHub release.
 # A dry run generates and validates them and attaches nothing.
 name: Release SBOM
@@ -38,6 +38,12 @@ jobs:
         run: |
           npm ls --omit=dev --all --json > npm-tree.json
           node .github/scripts/release-sbom.mjs generate --tree npm-tree.json --output sbom.cdx.json
+      - name: Enrich and check the SBOM lifecycle profile
+        run: |
+          npm run build --silent
+          node dist/src/cli.js sbom enrich sbom.cdx.json --data-version bundled > sbom.enriched.json
+          node docs/spec/lifecycle-properties/conformance/check.mjs sbom.enriched.json
+          mv sbom.enriched.json sbom.cdx.json
       - name: Validate the SBOM against the CycloneDX schema and the release tree
         run: node .github/scripts/release-sbom.mjs check sbom.cdx.json --tree npm-tree.json
       - name: Generate and validate the VEX file from security/vex

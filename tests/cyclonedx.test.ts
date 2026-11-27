@@ -20,6 +20,7 @@ const rule: RegistryV2Rule = {
   summary: "No longer supported",
   severity: "high",
   deadline: "2026-01-01",
+  replacement: "Example Next",
   sources: [{ title: "Policy", url: "https://example.com/policy", accessedAt: "2025-12-01" }],
   provenance: { observedAt: "2025-12-01", reviewedAt: "2026-02-01", reviewer: "test" },
 };
@@ -30,6 +31,14 @@ const bom = <T = Record<string, unknown>>(components: T[] = []) => ({
   version: 1,
   components,
 });
+function propertiesFor(id: string, deadline = rule.deadline) {
+  return [
+    { name: endOfLife, value: deadline },
+    { name: "offing:lifecycle:ruleId", value: id },
+    { name: "offing:lifecycle:source", value: rule.sources[0]!.url },
+    { name: "offing:lifecycle:replacement", value: rule.replacement },
+  ];
+}
 const components = (document: Record<string, unknown>) => document.components as Array<Record<string, unknown>>;
 
 // Unmodified upstream CycloneDX 1.6 schemas, kept local so validation needs no network.
@@ -81,8 +90,9 @@ test("CycloneDX enrichment preserves data, adds official milestones and evidence
   assert.deepEqual(component.licenses, original.components[0]!.licenses);
   assert.deepEqual(component.properties, [
     ...original.components[0]!.properties,
-    { name: endOfLife, value: rule.deadline },
+    ...propertiesFor(rule.id),
     { name: "cdx:lifecycle:milestone:endOfSupport", value: rule.deadline },
+    { name: "offing:lifecycle:ruleId", value: "example.support" },
   ]);
   assert.deepEqual(component.externalReferences, [
     ...original.components[0]!.externalReferences,
@@ -117,7 +127,13 @@ test("CycloneDX matches versions and normalized PURLs, including metadata and ne
   ]);
   const list = components(result);
   for (const index of [0, 2, 3]) assert.deepEqual(list[index], input.components[index]);
-  for (const index of [1, 5, 6]) assert.deepEqual(list[index]!.properties, [{ name: endOfLife, value: rule.deadline }]);
+  for (const [index, id] of [
+    [1, rule.id],
+    [5, "scoped.eol"],
+    [6, "python.eol"],
+  ] as const) {
+    assert.deepEqual(list[index]!.properties, propertiesFor(id));
+  }
   const nested = (list[4]!.components as Array<Record<string, unknown>>)[0]!;
   assert.deepEqual(nested.properties, list[1]!.properties);
   assert.deepEqual(
@@ -146,11 +162,16 @@ test("CycloneDX omits unsupported claims, and keeps unknown components and exist
       externalReferences: [{ type: "other", url: rule.sources[0]!.url, comment: "Keep me" }],
     },
   ]);
-  assert.deepEqual(enrichCycloneDx(existing, [rule, rule]), existing);
+  const enrichedExisting = enrichCycloneDx(existing, [rule, rule]);
+  assert.deepEqual(components(enrichedExisting)[0]!.externalReferences, existing.components[0]!.externalReferences);
+  assert.deepEqual(components(enrichedExisting)[0]!.properties, propertiesFor(rule.id));
   const scheduled = enrichCycloneDx(input, [{ ...rule, event: "scheduled-end-of-life", deadline: "2030-01-01" }]);
-  assert.deepEqual(components(scheduled)[0]!.properties, [{ name: endOfLife, value: "2030-01-01" }]);
+  assert.deepEqual(components(scheduled)[0]!.properties, propertiesFor(rule.id, "2030-01-01"));
   const unversioned = bom([{ type: "library", name: "example", purl: "pkg:npm/example" }]);
   assert.ok(components(enrichCycloneDx(unversioned, [{ ...rule, vers: "vers:npm/*" }]))[0]!.properties);
+  const { replacement: _replacement, ...noReplacement } = rule;
+  const withoutReplacement = enrichCycloneDx(input, [noReplacement]);
+  assert.deepEqual(components(withoutReplacement)[0]!.properties, propertiesFor(rule.id).slice(0, 3));
   assert.deepEqual(enrichCycloneDx(bom(), []), bom());
   for (const specVersion of ["1.3", "1.4", "1.5"]) {
     assert.equal(enrichCycloneDx({ ...input, specVersion }, [rule]).specVersion, specVersion);
@@ -202,7 +223,7 @@ test("CycloneDX file enrichment reads all active registries, including ecosystem
       paths,
       BUNDLED_ECOSYSTEMS.map((ecosystem) => `registry/${ecosystem}.json`),
     );
-    assert.deepEqual(components(result)[0]!.properties, [{ name: endOfLife, value: rule.deadline }]);
+    assert.deepEqual(components(result)[0]!.properties, propertiesFor(rule.id));
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -221,7 +242,12 @@ test("CLI prints schema-valid enriched JSON deterministically and leaves the sou
     assert.equal(await readFile(path, "utf8"), original);
     const result = JSON.parse(first.stdout);
     assert.ok(validate(result), JSON.stringify(validate.errors));
-    assert.deepEqual(components(result)[0]!.properties, [{ name: endOfLife, value: "2026-04-30" }]);
+    assert.deepEqual(components(result)[0]!.properties, [
+      { name: endOfLife, value: "2026-04-30" },
+      { name: "offing:lifecycle:ruleId", value: "nodejs.runtime.eol-20" },
+      { name: "offing:lifecycle:source", value: "https://github.com/nodejs/Release/blob/main/schedule.json" },
+      { name: "offing:lifecycle:replacement", value: "Node.js 22 LTS or later" },
+    ]);
     assert.ok((components(result)[0]!.externalReferences as unknown[]).length > 0);
     await writeFile(path, first.stdout);
     assert.equal((await runCli(args)).stdout, first.stdout);

@@ -2,15 +2,13 @@ import { readFile } from "node:fs/promises";
 
 import { checkAgainst } from "../check-dependency.js";
 import type { DependencyFinding } from "../check-dependency.js";
-import { BUNDLED_ECOSYSTEMS } from "@velella/ebb/data-bundle";
-import { getActiveData } from "@velella/ebb/data-source";
 import type { ActiveData } from "@velella/ebb/data-source";
 import { parsePurl } from "@velella/ebb/purl";
-import { validateRegistryV2 } from "@velella/ebb/registry";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 import { required } from "../required.js";
 import "@velella/ebb/vers/index";
 import { OffingError } from "../offing-error.js";
+import { lifecycleRules, milestoneCandidates, milestoneNames } from "./lifecycle.js";
 
 type JsonObject = Record<string, unknown>;
 
@@ -24,13 +22,6 @@ export class CycloneDxError extends OffingError {
 function object(value: unknown): value is JsonObject {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
-
-/** Official names: https://cyclonedx.github.io/cyclonedx-property-taxonomy/cdx/lifecycle.html */
-const milestones: Partial<Record<RegistryV2Rule["event"], string>> = {
-  "end-of-support": "cdx:lifecycle:milestone:endOfSupport",
-  "end-of-life": "cdx:lifecycle:milestone:endOfLife",
-  "scheduled-end-of-life": "cdx:lifecycle:milestone:endOfLife",
-};
 
 /**
  * Enrich a copy, preserving every existing field and array entry. PURL identity and VERS
@@ -55,13 +46,6 @@ export function enrichCycloneDx(input: unknown, rules: readonly RegistryV2Rule[]
     if (bom.metadata.component !== undefined) enrichComponent(bom.metadata.component, candidates);
   }
   return bom;
-}
-
-/** Rules that can establish a dated, version-independent component milestone, in stable id order. */
-function milestoneCandidates(rules: readonly RegistryV2Rule[]): RegistryV2Rule[] {
-  return rules
-    .filter((rule) => rule.deadline && milestones[rule.event] && !rule.usage?.some((usage) => usage.kind === "symbol"))
-    .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 }
 
 function entries(parent: JsonObject, key: string): JsonObject[] {
@@ -97,7 +81,7 @@ function enrichPurlComponent(
   if (result.status !== "affected") return;
 
   for (const finding of result.findings) {
-    addMilestoneProperty(properties, finding);
+    addLifecycleProperties(properties, finding);
     addEvidenceReferences(references, finding);
   }
   value.properties = properties;
@@ -122,11 +106,17 @@ function checkComponentPurl(
   }
 }
 
-/** Adds the milestone property unless the same name and deadline are already present. */
-function addMilestoneProperty(properties: JsonObject[], finding: DependencyFinding): void {
-  const name = required(milestones[finding.event], "the milestone");
-  if (properties.some((property) => property.name === name && property.value === finding.deadline)) return;
-  properties.push({ name, value: required(finding.deadline, "the deadline") });
+function addProperty(properties: JsonObject[], name: string, value: string): void {
+  if (properties.some((property) => property.name === name && property.value === value)) return;
+  properties.push({ name, value });
+}
+
+function addLifecycleProperties(properties: JsonObject[], finding: DependencyFinding): void {
+  const milestone = required(milestoneNames[finding.event], "the milestone");
+  addProperty(properties, `cdx:lifecycle:milestone:${milestone}`, required(finding.deadline, "the deadline"));
+  addProperty(properties, "offing:lifecycle:ruleId", finding.ruleId);
+  for (const { url } of finding.sources) addProperty(properties, "offing:lifecycle:source", url);
+  if (finding.replacement) addProperty(properties, "offing:lifecycle:replacement", finding.replacement);
 }
 
 /** Adds one documentation reference per source URL not already present. */
@@ -147,12 +137,5 @@ export async function enrichCycloneDxFile(path: string, data?: ActiveData): Prom
       `Cannot read CycloneDX BOM ${path}: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
-  const active = data ?? (await getActiveData());
-  const registries = await Promise.all(
-    BUNDLED_ECOSYSTEMS.map(async (ecosystem) => validateRegistryV2(await active.read(`registry/${ecosystem}.json`))),
-  );
-  return enrichCycloneDx(
-    input,
-    registries.flatMap((registry) => registry.rules),
-  );
+  return enrichCycloneDx(input, await lifecycleRules(data));
 }

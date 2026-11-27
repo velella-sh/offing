@@ -49,7 +49,7 @@ Usage:
   offing data status [--json]
   offing export --format cle [--data-version <version>]   # CLE 1.0 snapshots, one JSON document per line and component; skipped rules reported on stderr
   offing export --format portal [path...] [--data-version <version>] [--report-base-url <url>]   # developer-portal catalog: severity counts, next end-of-life date, and report link per scanned path
-  offing sbom enrich <bom.json> [--data-version <version>]   # print enriched CycloneDX or SPDX 2.3 JSON; leaves the input unchanged
+  offing sbom enrich <bom.json> [--data-version <version>]   # print enriched CycloneDX or SPDX JSON; leaves the input unchanged
   offing watch add|remove <path>   # register a project for the digest
   offing watch [run] [--weekly] [--json]   # re-scan registered projects, print only what changed
   offing watch list [--json]
