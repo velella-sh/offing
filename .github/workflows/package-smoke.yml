@@ -260,7 +260,7 @@ jobs:
           export OFFING_FLEET_TEST_CLI="$package/dist/src/cli.js"
           test -f "$package/schemas/fleet-forecast.v1.schema.json"
           node --test --test-name-pattern '^fleet forecast acceptance' dist/tests/fleet-scan.test.js
-          node "$OFFING_FLEET_TEST_CLI" forecast --fleet "$package/examples/fleet-forecast/fleet.json" --card > "$out/fleet-card.svg"
+          node "$OFFING_FLEET_TEST_CLI" forecast --fleet "$package/examples/forecast/fleet.json" --card > "$out/fleet-card.svg"
           cmp "$out/fleet-card.svg" docs/assets/fleet-forecast/light.svg
           {
             printf '### acc-fleet-forecast\n\n'

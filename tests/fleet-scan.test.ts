@@ -458,5 +458,5 @@ test("fleet forecast acceptance records exact CODEOWNERS and works from an offli
     ...captured,
     repositoryStatus: captured.repositoryStatus.map((row) => ({ ...row, host: "https://gitlab.example" })),
   };
-  assert.deepEqual(canonical, JSON.parse(await readFile("examples/fleet-forecast/fleet.json", "utf8")));
+  assert.deepEqual(canonical, JSON.parse(await readFile("examples/forecast/fleet.json", "utf8")));
 });

@@ -78,7 +78,7 @@ artifact follows the workflow repository's permissions. Forecast recordings
 and owner files contain repository-relative paths and ownership names.
 
 The following light card was produced from the packed example recording
-by running `offing forecast --fleet examples/fleet-forecast/fleet.json --card`
+by running `offing forecast --fleet examples/forecast/fleet.json --card`
 from the project root.
 
 ![Fleet forecast card for two repositories with a nearest deadline of 30 April 2025](https://velella.sh/offing/assets/fleet-forecast/light.svg)
