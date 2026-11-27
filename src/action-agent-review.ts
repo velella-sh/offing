@@ -1,16 +1,22 @@
 import { rm } from "node:fs/promises";
 
 import { addReviewDetails, reviewPrivateText, type ReviewEntry } from "./action-agent-review-details.js";
+import {
+  markAgentComment,
+  publishAgentReview,
+  type ReviewDraft,
+  type ReviewEvent,
+} from "./action-agent-review-store.js";
 import { matchesAgentAuthor, parseAgentAuthors } from "./agent-pr.js";
 import { daysBetween } from "./baseline.js";
 import { git } from "./diff.js";
 import type { Finding } from "./domain.js";
+import { isRecord } from "./github-api-values.js";
 import { changedLines, selectChangedAnnotations } from "./github-action/diff.js";
 import type { GitHubActionOutcome } from "./github-action/types.js";
 import { githubRequest, type PullRequestCommentTarget } from "./pr-comment.js";
+import { required } from "./required.js";
 import { escapeMarkdown } from "./reporters/shared.js";
-
-type ReviewEvent = "COMMENT" | "REQUEST_CHANGES";
 
 interface AgentReviewPullRequest {
   number?: number;
@@ -46,10 +52,6 @@ export function readAgentReviewEvent(env: Env): ReviewEvent | undefined {
   throw new Error("review-event must be comment or request-changes.");
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
 function verifiedBot(row: unknown, commits: ReadonlySet<string>, authors: ReadonlySet<string>): string | undefined {
   if (!isRecord(row) || typeof row.sha !== "string" || !commits.has(row.sha)) return undefined;
   const { committer, commit } = row;
@@ -61,7 +63,7 @@ function verifiedBot(row: unknown, commits: ReadonlySet<string>, authors: Readon
     : undefined;
 }
 
-async function findCommitter(
+export async function findCommitter(
   target: PullRequestCommentTarget,
   root: string,
   range: string,
@@ -111,7 +113,12 @@ function deadlineLabel(today: string, deadline: string | undefined): string {
   return days < 0 ? `${-days} days overdue` : String(days);
 }
 
-function reviewEntries(outcome: GitHubActionOutcome, base: string, head: string, isPrivate: (text: string) => boolean) {
+function reviewEntries(
+  outcome: Pick<GitHubActionOutcome, "result">,
+  base: string,
+  head: string,
+  isPrivate: (text: string) => boolean,
+) {
   const { root, scannedAt, findings } = outcome.result;
   const mergeBase = git(root, ["merge-base", base, head]).toString("utf8").trim();
   if (!fullSha.test(mergeBase)) return undefined;
@@ -158,7 +165,7 @@ async function withCommitter(
   range: string,
   authors: ReadonlySet<string>,
 ): Promise<GitHubActionOutcome> {
-  if (outcome.agent?.attribution?.signal === "author-login") return outcome;
+  if (outcome.agent?.attribution?.signal === "author-login" || outcome.result.findings.length === 0) return outcome;
   try {
     const login = await findCommitter(target, outcome.result.root, range, authors);
     if (login) {
@@ -194,7 +201,7 @@ export async function reportAgentReview(
   event: ReviewEvent | undefined,
 ): Promise<AgentReviewReport> {
   const verify = env["INPUT_VERIFY-AGENT-COMMITTERS"] === "true";
-  if ((!verify && !event) || outcome.result.findings.length === 0) return { outcome };
+  if (!verify && !event) return { outcome };
   const authors = parseAgentAuthors(env["INPUT_AGENT-AUTHORS"]);
   const target = targetFor(env, pr);
   const revisions = scanRange(outcome, pr);
@@ -203,8 +210,43 @@ export async function reportAgentReview(
   const canPost = event !== undefined && pr?.head?.repo?.full_name === target.repository;
   const attributed =
     verify || canPost ? await withCommitter(outcome, target, pr, `${base}..${head}`, authors) : outcome;
-  if (canPost && attributed.agent) return postAgentReview(attributed, target, event, base, head, env);
+  if (canPost && (attributed.agent || attributed.result.findings.length === 0)) {
+    return postAgentReview(attributed, target, event, base, head, env);
+  }
   return { outcome: attributed };
+}
+
+export interface PreparedAgentReview {
+  draft: ReviewDraft;
+  posted?: PostedReviewFindings;
+  packetDirectory?: string;
+}
+
+export async function prepareAgentReview(
+  outcome: Pick<GitHubActionOutcome, "result">,
+  event: ReviewEvent,
+  base: string,
+  head: string,
+  env: Env,
+): Promise<PreparedAgentReview | undefined> {
+  const isPrivate = reviewPrivateText(env, outcome.result.root);
+  const review = reviewEntries(outcome, base, head, isPrivate);
+  if (!review) return undefined;
+  if (review.entries.length === 0) return { draft: { base, head, event, comments: [] } };
+  const details = await addReviewDetails(outcome.result, head, review.entries, review.changed, env, isPrivate);
+  const comments = details.comments.map((comment, index) => {
+    const { finding } = required(review.entries[index], "Agent review entry");
+    return markAgentComment(comment, JSON.stringify([finding.ruleId, finding.location.column]));
+  });
+  const posted = {
+    local: new Set(review.entries.map(({ finding }) => reviewFindingKey(finding))),
+    repository: new Set(review.entries.map(({ finding, comment }) => reviewFindingKey(finding, comment.path))),
+  };
+  return {
+    draft: { base, head, event, comments },
+    posted,
+    ...(details.packetDirectory ? { packetDirectory: details.packetDirectory } : {}),
+  };
 }
 
 async function postAgentReview(
@@ -217,23 +259,15 @@ async function postAgentReview(
 ): Promise<AgentReviewReport> {
   let packetDirectory: string | undefined;
   try {
-    const isPrivate = reviewPrivateText(env, outcome.result.root);
-    const review = reviewEntries(outcome, base, head, isPrivate);
-    if (!review?.entries.length) return { outcome };
-    const details = await addReviewDetails(outcome.result, head, review.entries, review.changed, env, isPrivate);
-    packetDirectory = details.packetDirectory;
-    await githubRequest(
-      target,
-      "POST",
-      `/repos/${target.repository}/pulls/${target.pullRequest}/reviews`,
-      { commit_id: head, event, body: "Offing lifecycle review", comments: details.comments },
-      AbortSignal.timeout(10_000),
-    );
-    const posted = {
-      local: new Set(review.entries.map(({ finding }) => reviewFindingKey(finding))),
-      repository: new Set(review.entries.map(({ finding, comment }) => reviewFindingKey(finding, comment.path))),
+    const prepared = await prepareAgentReview(outcome, event, base, head, env);
+    if (!prepared) return { outcome };
+    packetDirectory = prepared.packetDirectory;
+    await publishAgentReview(target, prepared.draft);
+    return {
+      outcome,
+      ...(prepared.posted ? { posted: prepared.posted } : {}),
+      ...(packetDirectory ? { packetDirectory } : {}),
     };
-    return { outcome, posted, ...(packetDirectory ? { packetDirectory } : {}) };
   } catch {
     if (packetDirectory) await rm(packetDirectory, { recursive: true, force: true }).catch(() => undefined);
     console.log(

@@ -48,12 +48,12 @@ export function stderrMessage(error: unknown): string | undefined {
 }
 
 /** Runs `git` in `root` from objects alone; throws DiffError on failure. Shared by `diff` and `wrapped`. */
-export function git(root: string, args: string[], input?: Buffer): Buffer {
+export function git(root: string, args: string[], input?: Buffer, maxBuffer = MAX_ARCHIVE_BYTES): Buffer {
   try {
     return execFileSync("git", args, {
       cwd: root,
       input,
-      maxBuffer: MAX_ARCHIVE_BYTES,
+      maxBuffer,
       stdio: ["pipe", "pipe", "pipe"],
       windowsHide: true,
     });

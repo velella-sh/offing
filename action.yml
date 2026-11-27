@@ -153,6 +153,14 @@ inputs:
     description: Submit the agent review as comment or request-changes.
     required: false
     default: "comment"
+  fork-review-mode:
+    description: Use prepare or publish in the trusted workflow_run fork review template.
+    required: false
+    default: "off"
+  fork-review-plan:
+    description: Validated job output from the trusted fork review prepare job in the same workflow run.
+    required: false
+    default: ""
   github-token:
     description: Token used for agent commit verification, agent reviews, pull request comments, command replies, fix suggestions, fix pull requests, and tracking issues.
     required: false
@@ -173,6 +181,9 @@ inputs:
     default: "true"
 
 outputs:
+  fork-review-plan:
+    description: Bounded base64 plan emitted by the trusted fork review prepare job.
+    value: ${{ steps.scan.outputs.fork-review-plan }}
   report-path:
     description: Absolute runner path to the generated JSON report, whether or not it is uploaded.
     value: ${{ steps.scan.outputs.report-path }}
@@ -250,6 +261,8 @@ runs:
         INPUT_VERIFY-AGENT-COMMITTERS: ${{ inputs.verify-agent-committers }}
         INPUT_AGENT-REVIEW: ${{ inputs.agent-review }}
         INPUT_REVIEW-EVENT: ${{ inputs.review-event }}
+        INPUT_FORK-REVIEW-MODE: ${{ inputs.fork-review-mode }}
+        INPUT_FORK-REVIEW-PLAN: ${{ inputs.fork-review-plan }}
         INPUT_COMMANDS: ${{ inputs.commands }}
         INPUT_FIX-PR: ${{ inputs.fix-pr }}
         INPUT_FIX-PR-LABELS: ${{ inputs.fix-pr-labels }}

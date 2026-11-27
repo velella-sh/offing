@@ -9,6 +9,7 @@ import { after, test } from "node:test";
 import { parse as parseYaml } from "yaml";
 
 import { addReviewDetails } from "../src/action-agent-review-details.js";
+import { markAgentComment, publishAgentReview } from "../src/action-agent-review-store.js";
 import { createBaseline, writeBaseline } from "../src/baseline.js";
 import { builtInDetectors } from "../src/detectors/index.js";
 import { scanRepository } from "../src/engine/index.js";
@@ -783,13 +784,16 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
   const head = git(root, ["rev-parse", "HEAD"]).trim();
   const repo = { full_name: "owner/project" };
   const eventPath = join(root, "event.json");
-  const writeEvent = (source = repo, login = "someone", revision = head) =>
-    writeFile(
+  let reviewHead = head;
+  const writeEvent = (source = repo, login = "someone", revision = head) => {
+    reviewHead = revision;
+    return writeFile(
       eventPath,
       JSON.stringify({
         pull_request: { number: 17, user: { login }, base: { sha: base, repo }, head: { sha: revision, repo: source } },
       }),
     );
+  };
   await writeEvent();
   const requests: string[] = [];
   const reviews: unknown[] = [];
@@ -805,6 +809,24 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
       const parts = [];
       for await (const chunk of request) parts.push(String(chunk));
       const body = JSON.parse(parts.join(""));
+      if (path.endsWith("/graphql")) {
+        response.end(
+          JSON.stringify({
+            data: {
+              repository: {
+                pullRequest: {
+                  state: "OPEN",
+                  baseRefOid: base,
+                  headRefOid: reviewHead,
+                  reviews: { nodes: [] },
+                  reviewThreads: { nodes: [], pageInfo: { hasNextPage: false } },
+                },
+              },
+            },
+          }),
+        );
+        return;
+      }
       if (path.endsWith("/reviews")) reviews.push(body);
       else summaries.push(body.body);
       response.writeHead(path.endsWith("/reviews") && rejectReview ? 422 : 201).end("{}");
@@ -860,12 +882,14 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
   assert.match(review.summary, /Agent attribution: bot-committer/u);
   assert.deepEqual(requests.slice(1), [
     "GET /repos/owner/project/pulls/17/commits?per_page=100&page=1",
+    "POST /graphql",
+    "POST /graphql",
     "POST /repos/owner/project/pulls/17/reviews",
   ]);
   const expected = {
     commit_id: head,
     event: "COMMENT",
-    body: "Offing lifecycle review",
+    body: "<!-- offing-agent-review -->\nOffing lifecycle review",
   };
   const first = reviews[0];
   assert.ok(first && typeof first === "object" && "comments" in first && Array.isArray(first.comments));
@@ -904,7 +928,7 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
   await writeEvent(repo, "Copilot");
   requests.length = 0;
   assert.equal((await execute({ "INPUT_AGENT-REVIEW": "true", "INPUT_REVIEW-EVENT": "request-changes" })).code, 0);
-  assert.deepEqual(requests, ["POST /repos/owner/project/pulls/17/reviews"]);
+  assert.deepEqual(requests, ["POST /graphql", "POST /graphql", "POST /repos/owner/project/pulls/17/reviews"]);
   assert.deepEqual(reviews[1], { ...first, event: "REQUEST_CHANGES" });
 
   requests.length = 0;
@@ -922,6 +946,8 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
   const combined = await execute({ ...flags, "INPUT_SUGGEST-FIXES": "true" });
   assert.equal(combined.code, 0);
   assert.deepEqual(requests, [
+    "POST /graphql",
+    "POST /graphql",
     "POST /repos/owner/project/pulls/17/reviews",
     "GET /repos/owner/project/issues/17/comments?per_page=100&page=1",
     "POST /repos/owner/project/issues/17/comments",
@@ -992,6 +1018,396 @@ test("acc-ai-pr-review keeps the core comment if its optional source snapshot ex
       { ...comment, body: `${item.title}\n\nNo deterministic codemod suggestion is available on these lines.` },
     ],
   });
+});
+
+test("acc-ai-pr-review reconciles only its current bot-authored threads and leaves manual threads intact", async (t) => {
+  const base = "a".repeat(40);
+  const head = "b".repeat(40);
+  const comment = markAgentComment({ path: "workflow.yml", line: 4, side: "RIGHT", body: "Original" }, "rule.one");
+  const gone = markAgentComment({ ...comment, path: "gone.yml", body: "Was present" }, "rule.two");
+  const changed = markAgentComment({ ...comment, body: "Updated" }, "rule.one");
+  const thread = (id: string, item: typeof comment, viewerDidAuthor = true, bot = true) => ({
+    id,
+    path: item.path,
+    line: item.line,
+    startLine: null,
+    diffSide: "RIGHT",
+    isResolved: false,
+    viewerCanResolve: true,
+    isOutdated: false,
+    comments: {
+      nodes: [
+        {
+          id: `comment-${id}`,
+          body: item.body,
+          viewerDidAuthor,
+          viewerCanUpdate: true,
+          replyTo: null,
+          author: { __typename: bot ? "Bot" : "User" },
+        },
+      ],
+    },
+  });
+  const writes: unknown[] = [];
+  let nodes = [thread("manual", comment, false), thread("same-user", changed, true, false)];
+  let staleBeforeMutation = false;
+  const server = createServer(async (request, response) => {
+    const parts = [];
+    for await (const chunk of request) parts.push(String(chunk));
+    const body = JSON.parse(parts.join(""));
+    response.setHeader("content-type", "application/json");
+    if (request.url?.endsWith("/reviews")) {
+      writes.push({ review: body });
+      nodes.push(thread("kept", comment));
+      return response.writeHead(201).end("{}");
+    }
+    if (String(body.query).startsWith("mutation")) {
+      writes.push(body.variables);
+      const id = body.variables.id;
+      return response.end(
+        JSON.stringify({
+          data: {
+            updatePullRequestReviewComment: { pullRequestReviewComment: { id } },
+            resolveReviewThread: { thread: { id } },
+          },
+        }),
+      );
+    }
+    const current = !String(body.query).startsWith("query OffingAgentReviewHead") || !staleBeforeMutation;
+    return response.end(
+      JSON.stringify({
+        data: {
+          repository: {
+            pullRequest: {
+              state: "OPEN",
+              baseRefOid: base,
+              headRefOid: current ? head : "c".repeat(40),
+              reviews: { nodes: [] },
+              reviewThreads: { nodes, pageInfo: { hasNextPage: false } },
+            },
+          },
+        },
+      }),
+    );
+  });
+  await new Promise<void>((ready) => server.listen(0, "127.0.0.1", ready));
+  t.after(async () => new Promise<void>((ready) => server.close(() => ready())));
+  const address = server.address();
+  assert.ok(address && typeof address === "object");
+  const target = {
+    apiUrl: `http://127.0.0.1:${address.port}`,
+    repository: "owner/project",
+    pullRequest: 17,
+    token: "fixture",
+  };
+  const draft = { base, head, event: "COMMENT" as const, comments: [comment] };
+  await publishAgentReview(target, draft);
+  assert.equal(writes.length, 1);
+  writes.length = 0;
+  await publishAgentReview(target, draft);
+  assert.deepEqual(writes, []);
+  nodes = [...nodes, thread("gone", gone)];
+  await publishAgentReview(target, { ...draft, comments: [changed] });
+  assert.deepEqual(writes, [{ id: "comment-kept", body: changed.body }, { id: "gone" }]);
+  writes.length = 0;
+  staleBeforeMutation = true;
+  await assert.rejects(publishAgentReview(target, { ...draft, comments: [] }), /changed before Agent review/u);
+  assert.deepEqual(writes, []);
+});
+
+test("acc-ai-pr-review replays Claude, Copilot, Codex, Jules and Devin payloads with a recorded lifecycle diff", async (t) => {
+  const { root, base } = await gitRepositoryWithFinding();
+  const repo = { full_name: "owner/project" };
+  const fixture = resolve("tests/fixtures/agent-review");
+  const recordings = JSON.parse(await readFile(join(fixture, "provider-replays.json"), "utf8")) as {
+    cases: Array<{
+      provider: string;
+      pullRequest: { user: { login: string }; head: { ref: string } };
+      commitMessage?: string;
+      commit?: Record<string, unknown>;
+      signal: string;
+    }>;
+  };
+  const eventPath = join(root, "provider-event.json");
+  let revision = "";
+  let commits: unknown[] = [];
+  const bodies: Array<{ commit_id: string; comments: Array<{ path: string; line: number; body: string }> }> = [];
+  const server = createServer(async (request, response) => {
+    response.setHeader("content-type", "application/json");
+    if (request.url?.includes("/commits?")) return response.end(JSON.stringify(commits));
+    if (request.url === "/graphql")
+      return response.end(
+        JSON.stringify({
+          data: {
+            repository: {
+              pullRequest: {
+                state: "OPEN",
+                baseRefOid: base,
+                headRefOid: revision,
+                reviews: { nodes: [] },
+                reviewThreads: { nodes: [], pageInfo: { hasNextPage: false } },
+              },
+            },
+          },
+        }),
+      );
+    assert.equal(request.url, "/repos/owner/project/pulls/17/reviews");
+    const parts = [];
+    for await (const chunk of request) parts.push(String(chunk));
+    bodies.push(JSON.parse(parts.join("")));
+    return response.writeHead(201).end("{}");
+  });
+  await new Promise<void>((ready) => server.listen(0, "127.0.0.1", ready));
+  t.after(async () => new Promise<void>((ready) => server.close(() => ready())));
+  const address = server.address();
+  assert.ok(address && typeof address === "object");
+  assert.equal(recordings.cases.length, 5);
+  for (const sample of recordings.cases) {
+    git(root, ["checkout", "--quiet", "--detach", base]);
+    git(root, ["apply", join(fixture, "checkout.patch")]);
+    git(root, ["add", ".github/workflows/ci.yml"]);
+    git(root, ["commit", "--quiet", "-m", sample.commitMessage ?? "Review fixture"]);
+    revision = git(root, ["rev-parse", "HEAD"]).trim();
+    commits = sample.commit ? [{ sha: revision, ...sample.commit }] : [];
+    await writeFile(
+      eventPath,
+      JSON.stringify({
+        pull_request: {
+          number: 17,
+          user: sample.pullRequest.user,
+          base: { sha: base, repo },
+          head: { ...sample.pullRequest.head, sha: revision, repo },
+        },
+      }),
+    );
+    const run = await runActionFixture(
+      root,
+      {
+        GITHUB_EVENT_NAME: "pull_request",
+        GITHUB_EVENT_PATH: eventPath,
+        GITHUB_REPOSITORY: repo.full_name,
+        GITHUB_API_URL: `http://127.0.0.1:${address.port}`,
+        INPUT_MODE: "diff",
+        "INPUT_AGENT-REVIEW": "true",
+        "INPUT_GITHUB-TOKEN": "fixture-token",
+        "INPUT_FAIL-ON-SEVERITY": "none",
+        OFFING_DATA_VERSION: "bundled",
+      },
+      process.env.OFFING_ACTION_FOR_REVIEW_TEST,
+    );
+    assert.equal(run.code, 0, sample.provider);
+    assert.ok(run.summary.includes(`Agent attribution: ${sample.signal}.`), sample.provider);
+    const payload = bodies.at(-1);
+    assert.ok(payload, sample.provider);
+    assert.equal(payload.commit_id, revision, sample.provider);
+    assert.deepEqual(
+      payload.comments.map(({ path, line }) => [path, line]),
+      [[".github/workflows/ci.yml", 4]],
+      sample.provider,
+    );
+  }
+  assert.equal(bodies.length, 5);
+});
+
+test("acc-ai-pr-review replays the fork signal and separate read/write jobs without checking out fork content", async (t) => {
+  const { root, base } = await gitRepositoryWithFinding();
+  await writeFile(join(root, ".gitattributes"), ".github/workflows/ci.yml export-ignore\n");
+  await writeFile(join(root, "host-only.json"), '{"engines":{"node":"8"}}');
+  await writeFile(join(root, "link-target"), join(root, "host-only.json"));
+  const link = git(root, ["hash-object", "-w", "link-target"]).trim();
+  git(root, ["add", ".gitattributes"]);
+  git(root, ["update-index", "--add", "--cacheinfo", `120000,${link},shadow/package.json`]);
+  git(root, ["commit", "--quiet", "-m", "Add archive attribute and synthetic symlink"]);
+  const head = git(root, ["rev-parse", "HEAD"]).trim();
+  const remote = join(root, "remote.git");
+  git(root, ["clone", "--quiet", "--bare", root, remote]);
+  git(remote, ["update-ref", "refs/pull/17/head", head]);
+  git(remote, ["update-server-info"]);
+
+  const repository = { id: 881, full_name: "owner/project" };
+  const fork = { id: 992, full_name: "fork/project", fork: true };
+  const path = ".github/workflows/offing-agent-review-scan.yml";
+  const run = {
+    id: 440,
+    run_attempt: 2,
+    workflow_id: 33,
+    path,
+    event: "pull_request",
+    status: "completed",
+    conclusion: "success",
+    repository,
+    head_repository: fork,
+    head_sha: head,
+    head_branch: "vendor/update",
+    pull_requests: [],
+  };
+  const event = join(root, "workflow-run.json");
+  await writeFile(event, JSON.stringify({ action: "completed", repository, workflow_run: run }));
+  const pull = {
+    number: 17,
+    state: "open",
+    draft: false,
+    user: { login: "Copilot" },
+    base: { repo: repository, sha: base, ref: "main" },
+    head: { repo: fork, sha: head, ref: run.head_branch },
+  };
+  let current = pull;
+  let duplicate = false;
+  let refetchChangesHead = false;
+  let graphSawCurrent = false;
+  const requests: Array<{ path: string; authorization?: string }> = [];
+  const reviews: Array<{
+    event: string;
+    commit_id: string;
+    comments: Array<{ path: string; line: number; body: string }>;
+  }> = [];
+  const server = createServer(async (request, response) => {
+    const url = new URL(request.url ?? "/", "http://fixture.invalid");
+    const authorization = request.headers.authorization;
+    requests.push({ path: url.pathname, ...(authorization ? { authorization } : {}) });
+    if (url.pathname.startsWith("/owner/project.git/")) {
+      const asset = url.pathname.slice("/owner/project.git/".length);
+      if (
+        !/^(?:HEAD|info\/refs|objects\/(?:info\/packs|[a-f0-9]{2}\/[a-f0-9]{38}|pack\/pack-[a-f0-9]+\.(?:idx|pack)))$/u.test(
+          asset,
+        )
+      ) {
+        return response.writeHead(404).end();
+      }
+      const bytes = await readFile(join(remote, asset)).catch(() => undefined);
+      if (!bytes) return response.writeHead(404).end();
+      return response.writeHead(200, { "content-type": "text/plain" }).end(bytes);
+    }
+    response.setHeader("content-type", "application/json");
+    const send = (value: unknown) => response.end(JSON.stringify(value));
+    if (url.pathname.endsWith("/actions/workflows/offing-agent-review-scan.yml"))
+      return send({ id: 33, path, state: "active" });
+    if (url.pathname.endsWith("/actions/runs/440")) return send(run);
+    if (url.pathname.endsWith("/pulls")) {
+      assert.equal(url.searchParams.get("head"), "fork:vendor/update");
+      const actual =
+        refetchChangesHead && graphSawCurrent
+          ? { ...current, head: { ...current.head, sha: "c".repeat(40) } }
+          : current;
+      return send(duplicate ? [actual, { ...actual, number: 18 }] : [actual]);
+    }
+    if (url.pathname.endsWith("/pulls/17")) return send(current);
+    if (url.pathname === "/graphql") {
+      graphSawCurrent = true;
+      return send({
+        data: {
+          repository: {
+            pullRequest: {
+              state: "OPEN",
+              baseRefOid: base,
+              headRefOid: head,
+              reviews: { nodes: [] },
+              reviewThreads: { nodes: [], pageInfo: { hasNextPage: false } },
+            },
+          },
+        },
+      });
+    }
+    assert.equal(url.pathname, "/repos/owner/project/pulls/17/reviews");
+    const parts = [];
+    for await (const chunk of request) parts.push(String(chunk));
+    reviews.push(JSON.parse(parts.join("")));
+    return response.writeHead(201).end("{}");
+  });
+  await new Promise<void>((ready) => server.listen(0, "127.0.0.1", ready));
+  t.after(async () => new Promise<void>((ready) => server.close(() => ready())));
+  const address = server.address();
+  assert.ok(address && typeof address === "object");
+  const origin = `http://127.0.0.1:${address.port}`;
+  const readTemplate = parseYaml(
+    await readFile(resolve("templates/workflows/offing-agent-review-scan.yml"), "utf8"),
+  ) as {
+    name: string;
+    permissions: unknown;
+    on: Record<string, unknown>;
+    jobs: { signal: { steps: unknown[] } };
+  };
+  const writer = parseYaml(await readFile(resolve("templates/workflows/offing-agent-review-fork.yml"), "utf8")) as {
+    on: { workflow_run: { workflows: string[] } };
+    permissions: unknown;
+    jobs: Record<
+      "prepare" | "publish",
+      { permissions: unknown; steps: [{ uses: string; with: Record<string, string> }] }
+    >;
+  };
+  assert.deepEqual(readTemplate.permissions, {});
+  assert.ok(readTemplate.on.pull_request);
+  assert.deepEqual(readTemplate.jobs.signal.steps, [{ name: "Signal a fork pull request", run: "true" }]);
+  assert.deepEqual(writer.on.workflow_run.workflows, [readTemplate.name]);
+  assert.deepEqual(writer.permissions, {});
+  assert.deepEqual(writer.jobs.prepare.permissions, { actions: "read", contents: "read", "pull-requests": "read" });
+  assert.deepEqual(writer.jobs.publish.permissions, { actions: "read", "pull-requests": "write" });
+  const execute = (stage: "prepare" | "publish", plan?: string) => {
+    const steps = writer.jobs[stage].steps;
+    assert.equal(steps.length, 1);
+    const config = steps[0].with;
+    return runActionFixture(
+      root,
+      {
+        GITHUB_EVENT_NAME: "workflow_run",
+        GITHUB_EVENT_PATH: event,
+        GITHUB_REPOSITORY: repository.full_name,
+        GITHUB_REPOSITORY_ID: String(repository.id),
+        GITHUB_API_URL: origin,
+        GITHUB_SERVER_URL: origin,
+        "INPUT_AGENT-REVIEW": config["agent-review"] ?? "",
+        "INPUT_FORK-REVIEW-MODE": config["fork-review-mode"] ?? "",
+        "INPUT_GITHUB-TOKEN": stage === "prepare" ? "fork-read-token" : "fork-write-token",
+        ...(plan ? { "INPUT_FORK-REVIEW-PLAN": plan } : {}),
+        OFFING_DATA_VERSION: "bundled",
+      },
+      process.env.OFFING_ACTION_FOR_REVIEW_TEST,
+    );
+  };
+  const prepared = await execute("prepare");
+  assert.equal(prepared.code, 0, prepared.stdout);
+  assert.equal(reviews.length, 0);
+  const plan = /^fork-review-plan=(.+)$/mu.exec(prepared.outputs)?.[1];
+  assert.ok(plan, prepared.stdout);
+  assert.ok(
+    requests.some(
+      ({ path, authorization }) =>
+        path.startsWith("/owner/project.git/") &&
+        authorization === "Basic " + Buffer.from("x-access-token:fork-read-token").toString("base64"),
+    ),
+  );
+  requests.length = 0;
+  const published = await execute("publish", plan);
+  assert.equal(published.code, 0, published.stdout);
+  assert.ok(
+    requests.every(
+      ({ path, authorization }) =>
+        !path.startsWith("/owner/project.git/") && authorization === "Bearer fork-write-token",
+    ),
+  );
+  assert.equal(reviews.length, 1);
+  assert.equal(reviews[0]?.event, "COMMENT");
+  assert.equal(reviews[0]?.commit_id, head);
+  assert.deepEqual(
+    reviews[0]?.comments.map(({ path, line }) => [path, line]),
+    [[".github/workflows/ci.yml", 4]],
+  );
+  assert.ok(!JSON.stringify(reviews).includes(root));
+  assert.ok(!JSON.stringify(reviews).includes("fork-read-token"));
+  assert.ok(!JSON.stringify(reviews).includes("fork-write-token"));
+
+  duplicate = true;
+  assert.doesNotMatch((await execute("prepare")).outputs, /fork-review-plan=/u);
+  duplicate = false;
+  current = { ...pull, head: { ...pull.head, repo: { ...fork, id: 1234 } } };
+  assert.equal((await execute("publish", plan)).code, 0);
+  current = pull;
+  graphSawCurrent = false;
+  refetchChangesHead = true;
+  const rejected = await execute("publish", plan);
+  assert.equal(rejected.code, 1);
+  assert.match(rejected.stdout, /Fork review provenance changed/u);
+  assert.equal(reviews.length, 1);
 });
 
 test("mode: diff falls back to a scan outside pull request events", async () => {

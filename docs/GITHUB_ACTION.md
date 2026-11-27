@@ -252,9 +252,19 @@ The job summary and the existing optional PR comment include a **Stale choices t
 
 Set `verify-agent-committers: "true"` and give the job `pull-requests: read` to include the bot-committer signal. After the offline scan, the Action checks up to 250 commits through GitHub and accepts a matching bot account only when GitHub verifies the commit signature and the commit is in the scanned Git range. If metadata is unavailable, the usual attribution signals still apply.
 
-Set `agent-review: "true"` in diff mode with `pull-requests: write` to post one review for a recognized agent on a pull request from the same repository. The Action also checks bot committers when this review is enabled. Each comment points to an added or changed line and includes the replacement, evidence and days left when available. Findings without an inline location remain in the local report, and forks receive the job summary. The default `review-event: comment` submits an informational review. Set `review-event: request-changes` to ask for changes explicitly. Both inputs apply to the `pull_request` event. Each eligible run submits its own review.
+Set `agent-review: "true"` in diff mode with a GitHub bot token and `pull-requests: write` to review a recognized agent’s pull request from the same repository. Offing checks bot committers and posts on added or changed lines. An inline comment includes the replacement, evidence and days left when available. Findings without an inline location stay in the local report. The default `review-event: comment` submits an informational review. Set `review-event: request-changes` to ask for changes explicitly.
 
 An inline comment offers a suggestion when a deterministic codemod can complete the fix in one block of changed lines. It says when no such suggestion is available. The comment names the finding’s JSON migration packet in the run’s `offing-agent-migration-packets-<attempt>` artifact. Packets use repository-relative paths, omit matched source excerpts, and are retained for 14 days. If `pr-comment` is also enabled, its countdown and findings list omit entries successfully posted in the inline review. The job summary and machine-readable report still include every finding.
+
+On a rerun, Offing updates the bot’s existing finding comments, resolves its threads for findings that disappeared, and submits a review only for new inline comments or a newly requested change decision. Manual and other bots’ threads stay in place. Serialize concurrent runs for the same PR in your workflow to keep overlapping runs from creating the same new thread.
+
+### Reviews for fork pull requests
+
+Install both [the signal template](https://github.com/velella-sh/offing/blob/main/templates/workflows/offing-agent-review-scan.yml) as `.github/workflows/offing-agent-review-scan.yml` and [the fork review template](https://github.com/velella-sh/offing/blob/main/templates/workflows/offing-agent-review-fork.yml) on the default branch. In both jobs use the same full release commit SHA that supports `fork-review-mode`.
+
+The `pull_request` workflow signals a fork PR with an empty permission set. The separate `workflow_run` workflow validates GitHub’s workflow, run, repository and current PR metadata. Its read-only job fetches Git objects, copies only regular file blobs into a private scratch directory, and scans those files with caching disabled. The writer accepts a bounded plan from that job and rechecks the originating run and exact PR revisions before changing GitHub. It never fetches fork objects, checks out code, or downloads a fork artifact. The template posts informational comments and can offer deterministic suggestions. Migration packet artifacts remain part of the same-repository review flow.
+
+Ambiguous, draft, closed, or changed PRs receive no fork review. Fork snapshots exceeding 5,000 regular files or 64 MiB also receive no review.
 
 ### Comment commands
 

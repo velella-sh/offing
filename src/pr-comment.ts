@@ -35,7 +35,7 @@ interface ReviewComment {
 }
 
 export async function githubRequest(
-  target: PullRequestCommentTarget,
+  target: Pick<PullRequestCommentTarget, "apiUrl" | "token">,
   method: string,
   path: string,
   body?: unknown,

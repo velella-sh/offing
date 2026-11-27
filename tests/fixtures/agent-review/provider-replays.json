@@ -1,0 +1,40 @@
+{
+  "fixtureType": "public GitHub actor observations with normalized local replays",
+  "cases": [
+    {
+      "provider": "Claude",
+      "observed": { "pullRequest": "https://github.com/edaubert42/applai/pull/313", "login": "claude[bot]" },
+      "pullRequest": { "user": { "login": "contributor" }, "head": { "ref": "fix/checkout" } },
+      "commitMessage": "Update workflow\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+      "signal": "co-author-trailer"
+    },
+    {
+      "provider": "Copilot",
+      "observed": { "pullRequest": "https://github.com/ThoughtWorksInc/sbt-scala-js-map/pull/217", "login": "Copilot" },
+      "pullRequest": { "user": { "login": "Copilot" }, "head": { "ref": "copilot/update-actions" } },
+      "signal": "author-login"
+    },
+    {
+      "provider": "Codex",
+      "observed": { "pullRequest": "https://github.com/openclaw/openclaw-enterprise/pull/1776", "login": "chatgpt-codex-connector[bot]" },
+      "pullRequest": { "user": { "login": "contributor" }, "head": { "ref": "fix/workflow" } },
+      "commit": {
+        "committer": { "login": "chatgpt-codex-connector[bot]", "type": "Bot" },
+        "commit": { "verification": { "verified": true } }
+      },
+      "signal": "bot-committer"
+    },
+    {
+      "provider": "Jules",
+      "observed": { "pullRequest": "https://github.com/sergey9519546/CREATEYOURTHUMBNAIL/pull/311", "login": "google-labs-jules[bot]" },
+      "pullRequest": { "user": { "login": "google-labs-jules[bot]" }, "head": { "ref": "update-ci" } },
+      "signal": "author-login"
+    },
+    {
+      "provider": "Devin",
+      "observed": { "pullRequest": "https://github.com/nazmijavier/meya-icons/pull/4", "login": "devin-ai-integration[bot]" },
+      "pullRequest": { "user": { "login": "contributor" }, "head": { "ref": "devin/update-actions" } },
+      "signal": "branch-prefix"
+    }
+  ]
+}
