@@ -48,6 +48,12 @@
     },
     "affecting": { "type": "integer", "minimum": 0 },
     "total": { "type": "integer", "minimum": 0 },
+    "predictions": {
+      "description": "Advisory modeled end-of-life dates. Omitted when no predictions are available. Confirmed events and their counts do not include these entries.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/prediction" }
+    },
     "noData": {
       "description": "Components without local lifecycle coverage. Current producers always include this array.",
       "type": "array",
@@ -112,6 +118,37 @@
     }
   },
   "$defs": {
+    "prediction": {
+      "type": "object",
+      "required": ["purl", "date", "interval", "confidence", "method", "sources", "modelVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "purl": {
+          "description": "The versioned Package URL of the component or release line.",
+          "type": "string",
+          "pattern": "^pkg:[a-z][a-z0-9.+-]*/[^@?#\\s]+@[^@?#\\s]+(?:\\?[^#\\s]+)?(?:#[^\\s]+)?$"
+        },
+        "date": { "type": "string", "format": "date", "description": "The modeled point estimate as a UTC calendar date." },
+        "interval": {
+          "description": "Inclusive bounds around the point estimate. Earliest must be on or before the estimate and latest must be on or after it.",
+          "type": "object",
+          "required": ["earliest", "latest"],
+          "additionalProperties": false,
+          "properties": {
+            "earliest": { "type": "string", "format": "date" },
+            "latest": { "type": "string", "format": "date" }
+          }
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "method": { "type": "string", "pattern": "\\S" },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^https://[^/\\s?#]+(?:[/?#][^\\s]*)?$" }
+        },
+        "modelVersion": { "type": "string", "pattern": "\\S" }
+      }
+    },
     "event": {
       "type": "object",
       "required": ["date", "ruleId", "ecosystem", "title", "severity", "source", "findings"],

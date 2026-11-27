@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "ebb.forecast.v1",
+  "root": ".",
+  "today": "2030-01-01",
+  "until": "2031-01-01",
+  "months": 12,
+  "groups": [],
+  "affecting": 0,
+  "total": 0,
+  "predictions": [
+    {
+      "purl": "pkg:generic/example-runtime@3.14",
+      "date": "2030-10-01",
+      "interval": { "earliest": "2030-11-01", "latest": "2030-12-01" },
+      "confidence": 0.8,
+      "method": "Historical release-line cadence",
+      "sources": ["https://example.org/runtime/release-policy"],
+      "modelVersion": "example-model-v1"
+    }
+  ]
+}

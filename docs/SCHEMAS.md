@@ -140,6 +140,8 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/forecast.v1.schema.json)
 
+[Predicted end-of-life contract](https://velella.sh/offing/spec/predicted-eol/v1/)
+
 ::schema-table{data="publicSchemas/forecast" label="Lifecycle forecast fields"}
 
 ### Browser forecast records
