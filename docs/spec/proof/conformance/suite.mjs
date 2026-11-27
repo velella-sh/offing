@@ -7,7 +7,7 @@ import { join } from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-import { prepareProofPublication } from "@velella/offing/proof";
+import { prepareAutopilotProofPublication, prepareProofPublication } from "@velella/offing/proof";
 
 import { fixtures } from "./fixtures.mjs";
 
@@ -53,6 +53,62 @@ async function checkPublication(file, repo) {
   }
 }
 
+async function checkRecordedRun(file, repo) {
+  for (const state of ["done", "stopped"]) {
+    const proof = JSON.parse(await readFile(file, "utf8"));
+    const recordPath = join(root, state + ".run.json");
+    const record = {
+      schemaVersion: "offing.autopilot-run.v1",
+      mode: "prepare",
+      state,
+      transitions: ["scan", "plan", "baseline-tests", "codemods", "agent-turn", "tests", "verify", state],
+      checkout: { id: "Proof1", branch: "offing/autopilot/Proof1", baseCommit: proof.range.base },
+      ...(state === "stopped" ? { stopReason: "fixture-timeout" } : {}),
+    };
+    await writeFile(recordPath, JSON.stringify(record));
+    const secret = "synthetic recorded-run marker";
+    const stdout = "fixture test ran\n";
+    const stderr = state === "stopped" ? "timed out with " + secret : "";
+    const attempt = proof.testRuns[0].attempts[0];
+    attempt.status = state === "done" ? "passed" : "timed-out";
+    attempt.exitCode = state === "done" ? 0 : null;
+    attempt.totals = state === "done" ? attempt.totals : null;
+    attempt.logs.stdout.sha256 = hash(stdout);
+    attempt.logs.stderr.sha256 = hash(stderr);
+    const command = { status: "not-run", exitCode: null, logSha256: null, purpose: "Fixture verification" };
+    proof.verify.commands = ["fixture test", "fixture skipped", "fixture future"].map((text) => ({ ...command, command: text }));
+    const { verify, testRuns, agentRuns, budget, tools } = proof;
+    const { body, files } = await prepareAutopilotProofPublication(JSON.parse(await readFile(recordPath, "utf8")), {
+      repo, verify, testRuns, agentRuns, budget, tools,
+      commandResults: [{ commandIndex: 0, testRunIndex: 0 }, { commandIndex: 1, testRunIndex: null }],
+    }, new Map([[hash(stdout), stdout], [hash(stderr), stderr]]), { FIXTURE_MARKER: secret }, ["FIXTURE_MARKER"]);
+    const output = JSON.parse(files.get("offing-proof.json"));
+    assert.deepEqual(output.range, proof.range);
+    assert.deepEqual(output.agentRuns, proof.agentRuns);
+    assert.equal(output.testRuns[0].attempts[0].status, attempt.status);
+    const combined = "[stdout]\n" + stdout + "\n[stderr]\n" + stderr.replace(secret, "[REDACTED]");
+    assert.deepEqual(output.verify.commands.map(({ status, exitCode, logSha256 }) => [status, exitCode, logSha256]), [
+      [state === "done" ? "passed" : "failed", attempt.exitCode, hash(combined)],
+      ["skipped", null, null],
+      ["not-run", null, null],
+    ]);
+    assert.equal(files.get("offing-log-" + hash(combined) + ".txt"), combined);
+    const human = body.split("<!-- offing-proof:v1 -->")[0];
+    assert.match(human, /Outcome — (done|stopped)[\s\S]*reported turns[\s\S]*Test runs[\s\S]*1 skipped, 1 not run[\s\S]*Budget used/);
+    assert(human.includes("Outcome — " + state));
+    const folder = join(root, state);
+    await mkdir(folder);
+    for (const [name, text] of files) {
+      assert(!text.includes(secret));
+      await writeFile(join(folder, name), text);
+    }
+    for (const result of verifyWithBoth(join(folder, "offing-proof.json"), repo)) {
+      assert.ifError(result.error);
+      assert.equal(result.status, 0, result.stderr);
+    }
+  }
+}
+
 try {
   const { repo, cases } = await fixtures(root);
   for (const { file, variant } of cases) {
@@ -67,9 +123,12 @@ try {
         assert.match(result.stdout, /Proof verified/);
       }
     }
-    if (variant === "valid") await checkPublication(file, repo);
+    if (variant === "valid") {
+      await checkPublication(file, repo);
+      await checkRecordedRun(file, repo);
+    }
   }
-  console.log("acc-proof-bundle: installed and independent verifiers agree on five fixtures and the redacted publication");
+  console.log("acc-proof-bundle: installed and independent verifiers agree on five fixtures, the redacted publication, and green/stopped recorded runs with four command outcomes");
 } finally {
   await rm(root, { recursive: true, force: true });
 }

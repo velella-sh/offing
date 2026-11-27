@@ -1,0 +1,1 @@
+- Build redacted migration proof from a recorded Autopilot run, including verified test outcomes and log digests.

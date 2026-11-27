@@ -101,9 +101,12 @@ function countPaths(output: string): Proof["diff"] {
   return stats;
 }
 
-async function checkDiff(repo: string, { range, diff }: Proof): Promise<void> {
+export async function readProofRange(repo: string, range: Proof["range"]): Promise<Proof["diff"]> {
   await checkCommit(repo, "base", range.base);
   await checkCommit(repo, "head", range.head);
+  await git(repo, ["merge-base", "--is-ancestor", range.base, range.head]).catch(() => {
+    throw mismatch("Proof base commit must be an ancestor of its head commit.");
+  });
   const output = await git(repo, [
     "diff-tree",
     "--no-commit-id",
@@ -122,7 +125,11 @@ async function checkDiff(repo: string, { range, diff }: Proof): Promise<void> {
   ]).catch(() => {
     throw mismatch("Cannot compare the proof commit range in the verification repository.");
   });
-  const actual = countPaths(output);
+  return countPaths(output);
+}
+
+async function checkDiff(repo: string, { range, diff }: Proof): Promise<void> {
+  const actual = await readProofRange(repo, range);
   for (const key of ["added", "changed", "deleted"] as const) {
     if (diff[key] !== actual[key]) throw mismatch(`Proof diff ${key} path count disagrees with Git.`);
   }
