@@ -147,14 +147,6 @@
         {
           "command": "node --version",
           "purpose": "Confirm the active Node.js runtime is supported."
-        },
-        {
-          "command": "npm run build --if-present",
-          "purpose": "Verify the project builds on the target runtime."
-        },
-        {
-          "command": "npm run test --if-present",
-          "purpose": "Run the repository test suite on the target runtime when defined."
         }
       ],
       "data": {
@@ -162,6 +154,22 @@
         "after": "<data: ageDays, createdAt, reviewedThrough, source, stale, version>"
       }
     },
-    "receipt_markdown": "<!-- offing-receipt -->\n## Offing receipt: Findings remain\n\n| Resolved | Remaining | Introduced |\n| --- | --- | --- |\n| 0 | 2 | 0 |\n\n### Resolved\n\n_None._\n\n### Remaining\n\n| Severity | Finding | Location |\n| --- | --- | --- |\n| high | Node\\.js 20 is end\\-of\\-life | \\.github/workflows/ci\\.yml:7 |\n| high | request is deprecated | package\\.json:5 |\n\n### Introduced\n\n_None._\n\n### Suggested commands\n\n```\nnode --version  # Confirm the active Node.js runtime is supported.\nnpm run build --if-present  # Verify the project builds on the target runtime.\nnpm run test --if-present  # Run the repository test suite on the target runtime when defined.\n```\n\nReproduce with: `offing receipt <path> --before <scan.json>`\n"
+    "receipt_markdown": "<!-- offing-receipt -->\n## Offing receipt: Findings remain\n\n| Resolved | Remaining | Introduced |\n| --- | --- | --- |\n| 0 | 2 | 0 |\n\n### Resolved\n\n_None._\n\n### Remaining\n\n| Severity | Finding | Location |\n| --- | --- | --- |\n| high | Node\\.js 20 is end\\-of\\-life | \\.github/workflows/ci\\.yml:7 |\n| high | request is deprecated | package\\.json:5 |\n\n### Introduced\n\n_None._\n\n### Suggested commands\n\n```\nnode --version  # Confirm the active Node.js runtime is supported.\nnpm run build --if-present  # Verify the project builds on the target runtime. …[truncated]",
+    "verifyResultUnavailable": "tool-size-limit",
+    "more": {
+      "truncated": true,
+      "hint": "Call list_deprecations on the same repository_path to see every finding a fresh scan still reports, then explain_deprecation with one id.",
+      "omitted": [
+        {
+          "path": "receipt.commands",
+          "shown": 1,
+          "total": 3
+        }
+      ],
+      "clipped": [
+        "receipt_markdown"
+      ],
+      "estimatedTokens": 1967
+    }
   }
 }

@@ -166,6 +166,12 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/verification" label="Migration verification fields"}
 
+### Verification result
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/verify-result.v1.schema.json)
+
+::schema-table{data="publicSchemas/verify-result" label="Verification result fields"}
+
 ## Internal formats
 
 | Schema | Repository use |

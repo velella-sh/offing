@@ -4,118 +4,42 @@ title: Verification receipts
 
 # Verification receipts
 
-A verification receipt is the deterministic record of what one change did to a repository's lifecycle findings: which a before/after comparison resolved, which remain, and which the change introduced. Offing builds it by comparing two scans. It never edits files and never runs a verification command.
+A verification receipt records what a change resolved, left, or introduced.
+Save a JSON scan outside the repository before making the change, then
+produce the versioned [verification result](https://velella.sh/offing/spec/verify/v1/):
 
 ```bash
-offing receipt [path] --before <scan.json> [--format markdown|json] [--fail-on-introduced]
+offing scan . --json > /tmp/before.json
+# Make and check the migration.
+offing receipt . --before /tmp/before.json --format verify-result > /tmp/verification.json
+offing scan . --json > /tmp/after.json
+node check.mjs /tmp/verification.json /tmp/before.json /tmp/after.json
 ```
 
-The default format is Markdown meant for a pull request body. `--format json` (or `--json`) prints the versioned `offing.receipt.v1` document. With `--fail-on-introduced`, the command exits `1` when the after scan reports findings the before scan did not.
+Download [check.mjs](https://velella.sh/offing/spec/verify/conformance/check.mjs)
+to validate the JSON. Use the same scan options and data for both sides when
+you want to isolate the effect of code changes. `--fail-on-introduced` makes
+the receipt command exit 1 when the change introduces a finding.
 
-Through the local MCP server, `verify_migration` can return the same receipt and `receipt_markdown` when the session already holds a before scan. See [Local MCP server](MCP.md).
+`offing fix . --branch --json` applies deterministic fixes on a local branch,
+commits them, and prints the same verification document. This command keeps
+the commit local. Through the local MCP server, `verify_migration` supplies
+the common document as `verifyResult` alongside its existing fields whenever
+it fits the tool response.
 
-## Reproduce one from `examples/demo`
+## Paste into a pull request
 
-Work on a copy of the demo so the repository tree stays unchanged. Scan first, save the report, remove the deprecated `request` dependency and its import, then ask for a receipt against the saved before scan:
+Run `offing receipt . --before /tmp/before.json` for a Markdown receipt, or
+paste the MCP `receipt_markdown` field. The human-readable summary shows
+findings and suggested commands. Look for the JSON fence immediately after
+`<!-- offing-verify-result:v1 -->` for the machine-readable document.
 
-```bash
-npm ci
-npm run build
-demo="$(node dist/tools/examples.js demo)"
-node dist/src/cli.js scan "$demo" --json > /tmp/offing-demo-before.json
-```
+For a large comparison, the receipt prints an artifact reference. Save the
+full JSON as `offing-verify-result.json` using `--format verify-result`,
+attach it to the associated run, and include a link to that run.
 
-In the copy, clear the `request` dependency and replace its usage:
-
-```json
-{
-  "name": "offing-demo",
-  "private": true,
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {}
-}
-```
-
-```js
-export function fetchStatus(url) {
-  return fetch(url).then((response) => response.status);
-}
-```
-
-Write those contents to `package.json` and `src/client.js`, then:
-
-```bash
-node dist/src/cli.js receipt "$demo" --before /tmp/offing-demo-before.json
-```
-
-That produces the Markdown below. Add `--format json` for the structured document.
-
-## Example Markdown receipt
-
-Real output from the steps above (Markdown escapes punctuation in titles and paths so the block stays paste-safe):
-
-````markdown
-<!-- offing-receipt -->
-## Offing receipt: Partially resolved
-
-| Resolved | Remaining | Introduced |
-| --- | --- | --- |
-| 1 | 4 | 0 |
-
-### Resolved
-
-| Severity | Finding | Location |
-| --- | --- | --- |
-| high | request is deprecated | package\.json:8 |
-
-### Remaining
-
-| Severity | Finding | Location |
-| --- | --- | --- |
-| high | Unsupported actions/checkout runtime | \.github/workflows/ci\.yml:9 |
-| medium | Node\.js 18 is end\-of\-life | package\.json:5 |
-| medium | Node\.js 19 is end\-of\-life | package\.json:5 |
-| medium | Node\.js 20 is end\-of\-life | package\.json:5 |
-
-### Introduced
-
-_None._
-
-### Suggested commands
-
-```
-git diff --check  # Validate the edited workflow diff.
-node --version  # Confirm the active Node.js runtime is supported.
-npm run build --if-present  # Verify imports, types, and the build remain valid.
-npm run test --if-present  # Run HTTP behavior and repository tests when defined.
-```
-
-Reproduce with: `offing receipt "$demo" --before /tmp/offing-demo-before.json`
-````
-
-## What each section means
-
-| Part | Meaning |
-| --- | --- |
-| `<!-- offing-receipt -->` | Marker so a tool can find or replace the block in a pull request body. |
-| Heading verdict | Derived only from the counts: no findings, all resolved, findings remain, partially resolved, or new findings introduced. Introduced wins when any new finding appears. |
-| Counts table | How many findings landed in each list. |
-| Resolved | Present in the before scan and absent after. Matched by finding id. |
-| Remaining | Present in both scans. |
-| Introduced | Present only in the after scan. |
-| Suggested commands | Verification commands named by the rules the comparison touched. Printed for the reader; Offing never runs them. |
-| Reproduce line | The `offing receipt` command that rebuilds this receipt, with the path and `--before` scan it was built from, relative to the working directory. Shows `<path>` and `<scan.json>` when the caller does not know them, as the MCP `receipt_markdown` output does. |
-
-When a list is empty, the section shows `_None._`. When a list has more than five findings, the Markdown collapses it into a `<details>` block.
-
-## JSON contract
-
-`--format json` prints the same comparison as `offing.receipt.v1`. The schema is [`schemas/receipt.v1.schema.json`](../schemas/receipt.v1.schema.json). Each finding entry keeps `id`, `rule`, `title`, `severity`, repository-relative `path`, and optional `line` — enough to join the finding in a `scan --json` report, not the whole finding. `data.before` and `data.after` record the lifecycle data each side used, or `null` when a scan did not.
-
-The same two scans always produce the same receipt: comparison is by finding id, lists are sorted, and the builder reads no clock and no environment.
-
-## Safety
-
-`receipt` reads the `--before` scan file and re-scans the path locally. It does not use the network, does not evaluate repository code, and does not execute suggested commands. A migration is complete only after the project's own tests pass and a fresh scan no longer reports the findings you meant to clear.
+`--format json` and `--json` still print the deprecated
+`offing.receipt.v1` document. See the [stability policy](https://velella.sh/offing/STABILITY/) for the
+deprecation window. Offing compares the scans locally and leaves suggested
+commands for you to run. The separate `offing verify` command checks the
+integrity of the installed Offing release.

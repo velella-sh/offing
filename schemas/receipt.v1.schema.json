@@ -2,6 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://velella.sh/offing/schemas/receipt.v1.schema.json",
   "title": "Offing verification receipt v1",
+  "deprecated": true,
+  "$comment": "Deprecated in Offing 0.1.4. Use https://velella.sh/offing/schemas/verify-result.v1.schema.json for new integrations.",
   "description": "What one change did to a repository's findings: which a before/after comparison resolved, which remain, which it introduced, and which verification commands the touched rules name. Reading and comparing scans only; no command is run.",
   "type": "object",
   "required": ["schema", "counts", "resolved", "remaining", "introduced", "commands", "data"],

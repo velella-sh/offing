@@ -42,6 +42,12 @@ Look for deprecations and their replacements in the
 documentation for the affected format. Deprecation notices describe the old
 contract, the replacement, and the earliest release that can remove it.
 
+The `offing.receipt.v1` and `offing.verification.v1` documents are deprecated
+in Offing 0.1.4. Both remain available during the notice release. New
+integrations should use [offing.verify-result.v1](https://velella.sh/offing/spec/verify/v1/). The
+replacement is available as `offing receipt --format verify-result`,
+`offing fix --branch --json`, and the MCP `verifyResult` field.
+
 ## Schema identifiers
 
 Resolve references using the schema set shipped in the same npm package as

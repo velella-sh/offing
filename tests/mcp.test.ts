@@ -193,13 +193,13 @@ test("local MCP server exposes the complete scan-to-verification workflow", asyn
     assert.deepEqual(
       [...verificationSchema.required].sort(),
       Object.keys(verificationContent)
-        .filter((key) => key !== "receipt" && key !== "receipt_markdown")
+        .filter((key) => !["receipt", "receipt_markdown", "verifyResult"].includes(key))
         .sort(),
     );
     assert.deepEqual(
       // `more` is declared by every schema and returned only when the token cap cut the answer.
       Object.keys(verificationSchema.properties)
-        .filter((key) => key !== "more")
+        .filter((key) => key !== "more" && key !== "verifyResultUnavailable")
         .sort(),
       Object.keys(verificationContent).sort(),
       "every field the tool returns is declared by the published schema",

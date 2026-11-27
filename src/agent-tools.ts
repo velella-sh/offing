@@ -14,6 +14,7 @@ import { readPinnedRuntimes } from "./runtime-pin.js";
 import { runScanRequest } from "./scan-request.js";
 import type { MigrationPacket } from "./migration-packet.js";
 import { OffingError } from "./offing-error.js";
+import { buildVerifyResult, identifyScan, type VerifyResult } from "./verify-result.js";
 
 /** A finding reduced to what a list of deprecations shows. */
 export interface DeprecationSummary {
@@ -51,6 +52,7 @@ export interface MigrationVerification {
   receipt?: Receipt;
   /** `receipt` rendered for a pull request body. */
   receipt_markdown?: string;
+  verifyResult?: VerifyResult;
 }
 
 /** A finding observed in this session, with the repository it came from. */
@@ -89,8 +91,7 @@ export class OffingAgentTools {
       root: repositoryPath,
       ...(baselinePath ? { baselinePath } : {}),
     });
-    this.remember(result);
-    return result;
+    return this.remember(result);
   }
 
   /** Scan once and preserve the finding references exposed by the forecast tool. */
@@ -100,7 +101,7 @@ export class OffingAgentTools {
       ...(asOf === undefined ? {} : { today: asOf, engine: replayScanOptions(asOf) }),
     });
     const forecast = await buildRepositoryForecast(result, months);
-    this.remember(result);
+    await this.remember(result);
     return forecast;
   }
 
@@ -147,9 +148,10 @@ export class OffingAgentTools {
     const remainingFindings = result.findings.filter(
       (finding) => finding.ruleId === observed.ruleId && finding.location.path === observed.location.path,
     );
-    this.remember(result);
+    const after = await this.remember(result);
     const verified = remainingFindings.length === 0;
-    const receipt = before ? buildReceipt(before, result) : undefined;
+    const receipt = before ? buildReceipt(before, after) : undefined;
+    const verifyResult = before && receipt ? buildVerifyResult(receipt, before, after) : undefined;
     const suggestedCommands = [
       ...(observed.migration?.verification ?? []),
       {
@@ -172,7 +174,9 @@ export class OffingAgentTools {
         : `A fresh local scan still reports ${remainingFindings.length} matching deprecation${remainingFindings.length === 1 ? "" : "s"}.`,
       remainingFindings,
       suggestedCommands,
-      ...(receipt ? { receipt, receipt_markdown: renderReceiptMarkdown(receipt) } : {}),
+      ...(receipt && verifyResult
+        ? { receipt, receipt_markdown: renderReceiptMarkdown(receipt, { verifyResult }), verifyResult }
+        : {}),
     };
   }
 
@@ -196,8 +200,9 @@ export class OffingAgentTools {
     return this.observedFindings().find((entry) => entry.repositoryKey === key && entry.finding.id === findingId);
   }
 
-  private remember(result: ScanResult): void {
-    this.lastScan.set(result.root, result);
+  private async remember(result: ScanResult): Promise<ScanResult> {
+    const identified = await identifyScan(result);
+    this.lastScan.set(result.root, identified);
     const findings = this.observed.get(result.root) ?? new Map<string, Finding>();
     for (const finding of result.findings) {
       const previous = findings.get(finding.id);
@@ -206,5 +211,6 @@ export class OffingAgentTools {
       }
     }
     this.observed.set(result.root, findings);
+    return identified;
   }
 }
