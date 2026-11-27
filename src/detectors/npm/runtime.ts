@@ -1,4 +1,4 @@
-import { resolve } from "node:path";
+import { basename, resolve } from "node:path";
 
 import semver from "semver";
 
@@ -219,7 +219,7 @@ export function judgeRuntimeDeclarations(
       declaration.value,
       newestRuleMajor,
       (major) => ruleForMajor(endedRules, major) !== undefined,
-      declaration.path.endsWith("/.tool-versions") ? [] : scheduledMajors,
+      basename(declaration.path) === ".tool-versions" ? [] : scheduledMajors,
     );
     for (const major of majors) {
       const rule = ruleForMajor([...nodeRules], major);
