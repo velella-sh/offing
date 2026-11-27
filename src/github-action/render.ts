@@ -294,7 +294,7 @@ export function renderSummary(
 ): string {
   const lines = ["## Offing", "", renderOverview(findings, failed, gate, diff, packages), ""];
   if (countdown) lines.push(...renderPrCountdown(countdown));
-  if (agent) lines.push(...renderAgentSection(agent.findings));
+  if (agent) lines.push(...renderAgentSection(agent.findings, agent.attribution));
   appendTimeline(lines, findings, countdown);
   appendFindingSections(lines, findings, packages);
   appendDiffSection(lines, diff);

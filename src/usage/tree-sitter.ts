@@ -13,7 +13,8 @@ import { required } from "../required.js";
 // package contains no binary artifact; `manifest.json` records the upstream source and SHA-256 of each.
 // The runtime is `.cjs` so Node treats it as CommonJS inside this `"type": "module"` package.
 const nodeRequire = createRequire(import.meta.url);
-const vendorDirectory = dirname(fileURLToPath(new URL("./vendor/tree-sitter/tree-sitter.cjs", import.meta.url)));
+const vendorRuntime = fileURLToPath(new URL("./vendor/tree-sitter/tree-sitter.cjs", import.meta.url));
+const vendorDirectory = dirname(vendorRuntime);
 
 type TreeSitter = typeof import("./vendor/tree-sitter/tree-sitter.js");
 
@@ -46,7 +47,7 @@ async function loadPayload(directory: string, file: string): Promise<Uint8Array>
 
 function loadRuntime(): Promise<{ module: TreeSitter; directory: string }> {
   runtime ??= (async () => {
-    const module = nodeRequire(join(vendorDirectory, "tree-sitter.cjs")) as TreeSitter;
+    const module = nodeRequire(vendorRuntime) as TreeSitter;
     const wasmBinary = await loadPayload(vendorDirectory, "tree-sitter.wasm");
     // `wasmBinary` is an Emscripten module option the published typings do not expose. Supplying it
     // means the runtime instantiates the decoded payload and never reads a `.wasm` file.

@@ -40,6 +40,7 @@ async function fixtureRepository(): Promise<string> {
 async function runActionFixture(
   root: string,
   inputs: Record<string, string> = {},
+  entry = resolve("dist/src/action.js"),
 ): Promise<{ code: number; stdout: string; outputs: string; summary: string }> {
   const runner = join(root, ".runner");
   const output = join(runner, "outputs.txt");
@@ -47,7 +48,7 @@ async function runActionFixture(
   await mkdir(runner, { recursive: true });
   await Promise.all([writeFile(output, ""), writeFile(summary, "")]);
 
-  const child = spawn(process.execPath, [resolve("dist/src/action.js")], {
+  const child = spawn(process.execPath, [entry], {
     env: {
       ...process.env,
       GITHUB_WORKSPACE: root,
@@ -705,6 +706,70 @@ test("mode: diff reads the pull request base and head from the event payload", a
   assert.match(run.summary, /Fixed by this pull request: \*\*0\*\* findings \(0 unchanged\)\./);
   assert.match(run.stdout, /1 finding met or exceeded the high severity gate/);
   assert.match(run.outputs, /finding-count=1/);
+});
+
+test("mode: diff uses a reserved agent branch only when the pull request is from the same repository", async () => {
+  const { root, base, head } = await gitRepositoryWithFinding();
+  const eventPath = join(root, "event.json");
+  for (const repository of ["owner/project", "fork/project"]) {
+    await writeFile(
+      eventPath,
+      JSON.stringify({
+        pull_request: {
+          user: { login: "octocat" },
+          base: { sha: base, repo: { full_name: "owner/project" } },
+          head: { sha: head, ref: "codex/update-fixture", repo: { full_name: repository } },
+        },
+      }),
+    );
+    const run = await runActionFixture(root, { INPUT_MODE: "diff", GITHUB_EVENT_PATH: eventPath });
+    assert.equal(run.summary.includes("Agent attribution: branch-prefix."), repository === "owner/project");
+  }
+});
+
+test("acc-ai-pr-review reports committed source and dependency findings through the Action entry point", async () => {
+  const { root, head: base } = await gitRepositoryWithFinding();
+  await writeFile(join(root, "example.ts"), "export const outdated = new Buffer(3);\n");
+  await writeFile(join(root, "example.py"), "import imp\nimp.reload(existing)\n");
+  await writeFile(join(root, "package.json"), '{\n  "dependencies": { "request": "2.88.2" }\n}\n');
+  git(root, ["add", "."]);
+  git(root, ["commit", "-q", "-m", "add stale symbols and a deprecated dependency"]);
+  const head = git(root, ["rev-parse", "HEAD"]).trim();
+  const eventPath = join(root, "event.json");
+  await writeFile(
+    eventPath,
+    JSON.stringify({
+      pull_request: {
+        user: { login: "Copilot" },
+        base: { sha: base },
+        head: { sha: head },
+      },
+    }),
+  );
+  const run = await runActionFixture(
+    root,
+    {
+      INPUT_MODE: "diff",
+      GITHUB_EVENT_PATH: eventPath,
+      "INPUT_FAIL-ON-SEVERITY": "none",
+      OFFING_DATA_VERSION: "bundled",
+    },
+    process.env.OFFING_ACTION_FOR_REVIEW_TEST,
+  );
+  assert.equal(run.code, 0);
+  assert.match(run.summary, /Agent attribution: author-login\./u);
+  const report = JSON.parse(await readFile(join(root, ".runner", "offing-report.json"), "utf8")) as {
+    findings: Finding[];
+  };
+  assert.deepEqual(
+    report.findings.map(({ ruleId, location }) => [ruleId, location.path, location.line]),
+    [
+      ["nodejs.symbol.buffer.constructor", "example.ts", 1],
+      ["npm.package.request.deprecated", "package.json", 2],
+      ["python.module.imp.removed", "example.py", 1],
+      ["python.symbol.imp.reload", "example.py", 2],
+    ],
+  );
 });
 
 test("mode: diff falls back to a scan outside pull request events", async () => {

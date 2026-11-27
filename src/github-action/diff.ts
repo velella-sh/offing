@@ -27,7 +27,7 @@ export function parseChangedLines(diff: string): Map<string, LineRange[]> {
       inHunk = false;
     }
     if (!inHunk && line.startsWith("+++ ")) {
-      const header = unquotePath(line.slice(4).trim());
+      const header = unquotePath(line.slice(4).replace(/\t?\r?$/u, ""));
       path = header === "/dev/null" ? undefined : header.replace(/^b\//, "");
       continue;
     }
@@ -62,7 +62,19 @@ export function changedLines(root: string, range: string): Map<string, LineRange
   try {
     const output = execFileSync(
       "git",
-      ["-c", "core.quotePath=false", "diff", "--unified=0", "--no-color", "--no-ext-diff", "--no-textconv", range],
+      [
+        "-c",
+        "core.quotePath=false",
+        "diff",
+        "--relative",
+        "--find-renames",
+        "--unified=0",
+        "--no-color",
+        "--no-ext-diff",
+        "--no-textconv",
+        range,
+        "--",
+      ],
       {
         cwd: root,
         encoding: "utf8",

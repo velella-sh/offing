@@ -1,0 +1,1 @@
+- The GitHub Action's diff report now finds deprecated APIs on changed JavaScript, TypeScript and Python lines, locates newly added npm dependencies at their declarations, and records the evidence used to attribute a PR to a coding agent.

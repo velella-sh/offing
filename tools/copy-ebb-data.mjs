@@ -1,4 +1,4 @@
-// Copies the data files @velella/ebb reads at run time next to the GitHub Action bundle.
+// Copies the data files @velella/ebb and Offing's source parsers read at run time next to the GitHub Action bundle.
 //
 // ncc inlines Ebb's code into dist/action/index.js but not the JSON it reads from disk. The Action runs from a
 // checkout of this repository with no node_modules, so Ebb finds its registries and the Sigstore trusted root only
@@ -6,7 +6,7 @@
 //
 //   node tools/copy-ebb-data.mjs <bundle directory>
 
-import { cp, mkdir, rm } from "node:fs/promises";
+import { cp, mkdir, readdir, rm } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -31,6 +31,18 @@ export async function copyEbbData(destination, source = ebbPackageDirectory()) {
   await cp(join(source, "data", "sigstore-trusted-root.json"), join(destination, "data", "sigstore-trusted-root.json"));
 }
 
+async function copySourceParserAssets(destination) {
+  const vendor = new URL("../src/usage/vendor/tree-sitter/", import.meta.url);
+  const payloads = (await readdir(vendor)).filter((file) => file.endsWith(".wasm.b64"));
+  // ncc relocates the runtime into the bundle directory. The parser opens grammar files beside it.
+  await Promise.all([
+    ...payloads.map((file) => cp(new URL(file, vendor), join(destination, file))),
+    cp(new URL("LICENSE", vendor), join(destination, "tree-sitter-LICENSE")),
+    cp(new URL("manifest.json", vendor), join(destination, "tree-sitter-manifest.json")),
+    cp(new URL("../src/usage/queries/", import.meta.url), join(destination, "queries"), { recursive: true }),
+  ]);
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const destination = process.argv[2];
   if (!destination) {
@@ -38,4 +50,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exit(2);
   }
   await copyEbbData(destination);
+  await copySourceParserAssets(destination);
 }

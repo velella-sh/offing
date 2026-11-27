@@ -79,9 +79,9 @@ async function isFile(path: string): Promise<boolean> {
 const strings = (value: unknown): string[] =>
   Array.isArray(value) ? value.filter((item): item is string => typeof item === "string" && item.length > 0) : [];
 
-async function npmPatterns(root: string): Promise<string[]> {
+/** Reads workspace patterns from npm, pnpm and Lerna configuration text. */
+export function npmWorkspacePatterns(manifest?: string, pnpm?: string, lerna?: string): string[] {
   const patterns: string[] = [];
-  const manifest = await readText(join(root, "package.json"));
   if (manifest) {
     try {
       const parsed = JSON.parse(manifest) as { workspaces?: unknown };
@@ -95,7 +95,6 @@ async function npmPatterns(root: string): Promise<string[]> {
       // A manifest that does not parse declares no workspaces.
     }
   }
-  const pnpm = await readText(join(root, "pnpm-workspace.yaml"));
   if (pnpm) {
     try {
       patterns.push(...strings((parseYaml(pnpm) as { packages?: unknown } | null)?.packages));
@@ -103,7 +102,6 @@ async function npmPatterns(root: string): Promise<string[]> {
       // Same: unreadable means none.
     }
   }
-  const lerna = await readText(join(root, "lerna.json"));
   if (lerna) {
     try {
       patterns.push(...strings((JSON.parse(lerna) as { packages?: unknown }).packages));
@@ -112,6 +110,14 @@ async function npmPatterns(root: string): Promise<string[]> {
     }
   }
   return patterns;
+}
+
+async function npmPatterns(root: string): Promise<string[]> {
+  return npmWorkspacePatterns(
+    await readText(join(root, "package.json")),
+    await readText(join(root, "pnpm-workspace.yaml")),
+    await readText(join(root, "lerna.json")),
+  );
 }
 
 async function pythonPatterns(root: string): Promise<{ include: string[]; exclude: string[] }> {
