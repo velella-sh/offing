@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict";
 import { readFile, realpath } from "node:fs/promises";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 
 const schema = "offing.verify-result.v1";
 const groups = ["resolved", "remaining", "introduced"];
@@ -134,7 +134,12 @@ async function main(args) {
   console.log(`acc-verify-contract: ${args.length === 3 ? "validated and rebuilt from two scans" : "valid document"}`);
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(await realpath(process.argv[1])).href) {
+const invokedDirectly =
+  import.meta.main ??
+  (process.argv[1] !== undefined &&
+    (await realpath(process.argv[1]).catch(() => undefined)) === (await realpath(fileURLToPath(import.meta.url))));
+
+if (invokedDirectly) {
   main(process.argv.slice(2)).catch((error) => {
     console.error(`acc-verify-contract: ${error.message}`);
     process.exitCode = 1;
