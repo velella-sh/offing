@@ -81,10 +81,10 @@ If you omit the `github-token` secret, the workflow falls back to the caller's `
 
 Add one workflow to the caller repository. It calls
 [`.github/workflows/org-scan.yml`](../.github/workflows/org-scan.yml),
-which runs `offing fleet` in one job. The examples target the `v0.1.6`
-release tag. Before publication, use the full SHA of an Offing candidate
-commit that contains the fleet workflow. The workflow builds Offing from
-the source and lockfile at its own commit. If you pass the optional
+which runs `offing fleet` in one job. The examples target the `v0.1.2`
+release tag once it is published. Before publication, use the full SHA of an
+Offing candidate commit that contains the fleet workflow. The workflow builds
+Offing from the source and lockfile at its own commit. If you pass the optional
 `offing-ref` input, set it to the full SHA of that same commit.
 
 Create `.github/workflows/offing-org-scan.yml`:
@@ -102,7 +102,7 @@ permissions:
 
 jobs:
   org-scan:
-    uses: velella-sh/offing/.github/workflows/org-scan.yml@v0.1.6
+    uses: velella-sh/offing/.github/workflows/org-scan.yml@v0.1.2
     with:
       organization: your-org
       fail-on-severity: high
@@ -122,10 +122,11 @@ gh run watch <run-id> --repo your-org/your-ops-repo
 ```
 
 The fleet job writes per-repository progress and a final digest, uploads
-`offing-fleet`, then applies the severity gate. Scan failures appear in the
-report alongside successful repositories. The gate checks findings from
-completed scans. Review failed repositories in the summary and retry when
-their branch or contents are accessible.
+`reports/fleet.json` as `offing-fleet`, then applies the severity gate.
+Scan failures appear in the report alongside successful repositories.
+The gate checks severity counts from scanned and cached results. Review
+failed repositories in the summary and retry when their branch or contents
+are accessible.
 
 | Input | Default | Meaning |
 | --- | --- | --- |
@@ -151,8 +152,8 @@ A baseline records findings you have reviewed and accepted. It is usually a file
 Run this in the repository whose findings you are accepting:
 
 ```bash
-npx @velella/offing@0.1.6 scan . --fail-on none
-npx @velella/offing@0.1.6 baseline . --output .offing-baseline.json
+npx @velella/offing@0.1.2 scan . --fail-on none
+npx @velella/offing@0.1.2 baseline . --output .offing-baseline.json
 ```
 
 The second command writes one entry per current finding and keeps the file's history when it already exists, so running it again updates the file instead of starting over:
@@ -172,7 +173,7 @@ git commit -m "chore: accept current Offing findings"
 A scan that uses the baseline now hides exactly those findings:
 
 ```bash
-npx @velella/offing@0.1.6 scan . --baseline .offing-baseline.json --fail-on high
+npx @velella/offing@0.1.2 scan . --baseline .offing-baseline.json --fail-on high
 ```
 
 ```text
@@ -200,7 +201,7 @@ Every entry can carry optional context. These fields never change what is suppre
 `owner` and `reason` are non-empty text up to 500 characters. `created` and `expires` are `YYYY-MM-DD` calendar dates, and `expires` cannot be before `created`. Expired suppressions stop hiding their finding; a scan also warns 14 days before an expiry unless you change the window:
 
 ```bash
-npx @velella/offing@0.1.6 scan . --baseline .offing-baseline.json --baseline-warn-days 30
+npx @velella/offing@0.1.2 scan . --baseline .offing-baseline.json --baseline-warn-days 30
 ```
 
 `--on-expired resurface` (the default) reports the finding again after its expiry day. `--on-expired fail` reports it and also fails the scan. See the [baseline format](GITHUB_ACTION.md#pull-request-workflow) for the full field reference.
@@ -212,7 +213,7 @@ The baseline only takes effect where a workflow passes it to the Action or the r
 ```yaml
 jobs:
   lifecycle:
-    uses: velella-sh/offing/.github/workflows/offing-reusable.yml@v0.1.6
+    uses: velella-sh/offing/.github/workflows/offing-reusable.yml@v0.1.2
     with:
       baseline: .offing-baseline.json
       fail-on-severity: high
@@ -221,7 +222,7 @@ jobs:
 Or pass the same inputs on the Action step directly:
 
 ```yaml
-- uses: velella-sh/offing@v0.1.6
+- uses: velella-sh/offing@v0.1.2
   with:
     baseline: .offing-baseline.json
     fail-on-severity: high
@@ -237,7 +238,7 @@ accepting its first report.
 A shared baseline can be combined with the repository's own on the command line:
 
 ```bash
-npx @velella/offing@0.1.6 scan . \
+npx @velella/offing@0.1.2 scan . \
   --baseline ../org-config/offing-baseline.json \
   --baseline .offing-baseline.json
 ```
@@ -248,13 +249,14 @@ npx @velella/offing@0.1.6 scan . \
 
 Download the run's `offing-fleet` artifact. It contains a single fleet
 report with per-repository branch, commit, status and failure reason.
-Use the CLI from the same release or [candidate commit](FLEET.md) for
-the local rollup commands.
+Use the CLI from the same release for the local rollup commands.
+Before publication, use the local binary from the
+[candidate installation](FLEET.md) in place of the `npx` command.
 
 ```sh
 gh run download <run-id> --repo your-org/your-ops-repo --name offing-fleet --dir org-reports
-npx @velella/offing@0.1.6 rollup org-reports/fleet.json
-npx @velella/offing@0.1.6 rollup org-reports/fleet.json --owners owners.json --html > report.html
+npx @velella/offing@0.1.2 rollup org-reports/fleet.json
+npx @velella/offing@0.1.2 rollup org-reports/fleet.json --owners owners.json --html > report.html
 ```
 
 Map full repository names such as `your-org/sample-api` to teams in
@@ -275,7 +277,7 @@ Enable one or both webhooks by adding the secrets and passing them from the call
 ```yaml
 jobs:
   org-scan:
-    uses: velella-sh/offing/.github/workflows/org-scan.yml@v0.1.6
+    uses: velella-sh/offing/.github/workflows/org-scan.yml@v0.1.2
     with:
       organization: your-org
     secrets:
@@ -324,14 +326,14 @@ Run the workflow by hand and confirm the message arrives in the channel:
 gh workflow run offing-org-scan.yml --repo your-org/your-ops-repo
 ```
 
-The workflow truncates the digest to Slack's 3,000-character section limit, adding a `…truncated` marker. Keep the channel to the summary and use the artifacts or the [rollup page](#optional-publish-one-page) for the full list.
+The workflow truncates the digest to Slack's 3,000-character section limit, adding a `…truncated` marker. Keep the channel to the summary and use the artifacts or the [rollup page](#4-read-the-report-artifacts) for the full list.
 
 ## 6. Offer the starter from the organization's `.github` repository
 
 So each repository can add Offing from the Actions **New workflow** gallery instead of pasting YAML by hand, put the starter in the organization's [`.github` repository](https://docs.github.com/en/actions/sharing-automations/creating-workflow-templates-for-your-organization):
 
 1. Create `your-org/.github` if it does not exist.
-2. Copy both files from [`templates/workflows/`](../templates/workflows/) into that repository:
+2. Copy both files from [`templates/workflows/`](https://github.com/velella-sh/offing/tree/main/templates/workflows) into that repository:
 
 ```text
 workflow-templates/offing.yml
@@ -340,7 +342,7 @@ workflow-templates/offing.properties.json
 
 3. Commit them on the default branch. The next time someone opens **Actions → New workflow** in a repository of the organization, **Offing lifecycle scan** appears in the list.
 
-Pin the copied starter to `v0.1.6` as shown below. It grants only
+Pin the copied starter to `v0.1.2` as shown below. It grants only
 `contents: read` and runs on pull requests, pushes to the default branch,
 a weekly schedule, and manual dispatch.
 
@@ -365,7 +367,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: velella-sh/offing@v0.1.6
+      - uses: velella-sh/offing@v0.1.2
         with:
           upload-report: "false"
 ```
@@ -376,7 +378,7 @@ GitHub substitutes `$default-branch` when someone creates the workflow from the 
 
 The organization-scan workflow covers every repository on a schedule. To put a pull-request workflow in every repository without waiting for each team to open the gallery, Offing can open the adoption pull requests for you. Offing lands best as one reviewed change per repository. The rollout tool (`tools/org-rollout.ts`) turns that into a single step: it lists the target repositories, shows exactly what it would change, and only opens pull requests when you explicitly ask for it. Nothing is ever pushed directly to a default branch, and scans stay offline: the tool's own network calls are GitHub API calls, never repository analysis.
 
-Run it from a checkout of this repository:
+Run it from a checkout of the release tag or candidate commit:
 
 ```bash
 npm ci
@@ -392,14 +394,14 @@ npm run org:rollout -- --repos acme/api,acme/web       # a specific repository l
 For every target repository (non-archived, not a fork, with a default branch) it:
 
 1. Checks whether any existing workflow under `.github/workflows/` already invokes `velella-sh/offing`. If one does, the repository is skipped, so reapplication can never stack duplicate workflows.
-2. Resolves the action version to pin. Pass `--action-ref v0.1.6` for a fixed version; otherwise the tool pins the repository's latest release tag.
+2. Resolves the action version to pin. Pass `--action-ref v0.1.2` for a fixed version; otherwise the tool pins the repository's latest release tag.
 3. Prints the plan: each repository with `pull-request` or `skip`, the totals, and the full workflow file that would be added. **Without `--apply` this is the whole run.**
 4. With `--apply`, and a token with write access, it opens one pull request per repository. The pull request creates the branch, adds `.github/workflows/offing.yml` (the workflow in [GitHub Action](GITHUB_ACTION.md)), and opens the pull request against the default branch.
 
 The generated workflow runs the scan on pull requests, on a weekly schedule (`--schedule`, default `0 4 * * 1`), and on demand via `workflow_dispatch`. It needs no configuration: read-only permissions, no secrets, findings as annotations, and a `high` severity gate. To accept existing findings, commit the baseline from [step 3](#3-accept-existing-findings-with-a-baseline) and add the `baseline` input to the generated workflow in the same pull request:
 
 ```yaml
-- uses: velella-sh/offing@v0.1.6
+- uses: velella-sh/offing@v0.1.2
   with:
     baseline: .offing-baseline.json
     fail-on-severity: high
@@ -429,7 +431,7 @@ Without the input, the Action reports every finding even though the baseline fil
 The report and opt-in owner digest artifacts request 14 days of retention,
 subject to the caller repository's retention limit. Download or roll up
 reports before they expire to keep a longer history. You can also publish
-the [rollup page](#optional-publish-one-page) from a workflow that runs
+the [rollup page](#4-read-the-report-artifacts) from a workflow that runs
 alongside the scan.
 
 ## Troubleshooting
