@@ -22,7 +22,7 @@ interface ConfigDiagnostic extends Position {
   suggestion: string;
 }
 
-interface ConfigValidationResult {
+export interface ConfigValidationResult {
   schemaVersion: "offing.config-validation.v1";
   file: string | null;
   valid: boolean;
@@ -30,6 +30,7 @@ interface ConfigValidationResult {
 }
 
 type Issue = Omit<ConfigDiagnostic, "file" | "line" | "column">;
+type InspectedSource = { diagnostics: ConfigDiagnostic[]; value?: unknown };
 
 let schemaValidator: Promise<ValidateFunction<unknown>> | undefined;
 
@@ -176,17 +177,24 @@ function limitDiagnostic(file: string, detail: string): ConfigDiagnostic {
   });
 }
 
-async function validateText(file: string, text: string): Promise<ConfigDiagnostic[]> {
+async function validateText(file: string, text: string): Promise<InspectedSource> {
   const parsed = parseBoundedJson(text);
-  if (parsed?.skipped) return [limitDiagnostic(file, parsed.skipped.detail)];
+  if (parsed?.skipped) return { diagnostics: [limitDiagnostic(file, parsed.skipped.detail)] };
   const locations = sourceLocations(text, file);
-  if (!parsed) return locations.errors.length > 0 ? locations.errors : [diagnostic(file, syntaxIssue("Invalid JSON."))];
+  if (!parsed) {
+    return {
+      diagnostics: locations.errors.length > 0 ? locations.errors : [diagnostic(file, syntaxIssue("Invalid JSON."))],
+    };
+  }
   const validate = await (schemaValidator ??= compileSchema());
-  validate(parsed.value);
-  return [
-    ...(validate.errors ?? []).map((error) => schemaDiagnostic(file, error, locations)),
-    ...deprecations(file, locations.keys),
-  ].sort((left, right) => left.line - right.line || left.column - right.column);
+  const valid = validate(parsed.value);
+  return {
+    diagnostics: [
+      ...(validate.errors ?? []).map((error) => schemaDiagnostic(file, error, locations)),
+      ...deprecations(file, locations.keys),
+    ].sort((left, right) => left.line - right.line || left.column - right.column),
+    ...(valid ? { value: parsed.value } : {}),
+  };
 }
 
 function unreadable(file: string, detail: string): ConfigDiagnostic {
@@ -199,16 +207,16 @@ function unreadable(file: string, detail: string): ConfigDiagnostic {
   });
 }
 
-async function inspectFile(file: string): Promise<ConfigDiagnostic[]> {
+async function inspectFile(file: string): Promise<InspectedSource> {
   let input: Awaited<ReturnType<typeof readBoundedFile>>;
   try {
-    if (!(await stat(file)).isFile()) return [unreadable(file, "Config path is not a regular file.")];
+    if (!(await stat(file)).isFile()) return { diagnostics: [unreadable(file, "Config path is not a regular file.")] };
     input = await readBoundedFile(file);
   } catch (error) {
-    return [unreadable(file, error instanceof Error ? error.message : String(error))];
+    return { diagnostics: [unreadable(file, error instanceof Error ? error.message : String(error))] };
   }
-  if (!input) return [unreadable(file, "Config file does not exist.")];
-  if (input.skipped) return [limitDiagnostic(file, input.skipped.detail)];
+  if (!input) return { diagnostics: [unreadable(file, "Config file does not exist.")] };
+  if (input.skipped) return { diagnostics: [limitDiagnostic(file, input.skipped.detail)] };
   return validateText(file, input.contents);
 }
 
@@ -221,25 +229,30 @@ async function explicitConfigPath(path: string): Promise<string> {
 
 /** Validate one explicit file/directory or discover the current project's config. */
 export async function inspectConfig(path?: string): Promise<ConfigValidationResult> {
-  return path === undefined ? inspectDiscoveredConfig(".") : inspectResolvedConfig(await explicitConfigPath(path));
+  const inspected =
+    path === undefined
+      ? await inspectDiscoveredConfig(".")
+      : await inspectResolvedConfig(await explicitConfigPath(path));
+  return inspected.report;
 }
 
-/** Use the same discovery rules as the scan command, including when doctor is pointed at a project file. */
-export async function inspectDiscoveredConfig(path: string): Promise<ConfigValidationResult> {
+/** Use the scan discovery rules. The valid source value is for local callers, separately from the public report. */
+export async function inspectDiscoveredConfig(path: string) {
   const absolute = resolve(path);
   const info = await stat(absolute).catch(() => undefined);
   const start = info?.isFile() ? dirname(absolute) : absolute;
   return inspectResolvedConfig((await findConfigFile(start)) ?? null);
 }
 
-async function inspectResolvedConfig(file: string | null): Promise<ConfigValidationResult> {
-  const diagnostics = file === null ? [] : await inspectFile(file);
-  return {
+async function inspectResolvedConfig(file: string | null) {
+  const { diagnostics, value } = file === null ? { diagnostics: [], value: undefined } : await inspectFile(file);
+  const report: ConfigValidationResult = {
     schemaVersion: "offing.config-validation.v1",
     file,
     valid: diagnostics.every((item) => item.severity !== "error"),
     diagnostics,
   };
+  return { report, value };
 }
 
 export function renderConfigDiagnostic({

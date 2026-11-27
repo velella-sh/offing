@@ -1,0 +1,1 @@
+- Show the same configured test commands in doctor and Autopilot previews, and use a lockfile-preserving install flag for Yarn Classic.
