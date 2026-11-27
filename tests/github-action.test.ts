@@ -661,3 +661,17 @@ test("pr-comment shares its countdown with a fork summary and uploads the before
   const sameRepository = await runAction(root, { ...env, "INPUT_GITHUB-TOKEN": "" });
   assert.equal(sameRepository.summary, fork.summary);
 });
+
+test("runGitHubAction scans an SBOM with the usual gate and rejects mixed scan modes", async () => {
+  const root = await mkdtemp(join(tmpdir(), "offing-action-sbom-"));
+  temporaryRoots.push(root);
+  const sbom = "consumer.sbom.json";
+  await writeFile(join(root, sbom), await readFile("examples/sbom/image.cdx.json"));
+  const options = { root, sbom, reportPath: join(root, "report.json"), failOnSeverity: "info" as const };
+  const action = await runGitHubAction(options);
+  assert.equal(action.gateFailed, true);
+  assert.equal(action.result.findings[0]?.ruleId, "npm.package.request.deprecated");
+  assert.deepEqual(action.result.findings[0]?.location, { path: sbom, jsonPointer: "/components/0" });
+  await assert.rejects(runGitHubAction({ ...options, mode: "diff" }), /sbom requires scan mode/);
+  await assert.rejects(runGitHubAction({ ...options, paths: [root] }), /sbom requires scan mode/);
+});
