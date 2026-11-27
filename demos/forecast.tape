@@ -1,4 +1,4 @@
-# From the repository root after npm run build.
+# Record with OFFING_VERSION set and bash demos/build.sh --record forecast.
 Output docs/demos/forecast.gif
 
 Require node
@@ -17,18 +17,17 @@ Set CursorBlink false
 Env NO_COLOR "1"
 
 Hide
-Type@1ms 'source demos/colorize.sh && demo=$(node dist/tools/examples.js demo) && cd "$demo" && clear' Enter
+Type@1ms 'source demos/colorize.sh && offing_demo_setup && clear' Enter
 Wait@10s /❯ *$/
 Show
 Sleep 1s
 
 Type "npx @velella/offing forecast . --as-of 2026-07-01 --data-version bundled" Enter
-Wait+Screen@10s /(?m)^Weather: (clear|cloudy|storm) *$/
-Wait+Screen@10s /(?m)^0-3 months *$/
-Wait+Screen@10s /(?m)^3-6 months *$/
-Wait+Screen@10s /(?m)^6-12 months *$/
+Wait+Screen@10s /(?m)^Forecast from 2026-07-01 to 2027-07-01 /
+Wait+Screen@10s /github-actions\.checkout\.node20/
+Wait+Screen@10s /\.github\/workflows\/ci\.yml:9/
 Wait@10s /❯ *$/
 Sleep 10s
 Hide
-Type@1ms 'forecast_status=$?; cd / && rm -rf -- "$demo" && [[ $forecast_status == 0 ]] && echo "forecast-demo: ok"' Enter
+Type@1ms '[[ $? == 0 ]] && echo "forecast-demo: ok"' Enter
 Wait+Screen@10s /(?m)^forecast-demo: ok *$/

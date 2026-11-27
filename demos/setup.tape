@@ -1,11 +1,5 @@
 # Offing demo tape: Tell every coding agent in the repository to check before adding.
-#
-# Rendered by CI (.github/workflows/demos.yml) from the repository root after
-# `npm run build`; never recorded by hand. demos/colorize.sh prepares a clean
-# copy of examples/demo in /tmp/offing-demo, sets the prompt, and colors the
-# output. Regenerate every recording with:
-#
-#   for tape in demos/*.tape; do vhs "$tape" || exit 1; done
+# Record with OFFING_VERSION set and bash demos/build.sh --record setup.
 
 Output docs/assets/demos/setup.gif
 
@@ -29,7 +23,7 @@ Set CursorBlink false
 
 Hide
 Type "source demos/colorize.sh" Enter
-Type "offing_demo_setup" Enter
+Type "offing_demo_repository" Enter
 Type "mkdir -p .claude" Enter
 Type "clear" Enter
 Show

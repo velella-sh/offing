@@ -163,7 +163,7 @@ Prints a one-screen summary of the repository's lifecycle state, laid out like `
 | `--as-of <YYYY-MM-DD>` | Read the state as of this date instead of today. |
 | `--json` | Print the facts as an `offing.glance.v1` document, without the mark. |
 
-Below 80 terminal columns the mark is dropped and the facts keep the full width. On a terminal the severity blocks are colored; `NO_COLOR` turns that off. [Showcase](SHOWCASE.md) shows the card and [docs/demos/glance.tape](demos/glance.tape) records it.
+Below 80 terminal columns the mark is dropped and the facts keep the full width. On a terminal the severity blocks are colored; `NO_COLOR` turns that off. [Showcase](SHOWCASE.md) shows the card and [glance.tape](https://github.com/velella-sh/offing/blob/main/demos/glance.tape) records it.
 
 ### `prompt`
 
@@ -197,7 +197,7 @@ Prints a year-in-review of lifecycle findings for a Git repository: how many wer
 | `--json` | Print the `offing.wrapped.v1` document. |
 | `--no-animation` | Print every card at once, even on a terminal. |
 
-On a terminal the cards play one at a time within six seconds. Off a terminal, or with `--no-animation`, the same content prints as static text. When the repository has no commit before the year, the command says so and compares against the first commit. [Showcase](SHOWCASE.md) shows the cards and [docs/demos/wrapped.tape](demos/wrapped.tape) records them.
+On a terminal the cards play one at a time within six seconds. Off a terminal, or with `--no-animation`, the same content prints as static text. When the repository has no commit before the year, the command says so and compares against the first commit. [Showcase](SHOWCASE.md) shows the cards and [wrapped.tape](https://github.com/velella-sh/offing/blob/main/demos/wrapped.tape) records them.
 
 ### `timelapse`
 
@@ -216,7 +216,7 @@ Plays a month-by-month time-lapse of how lifecycle findings age in a repository.
 | `--json` | Print an array of `{ month, findings, files }`. |
 | `--no-animation` | Print every frame at once, even on a terminal. |
 
-On a terminal the frames play within six seconds. Off a terminal, under `CI`, or with `--no-animation`, the same content prints as static text. The SVG keeps the final frame under `prefers-reduced-motion` and avoids `<script>`, `<foreignObject>`, and external references so it survives GitHub's sanitizer. [Showcase](SHOWCASE.md) shows the play and [docs/demos/timelapse.tape](demos/timelapse.tape) records it.
+On a terminal the frames play within six seconds. Off a terminal, under `CI`, or with `--no-animation`, the same content prints as static text. The SVG keeps the final frame under `prefers-reduced-motion` and avoids `<script>`, `<foreignObject>`, and external references so it survives GitHub's sanitizer. [Showcase](SHOWCASE.md) shows the play and [timelapse.tape](https://github.com/velella-sh/offing/blob/main/demos/timelapse.tape) records it.
 
 ### `lookup`
 
