@@ -20,7 +20,7 @@ Prints one row per dated deadline that affects the project: the subject, a bar s
 
 On a terminal the frame redraws once per second for six seconds and stops on the final frame. `--once` prints one frame, `--no-animation` keeps one static frame, and piping the output prints one plain frame. `--json` prints the same rows with `subject`, `deadline`, `remainingSeconds`, `ruleId`, and `location`, so a script can chart or gate on them.
 
-The example uses `examples/gallery`, which has upcoming deadlines across container, runtime, and package rules. The gallery is committed with scanner-neutral names, so the command copies it to a temporary directory and restores the real names before scanning. `docs/demos/countdown.tape` records the animation with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `vhs docs/demos/countdown.tape`.
+The example uses `examples/gallery`, which has upcoming deadlines across container, runtime, and package rules. The gallery is committed with scanner-neutral names, so the command copies it to a temporary directory and restores the real names before scanning. `demos/countdown.tape` records the animation with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `OFFING_VERSION=0.1.1 bash demos/build.sh --record countdown`.
 
 ## Fix before and after
 
@@ -32,7 +32,7 @@ Plays the deterministic fixes in the terminal. Each patch shows its file, the re
 
 Nothing is written to the repository. The "after" count comes from a scan of a temporary copy of the repository with the patches applied, and the copy is removed afterwards. With `--branch` the fixes are committed on `offing/fix` as usual and the view shows what was committed, with the count from the re-scan of the real repository.
 
-The play is held to six seconds: a long plan is typed faster, and if time still runs out the rest is printed at once. `--no-animation` prints the same content as static colored diffs, and piping the output prints it without color. `--show` cannot be combined with `--json`. `docs/demos/fix-show.tape` records the animation with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `vhs docs/demos/fix-show.tape`.
+The play is held to six seconds: a long plan is typed faster, and if time still runs out the rest is printed at once. `--no-animation` prints the same content as static colored diffs, and piping the output prints it without color. `--show` cannot be combined with `--json`. `demos/fix-show.tape` records the animation with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `OFFING_VERSION=0.1.1 bash demos/build.sh --record fix-show`.
 
 ## Glance card
 
@@ -42,7 +42,7 @@ npm run --silent example -- gallery glance --as-of 2026-10-25
 
 Prints a one-screen summary of the repository's lifecycle state, laid out like `neofetch`: the Offing mark on the left in the brand green, the facts on the right. The facts are the repository name, every detected ecosystem with its maturity level, findings by severity as colored blocks, the next deadline, the oldest ended item, and the lifecycle data version and age. The counts are the ones `scan --json` reports for the same path.
 
-Under 80 terminal columns the mark is dropped and the facts keep the full width. `--json` prints the facts alone as an `offing.glance.v1` document, so a script or a dashboard can reuse them. `docs/demos/glance.tape` records the card with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `vhs docs/demos/glance.tape`.
+Under 80 terminal columns the mark is dropped and the facts keep the full width. `--json` prints the facts alone as an `offing.glance.v1` document, so a script or a dashboard can reuse them. `demos/glance.tape` records the card with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `OFFING_VERSION=0.1.1 bash demos/build.sh --record glance`.
 
 ## Shell prompt segment
 
@@ -52,7 +52,7 @@ offing prompt
 
 Prints a short segment such as `⏳2` when the repository you are in has lifecycle findings, and nothing otherwise, so it can sit in your shell prompt. It reads only the scan cache that `offing scan` and `offing watch` leave behind: it never scans, starts a process, or uses the network, and a missing or stale cache prints nothing. The count is the high and critical findings when there are any, otherwise all findings; `--symbol EOL:` gives ASCII.
 
-[docs/PROMPT.md](PROMPT.md) has snippets for Starship, oh-my-zsh, Powerlevel10k, fish, and bash. `docs/demos/prompt.tape` records it with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `vhs docs/demos/prompt.tape`.
+[docs/PROMPT.md](PROMPT.md) has snippets for Starship, oh-my-zsh, Powerlevel10k, fish, and bash. `demos/prompt.tape` records it with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `OFFING_VERSION=0.1.1 bash demos/build.sh --record prompt`.
 
 ## Watch board
 
@@ -62,7 +62,7 @@ offing watch --board
 
 Ranks every project registered with `offing watch` by lifecycle risk. Each row is the rank, the project name, findings by severity as small colored bars, the next deadline, and a trend arrow against the previous board (▲ worse, ▼ better, ● same). Ranking uses the same severity weights as the HTML treemap (critical 8, high 4, medium 2, low 1, info 0.5), then the earliest deadline, then the project name.
 
-The board re-scans like `watch run`, stores a per-project summary in the watch state file, and leaves the digest history alone. An older state file without summaries shows ● for every project. `--json` prints the ranked rows as an `offing.watch-board.v1` document. On a terminal the severity bars are colored; `NO_COLOR` or a pipe turns that off. `docs/demos/watch-board.tape` records the table with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `vhs docs/demos/watch-board.tape`.
+The board re-scans like `watch run`, stores a per-project summary in the watch state file, and leaves the digest history alone. An older state file without summaries shows ● for every project. `--json` prints the ranked rows as an `offing.watch-board.v1` document. On a terminal the severity bars are colored; `NO_COLOR` or a pipe turns that off. `demos/watch-board.tape` records the table with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `OFFING_VERSION=0.1.1 bash demos/build.sh --record watch-board`.
 
 ## Year in review
 
@@ -74,7 +74,7 @@ Plays a year-in-review of lifecycle findings for the repository. Each card is ba
 
 The base is the last commit before 1 January of the year; when the repository has none, the command says so and compares against the first commit. For a past year the head is the last commit of that year; for the current year it is `HEAD`. Scans use git objects only, so the working tree is never modified.
 
-On a terminal the cards play one at a time within six seconds. `--no-animation` prints them all at once, and piping the output does the same. `--svg wrapped.svg` writes one 1200×630 summary card with no script and no external references. `--json` prints the `offing.wrapped.v1` document. `docs/demos/wrapped.tape` records the play with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `vhs docs/demos/wrapped.tape`.
+On a terminal the cards play one at a time within six seconds. `--no-animation` prints them all at once, and piping the output does the same. `--svg wrapped.svg` writes one 1200×630 summary card with no script and no external references. `--json` prints the `offing.wrapped.v1` document. `demos/wrapped.tape` records the play with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `OFFING_VERSION=0.1.1 bash demos/build.sh --record wrapped`.
 
 ## Time-lapse of a repository aging
 
@@ -82,7 +82,7 @@ On a terminal the cards play one at a time within six seconds. `--no-animation` 
 offing timelapse . --from 2026-11 --to 2028-10 --no-animation
 ```
 
-Plays 24 monthly frames of the same repository: each frame is the scan projected onto that month's last day with `scan --as-of` logic, so finding counts stay honest. Affected files start dim and turn red as their deadlines pass, with a running count under the tree. `--svg timelapse.svg` writes a 1200×630 CSS animation of those frames for a README; `--json` prints `{ month, findings, files }` for each month. `docs/demos/timelapse.tape` records the play with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `vhs docs/demos/timelapse.tape`.
+Plays 24 monthly frames of the same repository: each frame is the scan projected onto that month's last day with `scan --as-of` logic, so finding counts stay honest. Affected files start dim and turn red as their deadlines pass, with a running count under the tree. `--svg timelapse.svg` writes a 1200×630 CSS animation of those frames for a README; `--json` prints `{ month, findings, files }` for each month. `demos/timelapse.tape` records the play with [VHS](https://github.com/charmbracelet/vhs); regenerate the GIF with `OFFING_VERSION=0.1.1 bash demos/build.sh --record timelapse`.
 
 ## Mermaid support windows
 

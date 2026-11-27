@@ -1,11 +1,5 @@
 # Offing demo tape: Accept what exists, then see only new problems.
-#
-# Rendered by CI (.github/workflows/demos.yml) from the repository root after
-# `npm run build`; never recorded by hand. demos/colorize.sh prepares a clean
-# copy of examples/demo in /tmp/offing-demo, sets the prompt, and colors the
-# output. Regenerate every recording with:
-#
-#   for tape in demos/*.tape; do vhs "$tape" || exit 1; done
+# Record with OFFING_VERSION set and bash demos/build.sh --record baseline.
 
 Output docs/assets/demos/baseline.gif
 
@@ -29,7 +23,7 @@ Set CursorBlink false
 
 Hide
 Type "source demos/colorize.sh" Enter
-Type "offing_demo_setup" Enter
+Type "offing_demo_repository" Enter
 Type "clear" Enter
 Show
 

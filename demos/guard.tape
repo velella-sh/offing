@@ -1,4 +1,4 @@
-# From the repository root after npm run build.
+# Record with OFFING_VERSION set and bash demos/build.sh --record guard.
 Output docs/demos/guard.gif
 
 Require node
@@ -16,7 +16,7 @@ Set TypingSpeed 25ms
 Set CursorBlink false
 
 Hide
-Type@1ms 'source demos/colorize.sh && offing() { node "$OFFING_CLI" "$@"; } && clear' Enter
+Type@1ms 'source demos/colorize.sh && clear' Enter
 Wait@10s /❯ *$/
 Show
 Sleep 1s

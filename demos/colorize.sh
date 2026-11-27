@@ -1,19 +1,43 @@
+# shellcheck shell=bash
 # Sourced by the demo tapes (hidden). It prepares a clean copy of the demo
 # project, sets the prompt, and defines `npx` so a tape can type the command a
-# reader runs (`npx @velella/offing ...`) while the recording runs the local
-# build and colors its plain-text output. Color applies only when stdout is a
+# reader runs (`npx @velella/offing ...`) while the recording uses the CLI
+# selected by build.sh. Color applies only when stdout is a
 # terminal, so redirects and pipes stay plain. The only text it changes is the
 # volatile age suffix of the data line ("(today)", "(3 days ago)"), which would
 # otherwise make every recording differ from day to day.
 
 PS1=$'\[\e[38;2;126;156;216m\]❯\[\e[0m\] '
-OFFING_CLI="$PWD/dist/src/cli.js"
+demo_examples="$PWD/dist/tools/examples.js"
 
 offing_demo_setup() {
-  rm -rf /tmp/offing-demo
-  cp -r examples/demo /tmp/offing-demo
-  cd /tmp/offing-demo || return 1
-  git init -q
+  local project
+  project=$(node "$demo_examples" "${1:-demo}") || return
+  cd "$project" || return
+}
+
+offing() {
+  node "${OFFING_CLI:?run the tape through demos/build.sh}" "$@"
+}
+
+offing_demo_repository() {
+  offing_demo_setup || return
+  git init -q --template=
+}
+
+_offing_demo_snapshot() {
+  git add . &&
+    GIT_AUTHOR_DATE="$1" GIT_COMMITTER_DATE="$1" git \
+      -c user.name='Offing demo' -c user.email=demo@example.invalid \
+      -c core.hooksPath=/dev/null -c commit.gpgSign=false commit -qm "$2"
+}
+
+offing_demo_history() {
+  offing_demo_repository &&
+    printf 'FROM node:16\n' > Dockerfile &&
+    _offing_demo_snapshot 2024-12-31T12:00:00Z 'Add the first image' &&
+    printf 'FROM node:24\n' > Dockerfile &&
+    _offing_demo_snapshot 2025-12-31T12:00:00Z 'Upgrade the image'
 }
 
 _offing_color() {
@@ -39,10 +63,14 @@ _offing_color() {
 }
 
 npx() {
+  if [[ ${1:-} != @velella/offing ]]; then
+    command npx "$@"
+    return
+  fi
   shift
   if [ -t 1 ]; then
-    (set -o pipefail; node "$OFFING_CLI" "$@" | _offing_color)
+    (set -o pipefail; offing "$@" | _offing_color)
   else
-    node "$OFFING_CLI" "$@"
+    offing "$@"
   fi
 }
