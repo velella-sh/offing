@@ -178,6 +178,7 @@ test("public API shape: package.json exposes exactly the reviewed entry points",
       "./schemas/lineage.v1.schema.json",
       "./schemas/proof.v1.schema.json",
       "./schemas/whatif.v1.schema.json",
+      "./schemas/stack-context.v1.schema.json",
     ].sort(),
   );
 });

@@ -12,7 +12,7 @@ import { nodeFileSystem } from "../node-file-system.js";
 import { advisoryIdsByRuleId } from "../osv-advisories.js";
 import { computeFileHash, defaultScanCacheDirectory, ScanCache } from "../scan-cache.js";
 import type { Detector } from "../sdk.js";
-import { detectAll, detectorVersion } from "./detect.js";
+import { detectAll, detectorVersion, readCurrentDetections } from "./detect.js";
 import type { DetectorResult } from "./detect.js";
 import { listRepositoryFiles } from "./discover.js";
 import { buildScanResult } from "./report.js";
@@ -115,9 +115,7 @@ async function recordScanManifest(
   await scanCache.setScanManifest({
     root,
     scannedAt,
-    detectorSignatures: Object.fromEntries(
-      detectors.map((detector) => [detector.id, `${detectorVersion(detector)}:${dataVersion}`]),
-    ),
+    detectorSignatures: scanDetectorSignatures(detectors, dataVersion),
   });
 }
 
@@ -136,6 +134,10 @@ async function resolveAnalyses(
     ),
     references: sortReferences(analyses.flatMap((analysis) => analysis.unclassified)),
   };
+}
+
+export function scanDetectorSignatures(detectors: readonly Detector[], dataVersion: string): Record<string, string> {
+  return Object.fromEntries(detectors.map((detector) => [detector.id, `${detectorVersion(detector)}:${dataVersion}`]));
 }
 
 function scanWorkspace(root: string, options: ScanOptions) {
@@ -159,7 +161,8 @@ async function analyzeRepository(
 ) {
   const { context, fileSystem, scanCache, noCache } = workspace;
   const { root, scannedAt } = context;
-  const repoFiles = detectors.length > 0 ? await listRepositoryFiles(root, fileSystem) : [];
+  const repoFiles =
+    detectors.length > 0 ? await listRepositoryFiles(root, fileSystem, resolve(scanCache.directory)) : [];
   const analyses = await detectAll(detectors, {
     context,
     root,
@@ -186,6 +189,26 @@ export async function scanRepositoryFindings(
   await active.read("registry/nodejs.json");
   const { analyses } = await analyzeRepository(scanWorkspace(root, {}), detectors, active.info.version);
   return { findings: sortFindings(analyses.flatMap((analysis) => analysis.findings)) };
+}
+
+export async function cachedRepositoryFindings(
+  root: string,
+  detectors: readonly Detector[],
+  cache: ScanCache,
+  scannedAt: string,
+  dataVersion: string,
+): Promise<Finding[] | undefined> {
+  const analyses = await readCurrentDetections(detectors, {
+    context: { root, scannedAt },
+    root,
+    repoFiles: await listRepositoryFiles(root, nodeFileSystem, resolve(cache.directory)),
+    cache,
+    fileSystem: nodeFileSystem,
+    dataVersion,
+    noCache: false,
+    getFileHash: fileHashReader(root, nodeFileSystem),
+  });
+  return analyses && sortFindings(analyses.flatMap(({ findings }) => findings));
 }
 
 /** Runs the detectors over a repository and returns the sorted, deduplicated findings. */

@@ -8,6 +8,7 @@ export const command: CliCommand = {
   example: "offing hook claude-code",
   usage: [
     "  offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol",
+    "  offing hook session-start <host>   # supply cached lifecycle evidence at session start",
   ],
   async run(args) {
     return runHook(args);

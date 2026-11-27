@@ -5,7 +5,9 @@ import { join } from "node:path";
 import { after, afterEach, beforeEach, test } from "node:test";
 
 import { configureActiveData } from "@velella/ebb/data-source";
+import { listRepositoryFiles } from "../src/engine/discover.js";
 import { buildScanCoverage, findRepositories, scanRepository } from "../src/engine/index.js";
+import { nodeFileSystem } from "../src/node-file-system.js";
 import { renderText } from "../src/reporters.js";
 import { DETECTOR_API_VERSION } from "../src/sdk.js";
 import type { Detector } from "../src/sdk.js";
@@ -14,6 +16,28 @@ import { cleanupScratch, detectorFinding, detectorOf, scratch } from "./engine-h
 after(cleanupScratch);
 beforeEach(() => configureActiveData({ pinnedVersion: "bundled" }));
 afterEach(() => configureActiveData());
+
+test("repository listing skips a cache directory addressed by an alias", async () => {
+  const root = await scratch("cache-exclusion");
+  const cache = join(root, "cache");
+  const alias = join(root, "cache-alias");
+  const nested = join(root, "scripts");
+  await Promise.all([mkdir(cache), mkdir(nested), mkdir(join(root, "node_modules"))]);
+  await Promise.all([
+    writeFile(join(cache, "entry.json"), "{}"),
+    writeFile(join(nested, "index.js"), ""),
+    writeFile(join(root, "node_modules", "ignore.js"), ""),
+  ]);
+  const aliases = {
+    ...nodeFileSystem,
+    async realPath(path: string) {
+      return path === alias ? cache : path;
+    },
+  };
+  assert.deepEqual(await listRepositoryFiles(root, aliases, alias), ["scripts/index.js"]);
+  assert.deepEqual(await listRepositoryFiles(root, aliases), ["cache/entry.json", "scripts/index.js"]);
+  assert.deepEqual(await listRepositoryFiles(root, nodeFileSystem, alias), ["cache/entry.json", "scripts/index.js"]);
+});
 
 test("coverage names ecosystems and files matched by detector inputs", async () => {
   const root = await mkdtemp(join(tmpdir(), "offing-coverage-"));
