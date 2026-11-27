@@ -182,3 +182,19 @@ test("Composer follows package requirements and Go leaves indirect vendor entrie
   assert.deepEqual(find(modules.issues, "example.org/top@v1.0.0").chain, ["example.org/top@v1.0.0"]);
   assert.equal(find(modules.issues, "example.org/bottom@v1.0.0").chain, undefined);
 });
+
+test("graphic options reject conflicting formats and bad themes, and explicit JSON matches --json", async (t) => {
+  const root = await fixture(t, { "package-lock.json": npmLock() });
+  const run = (flags: string[]) => runCli(["upgrade-check", "--to", "nodejs@22", root, "--graph", ...flags]);
+  for (const flags of [
+    ["--format", "html"],
+    ["--json", "--format", "svg"],
+    ["--format", "svg", "--theme", "blue"],
+    ["--theme", "dark"],
+  ]) {
+    const result = await run(flags);
+    assert.equal(result.code, 2);
+    assert.match(result.stderr, /^Usage: offing upgrade-check/);
+  }
+  assert.deepEqual(await run(["--format", "json"]), await run(["--json"]));
+});
