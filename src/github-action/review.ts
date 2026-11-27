@@ -2,13 +2,13 @@ import { posix, resolve } from "node:path";
 
 import { declaredDependencies, parsePackageManifest } from "../detectors/npm/manifest.js";
 import { npmLockfiles, parseLockContents } from "../detectors/npm/lockfiles/index.js";
-import { mergeLockData } from "../detectors/npm/lockfiles/shared.js";
 import { loadPackageRules, matchPackageRules, matchedRuleFinding } from "../detectors/npm/rules.js";
 import type { DiffResult } from "../diff.js";
 import { git } from "../diff.js";
 import type { Finding } from "../domain.js";
 import { snippetSymbolFindings } from "../snippet-symbols.js";
 import { languageFor, maximumFileBytes } from "../source-files.js";
+import { globToRegExp, npmWorkspacePatterns } from "../workspaces.js";
 import { changedLines, selectChangedAnnotations } from "./diff.js";
 
 /** Resolve refs before passing the range to other Git commands. */
@@ -52,7 +52,21 @@ function npmLock(root: string, head: string, directory: string) {
     committedText(root, head, posix.join(directory, lockfile), maximumLockfileBytes),
   );
   if (sources.includes(null)) return undefined;
-  return parseLockContents(sources.map((source) => source ?? undefined));
+  return {
+    present: sources.some((source) => source !== undefined),
+    data: parseLockContents(sources.map((source) => source ?? undefined)),
+  };
+}
+
+function manifestLock(root: string, head: string, directory: string) {
+  const own = npmLock(root, head, directory);
+  if (!own || own.present || directory === ".") return own?.data;
+  const patterns = npmWorkspacePatterns(
+    committedText(root, head, "package.json") ?? undefined,
+    committedText(root, head, "pnpm-workspace.yaml") ?? undefined,
+    committedText(root, head, "lerna.json") ?? undefined,
+  );
+  return patterns.some((pattern) => globToRegExp(pattern).test(directory)) ? npmLock(root, head, ".")?.data : own.data;
 }
 
 async function manifestFindings(
@@ -74,11 +88,16 @@ async function manifestFindings(
   });
   if (rules.length === 0) return [];
   const directory = posix.dirname(path);
-  const rootLock = npmLock(root, refs.head, ".");
-  const ownLock = directory === "." ? rootLock : npmLock(root, refs.head, directory);
-  if (!rootLock || !ownLock) return [];
-  const lock = mergeLockData(rootLock, ownLock);
-  const project = { ...lock, directory, manifestPath: resolve(root, path), contents, manifest };
+  const lock = manifestLock(root, refs.head, directory);
+  if (!lock) return [];
+  const project = {
+    resolved: lock.versions,
+    graph: lock.graph,
+    directory,
+    manifestPath: resolve(root, path),
+    contents,
+    manifest,
+  };
   return matchPackageRules(project, rules).map((entry): Finding => {
     const finding = matchedRuleFinding(root, entry, new Map([[entry.rule.id, []]]), []);
     return { ...finding, detector: "npm", confidence: finding.confidence ?? "range" };

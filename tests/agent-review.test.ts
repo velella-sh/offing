@@ -39,6 +39,18 @@ test("diff review uses committed source and manifest lines, including standalone
   const root = await init(t);
   const manifest = join(root, "example app", "package.json");
   await mkdir(join(root, "example app"));
+  await writeFile(join(root, "package.json"), '{"name":"root","private":true,"devDependencies":{"tslint":"6.1.3"}}\n');
+  await writeFile(
+    join(root, "package-lock.json"),
+    JSON.stringify({
+      name: "root",
+      lockfileVersion: 3,
+      packages: {
+        "": { devDependencies: { tslint: "6.1.3" } },
+        "node_modules/tslint": { version: "6.1.3" },
+      },
+    }),
+  );
   await writeFile(manifest, '{ "name": "example-app", "dependencies": { "moment": "2.29.4" } }\n');
   await writeFile(join(root, "app.ts"), "const untouched = new Buffer(2);\nconst updated = Buffer.alloc(4);\n");
   await writeFile(join(root, "app.py"), "import imp\nprint('ready')\n");
@@ -96,11 +108,18 @@ test("review annotations stay scoped to the selected Action path and dedupe a su
   const root = join(repo, "app");
   await mkdir(join(root, "packages", "client"), { recursive: true });
   await writeFile(join(root, "package.json"), '{"name":"workspace","workspaces":["packages/*"]}\n');
+  await writeFile(
+    join(root, "package-lock.json"),
+    JSON.stringify({
+      lockfileVersion: 3,
+      packages: { "node_modules/tslint": { version: "5.20.1" } },
+    }),
+  );
   const manifest = join(root, "packages", "client", "package.json");
   await writeFile(manifest, '{"name":"client"}\n');
   await writeFile(join(repo, "unrelated.ts"), "Buffer.alloc(4);\n");
   const base = commit(repo, "base");
-  await writeFile(manifest, '{\n  "name": "client",\n  "dependencies": { "request": "2.88.2" }\n}\n');
+  await writeFile(manifest, '{\n  "name": "client",\n  "dependencies": { "request": "2.88.2", "tslint": "*" }\n}\n');
   await writeFile(join(root, "changed.ts"), "new Buffer(4);\n");
   await writeFile(join(repo, "unrelated.ts"), "new Buffer(4);\n");
   const head = commit(repo, "change workspace");
