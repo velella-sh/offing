@@ -58,7 +58,7 @@ function noDataInManifest(contents: string, path: string, known: ReadonlySet<str
 }
 
 /** Use the scan's unclassified references plus npm declarations with no rule for their package identity. */
-async function noDataComponents(
+export async function noDataComponents(
   result: ScanResult,
   rules: readonly RegistryV2Rule[],
 ): Promise<UnclassifiedReference[]> {
