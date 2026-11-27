@@ -7,6 +7,7 @@ import { test } from "node:test";
 import { setTimeout } from "node:timers/promises";
 
 import { Ajv2020 } from "ajv/dist/2020.js";
+import { z } from "zod";
 
 import { fixers } from "../src/fix/index.js";
 import { runApprovedTest } from "../src/test-runners/run.js";
@@ -16,6 +17,48 @@ import { summarize } from "../benchmarks/fix-evals/report.js";
 import { fixtureSource, tempSource } from "../benchmarks/fix-evals/source.js";
 
 const nodeFix = fixers.filter(({ id }) => id === "node-buffer");
+
+const commitSha = z.string().regex(/^[a-f0-9]{40}$/u);
+const sha256Hex = z.string().regex(/^[a-f0-9]{64}$/u);
+const selection = z.object({
+  offingCommit: commitSha,
+  ebbVersion: z.string().min(1),
+  scannedAt: z.iso.datetime(),
+  repositories: z
+    .array(
+      z.object({
+        repository: z.string().regex(/^[a-z0-9][a-z0-9_.-]*\/[a-z0-9][a-z0-9_.-]*$/iu),
+        commit: commitSha,
+        baseline: z.discriminatedUnion("kind", [
+          z.object({
+            kind: z.literal("isolated"),
+            image: z.string().regex(/(?:^|@)sha256:[a-f0-9]{64}$/u),
+            checks: z.array(z.object({ command: z.array(z.string()).min(1), exitCode: z.literal(0) })).min(1),
+          }),
+          z.object({
+            kind: z.literal("upstream"),
+            job: z.string().regex(/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/actions\/runs\/\d+\/job\/\d+$/u),
+            checks: z.array(z.string().min(1)).min(1),
+          }),
+        ]),
+        patches: z.array(z.object({ fixer: z.string(), sha256: sha256Hex, paths: z.array(z.string()).min(1) })).min(1),
+      }),
+    )
+    .min(60),
+});
+
+test("acc-fix-evals selection has one source pin per repository and evidence for every registered fixer", async () => {
+  const data = selection.parse(JSON.parse(await readFile("benchmarks/fix-evals/selection.json", "utf8")));
+  const repositories = data.repositories.map(({ repository }) => repository.toLowerCase());
+  assert.equal(new Set(repositories).size, repositories.length);
+  const covered = new Set(data.repositories.flatMap(({ patches }) => patches.map(({ fixer }) => fixer)));
+  for (const { id } of fixers) assert.ok(covered.has(id), `The selection lacks a baseline and patch for ${id}.`);
+  for (const { baseline, repository } of data.repositories) {
+    if (baseline.kind === "upstream") {
+      assert.ok(new URL(baseline.job).pathname.toLowerCase().startsWith(`/${repository.toLowerCase()}/actions/runs/`));
+    }
+  }
+});
 
 async function fixtureEval(kind: string, output: string) {
   const input: Input = { id: kind, repository: null, commit: null, profile: "npm" };

@@ -16,12 +16,28 @@ npm run fix-evals -- --fixtures --runner-profile all
 npm run fix-evals -- --fixtures --runner-tool all
 ```
 
-The default run uses the public candidate list in
+The evaluation pilot uses the public candidate list in
 [`benchmarks/fix-evals/repositories.json`](https://github.com/velella-sh/offing/blob/main/benchmarks/fix-evals/repositories.json).
-It is a pilot selection. The release cohort requires at least 60 distinct public repositories and at least one
-eligible case per registered fixer.
 
 ## Selection and isolation
+
+A repository can enter the
+[`benchmarks/fix-evals/selection.json`](https://github.com/velella-sh/offing/blob/main/benchmarks/fix-evals/selection.json)
+cohort once the original public commit has a green build or applicable validator and Offing emits at least one
+nonempty patch from that commit. Select at least 60 distinct repositories and include a case for each registered
+fixer. A repository may cover several fixers. For a validator, record the files it actually checks and count
+patches on those paths. Keep the repository, full commit, Offing and Ebb versions, patch paths and hashes, and
+baseline evidence so the selection can be audited independently.
+
+Baseline evidence comes from a fresh isolated checkout with a digest-pinned tool or from a successful upstream
+build or test job that checked out the exact source commit. An upstream job must identify the build or test it
+ran, and every baseline check must pass on its first attempt. Use real repository source for the selection.
+The evaluation reruns baselines and measures what happens after applying each patch.
+
+For isolated checks that need packages, stage the public inputs from the recorded lockfile or pinned tool source
+before running the check. Disable lifecycle scripts while staging JavaScript dependencies and run the recorded
+build command with the prepared cache in a fresh container with networking disabled. The selection records the
+input hashes or source commits needed to recreate that environment.
 
 A candidate identifies a public GitHub repository, a full commit SHA, and the build or validation profile. An eligible
 repository must produce a patch with the current Offing registry and have a passing baseline for every check that

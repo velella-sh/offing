@@ -1,0 +1,1679 @@
+{
+  "offingCommit": "b821f1ce170475aea318e7e72dc93a1c1af700ee",
+  "ebbVersion": "0.2.0",
+  "scannedAt": "2026-11-27T00:00:00.000Z",
+  "repositories": [
+    {
+      "repository": "5j9/tsetmc",
+      "commit": "fdaf0e085c3ed884c828000f2f4752f91a6b5e7b",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/pytest.yml"],
+          "sha256": "454187c0d6532611b9201bbdfa9f5314adc6eae1f6f4e06929cc9198a0b06360"
+        }
+      ]
+    },
+    {
+      "repository": "64-B1T/basic_robotics",
+      "commit": "d2175e366399938b91bd0951b6bbd0fed32413ec",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/docs.yml", ".github/workflows/publish.yml", ".github/workflows/tests.yml"],
+          "sha256": "aa7b66207b6299807ae506bff4e29d462fe8cc66702f0f04e0639d44765a5f76"
+        }
+      ]
+    },
+    {
+      "repository": "721AndrewWang/VibeCrew",
+      "commit": "d320dd99b0f6686f37db70913db90efc43147580",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml", ".github/workflows/release.yml"],
+          "sha256": "7d02e497b9fcd76f0700653fe90c2f580bf9888dcd30a5f3b26b4b30dd757f7c"
+        }
+      ]
+    },
+    {
+      "repository": "aandresalvarez/athena_client",
+      "commit": "f48e494072fcd7b42ccf81f0b3f1e3e7744979e5",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml", ".github/workflows/publish.yml"],
+          "sha256": "dd97897bd97307eb8d0362eee802825fc0302d0fb8374ca81808f17bf1c05fb7"
+        }
+      ]
+    },
+    {
+      "repository": "aarongarrett/inspyred",
+      "commit": "fb29ba3b9d9e582dabe72f278458ed0e6932eb7c",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml"],
+          "sha256": "f264c6bc3d80eebf7f295cb346a4613e81715a60f748f86e0cb6872f631dad87"
+        }
+      ]
+    },
+    {
+      "repository": "ace-step/ACE-Step-ComfyUI",
+      "commit": "5de16c9bc43abdbe9a3104d220bba9f71b51165a",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/publish_action.yml"],
+          "sha256": "a35f6138a8012d7c3e824fff12a689f027e930c08901c82edf5b6a5496355a15"
+        }
+      ]
+    },
+    {
+      "repository": "achtaitaipai/odyc",
+      "commit": "6cb119e0bc90833ea0384cac9064f94e3c2f8d09",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/formatter.yml", ".github/workflows/linter.yml", ".github/workflows/test.yml"],
+          "sha256": "3ec204f83402d68cf6a8005cfc331baa22d1c953b7ce761ba0a4561a0a0a733d"
+        }
+      ]
+    },
+    {
+      "repository": "aconrad/pycobertura",
+      "commit": "033b82157f29fa811f7f5eac06a30f8849aa305c",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/build-and-test-pycobertura.yml"],
+          "sha256": "1946fd38157e21f3ce7e84f3b7ec981eafa6a8553d9df803466f1e5e8411d506"
+        }
+      ]
+    },
+    {
+      "repository": "Adamant-im/adamant-api-jsclient",
+      "commit": "951b210602903cfd57da4027019e1c718cfe17aa",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/docs.yml", ".github/workflows/publish.yml"],
+          "sha256": "23fe028703d1deb224e4acc448102eaff0beeaa8cd30f60750a2d4c20ccb79ff"
+        }
+      ]
+    },
+    {
+      "repository": "afterlogic/webmail-lite-8",
+      "commit": "74ec3b91df8156ce5c3497c0c3432c766c6f196a",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/build-documentation.yml", ".github/workflows/build.yml"],
+          "sha256": "4ed49b0c2246fe7f4c767667180fe3bf79b0ff444d8b39011e558c5dc3f5e77c"
+        }
+      ]
+    },
+    {
+      "repository": "agentgg-dev/agentgg",
+      "commit": "20cca9c1896ef4fee26c93a8730c0f46e4ca44d6",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml", ".github/workflows/release.yml"],
+          "sha256": "cb298ba05c5e3d9ed011d354bd1174add3a412a3f5e30f7011244e611bee6e35"
+        }
+      ]
+    },
+    {
+      "repository": "Agions/dramaxis",
+      "commit": "3ec6a159fb4c9a969bf85e83e701772b346d654c",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/pages.yml", ".github/workflows/release.yml"],
+          "sha256": "ce74081a14af9de2309eaaae9fa62701a354c9a85a2b93722a698cc778ec170e"
+        }
+      ]
+    },
+    {
+      "repository": "Ajala111/owlcompare",
+      "commit": "ab1a8f6bda61b2df18deecd0e0b9138b52ee7b9a",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [
+            ".github/workflows/action-smoke-test.yml",
+            ".github/workflows/ci.yml",
+            ".github/workflows/docs.yml",
+            ".github/workflows/release-test.yml",
+            ".github/workflows/release.yml"
+          ],
+          "sha256": "7f94a62c9789ea181871af5506aff6ccbdb878f259ae97ff31546d2c1415623e"
+        }
+      ]
+    },
+    {
+      "repository": "aklinker1/bunv",
+      "commit": "edb112800e26f1963a36bd0569ad6144c15fe4a1",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [
+            ".github/workflows/build-platforms.yml",
+            ".github/workflows/release.yml",
+            ".github/workflows/validate.yml"
+          ],
+          "sha256": "929fc519616dbd629cd70c957b25ecc7ce9e3c0ffd02a5bca59c83b309a27b09"
+        }
+      ]
+    },
+    {
+      "repository": "alexandrainst/coral",
+      "commit": "6902e511de407ee604ab2add7ef10be27d50de34",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yaml"],
+          "sha256": "8eb4837de7db4d761db6f28f5a69ba1502b2913fcb017be30f30d26c0ecb261f"
+        }
+      ]
+    },
+    {
+      "repository": "AlirezaKJ/BetterSoundCloud",
+      "commit": "81892f82a5f9ba204a2db53152968650dde6a01b",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml"],
+          "sha256": "0345852dbe5f36bc96928aa9436e489abf9ba990fc542fea37b80b9ca2e62ddc"
+        }
+      ]
+    },
+    {
+      "repository": "AmirTlinov/codemap",
+      "commit": "c673fffb2f369d8af24bd25001754eaa4bda7afa",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/release.yml"],
+          "sha256": "d2884a1ce8f8843c34f4897592ff576880b400cc281aec6d4990ee86a30b333f"
+        }
+      ]
+    },
+    {
+      "repository": "antfu/v-lazy-show",
+      "commit": "dbd8bad96812be9ce96d3776c7e68e385df1b5cd",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml", ".github/workflows/release.yml"],
+          "sha256": "5150ab557c111a91d1338ca98d1c34c13a18824fa11e161765bde544d73239dc"
+        }
+      ]
+    },
+    {
+      "repository": "authgear/authgear-deno",
+      "commit": "341983a549350bbf22f6092d6dd9f906cdd664c1",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yaml"],
+          "sha256": "0a8849eac79a8740c69214e7fd27e8a74d9fb3e1a4c85176380b4d9bef17a352"
+        }
+      ]
+    },
+    {
+      "repository": "bennett-treptow/laravel-migration-generator",
+      "commit": "e10508d00052ffe1f217ea68d30cdeac89adc71a",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/php.yml"],
+          "sha256": "18bb7718961e2a792d48c8d59cf0b15fccc8d00b6819bde7824f4a1b58c0eaf0"
+        }
+      ]
+    },
+    {
+      "repository": "bikeshaving/repeater",
+      "commit": "c57e999dbbf4e02d92b8ebd3f04590ae6f27b396",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/main.yml"],
+          "sha256": "17ae5628eaf8760e4cf267b1a68bc196393b460d7b88a3d0173e203c53a18883"
+        }
+      ]
+    },
+    {
+      "repository": "BillionsBobby/JevRouter",
+      "commit": "b1cdf80593ee530cedd99728a938f4e74ddd556b",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml", ".github/workflows/pages.yml"],
+          "sha256": "1e27df1ec8ea2f51a895f5121ad5c60389f4fb1d47b68c891198fb8fa8730bbd"
+        }
+      ]
+    },
+    {
+      "repository": "blackbird-cloud/terraform-aws-cloudformation-stackset",
+      "commit": "1fc62541393334ec655f93058b2ff54aa1c47be0",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/format.yml", ".github/workflows/readme.yml", ".github/workflows/test.yml"],
+          "sha256": "b9694a536c50d6430e1d772ea5eb9e264a3393b16a9effb26e65d37b9282267e"
+        }
+      ]
+    },
+    {
+      "repository": "bndr/pipreqs",
+      "commit": "48dbafd39003b9de177b8d314795e45797555850",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/flake8.yml", ".github/workflows/tests.yml"],
+          "sha256": "31be01670226283ef17e36f923bd2e934033ffb7508b1b246526a1337ab66092"
+        }
+      ]
+    },
+    {
+      "repository": "Calvin-LL/is-even-ai",
+      "commit": "9839c1e2018f8eb41d2f4ffa10c010edb07900ef",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/release.yaml", ".github/workflows/test.yaml"],
+          "sha256": "be034ce0097d25486da718ca17c8d6c037defa6482647f6d6aed668ab1d61c35"
+        }
+      ]
+    },
+    {
+      "repository": "Chilfish/Weibo-archiver",
+      "commit": "f053b62fbd3217a2cf35a430b4c35cba96cb86dd",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/beta-build.yml", ".github/workflows/release.yml"],
+          "sha256": "00096df1c448ada821dfb8319fe38c00e09cdf48544b0a9b2a4a5768a8ad2c87"
+        }
+      ]
+    },
+    {
+      "repository": "chrishenry/deltanyc-heatseek",
+      "commit": "258e225efa89e46e92e9676864f8c07976b4ccf2",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/hashicorp/terraform@sha256:1c27ac61857ceeb75c4119ea908143791f3f05914142116181355bb360e61e33",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "mirror=/work/tree/.offing-mirror; mkdir -p \"$mirror\"; unzip -q .offing-tool.zip -d \"$mirror\"; cd infra; terraform init -backend=false -input=false -plugin-dir \"$mirror\" && terraform validate -no-color"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "96725b209f7b83da47c16402763fcfe6787a897dd90f7ca522ccb3ee3bfb22a9",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "provider": {
+          "url": "https://github.com/digitalocean/terraform-provider-digitalocean/releases/download/v2.46.0/terraform-provider-digitalocean_2.46.0_linux_amd64.zip",
+          "sha256": "9bfb2496dbf6b64f25a925b7521cc3fd4ca8087ea0932b99c3c972febc005386"
+        }
+      },
+      "patches": [
+        {
+          "fixer": "terraform-legacy",
+          "paths": ["infra/main.tf"],
+          "sha256": "189c7354c930d34baaf7c14d9bc609b1e8ab23e2faa16b8881cfb58ed380f665"
+        }
+      ]
+    },
+    {
+      "repository": "chutingyean/Agent-Cockpit",
+      "commit": "a968c6bc2568a5036981f896939234aaac29c1cd",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/test.yml"],
+          "sha256": "a6aa03f9e84f404ab6bd16eb4bb429d46e861a5dd1366c79273b7d8ce58daa53"
+        }
+      ]
+    },
+    {
+      "repository": "cinar/indicatorts",
+      "commit": "c6bfb623b2ccbac2c536d60740e8c458e4efa7cd",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml", ".github/workflows/release.yml"],
+          "sha256": "4cc88d91e71f821985528bdaf8155f85c8bb91a37b98a41a9c7b2df2e148ffad"
+        }
+      ]
+    },
+    {
+      "repository": "CleoMenezesJr/MosaicWM",
+      "commit": "db885f37744f8f427848f2f42237f8a77adff7a3",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml"],
+          "sha256": "459db5183dae75c91a2d5bc8e0ce028fcbf9ab04df1c0eded32551ee1dc425ae"
+        }
+      ]
+    },
+    {
+      "repository": "cloudflare/recapn",
+      "commit": "296226d8594796f7830d7899f1683d41486b54a9",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml", ".github/workflows/semgrep.yml"],
+          "sha256": "94f590f7a9960b94b59b3fc1fe603fd8a2fd42590297d8e7a45cab72d374bd54"
+        }
+      ]
+    },
+    {
+      "repository": "cloudfour/lighthouse-parade",
+      "commit": "e3cddd59a47c0dfac81a1178f3e0032b6d4acc8a",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml"],
+          "sha256": "beaf9254ec38daca89ffd1e394bf5b8dad2bbf7ac234771ca2be7479b999a77d"
+        }
+      ]
+    },
+    {
+      "repository": "cnosdb/cnosdb",
+      "commit": "14c13e32660d44f347462caa56a919d9a8259fc7",
+      "baseline": {
+        "kind": "upstream",
+        "job": "https://github.com/cnosdb/cnosdb/actions/runs/45978985108/job/140437783083",
+        "workflow": ".github/workflows/community-latest_docker_build_and_push.yml",
+        "checks": ["Compiler", "Build and push: docker buildx build -f docker/Dockerfile"]
+      },
+      "patches": [
+        {
+          "fixer": "dockerfile-legacy",
+          "paths": ["docker/Dockerfile"],
+          "sha256": "ab4b0566cfe32c3e9f5605ac9cfa22ac7fd974aa9e3489cf39f530f55f0e4fe4"
+        }
+      ]
+    },
+    {
+      "repository": "ColinEberhardt/applause-button",
+      "commit": "7995d3bd403c320ee798a827aee05bcd8dd207d3",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/release.yml"],
+          "sha256": "8a484d37d1a747772e88ea46c141c9a6ca1cc699aeef7aefbc0a7f6aa2b00e51"
+        }
+      ]
+    },
+    {
+      "repository": "connectrpc/connect-playwright-es",
+      "commit": "1fc1442b31f3104122b919f959cfe55d15338cca",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yaml"],
+          "sha256": "5eea1ce929b8d3d8dab5b7f2a358389c5ab5ff04c85f35545cec690e8a9b9bc9"
+        }
+      ]
+    },
+    {
+      "repository": "connectrpc/connect-query-es",
+      "commit": "584732abf870b5561ba50052d02caf0c85635204",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yaml"],
+          "sha256": "95d0e0b534049510f4ecc5aaa78c73432e0dfb5833894aa1ef7c5c87036bb5ba"
+        }
+      ]
+    },
+    {
+      "repository": "CuteSurtr/NeedlemanWunschLean",
+      "commit": "7aaff9d59b1ce98fca3ee6e55899c558e2c01d46",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/lean_action_ci.yml"],
+          "sha256": "d633b16e2cfcbdb15f6b2e09d490fb40fa8dd3d772c5398ce8ad7460f9ae63dc"
+        }
+      ]
+    },
+    {
+      "repository": "cyanheads/atlas-mcp-server",
+      "commit": "5a0bfdc08f9d0d106e69432bcaa606cc414340f1",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/publish.yml"],
+          "sha256": "e12487646306026f1a5c771a86a7ca262d536feb732f82ddca7f604cb707dd97"
+        }
+      ]
+    },
+    {
+      "repository": "danieltyukov/studocuhack",
+      "commit": "a01a3ecb50573d9a7e15b29ebcb368f7c292db18",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml", ".github/workflows/pages.yml", ".github/workflows/release.yml"],
+          "sha256": "bfbda4d831be51c1ed6d9ee23723c261040590a772e3dfeaa5e35da4fc6c963f"
+        }
+      ]
+    },
+    {
+      "repository": "darkroomengineering/aniso",
+      "commit": "59d0aa139b6964de2ba4c042f04505677aed4cd8",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/main.yml"],
+          "sha256": "924a409f0860f73a2d928434e8e65a1922d4b63139d01905d7e4181af81db7fa"
+        }
+      ]
+    },
+    {
+      "repository": "davidpob99/nasa-wallpaper",
+      "commit": "457c3eadce775423fe1399eeada78a29c95698ae",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [
+            ".github/workflows/ci.yml",
+            ".github/workflows/linux-build.yml",
+            ".github/workflows/macos-build.yml",
+            ".github/workflows/windows-build.yml"
+          ],
+          "sha256": "9eccb496abebe2a335411323dbc57192c7917b831d675ff15b22ef855e53ed99"
+        }
+      ]
+    },
+    {
+      "repository": "dc7290/next-export-optimize-images",
+      "commit": "dffdfc2aa86b3e91e21c6ed80d528b474eda2e4c",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/node.js.yml", ".github/workflows/release.yml"],
+          "sha256": "6f0d978fed1b01db6bec14012a192477e6ac6eba1b1c4b09a67b8ceb6429d45f"
+        }
+      ]
+    },
+    {
+      "repository": "dominictarr/d64",
+      "commit": "615fd846fa98a7d4cf1e525c6ca87cc20831f209",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/library/node@sha256:e0e989b967dacc279681ed81774b2ce9eeebbb0efb8e0c427573235bebf1eda1",
+        "checks": [
+          {
+            "command": ["node", "--check", "index.js"],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "command": ["npm", "test"],
+            "exitCode": 0,
+            "stdoutSha256": "7d3a20576968ce8ccb0f4f61d7bd3f851179a403b9172c20222598b011b39a81",
+            "stderrSha256": "390597c3136286ff896634a0b7588455aa8badb2791a30dc4370b5189d9029aa"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "node-buffer",
+          "paths": ["test/index.js"],
+          "sha256": "72a4ff22e10c631ac5bd1f26721332fe8ca4e7ab31631336ba598188a38910f4"
+        }
+      ]
+    },
+    {
+      "repository": "dotpcap/sharppcap",
+      "commit": "667db1721cf0f91000c584fb6f5e8ff1f8327364",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/dotnet-core.yml"],
+          "sha256": "1726be881d1eee9b1d58463e3e11fe5a00cbc50b98fbe669b95615a7d5c6eee9"
+        }
+      ]
+    },
+    {
+      "repository": "dpgaspar/Flask-AppBuilder",
+      "commit": "30e13dc7916167fa159452322aa00d03999970f9",
+      "baseline": {
+        "kind": "upstream",
+        "job": "https://github.com/dpgaspar/Flask-AppBuilder/actions/runs/39783892678/job/119841858888",
+        "workflow": ".github/workflows/ci.yml",
+        "checks": ["Install dependencies", "Run tests"]
+      },
+      "patches": [
+        {
+          "fixer": "python-imp",
+          "paths": ["bin/db_migrate.py"],
+          "sha256": "8caf6e4f6d2882433186376f2cc635fa65f21182081d325b313b311a37b865da"
+        }
+      ]
+    },
+    {
+      "repository": "droidrun/mobile-jev",
+      "commit": "395fc222beac4f059f9a0beb337d114a2b066e99",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/ci.yml"],
+          "sha256": "b39841f6f6c4f50857bdef1c9589350bba95f50c2d3b73bd77ab683cd36e55dd"
+        }
+      ]
+    },
+    {
+      "repository": "dynamicexpresso/DynamicExpresso",
+      "commit": "ad167c0f396127de6df1f0b555d2916992345713",
+      "baseline": {
+        "kind": "upstream",
+        "job": "https://github.com/dynamicexpresso/DynamicExpresso/actions/runs/36018393664/job/107696720924",
+        "workflow": ".github/workflows/ci.yml",
+        "checks": ["Build", "Test .net core 8.0", "Test .net core 9.0"]
+      },
+      "patches": [
+        {
+          "fixer": "workflow-commands",
+          "paths": [".github/workflows/ci.yml"],
+          "sha256": "2e1836e872c356797fdd028103102a46f0a0a1ffdb24b4b0a721acd762fa12a2"
+        }
+      ]
+    },
+    {
+      "repository": "ecugol/pre-commit-hooks-django",
+      "commit": "7f436e6be071cfa69ba9f10091184d5c9cc94dcd",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/python-package.yml", ".github/workflows/python-publish.yml"],
+          "sha256": "df9a8a7fef328c6c95781b3cc6d6b28a3857a2552d39dda784b9e592c333d264"
+        }
+      ]
+    },
+    {
+      "repository": "encode/httpx",
+      "commit": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/publish.yml", ".github/workflows/test-suite.yml"],
+          "sha256": "2260ad67e4215937cb99a13124d5bb8ae1ad41216b28d7ebe036127b0f7bf8d1"
+        }
+      ]
+    },
+    {
+      "repository": "Ewwii-sh/ewwii",
+      "commit": "2e3b740f77a84c9a57f0cbdbdfdf431e4bc41975",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "github-actions-uses",
+          "paths": [".github/workflows/build.yml"],
+          "sha256": "12e355142c78f4f3651f2f326855694c8a292656914cf3a9065c83679278e278"
+        }
+      ]
+    },
+    {
+      "repository": "gorilla/mux",
+      "commit": "db9d1d0073d27a0a2d9a8c1bc52aa0af4374d265",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/library/golang@sha256:66c04b389c4b0a2e0f0d51f3a37de0109650887a321b2a3b8cd9f573d7490a01",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "mkdir -p /work/go-tmp /work/go-cache && export GOTMPDIR=/work/go-tmp GOCACHE=/work/go-cache && go build -mod=vendor ./... && go test -mod=vendor ./..."
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "3dc26568a8146066e849b01db9ed965dadd9b9cf1437279060d118e529542ba1",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "go-mod",
+          "paths": ["go.mod"],
+          "sha256": "f225821faf409aa11f12ce87b032e8ba7d8b7d3ec0d6b50fdfe57fec62c065e1"
+        }
+      ]
+    },
+    {
+      "repository": "joserodpt/RealScoreboard",
+      "commit": "bf0d0457562b17474323abd7d4f13f05baaad4df",
+      "baseline": {
+        "kind": "upstream",
+        "job": "https://github.com/joserodpt/RealScoreboard/actions/runs/36355455149/job/108723228986",
+        "workflow": ".github/workflows/maven.yml",
+        "checks": ["mvn --no-transfer-progress package -Dmaven.javadoc.skip=true"]
+      },
+      "patches": [
+        {
+          "fixer": "java",
+          "paths": ["realscoreboard-api/pom.xml", "realscoreboard-plugin/pom.xml"],
+          "sha256": "bb7d0ec0da13c2fdc423171bd420e5c0324be4711714790b8a0a59e48d481485"
+        }
+      ]
+    },
+    {
+      "repository": "Jxck/events",
+      "commit": "1358e148092caf067b468224bd5b6aea57b0f64c",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/library/node@sha256:e0e989b967dacc279681ed81774b2ce9eeebbb0efb8e0c427573235bebf1eda1",
+        "checks": [
+          {
+            "command": ["node", "--check", "events.js"],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "command": [
+              "node",
+              "-e",
+              "const fs = require(\"node:fs\");\nconst vm = require(\"node:vm\");\nconst path = require(\"node:path\");\nconst context = vm.createContext({ console, setTimeout, clearTimeout });\ncontext.window = context;\nconst html = fs.readFileSync(\"test/index.html\", \"utf8\").replace(/<!--[\\s\\S]*?-->/g, \"\");\nlet checks = 0;\nfor (const match of html.matchAll(/<script src=\"([^\"]+)\"[^>]*>/g)) {\n  const filename = path.join(\"test\", match[1]);\n  vm.runInContext(fs.readFileSync(filename, \"utf8\"), context, { filename });\n  if (/^test-/.test(match[1])) checks++;\n}\nif (checks === 0) throw Error(\"No upstream browser tests discovered\");\nconsole.log(\"Passed browser test files:\", checks);"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "3e9cc92cdcffb632740920d468753a5bd883762d4960d9ffef2338e07beac172",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "node-util-is",
+          "paths": ["events.js"],
+          "sha256": "89c95ec8dcac90e7c7df241db1768443d09ee482b11f0f3c9b643c2ff6c01c2e"
+        }
+      ]
+    },
+    {
+      "repository": "knrt10/kubernetes-basicLearning",
+      "commit": "5a50f7cc6100f210e7b8211aa56e5a459a807cc7",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/library/node@sha256:ee25271e00572cb09d095f6b35880a284eac570c17452644bc67fd1d8dc7f9f7",
+        "checks": [
+          {
+            "command": [
+              "build",
+              "--platform",
+              "linux/amd64",
+              "--progress",
+              "plain",
+              "--network",
+              "none",
+              "--build-context",
+              "node:8=docker-image://docker.io/library/node@sha256:ee25271e00572cb09d095f6b35880a284eac570c17452644bc67fd1d8dc7f9f7",
+              "--output",
+              "type=cacheonly",
+              "."
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "c0aa41664aeff70922dd8a4b82b0a2acb6eae4cccd775a8b5b41cba7ade84150"
+          }
+        ],
+        "directory": "kubia-unhealthy"
+      },
+      "patches": [
+        {
+          "fixer": "dockerfile",
+          "paths": ["kubia-unhealthy/Dockerfile"],
+          "sha256": "542ca6f554e6b72ca39439d365651b8b42b3288e5393b62105a060c6f746e932"
+        }
+      ]
+    },
+    {
+      "repository": "Monogramm/autodiscover-email-settings",
+      "commit": "66c144e923f245dc0b4e64421449afedcad64052",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/library/node@sha256:e0e989b967dacc279681ed81774b2ce9eeebbb0efb8e0c427573235bebf1eda1",
+        "lockSha256": "8ab50ada546544ddc2fbae37b9d4172b906a798ebbd887d407410b86972cc996",
+        "stagedLockSha256": "8ab50ada546544ddc2fbae37b9d4172b906a798ebbd887d407410b86972cc996",
+        "checks": [
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "yarn install --offline --frozen-lockfile --production --cache-folder .yarn-cache --non-interactive && node --check index.js && node --check settings.js"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "e0fb4381338e6950bb887f5af43411b062c1e7ca78c091428ea3c758c0f7a3fc",
+            "stderrSha256": "3c808f807386ae8a164cfd883e7925109efed1533f6ddc5bee28560972cb9641"
+          },
+          {
+            "command": [
+              "sh",
+              "-ec",
+              "yarn install --offline --frozen-lockfile --production --cache-folder .yarn-cache --non-interactive && export NODE_ENV=production DOMAIN=example.com COMPANY_NAME=Company; node index.js & app=$!; trap \"kill $app 2>/dev/null || true\" EXIT; node -e 'const assert = require(\"node:assert/strict\"); (async () => { for (let n = 0; n < 30; n++) { const reply = await fetch(\"http://127.0.0.1:8000/\").catch(() => null); if (!reply) { await new Promise(r => setTimeout(r, 200)); continue; } assert.equal(reply.status, 200); assert.match(await reply.text(), /Generic settings/); console.log(\"Autodiscover health fixture passed\"); return; } throw Error(\"Server did not start\"); })().catch(error => {console.error(error); process.exitCode = 1;});'"
+            ],
+            "exitCode": 0,
+            "stdoutSha256": "9b35d647a4823b43a5f947153230bf04db37044e2253cd4fe6f1094c192a98c1",
+            "stderrSha256": "20b95e9839a88712c860ee6f0ccc5312bd3f207e0d6a696d2fc507aecb28f7ee"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "codemods",
+          "paths": ["index.js"],
+          "sha256": "f8014646605fc30bd77c68b2bd201fe612e961fce247a11b5584d1b2b0a5350b"
+        }
+      ]
+    },
+    {
+      "repository": "n8henrie/pycookiecheat",
+      "commit": "eed8f7411fd498344a7c95592893828a42d20414",
+      "baseline": {
+        "kind": "upstream",
+        "job": "https://github.com/n8henrie/pycookiecheat/actions/runs/28376776321/job/84068393212",
+        "workflow": ".github/workflows/python-package.yml",
+        "checks": ["Run tests via tox (Chromium)", "Run tests via tox (Brave)"]
+      },
+      "patches": [
+        {
+          "fixer": "python",
+          "paths": ["pyproject.toml"],
+          "sha256": "753e4cfee1e27e717d685fbf7362371d1d1d003b031314dd2864762b29643e5f"
+        },
+        {
+          "fixer": "python-utcnow",
+          "paths": ["tests/test_firefox.py"],
+          "sha256": "a2db291cff3d274fe99455914371ff74b4f5f927d228e6cc550670f20a8dc63c"
+        },
+        {
+          "fixer": "runtime-pins",
+          "paths": [".python-version"],
+          "sha256": "ac2bb7c2796a396d9bb93fce57620e704fa6aa26014be55ae3617cb7175d2e60"
+        }
+      ]
+    },
+    {
+      "repository": "Readme-Workflows/recent-activity",
+      "commit": "822d7c85dca09b7c42f52b5ad57ecb7b246a271f",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/library/node@sha256:e0e989b967dacc279681ed81774b2ce9eeebbb0efb8e0c427573235bebf1eda1",
+        "lockSha256": "4e8a5d2d09bc2b446d28fc872bf853a5f6655f3ff155ede2e78ac0c4c8a06110",
+        "stagedLockSha256": "4e8a5d2d09bc2b446d28fc872bf853a5f6655f3ff155ede2e78ac0c4c8a06110",
+        "checks": [
+          {
+            "command": ["sh", "-ec", "npm ci --offline --cache .npm-cache --no-audit --no-fund && npm run build"],
+            "exitCode": 0,
+            "stdoutSha256": "5ec4d9f155978fbaf321151e234ba57333d4e7b0e8344f5dd5e366f82f3cc70c",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "action-runtime",
+          "paths": ["action.yml"],
+          "sha256": "6e4def72ead6aa6fe138ff42ce1acb25b6592ccc33cd8cda87c272a4fa251fe3"
+        }
+      ]
+    },
+    {
+      "repository": "stefanprodan/k8s-prom-hpa",
+      "commit": "2dbaabafd360e5c1d0f8a9aaa7bfaa7cb80b6c4b",
+      "baseline": {
+        "kind": "isolated",
+        "image": "sha256:5006303e972de19ed64bdc0efb57824960017450a7c0e59e4523dd1ac3cd9d8f",
+        "checks": [
+          {
+            "command": [
+              "/usr/local/bin/kubeconform",
+              "-strict",
+              "-summary",
+              "-schema-location",
+              "./.offing-kubeconform-schemas/{{.ResourceKind}}{{.KindSuffix}}.json",
+              "custom-metrics-api/custom-metrics-apiserver-auth-delegator-cluster-role-binding.yaml",
+              "custom-metrics-api/custom-metrics-apiserver-auth-reader-role-binding.yaml",
+              "custom-metrics-api/custom-metrics-apiserver-resource-reader-cluster-role-binding.yaml",
+              "custom-metrics-api/custom-metrics-apiservice.yaml",
+              "custom-metrics-api/custom-metrics-cluster-role.yaml",
+              "custom-metrics-api/custom-metrics-resource-reader-cluster-role.yaml",
+              "custom-metrics-api/hpa-custom-metrics-cluster-role-binding.yaml",
+              "ingress/ingress-nginx-rbac.yaml",
+              "metrics-server/auth-delegator.yaml",
+              "metrics-server/auth-reader.yaml",
+              "metrics-server/metrics-apiservice.yaml",
+              "podinfo/podinfo-hpa-custom.yaml",
+              "podinfo/podinfo-hpa.yaml",
+              "podinfo/podinfo-ingress.yaml",
+              "prometheus/prometheus-rbac.yaml"
+            ],
+            "exitCode": 0
+          }
+        ],
+        "schemas": {
+          "repository": "yannh/kubernetes-json-schema",
+          "commit": "e62c03bd5a52fd34ff6ac28d083e2a300e0ae7c1",
+          "directory": "v1.21.14-standalone-strict",
+          "files": [
+            "clusterrolebinding-rbac-v1beta1.json",
+            "rolebinding-rbac-v1beta1.json",
+            "apiservice-apiregistration-v1beta1.json",
+            "clusterrole-rbac-v1beta1.json",
+            "serviceaccount-v1.json",
+            "role-rbac-v1beta1.json",
+            "horizontalpodautoscaler-autoscaling-v2beta2.json",
+            "service-v1.json",
+            "ingress-extensions-v1beta1.json"
+          ]
+        }
+      },
+      "patches": [
+        {
+          "fixer": "kubernetes",
+          "paths": [
+            "custom-metrics-api/custom-metrics-apiserver-auth-delegator-cluster-role-binding.yaml",
+            "custom-metrics-api/custom-metrics-apiserver-auth-reader-role-binding.yaml",
+            "custom-metrics-api/custom-metrics-apiserver-resource-reader-cluster-role-binding.yaml",
+            "custom-metrics-api/custom-metrics-apiservice.yaml",
+            "custom-metrics-api/custom-metrics-cluster-role.yaml",
+            "custom-metrics-api/custom-metrics-resource-reader-cluster-role.yaml",
+            "custom-metrics-api/hpa-custom-metrics-cluster-role-binding.yaml",
+            "ingress/ingress-nginx-rbac.yaml",
+            "metrics-server/auth-delegator.yaml",
+            "metrics-server/auth-reader.yaml",
+            "metrics-server/metrics-apiservice.yaml",
+            "podinfo/podinfo-hpa-custom.yaml",
+            "podinfo/podinfo-hpa.yaml",
+            "prometheus/prometheus-rbac.yaml"
+          ],
+          "sha256": "5c33ec04fc1c0afc18220887255b87682684952145de6033320af79eb89e19be"
+        },
+        {
+          "fixer": "kubernetes-ingress-v1",
+          "paths": ["podinfo/podinfo-ingress.yaml"],
+          "sha256": "8478e2982da19b511faf61f1f1b61332702dffcf42256509df8267fadd1b554d"
+        }
+      ]
+    },
+    {
+      "repository": "streamich/fs-monkey",
+      "commit": "08fc2cc3b4cdd8c0889a0576def3d66338a5cf4a",
+      "baseline": {
+        "kind": "isolated",
+        "image": "docker.io/library/node@sha256:e0e989b967dacc279681ed81774b2ce9eeebbb0efb8e0c427573235bebf1eda1",
+        "lockSha256": "00b0880ca4e74ddda6576e44e6e028a5811d0a8107660b9ca68eda5330bb498f",
+        "stagedLockSha256": "00b0880ca4e74ddda6576e44e6e028a5811d0a8107660b9ca68eda5330bb498f",
+        "checks": [
+          {
+            "command": ["sh", "-ec", "npm ci --offline --cache .npm-cache --no-audit --no-fund && npm run build"],
+            "exitCode": 0,
+            "stdoutSha256": "51c4c3bf0bec6691d2186790144530a81862d18ea87f91eb24936666f33e9eff",
+            "stderrSha256": "685b5c36362c5ac836b7cff0166027537c6d54f6f80518eea630d140b6292dca"
+          },
+          {
+            "command": ["sh", "-ec", "npm ci --offline --cache .npm-cache --no-audit --no-fund && npm run test"],
+            "exitCode": 0,
+            "stdoutSha256": "698c5b30e2b2f9d048f723082e18450e75e57fb88b1ea872a574f99495f6d272",
+            "stderrSha256": "04915ad48c33d89fbb81424a42d727a902781307c199d3f0be93ed6696aeb3e2"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "fixer": "node-renames",
+          "paths": ["src/patchRequire.js"],
+          "sha256": "f2518bea8f11cabcc2988f9d8b030f50a4bc7578ece8c61ef07df0bb4eae0931"
+        }
+      ]
+    },
+    {
+      "repository": "zhanyong-wan/dongbei",
+      "commit": "d36def3d423d7f5481d2afa44cf8390e24d0f179",
+      "baseline": {
+        "kind": "upstream",
+        "job": "https://github.com/zhanyong-wan/dongbei/actions/runs/26383946891/job/77658489014",
+        "workflow": ".github/workflows/ci.yml",
+        "checks": ["test (3.11)"]
+      },
+      "patches": [
+        {
+          "fixer": "python-renames",
+          "paths": ["test/dongbei_test.py"],
+          "sha256": "15c1b49571d0ceadf9670f0775dbc04a92fe603199ea03f6abdf5b0622fb56fd"
+        }
+      ]
+    }
+  ]
+}
