@@ -1,0 +1,1 @@
+- Add offline runtime upgrade simulations to forecast and MCP with pinned fleet readiness evidence.

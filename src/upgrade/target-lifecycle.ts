@@ -1,4 +1,4 @@
-import { readdir, readFile } from "node:fs/promises";
+import { lstat, readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import semver from "semver";
@@ -14,6 +14,7 @@ import { parseImageReference } from "../detectors/container/parse-image.js";
 import { addDays } from "@velella/ebb/forecast";
 import { lookupProduct } from "@velella/ebb/lookup";
 import type { LookupFinding, LookupResult } from "@velella/ebb/lookup";
+import { MAXIMUM_READ_BYTES } from "../package-files.js";
 import { readPinnedRuntimes } from "../runtime-pin.js";
 import type { UpgradeAnalyzer, UpgradeIssue, UpgradeTarget } from "./types.js";
 
@@ -59,11 +60,15 @@ export interface RuntimePin {
   normalized: string;
   /** The field label carried in the issue evidence, such as `nvmrc` or `actions/setup-node`. */
   field: string;
+  /** More than one declaration shares this source, so a single substitution would be incomplete. */
+  ambiguous?: true;
 }
 
 async function readOptional(path: string): Promise<string | undefined> {
   try {
-    return await readFile(path, "utf8");
+    const stat = await lstat(path);
+    if (stat.isFile() && stat.size <= MAXIMUM_READ_BYTES) return await readFile(path, "utf8");
+    return undefined;
   } catch {
     return undefined;
   }
@@ -131,7 +136,7 @@ const ASDF_TOOLS: Record<string, string> = {
 };
 
 /** The first concrete version of every recognized tool line of a `.tool-versions` file. */
-export function toolVersionPins(contents: string): RuntimePin[] {
+export function toolVersionPins(contents: string, markAmbiguous = false): RuntimePin[] {
   const pins: RuntimePin[] = [];
   for (const [index, rawLine] of contents.split(/\r?\n/).entries()) {
     const text = (rawLine.split("#", 1)[0] ?? "").trim();
@@ -144,7 +149,15 @@ export function toolVersionPins(contents: string): RuntimePin[] {
     if (value === undefined) continue;
     const normalized = normalizePin(value);
     if (normalized === undefined) continue;
-    pins.push({ runtime, path: ".tool-versions", line: index + 1, value, normalized, field: `.tool-versions ${tool}` });
+    pins.push({
+      runtime,
+      path: ".tool-versions",
+      line: index + 1,
+      value,
+      normalized,
+      field: `.tool-versions ${tool}`,
+      ...(markAmbiguous && parts.length > 2 ? { ambiguous: true } : {}),
+    });
   }
   return pins;
 }
@@ -174,6 +187,7 @@ export function imagePin(reference: string, line: number, path: string): Runtime
   if (image === undefined || image.tag === undefined) return undefined;
   const runtime = DOCKER_IMAGE_REPOSITORIES[image.repository];
   if (runtime === undefined) return undefined;
+  if (image.registry !== (runtime === "dotnet" ? "mcr.microsoft.com" : "docker.io")) return undefined;
   const normalized = normalizePin(image.tag);
   if (normalized === undefined) return undefined;
   return { runtime, path, line, value: reference, normalized, field: "FROM" };
@@ -318,6 +332,7 @@ async function workflowFilePins(root: string): Promise<RuntimePin[]> {
   const directory = join(root, ".github", "workflows");
   let entries: string[];
   try {
+    if (!(await lstat(join(root, ".github"))).isDirectory() || !(await lstat(directory)).isDirectory()) return [];
     entries = (await readdir(directory)).filter((name) => /\.(?:ya?ml)$/i.test(name)).sort();
   } catch {
     return [];
@@ -356,7 +371,7 @@ function parserPins(
 }
 
 /** Every versioned pin of a supported runtime the analyzer can read, sorted by path and line. */
-export async function readRuntimePins(root: string): Promise<RuntimePin[]> {
+export async function readRuntimePins(root: string, options: { markAmbiguous?: boolean } = {}): Promise<RuntimePin[]> {
   const pins: RuntimePin[] = [];
   for (const spec of SINGLE_LINE_PINS) {
     const contents = await readOptional(join(root, spec.path));
@@ -379,7 +394,7 @@ export async function readRuntimePins(root: string): Promise<RuntimePin[]> {
     ...parserPins("global.json", "dotnet", await readOptional(join(root, "global.json")), parseGlobalJson),
   );
   const toolContents = await readOptional(join(root, ".tool-versions"));
-  if (toolContents !== undefined) pins.push(...toolVersionPins(toolContents));
+  if (toolContents !== undefined) pins.push(...toolVersionPins(toolContents, options.markAmbiguous));
   pins.push(...(await dockerfilePins(root)));
   pins.push(...(await workflowFilePins(root)));
   return pins.sort(
@@ -392,7 +407,7 @@ export async function readRuntimePins(root: string): Promise<RuntimePin[]> {
 }
 
 /** The rule-id prefix that marks a runtime's own lifecycle rules in the bundled registry. */
-const RUNTIME_RULE_PREFIXES: Record<string, string> = {
+export const RUNTIME_RULE_PREFIXES: Record<string, string> = {
   nodejs: "nodejs.runtime.",
   python: "python.runtime.",
   go: "go.runtime.",
@@ -410,7 +425,7 @@ const STATUS_PRECEDENCE = ["end-of-life", "removed", "end-of-support", "deprecat
  * The finding that speaks about the runtime release itself. `lookupProduct` aggregates every rule of the resolved
  * product, which can include module or platform rules, so only the product's own lifecycle rules judge the target.
  */
-function primaryFinding(runtime: string, findings: readonly LookupFinding[]): LookupFinding | undefined {
+export function primaryFinding(runtime: string, findings: readonly LookupFinding[]): LookupFinding | undefined {
   const prefix = RUNTIME_RULE_PREFIXES[runtime];
   if (prefix === undefined) return undefined;
   const own = findings.filter((finding) => finding.ruleId.startsWith(prefix));
@@ -432,10 +447,8 @@ export function targetLifecycleIssue(
   const deadline = primary.deadline;
   const outOfSupport = primary.event === "end-of-support";
   const ended =
-    primary.event === "end-of-life" ||
-    primary.event === "removed" ||
     outOfSupport ||
-    (deadline !== undefined && deadline <= today);
+    (deadline === undefined ? primary.event === "end-of-life" || primary.event === "removed" : deadline <= today);
   if (!ended && (deadline === undefined || deadline > addDays(today, SOON_ENDING_DAYS))) return undefined;
   const suggestion = primary.replacement ?? "a newer supported line named by the bundled lifecycle data";
   const subject = `${target.runtime}@${target.version}`;
@@ -515,8 +528,8 @@ export class TargetLifecycleAnalyzer implements UpgradeAnalyzer {
     return (await readRuntimePins(root)).length > 0;
   }
 
-  async analyze(root: string, target: UpgradeTarget): Promise<UpgradeIssue[]> {
-    return analyzeTargetLifecycle(root, target, today());
+  async analyze(root: string, target: UpgradeTarget, asOf = today()): Promise<UpgradeIssue[]> {
+    return analyzeTargetLifecycle(root, target, asOf);
   }
 }
 

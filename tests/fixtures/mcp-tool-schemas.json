@@ -6344,5 +6344,772 @@
       ],
       "additionalProperties": false
     }
+  },
+  {
+    "name": "simulate_upgrade",
+    "title": "Simulate runtime upgrade",
+    "description": "Call before you compare proposed runtime targets. Simulate each upgrade independently. Returns static blockers, literal pins and projected lifecycle deadlines from local evidence, without changing files or running builds.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "repository_path": {
+          "default": ".",
+          "description": "Local path to the repository. Defaults to the server working directory.",
+          "type": "string",
+          "minLength": 1
+        },
+        "targets": {
+          "minItems": 1,
+          "maxItems": 8,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Runtime versions such as nodejs@22 or python@3.13."
+        },
+        "months": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 36
+        },
+        "as_of": {
+          "description": "Start day in YYYY-MM-DD. Defaults to today in UTC.",
+          "type": "string"
+        },
+        "effort": {
+          "description": "Include deterministic, assisted and manual effort evidence.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "targets"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://velella.sh/offing/schemas/whatif.v1.schema.json",
+      "title": "Offing runtime upgrade simulation v1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "kind",
+        "today",
+        "reports"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "offing.whatif.v1"
+        },
+        "kind": {
+          "enum": [
+            "repository",
+            "fleet"
+          ]
+        },
+        "today": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/report"
+          },
+          "minItems": 1,
+          "maxItems": 8
+        },
+        "more": {
+          "type": "object",
+          "required": [
+            "truncated",
+            "hint",
+            "omitted",
+            "estimatedTokens"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "truncated": {
+              "const": true,
+              "description": "Always true: the answer was cut to fit the size cap."
+            },
+            "hint": {
+              "type": "string",
+              "minLength": 1,
+              "description": "How to read what was left out."
+            },
+            "omitted": {
+              "type": "array",
+              "description": "One entry per array that lost elements. A path with [] sums every array at that position, including those inside elements that were left out.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "path",
+                  "shown",
+                  "total"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?(\\.[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?)*$",
+                    "description": "Where the array sits, such as findings or findings[].usages."
+                  },
+                  "shown": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Elements in the answer as returned."
+                  },
+                  "total": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Elements in the full answer."
+                  }
+                }
+              }
+            },
+            "clipped": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Path of every text that was shortened; it ends with a truncation marker."
+            },
+            "estimatedTokens": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Size of the answer as returned: three characters of JSON text count as one token."
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "repository"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reports": {
+                "items": {
+                  "$ref": "#/$defs/repositoryReport"
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "reports": {
+                "items": {
+                  "$ref": "#/$defs/fleetReport"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "$defs": {
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "runtime",
+            "version"
+          ],
+          "properties": {
+            "runtime": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,39}$"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^\\d{1,6}(?:\\.\\d{1,6}){0,2}$"
+            }
+          }
+        },
+        "effort": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "reason",
+            "evidence"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "automatic",
+                "assisted",
+                "manual"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "pin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "runtime",
+            "path",
+            "line",
+            "value",
+            "normalized",
+            "field",
+            "replacement",
+            "change"
+          ],
+          "properties": {
+            "runtime": {
+              "type": "string",
+              "minLength": 1
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "line": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "normalized": {
+              "type": "string",
+              "minLength": 1
+            },
+            "field": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lineage": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "replacement": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "change": {
+              "enum": [
+                "substituted",
+                "unresolved"
+              ]
+            },
+            "effort": {
+              "$ref": "#/$defs/effort"
+            }
+          }
+        },
+        "issue": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "analyzer",
+            "level",
+            "subject",
+            "path",
+            "reason",
+            "evidence"
+          ],
+          "properties": {
+            "analyzer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "level": {
+              "enum": [
+                "blocker",
+                "warning",
+                "unknown"
+              ]
+            },
+            "subject": {
+              "type": "string",
+              "minLength": 1
+            },
+            "path": {
+              "type": "string"
+            },
+            "line": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "chain": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "manifest",
+                    "lockfile",
+                    "rule"
+                  ]
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "effort": {
+              "$ref": "#/$defs/effort"
+            }
+          }
+        },
+        "blocker": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "subject",
+            "path",
+            "firstSupported"
+          ],
+          "properties": {
+            "subject": {
+              "type": "string",
+              "minLength": 1
+            },
+            "path": {
+              "type": "string"
+            },
+            "chain": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "firstSupported": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "blockers": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "total",
+            "roots",
+            "ungrouped"
+          ],
+          "properties": {
+            "total": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "roots": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "dependency",
+                  "unlocks",
+                  "blockers"
+                ],
+                "properties": {
+                  "dependency": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unlocks": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "blockers": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/blocker"
+                    }
+                  }
+                }
+              }
+            },
+            "ungrouped": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/blocker"
+              }
+            }
+          }
+        },
+        "support": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "rule",
+            "date",
+            "source",
+            "next"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "dated",
+                "ended",
+                "no-data"
+              ]
+            },
+            "rule": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "date": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "next": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "range",
+                    "date"
+                  ],
+                  "properties": {
+                    "range": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    }
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        "deadline": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "date",
+            "rule",
+            "title",
+            "path",
+            "source"
+          ],
+          "properties": {
+            "date": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "rule": {
+              "type": "string",
+              "minLength": 1
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "line": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "forecast": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "until",
+            "removed",
+            "retained",
+            "added"
+          ],
+          "properties": {
+            "until": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "removed": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/deadline"
+              }
+            },
+            "retained": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/deadline"
+              }
+            },
+            "added": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/deadline"
+              }
+            }
+          }
+        },
+        "repositoryReport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "target",
+            "verdict",
+            "analyzers",
+            "issues",
+            "blockers",
+            "support",
+            "pins",
+            "forecast"
+          ],
+          "properties": {
+            "target": {
+              "$ref": "#/$defs/target"
+            },
+            "verdict": {
+              "enum": [
+                "ready",
+                "blocked",
+                "unknown"
+              ]
+            },
+            "analyzers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/issue"
+              }
+            },
+            "blockers": {
+              "$ref": "#/$defs/blockers"
+            },
+            "support": {
+              "$ref": "#/$defs/support"
+            },
+            "pins": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/pin"
+              }
+            },
+            "forecast": {
+              "$ref": "#/$defs/forecast"
+            }
+          }
+        },
+        "fleetEntry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "host",
+            "commit",
+            "reason"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "host": {
+              "type": "string",
+              "minLength": 1
+            },
+            "commit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "fleetReport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "target",
+            "ready",
+            "blocked",
+            "unknown"
+          ],
+          "properties": {
+            "target": {
+              "$ref": "#/$defs/target"
+            },
+            "ready": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/fleetEntry"
+              }
+            },
+            "blocked": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/fleetEntry"
+              }
+            },
+            "unknown": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/fleetEntry"
+              }
+            }
+          }
+        },
+        "report": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "$ref": "#/$defs/target"
+            },
+            "verdict": {
+              "enum": [
+                "ready",
+                "blocked",
+                "unknown"
+              ]
+            },
+            "analyzers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/issue"
+              }
+            },
+            "blockers": {
+              "$ref": "#/$defs/blockers"
+            },
+            "support": {
+              "$ref": "#/$defs/support"
+            },
+            "pins": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/pin"
+              }
+            },
+            "forecast": {
+              "$ref": "#/$defs/forecast"
+            },
+            "ready": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/fleetEntry"
+              }
+            },
+            "blocked": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/fleetEntry"
+              }
+            },
+            "unknown": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/fleetEntry"
+              }
+            }
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/repositoryReport"
+            },
+            {
+              "$ref": "#/$defs/fleetReport"
+            }
+          ]
+        }
+      }
+    }
   }
 ]

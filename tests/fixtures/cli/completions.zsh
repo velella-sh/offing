@@ -24,7 +24,7 @@ _offing() {
     policy) compadd validate explain pull ;;
         scan) _arguments '--demo' '--sbom' '--json' '--format' '--baseline' '--baseline-warn-days' '--on-expired' '--today' '--write-status' '--interactive' '--fail-on' '--lookahead' '--policy' '--policy-online' '--all' '--by-owner' '--data-version' '--only' '--exclude' '*:path:_files' ;;
         baseline) _arguments '--output' '--data-version' '*:path:_files' ;;
-        forecast) _arguments '--months' '--as-of' '--today' '--svg' '--animate' '--timeline' '--json' '--format' '--data-version' '--ics' '--force' '--fleet' '--by' '--card' '--theme' '--digest' '--previous' '--owners' '--gitlab' '--gitlab-url' '*:path:_files' ;;
+        forecast) _arguments '--months' '--as-of' '--today' '--svg' '--animate' '--timeline' '--json' '--format' '--data-version' '--ics' '--force' '--target' '--effort' '--fleet' '--by' '--card' '--theme' '--digest' '--previous' '--owners' '--gitlab' '--gitlab-url' '*:path:_files' ;;
         forecast) _arguments '--months' '--as-of' '--today' '--timeline' '--json' '--format' '--data-version' '*:path:_files' ;;
         countdown) _arguments '--as-of' '--limit' '--json' '--once' '--no-animation' '--no-cache' '--data-version' '*:path:_files' ;;
         plan) _arguments '--json' '--wave' '--data-version' '*:path:_files' ;;
@@ -58,7 +58,7 @@ _offing() {
         report-issue) _arguments '--output' '--data-version' '*:path:_files' ;;
         capabilities) _arguments '--json' '*:path:_files' ;;
         autopilot) _arguments '--dry-run' '--prepare' '--undo' '--wave' '--finding' '--to' '--agent' '*:path:_files' ;;
-        fleet) _arguments '--include' '--exclude' '--topic' '--repos' '--jobs' '--policy' '--gitlab' '--gitlab-url' '--include-forks' '--include-archived' '--json' '--image-lineage' '--html' '--format' '--no-cache' '--fail-on' '--progress' '--forecast-input' '--as-of' '*:path:_files' ;;
+        fleet) _arguments '--include' '--exclude' '--topic' '--repos' '--jobs' '--policy' '--gitlab' '--gitlab-url' '--include-forks' '--include-archived' '--json' '--image-lineage' '--html' '--format' '--no-cache' '--fail-on' '--progress' '--forecast-input' '--what-if-target' '--as-of' '*:path:_files' ;;
         hook) _arguments '--fail-on' '*:path:_files' ;;
         lineage) _arguments '--json' '--format' '--resolve-digests' '*:path:_files' ;;
         lsp) _arguments  '*:path:_files' ;;

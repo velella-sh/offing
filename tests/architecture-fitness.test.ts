@@ -165,7 +165,12 @@ test("public API shape: package.json exposes exactly the reviewed entry points",
   };
   assert.deepEqual(
     Object.keys(manifest.exports).sort(),
-    [...Object.keys(EXPORTS), "./package.json", "./schemas/lineage.v1.schema.json"].sort(),
+    [
+      ...Object.keys(EXPORTS),
+      "./package.json",
+      "./schemas/lineage.v1.schema.json",
+      "./schemas/whatif.v1.schema.json",
+    ].sort(),
   );
 });
 

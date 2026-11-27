@@ -9,6 +9,9 @@ import { fleetHostFor, validRepositoryPath } from "../fleet/remote.js";
 import { renderRollupHtml, renderRollupText } from "../rollup.js";
 import type { CliCommand, CommandContext } from "./types.js";
 
+import { simulationTargets } from "../what-if/target.js";
+import { OffingError } from "../offing-error.js";
+
 const options = {
   include: { type: "string", multiple: true },
   exclude: { type: "string", multiple: true },
@@ -28,6 +31,7 @@ const options = {
   "fail-on": { type: "string" },
   progress: { type: "boolean" },
   "forecast-input": { type: "boolean" },
+  "what-if-target": { type: "string", multiple: true },
   "as-of": { type: "string" },
 } as const;
 
@@ -57,6 +61,27 @@ function renderFormat(values: Flags): string {
   return format;
 }
 
+function evidenceScanOptions(values: Flags) {
+  return {
+    ...(values["what-if-target"]
+      ? {
+          whatIf: {
+            targets: simulationTargets(values["what-if-target"]),
+            ...(values["as-of"] === undefined ? {} : { asOf: values["as-of"] }),
+          },
+        }
+      : {}),
+    ...(values["forecast-input"]
+      ? {
+          forecast: {
+            gitlab: Boolean(values.gitlab || values["gitlab-url"]),
+            ...(values["as-of"] === undefined ? {} : { asOf: values["as-of"] }),
+          },
+        }
+      : {}),
+  };
+}
+
 async function scanOptions(values: Flags): Promise<FleetOptions> {
   return {
     jobs: Number(values.jobs ?? "4"),
@@ -70,14 +95,7 @@ async function scanOptions(values: Flags): Promise<FleetOptions> {
     ...(values.policy ? { policy: values.policy } : {}),
     ...(values.repos === undefined ? {} : { repositories: await repositoryList(values.repos) }),
     ...(values.progress ? { onProgress: ({ name, status }) => process.stderr.write(`${name}: ${status}\n`) } : {}),
-    ...(values["forecast-input"]
-      ? {
-          forecast: {
-            gitlab: Boolean(values.gitlab || values["gitlab-url"]),
-            ...(values["as-of"] === undefined ? {} : { asOf: values["as-of"] }),
-          },
-        }
-      : {}),
+    ...evidenceScanOptions(values),
   };
 }
 
@@ -85,6 +103,14 @@ function severityIndex(threshold: string): number {
   const index = severityValues.findIndex((value) => value === threshold);
   if (index < 0 && threshold !== "none") throw new FleetHostError("Unknown fleet severity threshold.");
   return index;
+}
+
+function validateEvidenceFlags(values: Flags, format: string): void {
+  if (values["forecast-input"] && format !== "json") throw new FleetHostError("--forecast-input requires JSON output.");
+  if (values["what-if-target"] && format !== "json") throw new FleetHostError("--what-if-target requires JSON output.");
+  if (values["as-of"] !== undefined && !values["forecast-input"] && !values["what-if-target"]) {
+    throw new FleetHostError("--as-of on fleet requires --forecast-input or --what-if-target.");
+  }
 }
 
 async function run(args: string[], ctx: CommandContext): Promise<number> {
@@ -96,12 +122,7 @@ async function run(args: string[], ctx: CommandContext): Promise<number> {
     }
     const format = renderFormat(values);
     const index = severityIndex(values["fail-on"] ?? "none");
-    if (values["forecast-input"] && format !== "json") {
-      return ctx.fail("usage", "--forecast-input requires JSON output.");
-    }
-    if (values["as-of"] !== undefined && !values["forecast-input"]) {
-      return ctx.fail("usage", "--as-of on fleet requires --forecast-input.");
-    }
+    validateEvidenceFlags(values, format);
     const host = await fleetHostFor(values.gitlab, values["gitlab-url"]);
     const result = await scanFleet(host, namespace, await scanOptions(values));
     const output =
@@ -122,7 +143,8 @@ async function run(args: string[], ctx: CommandContext): Promise<number> {
 }
 
 function fleetError(error: unknown, ctx: CommandContext): number {
-  if (error instanceof FleetHostError) return ctx.fail("usage", error.message);
+  if (error instanceof FleetHostError || (error instanceof OffingError && error.code === "invalid-argument"))
+    return ctx.fail("usage", error.message);
   if (
     error instanceof TypeError &&
     "code" in error &&
@@ -143,6 +165,7 @@ export const command: CliCommand = {
     "  offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs",
     "  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>] [--image-lineage --json]",
     "  offing fleet <organization|group> --json --forecast-input [--as-of <YYYY-MM-DD>]   # save private forecast evidence",
+    "  offing fleet <organization|group> --json --what-if-target <runtime@version> [--as-of <YYYY-MM-DD>]",
   ],
   run,
 };

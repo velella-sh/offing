@@ -14,6 +14,7 @@ import { registerPlanMigrations } from "./tools/plan-migrations.js";
 import { registerRecommendVersion } from "./tools/recommend-version.js";
 import { registerScanRepository } from "./tools/scan-repository.js";
 import { registerScanSbom } from "./tools/scan-sbom.js";
+import { registerSimulateUpgrade } from "./tools/simulate-upgrade.js";
 import { registerVerifyMigration } from "./tools/verify-migration.js";
 
 /**
@@ -35,6 +36,7 @@ export const MCP_TOOL_REGISTRARS = [
   registerRecommendVersion,
   registerScanSbom,
   registerImageLineage,
+  registerSimulateUpgrade,
 ] as const;
 
 /** Registers every MCP tool on the server. */
