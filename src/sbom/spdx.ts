@@ -2,15 +2,13 @@ import { readFile } from "node:fs/promises";
 
 import { checkAgainst } from "../check-dependency.js";
 import type { DependencyFinding } from "../check-dependency.js";
-import { BUNDLED_ECOSYSTEMS } from "@velella/ebb/data-bundle";
-import { getActiveData } from "@velella/ebb/data-source";
 import type { ActiveData } from "@velella/ebb/data-source";
 import { parsePurl } from "@velella/ebb/purl";
-import { validateRegistryV2 } from "@velella/ebb/registry";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 import { required } from "../required.js";
 import "@velella/ebb/vers/index";
 import { OffingError } from "../offing-error.js";
+import { lifecycleRules, milestoneCandidates, milestoneNames } from "./lifecycle.js";
 
 type JsonObject = Record<string, unknown>;
 
@@ -24,13 +22,6 @@ export class SpdxError extends OffingError {
 function object(value: unknown): value is JsonObject {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
-
-/** Milestone labels written into annotation comments; same lifecycle events as CycloneDX enrich. */
-const milestones: Partial<Record<RegistryV2Rule["event"], string>> = {
-  "end-of-support": "endOfSupport",
-  "end-of-life": "endOfLife",
-  "scheduled-end-of-life": "endOfLife",
-};
 
 const ANNOTATOR = "Tool: offing";
 const EVIDENCE_TYPE = "documentation";
@@ -61,13 +52,6 @@ export function enrichSpdx(input: unknown, rules: readonly RegistryV2Rule[]): Js
     enrichPackage(pkg, `/packages/${index}`, candidates);
   }
   return document;
-}
-
-/** Rules that can establish a dated, version-independent package milestone, in stable id order. */
-function milestoneCandidates(rules: readonly RegistryV2Rule[]): RegistryV2Rule[] {
-  return rules
-    .filter((rule) => rule.deadline && milestones[rule.event] && !rule.usage?.some((usage) => usage.kind === "symbol"))
-    .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 }
 
 function enrichPackage(pkg: JsonObject, location: string, candidates: readonly RegistryV2Rule[]): void {
@@ -131,7 +115,7 @@ function purlFindings(
 
 /** Adds the milestone annotation unless an identical one is present; returns whether it was added. */
 function addMilestoneAnnotation(annotations: JsonObject[], finding: DependencyFinding): boolean {
-  const milestone = required(milestones[finding.event], "the milestone");
+  const milestone = required(milestoneNames[finding.event], "the milestone");
   const comment = milestoneComment(milestone, required(finding.deadline, "the deadline"));
   if (annotations.some((annotation) => annotation.comment === comment)) return false;
   annotations.push({
@@ -176,12 +160,5 @@ export async function enrichSpdxFile(path: string, data?: ActiveData): Promise<J
   } catch (error) {
     throw new SpdxError(`Cannot read SPDX document ${path}: ${error instanceof Error ? error.message : String(error)}`);
   }
-  const active = data ?? (await getActiveData());
-  const registries = await Promise.all(
-    BUNDLED_ECOSYSTEMS.map(async (ecosystem) => validateRegistryV2(await active.read(`registry/${ecosystem}.json`))),
-  );
-  return enrichSpdx(
-    input,
-    registries.flatMap((registry) => registry.rules),
-  );
+  return enrichSpdx(input, await lifecycleRules(data));
 }

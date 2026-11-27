@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { test } from "node:test";
@@ -120,6 +120,21 @@ test("the command refuses inventoried paths, directory outputs, and marked new f
   assert.match(run.stderr, /notes\/output\.md" looks generated/);
   assert.match(run.stderr, /3 generated file\(s\) added/);
   assert.doesNotMatch(run.stderr, /src\/normal\.ts/);
+});
+
+test("only the pinned upstream schema at its vendored path may carry the SPDX generator marker", (t) => {
+  const path = "schemas/vendor/spdx-3.0.1-json-schema.json";
+  assert.deepEqual(tool.inspectAdditions([path]), []);
+  const root = mkdtempSync(join(tmpdir(), "offing-vendored-schema-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, "schemas", "vendor"), { recursive: true });
+  const official = readFileSync(path, "utf8");
+  writeFileSync(join(root, path), `${official}\n`);
+  writeFileSync(join(root, "unrelated.json"), official);
+  assert.deepEqual(
+    tool.inspectAdditions([path, "unrelated.json"], { root }).map((finding) => finding.kind),
+    ["marker", "marker"],
+  );
 });
 
 test("the command passes a change that adds only hand-written files", () => {

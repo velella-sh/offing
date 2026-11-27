@@ -3,6 +3,7 @@ import process from "node:process";
 
 import { CycloneDxError, enrichCycloneDxFile } from "../sbom/cyclonedx.js";
 import { SpdxError, enrichSpdxFile } from "../sbom/spdx.js";
+import { enrichSpdx3WithActiveData, isSpdx3 } from "../sbom/spdx3.js";
 import { withPrepared } from "./runtime.js";
 import type { CliCommand } from "./types.js";
 
@@ -11,7 +12,7 @@ export const command: CliCommand = {
   flags: ["--data-version"],
   example: "offing sbom enrich bom.json",
   usage: [
-    "  offing sbom enrich <bom.json> [--data-version <version>]   # print enriched CycloneDX or SPDX 2.3 JSON; leaves the input unchanged",
+    "  offing sbom enrich <bom.json> [--data-version <version>]   # print enriched CycloneDX or SPDX JSON; leaves the input unchanged",
   ],
   usageSlots: [45],
   run(args, ctx) {
@@ -36,10 +37,7 @@ export const command: CliCommand = {
         } catch {
           peek = undefined;
         }
-        const bom =
-          peek !== null && typeof peek === "object" && !Array.isArray(peek) && "spdxVersion" in (peek as object)
-            ? await enrichSpdxFile(path)
-            : await enrichCycloneDxFile(path);
+        const bom = await enrichBom(path, peek);
         process.stdout.write(`${JSON.stringify(bom, null, 2)}\n`);
         return 0;
       } catch (error) {
@@ -49,3 +47,11 @@ export const command: CliCommand = {
     });
   },
 };
+
+function enrichBom(path: string, input: unknown) {
+  if (isSpdx3(input)) return enrichSpdx3WithActiveData(input);
+  if (input !== null && typeof input === "object" && !Array.isArray(input) && "spdxVersion" in input) {
+    return enrichSpdxFile(path);
+  }
+  return enrichCycloneDxFile(path);
+}

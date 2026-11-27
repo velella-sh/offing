@@ -14,7 +14,8 @@
 // diff against).
 
 import { execFileSync } from "node:child_process";
-import { closeSync, openSync, readSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { closeSync, openSync, readFileSync, readSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -159,6 +160,16 @@ export function addedFiles(base, root = process.cwd()) {
   return files.filter((line) => line.length > 0).sort((left, right) => left.localeCompare(right));
 }
 
+/** The exact upstream SPDX schema is a pinned test input, even though SPDX generates it. */
+function isPinnedVendoredSchema(file, root) {
+  if (normalize(file) !== "schemas/vendor/spdx-3.0.1-json-schema.json") return false;
+  const source = readFileSync(join(root, file), "utf8").replaceAll("\r\n", "\n");
+  return (
+    createHash("sha256").update(source).digest("hex") ===
+    "571dd17d52ad567cb5b44c2fdf0c57f013d08584f00e4f30b4f744dcca0fbb4c"
+  );
+}
+
 /** Everything wrong with the added files: an inventoried path, or a generated-file marker. */
 export function inspectAdditions(files, options = {}) {
   const root = options.root ?? process.cwd();
@@ -178,7 +189,9 @@ export function inspectAdditions(files, options = {}) {
     }
     if (head.includes(0)) continue;
     const marker = markerIn(head.toString("utf8"));
-    if (marker !== undefined) findings.push({ path: file, kind: "marker", marker });
+    if (marker !== undefined && !isPinnedVendoredSchema(file, root)) {
+      findings.push({ path: file, kind: "marker", marker });
+    }
   }
   return findings;
 }

@@ -1,14 +1,17 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { test } from "node:test";
+import { pathToFileURL } from "node:url";
 import { Ajv2020 } from "ajv/dist/2020.js";
 
 import { BUNDLED_ECOSYSTEMS } from "@velella/ebb/data-bundle";
 import type { ActiveData } from "@velella/ebb/data-source";
 import { CLE_SCHEMA, exportActiveCle, exportCle } from "@velella/ebb/export/cle";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
+import { CLE_FILE_NAME, ingestCle } from "../src/cle-ingest.js";
 import { runCli } from "./cli-runner.js";
 
 const rule: RegistryV2Rule = {
@@ -150,4 +153,26 @@ test("CLI rejects incomplete export options and CLE on other commands", async ()
     assert.equal(failure.code, 2);
     assert.match(failure.stderr, /Usage: offing export|Unknown format/);
   }
+});
+
+test("CLE export preserves the milestone and affected range through package ingest", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "offing-cle-round-trip-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const pkg = join(root, "node_modules", "example");
+  await mkdir(pkg, { recursive: true });
+  const { documents } = exportCle([rule]);
+  assert.equal(documents.length, 1);
+  assert.ok(validate(documents[0]), JSON.stringify(validate.errors));
+  await writeFile(join(pkg, CLE_FILE_NAME), JSON.stringify(documents[0]));
+  const manifest = join(pkg, "package.json");
+  await writeFile(manifest, JSON.stringify({ name: "example", version: "1.0.0" }));
+  const options = { scannedAt: "2026-03-01T00:00:00Z" };
+  const findings = await ingestCle(root, options);
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0]?.severity, "high");
+  assert.equal(findings[0]?.deadline, rule.deadline);
+  assert.equal(findings[0]?.location.path, "node_modules/example/cle.json");
+  assert.equal(findings[0]?.sources[0]?.url, pathToFileURL(join(pkg, CLE_FILE_NAME)).href);
+  await writeFile(manifest, JSON.stringify({ name: "example", version: "2.0.0" }));
+  assert.deepEqual(await ingestCle(root, options), []);
 });

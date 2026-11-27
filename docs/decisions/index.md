@@ -40,6 +40,7 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0033](0033-required-source-access-date.md) | Require the retrieval date on every lifecycle source | Make `sources[].accessedAt` required in registry v2, backfill every bundled record, and let the importer runner stamp the run date so every finding shows when its source was read. |
 | [0049](0049-agent-migrate.md) | Run a scoped local agent migration | Record the resulting local branch and a verification trailer, with measured per-condition benchmark evidence. |
 | [0038](0038-forecast-v1-coverage.md) | Add coverage gaps to forecast v1 | Add an optional `noData` field to the CLI and MCP forecast schema. Producers always emit the array. |
+| [0051](0051-lifecycle-sbom-properties.md) | Lifecycle metadata in SBOMs | Map dated Ebb rules to versioned CycloneDX properties and SPDX annotations. |
 | [0046](0046-sbom-scan.md) | Scan SBOMs through existing report contracts | Feed CLI, Action, and MCP from the same offline scan result, with optional JSON Pointer locations. |
 | [0044](0044-schema-contract-ids.md) | Publish stable JSON schema identifiers | Use public Pages URLs and provide a one-release alias map for the former IDs. |
 | [0043](0043-config-validation-result.md) | Give config validation a versioned result | Use the bundled schema to report located diagnostics from the CLI and doctor. |
