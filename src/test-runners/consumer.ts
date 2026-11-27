@@ -132,15 +132,12 @@ async function executePlan(
 /** Freeze the approved argv and profile before edits. Each invocation tests a fresh private snapshot. */
 export async function prepareContainerTestRun(
   tree: string,
-  requested: boolean,
 ): Promise<{ config: ReturnType<typeof parseAutopilotConfig>; run(deadline: number): Promise<ContainerTestResult[]> }> {
   await checkTree(tree);
   const { report, value } = await inspectDiscoveredConfig(tree);
   if (!report.valid) refused("Fix the committed Offing configuration before running container tests.");
   const section = value && typeof value === "object" && "autopilot" in value ? value.autopilot : undefined;
   const config = parseAutopilotConfig(section);
-  if (!requested && config.testRuntime !== "container")
-    refused("Use --container or configure autopilot.testRuntime as container.");
   const { steps } = await detectTestPlan(tree, "linux");
   const tests = steps.filter(({ kind }) => kind === "test");
   const profile = checkedProfile(tests);
@@ -155,8 +152,8 @@ export async function prepareContainerTestRun(
   };
 }
 
-async function runInCheckout(tree: string, requested: boolean) {
-  const plan = await prepareContainerTestRun(tree, requested);
+async function runInCheckout(tree: string) {
+  const plan = await prepareContainerTestRun(tree);
   const runs = await plan.run(performance.now() + plan.config.budget.run.wallTimeMs);
   const { redact } = childEnvironments(process.env, plan.config.driver, plan.config.secretEnv);
   const lines = runs.flatMap(({ command, attempts, flaky }) => [
@@ -170,10 +167,10 @@ async function runInCheckout(tree: string, requested: boolean) {
 }
 
 /** Run only the tests requested for an immutable local checkout inside the pinned Docker sandbox. */
-export async function runContainerTests(root: string, requested: boolean) {
+export async function runContainerTests(root: string) {
   let result: Awaited<ReturnType<typeof runInCheckout>> | undefined;
   const location = await withAutopilotWorktree(root, startRun("prepare"), async (tree) => {
-    result = await runInCheckout(tree, requested);
+    result = await runInCheckout(tree);
   });
   await undoAutopilotWorktree(root, location.id);
   if (!result) throw new Error("Container test checkout produced no result.");

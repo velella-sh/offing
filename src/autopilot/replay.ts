@@ -1,3 +1,4 @@
+import { createContainerReplayDriver } from "../agent-drivers/replay.js";
 import { findingFingerprint } from "../baseline.js";
 import { compareFindings } from "../diff.js";
 import type { ScanResult } from "../domain.js";
@@ -5,7 +6,6 @@ import { digest } from "../proof/document.js";
 import type { ContainerTestResult, prepareContainerTestRun } from "../test-runners/consumer.js";
 import { identifyScan } from "../verify-result.js";
 import { createPathScope } from "./limits/scope.js";
-import { createReplayDriver } from "../agent-drivers/replay.js";
 import { loadConfig } from "../config.js";
 import { buildFindingPacket } from "../migrate/prompt.js";
 import { parseAutopilotConfig } from "./limits/config.js";
@@ -51,7 +51,7 @@ export async function prepareReplay(
   protectSelection(run, selection, redact);
   const testFiles = await trackedAutopilotTestFiles(tree);
   advanceRun(run, "agent-turn");
-  const output = await createReplayDriver(file, { config, packets, testFiles, started }).run({
+  const output = await createContainerReplayDriver(file, { config, packets, testFiles, started }).run({
     worktreePath: tree,
     prompt: "",
     timeoutMs: config.budget.run.wallTimeMs,
@@ -65,6 +65,7 @@ interface LoopOptions {
   selection: PlanOptions;
   allowedBaseline: ReadonlySet<string>;
   started: number;
+  createReplay?: typeof createContainerReplayDriver;
 }
 
 type TestPlan = Awaited<ReturnType<typeof prepareContainerTestRun>>;
@@ -79,7 +80,7 @@ function stop(run: AutopilotRun, reason: string): false {
 async function baselinePlan(tree: string, run: AutopilotRun): Promise<TestPlan | undefined> {
   try {
     const { prepareContainerTestRun } = await import("../test-runners/consumer.js");
-    return await prepareContainerTestRun(tree, true);
+    return await prepareContainerTestRun(tree);
   } catch {
     stop(run, "container-tests-unavailable");
     return undefined;
@@ -137,7 +138,7 @@ async function replayPhase(
   const packets = () => Promise.all(pending().map(({ id }) => buildFindingPacket(state.scan, id, before.root)));
   const complete = () => testsPass(state.tests) && pending().length === 0;
   if (complete()) return finishVerified(run);
-  const driver = createReplayDriver(options.file, {
+  const driver = (options.createReplay ?? createContainerReplayDriver)(options.file, {
     config,
     packets: await packets(),
     testFiles,

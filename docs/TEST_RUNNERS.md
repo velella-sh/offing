@@ -50,8 +50,9 @@ executes those repository commands inside the pinned Fix Evals sandbox.
 offing autopilot ./project --test-only --container
 ```
 
-Set `autopilot.testRuntime` to `"container"` in the committed `.offing.json` to omit `--container` from that
-command. Test-only uses one detected Linux runtime profile and honors committed `autopilot.tests` as literal
+`--test-only` uses the pinned Docker runtime by default. `--container` and the committed setting
+`autopilot.testRuntime: "container"` explicitly select that same runtime. Test-only uses one detected Linux runtime
+profile and honors committed `autopilot.tests` as literal
 argv. It has no local process fallback. The streamed snapshot excludes Git internals and stays separate from the
 original checkout. The sandbox uses an unprivileged user, a read-only image, temporary space, and limits on time,
 processes, CPU and memory. It has no network or host mounts. Tool image downloads happen before execution.
@@ -65,3 +66,5 @@ Go's container command uses vendored modules. Maven's native command uses its of
 The runtime retries a failed command once when time remains. Each attempt starts from the same clean snapshot
 and sets `OFFING_TEST_ATTEMPT` to `1` or `2`. A case is reported as flaky when JUnit evidence shows that it failed
 first and passed on retry. The command succeeds when its last attempt passes.
+
+See [Autopilot safety](AUTOPILOT_SAFETY.md) for execution boundaries, secret handling, and undo.

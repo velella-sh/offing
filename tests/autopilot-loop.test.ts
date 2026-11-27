@@ -6,6 +6,7 @@ import { dirname, join, resolve } from "node:path";
 import { test, type TestContext } from "node:test";
 import { promisify } from "node:util";
 
+import { createReplayDriver } from "../src/agent-drivers/replay.js";
 import { acceptsBaseline, replayLoopPrompt, testsPass } from "../src/autopilot/plan.js";
 import { runReplayLoop } from "../src/autopilot/replay.js";
 import { startRun } from "../src/autopilot/state.js";
@@ -52,6 +53,7 @@ async function runFixtureReplay(root: string, file: string, extra: readonly stri
         selection: {},
         allowedBaseline: new Set(extra.filter((arg) => arg !== "--allow-red-baseline")),
         started: performance.now(),
+        createReplay: createReplayDriver,
       },
       async (checkout, deadline) => {
         const phase = (await readFile(join(checkout, "tests/state.txt"), "utf8")).trim();

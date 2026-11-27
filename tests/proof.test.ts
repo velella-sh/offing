@@ -183,7 +183,7 @@ test("acc-guardrails redacts source evidence before rendering a PR or returning 
 });
 
 test("PR proof falls back to named, hashed JSON for oversized UTF-8 and reports a stopped outcome", async (t) => {
-  const { proof } = await sample(t);
+  const { proof, root, repo } = await sample(t);
   const run = proof.testRuns[0];
   const agent = proof.agentRuns[0];
   const command = proof.verify.commands[0];
@@ -194,20 +194,34 @@ test("PR proof falls back to named, hashed JSON for oversized UTF-8 and reports 
   command.status = "failed";
   command.exitCode = 1;
   agent.turns = null;
-  agent.summary = "🧪".repeat(13_000);
+  const marker = "synthetic artifact secret";
+  const log = "recording contained " + marker + "\n";
+  agent.summary = marker + "\n" + "🧪".repeat(13_000);
+  command.purpose = marker;
   run.attempts[0].status = "failed";
+  run.attempts[0].exitCode = 1;
   const { stdout, stderr } = run.attempts[0].logs;
+  stdout.sha256 = command.logSha256 = digest(log);
   const logs = new Map([
-    [stdout.sha256, "synthetic passing test\n"],
+    [stdout.sha256, log],
     [stderr.sha256, ""],
   ]);
-  const { body, files } = await prepareProofPublication(proof, logs, {}, []);
+  const { body, files } = await prepareProofPublication(proof, logs, { ARTIFACT_SECRET: marker }, ["ARTIFACT_SECRET"]);
   const artifact = files.get(PROOF_FILE);
   assert.ok(artifact);
   assert.match(body, /Outcome — stopped \(verification failed\)/);
   assert.match(body, /0 reported turns, 1 runs with unreported turns/);
   assert.match(body, /Test runs — 0 passed of 1\n- Budget used — 30 ms, USD 0/);
   assert.ok(body.endsWith(`Artifact: \`offing-proof.json\` (SHA-256 \`${digest(artifact)}\`).\n`));
+  assert.ok(!body.includes(marker));
+  assert.ok(!body.includes(digest(log)));
+  assert.equal(files.get(logName(digest("recording contained [REDACTED]\n"))), "recording contained [REDACTED]\n");
+  for (const [name, contents] of files) {
+    assert.ok(!name.includes(marker) && !contents.includes(marker));
+    assert.ok(!name.includes(digest(log)) && !contents.includes(digest(log)));
+    await writeFile(join(root, name), contents);
+  }
+  assert.equal((await runCli(["proof", "verify", join(root, PROOF_FILE), "--repo", repo])).code, 0);
   assert.ok(!body.includes("\`\`\`"));
 });
 
