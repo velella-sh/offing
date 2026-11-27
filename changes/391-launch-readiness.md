@@ -1,0 +1,1 @@
+- Add a launch readiness report with evidence links, open-issue counts, adoption snapshots, and optional checks against a deployed Pages build.
