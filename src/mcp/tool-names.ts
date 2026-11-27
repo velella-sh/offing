@@ -15,6 +15,7 @@ export const MCP_TOOL_NAMES = [
   "scan_sbom",
   "image_lineage",
   "simulate_upgrade",
+  "campaign_status",
 ] as const;
 
 export type McpToolName = (typeof MCP_TOOL_NAMES)[number];
@@ -36,6 +37,7 @@ export const MCP_OUTPUT_SCHEMA_FILES = {
   scan_sbom: "scan.v1.schema.json",
   image_lineage: "lineage.v1.schema.json",
   simulate_upgrade: "whatif.v1.schema.json",
+  campaign_status: "campaign-state.v1.schema.json",
 } as const satisfies Record<McpToolName, string>;
 
 /** MCP hints shared by every tool: read-only, idempotent, closed-world, and non-destructive. */
@@ -65,4 +67,5 @@ export const MCP_TOOL_MORE_HINTS = {
   scan_sbom: "The complete report: offing scan --sbom <file> --json.",
   simulate_upgrade: "The complete report: offing forecast <path> --target <runtime>@<version> --effort --json.",
   image_lineage: "The complete report: offing lineage <path> --json.",
+  campaign_status: "The complete state: offing campaign status <state.json> --json.",
 } as const satisfies Record<Exclude<McpToolName, "agent_guard">, string>;

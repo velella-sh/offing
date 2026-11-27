@@ -168,6 +168,8 @@ test("public API shape: package.json exposes exactly the reviewed entry points",
     [
       ...Object.keys(EXPORTS),
       "./package.json",
+      "./schemas/campaign-state.v1.schema.json",
+      "./schemas/campaign.v1.schema.json",
       "./schemas/lineage.v1.schema.json",
       "./schemas/whatif.v1.schema.json",
     ].sort(),

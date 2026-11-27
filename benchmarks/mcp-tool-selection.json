@@ -456,6 +456,36 @@
       "prompt": "What would happen to my lifecycle deadlines if I changed the runtime target? Simulate that upgrade.",
       "tool": "simulate_upgrade",
       "reason": "The question ties a target change to a projection of deadlines."
+    },
+    {
+      "id": "campaign-status-batches",
+      "prompt": "Read campaign status from state.json and list the recorded batches.",
+      "tool": "campaign_status",
+      "reason": "Requests the status of an existing campaign file."
+    },
+    {
+      "id": "campaign-status-repository",
+      "prompt": "What repository phases does my saved campaign state report?",
+      "tool": "campaign_status",
+      "reason": "Saved phases are returned with campaign status."
+    },
+    {
+      "id": "campaign-status-omissions",
+      "prompt": "Read the saved campaign omissions without creating a new plan.",
+      "tool": "campaign_status",
+      "reason": "The saved document records the omitted repositories."
+    },
+    {
+      "id": "campaign-status-validate",
+      "prompt": "Validate this migration campaign state file and show its phase history.",
+      "tool": "campaign_status",
+      "reason": "Reads and validates an existing campaign state."
+    },
+    {
+      "id": "campaign-status-pins",
+      "prompt": "Check the saved campaign status for the pinned repositories in batch two.",
+      "tool": "campaign_status",
+      "reason": "The existing state contains pinned batch assignments."
     }
   ]
 }

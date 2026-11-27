@@ -544,6 +544,7 @@ test("every tool advertises an outputSchema, and its structured content validate
     const calls: Array<[string, Record<string, unknown>]> = [
       ["scan_repository", { repository_path: root }],
       ["image_lineage", { repository_path: root }],
+      ["campaign_status", { state_path: resolve("docs/spec/campaign/conformance/valid-state.json") }],
       ["simulate_upgrade", { repository_path: root, targets: ["nodejs@22"], as_of: "2026-01-01" }],
       ["scan_sbom", { sbom_path: resolve("examples/sbom/image.cdx.json") }],
       ["list_deprecations", { repository_path: root }],
