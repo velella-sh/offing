@@ -23,6 +23,7 @@ export interface OffingConfig {
   dataVersion?: string;
   baseline?: string[];
   policy?: LifecyclePolicy;
+  extends?: string;
   configPath?: string;
 }
 
@@ -43,6 +44,7 @@ export const KNOWN_CONFIG_KEYS = new Set([
   "baselineFiles",
   "baseline-files",
   "policy",
+  "extends",
 ]);
 
 /**
@@ -57,7 +59,7 @@ export function validateConfig(raw: unknown, filePath = CONFIG_FILE_NAME): Offin
   const unknownKeys = Object.keys(record).filter((key) => !KNOWN_CONFIG_KEYS.has(key));
   if (unknownKeys.length > 0) {
     throw new ConfigError(
-      `Unknown key in ${filePath}: "${unknownKeys[0]}" (allowed keys: fail-on, ignore, data-version, baseline, policy).`,
+      `Unknown key in ${filePath}: "${unknownKeys[0]}" (allowed keys: fail-on, ignore, data-version, baseline, policy, extends).`,
     );
   }
 
@@ -87,7 +89,16 @@ export function validateConfig(raw: unknown, filePath = CONFIG_FILE_NAME): Offin
     ...(ignore !== undefined ? { ignore } : {}),
     ...(baseline !== undefined ? { baseline } : {}),
     ...parsePolicy(record.policy, filePath),
+    ...parseFleetParent(record.extends, filePath),
   };
+}
+
+function parseFleetParent(value: unknown, filePath: string): Pick<OffingConfig, "extends"> {
+  if (value === undefined) return {};
+  if (!nonblank(value)) {
+    throw new ConfigError(`Invalid extends in ${filePath}: expected a policy path or pinned remote reference.`);
+  }
+  return { extends: value.trim() };
 }
 
 function policyObject<T extends object>(raw: unknown, keys: readonly string[], location: string): Partial<T> {
@@ -135,9 +146,12 @@ function parsePolicyRule(value: unknown, location: string): PolicyRule {
 }
 
 function parsePolicyException(value: unknown, location: string): PolicyException {
-  const item = policyObject<PolicyException>(value, ["path", "ecosystem", "reason", "expires"], location);
+  const item = policyObject<PolicyException>(value, ["path", "ecosystem", "reason", "expires", "owner"], location);
   if (!validPolicyScope(item) || (item.path === undefined && item.ecosystem === undefined)) {
     throw new ConfigError(`Invalid policy exception at ${location}: a path or ecosystem is required.`);
+  }
+  if (item.owner !== undefined && !nonblank(item.owner)) {
+    throw new ConfigError(`Invalid policy exception owner at ${location}.`);
   }
   if (!nonblank(item.reason) || !isIsoDate(item.expires)) {
     throw new ConfigError(

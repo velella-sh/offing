@@ -1,10 +1,14 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, posix } from "node:path";
+import { join, posix, resolve } from "node:path";
 
 import { getActiveData } from "@velella/ebb/data-source";
 import { isIsoDate } from "@velella/ebb/registry";
 
+import { CODEOWNERS_LOCATIONS } from "../codeowners.js";
+import { CONFIG_FILE_NAME } from "../config.js";
+import { fleetPolicyCompliance, type FleetPolicyCompliance } from "../fleet-policy/compliance.js";
+import { parsePolicyReference } from "../fleet-policy/reference.js";
 import { defaultCacheDirectory } from "../cache-paths.js";
 import { declaresInput, detectorSparsePatterns } from "../detector-inputs.js";
 import { builtInDetectors } from "../detectors/index.js";
@@ -24,6 +28,7 @@ const selection: FleetSelection = {
   includes: (path) => inputs.some((input) => declaresInput(input, path)),
 };
 
+const policyPaths = [CONFIG_FILE_NAME, ...CODEOWNERS_LOCATIONS];
 export interface FleetProgress extends FleetRepositoryStatus {
   readonly bytesFetched: number;
 }
@@ -32,6 +37,7 @@ export interface FleetOptions {
   readonly jobs?: number;
   readonly cacheDirectory?: string;
   readonly noCache?: boolean;
+  readonly policy?: string;
   readonly include?: readonly string[];
   readonly exclude?: readonly string[];
   readonly topics?: readonly string[];
@@ -55,6 +61,7 @@ interface FleetContext {
   readonly scannedAt: string;
   readonly noCache: boolean;
   readonly forecast?: FleetOptions["forecast"];
+  readonly policy?: string;
 }
 
 function matches(name: string, patterns: readonly string[] = []): boolean {
@@ -92,23 +99,44 @@ function safeFindings(findings: readonly RollupFinding[]): RollupFinding[] {
   }));
 }
 
-async function scanPinned(
-  context: FleetContext,
-  repository: FleetRepository,
-  commit: string,
-): Promise<Omit<RepositoryScan, "state"> & { forecastEvidence?: ForecastCapture }> {
+function selectedInputs(context: FleetContext): FleetSelection {
+  const locations = new Set([
+    ...(context.forecast ? ownershipLocations(context.forecast.gitlab) : []),
+    ...(context.policy ? policyPaths : []),
+  ]);
+  if (locations.size === 0) return selection;
+  return {
+    patterns: [...selection.patterns, ...[...locations].map((file) => `/${file}`)],
+    includes: (file) => selection.includes(file) || locations.has(file),
+  };
+}
+
+interface PinnedScan extends Omit<RepositoryScan, "state"> {
+  readonly compliance?: FleetPolicyCompliance;
+  readonly forecastEvidence?: ForecastCapture;
+}
+
+async function scanPinned(context: FleetContext, repository: FleetRepository, commit: string): Promise<PinnedScan> {
   const directory = await mkdtemp(join(tmpdir(), "offing-fleet-"));
   try {
-    const locations = context.forecast ? ownershipLocations(context.forecast.gitlab) : [];
-    const requested: FleetSelection = {
-      patterns: [...selection.patterns, ...locations.map((location) => `/${location}`)],
-      includes: (path) => locations.includes(path) || selection.includes(path),
-    };
-    const bytesFetched = await context.host.fetchFilesAtCommit(repository, commit, directory, requested);
+    const bytesFetched = await context.host.fetchFilesAtCommit(repository, commit, directory, selectedInputs(context));
     const report = await scanWithBuiltIns(directory, { noCache: true, scannedAt: context.scannedAt });
-    const findings = safeFindings(report.findings);
-    if (!context.forecast) return { bytesFetched, findings };
-    return { bytesFetched, findings, forecastEvidence: await captureForecast(report, context.forecast.gitlab) };
+    const policy = context.policy;
+    const compliance = policy
+      ? await fleetPolicyCompliance(report, {
+          root: directory,
+          reference: policy,
+          repository: repository.name,
+          today: context.scannedAt.slice(0, 10),
+        })
+      : undefined;
+    const forecastEvidence = context.forecast ? await captureForecast(report, context.forecast.gitlab) : undefined;
+    return {
+      bytesFetched,
+      findings: safeFindings(report.findings),
+      ...(compliance ? { compliance } : {}),
+      ...(forecastEvidence ? { forecastEvidence } : {}),
+    };
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
@@ -130,13 +158,20 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
     if (cached) {
       return { state: { ...state, commit, status: "cached", reason: null }, findings: cached, bytesFetched: 0 };
     }
-    const { forecastEvidence, ...report } = await scanPinned(context, repo, commit);
+    const { compliance, forecastEvidence, ...report } = await scanPinned(context, repo, commit);
     if (!context.noCache) {
       // A read-only cache directory must not turn a successful scan into a failed repository.
       await writeFleetCache(context.cache, key, report.findings).catch(() => undefined);
     }
     return {
-      state: { ...state, commit, status: "scanned", reason: null, ...(forecastEvidence ? { forecastEvidence } : {}) },
+      state: {
+        ...state,
+        commit,
+        status: "scanned",
+        reason: null,
+        ...(compliance ? { compliance } : {}),
+        ...(forecastEvidence ? { forecastEvidence } : {}),
+      },
       ...report,
     };
   } catch (error) {
@@ -159,8 +194,12 @@ export async function scanFleet(host: FleetHost, namespace: string, options: Fle
     host,
     fingerprint,
     scannedAt,
-    noCache: options.forecast !== undefined || (options.noCache ?? false),
+    // Existing scan-cache entries contain aggregate findings only.
+    noCache: options.forecast !== undefined || options.policy !== undefined || (options.noCache ?? false),
     forecast: options.forecast,
+    ...(options.policy
+      ? { policy: parsePolicyReference(options.policy) ? options.policy : resolve(options.policy) }
+      : {}),
     cache: options.cacheDirectory ?? join(defaultCacheDirectory(), "fleet-v1"),
   };
   const repos = [...(await host.listRepositories(namespace))].sort((a, b) => a.name.localeCompare(b.name, "en"));

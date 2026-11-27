@@ -34,6 +34,7 @@ Usage:
   offing scan [path] --by-owner [--json]   # group findings by CODEOWNERS owner; files with no owner are listed as unowned
   offing scan --sbom <file|-> [--json | --format <format>]   # scan a CycloneDX, SPDX or Syft JSON SBOM
   offing scan [path] --lookahead <duration>   # fail when a supported deadline is within the lookahead
+  offing scan [path] --policy <ref> [--policy-online]   # apply an inherited fleet policy
   offing rollup <report.json>... [--owners <file>] [--json | --html]   # merge saved scan reports by product and owner; reads files only
   offing renovate-preset [path]   # print Renovate packageRules for replacements and runtime pins; does not edit config
   offing dependabot-config [path]   # print a dependabot.yml that groups updates for deprecated packages; does not write files
@@ -75,6 +76,7 @@ Usage:
   offing config validate [path] [--json]
   offing drivers list
   offing drivers test <driver|command>
+  offing fleet <organization|group> --policy <file|reference> [--json | --html]
   offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs
   offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>]
   offing fleet <organization|group> --json --forecast-input [--as-of <YYYY-MM-DD>]   # save private forecast evidence
@@ -86,6 +88,9 @@ Usage:
   offing migrate <finding-id> [path] --driver <name> [--replay <recording>] [--timeout-ms <n>]
   offing migrate <finding-id> [path] --agent <command> [--timeout-ms <n>]
   offing migrate --from-refusals [path] --agent <command> [--timeout-ms <n>]
+  offing policy validate [repository] [--policy <ref>] [--today <date>]
+  offing policy explain <rule> [repository] [--policy <ref>]
+  offing policy pull [repository] [--policy <ref>]
   offing prompt [path] [--format <text|json>] [--symbol <s>]   # shell prompt segment such as ⏳2, read from the scan cache only
   offing recommend <product|purl> [--min-days <n>] [--as-of <date>] [--json]   # which release line to write today (default 180 days of support)
   offing rollback-readiness <release-ref> --candidate <tag> [--within-days <days>] [--json]
@@ -143,6 +148,7 @@ Examples:
   offing hook claude-code
   offing lsp
   offing migrate <finding-id> --agent 'my-agent "$OFFING_MIGRATION_PROMPT_FILE"'
+  offing policy validate
   offing prompt --symbol EOL:
   offing recommend node
   offing rollback-readiness v2.0.0 --candidate v1.9.0

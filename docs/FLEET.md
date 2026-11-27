@@ -41,6 +41,12 @@ fresh. Failed repositories carry a reason and do not stop the remaining
 scans. Use `--fail-on high` to exit 1 when completed scans find high or
 critical findings.
 
+Use `--policy <file|reference>` to apply the same organization policy to the
+fleet. Pin remote policies first with `offing policy pull`. Each scanned
+repository reports its compliance without policy paths, rule identifiers, or
+exception text. Violations and invalid policies produce exit status 1.
+[Fleet policy guide](https://velella.sh/offing/FLEET_POLICY/)
+
 The [fleet schema](https://velella.sh/offing/schemas/fleet.v1.schema.json)
 defines the JSON format, including repository status and failure reasons.
 Text goes to standard output by default. Use `--json` for data, `--html`

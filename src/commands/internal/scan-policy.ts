@@ -1,8 +1,10 @@
-import { loadConfig } from "../../config.js";
+import { ConfigError, loadConfig, type OffingConfig } from "../../config.js";
 import type { ScanResult } from "../../domain.js";
 import { severityValues } from "../../domain.js";
 import { builtInDetectors } from "../../detectors/index.js";
 import { applyScanSelection, findRepositories, renderMultiScanText, scanProjects } from "../../engine/index.js";
+import { resolveLifecyclePolicy } from "../../fleet-policy/load.js";
+import { fetchRemotePolicy } from "../../fleet-policy/remote.js";
 import { applyPolicy, findingsAtSeverity, parseLookahead, policyViolationText } from "../../policy.js";
 import type { CommandContext, Gated } from "../types.js";
 
@@ -21,6 +23,29 @@ export function checkLookahead(state: Gated, ctx: CommandContext): number | unde
     return ctx.fail("usage", "--lookahead requires one duration, such as 90d, 2w or 1y, up to 3650 days.");
   }
   return undefined;
+}
+
+export function checkPolicyReference(state: Gated, ctx: CommandContext): number | undefined {
+  if (
+    state.args.includes("--policy") &&
+    (state.optionValues("--policy").length !== 1 || !state.optionValue("--policy"))
+  ) {
+    return ctx.fail("usage", "--policy expects one local policy path or remote policy reference.");
+  }
+  return undefined;
+}
+
+export async function resolveScanLifecyclePolicy(state: Gated, root: string, config: OffingConfig | undefined) {
+  return resolveLifecyclePolicy({
+    root,
+    config,
+    today: scanPolicyDay(state),
+    reference: state.optionValue("--policy"),
+    ...(state.args.includes("--policy-online") ? { fetchPolicy: fetchRemotePolicy } : {}),
+  }).catch((error: unknown) => {
+    if (error instanceof ConfigError) throw error;
+    throw new ConfigError(`Cannot load fleet policy: ${error instanceof Error ? error.message : String(error)}`);
+  });
 }
 
 /** `--fail-on`: the policy gate on the scan's own severity floor. */
@@ -69,7 +94,12 @@ export async function multiScanPhase(
     multi.projects.map(async (project) => {
       const selected = state.selection ? applyScanSelection(project.result, state.selection) : project.result;
       const config = await loadConfig(project.result.root);
-      const result = applyPolicy(selected, config?.policy, today, lookahead);
+      const result = applyPolicy(
+        selected,
+        await resolveScanLifecyclePolicy(state, project.result.root, config),
+        today,
+        lookahead,
+      );
       return { ...project, findings: result.findings.length, result };
     }),
   );

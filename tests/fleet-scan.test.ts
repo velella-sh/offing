@@ -460,3 +460,91 @@ test("fleet forecast acceptance records exact CODEOWNERS and works from an offli
   };
   assert.deepEqual(canonical, JSON.parse(await readFile("examples/forecast/fleet.json", "utf8")));
 });
+
+test("fleet --policy reports compliant, violating and rejected repositories without exposing policy or source content", async (t) => {
+  const root = await workspace(t);
+  const policyPath = join(root, "fleet-policy.json");
+  await writeFile(
+    policyPath,
+    JSON.stringify({
+      schemaVersion: "offing.fleet-policy.v1",
+      allowLoosen: ["exceptions"],
+      policy: { rules: [{ id: "private-policy-rule", severity: "info" }] },
+    }),
+  );
+  const names = ["compliant", "violating", "unauthorized", "expired"];
+  const origin = await localHost(t, (request, response) => {
+    const pathname = decodeURIComponent(new URL(request.url ?? "/", "http://local").pathname);
+    if (pathname.endsWith("/projects")) {
+      return answer(
+        response,
+        names.map((name) => ({ path_with_namespace: `example/${name}`, default_branch: "main" })),
+      );
+    }
+    if (pathname.endsWith("/branches/main")) return answer(response, { commit: { id: commit } });
+    const files: Record<string, string> = {
+      "checkout/package.json": pathname.includes("/compliant/") ? "{}" : contents,
+      "checkout/ignored-private.txt": privateText,
+    };
+    if (pathname.includes("/unauthorized/")) {
+      files["checkout/.offing.json"] = JSON.stringify({
+        policy: { rules: [{ id: "private-policy-rule", severity: "critical" }] },
+      });
+    }
+    if (pathname.includes("/expired/")) {
+      files["checkout/.offing.json"] = JSON.stringify({
+        policy: {
+          rules: [{ id: "private-policy-rule", severity: "info" }],
+          exceptions: [{ owner: token, path: "private/", reason: privateText, expires: "2000-01-01" }],
+        },
+      });
+    }
+    return response.writeHead(200).end(archive(files));
+  });
+  const scan = (...flags: string[]) =>
+    run(
+      process.execPath,
+      [binary, "fleet", "example", "--gitlab-url", origin, "--policy", policyPath, "--json", ...flags],
+      {
+        env: withoutGit(root),
+        timeout: 15_000,
+      },
+    ).catch((error: unknown) => {
+      assert(
+        error instanceof Error &&
+          "code" in error &&
+          error.code === 1 &&
+          "stdout" in error &&
+          typeof error.stdout === "string",
+      );
+      return { stdout: error.stdout };
+    });
+  const result = await scan();
+  assert.doesNotMatch(result.stdout, new RegExp(`${privateText}|${token}|private-policy-rule|fleet-policy\\.json`));
+  const parsed = JSON.parse(result.stdout);
+  const statuses = Object.fromEntries(
+    parsed.repositoryStatus.map((item: { name: string; compliance: { status: string; reason: string | null } }) => [
+      item.name,
+      [item.compliance.status, item.compliance.reason],
+    ]),
+  );
+  assert.deepEqual(statuses, {
+    "example/compliant": ["compliant", null],
+    "example/violating": ["violation", "rule-threshold"],
+    "example/unauthorized": ["invalid", "unauthorized-override"],
+    "example/expired": ["invalid", "expired-exception"],
+  });
+  const schema = JSON.parse(await readFile("schemas/fleet.v1.schema.json", "utf8"));
+  const isFleet = new Ajv2020().compile<FleetResult>(schema);
+  assert(isFleet(parsed));
+  assert.match(renderRollupText(parsed), /policy violation/);
+  assert.match(renderRollupHtml(parsed), /<th>Policy<\/th>/);
+
+  const recording = await scan("--forecast-input");
+  const complete: FleetResult = JSON.parse(recording.stdout);
+  assert(isFleet(complete));
+  assert.ok(complete.repositoryStatus.some((repo) => repo.forecastEvidence?.findings.length));
+  const file = join(root, "forecast-recording.json");
+  await writeFile(file, recording.stdout);
+  assert.deepEqual(await rollupFiles([file]), parsed);
+});

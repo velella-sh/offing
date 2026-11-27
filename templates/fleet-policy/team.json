@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "offing.fleet-policy.v1",
+  "policy": {
+    "rules": [
+      {
+        "id": "runtime",
+        "days-left": 30,
+        "severity": "high"
+      }
+    ]
+  },
+  "teams": {
+    "platform": {
+      "policy": {
+        "rules": [
+          {
+            "id": "runtime",
+            "days-left": 45
+          }
+        ]
+      },
+      "repositories": [
+        "repository"
+      ]
+    }
+  }
+}

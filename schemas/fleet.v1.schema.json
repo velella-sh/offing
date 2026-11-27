@@ -225,6 +225,9 @@
         },
         "forecastEvidence": {
           "$ref": "#/$defs/forecastEvidence"
+        },
+        "compliance": {
+          "$ref": "#/$defs/compliance"
         }
       },
       "required": [
@@ -328,6 +331,42 @@
         "path"
       ],
       "additionalProperties": false
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "compliant",
+            "violation",
+            "invalid"
+          ]
+        },
+        "policy": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "violations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "enum": [
+            "rule-threshold",
+            "invalid-policy",
+            "expired-exception",
+            "unauthorized-override",
+            null
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "policy",
+        "violations",
+        "reason"
+      ]
     }
   }
 }
