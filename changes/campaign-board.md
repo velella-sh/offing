@@ -1,0 +1,1 @@
+- Add `offing campaign-board` to export campaign progress, estimates and a README badge for Mizzen and Lateen.
