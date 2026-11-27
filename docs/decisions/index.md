@@ -97,3 +97,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0057](0057-container-image-lineage.md) | Container image lineage | Publish exact image ancestry with an offline default and opt-in registry lookups. |
 | [0058](0058-lifecycle-attestation.md) | Lifecycle attestation v1 | Bind lifecycle evidence to artifact and Ebb digests and re-evaluate UTC dates independently. |
 | [0059](0059-codemod-kit.md) | Codemod v1 kit | Use reviewed code for built-in planners and declarative fixture packs for outside authors. |
+| [0060](0060-test-plan-and-run-results.md) | Test plans and test outcomes | Add an offline doctor plan and a versioned record for approved test attempts. |

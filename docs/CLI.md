@@ -589,7 +589,7 @@ Prints a ready-to-review issue report for one finding. It never opens an issue.
 ### `doctor`
 
 ```bash
-offing doctor [path] [--system] [--json]
+offing doctor [path] [--system] [--tests] [--json]
 ```
 
 Checks the runtime, package, MCP, Skill, plugin, and CI setup around a repository.
@@ -597,6 +597,7 @@ Checks the runtime, package, MCP, Skill, plugin, and CI setup around a repositor
 | Flag | What it does |
 | --- | --- |
 | `--system` | Also check the runtimes and tools installed on this machine, such as Node.js, Python, Go, Java, .NET, and Terraform. |
+| `--tests` | Show the [test and build plan](TEST_RUNNERS.md) from project markers without running project commands. |
 | `--json` | Print the diagnosis document, which conforms to [`schemas/doctor.v1.schema.json`](../schemas/doctor.v1.schema.json). |
 
 The command exits `1` when any check fails.

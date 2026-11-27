@@ -54,7 +54,7 @@ _offing() {
         rules) _arguments  '*:path:_files' ;;
         explain) _arguments '--json' '--data-version' '*:path:_files' ;;
         context) _arguments '--json' '--data-version' '*:path:_files' ;;
-        doctor) _arguments '--system' '--json' '--data-version' '*:path:_files' ;;
+        doctor) _arguments '--system' '--tests' '--json' '--data-version' '*:path:_files' ;;
         report-issue) _arguments '--output' '--data-version' '*:path:_files' ;;
         capabilities) _arguments '--json' '*:path:_files' ;;
         fleet) _arguments '--include' '--exclude' '--topic' '--repos' '--jobs' '--policy' '--gitlab' '--gitlab-url' '--include-forks' '--include-archived' '--json' '--image-lineage' '--html' '--format' '--no-cache' '--fail-on' '--progress' '--forecast-input' '--as-of' '*:path:_files' ;;

@@ -6,13 +6,16 @@ import type { CliCommand } from "./types.js";
 
 export const command: CliCommand = {
   name: "doctor",
-  flags: ["--system", "--json", "--data-version"],
+  flags: ["--system", "--tests", "--json", "--data-version"],
   example: "offing doctor --system",
-  usage: ["  offing doctor [path] [--system] [--json]"],
+  usage: ["  offing doctor [path] [--system] [--tests] [--json]"],
   usageSlots: [62],
   run(args, ctx) {
     return afterGates("doctor", args, ctx, async (state) => {
-      const result = await diagnoseEnvironment(state.pathArgument, { system: state.args.includes("--system") });
+      const result = await diagnoseEnvironment(state.pathArgument, {
+        system: state.args.includes("--system"),
+        tests: state.args.includes("--tests"),
+      });
       process.stdout.write(`${state.json ? JSON.stringify(result, null, 2) : renderDoctorText(result)}\n`);
       return result.summary.failed > 0 ? ctx.exitCodes.policy : 0;
     });

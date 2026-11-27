@@ -186,6 +186,12 @@ test("doctor --json matches doctor.v1.schema.json and rejects undeclared propert
     return doc;
   });
 
+  const { stdout: testsStdout } = await runCli("doctor", "--tests", "--json");
+  const testsParsed = JSON.parse(testsStdout);
+  assert.equal(validate(testsParsed), true, JSON.stringify(validate.errors));
+  assert.ok(testsParsed.tests.steps.some(({ kind }: { kind: string }) => kind === "test"));
+  assert.equal("tests" in parsed, false);
+
   // Doctor with --system matches doctor schema
   const { stdout: systemStdout } = await runCli("doctor", "--system", "--json");
   const systemParsed = JSON.parse(systemStdout);
