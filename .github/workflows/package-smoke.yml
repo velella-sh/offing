@@ -109,6 +109,76 @@ jobs:
             fixture/lifecycle.sigstore.json
           if-no-files-found: error
 
+  gate-signed-lifecycle:
+    if: github.event_name == 'workflow_dispatch'
+    needs: attest-lifecycle
+    name: acc-release-gate (signed lifecycle fixture)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: lifecycle-gate-candidate
+          path: candidate
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: lifecycle-acceptance-signed
+          path: fixture
+      - name: Install the exact packed candidate
+        working-directory: candidate/npm-install
+        run: npm ci --omit=dev --ignore-scripts --no-fund --no-audit
+      - name: Fetch trust roots for offline verification
+        working-directory: fixture
+        run: gh attestation trusted-root > trusted_root.jsonl
+      - name: Evaluate the signed predicate on either side of the deadline
+        working-directory: fixture
+        run: |
+          set -euo pipefail
+          bin=../candidate/npm-install/node_modules/.bin/offing
+          signer="$GITHUB_REPOSITORY/.github/workflows/package-smoke.yml"
+          export GH_CONFIG_DIR="$RUNNER_TEMP/offing-gate-gh"
+          export OFFING_DATA_VERSION=bundled
+          gate() {
+            "$bin" release-gate --attestation lifecycle.sigstore.json --subject "$1" \
+              --repo "$GITHUB_REPOSITORY" --signer-workflow "$signer" --trusted-root trusted_root.jsonl \
+              --today "$2" --within-days 0 --no-data ignore --json
+          }
+
+          gate lifecycle-sample.txt 2026-03-31 |
+            jq -e '.asOf == "2026-03-31" and .decisions[0].input.kind == "attestation" and .decisions[0].verdict == "pass"'
+          status=0
+          gate lifecycle-sample.txt 2026-04-01 > gate.json || status=$?
+          test "$status" -eq 1
+          jq -e '
+            .asOf == "2026-04-01" and .decisions[0].verdict == "block" and
+              any(.decisions[0].reasons[];
+                .component == "pkg:docker/library/alpine@3.18" and .code == "lifecycle" and
+                .deadline == "2026-04-01" and .daysLeft == 0 and .outcome == "block")
+          ' gate.json
+
+          cp lifecycle-sample.txt modified.txt
+          printf 'modified\n' >> modified.txt
+          status=0
+          gate modified.txt 2026-04-01 > rejected.json 2> rejected.err || status=$?
+          test "$status" -eq 4
+          jq -e '
+            .schemaVersion == "offing.error.v1" and .error.reason == "invalid-input" and .error.exitCode == 4 and
+              (.error.message | startswith("Lifecycle attestation verification failed"))
+          ' rejected.json
+
+          {
+            printf '### acc-release-gate (signed lifecycle fixture)\n\n'
+            printf -- '- Candidate tarball SHA-256 %s\n' "$(sha256sum ../candidate/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
+            printf -- '- The verified predicate passed before the deadline, blocked on it, and refused modified bytes.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
   smoke:
     if: ${{ !inputs.action_conformance_only }}
     name: npm, Docker, and Action
@@ -698,6 +768,21 @@ jobs:
         with:
           name: lifecycle-acceptance
           path: ${{ runner.temp }}/lifecycle-acceptance/
+          if-no-files-found: error
+
+      - name: Stage the exact packed candidate for signed gate acceptance
+        if: github.event_name == 'workflow_dispatch'
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          mkdir -p lifecycle-gate-candidate/npm-install
+          cp package-smoke/*.tgz lifecycle-gate-candidate/
+          cp package-smoke/npm-install/{package.json,package-lock.json} lifecycle-gate-candidate/npm-install/
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: lifecycle-gate-candidate
+          path: ${{ runner.temp }}/lifecycle-gate-candidate/
           if-no-files-found: error
 
       - name: acc-release-gate (installed CLI and standalone fixtures)
