@@ -10,6 +10,10 @@ default branch's commit, and runs the normal scanner against that pinned
 content. It resolves remote files first so the scan engine runs offline.
 No collected repository code runs.
 
+For a workflow run pinned to source, check out that same Offing commit
+and run `npm ci` and `npm run build`. The built CLI is available at
+`node dist/src/cli.js`.
+
 ```sh
 offing fleet my-org --json --jobs 4 > fleet.json
 offing fleet my-group/subgroup --gitlab --progress
@@ -49,6 +53,13 @@ exception text. Violations and invalid policies produce exit status 1.
 
 The [fleet schema](https://velella.sh/offing/schemas/fleet.v1.schema.json)
 defines the JSON format, including repository status and failure reasons.
+For offline validation with a Fleet-capable npm package that exposes the
+schema, import the schema from the same installed package as the CLI:
+
+```js
+import fleetSchema from "@velella/offing/schemas/fleet.v1.schema.json" with { type: "json" };
+```
+
 Text goes to standard output by default. Use `--json` for data, `--html`
 for a self-contained report, or `--progress` to write status lines to
 standard error while the fleet is scanning. Add `--image-lineage --json` to

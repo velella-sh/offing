@@ -44,6 +44,7 @@ test("the npm tarball ships only the root package.json as a dependency manifest"
     "docs/spec/predicted-eol/conformance/check.mjs",
     "docs/spec/predicted-eol/conformance/forecast-valid.json",
     "docs/spec/predicted-eol/conformance/forecast-invalid.json",
+    "schemas/fleet.v1.schema.json",
     "schemas/forecast.v1.schema.json",
   ]) {
     assert.ok(paths.includes(path), `${path} must ship in the tarball`);

@@ -1,0 +1,1 @@
+- Export the Fleet v1 schema from the npm package, build the organization scanner from the exact reusable workflow commit, and retain the reusable organization workflow's reports and opt-in owner digests for 14 days.

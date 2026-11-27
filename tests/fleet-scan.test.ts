@@ -3,8 +3,9 @@ import { execFile, spawn } from "node:child_process";
 import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { delimiter, dirname, join, resolve } from "node:path";
 import { test, type TestContext } from "node:test";
+import { pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 import { gzipSync } from "node:zlib";
 
@@ -314,21 +315,31 @@ test("fleet archive extraction rejects malformed bodies and preserves only regul
   assert.equal(await readFile(join(root, "package.json"), "utf8"), contents);
 });
 
-test("organization workflow pins its source and keeps the fleet report and both digests in one job", async () => {
-  interface Step {
-    readonly id?: string;
-    readonly uses?: string;
-    readonly run?: string;
-    readonly if?: string;
-    readonly with?: Record<string, unknown>;
-  }
-  const document = parse(await readFile(".github/workflows/org-scan.yml", "utf8")) as {
-    jobs: Record<string, { steps: Step[] }>;
+interface WorkflowStep {
+  readonly id?: string;
+  readonly name?: string;
+  readonly uses?: string;
+  readonly run?: string;
+  readonly if?: string;
+  readonly with?: Record<string, unknown>;
+  readonly env?: Record<string, unknown>;
+}
+
+async function organizationWorkflow() {
+  return parse(await readFile(".github/workflows/org-scan.yml", "utf8")) as {
+    jobs: Record<string, { steps: WorkflowStep[] }>;
     on: Record<string, { inputs: Record<string, { default: unknown }> }>;
   };
+}
+
+test("organization workflow pins its source and keeps the fleet report and both digests in one job", async () => {
+  const document = await organizationWorkflow();
   assert.deepEqual(Object.keys(document.jobs), ["fleet"]);
   const steps = document.jobs.fleet?.steps ?? [];
-  assert.match(steps.find(({ id }) => id === "source")?.run ?? "", /\^\[0-9a-f\]\{40\}\$/);
+  const source = steps.find(({ id }) => id === "source");
+  assert.match(source?.run ?? "", /\^\[0-9a-f\]\{40\}\$/);
+  assert.equal(source?.env?.OFFING_WORKFLOW_SHA, "${{ job.workflow_sha }}");
+  assert.ok(steps.some(({ uses }) => uses === "$/.github/actions/setup"));
   assert.equal(
     steps.find(({ uses }) => uses?.includes("actions/checkout"))?.with?.ref,
     "${{ steps.source.outputs.sha }}",
@@ -341,11 +352,174 @@ test("organization workflow pins its source and keeps the fleet report and both 
   assert.equal(document.on.workflow_dispatch?.inputs["forecast-digests"]?.default, false);
   const upload = steps.find(({ uses }) => uses?.includes("actions/upload-artifact"));
   assert.equal(upload?.with?.name, "offing-fleet");
+  assert.equal(upload?.with?.path, "reports/fleet.json");
+  assert.equal(upload?.with?.["retention-days"], 14);
+  for (const { uses } of steps) {
+    if (uses && !uses.startsWith("$/")) assert.match(uses, /^[^@]+@[0-9a-f]{40}$/);
+  }
   const ownerUpload = steps.find((step) => step.with?.name === "offing-owner-digests");
   assert.equal(ownerUpload?.if, "${{ inputs.forecast-digests }}");
+  assert.equal(ownerUpload?.with?.["retention-days"], 14);
   assert.equal(ownerUpload?.with?.path, "${{ runner.temp }}/offing-owner-digests/*.md");
   assert.ok(steps.some(({ run }) => run?.includes('type: "mrkdwn"') && run?.includes("echo") === false));
   assert.ok(steps.some(({ run }) => run?.includes("application/vnd.microsoft.card.adaptive")));
+});
+
+async function fixtureOrganization(t: TestContext): Promise<string> {
+  const tar = archive({ "prefix/package.json": contents });
+  return localHost(t, (request, response) => {
+    assert.equal(request.headers.authorization, `Bearer ${token}`);
+    const { pathname } = new URL(request.url ?? "/", "http://local");
+    if (pathname === "/orgs/example/repos") {
+      return answer(
+        response,
+        ["api", "unavailable"].map((name) => ({
+          full_name: `example/${name}`,
+          default_branch: "main",
+        })),
+      );
+    }
+    if (pathname === "/repos/example/api/branches/main") return answer(response, { commit: { sha: commit } });
+    if (pathname === `/repos/example/api/tarball/${commit}`) {
+      response.end(tar);
+      return;
+    }
+    response.writeHead(404).end();
+  });
+}
+
+async function runOrganizationStep(t: TestContext) {
+  const root = await workspace(t);
+  const origin = await fixtureOrganization(t);
+  await mkdir(join(root, "dist", "src"), { recursive: true });
+  await mkdir(join(root, "bin"));
+  await writeFile(
+    join(root, "dist", "src", "cli.js"),
+    `
+    const fetchFixture = globalThis.fetch;
+    globalThis.fetch = (resource, init) => {
+      const url = new URL(resource);
+      if (url.origin !== "https://api.github.com") throw new Error("Unexpected fixture request");
+      return fetchFixture(new URL(url.pathname + url.search, ${JSON.stringify(origin)}), { ...init, redirect: "manual" });
+    };
+    process.env.PATH = "";
+    void import(${JSON.stringify(pathToFileURL(binary).href)});
+  `,
+  );
+  await writeFile(
+    join(root, "bin", "curl"),
+    `#!/bin/sh
+while [ "$#" -gt 1 ]; do
+  if [ "$1" = "-d" ]; then printf '%s' "$2" > "$PAYLOAD_FILE"; exit; fi
+  shift
+done
+exit 1
+`,
+    { mode: 0o755 },
+  );
+  const steps = (await organizationWorkflow()).jobs.fleet?.steps ?? [];
+  return {
+    root,
+    step: (name: string, env: NodeJS.ProcessEnv = {}) => {
+      const script = steps.find((step) => step.id === name || step.name === name)?.run;
+      assert.ok(script, `Missing workflow script ${name}`);
+      return run("bash", ["--noprofile", "--norc", "-eo", "pipefail", "-c", script], {
+        cwd: root,
+        env: {
+          PATH: [join(root, "bin"), dirname(process.execPath), process.env.PATH].join(delimiter),
+          HOME: root,
+          OFFING_DATA_DIR: join(root, "data"),
+          ...env,
+        },
+      });
+    },
+  };
+}
+
+test("organization workflow runs the installed CLI and renders Slack and Teams digests", {
+  skip: process.env.OFFING_FLEET_WORKFLOW_TEST !== "1",
+}, async (t) => {
+  const { root, step } = await runOrganizationStep(t);
+  const output = join(root, "output");
+  const summary = join(root, "summary");
+  const source = (ref: string, workflowSha = commit) =>
+    step("source", { OFFING_REF: ref, OFFING_WORKFLOW_SHA: workflowSha, GITHUB_OUTPUT: output });
+  await assert.rejects(source("", "main"), /Could not resolve the exact Offing workflow commit SHA/);
+  await assert.rejects(source("a".repeat(40)), /Supply offing-ref as the exact Offing workflow commit SHA/);
+  await source(commit);
+  await source("");
+  await step("scan", {
+    ORGANIZATION: "example",
+    GH_TOKEN: token,
+    FAIL_ON: "info",
+    MAX_JOBS: "2",
+    FORECAST_DIGESTS: "false",
+    RUNNER_TEMP: root,
+    GITHUB_OUTPUT: output,
+    GITHUB_STEP_SUMMARY: summary,
+  });
+  assert.equal(await readFile(output, "utf8"), `sha=${commit}\nsha=${commit}\nstatus=1\n`);
+  const report: unknown = JSON.parse(await readFile(join(root, "reports", "fleet.json"), "utf8"));
+  const schema: unknown = JSON.parse(
+    await readFile(resolve(dirname(binary), "../../schemas/fleet.v1.schema.json"), "utf8"),
+  );
+  assert.ok(schema && typeof schema === "object");
+  const validate = new Ajv2020({ strict: false }).compile<FleetResult>(schema);
+  assert.ok(validate(report), JSON.stringify(validate.errors));
+  assert.deepEqual(
+    report.repositoryStatus.map(({ name, status }) => [name, status]),
+    [
+      ["example/api", "scanned"],
+      ["example/unavailable", "failed"],
+    ],
+  );
+  const digest = await readFile(summary, "utf8");
+  assert.equal(digest, await readFile(join(root, "digest.txt"), "utf8"));
+  assert.match(digest, /example\/unavailable/);
+  const payload = async (name: "Slack" | "Teams"): Promise<unknown> => {
+    const file = join(root, name);
+    await step(`Post to ${name}`, { PAYLOAD_FILE: file });
+    await assert.rejects(readFile(file), { code: "ENOENT" });
+    await step(`Post to ${name}`, {
+      [`${name.toUpperCase()}_WEBHOOK_URL`]: "https://webhook.invalid",
+      PAYLOAD_FILE: file,
+    });
+    const parsed: unknown = JSON.parse(await readFile(file, "utf8"));
+    return parsed;
+  };
+  const title = "Offing organization digest";
+  assert.deepEqual(await payload("Slack"), {
+    text: title,
+    blocks: [
+      { type: "header", text: { type: "plain_text", text: title, emoji: false } },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: digest.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+        },
+      },
+    ],
+  });
+  assert.deepEqual(await payload("Teams"), {
+    type: "message",
+    attachments: [
+      {
+        contentType: "application/vnd.microsoft.card.adaptive",
+        contentUrl: null,
+        content: {
+          $schema: "http://adaptivecards.io/schemas/adaptive-card.json",
+          type: "AdaptiveCard",
+          version: "1.4",
+          body: [
+            { type: "TextBlock", text: title, weight: "Bolder", size: "Medium" },
+            { type: "TextBlock", text: digest, wrap: true },
+          ],
+        },
+      },
+    ],
+  });
+  await assert.rejects(step("Enforce the severity gate", { STATUS: "1" }), { code: 1 });
 });
 
 test("fleet forecast acceptance records exact CODEOWNERS and works from an offline file", async (t) => {

@@ -362,12 +362,17 @@ jobs:
           out="$RUNNER_TEMP/package-smoke"
           package="$out/npm-install/node_modules/@velella/offing"
           export OFFING_FLEET_TEST_CLI="$package/dist/src/cli.js"
+          export OFFING_FLEET_WORKFLOW_TEST=1
+          (
+            cd "$out/npm-install"
+            node --input-type=module -e 'import "@velella/offing/schemas/fleet.v1.schema.json" with { type: "json" };'
+          )
           node --test --test-name-pattern '^(?!fleet forecast acceptance)' dist/tests/fleet-scan.test.js
           {
             printf '### acc-fleet-scan\n\n'
             printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$(node "$OFFING_FLEET_TEST_CLI" --version)" "$GITHUB_SHA"
-            printf -- '- Local host fixtures passed for SHA pinning, cache resume, redaction, and rollup.\n'
+            printf -- '- Fixture organization produced schema-valid fleet JSON and Slack and Teams digests from the installed CLI.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: acc-fleet-forecast

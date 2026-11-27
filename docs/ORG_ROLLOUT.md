@@ -15,7 +15,7 @@ This guide takes one person from an unconfigured organization to a weekly lifecy
 6. Offer the per-repository starter from the organization's `.github` repository.
 7. Open adoption pull requests at scale (optional).
 
-The reusable workflow builds the CLI from the explicit Offing commit you supply.
+The reusable workflow builds the CLI from the commit that defines the fleet job.
 One fleet job discovers the organization repositories, reads pinned detector
 inputs, scans them offline, and optionally posts a digest. See
 [Fleet scans](https://velella.sh/offing/FLEET/) for the local equivalent.
@@ -79,8 +79,13 @@ If you omit the `github-token` secret, the workflow falls back to the caller's `
 
 ## 2. Add the caller workflow
 
-Add one workflow to the caller repository. It calls [`.github/workflows/org-scan.yml`](../.github/workflows/org-scan.yml), which runs `offing fleet` in one job. Use the same full commit SHA for the workflow ref and the
-`offing-ref` input. The job installs dependencies from the pinned lockfile.
+Add one workflow to the caller repository. It calls
+[`.github/workflows/org-scan.yml`](../.github/workflows/org-scan.yml),
+which runs `offing fleet` in one job. Choose an Offing commit that contains
+the Fleet workflow and use its full SHA as the workflow ref. The optional
+`offing-ref` input must match that commit when supplied. The job installs
+dependencies from the workflow commit's lockfile. The per-repository
+Action examples use the published `v0.1.1` release.
 
 Create `.github/workflows/offing-org-scan.yml`:
 
@@ -119,11 +124,13 @@ gh run watch <run-id> --repo your-org/your-ops-repo
 
 The fleet job writes per-repository progress and a final digest, uploads
 `offing-fleet`, then applies the severity gate. Scan failures appear in the
-report alongside successful repositories.
+report alongside successful repositories. The gate checks findings from
+completed scans. Review failed repositories in the summary and retry when
+their branch or contents are accessible.
 
 | Input | Default | Meaning |
 | --- | --- | --- |
-| `offing-ref` | Current commit for in-repository runs | Full Offing workflow commit SHA, required from another repository. |
+| `offing-ref` | Unset | Optional assertion of the full Offing workflow commit SHA. A mismatch fails before checkout. |
 | `organization` | Caller repository owner | GitHub organization slug. |
 | `fail-on-severity` | `high` | Minimum severity that fails the final gate or `none`. |
 | `max-jobs` | `10` | Bounded repository concurrency, from 1 to 16. |
@@ -132,6 +139,11 @@ report alongside successful repositories.
 Existing Slack and Teams webhooks receive the aggregate digest. Use the
 [fleet forecast guide](https://velella.sh/offing/FLEET_FORECAST/) to route
 owner files to the appropriate recipients in a caller-managed workflow.
+
+The reusable workflow skips archived, disabled and forked repositories
+and repositories without a default branch. Use the [Fleet CLI](FLEET.md)
+for name or topic filters and allowlists. Its cache can resume scans on
+the same machine. Each hosted workflow run starts with a fresh cache.
 
 ## 3. Accept existing findings with a baseline
 
@@ -201,7 +213,7 @@ The baseline only takes effect where a workflow passes it to the Action or the r
 ```yaml
 jobs:
   lifecycle:
-    uses: velella-sh/offing/.github/workflows/offing-reusable.yml@main
+    uses: velella-sh/offing/.github/workflows/offing-reusable.yml@v0.1.1
     with:
       baseline: .offing-baseline.json
       fail-on-severity: high
@@ -216,7 +228,12 @@ Or pass the same inputs on the Action step directly:
     fail-on-severity: high
 ```
 
-The organization-wide scan workflow (`org-scan.yml`) does not pass a `baseline` input: it scans each repository with the Action's defaults and reports every finding. Use it with `fail-on-severity: none` as the inventory and digest, and use the per-repository workflow above for the pull-request gate. This is also the workflow created by the adoption pull requests in [step 7](#7-open-adoption-pull-requests-at-scale); add the `baseline` line to that file when you accept its first report.
+The organization-wide workflow scans repositories with the default detector
+configuration and reports every finding. Set `fail-on-severity: none` to
+use it as an inventory and digest. Use the per-repository workflow above
+for the pull-request gate. The adoption pull requests in [step 7](#7-open-adoption-pull-requests-at-scale)
+create the same per-repository workflow. Add the `baseline` input after
+accepting its first report.
 
 A shared baseline can be combined with the repository's own on the command line:
 
@@ -232,6 +249,8 @@ npx @velella/offing scan . \
 
 Download the run's `offing-fleet` artifact. It contains a single fleet
 report with per-repository branch, commit, status and failure reason.
+Use a CLI [built from the same Offing commit](FLEET.md) for the local
+rollup commands.
 
 ```sh
 gh run download <run-id> --repo your-org/your-ops-repo --name offing-fleet --dir org-reports
@@ -407,9 +426,11 @@ Without the input, the Action reports every finding even though the baseline fil
 
 ## Limits
 
-One fleet job scans with bounded concurrency. Archived, disabled and forked repositories are skipped by default.
-
-Artifacts are retained for 14 days. Download or roll up a run's reports before they expire if you need a longer history, or publish the [rollup page](#optional-publish-one-page) from a workflow that runs alongside the scan.
+The report and opt-in owner digest artifacts request 14 days of retention,
+subject to the caller repository's retention limit. Download or roll up
+reports before they expire to keep a longer history. You can also publish
+the [rollup page](#optional-publish-one-page) from a workflow that runs
+alongside the scan.
 
 ## Troubleshooting
 
@@ -417,9 +438,8 @@ Artifacts are retained for 14 days. Download or roll up a run's reports before t
 | --- | --- |
 | `List repositories` fails with `404` | The token cannot see the organization. Check its resource owner, repository access, and organization approval. |
 | `List repositories` fails with `403` | The token is missing `contents`/`repo` or `read:org`, or the organization restricts fine-grained tokens. |
-| A scan job cannot check out a repository | The token cannot read that repository's contents. Give it **All repositories**, not a selected list. |
+| A repository has a failed status | Check its report row for the reason. For access failures, verify the token has **All repositories** access and read-only **Contents** permission. |
 | The digest is skipped | Neither `slack-webhook-url` nor `teams-webhook-url` was passed. |
-| The digest job fails at `Download scan reports` | The caller did not grant `actions: read`. The reusable workflow cannot elevate its own permissions. |
 | Committed baselines have no effect | The workflow did not pass `baseline`. Add it to the per-repository Action step. The organization scan does not pass one. |
 
 ## Privacy and permissions
