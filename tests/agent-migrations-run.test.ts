@@ -1,11 +1,16 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { access, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { createCommandAgent, loadMigrationTasks, runMigrationTask } from "../benchmarks/agent-migrations/run.js";
+import {
+  createCommandAgent,
+  evaluateExpectedEndState,
+  loadMigrationTasks,
+  runMigrationTask,
+} from "../benchmarks/agent-migrations/run.js";
 import type { AgentAdapter, MigrationTask } from "../benchmarks/agent-migrations/run.js";
 
 const CHECK_SCRIPT = `import { readFileSync } from "node:fs";
@@ -210,5 +215,29 @@ test("the command adapter receives the prompt file inside the worktree", async (
 test("the harness loads the checked-in migration tasks", () => {
   const tasks = loadMigrationTasks();
   assert.equal(tasks.schemaVersion, "offing.agent-migrations.v1");
-  assert.equal(tasks.tasks.length, 20);
+  assert.ok(tasks.tasks.length >= 40);
+  const prefixes = new Set(tasks.tasks.map((task) => task.finding.ruleId.split(".")[0]));
+  for (const ecosystem of ["npm", "python", "rust", "go", "java", "github-actions"]) assert.ok(prefixes.has(ecosystem));
+  for (const task of tasks.tasks) {
+    assert.match(task.commit, /^[a-f0-9]{40}$/);
+    assert.ok(task.migrationEvidence?.commit.startsWith(`${task.repository}/commit/`), task.id);
+  }
+});
+
+test("a benchmark check refuses a symlink outside the worktree", { skip: process.platform === "win32" }, async () => {
+  const fixture = await fixtureRepository();
+  const outside = await mkdtemp(join(tmpdir(), "offing-agent-migrations-outside-"));
+  try {
+    const source = join(outside, "manifest.json");
+    await writeFile(source, "{}");
+    const target = join(fixture.repositoryPath, "package.json");
+    await rm(target);
+    await symlink(source, target);
+    const result = await evaluateExpectedEndState(fixture.repositoryPath, fixtureTask(fixture));
+    assert.equal(result.passed, false);
+    assert.match(result.checks[0]?.detail ?? "", /escapes the repository/);
+  } finally {
+    await fixture.cleanup();
+    await rm(outside, { recursive: true, force: true });
+  }
 });

@@ -13,27 +13,33 @@
  *     --agent-command 'my-agent "$OFFING_MIGRATION_PROMPT_FILE"'
  */
 
-import { exec, execFile } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve, sep } from "node:path";
 import { performance } from "node:perf_hooks";
 import { pathToFileURL } from "node:url";
 
-import { bundledRules } from "@velella/ebb/bundled-rules";
+import { createCommandAgent, DEFAULT_AGENT_TIMEOUT_MS, runShell, truncate } from "../../src/migrate/command-agent.js";
+import type { AgentAdapter } from "../../src/migrate/command-agent.js";
+import { discardWorktree, git, prepareWorktree } from "../../src/migrate/worktree.js";
+
+export { createCommandAgent, DEFAULT_AGENT_TIMEOUT_MS } from "../../src/migrate/command-agent.js";
+export type {
+  AgentAdapter,
+  AgentRunInput,
+  AgentRunOutput,
+  CommandAgentOptions,
+} from "../../src/migrate/command-agent.js";
 import { builtInDetectors } from "../../src/detectors/index.js";
 import { scanRepository } from "../../src/engine/index.js";
-import { createMigrationPacket } from "../../src/migration-packet.js";
-import { renderMigrationPrompt } from "../../src/migration-prompt.js";
-import { readPinnedRuntimes } from "../../src/runtime-pin.js";
+import type { ScanResult } from "../../src/domain.js";
+import { verifyFix } from "../../src/fix/verify.js";
+import { buildFindingPrompt } from "../../src/migrate/prompt.js";
 
 export const SCHEMA_VERSION = "offing.agent-migrations.v1" as const;
 
-export const DEFAULT_AGENT_TIMEOUT_MS = 30 * 60 * 1000;
 export const DEFAULT_VERIFICATION_TIMEOUT_MS = 30 * 60 * 1000;
-
-const OUTPUT_LIMIT = 8_000;
 
 export type MigrationCondition = "baseline" | "packet";
 
@@ -52,36 +58,12 @@ export interface MigrationTask {
   expectedEndState: { description: string; checks: MigrationTaskCheck[] };
   verification: string[];
   migrationEvidence?: { commit: string; summary: string };
+  evidenceSource?: "upstream-migration";
 }
 
 export interface MigrationTasksFile {
   schemaVersion: string;
   tasks: MigrationTask[];
-}
-
-export interface AgentRunInput {
-  prompt: string;
-  worktreePath: string;
-  timeoutMs: number;
-}
-
-export interface AgentRunOutput {
-  exitCode: number | null;
-  signal: NodeJS.Signals | null;
-  stdout: string;
-  stderr: string;
-  timedOut: boolean;
-}
-
-export interface AgentAdapter {
-  name: string;
-  run(input: AgentRunInput): Promise<AgentRunOutput>;
-}
-
-export interface CommandAgentOptions {
-  name?: string;
-  command: string;
-  env?: Record<string, string>;
 }
 
 export interface EndStateCheckResult {
@@ -126,6 +108,8 @@ export interface ConditionResult {
   };
   diff: { text: string; changedFiles: string[] };
   expectedEndState: EndStateResult;
+  findingResolved: boolean;
+  noNewFinding: boolean;
   verification: VerificationResult;
   durationMs: number;
   success: boolean;
@@ -135,6 +119,7 @@ export interface ConditionResult {
 export interface MigrationRunResult {
   schemaVersion: typeof SCHEMA_VERSION;
   taskId: string;
+  agent: { name: string; version?: string };
   repository: string;
   commit: string;
   startedAt: string;
@@ -145,6 +130,7 @@ export interface MigrationRunResult {
 export interface MigrationRunnerOptions {
   repositoryPath: string;
   agent: AgentAdapter;
+  agentVersion?: string;
   conditions?: readonly MigrationCondition[];
   timeoutMs?: number;
   verificationTimeoutMs?: number;
@@ -158,11 +144,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
-}
-
-function truncate(value: string): string {
-  if (value.length <= OUTPUT_LIMIT) return value;
-  return `${value.slice(0, OUTPUT_LIMIT)}\n… (${value.length - OUTPUT_LIMIT} characters truncated)`;
 }
 
 function nonEmptyString(value: unknown, context: string): string {
@@ -206,83 +187,6 @@ export function loadMigrationTasks(tasksPath = resolve("benchmarks/agent-migrati
   return { schemaVersion, tasks };
 }
 
-function execFileText(command: string, args: string[], cwd: string): Promise<string> {
-  return new Promise((resolvePromise, reject) => {
-    execFile(command, args, { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 }, (error, stdout) => {
-      if (error !== null) {
-        const stderr = (error as { stderr?: string }).stderr ?? "";
-        reject(new Error(`${command} ${args.join(" ")} failed in ${cwd}: ${(stderr || error.message).trim()}`));
-        return;
-      }
-      resolvePromise(stdout);
-    });
-  });
-}
-
-function git(args: string[], cwd: string): Promise<string> {
-  return execFileText("git", args, cwd);
-}
-
-function runShell(
-  command: string,
-  options: { cwd: string; timeoutMs: number; env?: Record<string, string> },
-): Promise<AgentRunOutput> {
-  return new Promise((resolvePromise) => {
-    exec(
-      command,
-      {
-        cwd: options.cwd,
-        timeout: options.timeoutMs,
-        encoding: "utf8",
-        maxBuffer: 16 * 1024 * 1024,
-        env: { ...process.env, ...options.env },
-      },
-      (error, stdout, stderr) => {
-        const failure = error as
-          | (Error & { code?: number | string | null; killed?: boolean; signal?: NodeJS.Signals | null })
-          | null;
-        resolvePromise({
-          exitCode: failure === null ? 0 : typeof failure.code === "number" ? failure.code : null,
-          signal: failure?.signal ?? null,
-          stdout: String(stdout),
-          stderr: String(stderr),
-          timedOut: failure?.killed === true,
-        });
-      },
-    );
-  });
-}
-
-/**
- * An adapter that runs a user-supplied command inside the worktree. The prompt is written to a temporary file
- * outside the worktree and its path is exported as `OFFING_MIGRATION_PROMPT_FILE`, so the command does not
- * have to embed a multi-line packet in argv.
- */
-export function createCommandAgent(options: CommandAgentOptions): AgentAdapter {
-  return {
-    name: options.name ?? "command",
-    async run(input) {
-      const promptDirectory = await mkdtemp(join(tmpdir(), "offing-agent-prompt-"));
-      const promptPath = join(promptDirectory, "prompt.md");
-      await writeFile(promptPath, input.prompt, "utf8");
-      try {
-        const output = await runShell(options.command, {
-          cwd: input.worktreePath,
-          timeoutMs: input.timeoutMs,
-          env: { ...options.env, OFFING_MIGRATION_PROMPT_FILE: promptPath },
-        });
-        return {
-          ...output,
-          stdout: truncate(output.stdout),
-          stderr: truncate(output.stderr),
-        };
-      } finally {
-        await rm(promptDirectory, { recursive: true, force: true });
-      }
-    },
-  };
-}
-
 export function baselinePrompt(task: MigrationTask): string {
   return [
     `You are migrating a repository checkout. Resolve this lifecycle finding:`,
@@ -298,30 +202,32 @@ export function baselinePrompt(task: MigrationTask): string {
   ].join("\n");
 }
 
-export async function buildPacketPrompt(task: MigrationTask, repositoryPath: string): Promise<string> {
-  const result = await scanRepository(repositoryPath, builtInDetectors, { noCache: true });
-  const finding = result.findings.find(
+function targetFinding(result: ScanResult, task: MigrationTask) {
+  return result.findings.find(
     (candidate) =>
       candidate.ruleId === task.finding.ruleId &&
       candidate.location.path === task.finding.path &&
       candidate.location.line === task.finding.line,
   );
+}
+
+export async function buildPacketPrompt(
+  task: MigrationTask,
+  repositoryPath: string,
+  before?: ScanResult,
+): Promise<string> {
+  const result = before ?? (await scanRepository(repositoryPath, builtInDetectors, { noCache: true }));
+  const finding = targetFinding(result, task);
   if (!finding) {
     throw new Error(
       `A fresh scan of ${repositoryPath} did not report ${task.finding.ruleId} at ${task.finding.path}:${task.finding.line}.`,
     );
   }
-  const packet = createMigrationPacket(
-    result,
-    finding.id,
-    await bundledRules(),
-    await readPinnedRuntimes(repositoryPath),
-  );
-  return renderMigrationPrompt(packet, repositoryPath);
+  return (await buildFindingPrompt(result, finding.id, repositoryPath)).prompt;
 }
 
 export async function evaluateExpectedEndState(root: string, task: MigrationTask): Promise<EndStateResult> {
-  const rootPath = resolve(root);
+  const rootPath = await realpath(root);
   const checks: EndStateCheckResult[] = [];
   for (const check of task.expectedEndState.checks) {
     const target = resolve(rootPath, check.path);
@@ -331,7 +237,12 @@ export async function evaluateExpectedEndState(root: string, task: MigrationTask
     }
     let content: string;
     try {
-      content = await readFile(target, "utf8");
+      const actual = await realpath(target);
+      if (!actual.startsWith(rootPath + sep)) {
+        checks.push({ path: check.path, passed: false, detail: "path escapes the repository" });
+        continue;
+      }
+      content = await readFile(actual, "utf8");
     } catch {
       checks.push({ path: check.path, passed: false, detail: "file is missing" });
       continue;
@@ -377,31 +288,6 @@ async function runVerification(
   };
 }
 
-async function prepareWorktree(repositoryPath: string, commit: string, worktreePath: string): Promise<void> {
-  try {
-    await git(["cat-file", "-e", `${commit}^{commit}`], repositoryPath);
-  } catch {
-    throw new Error(
-      `The repository at ${repositoryPath} does not contain ${commit}. Clone or fetch it before running the harness.`,
-    );
-  }
-  await git(["worktree", "add", "--detach", worktreePath, commit], repositoryPath);
-}
-
-async function discardWorktree(repositoryPath: string, worktreePath: string): Promise<void> {
-  try {
-    await git(["worktree", "remove", "--force", worktreePath], repositoryPath);
-  } catch {
-    // The worktree may already be gone; the recursive removal below is the fallback.
-  }
-  await rm(worktreePath, { recursive: true, force: true });
-  try {
-    await git(["worktree", "prune"], repositoryPath);
-  } catch {
-    // Pruning only cleans metadata; a failure here does not affect the result.
-  }
-}
-
 async function captureChanges(
   worktreePath: string,
   baseCommit: string,
@@ -442,8 +328,10 @@ async function runCondition(
 
   try {
     await prepareWorktree(repositoryPath, task.commit, worktreePath);
+    const before = await scanRepository(worktreePath, builtInDetectors, { noCache: true });
     try {
-      prompt = condition === "packet" ? await buildPacketPrompt(task, worktreePath) : baselinePrompt(task);
+      prompt = condition === "packet" ? await buildPacketPrompt(task, worktreePath, before) : baselinePrompt(task);
+      if (!targetFinding(before, task)) throw new Error("Pinned baseline did not report the expected finding.");
     } catch (cause) {
       error = messageOf(cause);
     }
@@ -484,6 +372,14 @@ async function runCondition(
       error ??= `could not run verification: ${messageOf(cause)}`;
     }
 
+    const after = await scanRepository(worktreePath, builtInDetectors, { noCache: true });
+    const findingResolved =
+      error === undefined &&
+      !after.findings.some(
+        (finding) => finding.ruleId === task.finding.ruleId && finding.location.path === task.finding.path,
+      );
+    const noNewFinding = verifyFix(before, after).introduced.length === 0;
+
     return {
       condition,
       worktreePath,
@@ -491,9 +387,17 @@ async function runCondition(
       agent,
       diff,
       expectedEndState,
+      findingResolved,
+      noNewFinding,
       verification,
       durationMs: Math.round(performance.now() - started),
-      success: error === undefined && agent.exitCode === 0 && expectedEndState.passed && verification.passed,
+      success:
+        error === undefined &&
+        agent.exitCode === 0 &&
+        expectedEndState.passed &&
+        findingResolved &&
+        noNewFinding &&
+        verification.passed,
       ...(error === undefined ? {} : { error }),
     };
   } finally {
@@ -533,6 +437,10 @@ export async function runMigrationTask(
   return {
     schemaVersion: SCHEMA_VERSION,
     taskId: task.id,
+    agent: {
+      name: options.agent.name,
+      ...(options.agentVersion === undefined ? {} : { version: options.agentVersion }),
+    },
     repository: task.repository,
     commit: task.commit,
     startedAt,
@@ -547,6 +455,7 @@ interface CliOptions {
   repositoryPath?: string;
   agentCommand?: string;
   agentName: string;
+  agentVersion?: string;
   conditions: MigrationCondition[];
   timeoutMs?: number;
   verificationTimeoutMs?: number;
@@ -569,6 +478,7 @@ Required:
 
 Options:
   --tasks <path>           Task file (default: benchmarks/agent-migrations/tasks.json)
+  --agent-version <ver>    Recorded CLI version for reproducible results
   --agent-name <name>      Label for the agent adapter (default: command)
   --condition <kind>       baseline, packet, or both (default: both)
   --timeout-ms <number>    Agent timeout per condition (default: 1800000)
@@ -623,6 +533,9 @@ function parseArguments(argv: readonly string[]): CliOptions {
         break;
       case "--agent-name":
         options.agentName = value();
+        break;
+      case "--agent-version":
+        options.agentVersion = value();
         break;
       case "--condition": {
         const kind = value();
@@ -730,6 +643,7 @@ async function main(argv: readonly string[]): Promise<number> {
   const result = await runMigrationTask(task, {
     repositoryPath: options.repositoryPath,
     agent,
+    ...(options.agentVersion === undefined ? {} : { agentVersion: options.agentVersion }),
     conditions: options.conditions,
     ...(options.timeoutMs === undefined ? {} : { timeoutMs: options.timeoutMs }),
     ...(options.verificationTimeoutMs === undefined ? {} : { verificationTimeoutMs: options.verificationTimeoutMs }),
