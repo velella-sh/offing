@@ -5,13 +5,14 @@ import { test } from "node:test";
 
 import ts from "typescript";
 
-// These are the shipped network entry points already covered by the data-update and GitHub Action tests.
+// These are the shipped network entry points for user-directed data, fleet, and Action operations.
 // GitHub Action writes answer an explicit repository workflow; the CLI data update downloads the rule bundle.
 const approved = new Map([
   ["action-commands.ts", ["fetch"]],
   ["action-fix-pr.ts", ["fetch"]],
   ["action-tracking-issue.ts", ["fetch"]],
   ["commands/data.ts", ["@velella/ebb/data-update", "node:http"]],
+  ["fleet/http.ts", ["fetch"]],
   ["pr-comment.ts", ["fetch"]],
 ]);
 const networkGlobals = /^(fetch|WebSocket|XMLHttpRequest|EventSource|sendBeacon|WebTransport)$/;
@@ -46,7 +47,7 @@ function networkReferences(source: ts.SourceFile): string[] {
   return references.sort();
 }
 
-test("shipped source has no network entry points beyond data updates and GitHub Action operations", async () => {
+test("shipped source has only the declared network entry points", async () => {
   const root = join(import.meta.dirname, "../../src");
   const files = ts.sys.readDirectory(root, [".ts", ".tsx", ".js", ".mjs", ".cjs"], ["**/vendor/**"], ["**/*"]);
   const entries = await Promise.all(

@@ -3,7 +3,7 @@ import { setTimeout } from "node:timers/promises";
 import { FleetHostError } from "./host.js";
 
 interface ClientOptions {
-  readonly fetch?: typeof fetch;
+  readonly request?: typeof fetch;
   readonly wait?: (ms: number) => Promise<unknown>;
 }
 
@@ -26,7 +26,7 @@ function delayMs(response: Response): number | undefined {
 export function fleetClient(
   headers: Readonly<Record<string, string>>,
   denied: string,
-  { fetch: request = fetch, wait = setTimeout }: ClientOptions = {},
+  { request = fetch, wait = setTimeout }: ClientOptions = {},
 ) {
   let blockedUntil = 0;
   return async (url: URL, redirect: RequestRedirect = "error"): Promise<Response> => {

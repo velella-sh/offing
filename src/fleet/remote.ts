@@ -84,7 +84,7 @@ function repository(value: unknown, gitlab: boolean): FleetRepository {
 interface RemoteOptions {
   readonly api?: string;
   readonly origin?: string;
-  readonly fetch?: typeof fetch;
+  readonly request?: typeof fetch;
   readonly wait?: (ms: number) => Promise<unknown>;
 }
 

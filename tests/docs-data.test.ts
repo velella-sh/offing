@@ -53,10 +53,11 @@ test("docs/DATA.md documents the real commands, options, variables, and threshol
   assert.ok(DEFAULT_RELEASES_URL.includes("/releases"));
 });
 
-test("the privacy page names the one network command and links to the data page", async () => {
+test("the privacy page explains local scanning, explicit network commands, and the data page", async () => {
   const privacy = await read("docs/PRIVACY.md");
-  assert.match(privacy, /Scans use no network\. The one exception is `offing data update`/);
+  assert.match(privacy, /Local scans use no network\. You can run `offing data update`/);
   assert.ok(privacy.includes("(DATA.md)"));
+  assert.match(privacy, /CLI `fleet`.*selected host.*scan engine runs offline/);
 });
 
 test("the release checklist and the data page send data releases to Ebb", async () => {
