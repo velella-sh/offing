@@ -1,0 +1,306 @@
+{
+  "source": "synthetic-fixture",
+  "rows": [
+    {
+      "id": "green-case",
+      "outcome": "green",
+      "run": {
+        "schemaVersion": "offing.autopilot-run.v1",
+        "mode": "prepare",
+        "state": "done",
+        "transitions": [
+          "scan",
+          "plan",
+          "baseline-tests",
+          "codemods",
+          "agent-turn",
+          "tests",
+          "verify",
+          "done"
+        ],
+        "checkout": {
+          "id": "sample",
+          "branch": "offing/autopilot/sample",
+          "baseCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      "proof": {
+        "schemaVersion": "offing.proof.v1",
+        "outcome": "done",
+        "range": {
+          "base": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "head": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "verify": {
+          "schemaVersion": "offing.verify-result.v1",
+          "before": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offingVersion": "synthetic-fixture",
+            "ebbDataVersion": "synthetic-fixture"
+          },
+          "after": {
+            "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "offingVersion": "synthetic-fixture",
+            "ebbDataVersion": "synthetic-fixture"
+          },
+          "counts": {
+            "resolved": 0,
+            "remaining": 0,
+            "introduced": 0
+          },
+          "resolved": [],
+          "remaining": [],
+          "introduced": [],
+          "verdict": "passed",
+          "commands": [
+            {
+              "command": "synthetic test",
+              "purpose": "Exercise fixture verification",
+              "status": "passed",
+              "exitCode": 0,
+              "logSha256": "72e9ec5bd3585649f7ce0e8b005f3698e6ac3fbc28fc7d13e87570fe1bdb2007"
+            }
+          ]
+        },
+        "testRuns": [],
+        "agentRuns": [
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "completed",
+            "summary": "Synthetic fixture driver",
+            "filesTouched": [],
+            "turns": 2,
+            "usage": {
+              "inputTokens": null,
+              "outputTokens": null,
+              "costUsd": 0.03
+            },
+            "driver": {
+              "name": "synthetic-fixture",
+              "version": null
+            }
+          }
+        ],
+        "diff": {
+          "added": 0,
+          "changed": 1,
+          "deleted": 0
+        },
+        "budget": {
+          "elapsedMs": 1000,
+          "costUsd": 0.03
+        },
+        "tools": {
+          "offing": "synthetic-fixture",
+          "git": "synthetic-fixture"
+        }
+      }
+    },
+    {
+      "id": "exhausted-case",
+      "outcome": "stopped-by-budget",
+      "run": {
+        "schemaVersion": "offing.autopilot-run.v1",
+        "mode": "prepare",
+        "state": "stopped",
+        "transitions": [
+          "scan",
+          "plan",
+          "baseline-tests",
+          "codemods",
+          "agent-turn",
+          "tests",
+          "stopped"
+        ],
+        "checkout": {
+          "id": "sample",
+          "branch": "offing/autopilot/sample",
+          "baseCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopReason": "run.turns"
+      },
+      "proof": {
+        "schemaVersion": "offing.proof.v1",
+        "outcome": "stopped",
+        "range": {
+          "base": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "head": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "verify": {
+          "schemaVersion": "offing.verify-result.v1",
+          "before": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offingVersion": "synthetic-fixture",
+            "ebbDataVersion": "synthetic-fixture"
+          },
+          "after": {
+            "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "offingVersion": "synthetic-fixture",
+            "ebbDataVersion": "synthetic-fixture"
+          },
+          "counts": {
+            "resolved": 0,
+            "remaining": 0,
+            "introduced": 0
+          },
+          "resolved": [],
+          "remaining": [],
+          "introduced": [],
+          "verdict": "failed",
+          "commands": [
+            {
+              "command": "synthetic test",
+              "purpose": "Exercise fixture verification",
+              "status": "failed",
+              "exitCode": 1,
+              "logSha256": "d39d2afc21b0a518f34b226186bb441c83762872a09fe5f3af94fb848503d992"
+            }
+          ]
+        },
+        "testRuns": [],
+        "agentRuns": [
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "failed",
+            "summary": "Synthetic fixture driver",
+            "filesTouched": [],
+            "turns": 6,
+            "usage": {
+              "inputTokens": null,
+              "outputTokens": null,
+              "costUsd": null
+            },
+            "driver": {
+              "name": "synthetic-fixture",
+              "version": null
+            }
+          }
+        ],
+        "diff": {
+          "added": 0,
+          "changed": 1,
+          "deleted": 0
+        },
+        "budget": {
+          "elapsedMs": 3000,
+          "costUsd": null
+        },
+        "tools": {
+          "offing": "synthetic-fixture",
+          "git": "synthetic-fixture"
+        }
+      },
+      "lastFailure": {
+        "file": "exhausted.txt",
+        "sha256": "484c5241eda8429583faa29dc6b17e9abd0c55c3ccf90fef4f719b0b044271ee"
+      }
+    },
+    {
+      "id": "failed-case",
+      "outcome": "failed",
+      "run": {
+        "schemaVersion": "offing.autopilot-run.v1",
+        "mode": "prepare",
+        "state": "stopped",
+        "transitions": [
+          "scan",
+          "plan",
+          "baseline-tests",
+          "codemods",
+          "agent-turn",
+          "tests",
+          "stopped"
+        ],
+        "checkout": {
+          "id": "sample",
+          "branch": "offing/autopilot/sample",
+          "baseCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopReason": "test-failed"
+      },
+      "proof": {
+        "schemaVersion": "offing.proof.v1",
+        "outcome": "stopped",
+        "range": {
+          "base": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "head": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "verify": {
+          "schemaVersion": "offing.verify-result.v1",
+          "before": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "offingVersion": "synthetic-fixture",
+            "ebbDataVersion": "synthetic-fixture"
+          },
+          "after": {
+            "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "offingVersion": "synthetic-fixture",
+            "ebbDataVersion": "synthetic-fixture"
+          },
+          "counts": {
+            "resolved": 0,
+            "remaining": 0,
+            "introduced": 0
+          },
+          "resolved": [],
+          "remaining": [],
+          "introduced": [],
+          "verdict": "failed",
+          "commands": [
+            {
+              "command": "synthetic test",
+              "purpose": "Exercise fixture verification",
+              "status": "failed",
+              "exitCode": 1,
+              "logSha256": "d39d2afc21b0a518f34b226186bb441c83762872a09fe5f3af94fb848503d992"
+            }
+          ]
+        },
+        "testRuns": [],
+        "agentRuns": [
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "failed",
+            "summary": "Synthetic fixture driver",
+            "filesTouched": [],
+            "turns": null,
+            "usage": {
+              "inputTokens": null,
+              "outputTokens": null,
+              "costUsd": 0.07
+            },
+            "driver": {
+              "name": "synthetic-fixture",
+              "version": null
+            }
+          }
+        ],
+        "diff": {
+          "added": 0,
+          "changed": 1,
+          "deleted": 0
+        },
+        "budget": {
+          "elapsedMs": 5000,
+          "costUsd": 0.07
+        },
+        "tools": {
+          "offing": "synthetic-fixture",
+          "git": "synthetic-fixture"
+        }
+      },
+      "lastFailure": {
+        "file": "failed.txt",
+        "sha256": "2460064f5040db2ea93f545869a45bc528b6c9efd481854efb3cc31cd1c8bdd7"
+      }
+    },
+    {
+      "id": "excluded-case",
+      "outcome": "excluded",
+      "lastFailure": {
+        "file": "excluded.txt",
+        "sha256": "e7e9eb7103a0bf2af68ab2ba5ccd712ae4c29f966daae77ea249d39189352559"
+      }
+    }
+  ]
+}
