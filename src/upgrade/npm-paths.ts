@@ -15,15 +15,16 @@ function packageRecords(text: string): RecordValue {
 }
 
 function installedPath(packages: RecordValue, parent: string, name: string): string | undefined {
-  if (!/^(?:@[\w.-]+\/)?[\w.-]+$/.test(name)) return undefined;
+  if (!/^(?:@[\w.-]+\/)?[\w.-]+$/.test(name) || name === "." || name === "..") return undefined;
   let directory = parent;
   while (true) {
     if (posix.basename(directory) !== "node_modules") {
       const candidate = posix.join(directory, "node_modules", name);
       if (Object.hasOwn(packages, candidate)) return candidate;
     }
-    if (directory === "" || directory === ".") return undefined;
-    directory = posix.dirname(directory);
+    const parentDirectory = posix.dirname(directory);
+    if (directory === "" || parentDirectory === directory) return undefined;
+    directory = parentDirectory;
   }
 }
 
@@ -35,15 +36,16 @@ function installedDependencies(packages: RecordValue, parent: string, names: str
 /** Follow installed paths so two locked copies of the same package cannot share each other's edges. */
 export function npmPaths(text: string): (path: string) => string[] | undefined {
   const packages = packageRecords(text);
-  const graph: LockedGraph = { edges: new Map(), labels: new Map(), roots: [] };
+  const edges: LockedGraph["edges"] = new Map();
   const labels = new Map<string, string>();
   for (const [path, metadata] of Object.entries(packages)) {
+    if (!path.startsWith("node_modules/") || posix.normalize(path) !== path) continue;
     const name = packageNameFromNodeModulesPath(path);
     const entry = object(metadata);
     if (name === undefined || typeof entry.version !== "string") continue;
     labels.set(path, (typeof entry.name === "string" && entry.name !== "" ? entry.name : name) + "@" + entry.version);
-    graph.edges.set(path, installedDependencies(packages, path, sections(entry, dependencySections)));
+    edges.set(path, installedDependencies(packages, path, sections(entry, dependencySections)));
   }
   const roots = [...installedDependencies(packages, "", sections(object(packages[""]), rootSections))];
-  return (path) => lockedChain({ ...graph, roots, labels }, path);
+  return (path) => lockedChain({ edges, roots, labels }, path);
 }

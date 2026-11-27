@@ -34,6 +34,7 @@ const npmPackages = [
   ["node_modules/b-root/node_modules/child", { version: "2.0.0", engines: { node: "<22" } }],
   ["node_modules/other", { version: "1.0.0", engines: { node: "<22" } }],
   ["node_modules/orphan", { version: "1.0.0", engines: { node: "<22" } }],
+  ["/node_modules/invalid", { version: "1.0.0", dependencies: { absent: "^1" } }],
 ] as const;
 
 const npmLock = (reverse = false): string =>
