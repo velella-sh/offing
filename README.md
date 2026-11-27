@@ -1,26 +1,13 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-night.svg">
-    <img src="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-day.svg" width="96" height="96" alt="Offing">
-  </picture>
-</p>
-
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-night.svg"><img src="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-day.svg" width="96" height="96" alt="Offing"></picture></p>
 <h1 align="center">Offing</h1>
-
-<p align="center">
-  <strong>See what's in the offing. Fix it before it lands.</strong><br>
-  Local-first end-of-life and deprecation scanner for your repository.
-</p>
-
-<p align="center">
-  <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
+<p align="center"><strong>See what's in the offing. Fix it before it lands.</strong><br>Local-first end-of-life and deprecation scanner for your repository.</p>
+<p align="center"><a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Coverage" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvelella-sh%2Foffing%2Fbadges%2Fcoverage.json&labelColor=1F1F28&style=flat"></a>
   <a href="https://www.npmjs.com/package/@velella/offing"><img alt="npm" src="https://img.shields.io/npm/v/@velella/offing?logo=npm&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/github/license/velella-sh/offing?labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Offing" src="https://raw.githubusercontent.com/velella-sh/offing/badges/offing-badge.svg"></a>
   <a href="https://securityscorecards.dev/viewer/?uri=github.com/velella-sh/offing"><img alt="OpenSSF Scorecard" src="https://img.shields.io/ossf-scorecard/github.com/velella-sh/offing?label=openssf%20scorecard&labelColor=1F1F28&color=6A5590&style=flat"></a>
-  <a href="https://skills.sh/velella-sh/offing/offing"><img alt="skills.sh" src="https://skills.sh/b/velella-sh/offing"></a>
-</p>
+  <a href="https://skills.sh/velella-sh/offing/offing"><img alt="skills.sh" src="https://skills.sh/b/velella-sh/offing"></a></p>
 
 Offing finds **end-of-life and deprecated** runtimes, packages, and GitHub Actions in your repository, at the exact file and line, each with an authoritative source, a replacement, and migration steps. It is deterministic, offline, and needs no account.
 
