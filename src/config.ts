@@ -2,6 +2,7 @@ import { isIsoDate } from "@velella/ebb/registry";
 import { readFile, stat } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 
+import { parseAutopilotConfig, type AutopilotConfig } from "./autopilot/limits/config.js";
 import type { LifecyclePolicy, PolicyException, PolicyRule, ScanResult, Severity } from "./domain.js";
 import { severityValues } from "./domain.js";
 import { OffingError } from "./offing-error.js";
@@ -24,6 +25,7 @@ export interface OffingConfig {
   baseline?: string[];
   policy?: LifecyclePolicy;
   extends?: string;
+  autopilot?: AutopilotConfig;
   configPath?: string;
 }
 
@@ -45,6 +47,7 @@ export const KNOWN_CONFIG_KEYS = new Set([
   "baseline-files",
   "policy",
   "extends",
+  "autopilot",
 ]);
 
 /**
@@ -59,7 +62,7 @@ export function validateConfig(raw: unknown, filePath = CONFIG_FILE_NAME): Offin
   const unknownKeys = Object.keys(record).filter((key) => !KNOWN_CONFIG_KEYS.has(key));
   if (unknownKeys.length > 0) {
     throw new ConfigError(
-      `Unknown key in ${filePath}: "${unknownKeys[0]}" (allowed keys: fail-on, ignore, data-version, baseline, policy, extends).`,
+      `Unknown key in ${filePath}: "${unknownKeys[0]}" (allowed keys: fail-on, ignore, data-version, baseline, policy, extends, autopilot).`,
     );
   }
 
@@ -90,7 +93,18 @@ export function validateConfig(raw: unknown, filePath = CONFIG_FILE_NAME): Offin
     ...(baseline !== undefined ? { baseline } : {}),
     ...parsePolicy(record.policy, filePath),
     ...parseFleetParent(record.extends, filePath),
+    ...parseAutopilot(record.autopilot, filePath),
   };
+}
+
+function parseAutopilot(value: unknown, filePath: string): Pick<OffingConfig, "autopilot"> {
+  if (value === undefined) return {};
+  try {
+    return { autopilot: parseAutopilotConfig(value) };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new ConfigError(message + " File: " + filePath);
+  }
 }
 
 function parseFleetParent(value: unknown, filePath: string): Pick<OffingConfig, "extends"> {

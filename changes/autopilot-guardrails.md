@@ -1,0 +1,1 @@
+- Validate the optional Autopilot settings for budgets, path scope, test commands, driver selection and secret environment names in .offing.json.

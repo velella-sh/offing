@@ -7,6 +7,7 @@ import { listDrivers, vendorByName } from "../agent-drivers/index.js";
 import { runProcess, type AgentRunOutput } from "../agent-drivers/process.js";
 import { createReplayDriver } from "../agent-drivers/replay.js";
 import { record } from "../agent-drivers/result.js";
+import { parseAutopilotConfig } from "../autopilot/limits/config.js";
 import { git } from "../migrate/worktree.js";
 import type { CliCommand } from "./types.js";
 
@@ -41,12 +42,17 @@ async function replayCase(input: CheckInput, kind: string) {
     return { ...output, result: makeResult({ name: "replay", version: "1" }, output) };
   }
   const recording = join(input.root, "turns.json");
-  const file = kind === "edit" ? "example.txt" : "../outside.txt";
+  const file = kind === "edit" ? "example.txt" : "unapproved.txt";
   await writeFile(
     recording,
     JSON.stringify({ schemaVersion: "offing.agent-replay.v1", turns: [{ [file]: "after\n" }] }),
   );
-  return createReplayDriver(recording).run(input);
+  return createReplayDriver(recording, {
+    config: parseAutopilotConfig(undefined),
+    packets: [],
+    testFiles: input.allowedPaths ?? [],
+    environment: {},
+  }).run(input);
 }
 
 function driverTest(target: string): CheckCallback {
