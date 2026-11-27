@@ -1,3 +1,4 @@
+import { defineCodemod } from "./kit/define.js";
 import { readFile, realpath } from "node:fs/promises";
 import { basename, dirname, isAbsolute, relative, resolve } from "node:path";
 
@@ -5,7 +6,7 @@ import semver from "semver";
 
 import { parseGoMod } from "../detectors/go/parse-go-mod.js";
 import type { Finding } from "../domain.js";
-import type { FilePatch, Fixer, Refuse } from "./types.js";
+import type { FilePatch, Refuse } from "./types.js";
 
 const VERSION = /^\d+\.\d+(?:\.\d+)?$/;
 const DIRECTIVE = /^(\s*(go|toolchain)\s+)((?:go)?\d+\.\d+(?:\.\d+)?)(\s*(?:\/\/.*)?\r?)$/;
@@ -103,8 +104,9 @@ function collectTargets(targets: Map<string, Targets>, findings: readonly Findin
 }
 
 /** Raise only go.mod directive values to an explicit supported replacement, never resolving modules or running Go. */
-export const goModFixer: Fixer = {
+export const goModFixer = defineCodemod({
   id: "go-mod",
+  rules: ["go.runtime.*"],
   async plan(result, refuse) {
     const targets = new Map<string, Targets>();
     collectTargets(targets, result.findings, refuse);
@@ -115,7 +117,7 @@ export const goModFixer: Fixer = {
     }
     return patches;
   },
-};
+});
 
 /** The `go.mod` patch that raises its directives to `normalized`, or undefined when nothing can change; declined findings are reported. */
 async function planFile(

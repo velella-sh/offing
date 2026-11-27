@@ -1,0 +1,28 @@
+{
+  "refusals": [
+    {
+      "ruleId": "python.symbol.imp.find-module",
+      "path": "app.py",
+      "line": 3,
+      "reason": "No exact replacement exists for `imp.find_module`; `importlib.util.find_spec` returns a different shape."
+    },
+    {
+      "ruleId": "python.symbol.imp.load-module",
+      "path": "app.py",
+      "line": 4,
+      "reason": "No exact replacement exists for `imp.load_module`; `importlib.import_module` loads an installed module, not a finder tuple."
+    },
+    {
+      "ruleId": "python.symbol.imp.load-source",
+      "path": "app.py",
+      "line": 5,
+      "reason": "No exact replacement exists for `imp.load_source`; `importlib.machinery.SourceFileLoader` needs a spec and a module."
+    },
+    {
+      "ruleId": "python.symbol.imp.get-suffixes",
+      "path": "app.py",
+      "line": 6,
+      "reason": "No exact replacement exists for `imp.get_suffixes`; it returns tuples that the `importlib.machinery` suffix lists do not reproduce."
+    }
+  ]
+}

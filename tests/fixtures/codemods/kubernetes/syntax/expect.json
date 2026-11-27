@@ -1,0 +1,16 @@
+{
+  "refusals": [
+    {
+      "ruleId": "kubernetes.networking-k8s-io.ingress.v1beta1.removed",
+      "path": "manifests/workloads.yml",
+      "line": 16,
+      "reason": "The replacement needs a spec change, not only an `apiVersion` rewrite."
+    },
+    {
+      "ruleId": "kubernetes.policy.poddisruptionbudget.v1beta1.removed",
+      "path": "manifests/workloads.yml",
+      "line": 25,
+      "reason": "The replacement needs a spec change, not only an `apiVersion` rewrite."
+    }
+  ]
+}

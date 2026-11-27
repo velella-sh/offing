@@ -1,0 +1,10 @@
+{
+  "refusals": [
+    {
+      "ruleId": "python.symbol.datetime.utcnow",
+      "path": "app.py",
+      "line": 3,
+      "reason": "The class is imported as `from datetime import datetime as d`; the codemod rewrites only the plain `datetime` name."
+    }
+  ]
+}

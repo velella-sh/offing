@@ -1,0 +1,100 @@
+{
+  "refusals": [
+    {
+      "ruleId": "nodejs.symbol.util.isdate",
+      "path": "destructured.js",
+      "line": 5,
+      "reason": "This file imports `util` only by name, so `util.types` is not reachable; the codemod does not add an import."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.iserror",
+      "path": "index.js",
+      "line": 7,
+      "reason": "Node.js offers no exact native equivalent of `util.isError` on every supported version; the codemod leaves the call unchanged."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isobject",
+      "path": "index.js",
+      "line": 8,
+      "reason": "The argument is not an identifier or a member chain without calls, so the replacement would evaluate it more than once."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isobject",
+      "path": "index.js",
+      "line": 9,
+      "reason": "The argument is not an identifier or a member chain without calls, so the replacement would evaluate it more than once."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isarray",
+      "path": "index.js",
+      "line": 10,
+      "reason": "The call spreads its argument, so the single value is not visible in the source text."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isarray",
+      "path": "index.js",
+      "line": 11,
+      "reason": "The call is optional (`?.`), so replacing it would change when it runs."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isnull",
+      "path": "index.js",
+      "line": 12,
+      "reason": "The call passes no argument; `util.isNull` takes exactly one."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isnull",
+      "path": "index.js",
+      "line": 13,
+      "reason": "The call passes 2 arguments; `util.isNull` takes exactly one."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isarray",
+      "path": "index.js",
+      "line": 17,
+      "reason": "The binding `check` is reassigned in this file, so the call may not reach `util.isArray`."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.iserror",
+      "path": "index.ts",
+      "line": 8,
+      "reason": "Node.js offers no exact native equivalent of `util.isError` on every supported version; the codemod leaves the call unchanged."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isobject",
+      "path": "index.ts",
+      "line": 9,
+      "reason": "The argument is not an identifier or a member chain without calls, so the replacement would evaluate it more than once."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isstring",
+      "path": "index.ts",
+      "line": 10,
+      "reason": "The call spreads its argument, so the single value is not visible in the source text."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isnull",
+      "path": "index.ts",
+      "line": 11,
+      "reason": "The call is optional (`?.`), so replacing it would change when it runs."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isarray",
+      "path": "index.ts",
+      "line": 12,
+      "reason": "The call passes no argument; `util.isArray` takes exactly one."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isundefined",
+      "path": "index.ts",
+      "line": 13,
+      "reason": "The call passes 2 arguments; `util.isUndefined` takes exactly one."
+    },
+    {
+      "ruleId": "nodejs.symbol.util.isarray",
+      "path": "index.ts",
+      "line": 17,
+      "reason": "The binding `check` is reassigned in this file, so the call may not reach `util.isArray`."
+    }
+  ]
+}

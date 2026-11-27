@@ -1,7 +1,8 @@
+import { defineCodemod } from "../kit/define.js";
 import type { ScanResult, Severity, SourceUsage, UsageMatcher } from "../../domain.js";
 import { parseSource } from "../../usage/tree-sitter.js";
 import type { Node } from "../../usage/vendor/tree-sitter/tree-sitter.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { callsByCallee } from "./shared/ast.js";
 import { type Edit, patchFor } from "./shared/edits.js";
 import { normalizeModule, optionalCall, requiredModule, unquote } from "./shared/javascript.js";
@@ -107,8 +108,9 @@ type Target = UsageTarget<Rename>;
  * expression and arguments are kept byte-for-byte. A call through a local binding, an optional call, a computed
  * member access, or a constructor call is refused with a reason.
  */
-export const nodeRenamesFixer: Fixer = {
+export const nodeRenamesFixer = defineCodemod({
   id: "node-renames",
+  rules: renames.map(({ id }) => id),
   async plan(result, refuse) {
     const { targets, importPaths } = await targetsFor(result);
     const byPath = groupByPath(targets);
@@ -117,7 +119,7 @@ export const nodeRenamesFixer: Fixer = {
       planPath(result.root, path, fileTargets, importPaths.has(path), refuse),
     );
   },
-};
+});
 
 async function planPath(
   repositoryRoot: string,

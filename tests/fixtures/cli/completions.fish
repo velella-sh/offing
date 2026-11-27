@@ -38,6 +38,7 @@ complete -c offing -n __fish_use_subcommand -a doctor
 complete -c offing -n __fish_use_subcommand -a report-issue
 complete -c offing -n __fish_use_subcommand -a capabilities
 complete -c offing -n __fish_use_subcommand -a completions
+complete -c offing -n __fish_use_subcommand -a codemod
 complete -c offing -n __fish_use_subcommand -a config
 complete -c offing -n __fish_use_subcommand -a drivers
 complete -c offing -n __fish_use_subcommand -a fleet
@@ -57,6 +58,7 @@ complete -c offing -n __fish_use_subcommand -l version
 complete -c offing -n '__fish_seen_subcommand_from completions' -a 'bash zsh fish'
 complete -c offing -n '__fish_seen_subcommand_from data' -a 'status update'
 complete -c offing -n '__fish_seen_subcommand_from watch' -a 'add remove run list'
+complete -c offing -n '__fish_seen_subcommand_from codemod' -a 'test'
 complete -c offing -n '__fish_seen_subcommand_from config' -a 'validate'
 complete -c offing -n '__fish_seen_subcommand_from drivers' -a 'list test'
 complete -c offing -n '__fish_seen_subcommand_from policy' -a 'validate explain pull'

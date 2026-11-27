@@ -7,7 +7,7 @@ import type { ScanResult } from "../src/domain.js";
 import { pythonImpFixer } from "../src/fix/index.js";
 import { apply, assertParses, cleanup, normalized, plan as planCodemod, repository } from "./codemod-helpers.js";
 
-const fixtures = resolve("tests/fixtures/fix/python-imp");
+const fixtures = resolve("tests/fixtures/codemods/python-imp");
 
 after(cleanup);
 
@@ -17,8 +17,8 @@ const rows = ["reload", "new-module", "get-magic", "get-tag", "cache-from-source
 
 for (const row of rows) {
   test(`${row} is rewritten exactly, drops import imp, and is idempotent`, async () => {
-    const before = await readFile(join(fixtures, row, "before.py"), "utf8");
-    const expected = await readFile(join(fixtures, row, "after.py"), "utf8");
+    const before = await readFile(join(fixtures, row, "before", "app.py"), "utf8");
+    const expected = await readFile(join(fixtures, row, "after", "app.py"), "utf8");
     const { root, patches } = await plan({ "app.py": before });
 
     assert.equal(patches.length, 1);
@@ -32,8 +32,8 @@ for (const row of rows) {
 }
 
 test("a file with a rewritable and a refused call keeps import imp and adds the import after it", async () => {
-  const before = await readFile(join(fixtures, "mixed", "before.py"), "utf8");
-  const expected = await readFile(join(fixtures, "mixed", "after.py"), "utf8");
+  const before = await readFile(join(fixtures, "mixed", "before", "app.py"), "utf8");
+  const expected = await readFile(join(fixtures, "mixed", "after", "app.py"), "utf8");
   const { root, patches, refusals } = await plan({ "app.py": before });
 
   assert.equal(patches.length, 1);
@@ -49,7 +49,7 @@ test("a file with a rewritable and a refused call keeps import imp and adds the 
 
 test("each removed function without an exact equivalent is refused", async () => {
   const { patches, refusals } = await plan({
-    "app.py": await readFile(join(fixtures, "refusals", "functions.py"), "utf8"),
+    "app.py": await readFile(join(fixtures, "refuse-functions", "before", "app.py"), "utf8"),
   });
 
   assert.deepEqual(patches, []);
@@ -64,7 +64,7 @@ test("each removed function without an exact equivalent is refused", async () =>
 
 test("keyword arguments and positional arguments the replacement reads differently are refused", async () => {
   const { patches, refusals } = await plan({
-    "app.py": await readFile(join(fixtures, "refusals", "keywords.py"), "utf8"),
+    "app.py": await readFile(join(fixtures, "refuse-keywords", "before", "app.py"), "utf8"),
   });
 
   assert.deepEqual(patches, []);
@@ -83,7 +83,9 @@ test("from-import, aliased-import, rebinding, and multi-name import shapes are r
     { file: "multiple-import.py", reason: /imports other modules/ },
   ];
   for (const { file, reason } of cases) {
-    const { patches, refusals } = await plan({ "app.py": await readFile(join(fixtures, "refusals", file), "utf8") });
+    const { patches, refusals } = await plan({
+      "app.py": await readFile(join(fixtures, `refuse-${file.slice(0, -3)}`, "before", "app.py"), "utf8"),
+    });
     assert.deepEqual(patches, [], `${file} is unchanged`);
     assert.ok(refusals.length > 0, `${file} is refused`);
     assert.ok(

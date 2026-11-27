@@ -1,0 +1,28 @@
+{
+  "refusals": [
+    {
+      "ruleId": "python.symbol.datetime.utcnow",
+      "path": "app.py",
+      "line": 3,
+      "reason": "`datetime.utcnow` takes no arguments, so the call's arguments cannot be kept."
+    },
+    {
+      "ruleId": "python.symbol.datetime.utcfromtimestamp",
+      "path": "app.py",
+      "line": 4,
+      "reason": "`datetime.utcfromtimestamp` needs a timestamp argument, so the call is left alone."
+    },
+    {
+      "ruleId": "python.symbol.datetime.utcfromtimestamp",
+      "path": "app.py",
+      "line": 5,
+      "reason": "`datetime.utcfromtimestamp` takes no keyword arguments, so the call is left alone."
+    },
+    {
+      "ruleId": "python.symbol.datetime.utcfromtimestamp",
+      "path": "app.py",
+      "line": 6,
+      "reason": "The call uses a splat argument, so its argument names are not visible in the source text."
+    }
+  ]
+}

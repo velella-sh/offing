@@ -1,8 +1,9 @@
+import { defineCodemod } from "../kit/define.js";
 import type { ScanResult, Severity, UsageMatcher } from "../../domain.js";
 import { required } from "../../required.js";
 import { parseSource } from "../../usage/tree-sitter.js";
 import type { Node } from "../../usage/vendor/tree-sitter/tree-sitter.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { callsByCallee } from "./shared/ast.js";
 import { type Edit, patchFor } from "./shared/edits.js";
 import { optionalCall, requiredModule, normalizeModule, unquote } from "./shared/javascript.js";
@@ -213,14 +214,15 @@ const utilModule = "util";
  * is a single expression and the replacement evaluates that expression no more often than the call did. A call that
  * cannot be rewritten exactly, including `util.isError` and an optional or spread call, is refused with a reason.
  */
-export const nodeUtilIsFixer: Fixer = {
+export const nodeUtilIsFixer = defineCodemod({
   id: "node-util-is",
+  rules: rules.map(({ id }) => id),
   async plan(result, refuse) {
     return planEachFile(groupByPath(await targetsFor(result)), (path, fileTargets) =>
       planFile(result.root, path, fileTargets, refuse),
     );
   },
-};
+});
 
 async function planFile(
   root: string,

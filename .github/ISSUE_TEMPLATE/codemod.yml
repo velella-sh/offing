@@ -1,0 +1,31 @@
+name: Codemod proposal
+description: Propose an exact repair for a lifecycle finding
+title: "Codemod: "
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: Ebb rule ID and replacement
+      description: Include the exact replacement the rule reports.
+    validations:
+      required: true
+  - type: textarea
+    id: fixtures
+    attributes:
+      label: Before and after fixtures
+      description: Include the smallest source files that show the required change.
+    validations:
+      required: true
+  - type: textarea
+    id: refusal
+    attributes:
+      label: Refusal cases
+      description: Show any ambiguous source shapes that require manual judgment and explain why.
+    validations:
+      required: true
+  - type: input
+    id: evidence
+    attributes:
+      label: Authoritative replacement documentation
+    validations:
+      required: true

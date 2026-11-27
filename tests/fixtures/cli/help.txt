@@ -73,6 +73,7 @@ Usage:
   offing capabilities [--json]
   offing completions <bash|zsh|fish>   # print a shell completion script
   offing lsp
+  offing codemod test <dir>    # check a codemod and its fixtures
   offing config validate [path] [--json]
   offing drivers list
   offing drivers test <driver|command>
@@ -143,6 +144,7 @@ Examples:
   offing report-issue <finding-id> . --output issue.md
   offing capabilities --json
   offing completions zsh > ~/.zfunc/_offing
+  offing codemod test ./my-codemod
   offing config validate
   offing drivers test replay
   offing fleet my-organization --json --jobs 4

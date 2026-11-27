@@ -1,0 +1,58 @@
+{
+  "refusals": [
+    {
+      "ruleId": "nodejs.symbol.buffer.constructor",
+      "path": "index.js",
+      "line": 5,
+      "reason": "The argument is an identifier; only a number, string, or array literal is rewritten."
+    },
+    {
+      "ruleId": "nodejs.symbol.buffer.constructor",
+      "path": "index.js",
+      "line": 6,
+      "reason": "The argument is a binary expression; only a number, string, or array literal is rewritten."
+    },
+    {
+      "ruleId": "nodejs.symbol.buffer.constructor",
+      "path": "index.js",
+      "line": 7,
+      "reason": "The numeric form takes exactly one argument."
+    },
+    {
+      "ruleId": "nodejs.symbol.buffer.constructor",
+      "path": "index.js",
+      "line": 8,
+      "reason": "The template literal has substitutions, so its value is not known from the source text."
+    },
+    {
+      "ruleId": "nodejs.symbol.slowbuffer",
+      "path": "index.js",
+      "line": 9,
+      "reason": "The call at the reported location is not a direct reference to `SlowBuffer`."
+    },
+    {
+      "ruleId": "nodejs.symbol.slowbuffer",
+      "path": "index.js",
+      "line": 10,
+      "reason": "`SlowBuffer` is only rewritten when it is constructed with `new`."
+    },
+    {
+      "ruleId": "nodejs.symbol.buffer.constructor",
+      "path": "index.ts",
+      "line": 4,
+      "reason": "The argument has a TypeScript type assertion, so its runtime kind is not rewritten."
+    },
+    {
+      "ruleId": "nodejs.symbol.buffer.constructor",
+      "path": "index.ts",
+      "line": 5,
+      "reason": "The argument has a TypeScript type assertion, so its runtime kind is not rewritten."
+    },
+    {
+      "ruleId": "nodejs.symbol.buffer.constructor",
+      "path": "index.ts",
+      "line": 6,
+      "reason": "The argument has a TypeScript type assertion, so its runtime kind is not rewritten."
+    }
+  ]
+}

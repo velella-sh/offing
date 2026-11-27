@@ -11,7 +11,7 @@ import { scanRepository } from "../src/engine/index.js";
 import { kubernetesApiVersionFixer, kubernetesIngressV1Fixer, planFixReport } from "../src/fix/index.js";
 import { applyPatches as apply, cleanup, repository } from "./codemod-helpers.js";
 
-const fixtures = resolve("tests/fixtures/fix/k8s-ingress-v1");
+const fixtures = resolve("tests/fixtures/codemods/kubernetes-ingress-v1/syntax");
 
 after(cleanup);
 
@@ -90,8 +90,8 @@ spec:
 `;
 
 test("the planner rewrites the before fixture to the after fixture and never writes in place", async () => {
-  const before = await readFile(join(fixtures, "before.yaml"), "utf8");
-  const after = await readFile(join(fixtures, "after.yaml"), "utf8");
+  const before = await readFile(join(fixtures, "before", "manifests/ingress.yaml"), "utf8");
+  const after = await readFile(join(fixtures, "after", "manifests/ingress.yaml"), "utf8");
   const root = await repository({ "manifests/ingress.yaml": before });
   const { patches } = await plan(root);
 
@@ -122,7 +122,9 @@ test("the planner rewrites the before fixture to the after fixture and never wri
 });
 
 test("the patched Ingress uses only networking.k8s.io/v1 fields", async () => {
-  const root = await repository({ "manifests/ingress.yaml": await readFile(join(fixtures, "before.yaml"), "utf8") });
+  const root = await repository({
+    "manifests/ingress.yaml": await readFile(join(fixtures, "before", "manifests/ingress.yaml"), "utf8"),
+  });
   const { patches } = await plan(root);
   await apply(root, patches);
   const after = await readFile(join(root, "manifests", "ingress.yaml"), "utf8");
@@ -149,7 +151,7 @@ test("the patched Ingress uses only networking.k8s.io/v1 fields", async () => {
 });
 
 test("a second pass has nothing to do", async () => {
-  const before = await readFile(join(fixtures, "before.yaml"), "utf8");
+  const before = await readFile(join(fixtures, "before", "manifests/ingress.yaml"), "utf8");
   const root = await repository({ "manifests/ingress.yaml": before });
   const { patches } = await plan(root);
   await apply(root, patches);

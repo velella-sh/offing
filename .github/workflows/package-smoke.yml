@@ -75,6 +75,23 @@ jobs:
             console.log(`npm scan: ${scan.findings.length} findings`);
           ' "$out/npm-scan.json"
 
+      - name: acc-codemod-kit
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          package="$out/npm-install/node_modules/@velella/offing"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          tarball="$(ls "$out"/*.tgz)"
+          test -f "$package/docs/spec/codemod/v1.md"
+          {
+            printf '### acc-codemod-kit\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$tarball" | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI version %s\n' "$("$bin" --version)"
+            printf -- '- Tested commit %s\n' "$GITHUB_SHA"
+            node "$package/docs/spec/codemod/conformance/check.mjs" "$bin"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
       - name: acc-sbom-scan
         run: |
           set -euo pipefail

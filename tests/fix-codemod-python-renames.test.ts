@@ -10,7 +10,7 @@ import { analyzePythonFile } from "../src/usage/python.js";
 import { apply, assertParses, cleanup, normalized, plan as planCodemod, repository } from "./codemod-helpers.js";
 import { runCli } from "./cli-runner.js";
 
-const fixtures = resolve("tests/fixtures/fix/python-renames");
+const fixtures = resolve("tests/fixtures/codemods/python-renames");
 
 after(cleanup);
 
@@ -18,8 +18,8 @@ const plan = (files: Record<string, string>) => planCodemod(files, "python-renam
 
 for (const row of ["module-renames", "testcase-aliases"]) {
   test(`${row} is rewritten exactly, parses, and is idempotent`, async () => {
-    const before = await readFile(join(fixtures, row, "before.py"), "utf8");
-    const expected = await readFile(join(fixtures, row, "after.py"), "utf8");
+    const before = await readFile(join(fixtures, row, "before", "app.py"), "utf8");
+    const expected = await readFile(join(fixtures, row, "after", "app.py"), "utf8");
     const { root, patches, refusals } = await plan({ "app.py": before });
 
     assert.deepEqual(refusals, []);
@@ -33,8 +33,8 @@ for (const row of ["module-renames", "testcase-aliases"]) {
 }
 
 test("a rewritable alias and assertDictContainsSubset in one file produce one patch and one refusal", async () => {
-  const before = await readFile(join(fixtures, "mixed", "before.py"), "utf8");
-  const expected = await readFile(join(fixtures, "mixed", "after.py"), "utf8");
+  const before = await readFile(join(fixtures, "mixed", "before", "app.py"), "utf8");
+  const expected = await readFile(join(fixtures, "mixed", "after", "app.py"), "utf8");
   const { root, patches, refusals } = await plan({ "app.py": before });
 
   assert.equal(patches.length, 1);
@@ -55,7 +55,7 @@ test("each refused shape is reported and the file is left unchanged", async () =
     { file: "not-unittest.py", refusals: 0, reason: undefined },
   ];
   for (const { file, refusals: count, reason } of cases) {
-    const contents = await readFile(join(fixtures, "refusals", file), "utf8");
+    const contents = await readFile(join(fixtures, `refuse-${file.slice(0, -3)}`, "before", "app.py"), "utf8");
     const { root, patches, refusals } = await plan({ "app.py": contents });
     assert.deepEqual(patches, [], `${file} is unchanged`);
     assert.equal(refusals.length, count, `${file} refusal count`);
@@ -78,7 +78,7 @@ const assertEquals: SymbolUsageMatcher = {
 };
 
 test("the method shape reports an alias call on any receiver inside a TestCase and not outside one", async () => {
-  const source = await readFile(join(fixtures, "testcase-aliases", "before.py"), "utf8");
+  const source = await readFile(join(fixtures, "testcase-aliases", "before", "app.py"), "utf8");
   const inside = await analyzePythonFile({ path: "app.py", language: "python", source }, [
     { id: "rule", matchers: [assertEquals] },
   ]);
@@ -90,14 +90,14 @@ test("the method shape reports an alias call on any receiver inside a TestCase a
   );
   assert.ok(usages.some((usage) => usage.excerpt.includes("helper")));
 
-  const negative = await readFile(join(fixtures, "refusals", "not-unittest.py"), "utf8");
+  const negative = await readFile(join(fixtures, "refuse-not-unittest", "before", "app.py"), "utf8");
   const outside = await analyzePythonFile({ path: "app.py", language: "python", source: negative }, [
     { id: "rule", matchers: [assertEquals] },
   ]);
   assert.ok(outside);
   assert.deepEqual(outside.get("rule"), []);
 
-  const plain = await readFile(join(fixtures, "refusals", "non-testcase.py"), "utf8");
+  const plain = await readFile(join(fixtures, "refuse-non-testcase", "before", "app.py"), "utf8");
   const plainResult = await analyzePythonFile({ path: "app.py", language: "python", source: plain }, [
     { id: "rule", matchers: [assertEquals] },
   ]);
@@ -107,7 +107,7 @@ test("the method shape reports an alias call on any receiver inside a TestCase a
 
 test("fix --json reports the refusal", async () => {
   const root = await repository({
-    "app.py": await readFile(join(fixtures, "refusals", "assert-dict-contains-subset.py"), "utf8"),
+    "app.py": await readFile(join(fixtures, "refuse-assert-dict-contains-subset", "before", "app.py"), "utf8"),
   });
 
   const { stdout } = await runCli(["fix", root, "--json"]);
@@ -233,7 +233,7 @@ test("plan refuses a Python file with a syntax error", async () => {
 
 test("refuses a unittest alias Python 3.12 left without a replacement", async () => {
   const { patches, refusals } = await plan({
-    "app.py": await readFile(join(fixtures, "refusals", "assert-dict-contains-subset.py"), "utf8"),
+    "app.py": await readFile(join(fixtures, "refuse-assert-dict-contains-subset", "before", "app.py"), "utf8"),
   });
 
   assert.deepEqual(patches, []);

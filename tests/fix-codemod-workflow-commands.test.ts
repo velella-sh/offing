@@ -61,15 +61,17 @@ test("each command and quoting style produces applicable, parseable, idempotent 
 });
 
 test("literal block fixture rewrites all commands and matches the after file", async () => {
-  const fixture = resolve("tests/fixtures/fix/workflow-commands");
-  const root = await repository(await readFile(join(fixture, "before.workflow.fixture"), "utf8"));
+  const fixture = resolve("tests/fixtures/codemods/workflow-commands/syntax");
+  const root = await repository(
+    await readFile(join(fixture, "before", ".github/workflows/ci.yml.workflow.fixture"), "utf8"),
+  );
   const plan = await report(root);
   assert.equal(plan.patches.length, 1);
   assert.deepEqual(plan.refusals, []);
   await apply(root, renderPatches(plan.patches));
   assert.equal(
     await readFile(join(root, path), "utf8"),
-    await readFile(join(fixture, "after.workflow.fixture"), "utf8"),
+    await readFile(join(fixture, "after", ".github/workflows/ci.yml.workflow.fixture"), "utf8"),
   );
   assert.deepEqual(await report(root), { patches: [], refusals: [] });
 });

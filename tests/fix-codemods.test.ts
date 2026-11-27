@@ -8,7 +8,7 @@ import { builtInDetectors as detectors } from "../src/detectors/index.js";
 import { scanRepository } from "../src/engine/index.js";
 import { renameCodemods, renameCodemodsFixer } from "../src/fix/codemods/index.js";
 
-const fixtures = resolve("tests/fixtures/fix-codemods");
+const fixtures = resolve("tests/fixtures/codemods/codemods/syntax");
 const temporaryRoots: string[] = [];
 const manifest = JSON.stringify({
   name: "app",
@@ -34,8 +34,8 @@ async function repository(source: string): Promise<string> {
 }
 
 test("each codemod rewrites its import to the successor and the output matches the after fixture", async () => {
-  const before = await readFile(join(fixtures, "before.js"), "utf8");
-  const after = await readFile(join(fixtures, "after.js"), "utf8");
+  const before = await readFile(join(fixtures, "before", "index.js"), "utf8");
+  const after = await readFile(join(fixtures, "after", "index.js"), "utf8");
   const root = await repository(before);
   const patches = await renameCodemodsFixer.plan(await scanRepository(root, detectors));
 
@@ -65,7 +65,7 @@ test("the codemods cover five packages and each names the successor its rule nam
 });
 
 test("the planned patch is idempotent: scanning the fixed file plans nothing", async () => {
-  const root = await repository(await readFile(join(fixtures, "after.js"), "utf8"));
+  const root = await repository(await readFile(join(fixtures, "after", "index.js"), "utf8"));
   assert.deepEqual(await renameCodemodsFixer.plan(await scanRepository(root, detectors)), []);
 });
 

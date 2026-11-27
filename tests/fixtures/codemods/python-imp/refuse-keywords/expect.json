@@ -1,0 +1,28 @@
+{
+  "refusals": [
+    {
+      "ruleId": "python.symbol.imp.reload",
+      "path": "app.py",
+      "line": 3,
+      "reason": "The replacement `importlib.reload` does not accept the keyword argument `file`."
+    },
+    {
+      "ruleId": "python.symbol.imp.get-magic",
+      "path": "app.py",
+      "line": 4,
+      "reason": "`imp.get_magic` takes no arguments, so it is not replaced by a constant."
+    },
+    {
+      "ruleId": "python.symbol.imp.cache-from-source",
+      "path": "app.py",
+      "line": 5,
+      "reason": "A second positional argument means `debug_override` in `imp` but `optimization` in `importlib.util`."
+    },
+    {
+      "ruleId": "python.symbol.imp.find-module",
+      "path": "app.py",
+      "line": 6,
+      "reason": "No exact replacement exists for `imp.find_module`; `importlib.util.find_spec` returns a different shape."
+    }
+  ]
+}

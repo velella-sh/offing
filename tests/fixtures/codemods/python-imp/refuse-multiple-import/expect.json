@@ -1,0 +1,10 @@
+{
+  "refusals": [
+    {
+      "ruleId": "python.symbol.imp.reload",
+      "path": "app.py",
+      "line": 3,
+      "reason": "The `import imp` statement imports other modules, so its line is not replaced."
+    }
+  ]
+}

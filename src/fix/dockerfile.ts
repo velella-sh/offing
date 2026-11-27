@@ -1,3 +1,4 @@
+import { defineCodemod } from "./kit/define.js";
 import { readFile } from "node:fs/promises";
 import { basename, isAbsolute, relative, resolve } from "node:path";
 
@@ -8,7 +9,7 @@ import type { ImageReference } from "../detectors/container/parse-image.js";
 import type { Finding } from "../domain.js";
 import { validateRegistryV2 } from "@velella/ebb/registry";
 import { required } from "../required.js";
-import type { FilePatch, Fixer, Refuse } from "./types.js";
+import type { FilePatch, Refuse } from "./types.js";
 
 const DOCKERFILE = /^(?:Dockerfile|Containerfile)(?:\.[A-Za-z0-9_.-]+)?$|\.(?:Dockerfile|Containerfile)$/;
 const FROM_LINE = /^(\s*FROM\s+(?:--[^\s]+\s+)*)([^\s]+)(.*)$/i;
@@ -170,8 +171,9 @@ async function scheduledRuleIds(): Promise<Set<string>> {
  * successor tag in the same distro family. Digest-pinned images, floating lines, Compose and devcontainer images, and
  * every ambiguous case are left alone and reported through `refuse` with the reason.
  */
-export const dockerfileBaseImageFixer: Fixer = {
+export const dockerfileBaseImageFixer = defineCodemod({
   id: "dockerfile",
+  rules: [{ id: "*", detector: "container" }],
   async plan(result, refuse) {
     const targets = await dockerfileTargets(result.findings, refuse);
     const patches: FilePatch[] = [];
@@ -181,7 +183,7 @@ export const dockerfileBaseImageFixer: Fixer = {
     }
     return patches;
   },
-};
+});
 
 /** The Dockerfiles that carry a fixable image finding, each with the tag edit per line; unfixable findings are refused. */
 async function dockerfileTargets(

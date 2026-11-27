@@ -11,7 +11,7 @@ import { scanRepository } from "../src/engine/index.js";
 import { terraformLegacyFixer } from "../src/fix/index.js";
 import { applyPatches as apply, cleanup, repository } from "./codemod-helpers.js";
 
-const fixtures = resolve("tests/fixtures/fix/terraform-legacy");
+const fixtures = resolve("tests/fixtures/codemods/terraform-legacy/syntax");
 
 after(cleanup);
 
@@ -64,8 +64,8 @@ function manualScan(root: string, findings: Finding[]): ScanResult {
 }
 
 test("the planner rewrites the before fixture to the after fixture and never writes in place", async () => {
-  const before = await readFile(join(fixtures, "before.tf"), "utf8");
-  const after = await readFile(join(fixtures, "after.tf"), "utf8");
+  const before = await readFile(join(fixtures, "before", "main.tf"), "utf8");
+  const after = await readFile(join(fixtures, "after", "main.tf"), "utf8");
   const root = await repository({ "main.tf": before });
   const { patches } = await plan(root);
 
