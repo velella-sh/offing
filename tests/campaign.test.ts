@@ -133,6 +133,7 @@ test("pinned Fleet capture discovers real codemods and static commands and the C
         assert.ok(filter.includes(".nvmrc"));
         assert.ok(filter.includes("requirements.txt"));
         await writeFile(join(root, ".nvmrc"), "18\n");
+        await writeFile(join(root, "Dockerfile"), "FROM node:18.1-alpine\n");
         await writeFile(join(root, "package.json"), JSON.stringify({ scripts: { test: "exit 77" } }));
         return 12;
       },
@@ -145,15 +146,20 @@ test("pinned Fleet capture discovers real codemods and static commands and the C
   );
   assert.ok(schema(recording), JSON.stringify(schema.errors));
   const evidence = recording.repositoryStatus[0]?.campaignEvidence;
-  assert.deepEqual(evidence?.runtimePins, [{ runtime: "nodejs", version: "18.0.0" }]);
+  assert.deepEqual(evidence?.runtimePins, [
+    { runtime: "nodejs", version: "18" },
+    { runtime: "nodejs", version: "18.1" },
+  ]);
   assert.ok(evidence?.codemods.includes("runtime-pins"));
   assert.deepEqual(evidence.checks, [{ kind: "test", command: ["npm", "run", "test"] }]);
+  const narrowerLine = { ...config, select: { release: { product: "nodejs", line: "18.0" } } };
+  assert.equal(planCampaign(narrowerLine, recording).repositories.length, 0);
   await writeFile(input, JSON.stringify(recording));
   await writeFile(configFile, JSON.stringify(config));
   const preview = await runCli(["campaign", "plan", configFile, "--fleet", input]);
   assert.equal(preview.code, 0, preview.stderr);
   assert.match(preview.stdout, /Target: nodejs@22/);
-  assert.match(preview.stdout, /Codemods: runtime-pins/);
+  assert.match(preview.stdout, /Codemods: .*runtime-pins/);
   assert.match(preview.stdout, /test: \["npm","run","test"\]/);
   const json = await runCli(["campaign", "plan", configFile, "--fleet", input, "--json"]);
   assert.equal(json.code, 0, json.stderr);
