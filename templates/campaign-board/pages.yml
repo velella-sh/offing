@@ -1,0 +1,73 @@
+name: Offing campaign board
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      from_campaign:
+        description: Build from the campaign state artifact in the same run.
+        type: boolean
+        default: true
+
+permissions: {}
+
+concurrency:
+  group: campaign-board-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref_type == 'branch' && github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        if: inputs.from_campaign
+        with:
+          name: offing-campaign-state
+          path: ${{ runner.temp }}/campaign-state
+      - name: Build the board
+        env:
+          FROM_CAMPAIGN: ${{ inputs.from_campaign }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          # The operations repository's lockfile pins these packages.
+          npm ci --ignore-scripts --no-audit --no-fund
+          state=state.json
+          if [[ "$FROM_CAMPAIGN" == true ]]; then
+            state="$RUNNER_TEMP/campaign-state/state.json"
+          fi
+          source="$RUNNER_TEMP/board-source"
+          ./node_modules/.bin/offing campaign-board "$state" --out "$source"
+          base="/${REPOSITORY#*/}"
+          if [[ "$base" == "/${REPOSITORY%/*}.github.io" ]]; then
+            base="/"
+          fi
+          ./node_modules/.bin/mizzen build "$source" --theme node_modules/@velella/lateen --base "$base" --out "$RUNNER_TEMP/board-site"
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: ${{ runner.temp }}/board-site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        id: deployment

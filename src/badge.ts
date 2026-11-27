@@ -205,14 +205,26 @@ export function renderBadgeSvg(
   expiredFailure = false,
   style: BadgeStyle = "flat",
 ): string {
-  const { message, color } = badgeState(result, expiredFailure);
+  return renderStatusBadge(LABEL, badgeState(result, expiredFailure), style);
+}
+
+export function renderCampaignBadge(merged: number, total: number): string {
+  return renderStatusBadge(
+    "campaign",
+    { message: `${merged}/${total} merged`, color: total > 0 && merged === total ? colors.clean : colors.quiet },
+    "flat",
+  );
+}
+
+function renderStatusBadge(name: string, { message, color }: BadgeState, style: BadgeStyle): string {
   const layout = layoutFor(style);
-  const labelWidth = PAD + layout.iconSize + GAP + layout.labelTextWidth + PAD;
+  const labelTextWidth = name === LABEL ? layout.labelTextWidth : Math.round(name.length * GLYPH_WIDTH);
+  const labelWidth = PAD + layout.iconSize + GAP + labelTextWidth + PAD;
   const messageText = Math.round(message.length * GLYPH_WIDTH);
   const messageWidth = messageText + 2 * PAD;
   const width = labelWidth + messageWidth;
-  const label = `${LABEL}: ${message}`;
-  const shownLabel = layout.uppercase ? LABEL.toUpperCase() : LABEL;
+  const label = `${name}: ${message}`;
+  const shownLabel = layout.uppercase ? name.toUpperCase() : name;
   const shownMessage = layout.uppercase ? message.toUpperCase() : message;
   const baseline = layout.height / 2 + 3.8;
   return [
@@ -225,7 +237,7 @@ export function renderBadgeSvg(
     "</g>",
     mark(PAD, (layout.height - layout.iconSize) / 2, layout.iconSize),
     `<g font-family="${FONT}" font-size="${layout.fontSize * 10}" font-weight="${layout.fontWeight}" text-rendering="geometricPrecision" style="font-variant-ligatures:none" transform="scale(.1)">`,
-    `<text x="${(PAD + layout.iconSize + GAP) * 10}" y="${Math.round(baseline * 10)}" fill="${WHITE}" textLength="${layout.labelTextWidth * 10}">${shownLabel}</text>`,
+    `<text x="${(PAD + layout.iconSize + GAP) * 10}" y="${Math.round(baseline * 10)}" fill="${WHITE}" textLength="${labelTextWidth * 10}">${shownLabel}</text>`,
     `<text x="${(labelWidth + PAD) * 10}" y="${Math.round(baseline * 10)}" fill="${readableTextColor(color)}" textLength="${messageText * 10}">${shownMessage}</text>`,
     "</g>",
     "</svg>",

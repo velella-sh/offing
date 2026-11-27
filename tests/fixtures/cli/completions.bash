@@ -5,7 +5,7 @@ _offing() {
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   command="${COMP_WORDS[1]}"
   if [ "$COMP_CWORD" -eq 1 ]; then
-    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions attest autopilot campaign codemod config drivers fleet hook lineage lsp migrate policy prompt proof recommend release-gate rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
+    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions attest autopilot campaign-board campaign codemod config drivers fleet hook lineage lsp migrate policy prompt proof recommend release-gate rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
     return
   fi
   case "$prev" in
@@ -64,6 +64,7 @@ _offing() {
     completions) opts="" ;;
     attest) opts="--subject --sbom --data-version --today" ;;
     autopilot) opts="--dry-run --prepare --undo --wave --finding --to --agent" ;;
+    campaign-board) opts="--out" ;;
     campaign) opts="--fleet --json" ;;
     codemod) opts="" ;;
     config) opts="--json" ;;
