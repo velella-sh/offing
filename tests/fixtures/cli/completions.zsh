@@ -55,7 +55,7 @@ _offing() {
         doctor) _arguments '--system' '--json' '--data-version' '*:path:_files' ;;
         report-issue) _arguments '--output' '--data-version' '*:path:_files' ;;
         capabilities) _arguments '--json' '*:path:_files' ;;
-        fleet) _arguments '--include' '--exclude' '--topic' '--repos' '--jobs' '--gitlab' '--gitlab-url' '--include-forks' '--include-archived' '--json' '--html' '--format' '--no-cache' '--fail-on' '--progress' '*:path:_files' ;;
+        fleet) _arguments '--include' '--exclude' '--topic' '--repos' '--jobs' '--policy' '--gitlab' '--gitlab-url' '--include-forks' '--include-archived' '--json' '--html' '--format' '--no-cache' '--fail-on' '--progress' '*:path:_files' ;;
         hook) _arguments '--fail-on' '*:path:_files' ;;
         lsp) _arguments  '*:path:_files' ;;
         migrate) _arguments '--agent' '--driver' '--from-refusals' '--replay' '--timeout-ms' '*:path:_files' ;;

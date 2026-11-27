@@ -1,9 +1,13 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, posix } from "node:path";
+import { join, posix, resolve } from "node:path";
 
 import { getActiveData } from "@velella/ebb/data-source";
 
+import { CODEOWNERS_LOCATIONS } from "../codeowners.js";
+import { CONFIG_FILE_NAME } from "../config.js";
+import { fleetPolicyCompliance, type FleetPolicyCompliance } from "../fleet-policy/compliance.js";
+import { parsePolicyReference } from "../fleet-policy/reference.js";
 import { defaultCacheDirectory } from "../cache-paths.js";
 import { declaresInput, detectorSparsePatterns } from "../detector-inputs.js";
 import { builtInDetectors } from "../detectors/index.js";
@@ -21,6 +25,12 @@ const selection: FleetSelection = {
   includes: (path) => inputs.some((input) => declaresInput(input, path)),
 };
 
+const policyPaths = [CONFIG_FILE_NAME, ...CODEOWNERS_LOCATIONS];
+const policySelection: FleetSelection = {
+  patterns: [...selection.patterns, ...policyPaths.map((file) => `/${file}`)],
+  includes: (file) => selection.includes(file) || policyPaths.includes(file),
+};
+
 export interface FleetProgress extends FleetRepositoryStatus {
   readonly bytesFetched: number;
 }
@@ -29,6 +39,7 @@ export interface FleetOptions {
   readonly jobs?: number;
   readonly cacheDirectory?: string;
   readonly noCache?: boolean;
+  readonly policy?: string;
   readonly include?: readonly string[];
   readonly exclude?: readonly string[];
   readonly topics?: readonly string[];
@@ -50,6 +61,7 @@ interface FleetContext {
   readonly fingerprint: string;
   readonly scannedAt: string;
   readonly noCache: boolean;
+  readonly policy?: string;
 }
 
 function matches(name: string, patterns: readonly string[] = []): boolean {
@@ -91,12 +103,25 @@ async function scanPinned(
   context: FleetContext,
   repository: FleetRepository,
   commit: string,
-): Promise<Omit<RepositoryScan, "state">> {
+): Promise<Omit<RepositoryScan, "state"> & { compliance?: FleetPolicyCompliance }> {
   const directory = await mkdtemp(join(tmpdir(), "offing-fleet-"));
   try {
-    const bytesFetched = await context.host.fetchFilesAtCommit(repository, commit, directory, selection);
+    const bytesFetched = await context.host.fetchFilesAtCommit(
+      repository,
+      commit,
+      directory,
+      context.policy ? policySelection : selection,
+    );
     const report = await scanWithBuiltIns(directory, { noCache: true, scannedAt: context.scannedAt });
-    return { bytesFetched, findings: safeFindings(report.findings) };
+    const compliance = context.policy
+      ? await fleetPolicyCompliance(report, {
+          root: directory,
+          reference: context.policy,
+          repository: repository.name,
+          today: context.scannedAt.slice(0, 10),
+        })
+      : undefined;
+    return { bytesFetched, findings: safeFindings(report.findings), ...(compliance ? { compliance } : {}) };
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
@@ -118,12 +143,15 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
     if (cached) {
       return { state: { ...state, commit, status: "cached", reason: null }, findings: cached, bytesFetched: 0 };
     }
-    const report = await scanPinned(context, repo, commit);
+    const { compliance, ...report } = await scanPinned(context, repo, commit);
     if (!context.noCache) {
       // A read-only cache directory must not turn a successful scan into a failed repository.
       await writeFleetCache(context.cache, key, report.findings).catch(() => undefined);
     }
-    return { state: { ...state, commit, status: "scanned", reason: null }, ...report };
+    return {
+      state: { ...state, commit, status: "scanned", reason: null, ...(compliance ? { compliance } : {}) },
+      ...report,
+    };
   } catch (error) {
     const reason = error instanceof FleetHostError ? error.message : "Could not scan the pinned tree.";
     return { state: { ...state, commit, status: "failed", reason }, findings: [], bytesFetched: 0 };
@@ -142,7 +170,11 @@ export async function scanFleet(host: FleetHost, namespace: string, options: Fle
     host,
     fingerprint,
     scannedAt,
-    noCache: options.noCache ?? false,
+    // Existing scan-cache entries contain aggregate findings, not the pinned config or CODEOWNERS.
+    noCache: options.policy !== undefined || (options.noCache ?? false),
+    ...(options.policy
+      ? { policy: parsePolicyReference(options.policy) ? options.policy : resolve(options.policy) }
+      : {}),
     cache: options.cacheDirectory ?? join(defaultCacheDirectory(), "fleet-v1"),
   };
   const repos = [...(await host.listRepositories(namespace))].sort((a, b) => a.name.localeCompare(b.name, "en"));

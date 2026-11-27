@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test, type TestContext } from "node:test";
 
 import { loadConfig } from "../src/config.js";
@@ -139,7 +139,7 @@ test("offline consumers use only an exact cached commit; explicit refresh valida
   assert.throws(() => parsePolicyReference("github:org/repo/../secret@main"), /Invalid remote policy reference/);
 });
 
-test("remote fetch pins immutable provider requests, rejects redirects and never uses a supplied host", async () => {
+test("remote policy resolves immutable refs and uses Fleet transport for precisely one selected file", async () => {
   const commit = "a".repeat(40);
   for (const source of ["github:example/repo/policies/organization.json@teams/main", "gitlab:example/group/repo"]) {
     const reference = parsePolicyReference(source);
@@ -151,12 +151,26 @@ test("remote fetch pins immutable provider requests, rejects redirects and never
         urls.push(String(input));
         assert.equal(options?.redirect, "error");
         assert.equal(new Headers(options?.headers).has("authorization"), false);
-        return new Response(urls.length === 1 ? json({ sha: commit, id: commit }) : json(organization));
+        return new Response(json({ sha: commit, id: commit }));
       },
       {},
+      {
+        async fetchFilesAtCommit(repo, pinned, directory, selection) {
+          assert.equal(repo.name, reference.repository);
+          assert.equal(pinned, commit);
+          assert.deepEqual(selection.patterns, [`/${reference.path}`]);
+          assert.equal(selection.includes(reference.path), true);
+          assert.equal(selection.includes("other.json"), false);
+          const path = join(directory, ...reference.path.split("/"));
+          await mkdir(dirname(path), { recursive: true });
+          await writeFile(path, json(organization));
+          return 200;
+        },
+      },
     );
     assert.match(urls[0] ?? "", /https:\/\/(api\.github\.com|gitlab\.com\/api\/v4)\//);
-    assert.ok(urls[1]?.endsWith(`?ref=${commit}`));
+    assert.equal(urls.length, 1);
+    assert.equal(result.text, json(organization));
     assert.equal(result.commit, commit);
     await assert.rejects(
       fetchRemotePolicy(reference, async () => new Response("redirect", { status: 302 }), {}),

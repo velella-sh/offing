@@ -198,6 +198,7 @@ complete -c offing -n '__fish_seen_subcommand_from fleet' -l exclude
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l topic
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l repos
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l jobs
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l policy
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l gitlab
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l gitlab-url
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l include-forks

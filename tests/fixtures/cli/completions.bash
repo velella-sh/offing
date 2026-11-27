@@ -61,7 +61,7 @@ _offing() {
     completions) opts="" ;;
     config) opts="--json" ;;
     drivers) opts="" ;;
-    fleet) opts="--include --exclude --topic --repos --jobs --gitlab --gitlab-url --include-forks --include-archived --json --html --format --no-cache --fail-on --progress" ;;
+    fleet) opts="--include --exclude --topic --repos --jobs --policy --gitlab --gitlab-url --include-forks --include-archived --json --html --format --no-cache --fail-on --progress" ;;
     hook) opts="--fail-on" ;;
     lsp) opts="" ;;
     migrate) opts="--agent --driver --from-refusals --replay --timeout-ms" ;;

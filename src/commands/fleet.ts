@@ -15,6 +15,7 @@ const options = {
   topic: { type: "string", multiple: true },
   repos: { type: "string" },
   jobs: { type: "string" },
+  policy: { type: "string" },
   gitlab: { type: "boolean" },
   "gitlab-url": { type: "string" },
   "include-forks": { type: "boolean" },
@@ -61,6 +62,7 @@ async function scanOptions(values: Flags): Promise<FleetOptions> {
     topics: values.topic ?? [],
     includeForks: values["include-forks"] ?? false,
     includeArchived: values["include-archived"] ?? false,
+    ...(values.policy ? { policy: values.policy } : {}),
     ...(values.repos === undefined ? {} : { repositories: await repositoryList(values.repos) }),
     ...(values.progress ? { onProgress: ({ name, status }) => process.stderr.write(`${name}: ${status}\n`) } : {}),
   };
@@ -93,7 +95,11 @@ async function run(args: string[], ctx: CommandContext): Promise<number> {
           ? renderRollupHtml(result)
           : renderRollupText(result);
     process.stdout.write(`${output}\n`);
-    return index >= 0 && severityValues.slice(index).some((severity) => result.severities[severity] > 0) ? 1 : 0;
+    const policyFailed = result.repositoryStatus.some(
+      ({ compliance }) => compliance && compliance.status !== "compliant",
+    );
+    const gateFailed = index >= 0 && severityValues.slice(index).some((severity) => result.severities[severity] > 0);
+    return policyFailed || gateFailed ? 1 : 0;
   } catch (error) {
     return fleetError(error, ctx);
   }
@@ -117,6 +123,7 @@ export const command: CliCommand = {
   flags: Object.keys(options).map((key) => `--${key}`),
   example: "offing fleet my-organization --json --jobs 4",
   usage: [
+    "  offing fleet <organization|group> --policy <file|reference> [--json | --html]",
     "  offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs",
     "  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>]",
   ],

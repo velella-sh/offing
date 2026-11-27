@@ -76,6 +76,7 @@ Usage:
   offing config validate [path] [--json]
   offing drivers list
   offing drivers test <driver|command>
+  offing fleet <organization|group> --policy <file|reference> [--json | --html]
   offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs
   offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>]
   offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol
