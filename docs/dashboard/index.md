@@ -1,7 +1,7 @@
 ---
 title: "Accuracy and performance dashboard"
 description: "Precision, recall, and pinned public corpus evidence by ecosystem, detector, and maturity level."
-image: https://velella.sh/offing/assets/og/accuracy-dashboard.svg
+image: https://velella.sh/offing/assets/brand/accuracy-dashboard.svg
 layout: doc
 permalink: /dashboard/
 ---

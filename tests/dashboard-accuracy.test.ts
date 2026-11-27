@@ -107,7 +107,7 @@ test("the dashboard renders with pinned Mizzen and Lateen while network calls ar
     Object.entries(production.collections).filter(([name]) => name.startsWith("dashboard")),
   );
   const site = join(directory, "docs");
-  for (const sub of ["_data", "_templates", "assets/og", "dashboard", "decisions"]) {
+  for (const sub of ["_data", "_templates", "assets/brand", "dashboard", "decisions"]) {
     await mkdir(join(site, sub), { recursive: true });
   }
   await writeFile(
@@ -117,7 +117,7 @@ test("the dashboard renders with pinned Mizzen and Lateen while network calls ar
   for (const path of [
     "dashboard/index.md",
     "_templates/dashboard-ecosystem.md",
-    "assets/og/accuracy-dashboard.svg",
+    "assets/brand/accuracy-dashboard.svg",
     "decisions/0013-detector-maturity.md",
     "decisions/0030-corpus-selection-and-200-target.md",
   ]) {
