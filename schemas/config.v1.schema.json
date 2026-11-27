@@ -256,6 +256,125 @@
       "type": "string",
       "pattern": "\\S",
       "description": "Organization fleet policy path or explicit GitHub/GitLab policy reference."
+    },
+    "autopilot": {
+      "type": "object",
+      "description": "Limits for an explicitly requested Autopilot run. Reading config alone starts no processes.",
+      "additionalProperties": false,
+      "properties": {
+        "driver": {
+          "enum": ["replay", "command", "claude", "codex", "gemini", "aider"],
+          "default": "replay"
+        },
+        "budget": {
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "run": {
+              "type": "object",
+              "default": {},
+              "additionalProperties": false,
+              "properties": {
+                "wallTimeMs": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 2147483647,
+                  "default": 300000
+                },
+                "turns": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "default": 3
+                },
+                "tokens": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000000000,
+                  "default": 30000
+                },
+                "costCents": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1000000,
+                  "default": 100
+                }
+              }
+            },
+            "turn": {
+              "type": "object",
+              "default": {},
+              "additionalProperties": false,
+              "properties": {
+                "wallTimeMs": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 2147483647,
+                  "default": 120000
+                },
+                "turns": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "default": 1
+                },
+                "tokens": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000000000,
+                  "default": 10000
+                },
+                "costCents": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1000000,
+                  "default": 50
+                }
+              }
+            }
+          }
+        },
+        "allowedPaths": {
+          "description": "Exact repository-relative file paths. If omitted, scope comes from the migration packets and the selected tests.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?=.*\\S)(?!.*(?:^|/)\\.{1,2}(?:/|$))[^/:\\u0000-\\u001f\\\\]+(?:/[^/:\\u0000-\\u001f\\\\]+)*(?![\\s\\S])"
+          }
+        },
+        "deniedPaths": {
+          "description": "Additional exact repository-relative file paths to deny. Built-in refusals always apply.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?=.*\\S)(?!.*(?:^|/)\\.{1,2}(?:/|$))[^/:\\u0000-\\u001f\\\\]+(?:/[^/:\\u0000-\\u001f\\\\]+)*(?![\\s\\S])"
+          },
+          "default": []
+        },
+        "tests": {
+          "description": "Candidate test commands as argv. The execution caller must approve commands separately.",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(?=[\\s\\S]*\\S)[^\\u0000]*(?![\\s\\S])"
+            }
+          }
+        },
+        "secretEnv": {
+          "description": "Names of additional environment values to redact, never to forward as credentials.",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*(?![\\s\\S])"
+          }
+        }
+      }
     }
   }
 }
