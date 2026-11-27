@@ -29,7 +29,7 @@ function cell(value: string): string {
   return value
     .replace(/[\r\n]+/g, " ")
     .replace(/[&<>]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[character] ?? character)
-    .replace(/[\\|`\[\]*_]/g, (character) => "\\" + character)
+    .replace(/[\\|`[\]*_]/g, (character) => "\\" + character)
     .trim();
 }
 
