@@ -138,7 +138,12 @@ function goDirectiveIssues(
 }
 
 /** Blockers from the vendored modules' own `go` lines, or an unknown when vendoring leaves no such evidence. */
-async function vendorIssues(root: string, target: UpgradeTarget, targetVersion: GoVersion): Promise<UpgradeIssue[]> {
+async function vendorIssues(
+  root: string,
+  target: UpgradeTarget,
+  targetVersion: GoVersion,
+  direct: ReadonlySet<string>,
+): Promise<UpgradeIssue[]> {
   const issues: UpgradeIssue[] = [];
   // `go mod vendor` records each dependency's own `go` version; without vendoring, that evidence is absent.
   const modulesText = await readOptional(join(root, VENDOR_MODULES));
@@ -146,10 +151,12 @@ async function vendorIssues(root: string, target: UpgradeTarget, targetVersion: 
   for (const module of vendored) {
     const go = goRequirementBelowTarget(module, targetVersion);
     if (go === undefined) continue;
+    const subject = `${module.module}@${module.version}`;
     issues.push({
       analyzer: ANALYZER_ID,
       level: "blocker",
-      subject: `${module.module}@${module.version}`,
+      subject,
+      ...(direct.has(subject) ? { chain: [subject] } : {}),
       path: VENDOR_MODULES,
       line: go.line,
       reason: `The target Go ${target.version} is below Go ${go.value}, which ${module.module}@${module.version} declares in ${VENDOR_MODULES}.`,
@@ -170,6 +177,10 @@ async function vendorIssues(root: string, target: UpgradeTarget, targetVersion: 
     });
   }
   return issues;
+}
+
+function directModuleIds(declarations: ReturnType<typeof parseGoMod>): Set<string> {
+  return new Set(declarations.flatMap((entry) => (entry.kind === "require" ? [`${entry.module}@${entry.value}`] : [])));
 }
 
 export class GoModulesAnalyzer implements UpgradeAnalyzer {
@@ -198,17 +209,17 @@ export class GoModulesAnalyzer implements UpgradeAnalyzer {
       ];
     }
 
-    const issues: UpgradeIssue[] = [];
-
     // Since Go 1.21 a `go` line is a minimum, not a suggestion: a toolchain older than it refuses the module.
     const goWork = await readOptional(join(root, "go.work"));
+    const moduleDirectives = parseGoMod(goMod);
     const declarations = [
-      ...parseGoMod(goMod).map((declaration) => ({ path: "go.mod", declaration })),
+      ...moduleDirectives.map((declaration) => ({ path: "go.mod", declaration })),
       ...(goWork === undefined ? [] : parseGoWork(goWork).map((declaration) => ({ path: "go.work", declaration }))),
     ];
     const goDirectives = declarations.filter((entry) => entry.declaration.kind === "go");
-    issues.push(...goDirectiveIssues(goDirectives, target, targetVersion));
-    issues.push(...(await vendorIssues(root, target, targetVersion)));
+    const issues = goDirectiveIssues(goDirectives, target, targetVersion);
+    const direct = directModuleIds(moduleDirectives);
+    issues.push(...(await vendorIssues(root, target, targetVersion, direct)));
 
     // The target release's own lifecycle, from the bundled Go rules.
     const targetRule = (await goRuntimeRules()).find((rule) => matchesRule(rule, targetVersion));

@@ -11,6 +11,8 @@ export interface UpgradeIssue {
   level: "blocker" | "warning" | "unknown";
   /** What is affected, such as `sharp@0.30.7` or `util.isArray`. */
   subject: string;
+  /** Locked path from a direct dependency, including the issue package. */
+  chain?: string[];
   path: string;
   line?: number;
   /** One sentence a person or an agent can show as is. */
@@ -36,4 +38,18 @@ export interface UpgradeReport {
   verdict: "ready" | "blocked" | "unknown";
   analyzers: string[];
   issues: UpgradeIssue[];
+  graph?: UpgradeGraph;
+}
+
+export interface UpgradeBlocker {
+  subject: string;
+  path: string;
+  chain?: string[];
+  firstSupported: string;
+}
+
+export interface UpgradeGraph {
+  total: number;
+  roots: { dependency: string; unlocks: number; blockers: UpgradeBlocker[] }[];
+  ungrouped: UpgradeBlocker[];
 }

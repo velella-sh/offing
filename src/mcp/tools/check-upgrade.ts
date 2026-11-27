@@ -4,6 +4,7 @@ import * as z from "zod/v4";
 
 import type { OffingAgentTools } from "../../agent-tools.js";
 import { OffingError } from "../../offing-error.js";
+import { buildBlockerGraph } from "../../upgrade/graph.js";
 import { checkUpgrade, parseUpgradeTarget } from "../../upgrade/index.js";
 import { failure, registerMcpTool, success } from "../tool-support.js";
 
@@ -35,7 +36,8 @@ export function registerCheckUpgrade(server: McpServer, tools: OffingAgentTools)
               `target must be <runtime>@<version>, for example php@8.4 (got "${target}").`,
             ),
           );
-        return success(await checkUpgrade(resolve(path), parsed));
+        const report = await checkUpgrade(resolve(path), parsed);
+        return success({ ...report, graph: buildBlockerGraph(report) });
       } catch (error) {
         return failure(error);
       }

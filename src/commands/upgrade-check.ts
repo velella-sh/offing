@@ -3,10 +3,10 @@ import type { CliCommand } from "./types.js";
 
 export const command: CliCommand = {
   name: "upgrade-check",
-  flags: ["--to", "--json"],
+  flags: ["--to", "--json", "--graph", "--format", "--theme"],
   example: "offing upgrade-check --to nodejs@22",
   usage: [
-    "  offing upgrade-check --to <runtime@version> [path] [--json]   # dependencies whose declared support excludes the target runtime",
+    "  offing upgrade-check --to <runtime@version> [path] [--json] [--graph] [--format mermaid|svg]   # dependencies whose declared support excludes the target runtime",
   ],
   usageSlots: [23],
   run(args) {

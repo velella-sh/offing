@@ -1,11 +1,15 @@
 import { stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import process from "node:process";
+import { parseArgs } from "node:util";
 
+import { buildBlockerGraph } from "./graph.js";
+import { renderBlockerMermaid, renderBlockerSvg, renderBlockerTree } from "./render-graph.js";
 import { checkUpgrade, parseUpgradeTarget } from "./index.js";
 import type { UpgradeIssue, UpgradeReport } from "./types.js";
 
-const USAGE = "Usage: offing upgrade-check --to <runtime@version> [path] [--json]";
+const USAGE =
+  "Usage: offing upgrade-check --to <runtime@version> [path] [--json] [--graph] [--format text|json|mermaid|svg] [--theme light|dark]";
 
 const UNKNOWN_VERDICT =
   "Offing found no evidence for this runtime in this repository. This is not a statement that the upgrade is safe.";
@@ -23,42 +27,64 @@ export function renderUpgradeReport(report: UpgradeReport): string {
   const lines = [
     `${report.target.runtime}@${report.target.version}: ${report.verdict} (${counts.blocker} blockers, ${counts.warning} warnings, ${counts.unknown} unknown)`,
   ];
+  if (report.graph) lines.push(...renderBlockerTree(report.target, report.graph));
   if (report.verdict === "unknown") lines.push(UNKNOWN_VERDICT);
   for (const issue of report.issues) lines.push(renderUpgradeIssue(issue));
   return lines.join("\n");
 }
 
-/** `offing upgrade-check --to <runtime@version> [path] [--json]`. Exit `1` when blocked, `2` for bad input. */
-export async function upgradeCheck(args: string[]): Promise<number> {
-  let json = false;
-  let targetText: string | undefined;
-  let path: string | undefined;
-  const pending = [...args];
-  for (let argument = pending.shift(); argument !== undefined; argument = pending.shift()) {
-    if (argument === "--json") {
-      json = true;
-      continue;
-    }
-    if (argument === "--to") {
-      const value = pending.shift();
-      if (value === undefined || value.startsWith("-")) return usage();
-      targetText = value;
-      continue;
-    }
-    if (argument.startsWith("-")) return usage();
-    if (path !== undefined) return usage();
-    path = argument;
+function parseUpgradeArgs(args: string[]) {
+  try {
+    return parseArgs({
+      args,
+      allowPositionals: true,
+      options: {
+        to: { type: "string" },
+        json: { type: "boolean" },
+        graph: { type: "boolean" },
+        format: { type: "string" },
+        theme: { type: "string" },
+      },
+    });
+  } catch {
+    return undefined;
   }
-  const target = targetText === undefined ? undefined : parseUpgradeTarget(targetText);
-  if (!target) return usage();
-  const root = resolve(path ?? ".");
+}
+
+function renderOutput(report: UpgradeReport, format: string, theme: string): string {
+  if (format === "json") return JSON.stringify(report, null, 2);
+  if (format === "mermaid" && report.graph) return renderBlockerMermaid(report.target, report.graph);
+  if (format === "svg" && report.graph) return renderBlockerSvg(report.target, report.graph, theme === "dark");
+  return renderUpgradeReport(report);
+}
+
+function upgradeOptions(args: string[]) {
+  const parsed = parseUpgradeArgs(args);
+  if (parsed === undefined || parsed.positionals.length > 1) return undefined;
+  const { values, positionals } = parsed;
+  const format = values.format ?? (values.json ? "json" : "text");
+  if (!["text", "json", "mermaid", "svg"].includes(format)) return undefined;
+  if (values.json && format !== "json") return undefined;
+  const theme = values.theme ?? "light";
+  if ((values.theme !== undefined && format !== "svg") || !["light", "dark"].includes(theme)) return undefined;
+  const target = values.to === undefined ? undefined : parseUpgradeTarget(values.to);
+  if (!target) return undefined;
+  return { root: resolve(positionals[0] ?? "."), target, format, theme, graph: values.graph };
+}
+
+/** Exit 1 when blocked, 2 for bad input, regardless of the report format. */
+export async function upgradeCheck(args: string[]): Promise<number> {
+  const options = upgradeOptions(args);
+  if (options === undefined) return usage();
+  const { root, target, format, theme, graph } = options;
   try {
     if (!(await stat(root)).isDirectory()) return usage(`${root} is not a directory.`);
   } catch {
     return usage(`Cannot read ${root}.`);
   }
   const report = await checkUpgrade(root, target);
-  process.stdout.write(`${json ? JSON.stringify(report, null, 2) : renderUpgradeReport(report)}\n`);
+  if (graph || format === "mermaid" || format === "svg") report.graph = buildBlockerGraph(report);
+  process.stdout.write(`${renderOutput(report, format, theme)}\n`);
   return report.verdict === "blocked" ? 1 : 0;
 }
 

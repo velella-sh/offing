@@ -118,7 +118,7 @@ test("the text output starts with the verdict and prints evidence for every issu
 
 test("the CLI and the check_upgrade MCP tool return the same report, and both validate against upgrade.v1", async () => {
   const blocked = fixture("blocked");
-  const cliResult = await run("--to", "php@8.4", blocked, "--json");
+  const cliResult = await run("--to", "php@8.4", blocked, "--json", "--graph");
   assert.equal(cliResult.code, 1);
   const fromCli = JSON.parse(cliResult.stdout) as UpgradeReport;
 

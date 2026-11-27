@@ -86,6 +86,7 @@ test("production packages are blockers, dev packages are warnings, and platform 
       analyzer: "composer-lock",
       level: "blocker",
       subject: "acme/http-client@2.1.0",
+      chain: ["acme/http-client@2.1.0"],
       path: "composer.lock",
       line: 9,
       reason: "acme/http-client@2.1.0 requires php ^7.4, which excludes PHP 8.4.",

@@ -28,7 +28,7 @@ _offing() {
         glance) _arguments '--as-of' '--json' '*:path:_files' ;;
         lookup) _arguments '--json' '*:path:_files' ;;
         drift) _arguments '--json' '--check' '--runtime' '--align' '*:path:_files' ;;
-        upgrade-check) _arguments '--to' '--json' '*:path:_files' ;;
+        upgrade-check) _arguments '--to' '--json' '--graph' '--format' '--theme' '*:path:_files' ;;
         inventory) _arguments '--format' '--json' '--fail-on' '--redact' '*:path:_files' ;;
         badge) _arguments '--snippet' '--repo' '--branch' '--shields' '*:path:_files' ;;
         diff) _arguments '--json' '--data-version' '*:path:_files' ;;

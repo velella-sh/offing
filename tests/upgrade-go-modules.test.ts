@@ -111,6 +111,7 @@ test("a target below a vendored module's go version is a lockfile blocker", asyn
       analyzer: "go-modules",
       level: "blocker",
       subject: "example.com/lib@v1.4.0",
+      chain: ["example.com/lib@v1.4.0"],
       path: "vendor/modules.txt",
       line: 2,
       reason: "The target Go 1.22 is below Go 1.23, which example.com/lib@v1.4.0 declares in vendor/modules.txt.",

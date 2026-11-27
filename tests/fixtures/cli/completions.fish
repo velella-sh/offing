@@ -110,6 +110,9 @@ complete -c offing -n '__fish_seen_subcommand_from drift' -l runtime
 complete -c offing -n '__fish_seen_subcommand_from drift' -l align
 complete -c offing -n '__fish_seen_subcommand_from upgrade-check' -l to
 complete -c offing -n '__fish_seen_subcommand_from upgrade-check' -l json
+complete -c offing -n '__fish_seen_subcommand_from upgrade-check' -l graph
+complete -c offing -n '__fish_seen_subcommand_from upgrade-check' -l format
+complete -c offing -n '__fish_seen_subcommand_from upgrade-check' -l theme
 complete -c offing -n '__fish_seen_subcommand_from inventory' -l format
 complete -c offing -n '__fish_seen_subcommand_from inventory' -l json
 complete -c offing -n '__fish_seen_subcommand_from inventory' -l fail-on

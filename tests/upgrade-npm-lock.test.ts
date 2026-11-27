@@ -208,5 +208,7 @@ test("readPackages reads only node_modules entries with engines.node and keeps p
   const entries = readPackages(
     '{\n  "lockfileVersion": 3,\n  "packages": {\n    "": { "engines": { "node": ">=18" } },\n    "node_modules/a": { "version": "1.0.0", "engines": { "node": ">=20 <22" } },\n    "node_modules/b": { "version": "2.0.0" },\n    "node_modules/c": { "version": "3.0.0", "engines": { "npm": ">=9" } }\n  }\n}\n',
   );
-  assert.deepEqual(entries, [{ name: "a", version: "1.0.0", range: ">=20 <22", line: 5, dev: false }]);
+  assert.deepEqual(entries, [
+    { location: "node_modules/a", name: "a", version: "1.0.0", range: ">=20 <22", line: 5, dev: false },
+  ]);
 });
