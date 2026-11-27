@@ -5,11 +5,13 @@ import type { Finding, ScanResult } from "./domain.js";
 
 /** Where Git hosts look for a CODEOWNERS file, in precedence order. */
 export const CODEOWNERS_LOCATIONS = [".github/CODEOWNERS", "CODEOWNERS", "docs/CODEOWNERS"] as const;
+export const GITLAB_CODEOWNERS_LOCATIONS = ["CODEOWNERS", "docs/CODEOWNERS", ".gitlab/CODEOWNERS"] as const;
 
 export interface CodeownersRule {
   pattern: string;
   owners: string[];
   matches: RegExp;
+  section?: string;
 }
 
 /** Findings grouped by the owner of the file they point at. A finding with several owners appears under each. */
@@ -52,25 +54,42 @@ function patternToRegExp(pattern: string): RegExp {
 }
 
 /** Parses CODEOWNERS text. Blank lines and comments are skipped; a pattern with no owners clears ownership for it. */
-export function parseCodeowners(text: string): CodeownersRule[] {
+export function parseCodeowners(text: string, host: "github" | "gitlab" = "github"): CodeownersRule[] {
   const rules: CodeownersRule[] = [];
+  const defaults = new Map<string, string[]>();
+  let section: string | undefined;
   for (const raw of text.split(/\r?\n/)) {
     const line = raw.replace(/(^|\s)#.*$/, "").trim();
-    if (line === "" || line.startsWith("[") || line.startsWith("^[")) continue;
+    if (line === "") continue;
+    if (line.startsWith("[") || line.startsWith("^[")) {
+      if (host === "gitlab") {
+        const heading = /^\^?\[([^\]]+)\](?:\[\d+\])?(?:\s+(.+))?$/u.exec(line);
+        if (heading?.[1]) {
+          section = heading[1].trim().toLowerCase();
+          if (heading[2]) defaults.set(section, heading[2].split(/\s+/u));
+        }
+      }
+      continue;
+    }
     const [pattern, ...owners] = line.split(/\s+/);
     if (!pattern) continue;
-    rules.push({ pattern, owners, matches: patternToRegExp(pattern) });
+    rules.push({ pattern, owners, matches: patternToRegExp(pattern), ...(section === undefined ? {} : { section }) });
   }
-  return rules;
+  return rules.map((rule) =>
+    rule.section !== undefined && rule.owners.length === 0
+      ? { ...rule, owners: defaults.get(rule.section) ?? [] }
+      : rule,
+  );
 }
 
-/** The owners of a path: the last rule that matches wins. Empty when no rule matches or the winning rule has no owners. */
+/** Resolves the last matching rule in each section and returns the unique owners. GitHub has one unnamed section. */
 export function ownersOf(rules: readonly CodeownersRule[], path: string): string[] {
   const normalized = path.replace(/\\/g, "/").replace(/^\.?\//, "");
-  for (const rule of [...rules].reverse()) {
-    if (rule.matches.test(normalized)) return rule.owners;
+  const matches = new Map<string | undefined, string[]>();
+  for (const rule of rules) {
+    if (rule.matches.test(normalized)) matches.set(rule.section, rule.owners);
   }
-  return [];
+  return [...new Set([...matches.values()].flat())];
 }
 
 export function groupByOwner(

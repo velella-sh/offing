@@ -192,6 +192,9 @@ test("fleet follows GitHub pagination, retries API limits, filters forks and com
   await git("config", "uploadpack.allowFilter", "true");
   await git("config", "uploadpack.allowReachableSHA1InWant", "true");
   await writeFile(join(repoPath, "package.json"), contents);
+  await mkdir(join(repoPath, ".github"));
+  await writeFile(join(repoPath, ".github/CODEOWNERS"), "/package.json @example/dependencies\n");
+  await writeFile(join(repoPath, "CODEOWNERS"), "* @example/lower-priority\n");
   await writeFile(join(repoPath, "not-detector.txt"), privateText);
   await git("add", ".");
   await git(
@@ -292,6 +295,11 @@ test("fleet follows GitHub pagination, retries API limits, filters forks and com
   const equivalent = rollup([{ repository: "example/api", report: local }]);
   assert.equal(result.findings, equivalent.findings);
   assert.deepEqual(result.byProduct, equivalent.byProduct);
+  const forecast = await scanFleet(host, "example", { forecast: { gitlab: false, asOf: "2025-01-01" } });
+  const pinned = forecast.repositoryStatus.find(({ name }) => name === "example/api");
+  assert.equal(pinned?.commit, api?.commit);
+  assert.deepEqual(pinned?.forecastEvidence?.findings[0]?.owners, ["@example/dependencies"]);
+  assert.doesNotMatch(JSON.stringify(result), /forecastEvidence|dependencies|lower-priority/);
   await assert.rejects(scanFleet(host, "example/foreign"), /Provide a GitHub organization/);
 });
 
@@ -311,10 +319,12 @@ test("organization workflow pins its source and keeps the fleet report and both 
     readonly id?: string;
     readonly uses?: string;
     readonly run?: string;
+    readonly if?: string;
     readonly with?: Record<string, unknown>;
   }
   const document = parse(await readFile(".github/workflows/org-scan.yml", "utf8")) as {
     jobs: Record<string, { steps: Step[] }>;
+    on: Record<string, { inputs: Record<string, { default: unknown }> }>;
   };
   assert.deepEqual(Object.keys(document.jobs), ["fleet"]);
   const steps = document.jobs.fleet?.steps ?? [];
@@ -323,11 +333,132 @@ test("organization workflow pins its source and keeps the fleet report and both 
     steps.find(({ uses }) => uses?.includes("actions/checkout"))?.with?.ref,
     "${{ steps.source.outputs.sha }}",
   );
-  assert.match(steps.find(({ id }) => id === "scan")?.run ?? "", /cli\.js fleet .*--json.*reports\/fleet\.json/);
+  const scan = steps.find(({ id }) => id === "scan")?.run ?? "";
+  assert.match(scan, /cli\.js fleet .*--json.*"\$fleet_output"/);
+  assert.match(scan, /forecast --fleet "\$fleet_output" --digest "\$RUNNER_TEMP\/offing-owner-digests"/);
+  assert.match(scan, /rollup "\$fleet_output" --json > reports\/fleet\.json/);
+  assert.equal(document.on.workflow_call?.inputs["forecast-digests"]?.default, false);
+  assert.equal(document.on.workflow_dispatch?.inputs["forecast-digests"]?.default, false);
   const upload = steps.find(({ uses }) => uses?.includes("actions/upload-artifact"));
   assert.equal(upload?.with?.name, "offing-fleet");
+  const ownerUpload = steps.find((step) => step.with?.name === "offing-owner-digests");
+  assert.equal(ownerUpload?.if, "${{ inputs.forecast-digests }}");
+  assert.equal(ownerUpload?.with?.path, "${{ runner.temp }}/offing-owner-digests/*.md");
   assert.ok(steps.some(({ run }) => run?.includes('type: "mrkdwn"') && run?.includes("echo") === false));
   assert.ok(steps.some(({ run }) => run?.includes("application/vnd.microsoft.card.adaptive")));
+});
+
+test("fleet forecast acceptance records exact CODEOWNERS and works from an offline file", async (t) => {
+  const root = await workspace(t);
+  const packages = {
+    "example-pin/package.json": JSON.stringify({
+      name: privateText,
+      dependencies: { "fictional-widget-unknown-to-registry": "1.0.0" },
+    }),
+    "example-pin/.nvmrc": "18\n",
+    "example-pin/notes.txt": privateText,
+  };
+  const owned = archive({
+    ...packages,
+    "example-pin/.gitlab/CODEOWNERS": "[Platform] @example/platform @example/runtime\n/.nvmrc\n",
+    "example-pin/.github/CODEOWNERS": "* @example/wrong-host\n",
+  });
+  const unowned = archive(packages);
+  let requests = 0;
+  const origin = await localHost(t, (request, response) => {
+    requests++;
+    const url = new URL(request.url ?? "/", "http://local");
+    if (url.pathname.endsWith("/projects")) {
+      return answer(response, [
+        { path_with_namespace: "example/app", default_branch: "main" },
+        { path_with_namespace: "example/edge", default_branch: "main" },
+        { path_with_namespace: "outside/scope", default_branch: "main" },
+      ]);
+    }
+    assert.doesNotMatch(url.pathname, /outside/u);
+    if (url.pathname.endsWith("/branches/main")) return answer(response, { commit: { id: commit } });
+    assert.equal(url.searchParams.get("sha"), commit);
+    const selected = url.pathname.includes("%2Fapp/") ? owned : unowned;
+    response.end(selected);
+  });
+  const cli = (...args: string[]) =>
+    run(process.execPath, [binary, ...args], { cwd: root, env: withoutGit(join(root, "data")) });
+  const asOf = "2025-01-01";
+  const live = ["--gitlab-url", origin, "--as-of", asOf];
+  const snapshot = await cli("fleet", "example", "--json", "--forecast-input", ...live);
+  await writeFile(join(root, "fleet.json"), snapshot.stdout);
+  const captured: FleetResult = JSON.parse(snapshot.stdout);
+  assert.equal(captured.forecastAsOf, asOf);
+  assert.equal(captured.repositoryStatus.length, 2);
+  assert.deepEqual(captured.repositoryStatus[0]?.forecastEvidence?.findings[0], {
+    ruleId: "nodejs.runtime.eol-18",
+    location: { path: ".nvmrc", line: 1 },
+    deadline: "2025-04-30",
+    owners: ["@example/platform", "@example/runtime"],
+  });
+  assert.doesNotMatch(snapshot.stdout, /private-test|wrong-host|notes\.txt|fictional-widget/u);
+  const schema = JSON.parse(await readFile("schemas/fleet.v1.schema.json", "utf8"));
+  const validate = new Ajv2020({ strict: false }).compile<FleetResult>(schema);
+  assert.ok(validate(captured), JSON.stringify(validate.errors));
+  const redacted = await cli("rollup", "fleet.json", "--json");
+  assert.doesNotMatch(redacted.stdout, /forecastEvidence|forecastAsOf|\.nvmrc/u);
+  await writeFile(join(root, "owners.json"), JSON.stringify({ "example/edge": "Edge owners" }));
+  const online = await cli("forecast", "--fleet", "example", "--json", ...live);
+  const recordedRequests = requests;
+  const offline = (...args: string[]) => cli("forecast", "--fleet", "fleet.json", ...args);
+  assert.equal((await offline("--json")).stdout, online.stdout);
+  const forecast = JSON.parse(online.stdout);
+  assert.equal(forecast.schemaVersion, "offing.fleet-forecast.v1");
+  assert.equal(forecast.byRepository[0]?.buckets[1]?.items.length, 1);
+  assert.deepEqual(
+    forecast.byOwner.map((group: { name: string }) => group.name),
+    ["@example/platform", "@example/runtime", "Edge owners", "unowned"],
+  );
+  assert.equal(forecast.coverage.share, 0.5);
+  const saved = join(root, "prior.json");
+  await writeFile(saved, online.stdout);
+  const compared = JSON.parse((await offline("--json", "--previous", saved)).stdout);
+  assert.deepEqual(compared.changes, { new: [], closer: [], fixed: [] });
+  await assert.rejects(offline("--previous", saved, "--as-of", "2024-12-31"), /previous forecast cannot be newer/);
+  assert.match((await offline("--by", "repository")).stdout, /example\/app/u);
+  const card = await offline("--card", "--theme", "dark");
+  assert.match(card.stdout, /Nearest deadline: 2025-04-30/u);
+  assert.equal(card.stdout, (await offline("--card", "--theme", "dark")).stdout);
+  await offline("--ics", "calendars");
+  await offline("--ics", "calendars-repeat");
+  for (const file of await readdir(join(root, "calendars"))) {
+    const content = await readFile(join(root, "calendars", file));
+    assert.deepEqual(content, await readFile(join(root, "calendars-repeat", file)));
+  }
+  await offline("--digest", "digests");
+  const digests = await readdir(join(root, "digests"));
+  const pathNamed = digests.find((name) => name.includes("example-platform"));
+  assert.ok(pathNamed);
+  assert.match(await readFile(join(root, "digests", pathNamed), "utf8"), /\.nvmrc/u);
+  await assert.rejects(offline("--ics", "calendars"), /Choose a new, writable output directory/);
+  await assert.rejects(offline("--card", "--by", "owner"), /--by accepts/);
+  await assert.rejects(offline("--gitlab"), /Apply GitLab options/);
+  await assert.rejects(offline("--json", "--card"), /Choose one of/);
+  await assert.rejects(offline("--theme", "dark"), /--theme accepts/);
+  await assert.rejects(offline("--today", asOf, "--as-of", asOf), /either --as-of or --today/);
+  await assert.rejects(offline("--as-of", "2025-02-29"), /needs a date/);
+  await assert.rejects(offline("--previous", "absent.json"), /Cannot read forecast JSON/);
+  await assert.rejects(offline("--previous", "fleet.json"), /previous file must be/);
+  await assert.rejects(offline("--owners", "fleet.json"), /mapping repository names/);
+  await assert.rejects(cli("forecast", "--by", "owner"), /--fleet needs an organization/);
+  await assert.rejects(offline("--ics"), /missing option value/);
+  await assert.rejects(cli("forecast", "--fleet", "https://outside.invalid/"), /Give a GitHub organization/);
+  await assert.rejects(cli("fleet", "example", "--forecast-input"), /requires JSON output/);
+  await assert.rejects(cli("fleet", "example", "--as-of", asOf), /requires --forecast-input/);
+  const aggregateFile = join(root, "aggregate.json");
+  await writeFile(aggregateFile, redacted.stdout);
+  await assert.rejects(cli("forecast", "--fleet", aggregateFile), /--forecast-input/);
+  assert.equal(requests, recordedRequests);
+  const canonical = {
+    ...captured,
+    repositoryStatus: captured.repositoryStatus.map((row) => ({ ...row, host: "https://gitlab.example" })),
+  };
+  assert.deepEqual(canonical, JSON.parse(await readFile("examples/forecast/fleet.json", "utf8")));
 });
 
 test("fleet --policy reports compliant, violating and rejected repositories without exposing policy or source content", async (t) => {
@@ -370,20 +501,25 @@ test("fleet --policy reports compliant, violating and rejected repositories with
     }
     return response.writeHead(200).end(archive(files));
   });
-  const result = await run(
-    process.execPath,
-    [binary, "fleet", "example", "--gitlab-url", origin, "--policy", policyPath, "--json"],
-    { env: withoutGit(root), timeout: 15_000 },
-  ).catch((error: unknown) => {
-    assert(
-      error instanceof Error &&
-        "code" in error &&
-        error.code === 1 &&
-        "stdout" in error &&
-        typeof error.stdout === "string",
-    );
-    return { stdout: error.stdout };
-  });
+  const scan = (...flags: string[]) =>
+    run(
+      process.execPath,
+      [binary, "fleet", "example", "--gitlab-url", origin, "--policy", policyPath, "--json", ...flags],
+      {
+        env: withoutGit(root),
+        timeout: 15_000,
+      },
+    ).catch((error: unknown) => {
+      assert(
+        error instanceof Error &&
+          "code" in error &&
+          error.code === 1 &&
+          "stdout" in error &&
+          typeof error.stdout === "string",
+      );
+      return { stdout: error.stdout };
+    });
+  const result = await scan();
   assert.doesNotMatch(result.stdout, new RegExp(`${privateText}|${token}|private-policy-rule|fleet-policy\\.json`));
   const parsed = JSON.parse(result.stdout);
   const statuses = Object.fromEntries(
@@ -403,4 +539,12 @@ test("fleet --policy reports compliant, violating and rejected repositories with
   assert(isFleet(parsed));
   assert.match(renderRollupText(parsed), /policy violation/);
   assert.match(renderRollupHtml(parsed), /<th>Policy<\/th>/);
+
+  const recording = await scan("--forecast-input");
+  const complete: FleetResult = JSON.parse(recording.stdout);
+  assert(isFleet(complete));
+  assert.ok(complete.repositoryStatus.some((repo) => repo.forecastEvidence?.findings.length));
+  const file = join(root, "forecast-recording.json");
+  await writeFile(file, recording.stdout);
+  assert.deepEqual(await rollupFiles([file]), parsed);
 });

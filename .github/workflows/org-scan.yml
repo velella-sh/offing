@@ -30,6 +30,10 @@ on:
         required: false
         default: 10
         type: number
+      forecast-digests:
+        description: Generate an owner Markdown artifact containing repository paths and ownership.
+        default: false
+        type: boolean
     secrets:
       github-token:
         description: >-
@@ -71,6 +75,10 @@ on:
         required: false
         default: 10
         type: number
+      forecast-digests:
+        description: Generate an owner Markdown artifact containing repository paths and ownership.
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -112,12 +120,24 @@ jobs:
           GH_TOKEN: ${{ secrets.github-token || github.token }}
           FAIL_ON: ${{ inputs.fail-on-severity }}
           MAX_JOBS: ${{ inputs.max-jobs }}
+          FORECAST_DIGESTS: ${{ inputs.forecast-digests }}
         run: |
           status=0
           mkdir -p reports
-          node dist/src/cli.js fleet "$ORGANIZATION" --jobs "$MAX_JOBS" --fail-on "$FAIL_ON" --json --progress > reports/fleet.json || status=$?
+          fleet_output=reports/fleet.json
+          forecast_flags=()
+          if [ "$FORECAST_DIGESTS" = true ]; then
+            umask 077
+            fleet_output="$RUNNER_TEMP/offing-forecast-input.json"
+            forecast_flags=(--forecast-input)
+          fi
+          node dist/src/cli.js fleet "$ORGANIZATION" --jobs "$MAX_JOBS" --fail-on "$FAIL_ON" --json --progress "${forecast_flags[@]}" > "$fleet_output" || status=$?
           if [ "$status" -gt 1 ]; then
             exit "$status"
+          fi
+          if [ "$FORECAST_DIGESTS" = true ]; then
+            node dist/src/cli.js forecast --fleet "$fleet_output" --digest "$RUNNER_TEMP/offing-owner-digests"
+            node dist/src/cli.js rollup "$fleet_output" --json > reports/fleet.json
           fi
           node dist/src/cli.js rollup reports/fleet.json > digest.txt
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -129,6 +149,14 @@ jobs:
           name: offing-fleet
           path: reports/fleet.json
           if-no-files-found: error
+
+      - name: Upload owner forecast digests
+        if: ${{ inputs.forecast-digests }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: offing-owner-digests
+          path: ${{ runner.temp }}/offing-owner-digests/*.md
+          if-no-files-found: ignore
 
       - name: Post to Slack
         env:

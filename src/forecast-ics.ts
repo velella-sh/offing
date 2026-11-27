@@ -53,18 +53,25 @@ function eventDescription(event: ForecastEvent, replacements: ReadonlyMap<string
   const lines = ["Affected files:", ...locations];
   for (const replacement of suggestions) lines.push("Replacement: " + replacement);
   if (event.source) lines.push("Source: " + event.source);
-  return escapeText(lines.join("\n"));
+  return lines.join("\n");
 }
 
-function eventLines(event: ForecastEvent, today: string, replacements: ReadonlyMap<string, string>): string[] {
+export interface CalendarDeadline {
+  uid: string;
+  date: string;
+  title: string;
+  description: string;
+}
+
+function eventLines(event: CalendarDeadline, today: string): string[] {
   const title = escapeText(event.title);
   const lines = [
     "BEGIN:VEVENT",
-    "UID:" + escapeText(event.ruleId + "-" + event.date + "@offing"),
+    "UID:" + escapeText(event.uid),
     "DTSTAMP:" + calendarDate(today) + "T000000Z",
     "DTSTART;VALUE=DATE:" + calendarDate(event.date),
     "SUMMARY:" + title,
-    "DESCRIPTION:" + eventDescription(event, replacements),
+    "DESCRIPTION:" + escapeText(event.description),
   ];
   for (const days of [90, 30]) {
     if (addDays(event.date, -days) < today) continue;
@@ -95,10 +102,20 @@ export function renderForecastIcs(
   for (const finding of findings) {
     if (finding.replacement) replacements.set(finding.id, finding.replacement);
   }
-  const events = forecast.groups
+  const deadlines = forecast.groups
     .flatMap((group) => group.events)
     .filter((event) => event.findings.length > 0)
-    .flatMap((event) => eventLines(event, forecast.today, replacements));
+    .map((event) => ({
+      uid: event.ruleId + "-" + event.date + "@offing",
+      date: event.date,
+      title: event.title,
+      description: eventDescription(event, replacements),
+    }));
+  return renderDeadlineCalendar(forecast.today, deadlines);
+}
+
+export function renderDeadlineCalendar(today: string, deadlines: readonly CalendarDeadline[]): string {
+  const events = deadlines.flatMap((event) => eventLines(event, today));
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",

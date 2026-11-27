@@ -23,7 +23,7 @@ _offing() {
     policy) opts="validate explain pull" ;;
     scan) opts="--demo --sbom --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --lookahead --policy --policy-online --all --by-owner --data-version --only --exclude" ;;
     baseline) opts="--output --data-version" ;;
-    forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force" ;;
+    forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force --fleet --by --card --theme --digest --previous --owners --gitlab --gitlab-url" ;;
     forecast) opts="--months --as-of --today --timeline --json --format --data-version" ;;
     countdown) opts="--as-of --limit --json --once --no-animation --no-cache --data-version" ;;
     plan) opts="--json --wave --data-version" ;;
@@ -61,7 +61,7 @@ _offing() {
     completions) opts="" ;;
     config) opts="--json" ;;
     drivers) opts="" ;;
-    fleet) opts="--include --exclude --topic --repos --jobs --policy --gitlab --gitlab-url --include-forks --include-archived --json --html --format --no-cache --fail-on --progress" ;;
+    fleet) opts="--include --exclude --topic --repos --jobs --policy --gitlab --gitlab-url --include-forks --include-archived --json --html --format --no-cache --fail-on --progress --forecast-input --as-of" ;;
     hook) opts="--fail-on" ;;
     lsp) opts="" ;;
     migrate) opts="--agent --driver --from-refusals --replay --timeout-ms" ;;

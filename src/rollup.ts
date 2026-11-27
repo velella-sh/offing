@@ -3,6 +3,8 @@ import { basename, dirname, extname } from "node:path";
 
 import { severityValues } from "./domain.js";
 import type { Finding, ScanResult, Severity } from "./domain.js";
+import type { ForecastCapture } from "./fleet-forecast/model.js";
+import type { FleetPolicyCompliance } from "./fleet-policy/compliance.js";
 import { required } from "./required.js";
 import { OffingError } from "./offing-error.js";
 
@@ -18,8 +20,6 @@ export const UNOWNED = "unowned";
 type SeverityCounts = Record<Severity, number>;
 
 /** Findings counted by severity for one group, plus the repositories they come from. */
-import type { FleetPolicyCompliance } from "./fleet-policy/compliance.js";
-
 export interface RollupGroup {
   name: string;
   findings: number;
@@ -65,12 +65,14 @@ export interface FleetRepositoryStatus {
   readonly commit: string | null;
   readonly status: "scanned" | "cached" | "skipped" | "failed";
   readonly reason: string | null;
+  readonly forecastEvidence?: ForecastCapture;
   readonly compliance?: FleetPolicyCompliance;
 }
 
 export interface FleetResult extends Omit<RollupResult, "schemaVersion"> {
   schemaVersion: "offing.fleet.v1";
   repositoryStatus: FleetRepositoryStatus[];
+  forecastAsOf?: string;
 }
 
 export type RollupDocument = RollupResult | FleetResult;
@@ -318,13 +320,8 @@ async function readJson(path: string): Promise<unknown> {
   }
 }
 
-/**
- * Reads scan reports (`offing scan --json`) from files and merges them. A repository is named after its
- * report file or directory, so `payments.json` or `offing-report-payments.json` is `payments`.
- * `ownersFile` is a JSON object mapping repository names to owners.
- */
-export async function rollupFiles(reportPaths: readonly string[], ownersFile?: string): Promise<RollupDocument> {
-  if (reportPaths.length === 0) throw new RollupError("Give at least one scan report (offing scan --json).");
+/** Reads the optional JSON map of repository names to owners. */
+export async function readRollupOwners(ownersFile?: string): Promise<Record<string, string>> {
   const owners = ownersFile === undefined ? {} : await readJson(ownersFile);
   if (
     typeof owners !== "object" ||
@@ -334,9 +331,15 @@ export async function rollupFiles(reportPaths: readonly string[], ownersFile?: s
   ) {
     throw new RollupError(`${ownersFile} must be a JSON object mapping repository names to owner names.`);
   }
+  return owners as Record<string, string>;
+}
+
+/** Merges saved scan or fleet reports. A scan's repository name comes from its report filename or directory. */
+export async function rollupFiles(reportPaths: readonly string[], ownersFile?: string): Promise<RollupDocument> {
+  if (reportPaths.length === 0) throw new RollupError("Give at least one scan report (offing scan --json).");
+  const ownerByRepository = await readRollupOwners(ownersFile);
   const inputs: RollupInput[] = [];
   const fleet: FleetResult[] = [];
-  const ownerByRepository = owners as Record<string, string>;
   for (const path of reportPaths) {
     const raw = await readJson(path);
     if (isFleetResult(raw)) {
@@ -371,6 +374,18 @@ function mergeGroups(groups: readonly RollupGroup[]): RollupGroup[] {
   return sortedGroups(map);
 }
 
+function aggregateStatus({
+  name,
+  host,
+  defaultBranch,
+  commit,
+  status,
+  reason,
+  compliance,
+}: FleetRepositoryStatus): FleetRepositoryStatus {
+  return { name, host, defaultBranch, commit, status, reason, ...(compliance ? { compliance } : {}) };
+}
+
 function mergeFleetReports(reports: readonly RollupDocument[], owners: Record<string, string>): FleetResult {
   const repos = new Map<string, RepoAccumulator>();
   const deadlines = new Map<string, { findings: number; repositories: Set<string> }>();
@@ -399,7 +414,7 @@ function mergeFleetReports(reports: readonly RollupDocument[], owners: Record<st
     }
     if (report.schemaVersion === "offing.fleet.v1") {
       for (const status of report.repositoryStatus)
-        statuses.set(JSON.stringify([status.host, status.name, status.commit]), status);
+        statuses.set(JSON.stringify([status.host, status.name, status.commit]), aggregateStatus(status));
     }
   }
   const byRepository = repositorySummaries(repos);
