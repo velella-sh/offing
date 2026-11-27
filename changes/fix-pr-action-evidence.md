@@ -1,0 +1,1 @@
+- Include verification receipts and artifacts in scheduled fix pull requests, preserve branches with contributor commits, and expose optional labels and PR outputs.

@@ -4,8 +4,7 @@ import { appendFile, readFile, stat } from "node:fs/promises";
 import process from "node:process";
 import { dirname, relative, resolve } from "node:path";
 
-import { publishFixPullRequest } from "./action-fix-pr.js";
-import type { ScanResult } from "./domain.js";
+import { publishActionFixes } from "./action-fix-pr.js";
 import { runCommentCommands } from "./action-commands.js";
 import {
   highestSeverity,
@@ -124,6 +123,7 @@ interface RepositoryRef {
 }
 
 interface PullRequestEvent {
+  repository?: { default_branch?: string; fork?: boolean };
   pull_request?: {
     number?: number;
     user?: { login?: string };
@@ -369,53 +369,6 @@ async function postFixSuggestions(
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.log(`::warning title=Offing could not post the fix suggestions review::${commandValue(message)}`);
-  }
-}
-
-/** The default branch a fix pull request targets: the event payload's repository default, else the checked-out ref. */
-async function resolveBaseBranch(eventPath?: string): Promise<string> {
-  const event = eventPath
-    ? (JSON.parse(await readFile(eventPath, "utf8")) as { repository?: { default_branch?: string } })
-    : {};
-  return event.repository?.default_branch || process.env.GITHUB_REF_NAME || "main";
-}
-
-/** Opens, updates, or closes the one fix pull request. A failure warns; it never changes the scan outcome. */
-async function publishFixes(result: ScanResult): Promise<void> {
-  if (process.env["INPUT_FIX-PR"] !== "true") return;
-  const eventName = process.env.GITHUB_EVENT_NAME;
-  if (eventName !== "schedule" && eventName !== "workflow_dispatch") {
-    console.log(
-      `::notice title=Offing fix pull request skipped::fix-pr runs on schedule and workflow_dispatch events; this run is ${eventName ?? "not a GitHub Actions event"}.`,
-    );
-    return;
-  }
-  const token = process.env["INPUT_GITHUB-TOKEN"];
-  const repository = process.env.GITHUB_REPOSITORY;
-  if (!token || !repository) {
-    console.log("::notice title=Offing fix pull request skipped::fix-pr needs a token and GITHUB_REPOSITORY.");
-    return;
-  }
-  try {
-    const done = await publishFixPullRequest(result, {
-      root: result.root,
-      repository,
-      token,
-      apiUrl: process.env.GITHUB_API_URL ?? "https://api.github.com",
-      baseBranch: await resolveBaseBranch(process.env.GITHUB_EVENT_PATH),
-      attribution: process.env.INPUT_ATTRIBUTION !== "false",
-    });
-    if (done.status === "nothing")
-      console.log("Offing found no deterministic fixes; it opened no pull request and had none to close.");
-    else if (done.status === "closed")
-      console.log(`Offing closed fix pull request #${done.number}: nothing is left to fix.`);
-    else
-      console.log(
-        `Offing ${done.status} fix pull request #${done.number} with ${done.fixes} deterministic fix${done.fixes === 1 ? "" : "es"}${done.url ? `: ${done.url}` : "."}`,
-      );
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.log(`::warning title=Offing could not publish the fix pull request::${commandValue(message)}`);
   }
 }
 
@@ -718,7 +671,11 @@ async function reportOutcome(
   const forecast = await publishForecast(outcome, ctx, forecastMonths);
   await publishScanSummaries(outcome, ctx, proposal, forecast);
   await postFixSuggestions(outcome, ctx.event);
-  await publishFixes(outcome.result);
+  await publishActionFixes(outcome.result, ctx.env, ctx.event.repository, ctx.fork, {
+    setOutput,
+    writeSummary,
+    commandValue,
+  });
   await updateTrackingIssue(outcome);
   warnAboutStaleData(outcome);
   console.log(runSummary(outcome, ctx.diff, ctx.scanPaths?.length, proposal));

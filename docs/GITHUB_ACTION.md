@@ -366,40 +366,7 @@ The scan stays offline; only the final step calls the GitHub API. The job needs 
 
 ## Scheduled fix pull request
 
-Dependabot, but for end of life. Set `fix-pr: true` on a scheduled workflow and the Action keeps one pull request that contains every fix Offing can apply deterministically, the same patches `offing fix` prints. It commits them to `offing/fixes`, force-pushes the branch, and opens or updates that pull request. The body lists each fix with its exact location and the evidence it cites. When a run finds nothing left to fix, it closes the pull request instead of opening an empty one.
-
-```yaml
-name: Offing fixes
-
-on:
-  schedule:
-    - cron: "0 6 * * 1" # Mondays 06:00 UTC
-  workflow_dispatch:
-
-permissions:
-  contents: write
-  pull-requests: write
-
-concurrency:
-  group: offing-fixes
-  cancel-in-progress: false
-
-jobs:
-  fixes:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: velella-sh/offing@v0.1.1
-        with:
-          fix-pr: "true"
-          fail-on-severity: none
-```
-
-Every run force-pushes `offing/fixes`, and the pull request is found by its head branch rather than by title or body, so running twice updates the same pull request. A fixer that cannot apply a change exactly leaves that finding alone: the pull request contains only the patches that were applied. Review the pull request as you would any other; Offing never merges it and never touches the default branch.
-
-`fix-pr` runs only on `schedule` and `workflow_dispatch` events. On any other event the Action logs a notice and leaves the repository alone, so a pull request from a fork, whose token is read-only, never tries to push. The scan itself stays offline: only the `git push` and the GitHub API calls that create, update, or close the pull request use the network, after the scan has finished. The job needs `contents: write` to push the branch and `pull-requests: write` to manage the pull request.
-
-See it working on a schedule in [offing-action-sample](https://github.com/velella-sh/offing-action-sample): it keeps one fix pull request and one tracking issue current every Monday.
+Set `fix-pr: true` on a scheduled workflow to maintain one pull request with deterministic fixes. The [fix PR guide](https://velella.sh/offing/FIX_PR/) links the copyable workflow and documents branch protection, labels, receipts, artifacts, and job summaries. A run with no patches closes the open automation PR when its branch is still bot-owned.
 
 ## Permissions and privacy
 
