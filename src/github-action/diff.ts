@@ -94,12 +94,13 @@ export function changedLines(root: string, range: string): Map<string, LineRange
  * followed by added lines becomes one suggestion; a run that only inserts or deletes lines cannot be
  * expressed as one, so it is left out.
  */
-export function suggestionsFromPatch(path: string, patch: string): FixSuggestion[] {
+export function suggestionsFromPatch(path: string, patch: string, complete = false): FixSuggestion[] {
   const suggestions: FixSuggestion[] = [];
   let headLine = 0;
   let inHunk = false;
   let removed: number[] = [];
   let added: string[] = [];
+  let partial = false;
 
   const flush = (): void => {
     if (removed.length > 0 && added.length > 0) {
@@ -109,6 +110,8 @@ export function suggestionsFromPatch(path: string, patch: string): FixSuggestion
         line: required(removed.at(-1), "a removed line"),
         replacement: added,
       });
+    } else if (removed.length > 0 || added.length > 0) {
+      partial = true;
     }
     removed = [];
     added = [];
@@ -138,7 +141,7 @@ export function suggestionsFromPatch(path: string, patch: string): FixSuggestion
     }
   }
   flush();
-  return suggestions;
+  return complete && partial ? [] : suggestions;
 }
 
 /**

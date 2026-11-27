@@ -14,6 +14,7 @@ export interface PullRequestCountdown {
   findings: readonly Finding[];
   timelineFindings: readonly Finding[];
   receiptUrl?: string;
+  reviewedDated?: boolean;
 }
 
 function countdownFor(finding: Finding, now: number) {
@@ -59,7 +60,14 @@ export function renderPrCountdown(context: PullRequestCountdown): string[] {
     .sort((a, b) => a.days - b.days || a.finding.id.localeCompare(b.finding.id));
 
   const lines = ["### PR countdown", ""];
-  if (rows.length === 0) return [...lines, "No dated findings on lines this pull request changed.", ""];
+  if (rows.length === 0)
+    return [
+      ...lines,
+      context.reviewedDated
+        ? "Dated findings on changed lines are in the inline lifecycle review."
+        : "No dated findings on lines this pull request changed.",
+      "",
+    ];
   const soon = rows.filter(({ days }) => days >= 0 && days <= SOON_DAYS).length;
   lines.push(
     `**${soon} ${soon === 1 ? "thing this PR touches ends" : "things this PR touches end"} within ${SOON_DAYS} days.**`,

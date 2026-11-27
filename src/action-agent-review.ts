@@ -1,9 +1,12 @@
+import { rm } from "node:fs/promises";
+
+import { addReviewDetails, reviewPrivateText, type ReviewEntry } from "./action-agent-review-details.js";
 import { matchesAgentAuthor, parseAgentAuthors } from "./agent-pr.js";
 import { daysBetween } from "./baseline.js";
 import { git } from "./diff.js";
 import type { Finding } from "./domain.js";
 import { changedLines, selectChangedAnnotations } from "./github-action/diff.js";
-import type { GitHubActionOutcome, SuggestionComment } from "./github-action/types.js";
+import type { GitHubActionOutcome } from "./github-action/types.js";
 import { githubRequest, type PullRequestCommentTarget } from "./pr-comment.js";
 import { escapeMarkdown } from "./reporters/shared.js";
 
@@ -19,6 +22,21 @@ interface AgentReviewPullRequest {
 type Env = Record<string, string | undefined>;
 const fullSha = /^[\da-f]{40}$/u;
 const fullName = /^[\da-z-]+\/[\da-z._-]+$/iu;
+
+export interface PostedReviewFindings {
+  local: ReadonlySet<string>;
+  repository: ReadonlySet<string>;
+}
+
+export interface AgentReviewReport {
+  outcome: GitHubActionOutcome;
+  posted?: PostedReviewFindings;
+  packetDirectory?: string;
+}
+
+export function reviewFindingKey({ ruleId, location }: Finding, path = location.path): string {
+  return JSON.stringify([ruleId, path, location.line]);
+}
 
 export function readAgentReviewEvent(env: Env): ReviewEvent | undefined {
   if (env["INPUT_AGENT-REVIEW"] !== "true") return undefined;
@@ -73,8 +91,9 @@ function safeText(value: string): string {
   return escapeMarkdown(value).replaceAll("@", "&#64;").replaceAll("~", "\\~");
 }
 
-function sourceLink(finding: Finding): string {
+function sourceLink(finding: Finding, isPrivate: (text: string) => boolean): string {
   for (const source of finding.sources) {
+    if (isPrivate(source.url)) continue;
     try {
       const url = new URL(source.url);
       if (url.protocol === "https:" || url.protocol === "http:") return `<${url.href}>`;
@@ -92,29 +111,33 @@ function deadlineLabel(today: string, deadline: string | undefined): string {
   return days < 0 ? `${-days} days overdue` : String(days);
 }
 
-function reviewComments(outcome: GitHubActionOutcome, base: string, head: string): SuggestionComment[] {
+function reviewEntries(outcome: GitHubActionOutcome, base: string, head: string, isPrivate: (text: string) => boolean) {
   const { root, scannedAt, findings } = outcome.result;
   const mergeBase = git(root, ["merge-base", base, head]).toString("utf8").trim();
-  if (!fullSha.test(mergeBase)) return [];
+  if (!fullSha.test(mergeBase)) return undefined;
   const changed = changedLines(root, `${mergeBase}..${head}`);
   const prefix = git(root, ["rev-parse", "--show-prefix"]).toString("utf8").trimEnd();
-  return selectChangedAnnotations(findings, changed).annotated.flatMap((finding) => {
+  const entries = selectChangedAnnotations(findings, changed).annotated.flatMap((finding): ReviewEntry[] => {
     const { path, line } = finding.location;
-    if (line === undefined) return [];
+    if (line === undefined || isPrivate(prefix + path)) return [];
     return [
       {
-        path: prefix + path,
-        line,
-        side: "RIGHT",
-        body: [
-          safeText(finding.title),
-          `Replacement: ${finding.replacement ? safeText(finding.replacement) : "Unavailable"}`,
-          `Source: ${sourceLink(finding)}`,
-          `Days left: ${deadlineLabel(scannedAt.slice(0, 10), finding.deadline)}`,
-        ].join("\n\n"),
+        finding,
+        comment: {
+          path: prefix + path,
+          line,
+          side: "RIGHT",
+          body: [
+            isPrivate(finding.title) ? "Lifecycle finding" : safeText(finding.title),
+            `Replacement: ${finding.replacement && !isPrivate(finding.replacement) ? safeText(finding.replacement) : "Unavailable"}`,
+            `Source: ${sourceLink(finding, isPrivate)}`,
+            `Days left: ${deadlineLabel(scannedAt.slice(0, 10), finding.deadline)}`,
+          ].join("\n\n"),
+        },
       },
     ];
   });
+  return { changed, entries };
 }
 
 function targetFor(env: Env, pr: AgentReviewPullRequest | undefined): PullRequestCommentTarget | undefined {
@@ -169,19 +192,19 @@ export async function reportAgentReview(
   env: Env,
   pr: AgentReviewPullRequest | undefined,
   event: ReviewEvent | undefined,
-): Promise<GitHubActionOutcome> {
+): Promise<AgentReviewReport> {
   const verify = env["INPUT_VERIFY-AGENT-COMMITTERS"] === "true";
-  if ((!verify && !event) || outcome.result.findings.length === 0) return outcome;
+  if ((!verify && !event) || outcome.result.findings.length === 0) return { outcome };
   const authors = parseAgentAuthors(env["INPUT_AGENT-AUTHORS"]);
   const target = targetFor(env, pr);
   const revisions = scanRange(outcome, pr);
-  if (!target || !revisions || authors.size === 0) return outcome;
+  if (!target || !revisions || authors.size === 0) return { outcome };
   const { base, head } = revisions;
   const canPost = event !== undefined && pr?.head?.repo?.full_name === target.repository;
   const attributed =
     verify || canPost ? await withCommitter(outcome, target, pr, `${base}..${head}`, authors) : outcome;
-  if (canPost && attributed.agent) await postAgentReview(attributed, target, event, base, head);
-  return attributed;
+  if (canPost && attributed.agent) return postAgentReview(attributed, target, event, base, head, env);
+  return { outcome: attributed };
 }
 
 async function postAgentReview(
@@ -190,20 +213,32 @@ async function postAgentReview(
   event: ReviewEvent,
   base: string,
   head: string,
-): Promise<void> {
+  env: Env,
+): Promise<AgentReviewReport> {
+  let packetDirectory: string | undefined;
   try {
-    const comments = reviewComments(outcome, base, head);
-    if (comments.length === 0) return;
+    const isPrivate = reviewPrivateText(env, outcome.result.root);
+    const review = reviewEntries(outcome, base, head, isPrivate);
+    if (!review?.entries.length) return { outcome };
+    const details = await addReviewDetails(outcome.result, head, review.entries, review.changed, env, isPrivate);
+    packetDirectory = details.packetDirectory;
     await githubRequest(
       target,
       "POST",
       `/repos/${target.repository}/pulls/${target.pullRequest}/reviews`,
-      { commit_id: head, event, body: "Offing lifecycle review", comments },
+      { commit_id: head, event, body: "Offing lifecycle review", comments: details.comments },
       AbortSignal.timeout(10_000),
     );
+    const posted = {
+      local: new Set(review.entries.map(({ finding }) => reviewFindingKey(finding))),
+      repository: new Set(review.entries.map(({ finding, comment }) => reviewFindingKey(finding, comment.path))),
+    };
+    return { outcome, posted, ...(packetDirectory ? { packetDirectory } : {}) };
   } catch {
+    if (packetDirectory) await rm(packetDirectory, { recursive: true, force: true }).catch(() => undefined);
     console.log(
       "::warning title=Offing could not post the agent review::Check the pull request head and token permissions.",
     );
+    return { outcome };
   }
 }

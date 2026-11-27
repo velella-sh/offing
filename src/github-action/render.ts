@@ -158,7 +158,7 @@ function appendFindingTables(lines: string[], findings: readonly Finding[]): voi
 }
 
 function renderOverview(
-  findings: readonly Finding[],
+  count: number,
   failed: boolean,
   gate: SeverityGate,
   diff: DiffSummary | undefined,
@@ -166,11 +166,15 @@ function renderOverview(
 ): string {
   const status = failed ? `failed the **${gate}** severity gate` : "passed the severity gate";
   if (diff) {
-    return `Found **${findings.length}** lifecycle finding${findings.length === 1 ? "" : "s"} introduced by this pull request (${diff.base}..${diff.head}); ${status}.`;
+    return `Found **${count}** lifecycle finding${count === 1 ? "" : "s"} introduced by this pull request (${diff.base}..${diff.head}); ${status}.`;
   }
   const scope =
     packages && packages.length > 0 ? ` across **${packages.length}** package${packages.length === 1 ? "" : "s"}` : "";
-  return `Found **${findings.length}** new lifecycle finding${findings.length === 1 ? "" : "s"}${scope}; ${status}.`;
+  return `Found **${count}** new lifecycle finding${count === 1 ? "" : "s"}${scope}; ${status}.`;
+}
+
+function appendReviewedNotice(lines: string[], reviewed: number): void {
+  if (reviewed > 0) lines.push(`See the inline lifecycle review for ${plural(reviewed, "finding")}.`, "");
 }
 
 function appendFindingSections(
@@ -291,8 +295,10 @@ export function renderSummary(
   unannotated?: UnannotatedFindings,
   agent?: AgentIntroducedFindings,
   countdown?: PullRequestCountdown,
+  reviewed = 0,
 ): string {
-  const lines = ["## Offing", "", renderOverview(findings, failed, gate, diff, packages), ""];
+  const lines = ["## Offing", "", renderOverview(findings.length + reviewed, failed, gate, diff, packages), ""];
+  appendReviewedNotice(lines, reviewed);
   if (countdown) lines.push(...renderPrCountdown(countdown));
   if (agent) lines.push(...renderAgentSection(agent.findings, agent.attribution));
   appendTimeline(lines, findings, countdown);
@@ -327,8 +333,16 @@ export function compactPullRequestComment(
   gate: SeverityGate,
   attribution: boolean,
   countdown?: PullRequestCountdown,
+  reviewed = 0,
 ): string {
-  const lines = [PR_COMMENT_MARKER, "## Offing", "", renderOverview(findings, failed, gate, undefined, undefined), ""];
+  const lines = [
+    PR_COMMENT_MARKER,
+    "## Offing",
+    "",
+    renderOverview(findings.length + reviewed, failed, gate, undefined, undefined),
+    "",
+  ];
+  appendReviewedNotice(lines, reviewed);
   if (countdown) lines.push(...renderPrCountdown(countdown));
   if (attribution) lines.push(ATTRIBUTION_LINE, "");
   return lines.join("\n");
@@ -347,7 +361,10 @@ export function renderComment(
   unannotated?: UnannotatedFindings,
   agent?: AgentIntroducedFindings,
   countdown?: PullRequestCountdown,
+  reviewed = 0,
 ): string {
-  const body = `${PR_COMMENT_MARKER}\n${renderSummary(findings, failed, gate, data, attribution, suppressions, diff, packages, unannotated, agent, countdown)}`;
-  return limitPullRequestComment(body, () => compactPullRequestComment(findings, failed, gate, attribution, countdown));
+  const body = `${PR_COMMENT_MARKER}\n${renderSummary(findings, failed, gate, data, attribution, suppressions, diff, packages, unannotated, agent, countdown, reviewed)}`;
+  return limitPullRequestComment(body, () =>
+    compactPullRequestComment(findings, failed, gate, attribution, countdown, reviewed),
+  );
 }

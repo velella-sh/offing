@@ -24,7 +24,7 @@ export function reviewRange(root: string, base: string, head: string): { base: s
 const maximumLockfileBytes = 20_000_000;
 
 /** Reads a bounded regular Git blob. Null means a present entry could not be inspected. */
-function committedText(
+export function committedText(
   root: string,
   ref: string,
   path: string,
