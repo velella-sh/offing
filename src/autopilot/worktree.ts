@@ -1,4 +1,9 @@
-import { lstat, mkdtemp, realpath, rename, rm, rmdir, unlink, writeFile } from "node:fs/promises";
+import type { ScanResult } from "../domain.js";
+import { planFixReport, renderPatches } from "../fix/index.js";
+import { buildReceipt } from "../receipt.js";
+import { scanWithBuiltIns } from "../scan-builtins.js";
+import { buildVerifyResult, identifyScan, VERIFY_RESULT_ARTIFACT } from "../verify-result.js";
+import { lstat, mkdtemp, readdir, realpath, rename, rm, rmdir, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, join, relative } from "node:path";
 import process from "node:process";
@@ -107,7 +112,16 @@ async function deleteRunBranch(git: Git, root: string, branch: string, baseCommi
   });
 }
 
-export async function withAutopilotWorktree(path: string, run: AutopilotRun, prepare: (tree: string) => Promise<void>) {
+export interface AutopilotCheckout {
+  evidenceDirectory: string;
+  git(...args: string[]): Promise<string>;
+}
+
+export async function withAutopilotWorktree(
+  path: string,
+  run: AutopilotRun,
+  prepare: (tree: string, checkout: AutopilotCheckout) => Promise<void>,
+) {
   const localGit = restrictedGit();
   const root = await repositoryRoot(localGit, path);
   const inspectGit = await withoutFilters(localGit, root);
@@ -125,7 +139,7 @@ export async function withAutopilotWorktree(path: string, run: AutopilotRun, pre
     await git(root, "worktree", "add", "--quiet", location.tree, location.branch);
     treeCreated = true;
     run.checkout = { id: location.id, branch: location.branch, baseCommit };
-    await prepare(location.tree);
+    await prepare(location.tree, { evidenceDirectory: directory, git: (...args) => git(location.tree, ...args) });
     await saveRecord(location.record, run);
     return location;
   } catch (error) {
@@ -188,6 +202,10 @@ export async function undoAutopilotWorktree(path: string, id: string | undefined
     throw new OffingError("invalid-argument", `No unique prepared Autopilot worktree found.${detail}`);
   }
   const git = withoutHooks(inspectGit, location.record);
+  const entries = await readdir(location.directory).catch(() => []);
+  if (entries.some((name) => name !== "checkout" && name !== recordName)) {
+    throw new OffingError("invalid-argument", "Autopilot preserved the checkout and its recorded migration evidence.");
+  }
   const baseCommit = await readBaseCommit(location).catch(() => undefined);
   if (
     !baseCommit ||
@@ -203,4 +221,77 @@ export async function undoAutopilotWorktree(path: string, id: string | undefined
   await unlink(location.record);
   await rmdir(location.directory);
   return location.branch;
+}
+
+export function scanLoopCheckout(tree: string): Promise<ScanResult> {
+  return scanWithBuiltIns(tree, { noCache: true }).then(identifyScan);
+}
+
+export async function recordLoopEvidence(
+  checkout: AutopilotCheckout,
+  name: string,
+  value: unknown,
+  redact: (text: string) => string,
+): Promise<void> {
+  const json = JSON.stringify(value, (_key, item: unknown) => (typeof item === "string" ? redact(item) : item), 2);
+  await writeFile(join(checkout.evidenceDirectory, name), json + "\n", { flag: "wx", mode: 0o600 });
+}
+
+async function commitStaged(checkout: AutopilotCheckout, message: string, permits: (path: string) => boolean) {
+  const paths = (await checkout.git("diff", "--cached", "--name-only", "--no-renames", "-z"))
+    .split("\0")
+    .filter(Boolean);
+  if (!paths.every(permits)) throw new Error("Autopilot refused staged changes outside its current scope.");
+  if (paths.length === 0) return false;
+  await checkout.git(
+    "-c",
+    "user.name=Offing",
+    "-c",
+    "user.email=offing@example.invalid",
+    "-c",
+    "commit.gpgsign=false",
+    "commit",
+    "--quiet",
+    "-m",
+    message,
+  );
+  return true;
+}
+
+export async function commitReplayTurn(checkout: AutopilotCheckout, files: readonly string[], number: number) {
+  if (files.length === 0) return false;
+  const scope = new Set(files);
+  await checkout.git("--literal-pathspecs", "add", "--", ...files);
+  return commitStaged(checkout, `chore: replay Autopilot turn ${number}`, (path) => scope.has(path));
+}
+
+export async function commitCodemods(
+  checkout: AutopilotCheckout,
+  before: ScanResult,
+  selected: ReadonlySet<string>,
+  permits: (path: string) => boolean,
+  privateText: (text: string) => boolean,
+  redact: (text: string) => string,
+): Promise<ScanResult> {
+  const scoped = { ...before, findings: before.findings.filter(({ id }) => selected.has(id)) };
+  const { patches } = await planFixReport(scoped);
+  if (
+    patches.length === 0 ||
+    !patches.every(({ path, diff }) => permits(path) && !privateText(path) && !privateText(diff))
+  ) {
+    return before;
+  }
+  const patch = join(checkout.evidenceDirectory, "codemods.patch");
+  try {
+    await writeFile(patch, renderPatches(patches), { flag: "wx", mode: 0o600 });
+    await checkout.git("apply", "--check", "--index", "--whitespace=nowarn", "--", patch);
+    await checkout.git("apply", "--index", "--whitespace=nowarn", "--", patch);
+    await commitStaged(checkout, "chore: apply Autopilot codemods", permits);
+  } finally {
+    await rm(patch, { force: true });
+  }
+  const after = await scanLoopCheckout(before.root);
+  const evidence = buildVerifyResult(buildReceipt(before, after), before, after);
+  await recordLoopEvidence(checkout, VERIFY_RESULT_ARTIFACT, evidence, redact);
+  return after;
 }

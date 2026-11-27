@@ -57,6 +57,7 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0073](https://velella.sh/offing/decisions/0073-predicted-eol-contract/) | Keep predicted end-of-life evidence separate | Give Forecast v1 an optional predictions list and specify separate annotations for lifecycle interchange formats. |
 | [0074](https://velella.sh/offing/decisions/0074-configured-test-plans/) | Share configured test plans | Honor the same validated test override in doctor and Autopilot and select a frozen Yarn installation flag. |
 | [0079](0079-guarded-autopilot-replay.md) | Guarded Autopilot replay preparation | Run recorded edits inside the isolated preparation path and retain precise refusal reasons. |
+| [0080](0080-verified-autopilot-replay.md) | Verify recorded Autopilot migrations locally | Add a pinned-container baseline and verification loop for explicit replay recordings. |
 
 ## Adoption
 

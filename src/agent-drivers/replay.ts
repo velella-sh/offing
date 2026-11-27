@@ -127,6 +127,8 @@ interface ReplayGuardrails {
   environment?: NodeJS.ProcessEnv;
   now?: () => number;
   started?: number;
+  beforeTurn?: (number: number) => Promise<(path: string) => boolean>;
+  afterTurn?: (number: number, files: readonly string[]) => Promise<boolean>;
 }
 
 function guardrails(options: ReplayGuardrails) {
@@ -187,6 +189,25 @@ async function applyReplayTurn(
   if (stop) rejectBudget(stop);
 }
 
+async function replayTurns(
+  data: Awaited<ReturnType<typeof plan>>,
+  options: ReplayGuardrails | undefined,
+  guard: ReturnType<typeof guardrails> | undefined,
+  progress: { applied: Set<string>; completed: number },
+): Promise<void> {
+  for (const { turn, usage } of data.turns) {
+    const number = progress.completed + 1;
+    const permits = await options?.beforeTurn?.(number);
+    const files = turn.map(([path]) => path);
+    if (permits && !files.every(permits))
+      throw new ReplayRefusal("outside-path-scope", "Replay left the current packet scope.");
+    await applyReplayTurn(data.root, turn, usage, guard);
+    for (const path of files) progress.applied.add(path);
+    progress.completed = number;
+    if (await options?.afterTurn?.(number, files)) break;
+  }
+}
+
 export function createReplayDriver(file: string, options?: ReplayGuardrails) {
   return {
     name: "replay",
@@ -195,18 +216,12 @@ export function createReplayDriver(file: string, options?: ReplayGuardrails) {
     async run(input) {
       const driver = { name: "replay", version: "1" };
       const guard = options && guardrails(options);
-      const applied = new Set<string>();
-      let completed = 0;
+      const progress = { applied: new Set<string>(), completed: 0 };
       try {
-        const { root, turns } = await plan(file, input, guard);
-        for (const { turn, usage } of turns) {
-          await applyReplayTurn(root, turn, usage, guard);
-          for (const [path] of turn) applied.add(path);
-          completed += 1;
-        }
+        await replayTurns(await plan(file, input, guard), options, guard, progress);
         return {
           ...success,
-          result: makeResult(driver, success, [...applied].sort(), undefined, completed),
+          result: makeResult(driver, success, [...progress.applied].sort(), undefined, progress.completed),
         };
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
@@ -216,7 +231,7 @@ export function createReplayDriver(file: string, options?: ReplayGuardrails) {
           stderr: guard ? guard.redact(message) : message,
         };
         const result = guard
-          ? makeResult(driver, output, [...applied].sort(), undefined, completed)
+          ? makeResult(driver, output, [...progress.applied].sort(), undefined, progress.completed)
           : makeResult(driver, output);
         return {
           ...output,

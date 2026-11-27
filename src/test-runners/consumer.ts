@@ -16,6 +16,7 @@ import { runApprovedTest } from "./run.js";
 
 type Command = Parameters<typeof runApprovedTest>[0];
 type Run = Awaited<ReturnType<typeof runApprovedTest>>;
+export type ContainerTestResult = Run;
 type Step = TestPlan["steps"][number];
 
 const testProfiles: Partial<Record<Step["tool"], Profile>> = {
@@ -96,7 +97,7 @@ async function executePlan(
   profile: Profile,
   commands: readonly Command[],
   setup: readonly Command[],
-  maxMs: number,
+  deadline: number,
 ): Promise<Run[]> {
   const configuration = await mkdtemp(join(tmpdir(), "offing-test-docker-"));
   try {
@@ -104,7 +105,6 @@ async function executePlan(
     const docker = await connectDocker(configuration);
     const image = await prepareImage(docker, profile, "");
     const execute = sandbox(docker, image, source, setup);
-    const deadline = performance.now() + maxMs;
     const results: Run[] = [];
     for (const command of commands) {
       const timeout = Math.min(120_000, Math.floor(deadline - performance.now()));
@@ -129,7 +129,11 @@ async function executePlan(
   }
 }
 
-async function runInCheckout(tree: string, requested: boolean) {
+/** Freeze the approved argv and profile before edits. Each invocation tests a fresh private snapshot. */
+export async function prepareContainerTestRun(
+  tree: string,
+  requested: boolean,
+): Promise<{ config: ReturnType<typeof parseAutopilotConfig>; run(deadline: number): Promise<ContainerTestResult[]> }> {
   await checkTree(tree);
   const { report, value } = await inspectDiscoveredConfig(tree);
   if (!report.valid) refused("Fix the committed Offing configuration before running container tests.");
@@ -142,8 +146,19 @@ async function runInCheckout(tree: string, requested: boolean) {
   const profile = checkedProfile(tests);
   const { commands, setup } = await plannedCommands(tree, config.tests, steps, tests);
   if (commands.length > 64) refused("Limit an individual test run to 64 commands.");
-  const runs = await executePlan(tree, profile, commands, setup, config.budget.run.wallTimeMs);
-  const { redact } = childEnvironments(process.env, config.driver, config.secretEnv);
+  return {
+    config,
+    async run(deadline: number) {
+      await checkTree(tree);
+      return executePlan(tree, profile, commands, setup, deadline);
+    },
+  };
+}
+
+async function runInCheckout(tree: string, requested: boolean) {
+  const plan = await prepareContainerTestRun(tree, requested);
+  const runs = await plan.run(performance.now() + plan.config.budget.run.wallTimeMs);
+  const { redact } = childEnvironments(process.env, plan.config.driver, plan.config.secretEnv);
   const lines = runs.flatMap(({ command, attempts, flaky }) => [
     `${attempts.at(-1)?.status ?? "failed"} ${JSON.stringify(command.map(redact))}`,
     ...flaky.map(({ name }) => `  Flaky test: ${JSON.stringify(redact(name))}`),
