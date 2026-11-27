@@ -28,6 +28,7 @@ function supportVerdict(
   support: Awaited<ReturnType<typeof targetSupport>>,
 ): UpgradeReport["verdict"] {
   if (upgrade.verdict === "blocked" || support.status === "ended") return "blocked";
+  if (support.status !== "dated") return "unknown";
   // The lifecycle analyzer supplies pins and dates. Its presence does not prove compatibility.
   const hasCompatibilityAnalyzer = upgrade.analyzers.some((id) => id !== "target-lifecycle");
   return hasCompatibilityAnalyzer && upgrade.issues.every(({ level }) => level !== "unknown") ? "ready" : "unknown";

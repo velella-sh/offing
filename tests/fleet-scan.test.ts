@@ -579,18 +579,38 @@ test("fleet captures what-if readiness at a pinned commit and the forecast repla
   });
   const cli = (...args: string[]) =>
     run(process.execPath, [binary, ...args], { cwd: root, env: withoutGit(join(root, "data")) });
-  const flags = ["--gitlab-url", origin, "--what-if-target", "nodejs@22", "--as-of", "2026-11-27"];
+  const flags = [
+    "--gitlab-url",
+    origin,
+    "--what-if-target",
+    "nodejs@22",
+    "--what-if-target",
+    "nodejs@999",
+    "--as-of",
+    "2026-11-27",
+  ];
   await assert.rejects(cli("fleet", "example", ...flags), /--what-if-target requires JSON output/);
   const recorded = await cli("fleet", "example", "--json", ...flags);
   await writeFile(join(root, "fleet.json"), recorded.stdout);
   const count = requests;
-  const result = await cli("forecast", "--fleet", "fleet.json", "--target", "nodejs@22", "--json");
+  const result = await cli(
+    "forecast",
+    "--fleet",
+    "fleet.json",
+    "--target",
+    "nodejs@22",
+    "--target",
+    "nodejs@999",
+    "--json",
+  );
   assert.equal(requests, count);
-  const [report] = JSON.parse(result.stdout).reports;
+  const [report, unlisted] = JSON.parse(result.stdout).reports;
   assert.equal(report.ready[0].name, "example/ready");
   assert.equal(report.ready[0].commit, commit);
   assert.equal(report.blocked[0].name, "example/blocked");
   assert.match(report.blocked[0].reason, /excludes Node.js 22/);
   assert.equal(report.unknown[0].name, "example/unknown");
   assert.equal(report.unknown[0].commit, null);
+  assert.deepEqual(unlisted.ready, []);
+  assert(unlisted.unknown.some(({ name }: { name: string }) => name === "example/ready"));
 });

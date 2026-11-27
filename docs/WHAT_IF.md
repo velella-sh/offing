@@ -13,7 +13,7 @@ offing forecast . --target nodejs@22 --format markdown
 offing forecast . --target nodejs@22 --json
 ```
 
-The targets are separate simulations. Inspect the exact blocker and pin locations first, then compare the removed, retained and added deadlines. A target without a known date shows `no-data`. A verdict of `unknown` means the checked files cannot establish compatibility. A `ready` result describes the static evidence and still leaves builds, tests and deployments to verify.
+The targets are separate simulations. Inspect the exact blocker and pin locations first, then compare the removed, retained and added deadlines. A target without a known date shows `no-data`. A verdict of `unknown` means lifecycle or compatibility evidence is missing. A `ready` result requires a known date for the target line and static evidence of compatibility. Builds, tests and deployments still need verification.
 
 Use `--effort` to distinguish a deterministic change for the requested version, an assisted change with a migration packet, and work requiring manual judgment. Image variant names, digests and dynamic references can leave an image pin unresolved.
 

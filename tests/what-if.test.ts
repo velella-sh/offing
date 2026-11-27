@@ -110,6 +110,18 @@ test("historical evaluation compares the recorded target date with a later line"
   assert(report.issues.some((issue) => issue.level === "warning" && issue.reason.includes("2025-04-30")));
 });
 
+test("an open-ended engine range does not prove that an unknown target release exists", async (t) => {
+  const root = await directory(t);
+  await writeFile(join(root, "package-lock.json"), lockfile(">=22"));
+  const result = await simulateRepository(root, simulationTargets(["nodejs@999", "nodejs@22"]), { asOf: date });
+  const [unlisted, dated] = result.reports;
+  assert(unlisted && dated);
+  assert(unlisted.analyzers.includes("npm-lock"));
+  assert.equal(unlisted.support.status, "no-data");
+  assert.equal(unlisted.verdict, "unknown");
+  assert.equal(dated.verdict, "ready");
+});
+
 test("a private registrant sharing the official image name is not a runtime pin", async (t) => {
   const root = await directory(t);
   await writeFile(join(root, "Dockerfile"), "FROM private.example/library/node:18\n");

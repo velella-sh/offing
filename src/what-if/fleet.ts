@@ -31,8 +31,11 @@ export type FleetWhatIfEvidence = z.infer<typeof capture>;
 
 function captureReason(report: TargetSimulation): string {
   if (report.support.status === "ended") return "The requested runtime line has ended.";
-  if (report.verdict === "ready") return "The applicable static compatibility checks found no blocker or unknown.";
+  if (report.verdict === "ready")
+    return "The target has a known lifecycle date and static compatibility checks found no blocker or unknown.";
   const issue = report.issues.find(({ level }) => level === (report.verdict === "blocked" ? "blocker" : "unknown"));
+  if (!issue && report.support.status === "no-data")
+    return "Bundled data supplied no lifecycle date for this target line.";
   return issue
     ? `${issue.path} — ${issue.reason}`
     : "No compatibility analyzer supplied evidence for this repository and target.";
