@@ -219,9 +219,10 @@ function expandArguments(value: string, defaults: ReadonlyMap<string, string>): 
 function readArgument(text: string, defaults: Map<string, string>): void {
   const match = ARG.exec(text);
   if (!match?.[1] || match[2] === undefined) return;
-  const value = match[2].replace(/^(["'])([^"']*)\1$/, "$2");
+  const quoted = /^(["'])([^"']*)\1$/.exec(match[2]);
+  const value = quoted?.[2] ?? match[2];
   if (!/^[^\s"'\\`]*$/.test(value)) return;
-  defaults.set(match[1], expandArguments(value, defaults));
+  defaults.set(match[1], quoted?.[1] === "'" ? value : expandArguments(value, defaults));
 }
 
 function startStage(
@@ -252,11 +253,13 @@ function stageDetails(logical: LogicalLine, stage: DockerfileStage, names: Reado
     const dependency = names.get(copy.toLowerCase());
     stage.copies.push({ reference: copy, line, ...(dependency === undefined ? {} : { stage: dependency }) });
   }
-  if (/^LABEL\s/i.test(text)) {
-    for (const match of text.matchAll(/(?:^|\s)org\.opencontainers\.image\.source=(?:"([^"]+)"|'([^']+)'|([^\s]+))/g)) {
-      const source = match[1] ?? match[2] ?? match[3];
-      if (source && !isInterpolated(source)) stage.sourceLabels.push(source);
-    }
+  const labels = /^LABEL\s+(.+)$/i.exec(text)?.[1];
+  if (labels === undefined) return;
+  const assignments = /(?:^|\s)([^\s=]+)=(?:"((?:\\.|[^"\\])*)"|'([^']*)'|([^\s]+))/g;
+  for (const match of labels.matchAll(assignments)) {
+    if (match[1] !== "org.opencontainers.image.source") continue;
+    const source = match[2] ?? match[3] ?? match[4];
+    if (source && !isInterpolated(source)) stage.sourceLabels.push(source);
   }
 }
 

@@ -150,6 +150,25 @@ test("a floating latest consumer has no confirmed producer or lifecycle finding"
   }
 });
 
+test("quoted ARG defaults and OCI source labels retain Dockerfile boundaries", () => {
+  const build = parseDockerfileBuild(
+    [
+      "ARG TAG=18",
+      "ARG SINGLE='${TAG}'",
+      'ARG DOUBLE="${TAG}"',
+      "FROM node:${SINGLE} AS literal",
+      "FROM node:${DOUBLE} AS expanded",
+      'LABEL description="text org.opencontainers.image.source=https://github.com/not/a-source"',
+      'LABEL org.opencontainers.image.source="https://github.com/acme/base"',
+    ].join("\n"),
+  );
+  assert.deepEqual(
+    build.stages.map(({ resolved }) => resolved),
+    ["node:${TAG}", "node:18"],
+  );
+  assert.deepEqual(build.stages.at(-1)?.sourceLabels, ["https://github.com/acme/base"]);
+});
+
 test("Dockerfile heredoc bodies never add false build stages", () => {
   const build = parseDockerfileBuild(
     [
