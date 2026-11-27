@@ -8,7 +8,7 @@ on:
   workflow_call:
     inputs:
       offing-ref:
-        description: Exact Offing commit SHA. Use the SHA of the called workflow when calling from another repository.
+        description: Optional assertion of the exact commit SHA of this workflow.
         required: false
         default: ""
         type: string
@@ -56,7 +56,7 @@ on:
   workflow_dispatch:
     inputs:
       offing-ref:
-        description: Exact Offing commit SHA. Use the SHA of the called workflow when calling from another repository.
+        description: Optional assertion of the exact commit SHA of this workflow.
         required: false
         default: ""
         type: string
@@ -92,13 +92,18 @@ jobs:
       - name: Validate the Offing source pin
         id: source
         env:
-          OFFING_REF: ${{ inputs.offing-ref || (github.repository == 'velella-sh/offing' && github.sha) }}
+          OFFING_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          OFFING_REF: ${{ inputs.offing-ref }}
         run: |
-          if [[ ! "$OFFING_REF" =~ ^[0-9a-f]{40}$ ]]; then
+          if [[ ! "$OFFING_WORKFLOW_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Could not resolve the exact Offing workflow commit SHA." >&2
+            exit 1
+          fi
+          if [[ -n "$OFFING_REF" && "$OFFING_REF" != "$OFFING_WORKFLOW_SHA" ]]; then
             echo "Supply offing-ref as the exact Offing workflow commit SHA." >&2
             exit 1
           fi
-          echo "sha=$OFFING_REF" >> "$GITHUB_OUTPUT"
+          echo "sha=$OFFING_WORKFLOW_SHA" >> "$GITHUB_OUTPUT"
 
       - name: Check out the exact Offing workflow source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -148,6 +153,7 @@ jobs:
         with:
           name: offing-fleet
           path: reports/fleet.json
+          retention-days: 14
           if-no-files-found: error
 
       - name: Upload owner forecast digests
@@ -156,6 +162,7 @@ jobs:
         with:
           name: offing-owner-digests
           path: ${{ runner.temp }}/offing-owner-digests/*.md
+          retention-days: 14
           if-no-files-found: ignore
 
       - name: Post to Slack

@@ -49,10 +49,12 @@ jobs:
           tar -xzf "$RUNNER_TEMP/zizmor.tar.gz" -C "$RUNNER_TEMP" zizmor
       - name: Lint the workflows with actionlint
         # actionlint 1.7.12 predates GitHub's $/ self-repository syntax (rhysd/actionlint#711), which
-        # zizmor requires. These patterns ignore only that diagnostic; every other check still runs.
+        # zizmor requires, and the job.workflow_sha property for reusable workflows.
+        # Limit the exclusions to those GitHub syntax diagnostics.
         run: >-
           "${RUNNER_TEMP}/actionlint"
           -ignore 'specifying action "\$/.+" in invalid format because ref is missing'
           -ignore 'reusable workflow call "\$/.+" at "uses" is not following the format'
+          -ignore '^property "workflow_sha" is not defined in object type \{check_run_id:'
       - name: Audit the workflows and the Action with zizmor
         run: '"${RUNNER_TEMP}/zizmor" --persona=regular .github action.yml'
