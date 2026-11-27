@@ -27,7 +27,7 @@ Every gate must pass on the commit you will tag. None of them is optional.
 
 The last weekly run of the corpus workflow should also be green. If either is red, fix or explain it before tagging.
 
-Run `gh workflow run release.yml -f dry_run=true` to collect first-minute evidence for an unpublished candidate. The check requires a forecast in under 10 seconds on each supported runner pair and uploads its timing artifacts even when a pair misses the budget. This performance check runs in the no-publish dry run and the weekly [First minute workflow](../.github/workflows/first-minute.yml).
+Run `gh workflow run release.yml -f dry_run=true -f from=vX.Y.Z` to collect first-minute evidence for an unpublished candidate. Use the latest published tag for the notes baseline. The check requires a forecast in under 10 seconds on each supported runner pair and uploads its timing artifacts even when a pair misses the budget. This performance check runs in the no-publish dry run and the weekly [First minute workflow](../.github/workflows/first-minute.yml).
 
 ## Action bundles on release tags
 
