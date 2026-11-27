@@ -62,8 +62,8 @@ test("the publish workflow uses trusted publishing with least privilege and guar
   assert.equal(node?.with?.["registry-url"], "https://registry.npmjs.org", "Scorecard's Packaging check needs it");
   assert.match(releaseText, /uses: actions\/setup-node@[0-9a-f]{40}/, "setup-node is pinned");
   const run = (publishJob.steps ?? []).map((step) => step.run ?? "").join("\n");
-  assert.match(run, /npm publish --provenance --access public --tag next/);
-  assert.match(run, /\*\)\s+npm publish --provenance --access public ;;/);
+  assert.match(run, /npm publish "\$\{candidates\[0\]\}" --provenance --access public --tag next/);
+  assert.match(run, /\*\)\s+npm publish "\$\{candidates\[0\]\}" --provenance --access public ;;/);
   // It refuses a tag that disagrees with package.json and a commit that is not on main.
   const guard = await read(".github/scripts/check-release-tip.sh");
   assert.match(guard, /GITHUB_REF_NAME/);

@@ -18,7 +18,7 @@ From the directory you want to scan:
 npx --yes @velella/offing
 ```
 
-No subcommand is needed. Offing scans the current directory and prints the top findings and upcoming lifecycle deadlines. It never prompts or opens a browser, even on a terminal. If Git history is unavailable, it still scans the files on disk. For the full report with finding IDs, replacements, and evidence, run `npx --yes @velella/offing scan .`. Use `npx --yes @velella/offing --json` for the structured forecast without the next-step hints.
+No subcommand is needed. Offing scans the current directory and prints the top findings and upcoming lifecycle deadlines. After installation, it reads repository files such as manifests, lockfiles, workflows, and source files, plus local Ebb lifecycle data. The first run never prompts, writes files, or uses the network. If Git history is unavailable, it still scans the files on disk. For the full report with finding IDs, replacements, and evidence, run `npx --yes @velella/offing scan .`. Use `npx --yes @velella/offing --json` for the structured forecast without the next-step hints.
 
 The bare invocation starts working with the release that includes this change. To try it before then, use a checkout of Offing as shown below.
 
@@ -44,11 +44,24 @@ Git history is not available; Offing scanned the files on disk.
 
 Next: offing forecast
 Next: offing init --hooks
+Next: offing init --agents (add agent guard instructions)
 ```
 
 ### First download size
 
 On macOS arm64 with Node.js 22.23.1 and npm 10.9.8, a clean-cache `npx` install of the published `@velella/offing@0.1.1` downloaded **5,208,351 compressed bytes** (about 5.21 MB) across 12 package tarballs, including dependencies. This excludes registry metadata and protocol overhead; the exact size can vary by platform and dependency versions. To remeasure from the Offing checkout, run `npm run benchmark:first-run -- --npx-size`.
+
+### Time to the first forecast
+
+A locally packed candidate on macOS arm64 reached its first forecast at these times, with a fresh npm cache for each repository. The candidate tarball was already on disk. These timings include dependency downloads, installation, and the first forecast. The weekly run uses an exact published npm version and also measures transfer of the Offing tarball itself.
+
+| Pinned repository | Node.js 22.23.1 | Node.js 24.22.3 |
+| --- | ---: | ---: |
+| koa | 5.477 s | 4.324 s |
+| sampleproject | 4.144 s | 4.479 s |
+| bubbletea | 4.286 s | 4.207 s |
+
+The release run measures the candidate tarball before publication and records each runner's results even when a check fails. It requires the first forecast in under 10 seconds on Linux, macOS, and Windows with Node.js 22 and 24. Node.js 20 runs as a diagnostic. Downloads and installation overlap, so the reports show the tarball download span, npm's full install phase, and the time after install separately. [First minute workflow](https://github.com/velella-sh/offing/actions/workflows/first-minute.yml)
 
 ## 2. Check one dependency before adding it
 

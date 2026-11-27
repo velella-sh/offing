@@ -49,7 +49,12 @@ function renderFirstRun(scan: ScanResult, forecast: RepositoryForecast, empty: b
     );
   }
   if (!history) lines.push("Git history is not available; Offing scanned the files on disk.");
-  lines.push("", "Next: offing forecast", "Next: offing init --hooks");
+  lines.push(
+    "",
+    "Next: offing forecast",
+    "Next: offing init --hooks",
+    "Next: offing init --agents (add agent guard instructions)",
+  );
   return `${lines.join("\n")}\n`;
 }
 
@@ -68,11 +73,11 @@ export async function runOnboarding(args: readonly string[], ctx: CommandContext
     return ctx.fail("usage", "Usage: offing [--as-of <YYYY-MM-DD>] [--json]");
   }
   if (asOf !== undefined && !isIsoDate(asOf)) return ctx.fail("usage", "--as-of must be a date (YYYY-MM-DD).");
-  if (json) return forecastCommand.run(asOf === undefined ? ["--json"] : ["--json", "--as-of", asOf], ctx);
+  if (json) return forecastCommand.run(asOf === undefined ? ["--json"] : ["--json", "--as-of", asOf], ctx, true);
 
   const root = process.cwd();
   const [scan, entries, history] = await Promise.all([
-    scanWithBuiltIns(root, asOf === undefined ? undefined : replayScanOptions(asOf)),
+    scanWithBuiltIns(root, asOf === undefined ? { noCache: true } : replayScanOptions(asOf)),
     readdir(root),
     hasGitHistory(root),
   ]);

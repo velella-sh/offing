@@ -19,10 +19,11 @@ Every gate must pass on the commit you will tag. None of them is optional.
 
 | Gate | Command | What it proves |
 |---|---|---|
-| Full check | `npm run check` | Build, the Action bundle compiles, all tests including coverage floors in CI, plugin packages are in sync, plugin evals. This is what CI and `npm publish` (through `prepack`) run. |
+| Full check | `npm run check` | Build, the Action bundle compiles, all tests including coverage floors in CI, plugin packages are in sync, plugin evals. This is what CI and release candidate packing (through `prepack`) run. |
 | Coverage floors | `npm run test:coverage` | Lines, branches, and functions stay above the floors in `package.json`. |
 | Public corpus | `npm run validate:public-repos` | Exact findings on every pinned public repository, and each detector's precision above its floor in `benchmarks/thresholds.json`. Needs network. |
-| Package contents | `npm pack --dry-run` | Only `dist/src`, `examples`, `schemas`, and `skills` ship. The rules come from the `@velella/ebb` dependency. |
+| Package contents | `npm pack --dry-run` | The package ships the compiled CLI and library, schemas, skills, the Slipway starter, and explicitly listed spec tools and templates. The rules come from the `@velella/ebb` dependency. |
+| First minute | [First minute workflow](../.github/workflows/first-minute.yml) | Each supported OS and Node.js pair prints a first forecast in under 10 seconds using a cold npm cache on three pinned public repositories. Timing artifacts remain available when a job fails. |
 | Reproducible package | `npm run check:reproducible` | Two clean builds of the same commit pack to byte-identical npm tarballs. CI records the tarball hash on Linux, Windows, and macOS and fails `ci-ok` when the runners disagree; the release workflow runs the local check and fails on a mismatch. |
 
 The last weekly run of the corpus workflow should also be green. If either is red, fix or explain it before tagging.
@@ -33,7 +34,7 @@ The GitHub Action runs `dist/action/index.js`, one compiled bundle. `main` does 
 
 - A push to `main` that changes the version in `package.json` runs the *Release* workflow's `action-bundle` job. It builds `dist/action`, commits it on the branch `release/vX.Y.Z` (one commit on top of the release commit), and prints the tagging commands below.
 - The release tag points at that branch tip, not at a commit on `main`. The tag is created once and never moves, so `uses: velella-sh/offing@vX.Y.Z` keeps working for everyone who pinned it.
-- The Release chain's `npm-publish` job ([`release.yml`](../.github/workflows/release.yml), guard in [`check-release-tip.sh`](../.github/scripts/check-release-tip.sh)) refuses a tag that is not exactly that branch tip, or whose parent is not on `main`, or that changes anything besides `dist/action/`. `prepack` then rebuilds the bundle on the tagged commit and fails when the committed copy differs, so a stale or hand-edited bundle cannot be published.
+- The Release chain's `npm-candidate` job ([`release.yml`](../.github/workflows/release.yml), guard in [`check-release-tip.sh`](../.github/scripts/check-release-tip.sh)) refuses a tag that is not exactly that branch tip, or whose parent is not on `main`, or that changes anything besides `dist/action/`. `prepack` then rebuilds the bundle on the tagged commit and fails when the committed copy differs. The publish job sends the same tarball that passed the first-minute gate.
 - The npm tarball is unaffected: `package.json`'s `files` list does not include `dist/action`, so the tarball is byte-identical to one packed from the release commit on `main`.
 
 The tradeoff is that a release tag no longer points into `main` history, and its commit is not on `main`. The alternative, moving the tag onto a rebuilt commit after publishing, was rejected: the tag would move under users who already pinned it, the publish workflow would re-trigger, and every other release job (binaries, container, quickstart, major tag) selects the release by `git tag --points-at` on the commit it checked out.
