@@ -8,6 +8,7 @@ import { satisfies } from "semver";
 
 import { checkAgainst, systemToolRules } from "./check-dependency.js";
 import { inspectDiscoveredConfig, renderConfigDiagnostic } from "./config-validate.js";
+import { detectTestPlan, type TestPlan } from "./test-runners/detect.js";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 
 export const doctorCategories = ["runtime", "package", "mcp", "skill", "plugin", "ci", "system", "config"] as const;
@@ -41,6 +42,8 @@ export interface DoctorResult {
   checks: DoctorCheck[];
   /** The tools found on this machine; present only when `--system` was requested. */
   system?: SystemTool[];
+  /** The static test/build plan, present only when `--tests` was requested. */
+  tests?: TestPlan;
   privacy: {
     repositoryDataUploaded: false;
     configurationMutated: false;
@@ -65,6 +68,8 @@ export type VersionRunner = (command: string, args: readonly string[]) => Promis
 export interface DoctorOptions {
   /** Also report the runtimes and tools installed on this machine. */
   system?: boolean;
+  /** Also show the test and build commands suggested by repository metadata. */
+  tests?: boolean;
   versionRunner?: VersionRunner;
   systemRules?: readonly RegistryV2Rule[];
   environment?: Readonly<Record<string, string | undefined>>;
@@ -441,6 +446,7 @@ export async function diagnoseEnvironment(root = ".", options: DoctorOptions = {
   if (config) checks.push(config);
   const system = options.system ? await diagnoseSystem(options) : undefined;
   if (system) checks.push(...system.map(systemCheck));
+  const tests = options.tests ? await detectTestPlan(root, platform) : undefined;
 
   return {
     schemaVersion: "offing.doctor.v1",
@@ -449,6 +455,7 @@ export async function diagnoseEnvironment(root = ".", options: DoctorOptions = {
     summary: resultStatus(checks),
     checks,
     ...(system ? { system } : {}),
+    ...(tests ? { tests } : {}),
     privacy: {
       repositoryDataUploaded: false,
       configurationMutated: false,
@@ -468,6 +475,17 @@ export function renderDoctorText(result: DoctorResult): string {
     lines.push("", `[${symbols[check.status]}] ${check.category}: ${check.summary}`, check.details);
     if (check.remediation) lines.push(`Next: ${check.remediation}`);
   }
+  if (result.tests) {
+    lines.push("", "Test and build plan (no project commands were run)");
+    for (const { tool, kind, command } of result.tests.steps) {
+      lines.push(`  [${tool}] ${kind}: ${command.map(displayArgument).join(" ")}`);
+    }
+    for (const note of result.tests.notes) lines.push(`  ${note}`);
+  }
   lines.push("", "Privacy: no repository data was uploaded and no configuration was changed.");
   return lines.join("\n");
+}
+
+function displayArgument(argument: string): string {
+  return /^[A-Za-z0-9./_=-]+$/.test(argument) ? argument : JSON.stringify(argument).replace(/[$\x60]/g, "\\$&");
 }

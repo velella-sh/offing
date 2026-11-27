@@ -56,7 +56,7 @@ _offing() {
     rules) opts="" ;;
     explain) opts="--json --data-version" ;;
     context) opts="--json --data-version" ;;
-    doctor) opts="--system --json --data-version" ;;
+    doctor) opts="--system --tests --json --data-version" ;;
     report-issue) opts="--output --data-version" ;;
     capabilities) opts="--json" ;;
     completions) opts="" ;;

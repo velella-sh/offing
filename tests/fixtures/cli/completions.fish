@@ -199,6 +199,7 @@ complete -c offing -n '__fish_seen_subcommand_from explain' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from context' -l json
 complete -c offing -n '__fish_seen_subcommand_from context' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from doctor' -l system
+complete -c offing -n '__fish_seen_subcommand_from doctor' -l tests
 complete -c offing -n '__fish_seen_subcommand_from doctor' -l json
 complete -c offing -n '__fish_seen_subcommand_from doctor' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from report-issue' -l output

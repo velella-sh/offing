@@ -1,0 +1,1 @@
+- Add `offing doctor --tests` to preview test and build commands for JavaScript, Python, Go, Maven, Gradle, and .NET from local project files.

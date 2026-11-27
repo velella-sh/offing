@@ -178,6 +178,15 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/scan" label="Repository scan fields"}
 
+### Test run evidence
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/test-run.v1.schema.json)
+
+The recorder accepts a caller-provided execution backend. See the [decision record](decisions/0060-test-plan-and-run-results.md)
+for the contract and its relationship to the static doctor plan.
+
+::schema-table{data="publicSchemas/test-run" label="Test run evidence fields"}
+
 ### Upgrade report
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/upgrade.v1.schema.json)

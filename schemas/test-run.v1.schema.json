@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/test-run.v1.schema.json",
+  "title": "Offing test runner result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "command", "attempts", "flaky"],
+  "properties": {
+    "schemaVersion": { "const": "offing.test-run.v1" },
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "prefixItems": [{ "type": "string", "minLength": 1 }],
+      "items": { "type": "string" }
+    },
+    "attempts": { "type": "array", "minItems": 1, "maxItems": 2, "items": { "$ref": "#/$defs/attempt" } },
+    "flaky": { "type": "array", "items": { "$ref": "#/$defs/failure" } }
+  },
+  "$defs": {
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exitCode", "durationMs", "status", "totals", "failures", "logs"],
+      "properties": {
+        "exitCode": { "type": ["integer", "null"] },
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "status": { "enum": ["passed", "failed", "timed-out"] },
+        "totals": { "anyOf": [{ "type": "null" }, { "$ref": "#/$defs/totals" }] },
+        "failures": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/failure" } },
+        "logs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["stdout", "stderr"],
+          "properties": {
+            "stdout": { "$ref": "#/$defs/log" },
+            "stderr": { "$ref": "#/$defs/log" }
+          }
+        }
+      }
+    },
+    "totals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tests", "passed", "failed", "skipped"],
+      "properties": {
+        "tests": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "message", "file"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "message": { "type": "string", "maxLength": 4096 },
+        "file": { "type": ["string", "null"], "maxLength": 4096 }
+      }
+    },
+    "log": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "tail"],
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "tail": { "type": "string", "maxLength": 4096 }
+      }
+    }
+  }
+}
