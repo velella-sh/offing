@@ -4,6 +4,11 @@ title: Launch kit
 
 # Launch kit
 
+For setup and support, use the [forecast guide](https://velella.sh/offing/launch/forecast-in-30-seconds/),
+[guard guide](https://velella.sh/offing/launch/guard-in-one-command/), [coding agent guides](https://velella.sh/offing/guides/),
+[FAQ](https://velella.sh/offing/launch/FAQ/), [Offing and Ebb overview](https://velella.sh/offing/launch/offing-and-ebb/), and
+[troubleshooting guide](https://velella.sh/offing/launch/TROUBLESHOOTING/).
+
 Ready-to-post drafts for the Offing launch. Every claim in these drafts is
 backed by a file in this repository; the [fact check](#fact-check) maps each
 claim to its source. Adjust the first-person opening, confirm the release tag,
