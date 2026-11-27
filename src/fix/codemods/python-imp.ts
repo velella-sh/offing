@@ -1,8 +1,9 @@
+import { defineCodemod } from "../kit/define.js";
 import type { ScanResult, UsageMatcher } from "../../domain.js";
 import { required } from "../../required.js";
 import { parseSource } from "../../usage/tree-sitter.js";
 import type { Node } from "../../usage/vendor/tree-sitter/tree-sitter.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { callsByCallee } from "./shared/ast.js";
 import { type Edit, patchFor } from "./shared/edits.js";
 import { declineAll, groupByPath, planEachFile, sortTargets } from "./shared/plan.js";
@@ -125,14 +126,15 @@ type Target = UsageTarget<Rule>;
  * refused. When every `imp` use in a file was rewritten, `import imp` is replaced by the imports the replacements
  * need; otherwise it stays.
  */
-export const pythonImpFixer: Fixer = {
+export const pythonImpFixer = defineCodemod({
   id: "python-imp",
+  rules: rules.map(({ id }) => id),
   async plan(result, refuse) {
     return planEachFile(groupByPath(await targetsFor(result)), (path, fileTargets) =>
       planPath(result.root, path, fileTargets, refuse),
     );
   },
-};
+});
 
 async function planPath(
   repositoryRoot: string,

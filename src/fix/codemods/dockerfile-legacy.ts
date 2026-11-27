@@ -1,8 +1,9 @@
+import { defineCodemod } from "../kit/define.js";
 import { basename } from "node:path";
 
 import type { Finding } from "../../domain.js";
 import { required } from "../../required.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { diffFor } from "./shared/edits.js";
 import { readRepositoryFile } from "./shared/source.js";
 
@@ -80,8 +81,9 @@ function rewrite(line: string, ruleId: string): Rewrite {
  * continuation, or a heredoc is left alone and reported through `refuse`, as is any instruction inside an `ONBUILD`
  * trigger.
  */
-export const dockerfileLegacyFixer: Fixer = {
+export const dockerfileLegacyFixer = defineCodemod({
   id: "dockerfile-legacy",
+  rules: [MAINTAINER_RULE, LEGACY_ENV_RULE],
   async plan(result, refuse) {
     const targets = legacyTargets(result.findings, refuse);
     const patches: FilePatch[] = [];
@@ -91,7 +93,7 @@ export const dockerfileLegacyFixer: Fixer = {
     }
     return patches;
   },
-};
+});
 
 /** The Dockerfiles that carry a legacy instruction finding, each with its findings by line; a finding without a line is refused. */
 function legacyTargets(findings: readonly Finding[], refuse: Refuse | undefined): Map<string, Map<number, Target>> {

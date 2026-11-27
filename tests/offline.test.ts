@@ -51,8 +51,9 @@ async function sourceFiles(directory: string): Promise<string[]> {
   return nested.flat();
 }
 
+// Compare operations here. The AST audit in no-telemetry also checks global references.
 const NETWORK_USE =
-  /node:(?:https?|net|tls|dns|dgram|http2)\b|from ["'](?:https?|net|tls|dns|dgram|http2)["']|\bfetch\(|undici|WebSocket|XMLHttpRequest/;
+  /node:(?:https?|net|tls|dns|dgram|http2)\b|from ["'](?:https?|net|tls|dns|dgram|http2)["']|\bfetch\(|undici|\b(?:WebSocket|XMLHttpRequest)\s*(?:["\x27]\s*\])?\s*\(/;
 
 test("only the update command, the CLI entry point, and the Action's GitHub API calls can reach the network in the source tree", async () => {
   const using: string[] = [];

@@ -1,5 +1,6 @@
+import { defineCodemod } from "../kit/define.js";
 import type { Finding } from "../../domain.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { diffFor } from "./shared/edits.js";
 import { readRepositoryFile } from "./shared/source.js";
 
@@ -51,8 +52,13 @@ interface Tracked {
  * declaration is left to the migration, because choosing a version needs the network. Subpath imports such as
  * `koa-router/types` are left alone.
  */
-export const renameCodemodsFixer: Fixer = {
+export const renameCodemodsFixer = defineCodemod({
   id: "codemods",
+  rules: renameCodemods.map(({ ruleId, to }) => ({
+    id: ruleId,
+    replacement: to,
+    reason: "The rule no longer names the successor this codemod was written for.",
+  })),
   async plan(result, refuse) {
     const { edits, tracked } = renameTargets(result.findings, refuse);
     const patches: FilePatch[] = [];
@@ -80,7 +86,7 @@ export const renameCodemodsFixer: Fixer = {
     refuseUnrenamed(tracked, originals, updated, failures, refuse);
     return patches;
   },
-};
+});
 
 /** The findings that name a successor this codemod can rename, and the import usages each one covers. */
 function renameTargets(
@@ -92,10 +98,6 @@ function renameTargets(
   for (const finding of findings) {
     const codemod = renameCodemods.find((candidate) => candidate.ruleId === finding.ruleId);
     if (!codemod) continue;
-    if (!isTrusted(finding, codemod)) {
-      refuse?.(finding, "The rule no longer names the successor this codemod was written for.");
-      continue;
-    }
     const usages = (finding.usages ?? []).flatMap((usage) =>
       usage.kind === "import" && usage.location.line !== undefined
         ? [{ path: usage.location.path, line: usage.location.line }]
@@ -133,11 +135,6 @@ function refuseUnrenamed(
       refusalReason(usages, originals, codemod);
     refuse?.(finding, reason);
   }
-}
-
-/** The codemod applies only while the rule still names the successor it was written for. */
-function isTrusted(finding: Finding, codemod: RenameCodemod): boolean {
-  return finding.replacement === codemod.to;
 }
 
 /** Replaces the quoted specifier `from` on `line`; a longer specifier that merely starts with it never matches. */

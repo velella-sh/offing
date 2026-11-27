@@ -1,0 +1,64 @@
+{
+  "refusals": [
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.js",
+      "line": 5,
+      "reason": "The call goes through the local binding `renamed`, not a member access; renaming only the call would leave the import or alias unchanged."
+    },
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.js",
+      "line": 6,
+      "reason": "The call goes through the local binding `tmpDir`, not a member access; renaming only the call would leave the import or alias unchanged."
+    },
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.js",
+      "line": 7,
+      "reason": "The call is optional (`?.`), so renaming the member would change when it runs."
+    },
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.js",
+      "line": 8,
+      "reason": "The call is optional (`?.`), so renaming the member would change when it runs."
+    },
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.js",
+      "line": 9,
+      "reason": "The member is accessed with a computed key, so renaming only the member name is not exact."
+    },
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.ts",
+      "line": 6,
+      "reason": "The call goes through the local binding `renamed`, not a member access; renaming only the call would leave the import or alias unchanged."
+    },
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.ts",
+      "line": 7,
+      "reason": "The call goes through the local binding `tmpDir`, not a member access; renaming only the call would leave the import or alias unchanged."
+    },
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.ts",
+      "line": 8,
+      "reason": "The call is optional (`?.`), so renaming the member would change when it runs."
+    },
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.ts",
+      "line": 9,
+      "reason": "The call is optional (`?.`), so renaming the member would change when it runs."
+    },
+    {
+      "ruleId": "nodejs.symbol.os.tmpdir",
+      "path": "index.ts",
+      "line": 10,
+      "reason": "The member is accessed with a computed key, so renaming only the member name is not exact."
+    }
+  ]
+}

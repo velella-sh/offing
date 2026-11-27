@@ -1,9 +1,10 @@
+import { defineCodemod } from "../kit/define.js";
 import { LineCounter, Scalar, isMap, isNode, isScalar, isSeq, parseAllDocuments, visit } from "yaml";
 import type { Document, Pair, YAMLMap, YAMLSeq } from "yaml";
 
 import { MAXIMUM_DOCUMENTS, MAXIMUM_INPUT_BYTES } from "../../detectors/kubernetes/parse-manifest.js";
 import type { Finding } from "../../domain.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { diffFor } from "./shared/edits.js";
 import { readRepositoryFile } from "./shared/source.js";
 
@@ -457,8 +458,9 @@ async function rewritesForFile(
  * out-of-range `servicePort`, and tab indentation are refused with the reason instead of guessed.
  * `src/fix/kubernetes.ts` leaves these findings alone, so exactly one fixer rewrites any Ingress.
  */
-export const kubernetesIngressV1Fixer: Fixer = {
+export const kubernetesIngressV1Fixer = defineCodemod({
   id: "kubernetes-ingress-v1",
+  rules: [...INGRESS_RULE_IDS],
   async plan(result, refuse) {
     const grouped = [...targetsByPath(result.findings, refuse)].sort(([left], [right]) => left.localeCompare(right));
     const patches: FilePatch[] = [];
@@ -471,4 +473,4 @@ export const kubernetesIngressV1Fixer: Fixer = {
     }
     return patches;
   },
-};
+});

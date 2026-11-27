@@ -1,8 +1,9 @@
+import { defineCodemod } from "../kit/define.js";
 import type { ScanResult, Severity, UsageMatcher } from "../../domain.js";
 import { required } from "../../required.js";
 import { parseSource } from "../../usage/tree-sitter.js";
 import type { Node } from "../../usage/vendor/tree-sitter/tree-sitter.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { callsByCallee } from "./shared/ast.js";
 import { type Edit, patchFor } from "./shared/edits.js";
 import { declineAll, groupByPath, planEachFile, sortTargets } from "./shared/plan.js";
@@ -62,14 +63,15 @@ const typeAssertions = new Set(["as_expression", "satisfies_expression", "type_a
  * `Buffer.allocUnsafeSlow` when the argument is a number, string, template without substitutions, or array literal.
  * Every other shape, and every argument whose kind is not visible in the source text, is refused with a reason.
  */
-export const nodeBufferFixer: Fixer = {
+export const nodeBufferFixer = defineCodemod({
   id: "node-buffer",
+  rules: rules.map(({ id }) => id),
   async plan(result, refuse) {
     return planEachFile(groupByPath(await targetsFor(result)), (path, fileTargets) =>
       planFile(result.root, path, fileTargets, refuse),
     );
   },
-};
+});
 
 /** The patch for one file's targets, or undefined when no call changes; every refusal is reported. */
 async function planFile(

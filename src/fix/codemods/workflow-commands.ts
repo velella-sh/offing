@@ -1,3 +1,4 @@
+import { defineCodemod } from "../kit/define.js";
 import {
   commandsOnLine,
   isWorkflowCommandPath,
@@ -7,7 +8,7 @@ import {
 } from "../../detectors/github-actions-workflow-commands.js";
 import type { WorkflowCommand, WorkflowRunLine } from "../../detectors/github-actions-workflow-commands.js";
 import type { Finding } from "../../domain.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { diffFor } from "./shared/edits.js";
 import { insideRepository, readRepositoryFile } from "./shared/source.js";
 
@@ -122,8 +123,9 @@ async function planFile(
 }
 
 /** Plans literal echo migrations only; repository scripts are never executed. */
-export const workflowCommandsFixer: Fixer = {
+export const workflowCommandsFixer = defineCodemod({
   id: "workflow-commands",
+  rules: [`${workflowCommandPrefix}*`],
   async plan(result, refuse) {
     const patches: FilePatch[] = [];
     for (const [path, findings] of [...targets(result.findings)].sort(([a], [b]) => a.localeCompare(b))) {
@@ -132,7 +134,7 @@ export const workflowCommandsFixer: Fixer = {
     }
     return patches;
   },
-};
+});
 
 function echoOptionRisk(value: string, quote: string): boolean {
   return /^-[eEn]+$/.test(value) || (quote === '"' && value.startsWith("$"));

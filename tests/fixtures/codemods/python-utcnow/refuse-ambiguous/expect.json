@@ -1,0 +1,10 @@
+{
+  "refusals": [
+    {
+      "ruleId": "python.symbol.datetime.utcnow",
+      "path": "app.py",
+      "line": 4,
+      "reason": "The file binds `datetime` both as the module and as the class imported by name, so the codemod cannot tell which binding a call reads."
+    }
+  ]
+}

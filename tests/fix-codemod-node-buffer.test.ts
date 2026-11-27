@@ -5,7 +5,7 @@ import { after, test } from "node:test";
 
 import { apply, assertParses, cleanup, normalized, plan } from "./codemod-helpers.js";
 
-const fixtures = resolve("tests/fixtures/fix/node-buffer");
+const fixtures = resolve("tests/fixtures/codemods/node-buffer");
 
 after(cleanup);
 
@@ -14,8 +14,8 @@ for (const [extension, language] of [
   ["ts", "typescript"],
 ] as const) {
   test(`rewrites every literal form in ${extension} and the patch applies cleanly`, async () => {
-    const before = await readFile(join(fixtures, `before.${extension}`), "utf8");
-    const expected = await readFile(join(fixtures, `after.${extension}`), "utf8");
+    const before = await readFile(join(fixtures, "syntax", "before", `index.${extension}`), "utf8");
+    const expected = await readFile(join(fixtures, "syntax", "after", `index.${extension}`), "utf8");
     const { root, patches } = await plan({ [`index.${extension}`]: before }, "node-buffer");
 
     assert.equal(patches.length, 1);
@@ -26,7 +26,7 @@ for (const [extension, language] of [
   });
 
   test(`plans nothing for already-rewritten ${extension}`, async () => {
-    const expected = await readFile(join(fixtures, `after.${extension}`), "utf8");
+    const expected = await readFile(join(fixtures, "syntax", "after", `index.${extension}`), "utf8");
     assert.deepEqual((await plan({ [`index.${extension}`]: expected }, "node-buffer")).patches, []);
   });
 }
@@ -34,8 +34,8 @@ for (const [extension, language] of [
 test("refuses every shape whose argument kind is not visible in the source text", async () => {
   const { refusals } = await plan(
     {
-      "index.js": await readFile(join(fixtures, "refusals.js"), "utf8"),
-      "index.ts": await readFile(join(fixtures, "refusals.ts"), "utf8"),
+      "index.js": await readFile(join(fixtures, "refusals", "before", "index.js"), "utf8"),
+      "index.ts": await readFile(join(fixtures, "refusals", "before", "index.ts"), "utf8"),
     },
     "node-buffer",
   );

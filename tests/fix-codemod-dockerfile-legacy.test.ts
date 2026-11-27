@@ -10,13 +10,13 @@ import { dockerfileLegacyFixer } from "../src/fix/codemods/dockerfile-legacy.js"
 import { renderPatches } from "../src/fix/index.js";
 import { apply, cleanup, repository } from "./codemod-helpers.js";
 
-const fixtures = resolve("tests/fixtures/fix/dockerfile-legacy");
+const fixtures = resolve("tests/fixtures/codemods/dockerfile-legacy/syntax");
 
 after(cleanup);
 
 test("rewrites MAINTAINER and the legacy ENV form to the after fixture", async () => {
-  const before = await readFile(join(fixtures, "before.image.fixture"), "utf8");
-  const after = await readFile(join(fixtures, "after.image.fixture"), "utf8");
+  const before = await readFile(join(fixtures, "before", "image.fixture"), "utf8");
+  const after = await readFile(join(fixtures, "after", "image.fixture"), "utf8");
   const root = await repository({ Dockerfile: before });
   const patches = await dockerfileLegacyFixer.plan(await scanRepository(root, detectors));
 
@@ -39,7 +39,7 @@ test("rewrites MAINTAINER and the legacy ENV form to the after fixture", async (
 });
 
 test("the planned patch is idempotent: scanning the fixed file plans nothing", async () => {
-  const root = await repository({ Dockerfile: await readFile(join(fixtures, "after.image.fixture"), "utf8") });
+  const root = await repository({ Dockerfile: await readFile(join(fixtures, "after", "image.fixture"), "utf8") });
   assert.deepEqual(await dockerfileLegacyFixer.plan(await scanRepository(root, detectors)), []);
 });
 

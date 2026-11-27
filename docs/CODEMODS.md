@@ -1,15 +1,18 @@
 ---
 title: "Codemods"
-description: "The dockerfile-legacy fixer repairs the container.dockerfile.maintainer and container.dockerfile.legacy-env-format findings."
+description: "Plan deterministic repairs and verify new codemods with fixtures."
 ---
 
 # Codemods
 
-`offing fix` plans deterministic repairs for findings whose change is mechanical, and prints them as unified diffs that `git apply` accepts. It never writes a file or runs a command. A codemod applies only while the text it rewrites still matches the finding, and every finding it declines is reported as a refusal with the reason.
+The codemod kit checks deterministic repairs against source fixtures. Use `offing fix` to preview built-in
+repairs, or use the [codemod v1 specification](spec/codemod/v1.md) to write and test your own codemod.
+The planner produces unified diffs and records findings it declines to repair in `offing fix --json`.
 
 ```bash
-offing fix --dry-run            # print the patches
-offing fix --branch <name>      # apply them on a local branch and re-scan
+offing fix --dry-run           # print the patches
+offing fix --branch            # apply them on a local branch and re-scan
+offing codemod test ./my-codemod
 ```
 
 ## Dockerfile legacy syntax

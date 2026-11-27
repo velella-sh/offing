@@ -142,6 +142,21 @@ node dist/src/cli.js new-detector <id> [--ecosystem <slug>]
 
 It creates the detector, a parser, conformance and parser tests with fixtures, and a docs page, and it refuses names that existing detectors or Ebb's registries already use. The detector's rules are added to [Ebb](https://github.com/velella-sh/ebb). [Detector authoring](docs/DETECTORS.md#start-a-new-detector-in-this-repository) describes the files and the order to work in: fixtures, parser, rules, detector, registration, `npm run check`, then `npm run validate:public-repos`. Each of those is a good size for one pull request.
 
+## Write a codemod
+
+Start with a rule in Ebb that names an exact replacement. Include a before-and-after case and any
+ambiguous source shape the planner should refuse. The
+[Codemod v1 specification](docs/spec/codemod/v1.md) describes the fixture format and
+`offing codemod test <dir>` for authors working outside the Offing checkout.
+
+To add a built-in, run `npm run new:codemod my-fix` from this checkout. It creates a planner under
+`src/fix/codemods/` and a fixture case under `tests/fixtures/codemods/my-fix/`. Fill in the Ebb rule
+ID and replacement, implement the read-only planner, and complete the fixture. The build discovers
+the new module automatically. Run `npm run check` to exercise both its fixtures and the usual checks.
+
+For a proposal, use the
+[codemod request form](https://github.com/velella-sh/offing/issues/new?template=codemod.yml).
+
 ## Evidence policy
 
 Offing's findings are only as trustworthy as their sources.
