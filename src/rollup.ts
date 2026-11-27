@@ -3,6 +3,7 @@ import { basename, dirname, extname } from "node:path";
 
 import { severityValues } from "./domain.js";
 import type { Finding, ScanResult, Severity } from "./domain.js";
+import type { ForecastCapture } from "./fleet-forecast/model.js";
 import { required } from "./required.js";
 import { OffingError } from "./offing-error.js";
 
@@ -63,11 +64,13 @@ export interface FleetRepositoryStatus {
   readonly commit: string | null;
   readonly status: "scanned" | "cached" | "skipped" | "failed";
   readonly reason: string | null;
+  readonly forecastEvidence?: ForecastCapture;
 }
 
 export interface FleetResult extends Omit<RollupResult, "schemaVersion"> {
   schemaVersion: "offing.fleet.v1";
   repositoryStatus: FleetRepositoryStatus[];
+  forecastAsOf?: string;
 }
 
 export type RollupDocument = RollupResult | FleetResult;
@@ -304,8 +307,7 @@ async function readJson(path: string): Promise<unknown> {
  * report file or directory, so `payments.json` or `offing-report-payments.json` is `payments`.
  * `ownersFile` is a JSON object mapping repository names to owners.
  */
-export async function rollupFiles(reportPaths: readonly string[], ownersFile?: string): Promise<RollupDocument> {
-  if (reportPaths.length === 0) throw new RollupError("Give at least one scan report (offing scan --json).");
+export async function readRollupOwners(ownersFile?: string): Promise<Record<string, string>> {
   const owners = ownersFile === undefined ? {} : await readJson(ownersFile);
   if (
     typeof owners !== "object" ||
@@ -315,9 +317,14 @@ export async function rollupFiles(reportPaths: readonly string[], ownersFile?: s
   ) {
     throw new RollupError(`${ownersFile} must be a JSON object mapping repository names to owner names.`);
   }
+  return owners as Record<string, string>;
+}
+
+export async function rollupFiles(reportPaths: readonly string[], ownersFile?: string): Promise<RollupDocument> {
+  if (reportPaths.length === 0) throw new RollupError("Give at least one scan report (offing scan --json).");
+  const ownerByRepository = await readRollupOwners(ownersFile);
   const inputs: RollupInput[] = [];
   const fleet: FleetResult[] = [];
-  const ownerByRepository = owners as Record<string, string>;
   for (const path of reportPaths) {
     const raw = await readJson(path);
     if (isFleetResult(raw)) {
@@ -352,6 +359,17 @@ function mergeGroups(groups: readonly RollupGroup[]): RollupGroup[] {
   return sortedGroups(map);
 }
 
+function aggregateStatus({
+  name,
+  host,
+  defaultBranch,
+  commit,
+  status,
+  reason,
+}: FleetRepositoryStatus): FleetRepositoryStatus {
+  return { name, host, defaultBranch, commit, status, reason };
+}
+
 function mergeFleetReports(reports: readonly RollupDocument[], owners: Record<string, string>): FleetResult {
   const repos = new Map<string, RepoAccumulator>();
   const deadlines = new Map<string, { findings: number; repositories: Set<string> }>();
@@ -380,7 +398,7 @@ function mergeFleetReports(reports: readonly RollupDocument[], owners: Record<st
     }
     if (report.schemaVersion === "offing.fleet.v1") {
       for (const status of report.repositoryStatus)
-        statuses.set(JSON.stringify([status.host, status.name, status.commit]), status);
+        statuses.set(JSON.stringify([status.host, status.name, status.commit]), aggregateStatus(status));
     }
   }
   const byRepository = repositorySummaries(repos);

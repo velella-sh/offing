@@ -77,6 +77,8 @@ Usage:
   offing drivers test <driver|command>
   offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs
   offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>]
+  offing fleet <organization|group> --json --forecast-input [--as-of <YYYY-MM-DD>]   # save private forecast evidence
+  offing forecast --fleet <organization|group|fleet.json> [--as-of <YYYY-MM-DD>] [--by owner|repository | --json | --card [--theme light|dark] | --ics <dir> | --digest <dir>]
   offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol
   offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one detected agent host
   offing init --hooks --list [path]   # show agent hook stability and availability

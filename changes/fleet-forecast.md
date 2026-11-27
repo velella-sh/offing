@@ -1,0 +1,1 @@
+- Add organization lifecycle forecasts by owner and repository, with portable pinned evidence, shareable SVG cards, owner calendars and Markdown digests.

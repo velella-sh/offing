@@ -236,3 +236,10 @@ export function gitlabFleetHost(url: string, token?: string, options: RemoteOpti
   const base = gitlabBase(url);
   return remoteFleetHost(new URL("api/v4/", base), base, true, token, options);
 }
+
+export async function fleetHostFor(gitlab?: boolean, gitlabUrl?: string): Promise<FleetHost> {
+  if (gitlab || gitlabUrl !== undefined) {
+    return gitlabFleetHost(gitlabUrl ?? "https://gitlab.com", process.env.GITLAB_TOKEN?.trim() || undefined);
+  }
+  return githubFleetHost(await githubFleetToken());
+}

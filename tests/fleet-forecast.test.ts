@@ -6,7 +6,12 @@ import { Ajv2020 } from "ajv/dist/2020.js";
 
 import { applyFallbackOwners } from "../src/fleet-forecast/capture.js";
 import { parseForecastRecording } from "../src/fleet-forecast/input.js";
-import { buildFleetForecast, changeKinds, compareFleetForecast, type ForecastObservation } from "../src/fleet-forecast/model.js";
+import {
+  buildFleetForecast,
+  changeKinds,
+  compareFleetForecast,
+  type ForecastObservation,
+} from "../src/fleet-forecast/model.js";
 import {
   renderFleetCalendars,
   renderFleetDigests,

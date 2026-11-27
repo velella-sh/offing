@@ -16,6 +16,7 @@ const name = z
   .refine((value) => !/\p{Cc}/u.test(value));
 const day = z.string().refine(isIsoDate);
 const names = z.array(name);
+const captureOwners = names.transform((owners) => [...new Set(owners)].sort());
 const repo = z.object({ host: name, repository: name });
 const natural = z.int().nonnegative();
 const location = z
@@ -34,8 +35,8 @@ const location = z
     }),
   );
 
-const observation = z.object({ ruleId: name, location, deadline: day.nullable(), owners: names });
-const evidence = z.object({ findings: z.array(observation), noData: z.array(names) });
+const observation = z.object({ ruleId: name, location, deadline: day.nullable(), owners: captureOwners });
+const evidence = z.object({ findings: z.array(observation), noData: z.array(captureOwners) });
 const statusRow = z.object({
   name,
   host: name,

@@ -37,7 +37,7 @@ export async function captureForecast(report: ScanResult, gitlab: boolean): Prom
 }
 
 function validCodeowner(owner: string): boolean {
-  return /^(?:@@?[a-z\d][a-z\d_.\/-]*|[^@\s]+@[^@\s]+)$/iu.test(owner);
+  return /^(?:@@?[a-z\d][a-z\d_./-]*|[^@\s]+@[^@\s]+)$/iu.test(owner);
 }
 
 /** A local repository-level map is only consulted when no matching file owner is present. */

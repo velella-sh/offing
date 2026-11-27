@@ -3,10 +3,13 @@ import { tmpdir } from "node:os";
 import { join, posix } from "node:path";
 
 import { getActiveData } from "@velella/ebb/data-source";
+import { isIsoDate } from "@velella/ebb/registry";
 
 import { defaultCacheDirectory } from "../cache-paths.js";
 import { declaresInput, detectorSparsePatterns } from "../detector-inputs.js";
 import { builtInDetectors } from "../detectors/index.js";
+import { captureForecast, ownershipLocations } from "../fleet-forecast/capture.js";
+import type { ForecastCapture } from "../fleet-forecast/model.js";
 import { rollup, type FleetRepositoryStatus, type FleetResult, type RollupFinding } from "../rollup.js";
 import { scanWithBuiltIns } from "../scan-builtins.js";
 import { globToRegExp } from "../workspaces.js";
@@ -36,6 +39,7 @@ export interface FleetOptions {
   readonly includeForks?: boolean;
   readonly includeArchived?: boolean;
   readonly onProgress?: (event: FleetProgress) => void;
+  readonly forecast?: { readonly gitlab: boolean; readonly asOf?: string };
 }
 
 interface RepositoryScan {
@@ -50,6 +54,7 @@ interface FleetContext {
   readonly fingerprint: string;
   readonly scannedAt: string;
   readonly noCache: boolean;
+  readonly forecast?: FleetOptions["forecast"];
 }
 
 function matches(name: string, patterns: readonly string[] = []): boolean {
@@ -91,12 +96,19 @@ async function scanPinned(
   context: FleetContext,
   repository: FleetRepository,
   commit: string,
-): Promise<Omit<RepositoryScan, "state">> {
+): Promise<Omit<RepositoryScan, "state"> & { forecastEvidence?: ForecastCapture }> {
   const directory = await mkdtemp(join(tmpdir(), "offing-fleet-"));
   try {
-    const bytesFetched = await context.host.fetchFilesAtCommit(repository, commit, directory, selection);
+    const locations = context.forecast ? ownershipLocations(context.forecast.gitlab) : [];
+    const requested: FleetSelection = {
+      patterns: [...selection.patterns, ...locations.map((location) => `/${location}`)],
+      includes: (path) => locations.includes(path) || selection.includes(path),
+    };
+    const bytesFetched = await context.host.fetchFilesAtCommit(repository, commit, directory, requested);
     const report = await scanWithBuiltIns(directory, { noCache: true, scannedAt: context.scannedAt });
-    return { bytesFetched, findings: safeFindings(report.findings) };
+    const findings = safeFindings(report.findings);
+    if (!context.forecast) return { bytesFetched, findings };
+    return { bytesFetched, findings, forecastEvidence: await captureForecast(report, context.forecast.gitlab) };
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
@@ -118,12 +130,15 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
     if (cached) {
       return { state: { ...state, commit, status: "cached", reason: null }, findings: cached, bytesFetched: 0 };
     }
-    const report = await scanPinned(context, repo, commit);
+    const { forecastEvidence, ...report } = await scanPinned(context, repo, commit);
     if (!context.noCache) {
       // A read-only cache directory must not turn a successful scan into a failed repository.
       await writeFleetCache(context.cache, key, report.findings).catch(() => undefined);
     }
-    return { state: { ...state, commit, status: "scanned", reason: null }, ...report };
+    return {
+      state: { ...state, commit, status: "scanned", reason: null, ...(forecastEvidence ? { forecastEvidence } : {}) },
+      ...report,
+    };
   } catch (error) {
     const reason = error instanceof FleetHostError ? error.message : "Could not scan the pinned tree.";
     return { state: { ...state, commit, status: "failed", reason }, findings: [], bytesFetched: 0 };
@@ -136,13 +151,16 @@ export async function scanFleet(host: FleetHost, namespace: string, options: Fle
     throw new FleetHostError("Fleet concurrency must be an integer between 1 and 16.");
   }
   const data = await getActiveData();
-  const scannedAt = new Date().toISOString();
+  const asOf = options.forecast?.asOf;
+  if (asOf !== undefined && !isIsoDate(asOf)) throw new FleetHostError("--as-of needs a date (YYYY-MM-DD).");
+  const scannedAt = asOf === undefined ? new Date().toISOString() : `${asOf}T00:00:00.000Z`;
   const fingerprint = fleetCacheKey([VERSION, data.info.version, scannedAt.slice(0, 10), ...selection.patterns]);
   const context = {
     host,
     fingerprint,
     scannedAt,
-    noCache: options.noCache ?? false,
+    noCache: options.forecast !== undefined || (options.noCache ?? false),
+    forecast: options.forecast,
     cache: options.cacheDirectory ?? join(defaultCacheDirectory(), "fleet-v1"),
   };
   const repos = [...(await host.listRepositories(namespace))].sort((a, b) => a.name.localeCompare(b.name, "en"));
@@ -158,5 +176,10 @@ export async function scanFleet(host: FleetHost, namespace: string, options: Fle
     }),
   );
   const aggregated = rollup(results.map(({ state, findings }) => ({ repository: state.name, report: { findings } })));
-  return { ...aggregated, schemaVersion: "offing.fleet.v1", repositoryStatus: results.map(({ state }) => state) };
+  return {
+    ...aggregated,
+    schemaVersion: "offing.fleet.v1",
+    repositoryStatus: results.map(({ state }) => state),
+    ...(options.forecast ? { forecastAsOf: scannedAt.slice(0, 10) } : {}),
+  };
 }

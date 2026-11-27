@@ -244,12 +244,29 @@ jobs:
           out="$RUNNER_TEMP/package-smoke"
           package="$out/npm-install/node_modules/@velella/offing"
           export OFFING_FLEET_TEST_CLI="$package/dist/src/cli.js"
-          node --test dist/tests/fleet-scan.test.js
+          node --test --test-name-pattern '^(?!fleet forecast acceptance)' dist/tests/fleet-scan.test.js
           {
             printf '### acc-fleet-scan\n\n'
             printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$(node "$OFFING_FLEET_TEST_CLI" --version)" "$GITHUB_SHA"
             printf -- '- Local host fixtures passed for SHA pinning, cache resume, redaction, and rollup.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: acc-fleet-forecast
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          package="$out/npm-install/node_modules/@velella/offing"
+          export OFFING_FLEET_TEST_CLI="$package/dist/src/cli.js"
+          test -f "$package/schemas/fleet-forecast.v1.schema.json"
+          node --test --test-name-pattern '^fleet forecast acceptance' dist/tests/fleet-scan.test.js
+          node "$OFFING_FLEET_TEST_CLI" forecast --fleet "$package/examples/fleet-forecast/fleet.json" --card > "$out/fleet-card.svg"
+          cmp "$out/fleet-card.svg" docs/assets/fleet-forecast/light.svg
+          {
+            printf '### acc-fleet-forecast\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$(node "$OFFING_FLEET_TEST_CLI" --version)" "$GITHUB_SHA"
+            printf -- '- Pinned host, offline recording, ownership, schema, card, ICS and Markdown passed.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Build the Docker image and scan the fixture

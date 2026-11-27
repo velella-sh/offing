@@ -27,6 +27,7 @@ otherwise. Records are numbered in the order they were written; this page groups
 
 | # | Title | Decision |
 | --- | --- | --- |
+| [0056](0056-fleet-forecast.md) | Record pinned ownership evidence for fleet forecasts | Keep regular fleet reports aggregated, and opt into a pinnable input for offline owner reports, cards and calendars. |
 | [0053](0053-agent-drivers.md) | Version the Agent Driver contract | Preserve command migrations, add explicit driver selection and publish a standalone conformance suite. |
 | [0004](0004-registry-v2.md) | Key lifecycle rules by PURL and VERS with provenance | Move every ecosystem to one `offing.registry.v2` format keyed by Package URL and VERS, with provenance on each rule. |
 | [0005](0005-lifecycle-importers.md) | Draft lifecycle rules with importers; never write the registry | Let importers draft rules from one authoritative source; a person reviews every draft and changes `registry/` in a pull request. |

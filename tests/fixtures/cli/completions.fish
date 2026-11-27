@@ -88,6 +88,15 @@ complete -c offing -n '__fish_seen_subcommand_from forecast' -l format
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l ics
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l force
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l fleet
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l by
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l card
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l theme
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l digest
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l previous
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l owners
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l gitlab
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l gitlab-url
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l months
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l as-of
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l today
@@ -204,6 +213,8 @@ complete -c offing -n '__fish_seen_subcommand_from fleet' -l format
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l no-cache
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l fail-on
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l progress
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l forecast-input
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l as-of
 complete -c offing -n '__fish_seen_subcommand_from hook' -l fail-on
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l agent
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l driver

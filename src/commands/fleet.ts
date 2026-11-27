@@ -5,7 +5,7 @@ import { parseArgs } from "node:util";
 import { severityValues } from "../domain.js";
 import { scanFleet, type FleetOptions } from "../fleet/index.js";
 import { FleetHostError } from "../fleet/host.js";
-import { githubFleetHost, githubFleetToken, gitlabFleetHost, validRepositoryPath } from "../fleet/remote.js";
+import { fleetHostFor, validRepositoryPath } from "../fleet/remote.js";
 import { renderRollupHtml, renderRollupText } from "../rollup.js";
 import type { CliCommand, CommandContext } from "./types.js";
 
@@ -25,6 +25,8 @@ const options = {
   "no-cache": { type: "boolean" },
   "fail-on": { type: "string" },
   progress: { type: "boolean" },
+  "forecast-input": { type: "boolean" },
+  "as-of": { type: "string" },
 } as const;
 
 async function repositoryList(file: string): Promise<string[]> {
@@ -63,6 +65,14 @@ async function scanOptions(values: Flags): Promise<FleetOptions> {
     includeArchived: values["include-archived"] ?? false,
     ...(values.repos === undefined ? {} : { repositories: await repositoryList(values.repos) }),
     ...(values.progress ? { onProgress: ({ name, status }) => process.stderr.write(`${name}: ${status}\n`) } : {}),
+    ...(values["forecast-input"]
+      ? {
+          forecast: {
+            gitlab: Boolean(values.gitlab || values["gitlab-url"]),
+            ...(values["as-of"] === undefined ? {} : { asOf: values["as-of"] }),
+          },
+        }
+      : {}),
   };
 }
 
@@ -81,10 +91,13 @@ async function run(args: string[], ctx: CommandContext): Promise<number> {
     }
     const format = renderFormat(values);
     const index = severityIndex(values["fail-on"] ?? "none");
-    const host =
-      values.gitlab || values["gitlab-url"]
-        ? gitlabFleetHost(values["gitlab-url"] ?? "https://gitlab.com", process.env.GITLAB_TOKEN?.trim() || undefined)
-        : githubFleetHost(await githubFleetToken());
+    if (values["forecast-input"] && format !== "json") {
+      return ctx.fail("usage", "--forecast-input requires JSON output.");
+    }
+    if (values["as-of"] !== undefined && !values["forecast-input"]) {
+      return ctx.fail("usage", "--as-of on fleet requires --forecast-input.");
+    }
+    const host = await fleetHostFor(values.gitlab, values["gitlab-url"]);
     const result = await scanFleet(host, namespace, await scanOptions(values));
     const output =
       format === "json"
@@ -119,6 +132,7 @@ export const command: CliCommand = {
   usage: [
     "  offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs",
     "  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>]",
+    "  offing fleet <organization|group> --json --forecast-input [--as-of <YYYY-MM-DD>]   # save private forecast evidence",
   ],
   run,
 };
