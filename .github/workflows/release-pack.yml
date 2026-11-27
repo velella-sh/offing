@@ -38,8 +38,12 @@ jobs:
         env:
           USE_BLOCKED_FIXTURE: ${{ inputs.dry_run && inputs.release_gate_fixture }}
         run: bash .github/scripts/release-gate.sh
+      - name: Check warm agent hook latency
+        # Measure before prepack starts the CPU-intensive suite, just as the pull-request gate does.
+        run: node tools/run-tests.mjs dist/tests/agent-hooks-latency.test.js
       - name: Pack and check the exact release candidate
         env:
+          OFFING_HOOK_LATENCY: "0"
           OFFING_VERIFY_ACTION_BUNDLE: ${{ !inputs.dry_run && '1' || '' }}
         run: |
           mkdir -p "$RUNNER_TEMP/offing-candidate"

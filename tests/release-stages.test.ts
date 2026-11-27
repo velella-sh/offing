@@ -162,10 +162,23 @@ test("release publication and consumer workflows wire the same opt-in lifecycle 
   const release = parse(await readFile(join(workflowsDir, "release.yml"), "utf8"));
   assert.equal(release.jobs["npm-candidate"].uses, "./.github/workflows/release-pack.yml");
   const pack = parse(await readFile(join(workflowsDir, "release-pack.yml"), "utf8"));
-  const steps = pack.jobs.pack.steps as Array<{ run?: string; env?: Record<string, string> }>;
+  const steps = pack.jobs.pack.steps as Array<{
+    run?: string;
+    env?: Record<string, string>;
+    if?: string;
+    "continue-on-error"?: boolean;
+  }>;
   const gateIndex = steps.findIndex(({ run }) => run === "bash .github/scripts/release-gate.sh");
   assert.ok(gateIndex > 0);
-  assert.ok(steps.findIndex(({ run }) => run?.includes("npm pack")) > gateIndex);
+  const latencyIndex = steps.findIndex(
+    ({ run }) => run === "node tools/run-tests.mjs dist/tests/agent-hooks-latency.test.js",
+  );
+  const packIndex = steps.findIndex(({ run }) => run?.includes("npm pack"));
+  assert.ok(latencyIndex > gateIndex && packIndex > latencyIndex);
+  assert.equal(steps[latencyIndex]?.env?.OFFING_HOOK_LATENCY, undefined);
+  assert.equal(steps[latencyIndex]?.["continue-on-error"], undefined);
+  assert.equal(steps[packIndex]?.env?.OFFING_HOOK_LATENCY, "0");
+  assert.equal(steps[packIndex]?.if, undefined);
   assert.deepEqual(release.jobs["first-minute"].needs, ["npm-candidate"]);
   assert.match(
     release.jobs["first-minute"].if,
