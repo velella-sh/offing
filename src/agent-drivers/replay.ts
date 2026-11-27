@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { copyFile, lstat, mkdir, mkdtemp, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
+import { constants } from "node:fs";
+import { copyFile, lstat, mkdir, mkdtemp, open, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
 import { performance } from "node:perf_hooks";
@@ -427,3 +428,63 @@ const replayWorker = [
   "  }",
   "  process.stdout.write(JSON.stringify({ completed: output.result.turns, stopped: output.stopReason ?? null, files }));",
 ].join("\n");
+
+/** Only regular, scoped text files may enter the prompt. Worktree links and secret-bearing files stay out. */
+export async function readProposalFiles(
+  tree: string,
+  paths: readonly string[],
+  containsSecret: (value: string) => boolean,
+) {
+  const root = await realpath(tree);
+  const files: Array<[string, string]> = [];
+  let left = 48 * 1024;
+  for (const path of paths) {
+    if (containsSecret(path) || !(await inside(root, path).catch(() => false))) continue;
+    const file = await open(join(root, path), constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK).catch(
+      () => undefined,
+    );
+    if (!file) continue;
+    try {
+      const info = await file.stat();
+      if (!info.isFile() || info.size > left) continue;
+      const buffer = Buffer.alloc(info.size);
+      const { bytesRead } = await file.read(buffer);
+      const content = buffer.toString("utf8", 0, bytesRead);
+      if (content.includes("\0") || content.includes("\uFFFD") || containsSecret(content)) continue;
+      files.push([path, content]);
+      left -= bytesRead;
+    } finally {
+      await file.close();
+    }
+  }
+  return files;
+}
+
+function proposalEntries(proposal: unknown): Array<[string, string]> {
+  if (!Array.isArray(proposal) || proposal.length > 64) throw new Error("Invalid edit proposal.");
+  const entries: Array<[string, string]> = proposal.map((item: unknown) => {
+    const entry = record(item);
+    if (typeof entry?.path !== "string" || typeof entry.content !== "string") throw new Error("Invalid edit proposal.");
+    return [entry.path, entry.content];
+  });
+  if (!validPaths(entries.map(([path]) => path))) throw new Error("Invalid edit proposal paths.");
+  return entries;
+}
+
+export async function applyAgentProposal(
+  tree: string,
+  proposal: unknown,
+  permits: (path: string) => boolean,
+  containsSecret: (value: string) => boolean,
+  meter: Parameters<typeof applyGuarded>[2],
+) {
+  const root = await realpath(tree);
+  const turn = proposalEntries(proposal);
+  for (const [path, content] of turn) {
+    if (!permits(path) || !(await inside(root, path)))
+      throw new Error("Agent proposal exceeded the current file scope.");
+    if (containsSecret(path) || containsSecret(content)) throw new Error("Agent proposal contained a secret.");
+    await destinationMode(join(root, path));
+  }
+  return { stop: await applyGuarded(root, turn, meter), files: turn.map(([path]) => path) };
+}

@@ -323,11 +323,16 @@ async function commitStaged(checkout: AutopilotCheckout, message: string, permit
   return true;
 }
 
-export async function commitReplayTurn(checkout: AutopilotCheckout, files: readonly string[], number: number) {
+export async function commitReplayTurn(
+  checkout: AutopilotCheckout,
+  files: readonly string[],
+  number: number,
+  driver = "replay",
+) {
   if (files.length === 0) return false;
   const scope = new Set(files);
   await checkout.git("--literal-pathspecs", "add", "--", ...files);
-  return commitStaged(checkout, `chore: replay Autopilot turn ${number}`, (path) => scope.has(path));
+  return commitStaged(checkout, `chore: ${driver} Autopilot turn ${number}`, (path) => scope.has(path));
 }
 
 export async function commitCodemods(

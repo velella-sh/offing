@@ -20,6 +20,7 @@ interface RunOptions {
   cwd: string;
   timeoutMs: number;
   env?: Record<string, string>;
+  replaceEnv?: boolean;
   input?: string;
   outputLimit?: number;
 }
@@ -52,7 +53,7 @@ export function runProcess(
       cwd: options.cwd,
       shell,
       detached: process.platform !== "win32",
-      env: { ...process.env, ...options.env },
+      env: options.replaceEnv ? (options.env ?? {}) : { ...process.env, ...options.env },
       stdio: ["pipe", "pipe", "pipe"],
     });
     child.stdin.on("error", () => undefined);

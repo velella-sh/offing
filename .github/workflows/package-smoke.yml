@@ -14,6 +14,10 @@ on:
         description: Build the selected source revision and run the reusable Action conformance workflow.
         type: boolean
         default: false
+      autopilot_action_only:
+        description: Run only the synthetic Autopilot Action dispatch acceptance.
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -24,10 +28,43 @@ concurrency:
 
 jobs:
   action-conformance:
-    if: ${{ inputs.action_conformance_only }}
+    if: ${{ inputs.action_conformance_only && !inputs.autopilot_action_only }}
     uses: ./.github/workflows/action-conformance.yml # zizmor: ignore[self-repository] -- tests the reusable workflow from this revision
     with:
       build: true
+
+  autopilot-action:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.autopilot_action_only }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - name: Build the Action bundle and its acceptance fixture
+        run: npm run build --silent && npm run build:action --silent
+      - name: acc-autopilot-action (dispatch fixture)
+        env:
+          OFFING_AUTOPILOT_ACTION_BUNDLE: ${{ github.workspace }}/dist/action/index.js
+          OFFING_DATA_VERSION: bundled
+        run: |
+          set -euo pipefail
+          driver_dir="$RUNNER_TEMP/offing-action-driver"
+          mkdir "$driver_dir"
+          cp tests/fixtures/action-autopilot/driver/package.json.fixture "$driver_dir/package.json"
+          cp tests/fixtures/action-autopilot/driver/package-lock.json.fixture "$driver_dir/package-lock.json"
+          npm ci --prefix "$driver_dir" --no-audit --no-fund
+          "$RUNNER_TEMP/offing-action-driver/node_modules/.bin/claude" --version | grep -F '2.1.330'
+          node --test dist/tests/action-autopilot.test.js
+          {
+            printf '### acc-autopilot-action\n\n'
+            printf -- '- Action bundle SHA-256 %s\n' "$(sha256sum "$OFFING_AUTOPILOT_ACTION_BUNDLE" | cut -d ' ' -f 1)"
+            printf -- '- Tested commit %s\n' "$GITHUB_SHA"
+            printf -- '- Pinned driver setup, a synthetic-key turn, Docker tests, and missing-key refusal passed.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
 
   attest-proof:
     needs: smoke
@@ -180,7 +217,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   smoke:
-    if: ${{ !inputs.action_conformance_only }}
+    if: ${{ !inputs.action_conformance_only && !inputs.autopilot_action_only }}
     name: npm, Docker, and Action
     runs-on: ubuntu-latest
     timeout-minutes: 25

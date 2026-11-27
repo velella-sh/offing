@@ -29,6 +29,7 @@ import {
   runGitHubAction,
   suggestionComment,
 } from "./github-action.js";
+import { runActionAutopilot } from "./github-action/run.js";
 import { readReleaseGateDays, releaseGateSummary } from "./github-action/release-gate.js";
 import { parseFleetPolicyInput } from "./github-action/inputs.js";
 import { prepareForecast, readForecastMonths } from "./github-action/forecast.js";
@@ -752,6 +753,7 @@ async function publishForecast(outcome: RunOutcome, ctx: RunContext, months?: nu
 async function main(): Promise<void> {
   try {
     const env: Env = process.env;
+    if (await runActionAutopilot(env)) return;
     const forkMode = env["INPUT_FORK-REVIEW-MODE"] || "off";
     if (forkMode !== "off") {
       const plan = await runForkReview(forkMode, env);
