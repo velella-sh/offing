@@ -43,7 +43,9 @@ jobs:
           OFFING_VERIFY_ACTION_BUNDLE: ${{ !inputs.dry_run && '1' || '' }}
         run: |
           mkdir -p "$RUNNER_TEMP/offing-candidate"
-          npm pack --json --pack-destination "$RUNNER_TEMP/offing-candidate" > "$RUNNER_TEMP/offing-candidate-pack.json"
+          # Run the gate outside npm pack so nested test packs cannot inherit the candidate's output directory.
+          npm run prepack
+          npm pack --ignore-scripts --json --pack-destination "$RUNNER_TEMP/offing-candidate" > "$RUNNER_TEMP/offing-candidate-pack.json"
           node dist/tools/package-size-budget.js "$RUNNER_TEMP/offing-candidate-pack.json"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
