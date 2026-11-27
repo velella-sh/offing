@@ -111,7 +111,8 @@ async function measure(spec: string, root: string): Promise<ColdTiming> {
     const exists = lstatSync(join(root, forbidden), { throwIfNoEntry: false });
     if (exists) throw new Error(`Benchmark repository contains ${forbidden}: ${root}`);
   }
-  const cache = await mkdtemp(join(await realpath(tmpdir()), "offing-first-minute-"));
+  const temp = await realpath(process.env.RUNNER_TEMP ?? tmpdir());
+  const cache = await mkdtemp(join(temp, "offing-first-minute-"));
   try {
     return { repository: basename(root), ...(await timeNpx(spec, root, cache)) };
   } finally {
