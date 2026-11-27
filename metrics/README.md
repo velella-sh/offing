@@ -14,6 +14,12 @@ Directories without an anonymous public source for an Offing listing count are o
 
 The [2026-W44 snapshot](2026-W44.json) uses the [2026-10-28 adoption snapshot](adoption/2026-10-28.json) for GitHub totals and registry presence, plus the [npm API for 2026-10-21 through 2026-10-27](https://api.npmjs.org/downloads/point/2026-10-21:2026-10-27/@velella/offing).
 
+## Roadmap baseline
+
+The [2026-11-26 roadmap baseline](roadmap-baseline.json) records zero stars and zero forks. It preserves the dated [2026-W48 collection](https://github.com/velella-sh/offing/blob/0c72b8860a6f6d06b588e09a212d3ba7846e746c/metrics/2026-W48.json) if the weekly file is updated. The public launch observation has its own date and file.
+
+To verify the baseline and exercise `npm run metrics:adoption` in a clean checkout, dispatch [Launch metrics](../.github/workflows/metrics.yml) with `verify_only` enabled. The workflow writes its new observation to the runner's temporary directory and records the commit, package version and baseline digest in the run summary.
+
 ## Recording snapshots
 
 Build with `npm run build`, then run `node dist/tools/launch-metrics/index.js` from the repository root. It prints the snapshot and writes `metrics/YYYY-Www.json` and `metrics/chart.svg`. A repeat in the same UTC week updates that week's file. Earlier files are preserved. An API failure stops collection before it writes a snapshot.
