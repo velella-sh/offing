@@ -449,13 +449,16 @@ jobs:
 
       - name: acc-guardrails
         env:
+          OFFING_DATA_VERSION: bundled
           OFFING_GUARDRAILS_CLI: ${{ runner.temp }}/package-smoke/npm-install/node_modules/@velella/offing/dist/src/cli.js
         run: |
           set -euo pipefail
           node --test --test-name-pattern 'acc-guardrails exercises the prepared' dist/tests/autopilot-guardrails.test.js
           {
             printf '### acc-guardrails\n\n'
-            printf -- '- Pinned replay and test-only fixtures passed with refusals, redaction, budgets, and undo.\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$RUNNER_TEMP"/package-smoke/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$(node "$OFFING_GUARDRAILS_CLI" --version)" "$GITHUB_SHA"
+            printf -- '- Dry run left Git unchanged. Pinned replay and test-only fixtures passed with refusals, redaction, budgets, and undo.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: acc-proof-bundle
