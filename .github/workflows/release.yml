@@ -1,6 +1,5 @@
 name: Release
 
-# One release chain: verify → build → publish each channel (npm first) → binaries and SBOM → notes and smoke.
 # A version tag runs it; `dry_run` exercises every stage and publishes nothing. npm trusted publishing matches this filename.
 # Every channel's provenance is checked with slsa-verifier, so a missing or mismatched attestation fails the run. See docs/RELEASING.md for the full chain and the dry_run/release_tag manual runs.
 on:
@@ -44,6 +43,7 @@ jobs:
       release_gate_fixture: ${{ inputs.release_gate_fixture || false }}
   first-minute:
     needs: [npm-candidate]
+    if: ${{ !cancelled() && needs.npm-candidate.result == 'success' }}
     uses: ./.github/workflows/first-minute.yml # zizmor: ignore[self-repository] -- measure this release's candidate artifact
     with:
       candidate: true
@@ -51,6 +51,7 @@ jobs:
   # The npm publish lives here, not in a reusable stage: Scorecard's Packaging check needs a publish in a workflow with its own runs.
   npm-publish:
     needs: [first-minute]
+    if: ${{ !cancelled() && needs.first-minute.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
