@@ -245,6 +245,54 @@
         },
         "compliance": {
           "$ref": "#/$defs/compliance"
+        },
+        "whatIfEvidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "date",
+            "targets"
+          ],
+          "properties": {
+            "date": {
+              "$ref": "#/$defs/forecastDay"
+            },
+            "targets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "runtime",
+                  "version",
+                  "verdict",
+                  "reason"
+                ],
+                "properties": {
+                  "runtime": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "version": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "verdict": {
+                    "enum": [
+                      "ready",
+                      "blocked",
+                      "unknown"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "maxItems": 8
+            }
+          }
         }
       },
       "required": [

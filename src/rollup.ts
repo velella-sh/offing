@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { basename, dirname, extname } from "node:path";
+import type { FleetWhatIfEvidence } from "./what-if/fleet.js";
 
 import { severityValues } from "./domain.js";
 import type { Finding, ScanResult, Severity } from "./domain.js";
@@ -67,6 +68,7 @@ export interface FleetRepositoryStatus {
   readonly status: "scanned" | "cached" | "skipped" | "failed";
   readonly reason: string | null;
   readonly forecastEvidence?: ForecastCapture;
+  readonly whatIfEvidence?: FleetWhatIfEvidence;
   readonly compliance?: FleetPolicyCompliance;
 }
 

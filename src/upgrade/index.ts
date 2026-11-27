@@ -44,13 +44,14 @@ export async function checkUpgrade(
   root: string,
   target: UpgradeTarget,
   analyzers: readonly UpgradeAnalyzer[] = upgradeAnalyzers,
+  asOf?: string,
 ): Promise<UpgradeReport> {
   const ran: string[] = [];
   const issues: UpgradeIssue[] = [];
   for (const analyzer of analyzers) {
     if (!analyzer.runtimes.includes(target.runtime) || !(await analyzer.applies(root))) continue;
     ran.push(analyzer.id);
-    issues.push(...(await analyzer.analyze(root, target)));
+    issues.push(...(await analyzer.analyze(root, target, asOf)));
   }
   await attachManifestChains(root, issues);
   issues.sort(

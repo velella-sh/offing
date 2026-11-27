@@ -426,6 +426,36 @@
       "prompt": "Trace the Dockerfile container base build stages used by the last image.",
       "tool": "image_lineage",
       "reason": "A final stage can use bases through COPY."
+    },
+    {
+      "id": "what-if-deadlines",
+      "prompt": "Compare simulated runtime upgrade scenarios and show which deadlines go away.",
+      "tool": "simulate_upgrade",
+      "reason": "The request compares forecast changes caused by hypothetical runtime targets."
+    },
+    {
+      "id": "what-if-multiple",
+      "prompt": "Simulate upgrading my runtime to Node.js 22 or 24 and compare the separate results.",
+      "tool": "simulate_upgrade",
+      "reason": "The two targets call for independent scenarios."
+    },
+    {
+      "id": "what-if-pins",
+      "prompt": "Show the projected runtime pins and blockers after my proposed upgrade.",
+      "tool": "simulate_upgrade",
+      "reason": "The user asks for a hypothetical upgrade report rather than only the compatibility verdict."
+    },
+    {
+      "id": "what-if-effort",
+      "prompt": "Simulate a runtime upgrade and classify its projected fixes by effort.",
+      "tool": "simulate_upgrade",
+      "reason": "Effort and projections belong to the simulation report."
+    },
+    {
+      "id": "what-if-mixed",
+      "prompt": "What would happen to my lifecycle deadlines if I changed the runtime target? Simulate that upgrade.",
+      "tool": "simulate_upgrade",
+      "reason": "The question ties a target change to a projection of deadlines."
     }
   ]
 }

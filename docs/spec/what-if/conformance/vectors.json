@@ -1,0 +1,60 @@
+[
+  {
+    "name": "unmeasured repository",
+    "valid": true,
+    "report": {
+      "schemaVersion": "offing.whatif.v1",
+      "kind": "repository",
+      "today": "2026-11-27",
+      "reports": [
+        {
+          "target": { "runtime": "python", "version": "3.13" },
+          "verdict": "unknown",
+          "analyzers": [],
+          "issues": [],
+          "blockers": { "total": 0, "roots": [], "ungrouped": [] },
+          "support": { "status": "no-data", "rule": null, "date": null, "source": null, "next": null },
+          "pins": [],
+          "forecast": { "until": "2027-11-27", "removed": [], "retained": [], "added": [] }
+        }
+      ]
+    }
+  },
+  {
+    "name": "fleet with one unpinned repository",
+    "valid": true,
+    "report": {
+      "schemaVersion": "offing.whatif.v1",
+      "kind": "fleet",
+      "today": "2026-11-27",
+      "reports": [
+        {
+          "target": { "runtime": "nodejs", "version": "22" },
+          "ready": [],
+          "blocked": [],
+          "unknown": [{ "name": "org/repo", "host": "https://example.com", "commit": null, "reason": "No evidence." }]
+        }
+      ]
+    }
+  },
+  {
+    "name": "wrong fleet member kind",
+    "valid": false,
+    "report": {
+      "schemaVersion": "offing.whatif.v1",
+      "kind": "repository",
+      "today": "2026-11-27",
+      "reports": [{ "target": { "runtime": "nodejs", "version": "22" }, "ready": [], "blocked": [], "unknown": [] }]
+    }
+  },
+  {
+    "name": "unknown target syntax",
+    "valid": false,
+    "report": {
+      "schemaVersion": "offing.whatif.v1",
+      "kind": "fleet",
+      "today": "2026-11-27",
+      "reports": [{ "target": { "runtime": "nodejs", "version": "latest" }, "ready": [], "blocked": [], "unknown": [] }]
+    }
+  }
+]

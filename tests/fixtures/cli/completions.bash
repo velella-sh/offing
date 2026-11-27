@@ -25,7 +25,7 @@ _offing() {
     policy) opts="validate explain pull" ;;
     scan) opts="--demo --sbom --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --lookahead --policy --policy-online --all --by-owner --data-version --only --exclude" ;;
     baseline) opts="--output --data-version" ;;
-    forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force --fleet --by --card --theme --digest --previous --owners --gitlab --gitlab-url" ;;
+    forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force --target --effort --fleet --by --card --theme --digest --previous --owners --gitlab --gitlab-url" ;;
     forecast) opts="--months --as-of --today --timeline --json --format --data-version" ;;
     countdown) opts="--as-of --limit --json --once --no-animation --no-cache --data-version" ;;
     plan) opts="--json --wave --data-version" ;;
@@ -66,7 +66,7 @@ _offing() {
     codemod) opts="" ;;
     config) opts="--json" ;;
     drivers) opts="" ;;
-    fleet) opts="--include --exclude --topic --repos --jobs --policy --gitlab --gitlab-url --include-forks --include-archived --json --image-lineage --html --format --no-cache --fail-on --progress --forecast-input --as-of" ;;
+    fleet) opts="--include --exclude --topic --repos --jobs --policy --gitlab --gitlab-url --include-forks --include-archived --json --image-lineage --html --format --no-cache --fail-on --progress --forecast-input --what-if-target --as-of" ;;
     hook) opts="--fail-on" ;;
     lineage) opts="--json --format --resolve-digests" ;;
     lsp) opts="" ;;

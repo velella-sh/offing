@@ -1,0 +1,86 @@
+{
+  "request": {
+    "name": "simulate_upgrade",
+    "arguments": {
+      "repository_path": "<repository>",
+      "targets": [
+        "php@8.4"
+      ],
+      "as_of": "2026-11-27"
+    }
+  },
+  "response": {
+    "schemaVersion": "offing.whatif.v1",
+    "kind": "repository",
+    "today": "2026-11-27",
+    "reports": [
+      {
+        "target": {
+          "runtime": "php",
+          "version": "8.4"
+        },
+        "verdict": "blocked",
+        "analyzers": [
+          "composer-lock",
+          "target-lifecycle"
+        ],
+        "issues": [
+          {
+            "analyzer": "composer-lock",
+            "level": "blocker",
+            "subject": "acme/legacy@1.0.0",
+            "path": "composer.lock",
+            "line": 6,
+            "reason": "acme/legacy@1.0.0 requires php ^7.0, which excludes PHP 8.4.",
+            "evidence": {
+              "kind": "lockfile",
+              "value": "require.php: ^7.0"
+            }
+          }
+        ],
+        "blockers": {
+          "total": 1,
+          "roots": [],
+          "ungrouped": [
+            {
+              "subject": "acme/legacy@1.0.0",
+              "path": "composer.lock",
+              "firstSupported": "unknown"
+            }
+          ]
+        },
+        "support": {
+          "status": "no-data",
+          "rule": null,
+          "date": null,
+          "source": null,
+          "next": null
+        },
+        "pins": [],
+        "forecast": {
+          "until": "2027-11-27",
+          "removed": [],
+          "retained": [
+            {
+              "date": "2020-02-11",
+              "rule": "npm.package.request.deprecated",
+              "title": "request is deprecated",
+              "path": "package.json",
+              "line": 5,
+              "source": "https://www.npmjs.com/package/request"
+            },
+            {
+              "date": "2026-04-30",
+              "rule": "nodejs.runtime.eol-20",
+              "title": "Node.js 20 is end-of-life",
+              "path": ".github/workflows/ci.yml",
+              "line": 7,
+              "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+            }
+          ],
+          "added": []
+        }
+      }
+    ]
+  }
+}

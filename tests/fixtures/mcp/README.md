@@ -13,6 +13,7 @@ and holds the answer to the recording. A change to any answer is therefore a dif
 | `verify_migration.json` | The same finding after the repository was left unchanged, so it is not verified. |
 | `check_dependency.json` | `pkg:npm/request@2.88.2`. |
 | `check_upgrade.json` | A move to `php@8.4`, which the lockfile blocks. |
+| `simulate_upgrade.json` | A static PHP upgrade simulation with its recorded lockfile blocker and target status. |
 | `check_snippet.json` | A `Dockerfile` that starts from `node:16`. |
 | `forecast_repository.json`, `recommend_version.json` | Twelve months and a recommendation as of `2025-09-01`. |
 

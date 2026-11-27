@@ -20,6 +20,9 @@ import type { ForecastCapture } from "../fleet-forecast/model.js";
 import { rollup, type FleetRepositoryStatus, type FleetResult, type RollupFinding } from "../rollup.js";
 import { scanWithBuiltIns } from "../scan-builtins.js";
 import { globToRegExp } from "../workspaces.js";
+import type { UpgradeTarget } from "../upgrade/types.js";
+import { captureWhatIf, type FleetWhatIfEvidence } from "../what-if/fleet.js";
+import { simulateScan } from "../what-if/index.js";
 import { VERSION } from "../version.js";
 import { fleetCacheKey, readFleetCache, writeFleetCache } from "./cache.js";
 import { FleetHostError, type FleetHost, type FleetRepository, type FleetSelection } from "./host.js";
@@ -31,6 +34,7 @@ const selection: FleetSelection = {
   includes: (path) => inputs.some((input) => declaresInput(input, path)),
 };
 
+const upgradePaths = ["vendor/modules.txt"];
 const policyPaths = [CONFIG_FILE_NAME, ...CODEOWNERS_LOCATIONS];
 export interface FleetProgress extends FleetRepositoryStatus {
   readonly bytesFetched: number;
@@ -49,6 +53,7 @@ export interface FleetOptions {
   readonly includeForks?: boolean;
   readonly includeArchived?: boolean;
   readonly onProgress?: (event: FleetProgress) => void;
+  readonly whatIf?: { readonly targets: readonly UpgradeTarget[]; readonly asOf?: string };
   readonly forecast?: { readonly gitlab: boolean; readonly asOf?: string };
 }
 
@@ -66,6 +71,7 @@ interface FleetContext {
   readonly scannedAt: string;
   readonly noCache: boolean;
   readonly forecast?: FleetOptions["forecast"];
+  readonly whatIf: FleetOptions["whatIf"];
   readonly policy?: string;
   readonly imageLineage: boolean;
 }
@@ -109,6 +115,7 @@ function selectedInputs(context: FleetContext): FleetSelection {
   const locations = new Set([
     ...(context.forecast ? ownershipLocations(context.forecast.gitlab) : []),
     ...(context.policy ? policyPaths : []),
+    ...(context.whatIf ? upgradePaths : []),
   ]);
   if (locations.size === 0) return selection;
   return {
@@ -120,6 +127,7 @@ function selectedInputs(context: FleetContext): FleetSelection {
 interface PinnedScan extends Omit<RepositoryScan, "state"> {
   readonly compliance?: FleetPolicyCompliance;
   readonly forecastEvidence?: ForecastCapture;
+  readonly whatIfEvidence?: FleetWhatIfEvidence;
 }
 
 async function scanPinned(context: FleetContext, repository: FleetRepository, commit: string): Promise<PinnedScan> {
@@ -137,6 +145,7 @@ async function scanPinned(context: FleetContext, repository: FleetRepository, co
         })
       : undefined;
     const forecastEvidence = context.forecast ? await captureForecast(report, context.forecast.gitlab) : undefined;
+    const whatIf = context.whatIf ? captureWhatIf(await simulateScan(report, context.whatIf.targets)) : undefined;
     return {
       bytesFetched,
       findings: safeFindings(report.findings),
@@ -150,6 +159,7 @@ async function scanPinned(context: FleetContext, repository: FleetRepository, co
           }
         : {}),
       ...(forecastEvidence ? { forecastEvidence } : {}),
+      ...(whatIf ? { whatIfEvidence: whatIf } : {}),
     };
   } finally {
     await rm(directory, { recursive: true, force: true });
@@ -172,7 +182,7 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
     if (cached) {
       return { state: { ...state, commit, status: "cached", reason: null }, findings: cached, bytesFetched: 0 };
     }
-    const { compliance, forecastEvidence, ...report } = await scanPinned(context, repo, commit);
+    const { compliance, forecastEvidence, whatIfEvidence, ...report } = await scanPinned(context, repo, commit);
     if (!context.noCache) {
       // A read-only cache directory must not turn a successful scan into a failed repository.
       await writeFleetCache(context.cache, key, report.findings).catch(() => undefined);
@@ -185,6 +195,7 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
         reason: null,
         ...(compliance ? { compliance } : {}),
         ...(forecastEvidence ? { forecastEvidence } : {}),
+        ...(whatIfEvidence ? { whatIfEvidence } : {}),
       },
       ...report,
     };
@@ -196,7 +207,7 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
 
 async function fleetContext(host: FleetHost, options: FleetOptions): Promise<FleetContext> {
   const data = await getActiveData();
-  const asOf = options.forecast?.asOf;
+  const asOf = options.forecast?.asOf ?? options.whatIf?.asOf;
   if (asOf !== undefined && !isIsoDate(asOf)) throw new FleetHostError("--as-of needs a date (YYYY-MM-DD).");
   const scannedAt = asOf === undefined ? new Date().toISOString() : `${asOf}T00:00:00.000Z`;
   const fingerprint = fleetCacheKey([VERSION, data.info.version, scannedAt.slice(0, 10), ...selection.patterns]);
@@ -207,11 +218,13 @@ async function fleetContext(host: FleetHost, options: FleetOptions): Promise<Fle
     // Optional evidence needs the pinned inputs, while cache entries contain aggregates.
     noCache:
       options.forecast !== undefined ||
+      options.whatIf !== undefined ||
       options.policy !== undefined ||
       options.imageLineage === true ||
       (options.noCache ?? false),
     imageLineage: options.imageLineage ?? false,
     forecast: options.forecast,
+    whatIf: options.whatIf,
     ...(options.policy
       ? { policy: parsePolicyReference(options.policy) ? options.policy : resolve(options.policy) }
       : {}),
