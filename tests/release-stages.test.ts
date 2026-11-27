@@ -160,14 +160,34 @@ test("lifecycle signing is tag-only and the release verifies on a separate fresh
 
 test("release publication and consumer workflows wire the same opt-in lifecycle gate", async () => {
   const release = parse(await readFile(join(workflowsDir, "release.yml"), "utf8"));
-  const steps = release.jobs["npm-publish"].steps as Array<{ run?: string; env?: Record<string, string> }>;
+  assert.equal(release.jobs["npm-candidate"].uses, "./.github/workflows/release-pack.yml");
+  const pack = parse(await readFile(join(workflowsDir, "release-pack.yml"), "utf8"));
+  const steps = pack.jobs.pack.steps as Array<{
+    run?: string;
+    env?: Record<string, string>;
+    if?: string;
+    "continue-on-error"?: boolean;
+  }>;
   const gateIndex = steps.findIndex(({ run }) => run === "bash .github/scripts/release-gate.sh");
   assert.ok(gateIndex > 0);
-  assert.ok(steps.findIndex(({ run }) => run?.includes("npm publish")) > gateIndex);
-  assert.match(
-    steps[gateIndex]?.env?.USE_BLOCKED_FIXTURE ?? "",
-    /workflow_dispatch.*inputs.dry_run.*inputs.release_gate_fixture/,
+  const latencyIndex = steps.findIndex(
+    ({ run }) => run === "node tools/run-tests.mjs dist/tests/agent-hooks-latency.test.js",
   );
+  const packIndex = steps.findIndex(({ run }) => run?.includes("npm pack"));
+  assert.ok(latencyIndex > gateIndex && packIndex > latencyIndex);
+  assert.equal(steps[latencyIndex]?.env?.OFFING_HOOK_LATENCY, undefined);
+  assert.equal(steps[latencyIndex]?.["continue-on-error"], undefined);
+  assert.equal(steps[packIndex]?.env?.OFFING_HOOK_LATENCY, "0");
+  assert.equal(steps[packIndex]?.if, undefined);
+  assert.deepEqual(release.jobs["first-minute"].needs, ["npm-candidate"]);
+  assert.match(
+    release.jobs["first-minute"].if,
+    /!cancelled\(\).*needs\.npm-candidate\.result == 'success'.*inputs\.dry_run/,
+  );
+  assert.equal(release.jobs["first-minute"].with.candidate, true);
+  assert.deepEqual(release.jobs["npm-publish"].needs, ["npm-candidate"]);
+  assert.match(release.jobs["npm-publish"].if, /!cancelled\(\).*needs\.npm-candidate\.result == 'success'/);
+  assert.match(steps[gateIndex]?.env?.USE_BLOCKED_FIXTURE ?? "", /inputs.dry_run.*inputs.release_gate_fixture/);
   const script = await readFile(".github/scripts/release-gate.sh", "utf8");
   assert.match(script, /set -euo pipefail/);
   assert.match(script, /npm sbom --omit=dev --sbom-format=cyclonedx --package-lock-only/);

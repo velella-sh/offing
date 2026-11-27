@@ -1,0 +1,1 @@
+- Keep the first forecast read-only and show how to add agent guard instructions.

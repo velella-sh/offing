@@ -6,7 +6,8 @@ import { runCli } from "./cli-runner.js";
 import { copyFixtureTree } from "./fixture-copies.js";
 
 const asOf = ["--as-of", "2026-10-25"];
-const nextSteps = /\nNext: offing forecast\nNext: offing init --hooks\n$/;
+const nextSteps =
+  /\nNext: offing forecast\nNext: offing init --hooks\nNext: offing init --agents \(add agent guard instructions\)\n$/;
 
 test("the first-run forecast is short and stable on three examples", async (t) => {
   const roots: string[] = [];

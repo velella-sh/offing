@@ -103,7 +103,7 @@ async function writeCalendar(file: string, calendar: string, force: boolean, ctx
   }
 }
 
-export const command: CliCommand = {
+export const command = {
   name: "forecast",
   flags: [
     "--months",
@@ -130,9 +130,10 @@ export const command: CliCommand = {
     "  offing forecast --fleet <fleet.json> --target <runtime@version> [--format markdown|json]",
   ],
   usageSlots: [13, 14],
-  run(args, ctx) {
+  run(args, ctx, readOnly = false) {
     if (args.some((arg) => arg === "--target" || arg.startsWith("--target=") || arg === "--effort"))
       return runWhatIf(args, ctx);
+    const scanOptions = (state: Gated) => ({ noCache: readOnly || state.noCache });
     if (args.some((arg) => fleetForecastFlags.includes(arg.split("=")[0] ?? arg))) return runFleetForecast(args, ctx);
     return afterGates("forecast", args, ctx, async (state: Gated) => {
       const early = await repositoryPhase(state, ctx);
@@ -162,7 +163,7 @@ export const command: CliCommand = {
       }
       const scan = await scanWithBuiltIns(
         state.pathArgument,
-        asOfValue === undefined ? { noCache: state.noCache } : replayScanOptions(asOfValue),
+        asOfValue === undefined ? scanOptions(state) : replayScanOptions(asOfValue),
       );
       const forecast = await buildRepositoryForecast(scan, months);
       if (modes.ics) {
@@ -175,4 +176,4 @@ export const command: CliCommand = {
       return 0;
     });
   },
-};
+} satisfies CliCommand;
