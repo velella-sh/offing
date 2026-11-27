@@ -49,12 +49,14 @@ run summary. The locally recorded evaluation and the workflow signature cover
 different evidence. Offing checks the Git range and logs, and GitHub CLI
 checks which workflow attested to those exact proof bytes.
 
-After downloading the attested artifact, run the following in its directory.
-Set `SOURCE_REF` and `SOURCE_COMMIT` from the package smoke run you trust. For
-this workflow's same-revision reusable signer, the signer digest is the source
-commit.
+Set `RUN_ID`, `SOURCE_REF`, and `SOURCE_COMMIT` from the package smoke run you
+trust. For this workflow's same-revision reusable signer, the signer digest
+is the source commit.
 
 ```sh
+gh run download "$RUN_ID" --repo velella-sh/offing \
+  --name proof-acceptance-attested --dir proof-evidence
+cd proof-evidence
 gh attestation verify offing-proof.json \
   --bundle offing-proof.sigstore.json \
   --repo velella-sh/offing \
