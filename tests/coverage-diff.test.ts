@@ -137,6 +137,7 @@ test("the CI workflow shards checks and collects coverage in one unsharded run",
       };
       coverage: { name?: string; steps: Array<Record<string, unknown>>; needs?: unknown };
       "check-cross-os": { steps: Array<Record<string, unknown>> };
+      "coverage-badge": { needs: string[] };
       "ci-ok": { needs: string[] };
     };
   };
@@ -180,6 +181,7 @@ test("the CI workflow shards checks and collects coverage in one unsharded run",
 
   assert.equal(workflow.jobs.coverage.name, "coverage");
   assert.equal(workflow.jobs.coverage.needs, "changes");
+  assert.deepEqual(workflow.jobs["coverage-badge"].needs, ["check", "coverage"]);
   assert.ok(workflow.jobs["ci-ok"].needs.includes("coverage"));
   const coverageSteps = workflow.jobs.coverage.steps;
   const coverageNamed = (pattern: RegExp): Record<string, unknown> | undefined =>
