@@ -1,0 +1,1323 @@
+{
+  "checkedAt": "2026-11-27T20:54:21Z",
+  "activitySince": "2025-11-28",
+  "scanDate": "2026-11-28",
+  "offingCommit": "b821f1ce170475aea318e7e72dc93a1c1af700ee",
+  "ebbVersion": "0.2.0",
+  "repositories": [
+    {
+      "repository": "Tyrrrz/CliWrap",
+      "commit": "4b7a3d07b9934a9d7559cb0509dde9e6b286403b",
+      "lastPushAt": "2026-11-26T14:04:07Z",
+      "corpus": "benchmarks/public-repositories/dotnet/Tyrrrz--CliWrap.json",
+      "runner": "dotnet",
+      "testCommand": ["dotnet", "test", "./CliWrap.slnx"],
+      "baseline": {
+        "jobUrl": "https://github.com/Tyrrrz/CliWrap/actions/runs/45835285691/job/139962409882",
+        "job": "main / test (ubuntu-latest)",
+        "passedAt": "2026-11-26T14:05:22Z",
+        "testEvidence": "Run tests"
+      },
+      "finding": {
+        "id": "dotnet.runtime.end-of-support-6.0:CliWrap/CliWrap.csproj:3",
+        "ruleId": "dotnet.runtime.end-of-support-6.0",
+        "path": "CliWrap/CliWrap.csproj",
+        "line": 3
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 5,
+        "verificationCommands": 3,
+        "source": "https://dotnet.microsoft.com/platform/support/policy/dotnet-core"
+      }
+    },
+    {
+      "repository": "authgear/authgear-deno",
+      "commit": "341983a549350bbf22f6092d6dd9f906cdd664c1",
+      "lastPushAt": "2026-10-27T09:13:11Z",
+      "corpus": "benchmarks/public-repositories/deno/9130--authgear--authgear-deno.json",
+      "runner": "go",
+      "testCommand": ["go", "test", "-mod=readonly", "./..."],
+      "baseline": {
+        "jobUrl": "https://github.com/authgear/authgear-deno/actions/runs/40479124120/job/122104687085",
+        "job": "test",
+        "passedAt": "2026-10-27T09:13:47Z",
+        "testEvidence": "Run make test"
+      },
+      "finding": {
+        "id": "deno.runtime.eol-1.x:.tool-versions:2",
+        "ruleId": "deno.runtime.eol-1.x",
+        "path": ".tool-versions",
+        "line": 2
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 3,
+        "verificationCommands": 2,
+        "source": "https://github.com/denoland/deno/releases/tag/v2.0.0"
+      }
+    },
+    {
+      "repository": "cli/cli",
+      "commit": "9490d204a2ba95434153dedce99898ce9f281426",
+      "lastPushAt": "2026-11-27T12:21:32Z",
+      "corpus": "benchmarks/public-repositories/go/0489--cli--cli.json",
+      "runner": "go",
+      "testCommand": ["go", "test", "-mod=readonly", "./..."],
+      "baseline": {
+        "jobUrl": "https://github.com/cli/cli/actions/runs/41106691482/job/124238262638",
+        "job": "integration-tests (ubuntu-latest)",
+        "passedAt": "2026-10-30T18:25:46Z",
+        "testEvidence": "Run attestation command set integration tests"
+      },
+      "finding": {
+        "id": "go.runtime.end-of-support-1.25:.github/codeql/tests/unsanitized-response-to-terminal/go.mod:3",
+        "ruleId": "go.runtime.end-of-support-1.25",
+        "path": ".github/codeql/tests/unsanitized-response-to-terminal/go.mod",
+        "line": 3
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://go.dev/doc/devel/release"
+      }
+    },
+    {
+      "repository": "elastic/crd-ref-docs",
+      "commit": "fdfed81f54d565946e44564623a57ac2c11f3b06",
+      "lastPushAt": "2026-06-11T15:25:41Z",
+      "corpus": "benchmarks/public-repositories/kubernetes/0187--elastic--crd-ref-docs.json",
+      "runner": "go",
+      "testCommand": ["go", "test", "-mod=readonly", "./..."],
+      "baseline": {
+        "jobUrl": "https://github.com/elastic/crd-ref-docs/actions/runs/27357895014/job/80837066624",
+        "job": "Build",
+        "passedAt": "2026-06-11T15:26:41Z",
+        "testEvidence": "go test -v ./...",
+        "workflowPath": ".github/workflows/build.yml"
+      },
+      "finding": {
+        "id": "github-actions.cache.node20:.github/workflows/release.yml:23",
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 23
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "prometheus/node_exporter",
+      "commit": "baf644aaa87148ab0068cd334730a6c9737cfb46",
+      "lastPushAt": "2026-11-19T17:45:47Z",
+      "corpus": "benchmarks/public-repositories/go/0058--prometheus--node_exporter.json",
+      "runner": "go",
+      "testCommand": ["go", "test", "-mod=readonly", "./..."],
+      "baseline": {
+        "jobUrl": "https://github.com/prometheus/node_exporter/actions/runs/37601711367/job/112727397818",
+        "job": "Run end-to-end tests on FreeBSD",
+        "passedAt": "2026-10-07T09:37:26Z",
+        "testEvidence": "test-e2e"
+      },
+      "finding": {
+        "id": "go.runtime.end-of-support-1.25:go.mod:3",
+        "ruleId": "go.runtime.end-of-support-1.25",
+        "path": "go.mod",
+        "line": 3
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://go.dev/doc/devel/release"
+      }
+    },
+    {
+      "repository": "instacart/formula",
+      "commit": "423fe9bdbe70221f02ddac14adf3129818a6206f",
+      "lastPushAt": "2026-11-11T05:07:16Z",
+      "corpus": "benchmarks/public-repositories/android/0876--instacart--formula.json",
+      "runner": "gradle",
+      "testCommand": ["./gradlew", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/instacart/formula/actions/runs/42274755910/job/128088102049",
+        "job": "test",
+        "passedAt": "2026-11-06T18:57:30Z",
+        "testEvidence": "Run Core Tests"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/build-workflow.yml:118",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build-workflow.yml",
+        "line": 118
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "QuantumBadger/RedReader",
+      "commit": "3a1ab4f32a763155c49fa233cd1314173abd22d9",
+      "lastPushAt": "2026-10-10T15:45:39Z",
+      "corpus": "benchmarks/public-repositories/android/0870--QuantumBadger--RedReader.json",
+      "runner": "gradle",
+      "testCommand": ["./gradlew", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/QuantumBadger/RedReader/actions/runs/38064913825/job/114250487425",
+        "job": "ci",
+        "passedAt": "2026-10-10T15:54:16Z",
+        "testEvidence": "Unit tests"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/build.yml:14",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 14
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "sublunarian/light-amp",
+      "commit": "729161a67019730aa2352d4d5aa3b01a42f640c3",
+      "lastPushAt": "2026-11-25T07:07:14Z",
+      "corpus": "benchmarks/public-repositories/android/0905--sublunarian--light-amp.json",
+      "runner": "gradle",
+      "testCommand": ["./gradlew", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/sublunarian/light-amp/actions/runs/42276589378/job/128094354996",
+        "job": "build",
+        "passedAt": "2026-11-06T19:10:39Z",
+        "testEvidence": "Build and test"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/build.yml:23",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 23
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "freechat-fun/freechat",
+      "commit": "eb3bbd1260d37a9499a34b057574e9ab8b86e766",
+      "lastPushAt": "2026-11-27T13:34:04Z",
+      "corpus": "benchmarks/public-repositories/scala/0875--freechat-fun--freechat.json",
+      "runner": "maven",
+      "testCommand": ["mvn", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/freechat-fun/freechat/actions/runs/42161418519/job/127707736284",
+        "job": "java_build (25)",
+        "passedAt": "2026-11-06T04:17:44Z",
+        "testEvidence": "Compile and test with JDK 25"
+      },
+      "finding": {
+        "id": "android.target-sdk.existing.default-below-35:freechat-sdk/java/build.gradle:41",
+        "ruleId": "android.target-sdk.existing.default-below-35",
+        "path": "freechat-sdk/java/build.gradle",
+        "line": 41
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://developer.android.com/google/play/requirements/target-sdk"
+      }
+    },
+    {
+      "repository": "neo4j-examples/movies-java-spring-data-neo4j",
+      "commit": "e009df722b0d085e31b4cc4e7f84b12b16fb8925",
+      "lastPushAt": "2026-03-13T13:36:53Z",
+      "corpus": "benchmarks/public-repositories/java/0175--neo4j-examples--movies-java-spring-data-neo4j.json",
+      "runner": "maven",
+      "testCommand": ["./mvnw", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/neo4j-examples/movies-java-spring-data-neo4j/actions/runs/23053373128/job/66960075331",
+        "job": "with jdk 17",
+        "passedAt": "2026-03-13T13:37:49Z",
+        "testEvidence": "./mvnw --no-transfer-progress clean verify",
+        "workflowPath": ".github/workflows/build.yml"
+      },
+      "finding": {
+        "id": "github-actions.cache.node20:.github/workflows/build.yml:30",
+        "ruleId": "github-actions.cache.node20",
+        "path": ".github/workflows/build.yml",
+        "line": 30
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "actions/toolkit",
+      "commit": "7e25f67e8fd17369aa21e6e816ac99654106e0dc",
+      "lastPushAt": "2026-11-11T23:44:40Z",
+      "corpus": "benchmarks/public-repositories/node-actions/0007--actions--toolkit.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/actions/toolkit/actions/runs/38386516367/job/115259545836",
+        "job": "Build (ubuntu-latest, 20.x)",
+        "passedAt": "2026-10-13T10:58:40Z",
+        "testEvidence": "npm test"
+      },
+      "finding": {
+        "id": "github-actions.github-script.node20:.github/workflows/update-github.yaml:33",
+        "ruleId": "github-actions.github-script.node20",
+        "path": ".github/workflows/update-github.yaml",
+        "line": 33
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "bcomnes/npm-run-all2",
+      "commit": "42aeadd27c352024a54c06b2b311703be52edf44",
+      "lastPushAt": "2026-11-24T08:42:20Z",
+      "corpus": "benchmarks/public-repositories/node/0409--bcomnes--npm-run-all2.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/bcomnes/npm-run-all2/actions/runs/41482707130/job/125537952460",
+        "job": "test (ubuntu-latest, 22)",
+        "passedAt": "2026-11-02T16:46:32Z",
+        "testEvidence": "Run npm run test:node-test"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-22:.github/workflows/test.yml:44",
+        "ruleId": "nodejs.runtime.eol-22",
+        "path": ".github/workflows/test.yml",
+        "line": 44
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "BenoitZugmeyer/eslint-plugin-html",
+      "commit": "4cec5bff2686e014191c2281867d8c291cd8e7ca",
+      "lastPushAt": "2026-11-23T02:52:50Z",
+      "corpus": "benchmarks/public-repositories/node/0411--BenoitZugmeyer--eslint-plugin-html.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/BenoitZugmeyer/eslint-plugin-html/actions/runs/39745029982/job/119711344382",
+        "job": "test (ubuntu-latest, 18, latest)",
+        "passedAt": "2026-10-22T08:04:53Z",
+        "testEvidence": "Run npm test"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-18:.github/workflows/tests.yml:51",
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": ".github/workflows/tests.yml",
+        "line": 51
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "chalk/chalk",
+      "commit": "47fc05abd46171b235e24174cd2dba83d25bf037",
+      "lastPushAt": "2026-10-22T21:24:45Z",
+      "corpus": "benchmarks/public-repositories/node/0005--chalk--chalk.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/chalk/chalk/actions/runs/36291955059/job/108543617591",
+        "job": "Node.js 26",
+        "passedAt": "2026-09-27T03:38:22Z",
+        "testEvidence": "Run npm test"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-22:.github/workflows/main.yml:14",
+        "ruleId": "nodejs.runtime.eol-22",
+        "path": ".github/workflows/main.yml",
+        "line": 14
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "cloudfour/lighthouse-parade",
+      "commit": "e3cddd59a47c0dfac81a1178f3e0032b6d4acc8a",
+      "lastPushAt": "2026-11-21T14:36:25Z",
+      "corpus": "benchmarks/public-repositories/node/0042--cloudfour--lighthouse-parade.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/cloudfour/lighthouse-parade/actions/runs/32903587142/job/97982608887",
+        "job": "test (18.x)",
+        "passedAt": "2026-08-25T21:56:25Z",
+        "testEvidence": "npm run test",
+        "workflowPath": ".github/workflows/ci.yml"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-18:.github/workflows/ci.yml:18",
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": ".github/workflows/ci.yml",
+        "line": 18
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "expressjs/express",
+      "commit": "a419aa7350389a275ab45fde2e849ed1f02449ef",
+      "lastPushAt": "2026-11-19T17:49:18Z",
+      "corpus": "benchmarks/public-repositories/node/0000--expressjs--express.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/expressjs/express/actions/runs/37958916407/job/113917045954",
+        "job": "Node.js 16 - ubuntu-latest",
+        "passedAt": "2026-10-09T16:26:35Z",
+        "testEvidence": "Run tests"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-18:.github/workflows/ci.yml:49",
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": ".github/workflows/ci.yml",
+        "line": 49
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "fastify/fastify",
+      "commit": "f736849a10a9b2ca57fb09437feb8294cda76234",
+      "lastPushAt": "2026-11-27T16:53:36Z",
+      "corpus": "benchmarks/public-repositories/node/0002--fastify--fastify.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/fastify/fastify/actions/runs/38537302760/job/115763206590",
+        "job": "test-unit (24, macos-latest)",
+        "passedAt": "2026-10-14T08:46:49Z",
+        "testEvidence": "Run tests"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-20:.github/workflows/ci.yml:133",
+        "ruleId": "nodejs.runtime.eol-20",
+        "path": ".github/workflows/ci.yml",
+        "line": 133
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "koajs/koa",
+      "commit": "2fecd029c6ce6b79d65158d28a76538f7f6b0378",
+      "lastPushAt": "2026-11-27T07:52:07Z",
+      "corpus": "benchmarks/public-repositories/node/0003--koajs--koa.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/koajs/koa/actions/runs/37882342929/job/113664600482",
+        "job": "build (22.x)",
+        "passedAt": "2026-10-09T04:06:57Z",
+        "testEvidence": "Run npm run test:coverage"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-18:package.json:66",
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 66
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "npm/node-semver",
+      "commit": "6e05b7637396ac66522cff8731f07cfe0ef49a29",
+      "lastPushAt": "2026-11-05T19:55:36Z",
+      "corpus": "benchmarks/public-repositories/node/0009--npm--node-semver.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/npm/node-semver/actions/runs/27842314704/job/82403862931",
+        "job": "Test - Linux - 10.0.0",
+        "passedAt": "2026-06-19T18:30:06Z",
+        "testEvidence": "npm test --ignore-scripts",
+        "workflowPath": ".github/workflows/ci.yml"
+      },
+      "finding": {
+        "id": "github-actions.github-script.node20:.github/workflows/release.yml:219",
+        "ruleId": "github-actions.github-script.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 219
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "sindresorhus/got",
+      "commit": "05b4476913da39a47dd8e20d29e250f28b0a6dca",
+      "lastPushAt": "2026-11-20T09:46:06Z",
+      "corpus": "benchmarks/public-repositories/node/0001--sindresorhus--got.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/sindresorhus/got/actions/runs/38357497747/job/115163678392",
+        "job": "Node.js 26 on ubuntu-latest",
+        "passedAt": "2026-10-13T06:38:06Z",
+        "testEvidence": "Run npm run test"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-22:.github/workflows/main.yml:17",
+        "ruleId": "nodejs.runtime.eol-22",
+        "path": ".github/workflows/main.yml",
+        "line": 17
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "tj/commander.js",
+      "commit": "ba6d13ddb4243e5913367734f8c159089ffe7834",
+      "lastPushAt": "2026-11-27T04:43:51Z",
+      "corpus": "benchmarks/public-repositories/node/0006--tj--commander.js.json",
+      "runner": "npm",
+      "testCommand": ["npm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/tj/commander.js/actions/runs/26628399697/job/78470743447",
+        "job": "Test on node 22.x and ubuntu-latest",
+        "passedAt": "2026-05-29T09:04:04Z",
+        "testEvidence": "npm test",
+        "workflowPath": ".github/workflows/tests.yml"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-22:.github/workflows/tests.yml:15",
+        "ruleId": "nodejs.runtime.eol-22",
+        "path": ".github/workflows/tests.yml",
+        "line": 15
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "agentgg-dev/agentgg",
+      "commit": "20cca9c1896ef4fee26c93a8730c0f46e4ca44d6",
+      "lastPushAt": "2026-11-03T03:32:14Z",
+      "corpus": "benchmarks/public-repositories/node/0365--agentgg-dev--agentgg.json",
+      "runner": "pnpm",
+      "testCommand": ["pnpm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/agentgg-dev/agentgg/actions/runs/41572577829/job/125708675672",
+        "job": "ubuntu-latest / node 20",
+        "passedAt": "2026-11-03T03:31:17Z",
+        "testEvidence": "Test"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/ci.yml:22",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 22
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "Agions/dramaxis",
+      "commit": "3ec6a159fb4c9a969bf85e83e701772b346d654c",
+      "lastPushAt": "2026-11-27T09:05:43Z",
+      "corpus": "benchmarks/public-repositories/node/0364--Agions--dramaxis.json",
+      "runner": "pnpm",
+      "testCommand": ["pnpm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/Agions/dramaxis/actions/runs/40475313813/job/122091989371",
+        "job": "Frontend (tsc + test + build)",
+        "passedAt": "2026-10-27T08:42:46Z",
+        "testEvidence": "Vitest Run"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/ci.yml:23",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 23
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "AlbertHernandez/nestjs-service-template",
+      "commit": "74daaf0f42430483d9c47afcb31b9a596d22aa21",
+      "lastPushAt": "2026-11-13T03:03:38Z",
+      "corpus": "benchmarks/public-repositories/node/0371--AlbertHernandez--nestjs-service-template.json",
+      "runner": "pnpm",
+      "testCommand": ["pnpm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/AlbertHernandez/nestjs-service-template/actions/runs/21382898608/job/61553321584",
+        "job": "run",
+        "passedAt": "2026-01-27T03:04:37Z",
+        "testEvidence": "node --run test",
+        "workflowPath": ".github/workflows/node.yml"
+      },
+      "finding": {
+        "id": "container.dockerfile.legacy-env-format:Dockerfile:3",
+        "ruleId": "container.dockerfile.legacy-env-format",
+        "path": "Dockerfile",
+        "line": 3
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 3,
+        "verificationCommands": 3,
+        "source": "https://docs.docker.com/reference/build-checks/legacy-key-value-format/"
+      }
+    },
+    {
+      "repository": "barrel/shopify-vite",
+      "commit": "4ca6a12b862965858198a8bfc4bd835bafe446e3",
+      "lastPushAt": "2026-08-17T01:08:04Z",
+      "corpus": "benchmarks/public-repositories/node/0410--barrel--shopify-vite.json",
+      "runner": "pnpm",
+      "testCommand": ["pnpm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/barrel/shopify-vite/actions/runs/31984043164/job/95255822313",
+        "job": "test (ubuntu-latest, 22)",
+        "passedAt": "2026-08-17T01:08:33Z",
+        "testEvidence": "pnpm test",
+        "workflowPath": ".github/workflows/ci.yml"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/ci.yml:16",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 16
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "builderz-labs/marketing-dashboard",
+      "commit": "7ffbabd236a88e17901a19e745c1d9c8467277a5",
+      "lastPushAt": "2026-11-17T04:54:56Z",
+      "corpus": "benchmarks/public-repositories/node/0431--builderz-labs--marketing-dashboard.json",
+      "runner": "pnpm",
+      "testCommand": ["pnpm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/builderz-labs/marketing-dashboard/actions/runs/40725298214/job/122946811737",
+        "job": "quality",
+        "passedAt": "2026-10-28T16:25:47Z",
+        "testEvidence": "Unit tests"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/ci.yml:15",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 15
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "couetilc/react-social-icons",
+      "commit": "3a02ba70dc892a94bac805e90b10984da5db8bd3",
+      "lastPushAt": "2026-09-24T01:19:59Z",
+      "corpus": "benchmarks/public-repositories/node/0456--couetilc--react-social-icons.json",
+      "runner": "pnpm",
+      "testCommand": ["pnpm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/couetilc/react-social-icons/actions/runs/35942443231/job/107453081276",
+        "job": "Test React v16",
+        "passedAt": "2026-09-24T01:20:39Z",
+        "testEvidence": "Run Tests"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/pr_helper.yml:16",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/pr_helper.yml",
+        "line": 16
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "d3/d3-array",
+      "commit": "24c015e4d894ee44af6cf6a2cc9e300b1885b0d9",
+      "lastPushAt": "2026-11-09T20:11:35Z",
+      "corpus": "benchmarks/public-repositories/node/0466--d3--d3-array.json",
+      "runner": "pnpm",
+      "testCommand": ["pnpm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/d3/d3-array/actions/runs/41582559624/job/125740487909",
+        "job": "test",
+        "passedAt": "2026-11-03T05:13:01Z",
+        "testEvidence": "Run pnpm run test"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-18:package.json:61",
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 61
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "d3/d3-dsv",
+      "commit": "485751b00344f95f0fd9aee75e262ee09eef7f88",
+      "lastPushAt": "2026-11-03T05:49:21Z",
+      "corpus": "benchmarks/public-repositories/node/0468--d3--d3-dsv.json",
+      "runner": "pnpm",
+      "testCommand": ["pnpm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/d3/d3-dsv/actions/runs/41586016259/job/125751557422",
+        "job": "test",
+        "passedAt": "2026-11-03T05:48:39Z",
+        "testEvidence": "Run pnpm run test"
+      },
+      "finding": {
+        "id": "nodejs.runtime.eol-18:package.json:58",
+        "ruleId": "nodejs.runtime.eol-18",
+        "path": "package.json",
+        "line": 58
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+      }
+    },
+    {
+      "repository": "gethomepage/homepage",
+      "commit": "89b0d20655ca521e55ae65097c2da4285c87a403",
+      "lastPushAt": "2026-11-27T12:18:17Z",
+      "corpus": "benchmarks/public-repositories/container/0054--gethomepage--homepage.json",
+      "runner": "pnpm",
+      "testCommand": ["pnpm", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/gethomepage/homepage/actions/runs/38787473284/job/116603098471",
+        "job": "vitest (1)",
+        "passedAt": "2026-10-15T18:41:29Z",
+        "testEvidence": "Run pnpm -s exec vitest run --coverage --shard 1/4 --pool forks"
+      },
+      "finding": {
+        "id": "container.node.eol-21-and-older:Dockerfile-tilt:2",
+        "ruleId": "container.node.eol-21-and-older",
+        "path": "Dockerfile-tilt",
+        "line": 2
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 3,
+        "source": "https://nodejs.org/en/about/eol"
+      }
+    },
+    {
+      "repository": "astroufsc/chimera",
+      "commit": "c7e6f0a85d63330733fea73dfa017f873fcf912d",
+      "lastPushAt": "2026-09-15T17:55:18Z",
+      "corpus": "benchmarks/public-repositories/python/0776--astroufsc--chimera.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/astroufsc/chimera/actions/runs/35004248963/job/104499918138",
+        "job": "test",
+        "passedAt": "2026-09-15T17:59:19Z",
+        "testEvidence": "test"
+      },
+      "finding": {
+        "id": "github-actions.setup-uv.node20:.github/workflows/ci.yml:25",
+        "ruleId": "github-actions.setup-uv.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 25
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "cookiecutter/cookiecutter",
+      "commit": "c88fbe921c97c58b65f1883ba90a0ab53cc91b34",
+      "lastPushAt": "2026-04-01T17:46:44Z",
+      "corpus": "benchmarks/public-repositories/python/0015--cookiecutter--cookiecutter.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/cookiecutter/cookiecutter/actions/runs/22661985636/job/65684223000",
+        "job": "Test • ubuntu-latest • Python 3.10",
+        "passedAt": "2026-03-04T08:52:24Z",
+        "testEvidence": "uv run with the test group and pytest",
+        "workflowPath": ".github/workflows/tests.yml"
+      },
+      "finding": {
+        "id": "github-actions.setup-uv.node20:.github/workflows/tests.yml:49",
+        "ruleId": "github-actions.setup-uv.node20",
+        "path": ".github/workflows/tests.yml",
+        "line": 49
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "encode/httpx",
+      "commit": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+      "lastPushAt": "2026-11-26T16:06:39Z",
+      "corpus": "benchmarks/public-repositories/python/0012--encode--httpx.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/encode/httpx/actions/runs/22302625188/job/64513944728",
+        "job": "Python 3.9",
+        "passedAt": "2026-02-23T10:41:59Z",
+        "testEvidence": "scripts/test",
+        "workflowPath": ".github/workflows/test-suite.yml"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/publish.yml:17",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/publish.yml",
+        "line": 17
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "fastapi/fastapi",
+      "commit": "4dda4625bdc19ce5ae946c152298f70d4d4fc5ed",
+      "lastPushAt": "2026-11-24T11:14:37Z",
+      "corpus": "benchmarks/public-repositories/python/0017--fastapi--fastapi.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/fastapi/fastapi/actions/runs/38566992199/job/115862078730",
+        "job": "test-redistribute",
+        "passedAt": "2026-10-14T12:52:25Z",
+        "testEvidence": "Run source distribution tests"
+      },
+      "finding": {
+        "id": "python.runtime.eol-3.10-and-older:pyproject.toml:12",
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "path": "pyproject.toml",
+        "line": 12
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://devguide.python.org/versions/"
+      }
+    },
+    {
+      "repository": "flex-analytics/flexviz",
+      "commit": "b8fe166eba7fbd39de8bb298ee924a29d5baedcf",
+      "lastPushAt": "2026-10-26T16:38:06Z",
+      "corpus": "benchmarks/public-repositories/rust/0567--flex-analytics--flexviz.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/flex-analytics/flexviz/actions/runs/38360355257/job/115174844659",
+        "job": "test (ubuntu-latest, 3.10)",
+        "passedAt": "2026-10-13T07:10:50Z",
+        "testEvidence": "Tests"
+      },
+      "finding": {
+        "id": "python.runtime.eol-3.10-and-older:pyproject.toml:12",
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "path": "pyproject.toml",
+        "line": 12
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://devguide.python.org/versions/"
+      }
+    },
+    {
+      "repository": "lv10/amazonapi",
+      "commit": "d925670fbd81bb91892df8cafd1b78da44b25d38",
+      "lastPushAt": "2026-10-26T04:04:52Z",
+      "corpus": "benchmarks/public-repositories/python/0040--lv10--amazonapi.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/lv10/amazonapi/actions/runs/36908505891/job/110525002382",
+        "job": "Test (Python 3.9 on ubuntu-latest)",
+        "passedAt": "2026-10-01T18:40:10Z",
+        "testEvidence": "Run Tests"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/ci.yml:24",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 24
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "marcelomarkus/b-fast",
+      "commit": "819baed5d20420ca8d2935945300f1536d3f8783",
+      "lastPushAt": "2026-11-27T03:41:35Z",
+      "corpus": "benchmarks/public-repositories/python/0031--marcelomarkus--b-fast.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/marcelomarkus/b-fast/actions/runs/38636719479/job/116101647512",
+        "job": "Python Tests",
+        "passedAt": "2026-10-14T21:01:10Z",
+        "testEvidence": "Run Python tests"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/codspeed.yml:25",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/codspeed.yml",
+        "line": 25
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "nextstrain/augur",
+      "commit": "49d74672ef3f07a7e87375e45c381e17dce5be83",
+      "lastPushAt": "2026-11-20T23:02:37Z",
+      "corpus": "benchmarks/public-repositories/python/0708--nextstrain--augur.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/nextstrain/augur/actions/runs/40559321129/job/122383756378",
+        "job": "pytest-cram (python=3.10 biopython==1.80 numpy==1.21.3)",
+        "passedAt": "2026-10-27T18:32:00Z",
+        "testEvidence": "Run pytest"
+      },
+      "finding": {
+        "id": "python.runtime.eol-3.10-and-older:.github/workflows/ci.yaml:422",
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "path": ".github/workflows/ci.yaml",
+        "line": 422
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://devguide.python.org/versions/"
+      }
+    },
+    {
+      "repository": "onnxsim/onnxsim",
+      "commit": "29ca92fe4817df61c381e09636151a4f545071b1",
+      "lastPushAt": "2026-11-27T08:08:55Z",
+      "corpus": "benchmarks/public-repositories/android/0916--onnxsim--onnxsim.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/onnxsim/onnxsim/actions/runs/42350140636/job/128337597867",
+        "job": "Test cross-built wheel on Windows (py 3.11)",
+        "passedAt": "2026-11-07T07:27:51Z",
+        "testEvidence": "Run tests"
+      },
+      "finding": {
+        "id": "android.target-sdk.existing.default-below-35:scripts/android/app/app/build.gradle:13",
+        "ruleId": "android.target-sdk.existing.default-below-35",
+        "path": "scripts/android/app/app/build.gradle",
+        "line": 13
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://developer.android.com/google/play/requirements/target-sdk"
+      }
+    },
+    {
+      "repository": "pallets/click",
+      "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
+      "lastPushAt": "2026-11-16T17:03:40Z",
+      "corpus": "benchmarks/public-repositories/python/0019--pallets--click.json",
+      "runner": "pytest",
+      "testCommand": ["python3", "-m", "pytest"],
+      "baseline": {
+        "jobUrl": "https://github.com/pallets/click/actions/runs/37239605858/job/111545465833",
+        "job": "3.14",
+        "passedAt": "2026-10-04T22:20:18Z",
+        "testEvidence": "Run uv run --locked --no-default-groups --group dev tox run"
+      },
+      "finding": {
+        "id": "python.runtime.eol-3.10-and-older:pyproject.toml:16",
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "path": "pyproject.toml",
+        "line": 16
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://devguide.python.org/versions/"
+      }
+    },
+    {
+      "repository": "aconrad/pycobertura",
+      "commit": "033b82157f29fa811f7f5eac06a30f8849aa305c",
+      "lastPushAt": "2026-01-31T06:14:08Z",
+      "corpus": "benchmarks/public-repositories/python/0733--aconrad--pycobertura.json",
+      "runner": "tox",
+      "testCommand": ["python3", "-m", "tox"],
+      "baseline": {
+        "jobUrl": "https://github.com/aconrad/pycobertura/actions/runs/21540059315/job/62073053424",
+        "job": "build (3.9)",
+        "passedAt": "2026-01-31T06:14:42Z",
+        "testEvidence": "tox",
+        "workflowPath": ".github/workflows/build-and-test-pycobertura.yml"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/build-and-test-pycobertura.yml:17",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build-and-test-pycobertura.yml",
+        "line": 17
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "django/channels_redis",
+      "commit": "6c6ec4a023f04d7400780e440c71efd2c669a757",
+      "lastPushAt": "2026-08-20T11:56:36Z",
+      "corpus": "benchmarks/public-repositories/python/0754--django--channels_redis.json",
+      "runner": "tox",
+      "testCommand": ["python3", "-m", "tox"],
+      "baseline": {
+        "jobUrl": "https://github.com/django/channels_redis/actions/runs/32366288411/job/96416394359",
+        "job": "Python 3.10",
+        "passedAt": "2026-08-20T11:58:16Z",
+        "testEvidence": "python -m tox with environments for Python 3.10",
+        "workflowPath": ".github/workflows/tests.yml"
+      },
+      "finding": {
+        "id": "python.runtime.eol-3.10-and-older:.github/workflows/tests.yml:18",
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "path": ".github/workflows/tests.yml",
+        "line": 18
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://devguide.python.org/versions/"
+      }
+    },
+    {
+      "repository": "dpgaspar/Flask-AppBuilder",
+      "commit": "30e13dc7916167fa159452322aa00d03999970f9",
+      "lastPushAt": "2026-11-26T14:15:18Z",
+      "corpus": "benchmarks/public-repositories/python/0706--dpgaspar--Flask-AppBuilder.json",
+      "runner": "tox",
+      "testCommand": ["python3", "-m", "tox"],
+      "baseline": {
+        "jobUrl": "https://github.com/dpgaspar/Flask-AppBuilder/actions/runs/39783892678/job/119841858888",
+        "job": "test-postgres (3.10)",
+        "passedAt": "2026-10-22T13:19:38Z",
+        "testEvidence": "Run tests"
+      },
+      "finding": {
+        "id": "container.postgres.eol-14-and-older:docker-compose.yml:5",
+        "ruleId": "container.postgres.eol-14-and-older",
+        "path": "docker-compose.yml",
+        "line": 5
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 3,
+        "source": "https://www.postgresql.org/support/versioning/"
+      }
+    },
+    {
+      "repository": "Lawouach/WebSocket-for-Python",
+      "commit": "21dc60e632b346b0575f17ae2cb5a1263df4a4df",
+      "lastPushAt": "2026-11-26T16:12:43Z",
+      "corpus": "benchmarks/public-repositories/python/0414--Lawouach--WebSocket-for-Python.json",
+      "runner": "tox",
+      "testCommand": ["python3", "-m", "tox"],
+      "baseline": {
+        "jobUrl": "https://github.com/Lawouach/WebSocket-for-Python/actions/runs/37223596108/job/111498625746",
+        "job": "build (3.7)",
+        "passedAt": "2026-10-04T18:14:27Z",
+        "testEvidence": "Test with tox"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/python-package.yml:22",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/python-package.yml",
+        "line": 22
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "n8henrie/pycookiecheat",
+      "commit": "eed8f7411fd498344a7c95592893828a42d20414",
+      "lastPushAt": "2026-10-30T20:49:17Z",
+      "corpus": "benchmarks/public-repositories/python/0415--n8henrie--pycookiecheat.json",
+      "runner": "tox",
+      "testCommand": ["python3", "-m", "tox"],
+      "baseline": {
+        "jobUrl": "https://github.com/n8henrie/pycookiecheat/actions/runs/28376776321/job/84068393349",
+        "job": "build (3.9)",
+        "passedAt": "2026-06-29T13:49:29Z",
+        "testEvidence": "xvfb-run -- python -m tox -e py",
+        "workflowPath": ".github/workflows/python-package.yml"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/python-package.yml:25",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/python-package.yml",
+        "line": 25
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "preply/dj_anonymizer",
+      "commit": "a2b76d533f97b18b3de317b25112b8276c62e198",
+      "lastPushAt": "2026-09-18T10:22:43Z",
+      "corpus": "benchmarks/public-repositories/python/0787--preply--dj_anonymizer.json",
+      "runner": "tox",
+      "testCommand": ["python3", "-m", "tox"],
+      "baseline": {
+        "jobUrl": "https://github.com/preply/dj_anonymizer/actions/runs/35098739180/job/104802505021",
+        "job": "test (3.8, py38-django42)",
+        "passedAt": "2026-09-16T12:56:31Z",
+        "testEvidence": "Run tests"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/test.yml:38",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/test.yml",
+        "line": 38
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "psf/requests",
+      "commit": "611c6162cbc4ac2020a2f91c7cfa4f3abf9bbb60",
+      "lastPushAt": "2026-11-02T16:55:12Z",
+      "corpus": "benchmarks/public-repositories/python/0010--psf--requests.json",
+      "runner": "tox",
+      "testCommand": ["python3", "-m", "tox"],
+      "baseline": {
+        "jobUrl": "https://github.com/psf/requests/actions/runs/35650667084/job/106502010788",
+        "job": "build (3.10, ubuntu-22.04)",
+        "passedAt": "2026-09-21T20:24:17Z",
+        "testEvidence": "Run tests"
+      },
+      "finding": {
+        "id": "python.runtime.eol-3.10-and-older:.github/workflows/run-tests.yml:15",
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "path": ".github/workflows/run-tests.yml",
+        "line": 15
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://devguide.python.org/versions/"
+      }
+    },
+    {
+      "repository": "pytest-dev/pytest",
+      "commit": "c9c19f8e62c12834ad83193a1869cc82fe9c700e",
+      "lastPushAt": "2026-11-27T17:44:05Z",
+      "corpus": "benchmarks/public-repositories/python/0014--pytest-dev--pytest.json",
+      "runner": "tox",
+      "testCommand": ["python3", "-m", "tox"],
+      "baseline": {
+        "jobUrl": "https://github.com/pytest-dev/pytest/actions/runs/38343693701/job/115120267018",
+        "job": "build (windows-py310-unittest-asynctest)",
+        "passedAt": "2026-10-13T03:55:34Z",
+        "testEvidence": "Test with coverage"
+      },
+      "finding": {
+        "id": "python.runtime.eol-3.10-and-older:pyproject.toml:27",
+        "ruleId": "python.runtime.eol-3.10-and-older",
+        "path": "pyproject.toml",
+        "line": 27
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 4,
+        "source": "https://devguide.python.org/versions/"
+      }
+    },
+    {
+      "repository": "codeherence/react-native-header",
+      "commit": "fa98bfb0a19f8ed27431c056caece0336ffe48ac",
+      "lastPushAt": "2026-03-15T23:46:41Z",
+      "corpus": "benchmarks/public-repositories/node/0447--codeherence--react-native-header.json",
+      "runner": "yarn",
+      "testCommand": ["yarn", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/codeherence/react-native-header/actions/runs/23122146918/job/67158013289",
+        "job": "test",
+        "passedAt": "2026-03-15T23:47:16Z",
+        "testEvidence": "yarn test --maxWorkers=2 --coverage",
+        "workflowPath": ".github/workflows/ci.yml"
+      },
+      "finding": {
+        "id": "github-actions.checkout.node20:.github/workflows/ci.yml:15",
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 15
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 2,
+        "source": "https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/"
+      }
+    },
+    {
+      "repository": "excalidraw/excalidraw",
+      "commit": "1caec99b290c75cda05385e637138998807a65ae",
+      "lastPushAt": "2026-11-27T19:53:39Z",
+      "corpus": "benchmarks/public-repositories/container/0051--excalidraw--excalidraw.json",
+      "runner": "yarn",
+      "testCommand": ["yarn", "run", "test"],
+      "baseline": {
+        "jobUrl": "https://github.com/excalidraw/excalidraw/actions/runs/24333613696/job/71044962760",
+        "job": "test",
+        "passedAt": "2026-04-13T08:34:52Z",
+        "testEvidence": "yarn test:app",
+        "workflowPath": ".github/workflows/test.yml"
+      },
+      "finding": {
+        "id": "container.node.eol-21-and-older:.codesandbox/Dockerfile:1",
+        "ruleId": "container.node.eol-21-and-older",
+        "path": ".codesandbox/Dockerfile",
+        "line": 1
+      },
+      "migrationPacket": {
+        "schemaVersion": "offing.context.v1",
+        "steps": 4,
+        "verificationCommands": 3,
+        "source": "https://nodejs.org/en/about/eol"
+      }
+    }
+  ]
+}
