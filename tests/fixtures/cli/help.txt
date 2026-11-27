@@ -105,6 +105,7 @@ Usage:
   offing policy explain <rule> [repository] [--policy <ref>]
   offing policy pull [repository] [--policy <ref>]
   offing prompt [path] [--format <text|json>] [--symbol <s>]   # shell prompt segment such as ⏳2, read from the scan cache only
+  offing proof verify <file> [--repo <path>]  # check a migration proof against local Git and log evidence
   offing recommend <product|purl> [--min-days <n>] [--as-of <date>] [--json]   # which release line to write today (default 180 days of support)
   offing release-gate <ref|path> | --sbom <file|-> | --attestation <bundle> [--within-days <days> | --support-until <date>] [--today <date>] [--no-data fail|warn|ignore] [--json | --format text|json|sarif]
     --attestation also requires --subject <artifact> --repo <owner/repo> --signer-workflow <workflow> --trusted-root <file>
@@ -170,6 +171,7 @@ Examples:
   offing migrate <finding-id> --agent 'my-agent "$OFFING_MIGRATION_PROMPT_FILE"'
   offing policy validate
   offing prompt --symbol EOL:
+  offing proof verify offing-proof.json
   offing recommend node
   offing release-gate . --within-days 30
   offing rollback-readiness v2.0.0 --candidate v1.9.0

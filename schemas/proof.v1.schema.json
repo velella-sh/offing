@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/proof.v1.schema.json",
+  "title": "Offing migration proof v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "outcome", "range", "verify", "testRuns", "agentRuns", "diff", "budget", "tools"],
+  "properties": {
+    "schemaVersion": { "const": "offing.proof.v1" },
+    "outcome": { "enum": ["done", "stopped"] },
+    "range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base", "head"],
+      "properties": {
+        "base": { "$ref": "#/$defs/commit" },
+        "head": { "$ref": "#/$defs/commit" }
+      }
+    },
+    "verify": { "$ref": "https://velella.sh/offing/schemas/verify-result.v1.schema.json" },
+    "testRuns": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "$ref": "https://velella.sh/offing/schemas/test-run.v1.schema.json" }
+    },
+    "agentRuns": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "$ref": "https://velella.sh/offing/schemas/agent-run.v1.schema.json" }
+    },
+    "diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["added", "changed", "deleted"],
+      "properties": {
+        "added": { "$ref": "#/$defs/count" },
+        "changed": { "$ref": "#/$defs/count" },
+        "deleted": { "$ref": "#/$defs/count" }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["elapsedMs", "costUsd"],
+      "properties": {
+        "elapsedMs": { "$ref": "#/$defs/count" },
+        "costUsd": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["offing", "git"],
+      "properties": {
+        "offing": { "type": "string", "minLength": 1 },
+        "git": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "commit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+  }
+}

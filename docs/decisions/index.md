@@ -102,3 +102,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0066](0066-autopilot-run-state.md) | Autopilot run state | Record phase transitions, the selected migration wave and an optional isolated checkout. |
 | [0067](0067-what-if-runtime-simulation.md) | Runtime upgrade simulation | Project proven runtime pins and record static fleet readiness. |
 | [0068](0068-campaign-v1.md) | Campaign and campaign state v1 | Select pinned Fleet repositories and exchange campaign plans and state. |
+| [0071](0071-proof-bundle-v1.md) | Migration proof v1 | Verify paired scan evidence, local Git path counts, and redacted log digests. |

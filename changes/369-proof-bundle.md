@@ -1,0 +1,1 @@
+- Add the migration proof v1 format, redacted artifact preparation, and `offing proof verify` for offline Git and log checks.

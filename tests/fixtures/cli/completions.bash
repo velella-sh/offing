@@ -5,7 +5,7 @@ _offing() {
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   command="${COMP_WORDS[1]}"
   if [ "$COMP_CWORD" -eq 1 ]; then
-    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions attest autopilot campaign codemod config drivers fleet hook lineage lsp migrate policy prompt recommend release-gate rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
+    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions attest autopilot campaign codemod config drivers fleet hook lineage lsp migrate policy prompt proof recommend release-gate rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
     return
   fi
   case "$prev" in
@@ -23,6 +23,7 @@ _offing() {
     config) opts="validate --json" ;;
     drivers) opts="list test" ;;
     policy) opts="validate explain pull" ;;
+    proof) opts="verify" ;;
     scan) opts="--demo --sbom --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --lookahead --policy --policy-online --all --by-owner --data-version --only --exclude" ;;
     baseline) opts="--output --data-version" ;;
     forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force --target --effort --fleet --by --card --theme --digest --previous --owners --gitlab --gitlab-url" ;;
@@ -74,6 +75,7 @@ _offing() {
     migrate) opts="--agent --driver --from-refusals --replay --timeout-ms" ;;
     policy) opts="--policy --today" ;;
     prompt) opts="--format --symbol" ;;
+    proof) opts="--repo" ;;
     recommend) opts="--min-days --as-of --json" ;;
     release-gate) opts="--sbom --attestation --subject --repo --signer-workflow --trusted-root --within-days --support-until --today --no-data --json --format" ;;
     rollback-readiness) opts="--candidate --within-days --support-until --today --no-data --json" ;;

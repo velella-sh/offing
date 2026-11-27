@@ -50,10 +50,15 @@
       "types": "./dist/src/mcp.d.ts",
       "import": "./dist/src/mcp.js"
     },
+    "./proof": {
+      "types": "./dist/src/proof/publish.d.ts",
+      "import": "./dist/src/proof/publish.js"
+    },
     "./package.json": "./package.json",
     "./schemas/campaign-state.v1.schema.json": "./schemas/campaign-state.v1.schema.json",
     "./schemas/campaign.v1.schema.json": "./schemas/campaign.v1.schema.json",
     "./schemas/lineage.v1.schema.json": "./schemas/lineage.v1.schema.json",
+    "./schemas/proof.v1.schema.json": "./schemas/proof.v1.schema.json",
     "./schemas/whatif.v1.schema.json": "./schemas/whatif.v1.schema.json"
   },
   "bin": {
@@ -67,6 +72,7 @@
     "docs/spec/codemod",
     "docs/spec/lifecycle-attestation/conformance",
     "docs/spec/lifecycle-attestation/example",
+    "docs/spec/proof",
     "docs/spec/release-gate/conformance",
     "docs/spec/what-if",
     "templates/workflows/offing-attest.yml",

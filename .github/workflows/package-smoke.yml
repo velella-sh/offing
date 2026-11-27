@@ -369,6 +369,23 @@ jobs:
             printf -- '- Offline campaign plan, state, MCP and standalone checker passed.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-proof-bundle
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          package="$out/npm-install/node_modules/@velella/offing"
+          test -f "$package/docs/spec/proof/v1.md"
+          test -f "$package/schemas/proof.v1.schema.json"
+          node "$package/docs/spec/proof/conformance/suite.mjs" "$bin"
+          {
+            printf '### acc-proof-bundle\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
+            printf -- '- Installed and independent verifiers agreed on five synthetic fixtures and the redacted producer output.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build the Docker image and scan the fixture
         id: docker
         run: |

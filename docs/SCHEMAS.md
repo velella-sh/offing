@@ -229,6 +229,13 @@ for the contract and its relationship to the static doctor plan.
 
 ::schema-table{data="publicSchemas/verify-result" label="Verification result fields"}
 
+### Migration proof
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/proof.v1.schema.json) ·
+[Proof v1 specification](spec/proof/v1.md)
+
+::schema-table{data="publicSchemas/proof" label="Migration proof fields"}
+
 ### Agent driver run
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/agent-run.v1.schema.json)
