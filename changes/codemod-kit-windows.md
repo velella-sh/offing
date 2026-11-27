@@ -1,0 +1,1 @@
+- Fix Codemod Kit fixture checks on Git for Windows by using an empty temporary Git configuration.

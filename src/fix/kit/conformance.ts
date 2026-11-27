@@ -1,7 +1,7 @@
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
-import { lstat, mkdtemp, readFile, readdir, rm } from "node:fs/promises";
-import { devNull, tmpdir } from "node:os";
+import { lstat, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { isDeepStrictEqual, promisify } from "node:util";
 
@@ -31,11 +31,11 @@ const expectation = z.strictObject({
     .optional(),
 });
 
-async function apply(cwd: string, diff: string, options: readonly string[]): Promise<void> {
+async function apply(cwd: string, config: string, diff: string, options: readonly string[]): Promise<void> {
   const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.toUpperCase().startsWith("GIT_")));
   const args = ["-c", "core.autocrlf=false", "apply", "--no-index", "--whitespace=nowarn", ...options, "-"];
   env.GIT_CEILING_DIRECTORIES = dirname(cwd);
-  env.GIT_CONFIG_GLOBAL = devNull;
+  env.GIT_CONFIG_GLOBAL = config;
   env.GIT_CONFIG_NOSYSTEM = "1";
   const execution = execute("git", args, { cwd, env, timeout: 30_000 });
   execution.child.stdin?.on("error", () => {});
@@ -57,7 +57,9 @@ async function loadTree(path: string): Promise<Map<string, Buffer>> {
   return fixtureFiles(path, true);
 }
 
-async function checkCase(path: string, root: string, plan: Planner): Promise<void> {
+async function checkCase(path: string, workspace: string, plan: Planner): Promise<void> {
+  const root = join(workspace, "fixture");
+  await mkdir(root);
   const expected = expectation.parse(await loadJson(join(path, "expect.json")));
   const before = await loadTree(join(path, "before"));
   const after = await loadTree(join(path, "after"));
@@ -80,8 +82,10 @@ async function checkCase(path: string, root: string, plan: Planner): Promise<voi
     throw new Error("The patch differs from the expected byte snapshot.");
   }
   if (diff) {
-    await apply(root, diff, ["--check"]);
-    await apply(root, diff, []);
+    const config = join(workspace, "gitconfig");
+    await writeFile(config, "", { flag: "wx" });
+    await apply(root, config, diff, ["--check"]);
+    await apply(root, config, diff, []);
   }
   await assertTree(root, after, "The patched files do not match the after tree.");
   if ((await plan(root)).patches.length > 0) throw new Error("The codemod is not idempotent.");
@@ -98,13 +102,13 @@ export async function testCases(directory: string, plan: Planner): Promise<strin
     .sort();
   if (names.length === 0) throw new Error("At least one fixture case is required.");
   for (const name of names) {
-    const root = await mkdtemp(join(tmpdir(), "offing-codemod-case-"));
+    const workspace = await mkdtemp(join(tmpdir(), "offing-codemod-case-"));
     try {
-      await checkCase(join(directory, name), root, plan);
+      await checkCase(join(directory, name), workspace, plan);
     } catch (error) {
       throw new Error(`${name}: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
     } finally {
-      await rm(root, { recursive: true, force: true });
+      await rm(workspace, { recursive: true, force: true });
     }
   }
   return names;

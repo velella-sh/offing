@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
-import { mkdtemp, realpath, rm } from "node:fs/promises";
-import { devNull, tmpdir } from "node:os";
+import { mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { promisify } from "node:util";
 
@@ -28,25 +28,29 @@ const safeGitArgs = [
 ];
 
 async function git(root: string, args: readonly string[], input?: string): Promise<string> {
-  const child = execute("git", [...safeGitArgs, ...args], {
-    cwd: root,
-    env: {
-      PATH: process.env.PATH,
-      GIT_CONFIG_GLOBAL: devNull,
-      GIT_CONFIG_NOSYSTEM: "1",
-      GIT_CEILING_DIRECTORIES: dirname(root),
-      GIT_TERMINAL_PROMPT: "0",
-    },
-    timeout: 120_000,
-    maxBuffer: 16 * 1024 * 1024,
+  return tempSource(async (configDir) => {
+    const config = join(configDir, "gitconfig");
+    await writeFile(config, "", { flag: "wx" });
+    const child = execute("git", [...safeGitArgs, ...args], {
+      cwd: root,
+      env: {
+        PATH: process.env.PATH,
+        GIT_CONFIG_GLOBAL: config,
+        GIT_CONFIG_NOSYSTEM: "1",
+        GIT_CEILING_DIRECTORIES: dirname(root),
+        GIT_TERMINAL_PROMPT: "0",
+      },
+      timeout: 120_000,
+      maxBuffer: 16 * 1024 * 1024,
+    });
+    child.child.stdin?.on("error", () => {});
+    child.child.stdin?.end(input);
+    try {
+      return (await child).stdout;
+    } catch (error) {
+      throw new Error(`git ${args[0]} failed.`, { cause: error });
+    }
   });
-  child.child.stdin?.on("error", () => {});
-  child.child.stdin?.end(input);
-  try {
-    return (await child).stdout;
-  } catch (error) {
-    throw new Error(`git ${args[0]} failed.`, { cause: error });
-  }
 }
 
 function checkTree(tree: string): void {

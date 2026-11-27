@@ -468,6 +468,9 @@ jobs:
         # step shell-agnostic: the runner's default shell on Windows is PowerShell, which has no
         # RUNNER_TEMP variable.
         run: npm run record:reproducible --silent -- "${{ runner.temp }}/reproducible-${{ runner.os }}.json" --label "${{ runner.os }}"
+      - name: Test Git patch conformance on Windows
+        if: github.event_name == 'pull_request' && runner.os == 'Windows'
+        run: node --test dist/tests/codemod-kit.test.js dist/tests/fix-idempotency.test.js dist/tests/fix-evals.test.js
       - name: Upload the packed tarball hash
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
