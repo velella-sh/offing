@@ -7111,5 +7111,469 @@
         }
       }
     }
+  },
+  {
+    "name": "campaign_status",
+    "title": "Read campaign status",
+    "description": "Call when you need campaign status from a saved state file. Validates offing.campaign-state.v1 and returns the pinned repositories, batch assignments, phase history and omissions without editing the file.",
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "state_path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Local path to a saved campaign state JSON file."
+        }
+      },
+      "required": [
+        "state_path"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://velella.sh/offing/schemas/campaign-state.v1.schema.json",
+      "title": "Campaign State",
+      "description": "Pinned repositories, batch assignments and observed state transitions.",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "offing.campaign-state.v1"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+        },
+        "asOf": {
+          "type": "string",
+          "format": "date"
+        },
+        "batching": {
+          "$ref": "#/$defs/batching"
+        },
+        "repositories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/repository"
+          }
+        },
+        "omissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/omission"
+          }
+        },
+        "more": {
+          "type": "object",
+          "required": [
+            "truncated",
+            "hint",
+            "omitted",
+            "estimatedTokens"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "truncated": {
+              "const": true,
+              "description": "Always true: the answer was cut to fit the size cap."
+            },
+            "hint": {
+              "type": "string",
+              "minLength": 1,
+              "description": "How to read what was left out."
+            },
+            "omitted": {
+              "type": "array",
+              "description": "One entry per array that lost elements. A path with [] sums every array at that position, including those inside elements that were left out.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "path",
+                  "shown",
+                  "total"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?(\\.[A-Za-z_$][A-Za-z0-9_$]*(\\[\\])?)*$",
+                    "description": "Where the array sits, such as findings or findings[].usages."
+                  },
+                  "shown": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Elements in the answer as returned."
+                  },
+                  "total": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Elements in the full answer."
+                  }
+                }
+              }
+            },
+            "clipped": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Path of every text that was shortened; it ends with a truncation marker."
+            },
+            "estimatedTokens": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Size of the answer as returned: three characters of JSON text count as one token."
+            }
+          }
+        },
+        "target": {
+          "type": "object",
+          "properties": {
+            "runtime": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9][a-z0-9-]*$"
+            },
+            "version": {
+              "type": "string",
+              "maxLength": 30,
+              "pattern": "^[0-9]+(?:\\.[0-9]+){0,2}$"
+            }
+          },
+          "required": [
+            "runtime",
+            "version"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "id",
+        "asOf",
+        "batching",
+        "repositories",
+        "omissions"
+      ],
+      "additionalProperties": false,
+      "$defs": {
+        "batching": {
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "concurrency": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "minGapMinutes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10080
+            },
+            "maxFailureRate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "size",
+            "concurrency",
+            "minGapMinutes",
+            "maxFailureRate"
+          ],
+          "additionalProperties": false
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "verified",
+            "review",
+            "failed",
+            "closed",
+            "merged",
+            "cancelled"
+          ]
+        },
+        "transition": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "$ref": "#/$defs/status"
+            },
+            "to": {
+              "$ref": "#/$defs/status"
+            },
+            "at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "from",
+            "to",
+            "at"
+          ],
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "properties": {
+                "from": {
+                  "const": "queued"
+                },
+                "to": {
+                  "enum": [
+                    "running",
+                    "cancelled"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "from": {
+                  "const": "running"
+                },
+                "to": {
+                  "enum": [
+                    "verified",
+                    "failed",
+                    "cancelled"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "from": {
+                  "const": "verified"
+                },
+                "to": {
+                  "enum": [
+                    "review",
+                    "failed",
+                    "cancelled"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "from": {
+                  "const": "review"
+                },
+                "to": {
+                  "enum": [
+                    "merged",
+                    "closed"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "from": {
+                  "const": "failed"
+                },
+                "to": {
+                  "enum": [
+                    "queued",
+                    "cancelled"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "from": {
+                  "const": "closed"
+                },
+                "to": {
+                  "enum": [
+                    "queued"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "repository": {
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?:https://(?:[a-zA-Z0-9][a-zA-Z0-9.-]*|\\[[0-9a-fA-F:]+\\])|http://(?:localhost|127\\.0\\.0\\.1|\\[::1\\]))(?::[0-9]+)?(?:/[A-Za-z0-9_.%~-]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512,
+              "pattern": "^[A-Za-z0-9_][A-Za-z0-9_.-]*(?:/[A-Za-z0-9_][A-Za-z0-9_.-]*)+$"
+            },
+            "commit": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+            },
+            "batch": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "owners": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 255,
+                "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+              },
+              "uniqueItems": true
+            },
+            "deadline": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "codemods": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "pattern": "^[a-z0-9][a-z0-9-]*$"
+                  },
+                  "uniqueItems": true
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "checks": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/check"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "status": {
+              "$ref": "#/$defs/status"
+            },
+            "transitions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/transition"
+              }
+            }
+          },
+          "required": [
+            "host",
+            "name",
+            "commit",
+            "batch",
+            "owners",
+            "deadline",
+            "codemods",
+            "checks",
+            "status",
+            "transitions"
+          ],
+          "additionalProperties": false
+        },
+        "check": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "setup",
+                "install",
+                "build",
+                "test"
+              ]
+            },
+            "command": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512,
+                "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "kind",
+            "command"
+          ],
+          "additionalProperties": false
+        },
+        "omission": {
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?:https://(?:[a-zA-Z0-9][a-zA-Z0-9.-]*|\\[[0-9a-fA-F:]+\\])|http://(?:localhost|127\\.0\\.0\\.1|\\[::1\\]))(?::[0-9]+)?(?:/[A-Za-z0-9_.%~-]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512,
+              "pattern": "^[A-Za-z0-9_][A-Za-z0-9_.-]*(?:/[A-Za-z0-9_][A-Za-z0-9_.-]*)+$"
+            },
+            "reason": {
+              "enum": [
+                "excluded",
+                "outside-include",
+                "not-scanned",
+                "missing-evidence",
+                "no-match",
+                "blocked",
+                "unknown"
+              ]
+            }
+          },
+          "required": [
+            "host",
+            "name",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
   }
 ]

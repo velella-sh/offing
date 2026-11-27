@@ -40,6 +40,7 @@ complete -c offing -n __fish_use_subcommand -a capabilities
 complete -c offing -n __fish_use_subcommand -a completions
 complete -c offing -n __fish_use_subcommand -a attest
 complete -c offing -n __fish_use_subcommand -a autopilot
+complete -c offing -n __fish_use_subcommand -a campaign
 complete -c offing -n __fish_use_subcommand -a codemod
 complete -c offing -n __fish_use_subcommand -a config
 complete -c offing -n __fish_use_subcommand -a drivers
@@ -222,6 +223,8 @@ complete -c offing -n '__fish_seen_subcommand_from autopilot' -l wave
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l finding
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l to
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l agent
+complete -c offing -n '__fish_seen_subcommand_from campaign' -l fleet
+complete -c offing -n '__fish_seen_subcommand_from campaign' -l json
 complete -c offing -n '__fish_seen_subcommand_from config' -l json
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l include
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l exclude
@@ -241,6 +244,7 @@ complete -c offing -n '__fish_seen_subcommand_from fleet' -l no-cache
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l fail-on
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l progress
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l forecast-input
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l campaign-input
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l what-if-target
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l as-of
 complete -c offing -n '__fish_seen_subcommand_from hook' -l fail-on

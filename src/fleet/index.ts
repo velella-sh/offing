@@ -219,6 +219,18 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
   }
 }
 
+/** Optional evidence needs pinned source inputs. The ordinary cache stores aggregates. */
+function needsPinnedInputs(options: FleetOptions): boolean {
+  return Boolean(
+    options.campaign ||
+      options.forecast ||
+      options.whatIf ||
+      options.policy !== undefined ||
+      options.imageLineage ||
+      options.noCache,
+  );
+}
+
 async function fleetContext(host: FleetHost, options: FleetOptions): Promise<FleetContext> {
   const data = await getActiveData();
   const asOf = options.forecast?.asOf ?? options.whatIf?.asOf;
@@ -229,14 +241,7 @@ async function fleetContext(host: FleetHost, options: FleetOptions): Promise<Fle
     host,
     fingerprint,
     scannedAt,
-    // Optional evidence needs the pinned inputs, while cache entries contain aggregates.
-    noCache:
-      options.campaign === true ||
-      options.forecast !== undefined ||
-      options.whatIf !== undefined ||
-      options.policy !== undefined ||
-      options.imageLineage === true ||
-      (options.noCache ?? false),
+    noCache: needsPinnedInputs(options),
     imageLineage: options.imageLineage ?? false,
     forecast: options.forecast,
     campaign: options.campaign ?? false,

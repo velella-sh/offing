@@ -247,3 +247,63 @@ test("standalone conformance accepts the published vectors and rejects invalid i
   await assert.rejects(run(process.execPath, [script, join(vectorDir, "invalid-campaign.json"), state, schemas]));
   await assert.rejects(run(process.execPath, [script, config, join(vectorDir, "invalid-state.json"), schemas]));
 });
+
+test("the campaign admits only repositories marked ready by the pinned Fleet What-If path", async (t) => {
+  const target = { runtime: "nodejs", version: "22" };
+  const results = await scanFleet(
+    {
+      origin: host,
+      listRepositories: async () =>
+        ["ready", "blocked", "unknown"].map((name) => ({
+          name: `project/${name}`,
+          defaultBranch: "main",
+          archived: false,
+          fork: false,
+          disabled: false,
+          topics: [],
+        })),
+      readDefaultBranchHead: async () => commit,
+      async fetchFilesAtCommit(repo, sha, root, filter) {
+        assert.equal(sha, commit);
+        assert.ok(filter.includes("package-lock.json"));
+        assert.ok(filter.includes("requirements.txt"));
+        if (repo.name.endsWith("/unknown")) return 0;
+        const allowed = repo.name.endsWith("/ready") ? ">=22" : "^18.0.0";
+        await writeFile(
+          join(root, "package-lock.json"),
+          JSON.stringify(
+            {
+              name: "sample",
+              lockfileVersion: 3,
+              packages: {
+                "": { name: "sample", dependencies: { library: "1.0.0" } },
+                "node_modules/library": { version: "1.0.0", engines: { node: allowed } },
+              },
+            },
+            null,
+            2,
+          ),
+        );
+        return 1;
+      },
+    },
+    "project",
+    { campaign: true, forecast: { gitlab: true, asOf: captureDay }, whatIf: { targets: [target], asOf: captureDay } },
+  );
+  const root = await scratch(t);
+  const fleet = join(root, "fleet.json");
+  const config = join(root, "campaign.yml");
+  await writeFile(fleet, JSON.stringify(results));
+  await writeFile(config, JSON.stringify({ ...campaign, select: { upgradeTarget: target } }));
+  const result = await runCli(["campaign", "plan", config, "--fleet", fleet, "--json"]);
+  assert.equal(result.code, 0, result.stderr);
+  assert.deepEqual(
+    JSON.parse(result.stdout).repositories.map(({ name }: { name: string }) => name),
+    ["project/ready"],
+    JSON.stringify(results.repositoryStatus),
+  );
+  assert.deepEqual(
+    JSON.parse(result.stdout).omissions.map(({ reason }: { reason: string }) => reason),
+    ["blocked", "unknown"],
+  );
+});
