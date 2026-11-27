@@ -187,6 +187,8 @@ test("graphic options reject conflicting formats and bad themes, and explicit JS
   const root = await fixture(t, { "package-lock.json": npmLock() });
   const run = (flags: string[]) => runCli(["upgrade-check", "--to", "nodejs@22", root, "--graph", ...flags]);
   for (const flags of [
+    ["--format"],
+    ["--unrecognized"],
     ["--format", "html"],
     ["--json", "--format", "svg"],
     ["--format", "svg", "--theme", "blue"],
