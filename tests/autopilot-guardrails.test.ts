@@ -1,15 +1,17 @@
 import { isIsoDate } from "@velella/ebb/registry";
 import assert from "node:assert/strict";
-import { execFile } from "node:child_process";
+import { ChildProcess, execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { PassThrough } from "node:stream";
 import { test, type TestContext } from "node:test";
 import { promisify } from "node:util";
 
 import { Ajv2020 } from "ajv/dist/2020.js";
 
-import { createReplayDriver } from "../src/agent-drivers/replay.js";
+import { createContainerReplayDriver, createReplayDriver } from "../src/agent-drivers/replay.js";
 import { createBudget } from "../src/autopilot/limits/budget.js";
 import { parseAutopilotConfig } from "../src/autopilot/limits/config.js";
 import { createPathScope } from "../src/autopilot/limits/scope.js";
@@ -19,6 +21,7 @@ import { ConfigError, validateConfig } from "../src/config.js";
 import { buildFindingPacket } from "../src/migrate/prompt.js";
 import { renderMigrationPrompt } from "../src/migration-prompt.js";
 import { scanWithBuiltIns } from "../src/scan-builtins.js";
+import { profiles } from "../src/test-runners/profiles.js";
 import { runCli } from "./cli-runner.js";
 
 const command = promisify(execFile);
@@ -375,15 +378,84 @@ test("acc-guardrails strips marked multiline values and known patterns from rend
   assert.equal(JSON.parse(json).finding.summary, "Fix [REDACTED]");
 });
 
+test("container replay accepts only pinned, matching receipts and never falls back to a host edit", async (t) => {
+  const root = await scratch(t);
+  const recording = join(root, "recording.json");
+  const target = join(root, "project.txt");
+  const before = "before\n";
+  const after = "after\n";
+  const digest = createHash("sha256").update(after).digest("hex");
+  await writeFile(target, before);
+  await writeFile(
+    recording,
+    JSON.stringify({ schemaVersion: "offing.agent-replay.v1", turns: [{ "project.txt": after }] }),
+  );
+  const config = parseAutopilotConfig({ allowedPaths: ["project.txt"] });
+  const options = { config, packets: [], testFiles: [] };
+  const input = { worktreePath: root, prompt: "", timeoutMs: 10_000 };
+  const calls: string[][] = [];
+  let receipt: object = {};
+  const connect = async () => (args: string[]) => {
+    calls.push(args);
+    const cmd = args[0];
+    const output = cmd === "image" ? "linux/amd64\n" : args.includes("--eval") ? JSON.stringify(receipt) : "";
+    return Object.assign(Promise.resolve({ stdout: Buffer.from(output), stderr: Buffer.from(marked) }), {
+      child: Object.assign(new ChildProcess(), { stdin: new PassThrough() }),
+    });
+  };
+  const driver = createContainerReplayDriver(recording, options, connect);
+  for (receipt of [
+    { completed: 0, stopped: null, files: [] },
+    { completed: 1, stopped: "unexpected", files: [["project.txt", digest]] },
+    { completed: 1, stopped: null, files: [["project.txt", "0".repeat(64)]] },
+  ]) {
+    const failed = await driver.run(input);
+    assert.ok("stopReason" in failed);
+    assert.equal(failed.stopReason, "container-runtime-unavailable");
+    assert.ok(!failed.stderr.includes(marked));
+    assert.equal(await readFile(target, "utf8"), before);
+  }
+  const unavailable = createContainerReplayDriver(recording, options, () => Promise.reject(new Error(marked)));
+  const refused = await unavailable.run(input);
+  assert.ok("stopReason" in refused);
+  assert.equal(refused.stopReason, "container-runtime-unavailable");
+  assert.ok(!refused.stderr.includes(marked));
+  assert.equal(await readFile(target, "utf8"), before);
+  receipt = { completed: 1, stopped: "run.tokens", files: [["project.txt", digest]] };
+  const stopped = await driver.run(input);
+  assert.ok("stopReason" in stopped);
+  assert.equal(stopped.stopReason, "run.tokens");
+  assert.equal(await readFile(target, "utf8"), after);
+  receipt = { completed: 1, stopped: null, files: [["project.txt", digest]] };
+  assert.equal((await driver.run(input)).exitCode, 0);
+  assert.equal(await readFile(target, "utf8"), after);
+  const launch = calls.find((args) => args[0] === "run");
+  assert.ok(launch);
+  assert.ok(launch.includes(profiles.npm.image));
+  assert.ok(launch.includes("--read-only") && launch.includes("65532:65532"));
+  assert.equal(launch[launch.indexOf("--network") + 1], "none");
+  assert.equal(calls.filter((args) => args[0] === "rm").length, 5);
+});
+
 test("acc-guardrails exercises the prepared Autopilot replay workflow in a disposable Git repository", async (t) => {
   const root = await scratch(t);
   const recording = join(await scratch(t), "turns.json");
   const git = async (...args: string[]) => (await command("git", args, { cwd: root })).stdout.trim();
-  const manifest = JSON.stringify({ dependencies: { request: "2.88.2" }, scripts: { test: "node must-not-run.js" } });
+  const manifest = JSON.stringify({
+    dependencies: { request: "2.88.2" },
+    scripts: { test: "node --test tests/migration.test.js" },
+  });
+  const testSource = [
+    'const assert = require("node:assert/strict");',
+    'assert.equal(process.cwd(), "/work/tree");',
+    'assert.equal(process.env.HOME, "/tmp");',
+    "assert.equal(process.env.REPLAY_FIXTURE_SECRET, undefined);",
+    "",
+  ].join("\n");
   await git("init", "--quiet");
   await mkdir(join(root, "tests"));
   await writeFile(join(root, "package.json"), manifest);
-  await writeFile(join(root, "tests", "migration.test.js"), "// before\n");
+  await writeFile(join(root, "tests", "migration.test.js"), testSource);
   await writeFile(
     join(root, ".offing.json"),
     JSON.stringify({
@@ -405,6 +477,26 @@ test("acc-guardrails exercises the prepared Autopilot replay workflow in a dispo
     "-qm",
     "fixture",
   );
+  const installedCli = process.env.OFFING_GUARDRAILS_CLI;
+  const invoke = async (args: string[], env: NodeJS.ProcessEnv = {}) => {
+    if (!installedCli) return runCli(args, { env });
+    try {
+      const result = await command(process.execPath, [installedCli, ...args], { env: { ...process.env, ...env } });
+      return { ...result, code: 0 };
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        "code" in error &&
+        typeof error.code === "number" &&
+        "stdout" in error &&
+        typeof error.stdout === "string" &&
+        "stderr" in error &&
+        typeof error.stderr === "string"
+      )
+        return { code: error.code, stdout: error.stdout, stderr: error.stderr };
+      throw error;
+    }
+  };
   const start = async (turn: Record<string, string>, usage?: typeof idle) => {
     await writeFile(
       recording,
@@ -414,8 +506,8 @@ test("acc-guardrails exercises the prepared Autopilot replay workflow in a dispo
         ...(usage ? { turnUsage: [usage] } : {}),
       }),
     );
-    const result = await runCli(["autopilot", root, "--prepare", "--replay", recording], {
-      env: { REPLAY_FIXTURE_SECRET: marked },
+    const result = await invoke(["autopilot", root, "--prepare", "--replay", recording], {
+      REPLAY_FIXTURE_SECRET: marked,
     });
     const recordFile = /Run record: ([^\r\n]+)/u.exec(result.stdout)?.[1];
     assert.ok(recordFile, result.stderr);
@@ -425,12 +517,12 @@ test("acc-guardrails exercises the prepared Autopilot replay workflow in a dispo
     const checkout = join(dirname(recordFile), "checkout");
     t.after(async () => {
       if (await readFile(recordFile).catch(() => undefined))
-        await runCli(["autopilot", root, "--undo", record.checkout.id]);
+        await invoke(["autopilot", root, "--undo", record.checkout.id]);
     });
     return { result, record, checkout, recordFile };
   };
   const undo = async (run: Awaited<ReturnType<typeof start>>) => {
-    const result = await runCli(["autopilot", root, "--undo", run.record.checkout.id]);
+    const result = await invoke(["autopilot", root, "--undo", run.record.checkout.id]);
     assert.equal(result.code, 0, result.stderr);
     await assert.rejects(readFile(run.recordFile), { code: "ENOENT" });
   };
@@ -450,18 +542,25 @@ test("acc-guardrails exercises the prepared Autopilot replay workflow in a dispo
     await assert.rejects(readFile(join(run.checkout, ".env.ci")), { code: "ENOENT" });
     await undo(run);
   }
+  if (!installedCli && process.env.OFFING_VERIFY_REPLAY_DOCKER !== "1") {
+    assert.equal(await git("status", "--porcelain"), "");
+    return;
+  }
+  const tested = await invoke(["autopilot", root, "--test-only"], { REPLAY_FIXTURE_SECRET: marked });
+  assert.equal(tested.code, 0, tested.stderr);
+  assert.match(tested.stdout, /Pinned Docker tests\npassed \["npm","run","test"\]/u);
   const accepted = await start({ "package.json": "{}", "tests/migration.test.js": "// after\n" });
-  assert.equal(accepted.result.code, 0);
+  assert.equal(accepted.result.code, 0, accepted.result.stderr + "\n" + accepted.record.stopReason);
   assert.equal(accepted.record.stopReason, "replay-prepared");
   assert.equal(await readFile(join(accepted.checkout, "package.json"), "utf8"), "{}");
   assert.equal(await readFile(join(root, "package.json"), "utf8"), manifest);
   try {
-    const refused = await runCli(["autopilot", root, "--undo", accepted.record.checkout.id]);
+    const refused = await invoke(["autopilot", root, "--undo", accepted.record.checkout.id]);
     assert.equal(refused.code, 2);
     assert.match(refused.stderr, /worktree with local changes/u);
   } finally {
     await writeFile(join(accepted.checkout, "package.json"), manifest);
-    await writeFile(join(accepted.checkout, "tests", "migration.test.js"), "// before\n");
+    await writeFile(join(accepted.checkout, "tests", "migration.test.js"), testSource);
     await undo(accepted);
   }
   assert.equal(await git("status", "--porcelain"), "");

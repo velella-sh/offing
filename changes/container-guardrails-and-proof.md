@@ -1,0 +1,1 @@
+- Default explicitly requested replay and test execution to pinned Docker and verify the guard and proof paths with packaged fixtures.

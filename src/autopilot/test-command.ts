@@ -23,8 +23,8 @@ export async function runTestOnly(args: string[], ctx: CommandContext): Promise<
   const { positionals, values } = options;
   if (values["test-only"] !== true || positionals.length > 1) return ctx.fail("usage", "Usage: " + usage);
   try {
-    const result = await runContainerTests(resolve(positionals[0] ?? "."), values.container === true);
-    process.stdout.write(result.output);
+    const result = await runContainerTests(resolve(positionals[0] ?? "."));
+    process.stdout.write("Pinned Docker tests\n" + result.output);
     return result.passed ? 0 : 1;
   } catch (error) {
     if (error instanceof OffingError) return ctx.failError(error);

@@ -50,16 +50,34 @@ async function repository(t: TestContext, withGit = true) {
 
 const autopilot = (root: string, ...args: string[]) => runCli(["autopilot", root, ...args]);
 
-test("container tests require explicit test-only intent and a selected runtime", async (t) => {
+test("container tests require explicit test-only intent and a clean checkout", async (t) => {
   const root = await repository(t);
   for (const args of [["--container"], ["--prepare", "--container"], ["--test-only", "--dry-run"]]) {
     const result = await autopilot(root, ...args);
     assert.equal(result.code, 2, result.stderr);
     assert.match(result.stderr, /Usage: offing autopilot .*--test-only/);
   }
-  const noRuntime = await autopilot(root, "--test-only");
-  assert.equal(noRuntime.code, 2, noRuntime.stderr);
-  assert.match(noRuntime.stderr, /Use --container or configure autopilot\.testRuntime/);
+  assert.equal(await git(root, "branch", "--list", "offing/autopilot/*"), "");
+  await writeFile(
+    join(root, ".offing.json"),
+    JSON.stringify({ autopilot: { tests: Array.from({ length: 65 }, () => ["node", "--version"]) } }),
+  );
+  await git(root, "add", ".offing.json");
+  await git(
+    root,
+    "-c",
+    "user.name=Offing Test",
+    "-c",
+    "user.email=offing@example.com",
+    "-c",
+    "commit.gpgSign=false",
+    "commit",
+    "-qm",
+    "fixture command limit",
+  );
+  const oversized = await autopilot(root, "--test-only");
+  assert.equal(oversized.code, 2, oversized.stderr);
+  assert.match(oversized.stderr, /Limit an individual test run to 64 commands/u);
   assert.equal(await git(root, "branch", "--list", "offing/autopilot/*"), "");
   await writeFile(join(root, "uncommitted.txt"), "outside the approved snapshot");
   const dirty = await autopilot(root, "--test-only", "--container");
