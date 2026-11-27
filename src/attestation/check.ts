@@ -131,9 +131,14 @@ export async function validateStatement(value: unknown): Promise<LifecycleStatem
   return value;
 }
 
-export async function checkAttestation(file: string, asOf: string, subject?: string): Promise<AttestationCheck> {
+/** Verify the lifecycle contract and project only the supplied statement, including output from a trusted verifier. */
+export async function checkAttestationStatement(
+  payload: unknown,
+  asOf: string,
+  subject?: string,
+  envelope: AttestationCheck["envelope"] = "statement",
+): Promise<AttestationCheck> {
   if (!isIsoDate(asOf)) throw new OffingError("invalid-date", "Expected a real UTC calendar date (YYYY-MM-DD).");
-  const { statement: payload, envelope } = unwrap(await readAttestation(file));
   const statement = await validateStatement(payload);
   if (subject !== undefined) {
     const expected = await artifactSubject(subject);
@@ -142,4 +147,10 @@ export async function checkAttestation(file: string, asOf: string, subject?: str
     }
   }
   return { statement, envelope, asOf, components: project(statement, asOf) };
+}
+
+export async function checkAttestation(file: string, asOf: string, subject?: string): Promise<AttestationCheck> {
+  if (!isIsoDate(asOf)) throw new OffingError("invalid-date", "Expected a real UTC calendar date (YYYY-MM-DD).");
+  const { statement, envelope } = unwrap(await readAttestation(file));
+  return checkAttestationStatement(statement, asOf, subject, envelope);
 }

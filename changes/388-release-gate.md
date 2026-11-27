@@ -1,0 +1,1 @@
+- Add lifecycle release and rollback decisions for repositories, SBOMs, and verified attestations, with an optional release gate for GitHub Actions.

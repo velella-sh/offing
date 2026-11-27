@@ -157,3 +157,23 @@ test("lifecycle signing is tag-only and the release verifies on a separate fresh
   assert.match(signed?.run ?? "", /verify-blob-attestation.*--check-claims=true/);
   assert.match(signed?.run ?? "", /verify_gh tampered\.tgz \|\| verify_cosign tampered\.tgz/);
 });
+
+test("release publication and consumer workflows wire the same opt-in lifecycle gate", async () => {
+  const release = parse(await readFile(join(workflowsDir, "release.yml"), "utf8"));
+  const steps = release.jobs["npm-publish"].steps as Array<{ run?: string; env?: Record<string, string> }>;
+  const gateIndex = steps.findIndex(({ run }) => run === "bash .github/scripts/release-gate.sh");
+  assert.ok(gateIndex > 0);
+  assert.ok(steps.findIndex(({ run }) => run?.includes("npm publish")) > gateIndex);
+  assert.match(
+    steps[gateIndex]?.env?.USE_BLOCKED_FIXTURE ?? "",
+    /workflow_dispatch.*inputs.dry_run.*inputs.release_gate_fixture/,
+  );
+  const script = await readFile(".github/scripts/release-gate.sh", "utf8");
+  assert.match(script, /set -euo pipefail/);
+  assert.match(script, /npm sbom --omit=dev --sbom-format=cyclonedx --package-lock-only/);
+
+  const consumer = parse(await readFile("templates/workflows/offing-release-gate.yml", "utf8"));
+  assert.deepEqual(consumer.permissions, { contents: "read" });
+  assert.deepEqual(consumer.on, { release: { types: ["published"] }, push: { tags: ["v*"] } });
+  assert.equal(consumer.jobs.lifecycle.steps[1].with["release-gate-days"], "30");
+});

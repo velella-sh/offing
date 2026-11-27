@@ -10,6 +10,7 @@ import { applyPolicy, findingsAtSeverity } from "../policy.js";
 import { changedLines, planFixSuggestions, selectChangedAnnotations } from "./diff.js";
 import { parseAnnotations, parseGate } from "./inputs.js";
 import { annotationFor, renderBadge } from "./render.js";
+import { runReleaseGate } from "./release-gate.js";
 import { scanInMode } from "./scan.js";
 import type { AnnotationScope, GitHubActionOptions, GitHubActionOutcome, LineRange } from "./types.js";
 
@@ -88,7 +89,9 @@ export async function runGitHubAction(options: GitHubActionOptions): Promise<Git
   });
   const scanned = await scanInMode(root, options);
   const { expiredFailure, diff, packages, agent } = scanned;
-  const result = applyPolicy(scanned.result, policy, options.today ?? scanned.result.scannedAt.slice(0, 10));
+  const today = options.today ?? scanned.result.scannedAt.slice(0, 10);
+  const releaseGate = await runReleaseGate(root, options, policy, today);
+  const result = applyPolicy(scanned.result, policy, today);
   const { reportPath, sarifPath } = await writeReports(options, result);
 
   const gateFailed = findingsAtSeverity(result.findings, gate).length > 0;
@@ -105,7 +108,8 @@ export async function runGitHubAction(options: GitHubActionOptions): Promise<Git
     annotations: planned.annotations,
     unannotated: planned.unannotated,
     suggestions: planned.suggestions,
-    failed: expiredFailure || gateFailed || policyFailed,
+    failed: expiredFailure || gateFailed || policyFailed || releaseGate?.verdict === "block",
+    ...(releaseGate ? { releaseGate } : {}),
     gateFailed,
     gate,
     expiredFailure,

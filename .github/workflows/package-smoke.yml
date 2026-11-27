@@ -418,3 +418,71 @@ jobs:
             printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
             printf -- '- Unsigned statement, packaged schema and template, and standalone conformance verified.\n'
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: acc-release-gate (installed CLI and standalone fixtures)
+        working-directory: ${{ runner.temp }}
+        env:
+          OFFING_DATA_VERSION: bundled
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          package="$out/npm-install/node_modules/@velella/offing"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          fixture="$GITHUB_WORKSPACE/tests/fixtures/release-gate/blocked.cdx.json"
+          tarball=("$out"/*.tgz)
+          test "${#tarball[@]}" = 1
+          test -f "$package/schemas/release-gate.v1.schema.json"
+          test -f "$package/templates/workflows/offing-release-gate.yml"
+          "$bin" release-gate --sbom "$fixture" --today 2026-03-31 --support-until 2026-03-31 --json |
+            jq -e '.decisions[0].verdict == "pass"'
+          status=0
+          "$bin" release-gate --sbom "$fixture" --today 2026-03-31 --within-days 1 --format sarif > gate.sarif || status=$?
+          test "$status" -eq 1
+          jq -e '.runs[0].properties.offingReleaseGate.decisions[0].verdict == "block"' gate.sarif
+          mkdir consumer-release
+          git -C consumer-release init -q
+          printf '[tools]\nnode = "18"\n' > consumer-release/mise.toml
+          git -C consumer-release add mise.toml
+          git -C consumer-release -c user.name=fixture -c user.email=fixture@example.com commit -qm older
+          git -C consumer-release tag v1.0.0
+          printf '[tools]\nnode = "24"\n' > consumer-release/mise.toml
+          git -C consumer-release add mise.toml
+          git -C consumer-release -c user.name=fixture -c user.email=fixture@example.com commit -qm current
+          git -C consumer-release tag v2.0.0
+          (
+            cd consumer-release
+            "$bin" release-gate HEAD --today 2025-04-01 --within-days 29
+            status=0
+            "$bin" rollback-readiness v2.0.0 --candidate v1.0.0 --today 2025-04-01 --within-days 29 --json > rollback.json || status=$?
+            test "$status" -eq 1
+            jq -e '.decisions[0].reasons[0].ruleId == "nodejs.runtime.eol-18"' rollback.json
+          )
+          cp "$fixture" consumer-release/inventory.cdx.json
+          {
+            printf '### acc-release-gate\n\n'
+            printf -- '- Candidate artifact SHA-256 %s\n' "$(sha256sum "${tarball[0]}" | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
+            node "$package/docs/spec/release-gate/conformance/check.mjs"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: acc-release-gate (compliant checkout) # zizmor: ignore[self-repository] -- uses the locally built candidate
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/consumer-release
+          release-gate-days: '30'
+          fail-on-severity: none
+
+      - name: acc-release-gate (blocked SBOM) # zizmor: ignore[self-repository] -- uses the locally built candidate
+        id: release_gate_blocked
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/consumer-release
+          sbom: inventory.cdx.json
+          release-gate-days: '30'
+          fail-on-severity: none
+
+      - name: Check the blocked Action outcome
+        env:
+          BLOCKED_OUTCOME: ${{ steps.release_gate_blocked.outcome }}
+        run: test "$BLOCKED_OUTCOME" = failure

@@ -1,0 +1,15 @@
+{
+  "asOf": "2024-02-28",
+  "supportUntil": "2024-02-29",
+  "cases": [
+    { "name": "after the window", "noData": "warn", "deadline": "2024-03-01", "expected": ["pass"] },
+    { "name": "inclusive leap day", "noData": "warn", "deadline": "2024-02-29", "expected": ["block", "block", 1] },
+    { "name": "release day", "noData": "warn", "deadline": "2024-02-28", "expected": ["block", "block", 0] },
+    { "name": "past deadline", "noData": "warn", "deadline": "2024-02-27", "expected": ["block", "block", -1] },
+    { "name": "warn on missing evidence", "noData": "warn", "expected": ["warn", "warn"] },
+    { "name": "fail on missing evidence", "noData": "fail", "expected": ["block", "block"] },
+    { "name": "omit missing evidence", "noData": "ignore", "expected": ["pass"] },
+    { "name": "active on expiry day", "noData": "warn", "deadline": "2024-02-29", "expires": "2024-02-28", "expected": ["pass", "excepted", 1] },
+    { "name": "expired exception", "noData": "warn", "deadline": "2024-02-29", "expires": "2024-02-27", "expected": ["block", "block", 1] }
+  ]
+}

@@ -7,7 +7,7 @@ import type { UnclassifiedReference } from "../domain.js";
 import { OffingError } from "../offing-error.js";
 import { readSbomDocument } from "../sbom-scan.js";
 import { scanSbomInput } from "../sbom/input.js";
-import { lifecycleRules } from "../sbom/lifecycle.js";
+import { lifecyclePackageRules, lifecycleRules } from "../sbom/lifecycle.js";
 import { scanWithBuiltIns } from "../scan-builtins.js";
 import { VERSION } from "../version.js";
 import {
@@ -35,21 +35,10 @@ function eventAtBuild(rule: RuleDetails, builtOn: string): LifecycleRule {
   };
 }
 
-function packageRules(rules: readonly RegistryV2Rule[]): Map<string, RegistryV2Rule[]> {
-  const byPurl = new Map<string, RegistryV2Rule[]>();
-  for (const rule of rules) {
-    if (rule.usage?.some((usage) => usage.kind === "symbol")) continue;
-    const entries = byPurl.get(rule.purl) ?? [];
-    entries.push(rule);
-    byPurl.set(rule.purl, entries);
-  }
-  return byPurl;
-}
-
 async function sbomComponents(file: string, rules: readonly RegistryV2Rule[], builtOn: string): Promise<Observations> {
   const noData: ComponentIdentity[] = [];
   const components: LifecycleComponent[] = [];
-  const byPurl = packageRules(rules);
+  const byPurl = lifecyclePackageRules(rules);
   const entries = await scanSbomInput(await readSbomDocument(file), {
     check: ({ purl, version }) =>
       checkAgainst(byPurl.get(purlIdentity(parsePurl(purl))) ?? [], {

@@ -21,6 +21,7 @@ import {
   runGitHubAction,
   suggestionComment,
 } from "./github-action.js";
+import { readReleaseGateDays, releaseGateSummary } from "./github-action/release-gate.js";
 import { parseFleetPolicyInput } from "./github-action/inputs.js";
 import { prepareForecast, readForecastMonths } from "./github-action/forecast.js";
 import { compactPullRequestComment, limitPullRequestComment } from "./github-action/render.js";
@@ -221,7 +222,7 @@ function stepSummaryBody(
   const proposalNote = proposal
     ? `\n> **Suggested baseline:** \`${proposal.path}\` does not exist yet, so this first run recorded its ${count} finding${plural(count)} in a baseline proposal on the pull request comment.\n`
     : "";
-  return `${summary}${policyFailureNote(outcome)}${proposalNote}${forecast ? `\n${forecast}` : ""}`;
+  return `${summary}${policyFailureNote(outcome)}${releaseGateSummary(outcome.releaseGate)}${proposalNote}${forecast ? `\n${forecast}` : ""}`;
 }
 
 /** Posts or updates the one summary comment. A comment that cannot be posted warns without failing the scan. */
@@ -518,8 +519,10 @@ function scanOptionsFor(ctx: RunContext): Partial<RunOptions> {
 function policyOptionsFor(ctx: RunContext): Pick<RunOptions, "failOnSeverity"> & Partial<RunOptions> {
   const { env } = ctx;
   const policy = parseFleetPolicyInput(env.INPUT_POLICY);
+  const releaseGateDays = readReleaseGateDays(env["INPUT_RELEASE-GATE-DAYS"]);
   return {
     ...(policy ? { policy } : {}),
+    ...(releaseGateDays === undefined ? {} : { releaseGateDays }),
     ...(env["INPUT_BASELINE-WARN-DAYS"] ? { baselineWarnDays: Number(env["INPUT_BASELINE-WARN-DAYS"]) } : {}),
     ...(env["INPUT_ON-EXPIRED"] ? { onExpired: env["INPUT_ON-EXPIRED"] as ExpiredPolicy } : {}),
     ...(env["INPUT_MIN-SUPPORT-DAYS"] ? { minSupportDays: Number(env["INPUT_MIN-SUPPORT-DAYS"]) } : {}),
@@ -618,6 +621,9 @@ interface PreparedRun {
 async function prepareRun(env: Env, root: string, workspace: string): Promise<PreparedRun> {
   const { inputMode, inputAnnotations } = readModeInputs(env);
   const pathPatterns = parsePathsInput(env.INPUT_PATHS ?? "");
+  if (env["INPUT_RELEASE-GATE-DAYS"]?.trim() && (inputMode === "diff" || pathPatterns.length > 0)) {
+    throw new Error("release-gate-days requires one root or SBOM in scan mode.");
+  }
   const sbom = parseSbomInput(env.INPUT_SBOM, inputMode, pathPatterns);
   const event = await readEvent(env.GITHUB_EVENT_PATH);
   const diff = inputMode === "diff" ? resolveDiffMode(event) : undefined;

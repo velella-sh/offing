@@ -55,6 +55,8 @@ export function renderFailure(outcome: GitHubActionFailure): string | undefined 
   if (!outcome.failed) return undefined;
 
   const reasons: string[] = [];
+  if (outcome.releaseGate?.verdict === "block")
+    reasons.push("release blocked by lifecycle policy (see the job summary)");
   if (outcome.gateFailed) {
     const count = findingsAtSeverity(outcome.result.findings, outcome.gate).length;
     reasons.push(`${count} finding${count === 1 ? "" : "s"} met or exceeded the ${outcome.gate} severity gate`);

@@ -1,6 +1,7 @@
 import type { AgentIntroducedFindings } from "../agent-pr.js";
 import type { ExpiredPolicy } from "../baseline.js";
 import type { DiffResult } from "../diff.js";
+import type { GateDecision } from "../release-gate/decision.js";
 import type { Finding, ScanResult, Severity, SourceLocation } from "../domain.js";
 
 /** The severity threshold that fails an Action run; `none` never fails on a finding. */
@@ -86,6 +87,8 @@ export interface GitHubActionOptions {
   onExpired?: ExpiredPolicy;
   /** Warn on lines whose support ends within this many days; off when unset. */
   minSupportDays?: number;
+  /** Block when unexcepted lifecycle deadlines fall in this inclusive day window. */
+  releaseGateDays?: number;
   failOnSeverity?: SeverityGate;
   /** `"diff"` scans the pull request `base..head` refs and judges only what the PR introduces; `"scan"` (default) scans the checked-out tree. */
   mode?: "scan" | "diff";
@@ -106,6 +109,7 @@ export interface GitHubActionOptions {
 
 /** What an Action run produced, including the report, annotations, and whether the job should fail. */
 export interface GitHubActionOutcome {
+  releaseGate?: GateDecision;
   result: ScanResult;
   reportPath: string;
   sarifPath?: string;
@@ -134,5 +138,5 @@ export interface GitHubActionOutcome {
 
 export type GitHubActionFailure = Pick<
   GitHubActionOutcome,
-  "result" | "reportPath" | "failed" | "gateFailed" | "gate" | "expiredFailure"
+  "result" | "reportPath" | "failed" | "gateFailed" | "gate" | "expiredFailure" | "releaseGate"
 >;

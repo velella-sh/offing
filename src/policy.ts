@@ -40,6 +40,22 @@ function matchesScope(scope: PolicyScope, finding: Finding): boolean {
   );
 }
 
+/** Expired matches take precedence over active matches, as in the scan policy gate. */
+export function matchingPolicyException(
+  exceptions: readonly PolicyException[],
+  detector: string,
+  ruleId: string,
+  path: string | undefined,
+  today: string,
+): PolicyException | undefined {
+  const matches = exceptions.filter(
+    (scope) =>
+      (scope.ecosystem === undefined || scanSelectorMatches(scope.ecosystem, detector, ruleId)) &&
+      (scope.path === undefined || (path !== undefined && matchesIgnorePattern([scope.path], path))),
+  );
+  return matches.find((match) => match.expires < today) ?? matches[0];
+}
+
 function matchesDeadline(rule: PolicyRule, deadline: string | undefined, today: string): boolean {
   const window = rule["days-left"];
   const ended = rule["after-eol"];
@@ -66,9 +82,9 @@ function policyViolation(
   today: string,
 ): PolicyViolation[] {
   if (!matchesRule(rule, finding, today)) return [];
-  const matching = exceptions.filter((exception) => matchesScope(exception, finding));
-  const expired = matching.find((exception) => exception.expires < today);
-  if (expired === undefined && matching.length > 0) return [];
+  const match = matchingPolicyException(exceptions, finding.detector, finding.ruleId, finding.location.path, today);
+  if (match && match.expires >= today) return [];
+  const expired = match;
   return [
     {
       rule: rule.id,

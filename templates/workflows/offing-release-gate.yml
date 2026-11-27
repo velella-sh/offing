@@ -1,0 +1,27 @@
+name: Offing release gate
+
+# A published release already exists when its event fires. Put downstream publication jobs
+# in this workflow and make them depend on lifecycle. To gate the GitHub release itself,
+# run this job before the separate step that creates the release.
+on:
+  release:
+    types: [published]
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  lifecycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      # Replace this placeholder with the full commit SHA of an Offing release that supports release-gate-days.
+      - uses: velella-sh/offing@REPLACE_WITH_OFFING_RELEASE_SHA
+        with:
+          release-gate-days: '30'
+          fail-on-severity: none

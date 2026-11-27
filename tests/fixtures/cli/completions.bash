@@ -5,7 +5,7 @@ _offing() {
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   command="${COMP_WORDS[1]}"
   if [ "$COMP_CWORD" -eq 1 ]; then
-    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions attest codemod config drivers fleet hook lineage lsp migrate policy prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
+    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions attest codemod config drivers fleet hook lineage lsp migrate policy prompt recommend release-gate rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
     return
   fi
   case "$prev" in
@@ -73,7 +73,8 @@ _offing() {
     policy) opts="--policy --today" ;;
     prompt) opts="--format --symbol" ;;
     recommend) opts="--min-days --as-of --json" ;;
-    rollback-readiness) opts="--candidate --within-days --json" ;;
+    release-gate) opts="--sbom --attestation --subject --repo --signer-workflow --trusted-root --within-days --support-until --today --no-data --json --format" ;;
+    rollback-readiness) opts="--candidate --within-days --support-until --today --no-data --json" ;;
     timelapse) opts="--from --to --svg --json --no-animation" ;;
     verify) opts="--data-version" ;;
     wrapped) opts="--year --svg --json --no-animation" ;;
