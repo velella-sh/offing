@@ -326,14 +326,14 @@ Run the workflow by hand and confirm the message arrives in the channel:
 gh workflow run offing-org-scan.yml --repo your-org/your-ops-repo
 ```
 
-The workflow truncates the digest to Slack's 3,000-character section limit, adding a `…truncated` marker. Keep the channel to the summary and use the artifacts or the [rollup page](#optional-publish-one-page) for the full list.
+The workflow truncates the digest to Slack's 3,000-character section limit, adding a `…truncated` marker. Keep the channel to the summary and use the artifacts or the [rollup page](#4-read-the-report-artifacts) for the full list.
 
 ## 6. Offer the starter from the organization's `.github` repository
 
 So each repository can add Offing from the Actions **New workflow** gallery instead of pasting YAML by hand, put the starter in the organization's [`.github` repository](https://docs.github.com/en/actions/sharing-automations/creating-workflow-templates-for-your-organization):
 
 1. Create `your-org/.github` if it does not exist.
-2. Copy both files from [`templates/workflows/`](../templates/workflows/) into that repository:
+2. Copy both files from [`templates/workflows/`](https://github.com/velella-sh/offing/tree/main/templates/workflows) into that repository:
 
 ```text
 workflow-templates/offing.yml
@@ -431,7 +431,7 @@ Without the input, the Action reports every finding even though the baseline fil
 The report and opt-in owner digest artifacts request 14 days of retention,
 subject to the caller repository's retention limit. Download or roll up
 reports before they expire to keep a longer history. You can also publish
-the [rollup page](#optional-publish-one-page) from a workflow that runs
+the [rollup page](#4-read-the-report-artifacts) from a workflow that runs
 alongside the scan.
 
 ## Troubleshooting
