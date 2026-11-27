@@ -3,7 +3,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { ConfigError } from "../config.js";
-import type { FleetHost } from "../fleet/host.js";
+import { FleetHostError, type FleetHost } from "../fleet/host.js";
+import { fleetClient } from "../fleet/http.js";
 import { githubFleetHost, gitlabFleetHost } from "../fleet/remote.js";
 import { readBoundedFile } from "../package-files.js";
 import type { RemotePolicySnapshot } from "./cache.js";
@@ -55,19 +56,19 @@ function commitEndpoint(reference: PolicyReference): string {
     : `https://gitlab.com/api/v4/projects/${encodeURIComponent(reference.repository)}/repository/commits/${ref}`;
 }
 
-async function resolveCommit(reference: PolicyReference, request: typeof fetch, token?: string): Promise<string> {
+async function resolveCommit(
+  reference: PolicyReference,
+  request: typeof fetch | undefined,
+  token?: string,
+): Promise<string> {
   if (isPolicyCommit(reference.ref)) return reference.ref;
-  const headers = new Headers({ accept: "application/json" });
-  if (token) headers.set("Authorization", `Bearer ${token}`);
-  const response = await request(commitEndpoint(reference), {
-    headers,
-    redirect: "error",
-    signal: AbortSignal.timeout(10_000),
-  });
-  if (!response.ok) {
-    await response.body?.cancel();
-    throw new ConfigError(`Remote policy ${reference.source} returned HTTP ${response.status}.`);
+  const headers: Record<string, string> = { accept: "application/json" };
+  if (token) {
+    if (reference.provider === "github") headers.Authorization = `Bearer ${token}`;
+    else headers["PRIVATE-TOKEN"] = token;
   }
+  const read = fleetClient(headers, "Policy host denied read access.", request ? { request } : {});
+  const response = await read(new URL(commitEndpoint(reference)));
   return commitFromResponse(await responseText(response), reference.provider);
 }
 
@@ -96,7 +97,7 @@ async function readAtCommit(host: Pick<FleetHost, "fetchFilesAtCommit">, referen
 
 export async function fetchRemotePolicy(
   reference: PolicyReference,
-  request: typeof fetch = fetch,
+  request?: typeof fetch,
   env: NodeJS.ProcessEnv = process.env,
   host?: Pick<FleetHost, "fetchFilesAtCommit">,
 ): Promise<RemotePolicySnapshot> {
@@ -107,6 +108,7 @@ export async function fetchRemotePolicy(
     return { commit, text };
   } catch (error) {
     if (error instanceof ConfigError) throw error;
+    if (error instanceof FleetHostError) throw new ConfigError(`Remote policy ${reference.source}: ${error.message}`);
     throw new ConfigError(`Cannot fetch policy ${reference.source}; check the provider, reference, and read access.`);
   }
 }
