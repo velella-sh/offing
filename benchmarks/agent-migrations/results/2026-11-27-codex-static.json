@@ -1,0 +1,131 @@
+{
+  "agent": {
+    "name": "Codex CLI",
+    "version": "0.171.0-alpha.13.2",
+    "model": "gpt-6.2-sol"
+  },
+  "verificationProfile": {
+    "scope": "Pinned source, a full Offing rescan, git diff --check, and expected end-state checks repeated in a read-only Node container with the network disabled.",
+    "image": "docker.io/library/node@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5",
+    "projectVerificationStatus": "not-run"
+  },
+  "plannedTasks": 40,
+  "measuredTasks": 3,
+  "conditions": {
+    "baseline": {
+      "attempts": 3,
+      "successful": 2
+    },
+    "packet": {
+      "attempts": 3,
+      "successful": 3
+    }
+  },
+  "cases": [
+    {
+      "taskId": "2dust-androidlibv2raylite-checkout",
+      "repository": "https://github.com/2dust/AndroidLibV2rayLite",
+      "commit": "a51ab9fc8b39997f229011de39d4da5bead099d7",
+      "startedAt": "2026-11-27T00:53:11.233Z",
+      "finishedAt": "2026-11-27T00:53:55.289Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 23110,
+          "wallMs": 23737,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/main.yml"],
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 19679,
+          "wallMs": 20286,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/main.yml"],
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "natlibfi-ekirjasto-ios-core-checkout",
+      "repository": "https://github.com/NatLibFi/ekirjasto-ios-core",
+      "commit": "97c3c08c49c4c6d08fecd6955918ee743040d94c",
+      "startedAt": "2026-11-27T00:54:39.864Z",
+      "finishedAt": "2026-11-27T00:55:24.732Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 23995,
+          "wallMs": 24502,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ios-main.yml"],
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 19643,
+          "wallMs": 20208,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ios-main.yml"],
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "symfony-demo-checkout",
+      "repository": "https://github.com/symfony/demo",
+      "commit": "e28fadcbd64227cec50bbeb14a9907e36aebffe4",
+      "startedAt": "2026-11-27T00:53:55.612Z",
+      "finishedAt": "2026-11-27T00:54:39.759Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22849,
+          "wallMs": 23595,
+          "findingResolved": false,
+          "noNewFinding": true,
+          "staticVerificationPassed": false,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/lint.yaml"],
+          "success": false
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 20149,
+          "wallMs": 20462,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/lint.yaml"],
+          "success": true
+        }
+      ]
+    }
+  ]
+}
