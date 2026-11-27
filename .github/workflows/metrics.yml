@@ -5,6 +5,10 @@ on:
     - cron: "23 7 * * 1"
   workflow_dispatch:
     inputs:
+      verify_only:
+        description: Exercise the collector and verify the roadmap baseline without publishing.
+        type: boolean
+        default: false
       launch_date:
         description: "Confirmed launch date (YYYY-MM-DD UTC) to record the baseline. Leave blank for weekly metrics."
         type: string
@@ -17,8 +21,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  verify:
+    if: github.event_name == 'workflow_dispatch' && inputs.verify_only
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          package-manager-cache: "false"
+      - name: acc-launch-metrics
+        shell: bash
+        run: |
+          set -euo pipefail
+          snapshot="$RUNNER_TEMP/offing-adoption.json"
+          npm run metrics:adoption -- --out "$snapshot"
+          jq -e '.schemaVersion == "offing.adoption-snapshot.v1" and
+            (.metrics.githubStars.status == "ok") and (.metrics.githubForks.status == "ok") and
+            (.metrics.npmWeeklyDownloads.status == "ok") and (.metrics.mcpRegistryListed.status == "ok")' "$snapshot"
+          jq -e '.date == "2026-11-26" and .week == "2026-W48" and
+            .github == {"stars":0,"forks":0}' metrics/roadmap-baseline.json
+          node --test --test-reporter=dot dist/tests/adoption-metrics.test.js dist/tests/launch-metrics-no-users.test.js dist/tests/no-telemetry.test.js
+          git diff --exit-code -- metrics
+          {
+            printf '### acc-launch-metrics\n\n'
+            printf 'Commit: %s\n\n' "$(git rev-parse HEAD)"
+            printf 'Package version: %s\n\n' "$(node -p "require('./package.json').version")"
+            printf 'Roadmap baseline: %s\n' "$(sha256sum metrics/roadmap-baseline.json | cut -d ' ' -f 1)"
+          } >> "$GITHUB_STEP_SUMMARY"
   record:
-    if: github.repository == 'velella-sh/offing' && github.ref == 'refs/heads/main'
+    if: github.repository == 'velella-sh/offing' && github.ref == 'refs/heads/main' && !inputs.verify_only
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -71,8 +107,5 @@ jobs:
           git commit -m "$title"
           git -c 'credential.helper=!gh auth git-credential' push origin "HEAD:refs/heads/$branch"
           body='Recorded by the launch metrics workflow from unauthenticated public APIs.'
-          if [[ "$RECORD" == baseline ]]; then
-            body="$body"$'\n\nCloses #304'
-          fi
           gh pr create --base main --head "$branch" --title "$title" --body "$body"
         shell: bash
