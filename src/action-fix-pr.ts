@@ -174,7 +174,7 @@ async function inspectRemoteBranch(root: string, branch: string): Promise<Remote
   return {
     sha,
     botOwned: commits
-      .split("\n")
+      .split(/\r?\n/)
       .filter(Boolean)
       .every((commit) => commit === BOT_COMMIT),
   };
