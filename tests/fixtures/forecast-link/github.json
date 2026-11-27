@@ -1,0 +1,128 @@
+{
+  "tree": {
+    "sha": "2222222222222222222222222222222222222222",
+    "url": "https://external.invalid/tree",
+    "truncated": false,
+    "tree": [
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "requirements.txt",
+        "size": 14,
+        "sha": "3bf07eab6df22339245b9ae9c139aac63c1f2bb2"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "pyproject.toml",
+        "size": 37,
+        "sha": "40d3e748ca03bab7a310c08bbc2b22a12aee2864"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "packages/app group/package.json",
+        "size": 38,
+        "sha": "c0c6e8cc1ccb429e4a8ccd05f746b2c3f9a7afab"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "package-lock.json",
+        "size": 79,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": ".github/workflows/check.yml",
+        "size": 62,
+        "sha": "15e39d52b7d9293a208b40397af2d1c5b8894a9d"
+      },
+      {
+        "type": "blob",
+        "mode": "120000",
+        "path": "vendor/npm-shrinkwrap.json",
+        "size": 79,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "commit",
+        "mode": "160000",
+        "path": "vendor/requirements.txt",
+        "size": 79,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "../package.json",
+        "size": 79,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "/absolute/package.json",
+        "size": 79,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "./requirements.txt",
+        "size": 79,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "invalid\\file/package.json",
+        "size": 79,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": ".github/workflows/subdir/check.yml",
+        "size": 79,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "src/example.js",
+        "size": 79,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "too-big/package-lock.json",
+        "size": 1048577,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "unknown-size/package-lock.json",
+        "size": null,
+        "sha": "238bd1456ef1ee4e6cc2a614cea8609524cd5795"
+      },
+      {
+        "type": "blob",
+        "mode": "100644",
+        "path": "bad-sha/package.json",
+        "size": 79,
+        "sha": ""
+      }
+    ]
+  },
+  "files": {
+    ".github/workflows/check.yml": "jobs:\n  check:\n    steps:\n      - uses: actions/setup-node@v4\n",
+    "package-lock.json": "{\"lockfileVersion\":3,\"packages\":{\"node_modules/request\":{\"version\":\"2.88.2\"}}}\n",
+    "packages/app group/package.json": "{\"dependencies\":{\"request\":\"2.88.2\"}}\n",
+    "pyproject.toml": "[project]\nrequires-python = \">=3.10\"\n",
+    "requirements.txt": "django==4.2.0\n"
+  }
+}
