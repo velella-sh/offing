@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { brotliDecompressSync } from "node:zlib";
 
 import type { Language, ParseOptions, Parser, Query, Tree } from "./vendor/tree-sitter/tree-sitter.js";
 
@@ -9,7 +10,7 @@ import { readBundledText } from "../bundled-assets.js";
 import { required } from "../required.js";
 
 // Trimmed runtime + grammars under ./vendor/tree-sitter (from @vscode/tree-sitter-wasm). Offline, no native build.
-// The WebAssembly modules are committed as base64 text (`*.wasm.b64`) and decoded in memory, so the
+// The WebAssembly modules are committed as Brotli-compressed base64 text (`*.wasm.b64`) and decoded in memory, so the
 // package contains no binary artifact; `manifest.json` records the upstream source and SHA-256 of each.
 // The runtime is `.cjs` so Node treats it as CommonJS inside this `"type": "module"` package.
 const nodeRequire = createRequire(import.meta.url);
@@ -27,7 +28,7 @@ interface ParserInitOptions {
   locateFile: (file: string, folder: string) => string;
 }
 
-export type TreeSitterGrammar = "javascript" | "typescript" | "tsx" | "python";
+export type TreeSitterGrammar = "javascript" | "typescript" | "tsx" | "python" | "go" | "java" | "csharp";
 
 /** Same ceiling the regex scanner applies, so both engines skip the same files. */
 export const maximumParseBytes = 1_000_000;
@@ -42,7 +43,7 @@ const parsers = new Map<TreeSitterGrammar, Parser>();
 /** Reads a committed base64 payload and decodes it without touching the network or the filesystem beyond the vendor directory. */
 async function loadPayload(directory: string, file: string): Promise<Uint8Array> {
   const encoded = await readBundledText(join(directory, `${file}.b64`));
-  return new Uint8Array(Buffer.from(encoded, "base64"));
+  return brotliDecompressSync(Buffer.from(encoded, "base64"));
 }
 
 function loadRuntime(): Promise<{ module: TreeSitter; directory: string }> {
@@ -96,7 +97,7 @@ export function loadQuery(grammar: TreeSitterGrammar, ...names: string[]): Promi
 
 /** Picks the grammar for a source file, or undefined when no tree-sitter grammar covers it. */
 export function grammarFor(language: SourceLanguage, path: string): TreeSitterGrammar | undefined {
-  if (language === "python") return "python";
+  if (language === "python" || language === "go" || language === "java" || language === "csharp") return language;
   if (language === "javascript") return "javascript";
   if (language === "typescript") return path.toLowerCase().endsWith(".tsx") ? "tsx" : "typescript";
   return undefined;

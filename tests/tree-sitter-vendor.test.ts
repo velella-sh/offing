@@ -8,7 +8,7 @@ import { after, test } from "node:test";
 import { pathToFileURL } from "node:url";
 
 import type { SourceUsageContract } from "../src/domain.js";
-import { decodePayload, sha256, verifyVendor } from "../tools/verify-tree-sitter-wasm.js";
+import { decodePayload, encodePayload, sha256, verifyVendor } from "../tools/verify-tree-sitter-wasm.js";
 
 const roots: string[] = [];
 
@@ -66,7 +66,16 @@ test("the committed payloads match the manifest and no wasm binary is committed"
   assert.equal(manifest.package, "@vscode/tree-sitter-wasm");
   assert.equal(manifest.version, "0.3.1");
   assert.equal(manifest.source, "https://registry.npmjs.org/@vscode/tree-sitter-wasm/-/tree-sitter-wasm-0.3.1.tgz");
-  assert.equal(manifest.files.length, 5);
+  assert.equal(manifest.encoding, "brotli-base64");
+  assert.equal(manifest.files.length, 8);
+  assert.deepEqual(
+    manifest.files.flatMap((file) => (file.origin ? [[file.file, file.origin.version, file.origin.license]] : [])),
+    [
+      ["tree-sitter-go.wasm.b64", "v0.25.0", "MIT"],
+      ["tree-sitter-java.wasm.b64", "v0.23.5", "MIT"],
+      ["tree-sitter-csharp.wasm.b64", "v0.24.0", "MIT"],
+    ],
+  );
 
   const vendor = await readdir(resolve("src/usage/vendor/tree-sitter"));
   assert.deepEqual(
@@ -93,14 +102,16 @@ test("the checker reports a tampered payload and a stray wasm binary", async () 
   await cp(resolve("src/usage/vendor/tree-sitter"), directory, { recursive: true });
 
   const payload = join(directory, "tree-sitter-python.wasm.b64");
-  const encoded = await readFile(payload, "utf8");
-  await writeFile(
-    payload,
-    encoded.replace(/[A-Za-z0-9+/]/, (character) => (character === "A" ? "B" : "A")),
-  );
+  const bytes = decodePayload(await readFile(payload, "utf8"));
+  bytes[0] = 255;
+  await writeFile(payload, encodePayload(bytes));
+  await writeFile(join(directory, "LICENSE-go"), "tampered license");
+  await rm(join(directory, "LICENSE-java"));
   await writeFile(join(directory, "tree-sitter-cpp.wasm"), "");
 
   const { problems } = await verifyVendor(directory);
+  assert.ok(problems.includes("LICENSE-go: SHA-256 differs from the manifest"));
+  assert.ok(problems.includes("LICENSE-java: cannot read grammar license"));
   assert.ok(
     problems.some((problem) => problem.startsWith("tree-sitter-python.wasm.b64: sha256")),
     problems.join("\n"),

@@ -1,5 +1,5 @@
 /**
- * Refreshes the vendored tree-sitter runtime and grammars in `src/usage/vendor/tree-sitter/` from
+ * Refreshes the Brotli/base64 tree-sitter runtime and grammars in `src/usage/vendor/tree-sitter/` from
  * an installed `@vscode/tree-sitter-wasm`, keeping the WebAssembly payloads as committed base64 text
  * so the repository contains no binary artifacts.
  *
@@ -24,6 +24,7 @@ import {
   readManifest,
   sha256,
   verifyVendor,
+  type GrammarOrigin,
   type TreeSitterWasmFile,
   type TreeSitterWasmManifest,
 } from "./verify-tree-sitter-wasm.js";
@@ -39,6 +40,37 @@ const WASM_FILES = [
   "tree-sitter-tsx.wasm",
   "tree-sitter-python.wasm",
 ] as const;
+/** Official release assets and licenses, staged in the directory passed to this script. */
+const GRAMMARS = [
+  {
+    grammar: "go",
+    repository: "tree-sitter-go",
+    version: "v0.25.0",
+    revision: "1547678a9da59885853f5f5cc8a99cc203fa2e2c",
+    asset: "tree-sitter-go.wasm",
+    sha256: "9504573f352b20be7f2f1911754d710622aedc15afff16d5ed8fb5645681aee7",
+    licenseSha256: "2e0110e07abef7c2548b26ec9d6969775617ca539a0dc8dbeeb14d6452c711d1",
+  },
+  {
+    grammar: "java",
+    repository: "tree-sitter-java",
+    version: "v0.23.5",
+    revision: "94703d5a6bed02b98e438d7cad1136c01a60ba2c",
+    asset: "tree-sitter-java.wasm",
+    sha256: "4fdeac4ca6ca089f06c6f7e562abcac1733cd465728cc7031ebb73c2019122c4",
+    licenseSha256: "52ed137b039cd9c46409bc22e89938af911c95b157feae2d040b51e6084369a7",
+  },
+  {
+    grammar: "csharp",
+    repository: "tree-sitter-c-sharp",
+    version: "v0.24.0",
+    revision: "d4bbe18103c3380c6454085e589d2610938da142",
+    asset: "tree-sitter-c_sharp.wasm",
+    sha256: "e137386fcdfc2562a058f8048c76ab77b0663a318cb62d8026cd4d2e94944231",
+    licenseSha256: "778fb7d63b8c1844da315648c02f325c4713a6f4a5d19644fd413421422776d3",
+  },
+] as const;
+
 /** Text files copied from upstream; the runtime then gets the patch below. */
 const TEXT_FILES = [
   { from: "tree-sitter.js", to: "tree-sitter.cjs" },
@@ -105,11 +137,20 @@ if (previous && previous.version !== PINNED_VERSION) {
   );
 }
 
+const releaseDirectory = process.argv[2];
+if (!releaseDirectory) fail("Pass the directory containing the pinned grammar release assets and LICENSE files.");
+const grammars = GRAMMARS.map((pin) => stagedGrammar(pin, releaseDirectory));
+
 mkdirSync(destination, { recursive: true });
 for (const file of files) {
   writeFileSync(join(destination, file.file), encodePayload(readFileSync(join(wasmDirectory, file.upstream))));
   // Remove the binary form a previous sync may have left behind.
   rmSync(join(destination, file.upstream), { force: true });
+}
+for (const { file, bytes, license, licenseFile } of grammars) {
+  writeFileSync(join(destination, file.file), encodePayload(bytes));
+  writeFileSync(join(destination, licenseFile), license);
+  files.push(file);
 }
 for (const file of TEXT_FILES) cpSync(join(wasmDirectory, file.from), join(destination, file.to));
 cpSync(join(dirname(entry), "..", "LICENSE"), join(destination, "LICENSE"));
@@ -128,6 +169,7 @@ const manifest: TreeSitterWasmManifest = {
   version: PINNED_VERSION,
   source: `https://registry.npmjs.org/${PACKAGE_NAME}/-/${PACKAGE_NAME.split("/")[1]}-${PINNED_VERSION}.tgz`,
   license: "MIT",
+  encoding: "brotli-base64",
   files,
 };
 writeFileSync(join(destination, MANIFEST_FILE), `${JSON.stringify(manifest, null, 2)}\n`);
@@ -146,3 +188,28 @@ if (problems.length > 0) {
 console.log(
   `Synced ${files.length} payloads from ${PACKAGE_NAME}@${PINNED_VERSION} into src/usage/vendor/tree-sitter.`,
 );
+
+function stagedGrammar(pin: (typeof GRAMMARS)[number], directory: string) {
+  const licenseFile = `LICENSE-${pin.grammar}`;
+  const bytes = readFileSync(join(directory, pin.asset));
+  const license = readFileSync(join(directory, licenseFile));
+  if (sha256(bytes) !== pin.sha256 || sha256(license) !== pin.licenseSha256) {
+    fail(`Checksum mismatch for ${pin.repository} ${pin.version}.`);
+  }
+  const origin: GrammarOrigin = {
+    source: `https://github.com/tree-sitter/${pin.repository}/releases/download/${pin.version}/${pin.asset}`,
+    version: pin.version,
+    revision: pin.revision,
+    license: "MIT",
+    licenseFile,
+    licenseSha256: pin.licenseSha256,
+  };
+  const file: TreeSitterWasmFile = {
+    file: `tree-sitter-${pin.grammar}.wasm.b64`,
+    upstream: pin.asset,
+    bytes: bytes.length,
+    sha256: pin.sha256,
+    origin,
+  };
+  return { file, bytes, license, licenseFile };
+}
