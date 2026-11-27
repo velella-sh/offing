@@ -14,6 +14,7 @@ import type { CliCommand } from "./types.js";
 const usage = [
   "  offing autopilot [path] --dry-run [--wave <n> | --finding <id>] [--to <runtime@version>] [--agent <driver>]",
   "  offing autopilot [path] --prepare [--replay <recording>] [--wave <n> | --finding <id>] [--to <runtime@version>]",
+  "  offing autopilot [path] --run-replay <recording> [--allow-red-baseline <test>] [--wave <n> | --finding <id>]",
   "  offing autopilot [path] --test-only [--container]",
   "  offing autopilot [path] --undo [run]",
 ];
@@ -88,12 +89,42 @@ function parseAutopilotArgs(args: string[]) {
   };
 }
 
+async function prepareAutopilot(
+  root: string,
+  options: Exclude<ReturnType<typeof parseAutopilotArgs>, { mode: "undo" }>,
+  run: ReturnType<typeof startRun>,
+): Promise<number> {
+  let prepared = true;
+  const started = performance.now();
+  const location = await withAutopilotWorktree(root, run, async (tree) => {
+    const plan = await planAutopilot(tree, run, options.selection);
+    if (options.replay) {
+      prepared = await prepareReplay(tree, options.replay, run, started, plan);
+      return;
+    }
+    advanceRun(run, "baseline-tests");
+    advanceRun(run, { stop: "isolated-test-runner-unavailable" });
+  });
+  if (options.replay) {
+    process.stdout.write(
+      `Replay ${prepared ? "prepared" : "stopped"} (${run.stopReason}) in ${location.tree}.\nRun record: ${location.record}\n`,
+    );
+    return prepared ? 0 : 1;
+  }
+  process.stdout.write(
+    `Prepared ${location.branch} in ${location.tree}. Test execution is unavailable.\nRun record: ${location.record}\n`,
+  );
+  return 0;
+}
+
 export const command: CliCommand = {
   name: "autopilot",
   flags: [
     "--dry-run",
     "--prepare",
     "--replay",
+    "--run-replay",
+    "--allow-red-baseline",
     "--test-only",
     "--container",
     "--undo",
@@ -105,6 +136,10 @@ export const command: CliCommand = {
   example: "offing autopilot . --dry-run --to nodejs@22",
   usage,
   async run(args, ctx) {
+    if (args.some((arg) => arg === "--run-replay" || arg.startsWith("--run-replay="))) {
+      const { runReplayLoopCommand } = await import("../autopilot/test-command.js");
+      return runReplayLoopCommand(args, ctx, planArguments);
+    }
     if (args.includes("--test-only") || args.includes("--container")) {
       const { runTestOnly } = await import("../autopilot/test-command.js");
       return runTestOnly(args, ctx);
@@ -131,26 +166,6 @@ export const command: CliCommand = {
       process.stdout.write(`${preview}\nTransitions: ${run.transitions.join(" → ")}.\n`);
       return 0;
     }
-    let prepared = true;
-    const started = performance.now();
-    const location = await withAutopilotWorktree(root, run, async (tree) => {
-      const plan = await planAutopilot(tree, run, options.selection);
-      if (options.replay) {
-        prepared = await prepareReplay(tree, options.replay, run, started, plan);
-        return;
-      }
-      advanceRun(run, "baseline-tests");
-      advanceRun(run, { stop: "isolated-test-runner-unavailable" });
-    });
-    if (options.replay) {
-      process.stdout.write(
-        `Replay ${prepared ? "prepared" : "stopped"} (${run.stopReason}) in ${location.tree}.\nRun record: ${location.record}\n`,
-      );
-      return prepared ? 0 : 1;
-    }
-    process.stdout.write(
-      `Prepared ${location.branch} in ${location.tree}. Test execution is unavailable.\nRun record: ${location.record}\n`,
-    );
-    return 0;
+    return prepareAutopilot(root, options, run);
   },
 };

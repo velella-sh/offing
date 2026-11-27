@@ -140,6 +140,8 @@ interface ReplayGuardrails {
   environment?: NodeJS.ProcessEnv;
   now?: () => number;
   started?: number;
+  beforeTurn?: (number: number) => Promise<(path: string) => boolean>;
+  afterTurn?: (number: number, files: readonly string[]) => Promise<boolean>;
 }
 
 function guardrails(options: ReplayGuardrails) {
@@ -184,6 +186,7 @@ async function applyReplayTurn(
   turn: Array<[string, string]>,
   usage: BudgetUsage,
   guard: ReturnType<typeof guardrails> | undefined,
+  confirm?: (wallTimeMs: number) => Promise<void>,
 ): Promise<void> {
   if (!guard) {
     for (const [path, content] of turn) await write(join(root, path), content);
@@ -193,6 +196,7 @@ async function applyReplayTurn(
   if ("stop" in permit) rejectBudget(permit.stop);
   const check = permit.check(usage);
   if (check) rejectBudget(check);
+  await confirm?.(permit.limits.wallTimeMs);
   const stop = await applyGuarded(root, turn, {
     check: () => permit.check(usage),
     finish: () => permit.finish(usage),
@@ -262,26 +266,34 @@ async function replayInContainer(
   turns: readonly PlannedTurn[],
   options: ReplayGuardrails,
   connect?: ConnectDocker,
+  turnWallTimeMs?: number,
 ): Promise<ReplayReceipt> {
   const runner = await import("../test-runners/docker.js");
-  const started = options.started ?? performance.now();
+  const now = performance.now();
+  const runDeadline = (options.started ?? now) + options.config.budget.run.wallTimeMs;
+  const turnDeadline = now + (turnWallTimeMs ?? Infinity);
+  const deadline = Math.min(runDeadline, turnDeadline);
+  const reason = deadline === runDeadline ? "run.wallTimeMs" : "turn.wallTimeMs";
+  const remaining = () => Math.floor(deadline - performance.now());
   const folder = await mkdtemp(join(tmpdir(), "offing-replay-container-"));
   try {
     const staging = join(folder, "source");
     await mkdir(staging);
     const docker = await (connect ?? runner.connectDocker)(folder);
-    const image = await runner.prepareImage(docker, "npm", "");
-    const initial = Math.floor(options.config.budget.run.wallTimeMs - (performance.now() - started));
-    if (initial < 1) rejectBudget("run.wallTimeMs");
+    const budget = remaining();
+    if (budget < 1) rejectBudget(reason);
+    const signal = AbortSignal.timeout(Math.min(budget, 120_000));
+    const image = await runner.prepareImage((args) => docker(args, signal), "npm", "");
+    const initial = remaining();
+    if (initial < 1) rejectBudget(reason);
     await stageWorker(staging, turns, options.config, initial);
     const source = await runner.archiveTree(staging);
-    const remaining = Math.floor(options.config.budget.run.wallTimeMs - (performance.now() - started));
-    if (remaining < 1) rejectBudget("run.wallTimeMs");
+    if (remaining() < 1) rejectBudget(reason);
     const output: Uint8Array[] = [];
     const result = await runner.sandbox(docker, image, source)(
       ["node", "--input-type=module", "--eval", replayWorker],
       {
-        signal: AbortSignal.timeout(Math.min(remaining, 120_000)),
+        signal,
         stdout: (chunk) => output.push(chunk),
         stderr: () => {},
       },
@@ -291,7 +303,7 @@ async function replayInContainer(
     return readReceipt(Buffer.concat(output), turns);
   } catch (error) {
     if (error instanceof ReplayRefusal) throw error;
-    if (performance.now() - started >= options.config.budget.run.wallTimeMs) rejectBudget("run.wallTimeMs");
+    if (remaining() < 1) rejectBudget(reason);
     throw new ReplayRefusal("container-runtime-unavailable", "The pinned replay container is unavailable.");
   } finally {
     await rm(folder, { recursive: true, force: true });
@@ -311,6 +323,45 @@ async function acceptedTurns(turns: PlannedTurn[], options?: ReplayGuardrails, c
   return { turns: turns.slice(0, receipt.completed), stopped: receipt.stopped };
 }
 
+async function confirmContainerTurn(
+  turn: PlannedTurn,
+  options: ReplayGuardrails,
+  connect: ConnectDocker | undefined,
+  wallTimeMs: number,
+): Promise<void> {
+  const receipt = await replayInContainer([turn], options, connect, wallTimeMs);
+  if (receipt.stopped) rejectBudget(receipt.stopped);
+}
+
+async function replayTurns(
+  data: Awaited<ReturnType<typeof plan>>,
+  options: ReplayGuardrails | undefined,
+  guard: ReturnType<typeof guardrails> | undefined,
+  progress: { applied: Set<string>; completed: number },
+  container?: { connect: ConnectDocker | undefined },
+): Promise<void> {
+  const incremental = options?.beforeTurn || options?.afterTurn;
+  const batchedOptions = container && !incremental ? options : undefined;
+  const { turns, stopped } = await acceptedTurns(data.turns, batchedOptions, container?.connect);
+  for (const planned of turns) {
+    const { turn, usage } = planned;
+    const number = progress.completed + 1;
+    const permits = await options?.beforeTurn?.(number);
+    const files = turn.map(([path]) => path);
+    if (permits && !files.every(permits))
+      throw new ReplayRefusal("outside-path-scope", "Replay left the current packet scope.");
+    const confirm =
+      incremental && options && container
+        ? (wallTimeMs: number) => confirmContainerTurn(planned, options, container.connect, wallTimeMs)
+        : undefined;
+    await applyReplayTurn(data.root, turn, usage, guard, confirm);
+    for (const path of files) progress.applied.add(path);
+    progress.completed = number;
+    if (await options?.afterTurn?.(number, files)) break;
+  }
+  if (stopped) rejectBudget(stopped);
+}
+
 function replayDriver(
   file: string,
   options: ReplayGuardrails | undefined,
@@ -323,20 +374,12 @@ function replayDriver(
     async run(input) {
       const driver = { name: "replay", version: "1" };
       const guard = options && guardrails(options);
-      const applied = new Set<string>();
-      let completed = 0;
+      const progress = { applied: new Set<string>(), completed: 0 };
       try {
-        const { root, turns: planned } = await plan(file, input, guard);
-        const { turns, stopped } = await acceptedTurns(planned, container && options, container?.connect);
-        for (const { turn, usage } of turns) {
-          await applyReplayTurn(root, turn, usage, guard);
-          for (const [path] of turn) applied.add(path);
-          completed += 1;
-        }
-        if (stopped) rejectBudget(stopped);
+        await replayTurns(await plan(file, input, guard), options, guard, progress, container);
         return {
           ...success,
-          result: makeResult(driver, success, [...applied].sort(), undefined, completed),
+          result: makeResult(driver, success, [...progress.applied].sort(), undefined, progress.completed),
         };
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
@@ -346,7 +389,7 @@ function replayDriver(
           stderr: guard ? guard.redact(message) : message,
         };
         const result = guard
-          ? makeResult(driver, output, [...applied].sort(), undefined, completed)
+          ? makeResult(driver, output, [...progress.applied].sort(), undefined, progress.completed)
           : makeResult(driver, output);
         return {
           ...output,

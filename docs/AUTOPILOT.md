@@ -42,11 +42,37 @@ zero tokens and cost per edit object. An over-budget turn leaves the
 previously accepted edits intact. A prepared replay still needs separate
 test execution and verification.
 
+## Run a recorded migration
+
+```sh
+offing autopilot . --run-replay /path/to/turns.json --wave 0
+offing autopilot . --run-replay /path/to/turns.json --allow-red-baseline exact-test-name
+```
+
+Use a reviewed local checkout with Docker, an available pinned test image, and
+a committed, explicitly approved `autopilot.tests` command. Offing runs that
+command inside the container against the isolated baseline before making
+edits. A red baseline stops the run. Repeat `--allow-red-baseline` for each
+exact structured failure name you accept. A timeout, missing report, or
+unlisted failure still stops the run.
+
+Offing applies eligible codemods in their own local commit and writes an
+`offing-verify-result.json` receipt when it makes that commit. It records the
+remaining migration packets and bounded latest test feedback before each
+recorded turn, then saves each nonempty accepted turn as its own numbered
+commit. The recording supplies edited text; the prompts remain local evidence.
+Success requires the selected lifecycle findings to clear without introducing
+new findings and the approved tests to pass. Repeating the same net diff and
+test failures stops the run. The run record, test results, and prompts live
+beside the isolated checkout shown in the command output.
+
+## Undo a prepared worktree
+
 ```sh
 offing autopilot . --undo <run>
 ```
 
 Undo can infer the run when the repository has one prepared worktree. If it has
 several, pass the ID from the branch name. Undo refuses an advanced branch or
-a worktree containing local changes. It removes the prepared worktree, branch
-and run record.
+a worktree containing local changes or recorded migration evidence. It
+removes the prepared worktree, branch and run record.

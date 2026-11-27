@@ -437,6 +437,71 @@ test("container replay accepts only pinned, matching receipts and never falls ba
   assert.equal(calls.filter((args) => args[0] === "rm").length, 5);
 });
 
+test("incremental replay verifies each admitted turn in Docker before editing and keeps the cumulative budget", async (t) => {
+  const root = await scratch(t);
+  const recording = join(root, "recording.json");
+  const target = join(root, "project.txt");
+  const before = "before\n";
+  const first = "first\n";
+  const digest = createHash("sha256").update(first).digest("hex");
+  await writeFile(target, before);
+  await writeFile(
+    recording,
+    JSON.stringify({
+      schemaVersion: "offing.agent-replay.v1",
+      turns: [{ "project.txt": first }, { "project.txt": "second\n" }],
+      turnUsage: [
+        { ...idle, tokens: 2 },
+        { ...idle, tokens: 2 },
+      ],
+    }),
+  );
+  const config = parseAutopilotConfig({ allowedPaths: ["project.txt"], budget: { run: { tokens: 3 } } });
+  const events: string[] = [];
+  const connect = async () => (args: string[]) => {
+    const worker = args.includes("--eval");
+    const output = async () => {
+      if (worker) {
+        events.push("container");
+        assert.equal(await readFile(target, "utf8"), before);
+        return JSON.stringify({ completed: 1, stopped: null, files: [["project.txt", digest]] });
+      }
+      return args[0] === "image" ? "linux/amd64\n" : "";
+    };
+    return Object.assign(
+      output().then((value) => ({ stdout: Buffer.from(value), stderr: Buffer.alloc(0) })),
+      {
+        child: Object.assign(new ChildProcess(), { stdin: new PassThrough() }),
+      },
+    );
+  };
+  const driver = createContainerReplayDriver(
+    recording,
+    {
+      config,
+      packets: [],
+      testFiles: [],
+      async beforeTurn(number) {
+        events.push(`before-${number}`);
+        return (path) => path === "project.txt";
+      },
+      async afterTurn(number, files) {
+        events.push(`after-${number}`);
+        assert.deepEqual(files, ["project.txt"]);
+        assert.equal(await readFile(target, "utf8"), first);
+        return false;
+      },
+    },
+    connect,
+  );
+  const result = await driver.run({ worktreePath: root, prompt: "", timeoutMs: 10_000 });
+  assert.ok("stopReason" in result);
+  assert.equal(result.stopReason, "run.tokens");
+  assert.equal(result.result.turns, 1);
+  assert.deepEqual(events, ["before-1", "container", "after-1", "before-2"]);
+  assert.equal(await readFile(target, "utf8"), first);
+});
+
 test("acc-guardrails exercises the prepared Autopilot replay workflow in a disposable Git repository", async (t) => {
   const root = await scratch(t);
   const recording = join(await scratch(t), "turns.json");

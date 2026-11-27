@@ -1,0 +1,1 @@
+- Verify guarded Autopilot replay turns with pinned container tests and retain local migration evidence.
