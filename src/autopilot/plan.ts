@@ -1,4 +1,4 @@
-import type { MigrationPacket } from "../migration-packet.js";
+import { createMigrationPacket, type MigrationPacket } from "../migration-packet.js";
 import type { ContainerTestResult } from "../test-runners/consumer.js";
 import process from "node:process";
 
@@ -12,7 +12,8 @@ import { buildPlan } from "../plan-build.js";
 import type { Plan } from "../plan.js";
 import { selectTestPlan } from "../test-runners/detect.js";
 import { checkUpgrade, type UpgradeTarget } from "../upgrade/index.js";
-import { parseAutopilotConfig, type AutopilotDriver } from "./limits/config.js";
+import { parseAutopilotConfig, type AutopilotConfig, type AutopilotDriver } from "./limits/config.js";
+import { createPathScope, permitsCodemodPatches } from "./limits/scope.js";
 import { childEnvironments } from "./limits/secrets.js";
 import { advanceRun, type AutopilotRun, type Selection } from "./state.js";
 
@@ -46,6 +47,39 @@ export async function planAutopilot(root: string, run: AutopilotRun, options: Pl
   return { scan, items: plan.items.filter((item) => selected.has(item.findingId)), selection };
 }
 
+async function offlineCodemodIds(scan: ScanResult, selection: Selection, config: AutopilotConfig) {
+  const selected = new Set(selection.findingIds);
+  const findings = scan.findings.filter(({ id }) => selected.has(id));
+  if (findings.length === 0) return [];
+  // The declaration and usage files are available without reading Git or preparing a checkout.
+  const packets = findings.map((finding) => createMigrationPacket({ ...scan, findings: [finding] }, finding.id));
+  const permits = createPathScope(config, packets, []);
+  const { containsSecret } = childEnvironments(process.env, config.driver, config.secretEnv);
+  const { planFixReport } = await import("../fix/index.js");
+  const wave = await planFixReport({ ...scan, findings });
+  if (wave.patches.length === 0 || !permitsCodemodPatches(wave.patches, permits, containsSecret)) return [];
+
+  const waveDiffs = new Set(wave.patches.map(({ diff }) => diff));
+  const ids: string[] = [];
+  for (const finding of findings) {
+    const item = findings.length === 1 ? wave : await planFixReport({ ...scan, findings: [finding] });
+    if (
+      item.refusals.length === 0 &&
+      item.patches.length > 0 &&
+      item.patches.every(({ diff }) => waveDiffs.has(diff))
+    ) {
+      ids.push(finding.id);
+    }
+  }
+  return ids;
+}
+
+/** Reuse the existing scan and the default Autopilot wave for the first-run hint. */
+export async function countFirstWaveCodemods(scan: ScanResult): Promise<number> {
+  const config = (await loadConfig(scan.root))?.autopilot ?? parseAutopilotConfig(undefined);
+  return (await offlineCodemodIds(scan, selectWave(buildPlan(scan), {}), config)).length;
+}
+
 async function renderPrompt(
   scan: ScanResult,
   root: string,
@@ -74,12 +108,16 @@ export async function renderAutopilotPreview(
   const { steps } = await selectTestPlan(root, config.tests);
   const upgrade = selection.target === undefined ? undefined : await checkUpgrade(root, selection.target);
   const { redact } = childEnvironments(process.env, config.driver, config.secretEnv);
+  const offline = new Set(await offlineCodemodIds(scan, selection, config).catch(() => []));
   const prompt = items.length === 0 ? "No findings selected." : await renderPrompt(scan, root, selection, redact);
   return redact(
     [
       `Dry run (driver: ${driver ?? config.driver})`,
       `Plan: ${selection.wave === null ? "no waves" : `wave ${selection.wave}`}`,
-      ...items.map((item) => `  ${item.findingId}  ${item.title}`),
+      ...items.map(
+        ({ findingId, title }) => `  ${findingId}  ${title}${offline.has(findingId) ? " (offline codemod)" : ""}`,
+      ),
+      `Offline codemods: ${offline.size}`,
       ...(upgrade === undefined
         ? []
         : [`Upgrade target: ${upgrade.target.runtime}@${upgrade.target.version} (${upgrade.verdict})`]),

@@ -11,6 +11,7 @@ import process from "node:process";
 import { readJsonFile, record } from "../agent-drivers/result.js";
 import { git } from "../fix/git.js";
 import { OffingError } from "../offing-error.js";
+import { permitsCodemodPatches } from "./limits/scope.js";
 import { childEnvironments } from "./limits/secrets.js";
 import type { AutopilotRun } from "./state.js";
 
@@ -345,12 +346,7 @@ export async function commitCodemods(
 ): Promise<ScanResult> {
   const scoped = { ...before, findings: before.findings.filter(({ id }) => selected.has(id)) };
   const { patches } = await planFixReport(scoped);
-  if (
-    patches.length === 0 ||
-    !patches.every(({ path, diff }) => permits(path) && !privateText(path) && !privateText(diff))
-  ) {
-    return before;
-  }
+  if (patches.length === 0 || !permitsCodemodPatches(patches, permits, privateText)) return before;
   const patch = join(checkout.evidenceDirectory, "codemods.patch");
   try {
     await writeFile(patch, renderPatches(patches), { flag: "wx", mode: 0o600 });
