@@ -1,0 +1,1 @@
+- Include JUnit failures and standalone test-run records with hash-verifiable logs in isolated fix evaluations.

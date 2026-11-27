@@ -75,8 +75,15 @@ fixer, including those with zero cases, and links failed metrics back to their c
 
 `report.json` records the Offing source commit, bundled Ebb version, scan reference time, image identifiers, exclusion
 reasons, counts, and failed metrics. Each candidate's `evidence.json` records its pinned commit, approved check
-arguments, attempt statuses, and stream hashes. The adjacent raw stdout, stderr, and patch files contain the bytes
-used for SHA-256. For example, use `shasum -a 256 artifacts/fix-evals/<candidate>/<fixer>/build-1.stdout` to
+arguments, attempt statuses, and stream hashes. Each check also writes a standalone `build.v1.json` or `test.v1.json`
+that validates against `offing.test-run.v1`. Test attempts can include JUnit counts and failing case details.
+The harness reads up to 32 reports, each at most 1 MiB, from the isolated tree before removing it. It skips reports
+with the same bytes as a file that was already present before the test. It accepts
+`junit.xml` and `.offing-junit.xml` at the root and conventional Maven Surefire, Gradle test, and .NET `TestResults`
+paths. Runners such as pytest and Go with an existing JUnit reporter can write to `junit.xml`. If report data
+is unavailable or cannot be parsed, the harness uses the exit code and output tails. The adjacent raw stdout,
+stderr, and patch files contain the bytes used for SHA-256. For example, use
+`shasum -a 256 artifacts/fix-evals/<candidate>/<fixer>/build-1.stdout` to
 check one log against its attempt. Raw output may contain text printed by an evaluated repository. Inspect it as
 data. An infrastructure failure aborts the run without a summary so partial output cannot be mistaken for a complete
 run. Individual command output and source archive sizes are bounded.

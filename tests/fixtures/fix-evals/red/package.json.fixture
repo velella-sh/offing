@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "scripts": {
     "build": "node --check index.cjs",
-    "test": "node --test index.cjs"
+    "test": "node --test --test-reporter=tap --test-reporter=junit --test-reporter-destination=stdout --test-reporter-destination=junit.xml index.cjs"
   }
 }

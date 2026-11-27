@@ -18,6 +18,7 @@ const junitFixtures = [
   ["gradle", 2, 0, "example.CheckTest::fails()", "expected: <1>", null],
   ["dotnet", 2, 0, "Checks.Math::Fails", "Expected true", "Checks/Math.cs"],
   ["go", 2, 0, "example.test/fixture::TestFail", "suite_test.go:8: expected true", null],
+  ["node", 2, 0, "test::red", "Expected values to be strictly equal:1 !== 2", null],
 ] as const;
 
 for (const [tool, tests, skipped, name, message, file] of junitFixtures) {
