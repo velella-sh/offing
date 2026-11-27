@@ -41,6 +41,7 @@ complete -c offing -n __fish_use_subcommand -a completions
 complete -c offing -n __fish_use_subcommand -a config
 complete -c offing -n __fish_use_subcommand -a hook
 complete -c offing -n __fish_use_subcommand -a lsp
+complete -c offing -n __fish_use_subcommand -a migrate
 complete -c offing -n __fish_use_subcommand -a prompt
 complete -c offing -n __fish_use_subcommand -a recommend
 complete -c offing -n __fish_use_subcommand -a rollback-readiness
@@ -185,6 +186,9 @@ complete -c offing -n '__fish_seen_subcommand_from report-issue' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from capabilities' -l json
 complete -c offing -n '__fish_seen_subcommand_from config' -l json
 complete -c offing -n '__fish_seen_subcommand_from hook' -l fail-on
+complete -c offing -n '__fish_seen_subcommand_from migrate' -l agent
+complete -c offing -n '__fish_seen_subcommand_from migrate' -l from-refusals
+complete -c offing -n '__fish_seen_subcommand_from migrate' -l timeout-ms
 complete -c offing -n '__fish_seen_subcommand_from prompt' -l format
 complete -c offing -n '__fish_seen_subcommand_from prompt' -l symbol
 complete -c offing -n '__fish_seen_subcommand_from recommend' -l min-days

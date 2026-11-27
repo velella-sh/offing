@@ -5,6 +5,8 @@ description: "Built-in registry rules carry reviewed migration guidance next to 
 
 # Migration packets
 
+Use [migrate with a local agent](https://velella.sh/offing/MIGRATE/) when a finding needs edits beyond a deterministic fix.
+
 `offing context <finding-id>` converts one scan finding into a portable plan for a human or coding agent. Add `--json` for the versioned `offing.context.v1` representation.
 
 ```bash

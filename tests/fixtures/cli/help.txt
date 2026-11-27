@@ -76,6 +76,8 @@ Usage:
   offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one detected agent host
   offing init --hooks --list [path]   # show agent hook stability and availability
   offing init --hooks --remove [--hooks-for <host>] [path] [--dry-run]   # remove managed agent hooks
+  offing migrate <finding-id> [path] --agent <command> [--timeout-ms <n>]
+  offing migrate --from-refusals [path] --agent <command> [--timeout-ms <n>]
   offing prompt [path] [--format <text|json>] [--symbol <s>]   # shell prompt segment such as ⏳2, read from the scan cache only
   offing recommend <product|purl> [--min-days <n>] [--as-of <date>] [--json]   # which release line to write today (default 180 days of support)
   offing rollback-readiness <release-ref> --candidate <tag> [--within-days <days>] [--json]
@@ -130,6 +132,7 @@ Examples:
   offing config validate
   offing hook claude-code
   offing lsp
+  offing migrate <finding-id> --agent 'my-agent "$OFFING_MIGRATION_PROMPT_FILE"'
   offing prompt --symbol EOL:
   offing recommend node
   offing rollback-readiness v2.0.0 --candidate v1.9.0

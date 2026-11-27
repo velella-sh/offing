@@ -468,6 +468,546 @@
         "commit": "https://github.com/outline/outline/commit/a2ab9ef731cd0d0a0819125f0b74d53a22cd3c7e",
         "summary": "Replaced crypto-js and socket.io-redis with maintained packages."
       }
+    },
+    {
+      "id": "2dust-androidlibv2raylite-checkout",
+      "title": "Unsupported actions/checkout runtime",
+      "repository": "https://github.com/2dust/AndroidLibV2rayLite",
+      "commit": "a51ab9fc8b39997f229011de39d4da5bead099d7",
+      "finding": {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 22
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/checkout v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/main.yml",
+            "mustNotMatch": "actions/checkout@v4\\b",
+            "mustMatch": "actions/checkout@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/2dust/AndroidLibV2rayLite/commit/6805d541f996a107b7437172bd87a3344ffaef64",
+        "summary": "Bump actions/checkout from 4 to 5 (#71)"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "symfony-demo-checkout",
+      "title": "Unsupported actions/checkout runtime",
+      "repository": "https://github.com/symfony/demo",
+      "commit": "e28fadcbd64227cec50bbeb14a9907e36aebffe4",
+      "finding": {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/lint.yaml",
+        "line": 21
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/checkout v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/lint.yaml",
+            "mustNotMatch": "actions/checkout@v4\\b",
+            "mustMatch": "actions/checkout@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/symfony/demo/commit/c8ed0b691fe79096ab0130d253de15e4df4e0074",
+        "summary": "minor #1602 [CI] Bump actions/checkout from 4 to 5 (rosier)"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "natlibfi-ekirjasto-ios-core-checkout",
+      "title": "Unsupported actions/checkout runtime",
+      "repository": "https://github.com/NatLibFi/ekirjasto-ios-core",
+      "commit": "97c3c08c49c4c6d08fecd6955918ee743040d94c",
+      "finding": {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ios-main.yml",
+        "line": 23
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/checkout v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/ios-main.yml",
+            "mustNotMatch": "actions/checkout@v4\\b",
+            "mustMatch": "actions/checkout@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/NatLibFi/ekirjasto-ios-core/commit/3eeb92b74c05e7623f00674dc1c0c93323087f4f",
+        "summary": "EKIRJASTO-DEPENDABOT Bump actions/checkout from 4 to 5 (#132)"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "vmorkhat-skills-github-pages-checkout",
+      "title": "Unsupported actions/checkout runtime",
+      "repository": "https://github.com/vmorkhat/skills-github-pages",
+      "commit": "c28d0a5a71ab7fad2310efcbb181142e90ced925",
+      "finding": {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/0-welcome.yml",
+        "line": 29
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/checkout v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/0-welcome.yml",
+            "mustNotMatch": "actions/checkout@v4\\b",
+            "mustMatch": "actions/checkout@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/vmorkhat/skills-github-pages/commit/4e4053778bec3d85fbcf7a37c17e26110c5fafd8",
+        "summary": "deps: bump actions/checkout from 4 to 5"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "fabasoad-broadsage-scorecard-action-checkout",
+      "title": "Unsupported actions/checkout runtime",
+      "repository": "https://github.com/fabasoad/broadsage-scorecard-action",
+      "commit": "d984aee64316072a5b66ccb1362334593d8d4de5",
+      "finding": {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 20
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/checkout v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/release.yml",
+            "mustNotMatch": "actions/checkout@v4\\b",
+            "mustMatch": "actions/checkout@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/fabasoad/broadsage-scorecard-action/commit/b8c4c8c67eee52657513e01e02648baabc7696e2",
+        "summary": "chore(deps): bump actions/checkout from 4 to 5"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "avonrylew-environment-checkout",
+      "title": "Unsupported actions/checkout runtime",
+      "repository": "https://github.com/avonrylew/environment",
+      "commit": "4ed9413038d47019c1e11bd4a159f28f9739611c",
+      "finding": {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/build-node.yml",
+        "line": 21
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/checkout v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/build-node.yml",
+            "mustNotMatch": "actions/checkout@v4\\b",
+            "mustMatch": "actions/checkout@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/avonrylew/environment/commit/82c8bee79657d93102ea7a79cf6b31ead73c7c39",
+        "summary": "build(deps): bump actions/checkout from 4 to 5 ♻️"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "ms-dev01-sample-blogapp-checkout",
+      "title": "Unsupported actions/checkout runtime",
+      "repository": "https://github.com/ms-dev01/sample-blogapp",
+      "commit": "1558502890d1eb30f8cb1126796c8448557f55bb",
+      "finding": {
+        "ruleId": "github-actions.checkout.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 14
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/checkout v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "mustNotMatch": "actions/checkout@v4\\b",
+            "mustMatch": "actions/checkout@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/ms-dev01/sample-blogapp/commit/598630678497bb2b49d513029f46a2d72d38ebe9",
+        "summary": "Bump actions/checkout from 4 to 5"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "mdn-mdn-http-observatory-setup-node",
+      "title": "Unsupported actions/setup-node runtime",
+      "repository": "https://github.com/mdn/mdn-http-observatory",
+      "commit": "1c41f2043a03c3ab953a65cf184b7fa6b8c2af2f",
+      "finding": {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/build-and-test.yml",
+        "line": 29
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/setup-node v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/build-and-test.yml",
+            "mustNotMatch": "actions/setup-node@v4\\b",
+            "mustMatch": "actions/setup-node@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/mdn/mdn-http-observatory/commit/7755cf17c33c1aa3d4a85059600fef9790b8b4d6",
+        "summary": "build(deps): bump actions/setup-node from 4 to 5 (#286)"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "mdn-browser-compat-data-setup-node",
+      "title": "Unsupported actions/setup-node runtime",
+      "repository": "https://github.com/mdn/browser-compat-data",
+      "commit": "5d536f1d651e772d7ed3ce59c25b5f8599ed5b68",
+      "finding": {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/add-push-artifacts.yml",
+        "line": 17
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/setup-node v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/add-push-artifacts.yml",
+            "mustNotMatch": "actions/setup-node@v4\\b",
+            "mustMatch": "actions/setup-node@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/mdn/browser-compat-data/commit/6acad33c0f0812d1d6b9b66a23b869d89fb45ce4",
+        "summary": "Bump actions/setup-node from 4 to 5 (#27760)"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "carloscuesta-gitmoji-cli-setup-node",
+      "title": "Unsupported actions/setup-node runtime",
+      "repository": "https://github.com/carloscuesta/gitmoji-cli",
+      "commit": "a0770469740dd2ef3ce8270e1f29564db7a538a9",
+      "finding": {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/ci.yml",
+        "line": 19
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/setup-node v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "mustNotMatch": "actions/setup-node@v4\\b",
+            "mustMatch": "actions/setup-node@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/carloscuesta/gitmoji-cli/commit/a2d74f7db7ca9ecae41c74b7eef831baf0a772d8",
+        "summary": "⬆️ Bump actions/setup-node from 4 to 5 (#1474)"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "ffflorian-sortjson-com-setup-node",
+      "title": "Unsupported actions/setup-node runtime",
+      "repository": "https://github.com/ffflorian/sortjson.com",
+      "commit": "eb7564292ef4839442108cdfd0b7b6c39aa7cb26",
+      "finding": {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/build_test_deploy.yml",
+        "line": 22
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/setup-node v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/build_test_deploy.yml",
+            "mustNotMatch": "actions/setup-node@v4\\b",
+            "mustMatch": "actions/setup-node@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/ffflorian/sortjson.com/commit/021d97bb7a6f4cefdfb6994d1440cac2bc93230d",
+        "summary": "chore: bump actions/setup-node from 4 to 5 (#1528)"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "burakince-burakince-github-io-setup-node",
+      "title": "Unsupported actions/setup-node runtime",
+      "repository": "https://github.com/burakince/burakince.github.io",
+      "commit": "c057038a595447a509ae527bddace0490d7ad8d5",
+      "finding": {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/pages.yml",
+        "line": 31
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/setup-node v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/pages.yml",
+            "mustNotMatch": "actions/setup-node@v4\\b",
+            "mustMatch": "actions/setup-node@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/burakince/burakince.github.io/commit/18d34eb4d23aafb68635e7ce25dd4def42f50f50",
+        "summary": "chore(deps): Bump actions/setup-node from 4 to 5 in the actions-deps group"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "dipakparmar-docs-diary-setup-node",
+      "title": "Unsupported actions/setup-node runtime",
+      "repository": "https://github.com/dipakparmar/docs-diary",
+      "commit": "84901a777309997b2c2ebc9908909dc2b803d8c8",
+      "finding": {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/release.yml",
+        "line": 15
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/setup-node v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/release.yml",
+            "mustNotMatch": "actions/setup-node@v4\\b",
+            "mustMatch": "actions/setup-node@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/dipakparmar/docs-diary/commit/8025e749c0de3f8689fe0e99930ebc4b8abad4bc",
+        "summary": "chore(deps): bump actions/setup-node from 4 to 5 in /.github/workflows (#433)"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "atlasconsulting-bedita-sdk-js-setup-node",
+      "title": "Unsupported actions/setup-node runtime",
+      "repository": "https://github.com/atlasconsulting/bedita-sdk-js",
+      "commit": "bbbc7e257e1d353ae054d1809ed7a1d640f2ee7d",
+      "finding": {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/main.yml",
+        "line": 100
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/setup-node v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/main.yml",
+            "mustNotMatch": "actions/setup-node@v4\\b",
+            "mustMatch": "actions/setup-node@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/atlasconsulting/bedita-sdk-js/commit/8a952c74639b6c097b6dbd53963257fb6263f74f",
+        "summary": "chore(deps): bump actions/setup-node from 4 to 5"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "community-charts-community-charts-github-io-setup-node",
+      "title": "Unsupported actions/setup-node runtime",
+      "repository": "https://github.com/community-charts/community-charts.github.io",
+      "commit": "8903a5a425347c269173fe7e2ec71adfac1946b9",
+      "finding": {
+        "ruleId": "github-actions.setup-node.node20",
+        "path": ".github/workflows/deploy.yml",
+        "line": 17
+      },
+      "expectedEndState": {
+        "description": "The workflow uses actions/setup-node v5 or later.",
+        "checks": [
+          {
+            "path": ".github/workflows/deploy.yml",
+            "mustNotMatch": "actions/setup-node@v4\\b",
+            "mustMatch": "actions/setup-node@v(?:[5-9]|[1-9][0-9]+)\\b"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/community-charts/community-charts.github.io/commit/3e18acd491779cb92b196f855bf96c1a75dbcb22",
+        "summary": "Bump actions/setup-node from 4 to 5 in the actions-deps group"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "arnaud-eb-blockchain-project-pycrypto",
+      "title": "PyCrypto is obsolete and vulnerable",
+      "repository": "https://github.com/arnaud-eb/blockchain-project",
+      "commit": "c3eba626a2df0e428f124865b8d932da21854295",
+      "finding": {
+        "ruleId": "python.package.pycrypto.obsolete",
+        "path": "requirements.txt",
+        "line": 4
+      },
+      "expectedEndState": {
+        "description": "The requirements replace PyCrypto with PyCryptodome.",
+        "checks": [
+          {
+            "path": "requirements.txt",
+            "mustNotMatch": "(?:^|\\n)[ \\t]*[Pp][Yy][Cc][Rr][Yy][Pp][Tt][Oo](?:[ \\t=<>!~]|\\r?\\n|$)",
+            "mustMatch": "(?:^|\\n)[ \\t]*[Pp][Yy][Cc][Rr][Yy][Pp][Tt][Oo][Dd][Oo][Mm][Ee](?:[ \\t=<>!~]|\\r?\\n|$)"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/arnaud-eb/blockchain-project/commit/2a6148c943159767935b4d72e36fb46bda59afe0",
+        "summary": "fix: replace pycrypto with pycryptodome"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "ghanshyam775-custom-scanner-pycrypto",
+      "title": "PyCrypto is obsolete and vulnerable",
+      "repository": "https://github.com/Ghanshyam775/custom-scanner",
+      "commit": "2c919dc006ce0ac83ca2f83b73bfb76da03aea01",
+      "finding": {
+        "ruleId": "python.package.pycrypto.obsolete",
+        "path": "requirements.txt",
+        "line": 44
+      },
+      "expectedEndState": {
+        "description": "The requirements replace PyCrypto with PyCryptodome.",
+        "checks": [
+          {
+            "path": "requirements.txt",
+            "mustNotMatch": "(?:^|\\n)[ \\t]*[Pp][Yy][Cc][Rr][Yy][Pp][Tt][Oo](?:[ \\t=<>!~]|\\r?\\n|$)",
+            "mustMatch": "(?:^|\\n)[ \\t]*[Pp][Yy][Cc][Rr][Yy][Pp][Tt][Oo][Dd][Oo][Mm][Ee](?:[ \\t=<>!~]|\\r?\\n|$)"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/Ghanshyam775/custom-scanner/commit/6ba82d87f744f02ae44dc6ef376e45286717b143",
+        "summary": "Replaced pycrypto with pycryptodome"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "aemckenna-secure-messaging-app-pycrypto",
+      "title": "PyCrypto is obsolete and vulnerable",
+      "repository": "https://github.com/aemckenna/secure-messaging-app",
+      "commit": "57df5636239cad561db2c2423db4124237bf4571",
+      "finding": {
+        "ruleId": "python.package.pycrypto.obsolete",
+        "path": "requirements.txt",
+        "line": 121
+      },
+      "expectedEndState": {
+        "description": "The requirements replace PyCrypto with PyCryptodome.",
+        "checks": [
+          {
+            "path": "requirements.txt",
+            "mustNotMatch": "(?:^|\\n)[ \\t]*[Pp][Yy][Cc][Rr][Yy][Pp][Tt][Oo](?:[ \\t=<>!~]|\\r?\\n|$)",
+            "mustMatch": "(?:^|\\n)[ \\t]*[Pp][Yy][Cc][Rr][Yy][Pp][Tt][Oo][Dd][Oo][Mm][Ee](?:[ \\t=<>!~]|\\r?\\n|$)"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/aemckenna/secure-messaging-app/commit/7c5cebe524f28f7d6734fd4b07263a2ddc8fbfa5",
+        "summary": "Replace pycrypto with pycryptodome"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "chielbruin-currybot-pycrypto",
+      "title": "PyCrypto is obsolete and vulnerable",
+      "repository": "https://github.com/ChielBruin/CurryBot",
+      "commit": "612b36ccf2112bf11ed60cbcb8ad79e3f00acb6c",
+      "finding": {
+        "ruleId": "python.package.pycrypto.obsolete",
+        "path": "requirements.txt",
+        "line": 6
+      },
+      "expectedEndState": {
+        "description": "The requirements replace PyCrypto with PyCryptodome.",
+        "checks": [
+          {
+            "path": "requirements.txt",
+            "mustNotMatch": "(?:^|\\n)[ \\t]*[Pp][Yy][Cc][Rr][Yy][Pp][Tt][Oo](?:[ \\t=<>!~]|\\r?\\n|$)",
+            "mustMatch": "(?:^|\\n)[ \\t]*[Pp][Yy][Cc][Rr][Yy][Pp][Tt][Oo][Dd][Oo][Mm][Ee](?:[ \\t=<>!~]|\\r?\\n|$)"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/ChielBruin/CurryBot/commit/669380b89fe9a4a3ac083ef509e4fce34f7047a4",
+        "summary": "Replace pycrypto with pycryptodome"
+      },
+      "evidenceSource": "upstream-migration"
+    },
+    {
+      "id": "networkstructureandcloudcomputing-webapp-mysql-connector",
+      "title": "mysql:mysql-connector-java has moved to com.mysql:mysql-connector-j",
+      "repository": "https://github.com/NetworkStructureAndCloudComputing/webapp",
+      "commit": "1ba3683174ba940d30d000691163521077b77e98",
+      "finding": {
+        "ruleId": "java.maven.mysql.mysql-connector-java.relocated",
+        "path": "pom.xml",
+        "line": 52
+      },
+      "expectedEndState": {
+        "description": "The Maven dependency uses the published com.mysql:mysql-connector-j coordinate.",
+        "checks": [
+          {
+            "path": "pom.xml",
+            "mustNotMatch": "<artifactId>\\s*mysql-connector-java\\s*</artifactId>",
+            "mustMatch": "<groupId>\\s*com\\.mysql\\s*</groupId>\\s*<artifactId>\\s*mysql-connector-j\\s*</artifactId>"
+          }
+        ]
+      },
+      "verification": ["git diff --check HEAD"],
+      "migrationEvidence": {
+        "commit": "https://github.com/NetworkStructureAndCloudComputing/webapp/commit/a5f41c0508677c1de3860c036a20a681ab737660",
+        "summary": "build: Update to modern MySQL connector artifact"
+      },
+      "evidenceSource": "upstream-migration"
     }
   ]
 }

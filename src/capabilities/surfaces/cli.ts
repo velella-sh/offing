@@ -12,6 +12,7 @@ const cli: CapabilitySurface = {
     "deprecation.list",
     "deprecation.explain",
     "migration.context.create",
+    "migration.execute",
     "environment.doctor",
     "snippet.check",
     "version.recommend",
