@@ -28,7 +28,7 @@ export interface UpgradeAnalyzer {
   runtimes: readonly string[];
   /** True when the repository has the files this analyzer reads. */
   applies(root: string): Promise<boolean>;
-  analyze(root: string, target: UpgradeTarget): Promise<UpgradeIssue[]>;
+  analyze(root: string, target: UpgradeTarget, asOf?: string): Promise<UpgradeIssue[]>;
 }
 
 export interface UpgradeReport {

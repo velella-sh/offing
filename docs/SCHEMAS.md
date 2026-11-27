@@ -236,3 +236,9 @@ for the contract and its relationship to the static doctor plan.
 | `benchmark-result.v1.schema.json` | Agent proof benchmark reports |
 | `migration-review-log.v1.schema.json` | Migration research and ground-truth review |
 | `public-validation.v1.schema.json` | Curated public-repository corpus records |
+
+## Runtime upgrade simulation v1
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/whatif.v1.schema.json)
+
+::schema-table{data="publicSchemas/whatif" label="Runtime upgrade simulation fields"}

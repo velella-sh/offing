@@ -519,7 +519,16 @@ export function planUpgradePath(
   rules: readonly RegistryV2Rule[],
   today: string,
 ): UpgradePath | undefined {
-  const rule = rules.find((candidate) => candidate.id === finding.ruleId);
+  return planUpgradePathForRule(finding.ruleId, rules, today);
+}
+
+/** The same path when a lifecycle target is identified by its rule alone. */
+export function planUpgradePathForRule(
+  ruleId: string,
+  rules: readonly RegistryV2Rule[],
+  today: string,
+): UpgradePath | undefined {
+  const rule = rules.find((candidate) => candidate.id === ruleId);
   if (!rule) return undefined;
   const start = safeLowerBound(rule);
   if (!start?.version) return undefined;

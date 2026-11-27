@@ -51,7 +51,8 @@
       "import": "./dist/src/mcp.js"
     },
     "./package.json": "./package.json",
-    "./schemas/lineage.v1.schema.json": "./schemas/lineage.v1.schema.json"
+    "./schemas/lineage.v1.schema.json": "./schemas/lineage.v1.schema.json",
+    "./schemas/whatif.v1.schema.json": "./schemas/whatif.v1.schema.json"
   },
   "bin": {
     "offing": "dist/src/cli.js"
@@ -64,6 +65,7 @@
     "docs/spec/lifecycle-attestation/conformance",
     "docs/spec/lifecycle-attestation/example",
     "docs/spec/release-gate/conformance",
+    "docs/spec/what-if",
     "templates/workflows/offing-attest.yml",
     "templates/workflows/offing-release-gate.yml",
     "examples",

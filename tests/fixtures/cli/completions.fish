@@ -99,6 +99,8 @@ complete -c offing -n '__fish_seen_subcommand_from forecast' -l format
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l ics
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l force
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l target
+complete -c offing -n '__fish_seen_subcommand_from forecast' -l effort
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l fleet
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l by
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l card
@@ -239,6 +241,7 @@ complete -c offing -n '__fish_seen_subcommand_from fleet' -l no-cache
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l fail-on
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l progress
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l forecast-input
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l what-if-target
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l as-of
 complete -c offing -n '__fish_seen_subcommand_from hook' -l fail-on
 complete -c offing -n '__fish_seen_subcommand_from lineage' -l json
