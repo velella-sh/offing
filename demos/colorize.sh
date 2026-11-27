@@ -40,6 +40,20 @@ offing_demo_history() {
     _offing_demo_snapshot 2025-12-31T12:00:00Z 'Upgrade the image'
 }
 
+offing_demo_autopilot() {
+  local sandbox
+  sandbox=$(mktemp -d "${TMPDIR:-/tmp}/offing-autopilot-demo.XXXXXX") || return
+  mkdir -p "$sandbox/project/tests" || return
+  cd "$sandbox/project" || return
+  printf '%s\n' '{"name":"offing-autopilot-demo","scripts":{"test":"node tests/check.cjs"},"dependencies":{"request":"2.88.2"}}' > package.json
+  printf '%s\n' '{"autopilot":{"tests":[["node","tests/check.cjs"]]}}' > .offing.json
+  printf '%s\n' 'require("node:assert/strict").equal(require("../package.json").name,"offing-autopilot-demo");' > tests/check.cjs
+  cat > ../turns.json <<'JSON'
+{"schemaVersion":"offing.agent-replay.v1","turns":[{"package.json":"{\"name\":\"offing-autopilot-demo\",\"scripts\":{\"test\":\"node tests/check.cjs\"}}\n"}]}
+JSON
+  git init -q --template= && _offing_demo_snapshot 2026-11-27T00:00:00Z "Prepare the demo repository"
+}
+
 _offing_color() {
   local e=$'\033'
   # Wrap long lines at a word boundary so the terminal never splits a word.

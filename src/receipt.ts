@@ -46,7 +46,7 @@ export interface BuildReceiptOptions {
   data?: Partial<ReceiptData>;
 }
 
-const toReceiptFinding = (finding: Finding): ReceiptFinding => ({
+export const toReceiptFinding = (finding: Finding): ReceiptFinding => ({
   id: finding.id,
   rule: finding.ruleId,
   title: finding.title,

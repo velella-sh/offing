@@ -1,8 +1,8 @@
-import { runReplayLoop } from "./replay.js";
+import { resumeReplayLoop, runReplayLoop } from "./replay.js";
 import type { PlanOptions } from "./plan.js";
-import { startRun } from "./state.js";
-import { withAutopilotWorktree } from "./worktree.js";
-import { resolve } from "node:path";
+import { startRun, type AutopilotRun } from "./state.js";
+import { resumeAutopilotWorktree, runIdPattern, withAutopilotWorktree } from "./worktree.js";
+import { dirname, join, resolve } from "node:path";
 import process from "node:process";
 import { parseArgs } from "node:util";
 
@@ -39,8 +39,10 @@ export async function runTestOnly(args: string[], ctx: CommandContext): Promise<
   }
 }
 
-const replayLoopUsage =
-  "  offing autopilot [path] --run-replay <recording> [--allow-red-baseline <test>] [--wave <n> | --finding <id>]";
+const replayLoopUsage = [
+  "  offing autopilot [path] --run-replay <recording> [--agent replay] [--allow-red-baseline <test>] [--wave <n> | --finding <id>]",
+  "  offing autopilot [path] --resume <run> --run-replay <remaining-recording>",
+].join("\n");
 
 type SelectPlan = (wave?: string, finding?: string, target?: string) => PlanOptions;
 
@@ -50,6 +52,8 @@ function parseLoop(args: string[], select: SelectPlan) {
     allowPositionals: true,
     options: {
       "run-replay": { type: "string" },
+      resume: { type: "string" },
+      agent: { type: "string" },
       "allow-red-baseline": { type: "string", multiple: true },
       wave: { type: "string" },
       finding: { type: "string" },
@@ -65,27 +69,78 @@ function parseLoop(args: string[], select: SelectPlan) {
   ) {
     throw new Error("A replay recording and at most one project path are required.");
   }
+  if (values.agent !== undefined && values.agent !== "replay") throw new Error("--run-replay uses the replay driver.");
+  const resume = values.resume;
+  if (resume !== undefined && !runIdPattern.test(resume)) throw new Error("Invalid run ID.");
+  if (resume !== undefined && (allowed.length || values.wave !== undefined || values.finding !== undefined)) {
+    throw new Error("Resume keeps the recorded selection and baseline policy.");
+  }
   return {
     root: resolve(positionals[0] ?? "."),
     file: resolve(file),
+    resume,
     selection: select(values.wave, values.finding),
     allowedBaseline: new Set(allowed),
   };
 }
 
-export async function runReplayLoopCommand(args: string[], ctx: CommandContext, select: SelectPlan): Promise<number> {
+function replayProgressLine(run: AutopilotRun): string {
+  const { replay } = run;
+  const used = replay?.usage ?? { turns: 0, tokens: 0, costCents: 0 };
+  return `${run.state}: turn ${replay?.turn ?? 0}; budget used ${used.turns} turns, ${used.tokens} tokens, ${used.costCents} cents, ${replay?.elapsedMs ?? 0} ms; tests ${replay?.tests ?? "pending"}.`;
+}
+
+function replayResult(run: AutopilotRun, location: { tree: string; branch: string; record: string }): number {
+  const outcome = run.state === "done" ? "Replay verified" : `Replay stopped (${run.stopReason})`;
+  const lines = [`${outcome} in ${location.tree}.`, `Branch: ${location.branch}`, `Run record: ${location.record}`];
+  if (run.replay?.remaining !== undefined) {
+    const verification = run.replay.resume === 0 ? "final" : `resume-${run.replay.resume}`;
+    lines.push(`Wave findings: ${run.replay.remaining} remaining, ${run.replay.introduced} introduced.`);
+    const recordDirectory = dirname(location.record);
+    const verificationPath = join(recordDirectory, verification + "-verify-result.json");
+    lines.push(`Verification: ${verificationPath}`);
+  }
+  lines.push(`After review, remove the worktree, then use git branch -D ${location.branch} to discard the branch.`);
+  process.stdout.write(lines.join("\n") + "\n");
+  return run.state === "done" ? 0 : 1;
+}
+
+interface ReplayBackend {
+  createReplay: NonNullable<Parameters<typeof runReplayLoop>[3]["createReplay"]>;
+  runTests: NonNullable<Parameters<typeof runReplayLoop>[4]>;
+}
+
+export async function runReplayLoopCommand(
+  args: string[],
+  ctx: CommandContext,
+  select: SelectPlan,
+  backend?: ReplayBackend,
+): Promise<number> {
   let options: ReturnType<typeof parseLoop>;
   try {
     options = parseLoop(args, select);
   } catch (error) {
     return ctx.fail("usage", error instanceof Error ? error.message : String(error), replayLoopUsage);
   }
+  const loop = {
+    ...options,
+    ...(backend && { createReplay: backend.createReplay }),
+    started: performance.now(),
+    report: (run: AutopilotRun) => process.stdout.write(replayProgressLine(run) + "\n"),
+  };
+  if (options.resume) {
+    const { location, run } = await resumeAutopilotWorktree(
+      options.root,
+      options.resume,
+      async (tree, checkout, run, before) => {
+        await resumeReplayLoop(tree, checkout, run, loop, before, backend?.runTests);
+      },
+    );
+    return replayResult(run, location);
+  }
   const run = startRun("prepare");
-  const started = performance.now();
   const location = await withAutopilotWorktree(options.root, run, async (tree, checkout) => {
-    await runReplayLoop(tree, checkout, run, { ...options, started });
+    await runReplayLoop(tree, checkout, run, loop, backend?.runTests);
   });
-  const outcome = run.state === "done" ? "Replay verified" : `Replay stopped (${run.stopReason})`;
-  process.stdout.write(`${outcome} in ${location.tree}.\nRun record: ${location.record}\n`);
-  return run.state === "done" ? 0 : 1;
+  return replayResult(run, location);
 }

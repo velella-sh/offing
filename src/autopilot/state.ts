@@ -1,3 +1,4 @@
+import type { BudgetUsage } from "./limits/budget.js";
 import type { UpgradeTarget } from "../upgrade/index.js";
 
 const transitions = {
@@ -9,7 +10,7 @@ const transitions = {
   tests: ["verify", "agent-turn", "stopped"],
   verify: ["agent-turn", "done", "stopped"],
   done: [],
-  stopped: [],
+  stopped: ["tests"],
 } as const;
 
 type State = keyof typeof transitions;
@@ -20,6 +21,20 @@ export interface Selection {
   target?: UpgradeTarget;
 }
 
+/** A checkpoint for an explicitly approved local replay. */
+export interface ReplayProgress {
+  head: string;
+  context: string;
+  usage: BudgetUsage;
+  elapsedMs: number;
+  tests: "pending" | "passed" | "failed" | "unavailable";
+  turn: number;
+  resume: number;
+  previous?: string;
+  remaining?: number;
+  introduced?: number;
+}
+
 export interface AutopilotRun {
   schemaVersion: "offing.autopilot-run.v1";
   mode: "dry-run" | "prepare";
@@ -28,6 +43,7 @@ export interface AutopilotRun {
   selection?: Selection;
   checkout?: { id: string; branch: string; baseCommit: string };
   stopReason?: string;
+  replay?: ReplayProgress;
 }
 
 export function startRun(mode: AutopilotRun["mode"]): AutopilotRun {
@@ -41,4 +57,5 @@ export function advanceRun(run: AutopilotRun, state: Exclude<State, "stopped"> |
   run.state = next;
   run.transitions.push(next);
   if (typeof state !== "string") run.stopReason = state.stop;
+  else delete run.stopReason;
 }

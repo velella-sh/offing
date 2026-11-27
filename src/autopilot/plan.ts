@@ -102,7 +102,7 @@ export function latestFailures(runs: readonly ContainerTestResult[]) {
 }
 
 export function testsPass(runs: readonly ContainerTestResult[]): boolean {
-  return runs.every(({ attempts }) => attempts.at(-1)?.status === "passed");
+  return runs.length > 0 && runs.every(({ attempts }) => attempts.at(-1)?.status === "passed");
 }
 
 export function acceptsBaseline(runs: readonly ContainerTestResult[], allowed: ReadonlySet<string>): boolean {

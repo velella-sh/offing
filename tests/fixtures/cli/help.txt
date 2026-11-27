@@ -77,7 +77,8 @@ Usage:
   offing attest check <statement|bundle> [--subject <file|sha256:...>] [--today <date>]
   offing autopilot [path] --dry-run [--wave <n> | --finding <id>] [--to <runtime@version>] [--agent <driver>]
   offing autopilot [path] --prepare [--replay <recording>] [--wave <n> | --finding <id>] [--to <runtime@version>]
-  offing autopilot [path] --run-replay <recording> [--allow-red-baseline <test>] [--wave <n> | --finding <id>]
+  offing autopilot [path] --run-replay <recording> [--agent replay] [--allow-red-baseline <test>] [--wave <n> | --finding <id>]
+  offing autopilot [path] --resume <run> --run-replay <remaining-recording>
   offing autopilot [path] --test-only [--container]
   offing autopilot [path] --undo [run]
   offing campaign-board <state.json> --out <dir>  # export recorded campaign progress

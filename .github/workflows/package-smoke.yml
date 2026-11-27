@@ -383,6 +383,23 @@ jobs:
           package="$RUNNER_TEMP/package-smoke/npm-install/node_modules/@velella/offing"
           OFFING_GUARD_FRONTENDS_MODULE="$package/dist/src/usage/parsers.js" node --test dist/tests/check-snippet-guard-frontends.test.js
 
+      - name: acc-autopilot-loop
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          export OFFING_DATA_VERSION=bundled
+          export OFFING_AUTOPILOT_LOOP_DOCKER=1
+          export OFFING_AUTOPILOT_LOOP_CLI="$out/npm-install/node_modules/@velella/offing/dist/src/cli.js"
+          node --test dist/tests/autopilot-loop.test.js
+          node "$OFFING_AUTOPILOT_LOOP_CLI" capabilities --json |
+            jq -e '.capabilities[] | select(.id == "migration.execute" and .status == "supported")'
+          {
+            printf '### acc-autopilot-loop\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$(node "$OFFING_AUTOPILOT_LOOP_CLI" --version)" "$GITHUB_SHA"
+            printf -- '- Pinned replay verified one and three turns, preserved stops, and continued the same worktree.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: acc-forecast-island
         run: node --test dist/tests/forecast-tool-records.test.js
 

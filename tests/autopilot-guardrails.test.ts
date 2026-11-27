@@ -186,6 +186,7 @@ test("scope is the exact packet and test file set and built-in denials override 
     "path/id_ed25519",
     "certificate.pem",
     "nested/Package-Lock.JSON",
+    ".Offing.json",
     "packages/go.sum",
     "demo/../inside",
     "src/file.js.",

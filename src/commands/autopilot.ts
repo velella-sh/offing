@@ -14,7 +14,8 @@ import type { CliCommand } from "./types.js";
 const usage = [
   "  offing autopilot [path] --dry-run [--wave <n> | --finding <id>] [--to <runtime@version>] [--agent <driver>]",
   "  offing autopilot [path] --prepare [--replay <recording>] [--wave <n> | --finding <id>] [--to <runtime@version>]",
-  "  offing autopilot [path] --run-replay <recording> [--allow-red-baseline <test>] [--wave <n> | --finding <id>]",
+  "  offing autopilot [path] --run-replay <recording> [--agent replay] [--allow-red-baseline <test>] [--wave <n> | --finding <id>]",
+  "  offing autopilot [path] --resume <run> --run-replay <remaining-recording>",
   "  offing autopilot [path] --test-only [--container]",
   "  offing autopilot [path] --undo [run]",
 ];
@@ -124,6 +125,7 @@ export const command: CliCommand = {
     "--prepare",
     "--replay",
     "--run-replay",
+    "--resume",
     "--allow-red-baseline",
     "--test-only",
     "--container",
@@ -136,7 +138,7 @@ export const command: CliCommand = {
   example: "offing autopilot . --dry-run --to nodejs@22",
   usage,
   async run(args, ctx) {
-    if (args.some((arg) => arg === "--run-replay" || arg.startsWith("--run-replay="))) {
+    if (args.some((arg) => /^--(?:run-replay|resume)(?:=|$)/u.test(arg))) {
       const { runReplayLoopCommand } = await import("../autopilot/test-command.js");
       return runReplayLoopCommand(args, ctx, planArguments);
     }

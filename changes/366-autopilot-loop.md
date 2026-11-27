@@ -1,0 +1,1 @@
+- Verify recorded Autopilot migrations against their original wave, show live progress, and resume exhausted recordings without resetting the run budget.
