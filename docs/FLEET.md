@@ -10,13 +10,13 @@ default branch's commit, and runs the normal scanner against that pinned
 content. It resolves remote files first so the scan engine runs offline.
 No collected repository code runs.
 
-These examples target the `0.1.6` release. Run the pinned package directly:
+Run the pinned package once `0.1.2` is published:
 
 ```sh
-npx @velella/offing@0.1.6 fleet my-org --json --jobs 4 > fleet.json
-npx @velella/offing@0.1.6 fleet my-group/subgroup --gitlab --progress
-npx @velella/offing@0.1.6 fleet my-group --gitlab-url https://gitlab.example.net --html > fleet.html
-npx @velella/offing@0.1.6 rollup fleet.json --html > rollup.html
+npx @velella/offing@0.1.2 fleet my-org --include 'my-org/api-*' --topic production --json --jobs 4 > fleet.json
+npx @velella/offing@0.1.2 fleet my-group/subgroup --gitlab --progress
+npx @velella/offing@0.1.2 fleet my-group --gitlab-url https://gitlab.example.net --html > fleet.html
+npx @velella/offing@0.1.2 rollup fleet.json --html > rollup.html
 ```
 
 Before the release is published, install the candidate tarball to run the
@@ -37,26 +37,32 @@ repositories and repositories without a default branch are skipped. Repeat
 `--include`, `--exclude`, or `--topic` to filter the fleet, or give
 `--repos <file>` with one repository name per line. Patterns can match a
 short name or a full repository name. A repository must match every
-specified topic.
+specified topic. The CLI defaults to four concurrent repositories and
+accepts `--jobs` values from 1 to 16.
 
 The transport uses a sparse partial clone at the pinned commit. Without Git,
 it reads the host's archive and materializes only declared regular detector
 inputs. Each successful scan writes a cache entry under Offing's cache
-directory. Restarting a run rechecks branch heads and reuses entries with
-the same commit, scanner, active data and date. Use `--no-cache` to scan
-fresh. Failed repositories carry a reason and do not stop the remaining
-scans. Use `--fail-on high` to exit 1 when completed scans find high or
-critical findings.
+directory in `fleet-v1/`. Set `OFFING_DATA_DIR` to choose the cache root.
+Restarting a run rechecks branch heads and reuses entries with the same
+commit, scanner, active data and UTC date. Use `--no-cache` to scan fresh.
+
+The report records each repository as `scanned`, `cached`, `skipped` or
+`failed`. A failed repository carries a reason and the remaining scans
+continue. Review these rows even when the command exits successfully.
+Use `--fail-on high` to exit 1 when scanned or cached results include
+high or critical findings.
 
 Use `--policy <file|reference>` to apply the same organization policy to the
 fleet. Pin remote policies first with `offing policy pull`. Each scanned
 repository reports its compliance without policy paths, rule identifiers, or
-exception text. Violations and invalid policies produce exit status 1.
+exception text. Policy scans read pinned inputs again. Violations and invalid
+policies produce exit status 1.
 [Fleet policy guide](https://velella.sh/offing/FLEET_POLICY/)
 
 The [fleet schema](https://velella.sh/offing/schemas/fleet.v1.schema.json)
 defines the JSON format, including repository status and failure reasons.
-For offline validation, install `@velella/offing@0.1.6` in the validation
+For offline validation, install `@velella/offing@0.1.2` in the validation
 project and import the schema from the same package as the CLI:
 
 ```js
