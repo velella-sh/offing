@@ -1,0 +1,1 @@
+- Attest redacted migration proofs in GitHub Actions and document how to verify the workflow signature.
