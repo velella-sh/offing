@@ -18,8 +18,8 @@ Sizes are rounded for media. The forecast GIF is also published at the
 
 | Asset | Size | Source |
 | --- | ---: | --- |
-| [guard-agent.mp4](guard-agent.mp4) | 2.8 MB | Live Codex run with Offing's pre-write hook, edited to 30 seconds |
-| [guard-agent.srt](guard-agent.srt) | 598 B | Captions timed to the Codex recording |
+| [guard-agent.mp4](guard-agent.mp4) | 2.8 MB | Scripted replay of a recorded Codex run, with fixed frame times |
+| [guard-agent.srt](guard-agent.srt) | 598 B | Captions timed to the replay |
 | [guard.gif](guard.gif) | 461 kB | [Guard tape](https://github.com/velella-sh/offing/blob/main/demos/guard.tape) |
 | [guard.mp4](guard.mp4) | 2.1 MB | Guard tape and captions |
 | [guard.srt](guard.srt) | 529 B | Exact CLI text from the guard tape |
@@ -30,7 +30,8 @@ Sizes are rounded for media. The forecast GIF is also published at the
 ## Rebuild
 
 From a fresh checkout, install Node.js 22+, VHS 0.12.1, ttyd, FFmpeg with
-`libass` and `libx264`, a Chromium-based browser, and JetBrains Mono. Run:
+`libass` and `libx264`, a Chromium-based browser, JetBrains Mono, and Docker.
+Build the gallery with these commands.
 
 ```bash
 npm ci
@@ -38,17 +39,20 @@ OFFING_VERSION=0.1.1 bash demos/build.sh
 ```
 
 The script installs that exact npm version once with package scripts disabled.
-Both tapes run the installed CLI and export 12 fps GIFs with 128-color
-palettes and captioned MP4s. The checkout supplies the example files. For the Codex clip,
-follow [the recording script](https://github.com/velella-sh/offing/blob/main/demos/SCRIPT.md). Its frames show the
-request, hook response, and verification output from a live Codex CLI run,
-with the CLI events formatted for the recording and idle time trimmed.
+The guard and forecast tapes export 12 fps GIFs with 128-color palettes
+and captioned MP4s. The checkout supplies the example files. The
+[Codex replay](https://github.com/velella-sh/offing/blob/main/demos/SCRIPT.md)
+uses a digest-pinned Docker renderer and preserves the recorded prompt, refusal,
+and fallback. Rebuild just that MP4 with
+`OFFING_VERSION=0.1.1 bash demos/build.sh --record guard-agent`.
 
-Run `OFFING_VERSION=0.1.1 bash demos/build.sh --check` to smoke-test all tapes
-against that release. Use `bash demos/build.sh --check-source` to smoke-test
-the checkout, as pull request CI does. Both checks use `timeout`, shorten
-display pauses, and discard the rendered files. The Demos workflow accepts
-an exact version for a hosted check of the released package.
+Run `OFFING_VERSION=0.1.1 bash demos/build.sh --check guard-agent` to check
+the replay against that release. Use `bash demos/build.sh --check-source`
+to smoke-test all tapes against the checkout, as pull request CI does. The Codex
+replay check compares two 30-second rebuilds and the checked-in MP4. The other
+tape checks shorten display pauses. The checks discard the rendered files.
+The Demos workflow accepts an exact version for a hosted check of the released
+package.
 
 ## Other tape sources
 
