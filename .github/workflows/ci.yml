@@ -615,7 +615,8 @@ jobs:
 
   coverage-badge:
     if: github.event_name == 'push'
-    needs: coverage
+    # The dogfood check uploads offing-badge and coverage uploads coverage-badge.
+    needs: [check, coverage]
     runs-on: ubuntu-latest
     permissions:
       contents: write
