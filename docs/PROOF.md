@@ -19,13 +19,14 @@ proof contains one changed path, one resolved finding, and a passing
 maintainer metadata survived the codemod. The suggested Docker build and
 inspect commands are recorded as `not-run`. No agent turns were needed.
 
-The example ships in `docs/spec/proof/example` in the source tree and in the
-Offing package. Run the following from either directory's package root with
+The example ships as `docs/spec/proof/example/evaluation.zip` in the source
+tree and in the Offing package. Run the following from either directory's package root with
 the proof-capable Offing CLI installed. The included Git bundle contains the
 exact fixture commit objects, so Git needs no remote.
 
 ```sh
-example="$PWD/docs/spec/proof/example"
+example="$(mktemp -d)"
+unzip -q docs/spec/proof/example/evaluation.zip -d "$example"
 git clone --branch proof-evaluation "$example/evaluation.bundle" proof-evaluation
 offing proof verify "$example/offing-proof.json" --repo proof-evaluation
 git -C proof-evaluation diff \
