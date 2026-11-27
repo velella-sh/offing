@@ -57,6 +57,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: read requirements-dev.txt:7, which holds `nose`; it matches the declared range of registry rule python.package.nose.maintenance-only, whose sources are cited in the registry. Checked by AI agent (Claude Code) under maintainer direction on 2026-11-07 by reading the cited line in the pinned checkout. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/doc.yml",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8 to actions/setup-python at .github/workflows/doc.yml line 23."
+      }
     }
   ]
 }

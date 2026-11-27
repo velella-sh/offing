@@ -48,6 +48,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: read Dockerfile:1, which holds `FROM python:3.11.4-slim-buster`; it matches the declared range of registry rule container.python.eol-3.11-and-older, whose sources are cited in the registry. Checked by AI agent (Claude Code) under maintainer direction on 2026-11-07 by reading the cited line in the pinned checkout. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/release.yaml",
+      "line": 13,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/release.yaml line 13."
+      }
     }
   ]
 }

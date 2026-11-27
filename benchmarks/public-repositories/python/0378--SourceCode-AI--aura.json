@@ -31,6 +31,33 @@
         "note": "Dockerfile:4. The pythonver=3.10 and alpinever=3.15 defaults name python:3.10-alpine3.15.",
         "url": "https://github.com/SourceCode-AI/aura/blob/1981c139dd14db0be6306bd345e1e7113d0624a6/Dockerfile#L1-L4"
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": "pyproject.toml",
+      "line": 18,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.10 compatibility in a Trove classifier at pyproject.toml line 18."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 19,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.9 compatibility in a Trove classifier at pyproject.toml line 19."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 20,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.8 compatibility in a Trove classifier at pyproject.toml line 20."
+      }
     }
   ]
 }

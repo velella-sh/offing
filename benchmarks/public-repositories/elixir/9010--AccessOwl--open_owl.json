@@ -63,6 +63,15 @@
         "url": "https://nodejs.org/en/about/eol",
         "note": "Reviewed at this commit: line 38 of Dockerfile reads `FROM node:16-bullseye-slim AS app`. Node.js image release lines 21 and older are end-of-life. Node.js end-of-life releases (https://nodejs.org/en/about/eol)."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-19",
+      "path": ".tool-versions",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 19.6.0 at .tool-versions line 3."
+      }
     }
   ]
 }

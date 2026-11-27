@@ -3,5 +3,15 @@
   "commit": "d3befdfa090dd4879c3577a4fd56aafcc1604030",
   "ecosystem": "deno",
   "selection": "blind",
-  "expected": []
+  "expected": [
+    {
+      "ruleId": "nodejs.runtime.eol-20",
+      "path": ".tool-versions",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 20.19.5 at .tool-versions line 1."
+      }
+    }
+  ]
 }

@@ -1,0 +1,22 @@
+{
+  "refusals": [
+    {
+      "ruleId": "nodejs.runtime.eol-18",
+      "path": ".github/workflows/runtime.yml",
+      "line": 6,
+      "reason": "The runtime matrix has include or exclude entries that require manual review."
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/runtime.yml",
+      "line": 16,
+      "reason": "Removing end-of-life entries would leave no known supported runtime in the matrix."
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/runtime.yml",
+      "line": 16,
+      "reason": "Removing end-of-life entries would leave no known supported runtime in the matrix."
+    }
+  ]
+}

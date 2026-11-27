@@ -3,5 +3,15 @@
   "commit": "7b72dc644e5cfecbf7cb39bec732e5cda08e8fe2",
   "ecosystem": "deno",
   "selection": "blind",
-  "expected": []
+  "expected": [
+    {
+      "ruleId": "nodejs.runtime.eol-23",
+      "path": ".tool-versions",
+      "line": 1,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 23.9.0 at .tool-versions line 1."
+      }
+    }
+  ]
 }

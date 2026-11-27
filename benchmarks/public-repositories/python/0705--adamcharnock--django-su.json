@@ -57,6 +57,24 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: read .github/workflows/main.yml:96, which holds `- uses: actions/cache@v2`; it matches the declared range of registry rule github-actions.cache.node20, whose sources are cited in the registry. Checked by AI agent (Claude Code) under maintainer direction on 2026-11-07 by reading the cited line in the pinned checkout. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/main.yml",
+      "line": 29,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/main.yml line 29."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/main.yml",
+      "line": 29,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.7 to actions/setup-python at .github/workflows/main.yml line 29."
+      }
     }
   ]
 }

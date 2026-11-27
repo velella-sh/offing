@@ -273,6 +273,15 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 3 of Resize-CLI/app/src/main/jni/CMakeLists.txt reads `cmake_minimum_required(VERSION 3.4.1)`. The cited CMake declaration matches a reviewed removal rule."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/huggingface.yml",
+      "line": 25,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.7 to actions/setup-python at .github/workflows/huggingface.yml line 25."
+      }
     }
   ]
 }

@@ -156,6 +156,42 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: read pyproject.toml:27, which holds `django = \">=2.2,<3.0\"`; it matches the declared range of registry rule python.package.django-2.2.eol, whose sources are cited in the registry. The earlier label for this finding cited line 4, where Offing had reported it at the first line that merely mentioned the name; the declaration is on line 27, and the label was corrected after the line lookup was fixed (#2540). Checked by AI agent (Claude Code) under maintainer direction on 2026-11-07 by reading the cited line in the pinned checkout. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/build.yml",
+      "line": 21,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.7 to actions/setup-python at .github/workflows/build.yml line 21."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 16,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.7 compatibility in a Trove classifier at pyproject.toml line 16."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 17,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.8 compatibility in a Trove classifier at pyproject.toml line 17."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": "pyproject.toml",
+      "line": 18,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.9 compatibility in a Trove classifier at pyproject.toml line 18."
+      }
     }
   ]
 }

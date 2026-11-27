@@ -84,6 +84,42 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: read pyproject.toml:52, which holds `Django = \"^4\"`; it matches the declared range of registry rule python.package.django-4.2.eol, whose sources are cited in the registry. The earlier label for this finding cited line 36, where Offing had reported it at the first line that merely mentioned the name; the declaration is on line 52, and the label was corrected after the line lookup was fixed (#2540). Checked by AI agent (Claude Code) under maintainer direction on 2026-11-07 by reading the cited line in the pinned checkout. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/tests.yml",
+      "line": 37,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10.11 to actions/setup-python at .github/workflows/tests.yml line 37."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/tests.yml",
+      "line": 58,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10.11 to actions/setup-python at .github/workflows/tests.yml line 58."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/tests.yml",
+      "line": 37,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8.16 to actions/setup-python at .github/workflows/tests.yml line 37."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/tests.yml",
+      "line": 58,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8.16 to actions/setup-python at .github/workflows/tests.yml line 58."
+      }
     }
   ]
 }

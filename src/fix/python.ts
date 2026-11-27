@@ -1,3 +1,4 @@
+import { defineCodemod } from "./kit/define.js";
 import { readFile } from "node:fs/promises";
 import { basename, isAbsolute, relative, resolve } from "node:path";
 
@@ -8,15 +9,18 @@ import { renderDiff } from "../agent-instructions.js";
 import { loadDataFile } from "@velella/ebb/data-source";
 import type { Finding, ScanResult } from "../domain.js";
 import { validateRegistryV2 } from "@velella/ebb/registry";
-import type { FilePatch, Fixer, Refuse } from "./types.js";
+import type { FilePatch, Refuse } from "./types.js";
+import { isClassifierFinding, rewritePythonClassifiers } from "./codemods/shared/python-classifiers.js";
+import { rewritePythonIni } from "./codemods/shared/python-ini.js";
 
 const REQUIRES_PYTHON = /^(\s*requires-python\s*=\s*)(["'])([^"']*)\2(\s*(?:#.*)?\r?)$/;
 const BOUND = /^\s*(>=|<=|<)\s*(\d+(?:\.\d+){0,2})\s*$/;
 const TABLE = /^\s*\[([^\]]+)\]\s*(?:#.*)?\r?$/;
 
-/** `.python-version` is already handled by runtimePinsFixer; this adds explicit requires-python lower bounds. */
-export const pythonFixer: Fixer = {
+/** Raises Python compatibility floors and tox environments and removes obsolete Trove classifiers. */
+export const pythonFixer = defineCodemod({
   id: "python",
+  rules: ["python.runtime.eol-*"],
   async plan(result, refuse) {
     const targets = pythonTargets(result.findings);
     if (targets.size === 0) return [];
@@ -34,14 +38,13 @@ export const pythonFixer: Fixer = {
     }
     return patches;
   },
-};
+});
 
-/** The `pyproject.toml` files that carry an end-of-life finding for a Python runtime, each with its findings. */
+/** Groups supported Python packaging files by path and keeps the findings for each file. */
 function pythonTargets(findings: readonly Finding[]): Map<string, Finding[]> {
   const targets = new Map<string, Finding[]>();
   for (const finding of findings) {
-    if (!finding.ruleId.startsWith("python.runtime.eol-") || basename(finding.location.path) !== "pyproject.toml")
-      continue;
+    if (!["pyproject.toml", "setup.cfg", "tox.ini"].includes(basename(finding.location.path))) continue;
     targets.set(finding.location.path, [...(targets.get(finding.location.path) ?? []), finding]);
   }
   return targets;
@@ -64,7 +67,7 @@ async function supportedPythonLine(result: ScanResult): Promise<string | undefin
   return target;
 }
 
-/** The raised `pyproject.toml` patch for one file, or undefined when nothing can be changed; declined findings are reported. */
+/** Proposes the packaging patch for one file and reports the findings it cannot safely rewrite. */
 async function planFile(
   root: string,
   path: string,
@@ -83,6 +86,29 @@ async function planFile(
   if (before === undefined) return decline("The file could not be read.");
   if (!before.endsWith("\n")) return decline("The file does not end with a newline.");
 
+  const name = basename(path);
+  if (name === "setup.cfg" || name === "tox.ini") {
+    const after = rewritePythonIni(name, path, before, findings, supported, refuse);
+    return after === before ? undefined : { path, diff: renderDiff(path, before.slice(0, -1), after.slice(0, -1)) };
+  }
+
+  const bounds = findings.filter((finding) => !isClassifierFinding(finding));
+  const classifiers = findings.filter(isClassifierFinding);
+  const raised = bounds.length === 0 ? before : raisePyproject(before, bounds, supported, refuse);
+  const after = rewritePythonClassifiers(raised, classifiers, refuse);
+  return after === before ? undefined : { path, diff: renderDiff(path, before.slice(0, -1), after.slice(0, -1)) };
+}
+
+function raisePyproject(
+  before: string,
+  findings: readonly Finding[],
+  supported: string,
+  refuse: Refuse | undefined,
+): string {
+  const decline = (reason: string) => {
+    for (const finding of findings) refuse?.(finding, reason);
+    return before;
+  };
   const document = parseToml(before);
   const original = before.split("\n");
   const state = { project: false };
@@ -96,7 +122,7 @@ async function planFile(
       return decline("The edit would change other `pyproject.toml` keys.");
   }
   refuseUnchangedLines(findings, original, text.split("\n"), supported, refuse);
-  return text === before ? undefined : { path, diff: renderDiff(path, before.slice(0, -1), text.slice(0, -1)) };
+  return text;
 }
 
 function isTable(value: unknown): value is object {

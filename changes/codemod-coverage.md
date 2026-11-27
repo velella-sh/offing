@@ -1,0 +1,1 @@
+- Expand offline fix previews for runtime pins, GitHub Actions, Python packaging, and Kubernetes APIs with fixture-tested patches and explicit refusal reasons.

@@ -84,6 +84,15 @@
         "kind": "maintainer-review",
         "note": "Read k8s/app.yaml:64 at this commit: `apiVersion: extensions/v1beta1`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/build-test.yml",
+      "line": 19,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8 to actions/setup-python at .github/workflows/build-test.yml line 19."
+      }
     }
   ]
 }

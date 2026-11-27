@@ -21,7 +21,7 @@ export interface Declaration {
   path: string;
   line: number;
   value: string;
-  kind: "compatibility range" | "pinned runtime";
+  kind: "compatibility range" | "pinned runtime" | "Trove classifier";
   identity?: string;
 }
 

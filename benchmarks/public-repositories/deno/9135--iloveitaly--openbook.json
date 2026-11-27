@@ -23,6 +23,15 @@
         "url": "https://github.com/nodejs/Release/blob/main/schedule.json",
         "note": "Reviewed at this commit: line 87 of package.json reads `\"node\": \"20.3.1\",`. Node.js 20 is end-of-life (https://github.com/nodejs/Release/blob/main/schedule.json)."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.eol-20",
+      "path": ".tool-versions",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 20.3.1 at .tool-versions line 3."
+      }
     }
   ]
 }

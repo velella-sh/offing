@@ -39,6 +39,24 @@
         "kind": "maintainer-review",
         "note": "Read local.Dockerfile:7 at this commit: `ENV PORT 6001`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/validate-sam-template-dev.yaml",
+      "line": 33,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.9 to actions/setup-python at .github/workflows/validate-sam-template-dev.yaml line 33."
+      }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/validate-sam-template.yaml",
+      "line": 36,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.9 to actions/setup-python at .github/workflows/validate-sam-template.yaml line 36."
+      }
     }
   ]
 }

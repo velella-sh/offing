@@ -9,7 +9,8 @@ import {
 import type { WorkflowCommand, WorkflowRunLine } from "../../detectors/github-actions-workflow-commands.js";
 import type { Finding } from "../../domain.js";
 import type { FilePatch, Refuse } from "../types.js";
-import { diffFor } from "./shared/edits.js";
+import { patchFor } from "./shared/edits.js";
+import type { Edit } from "./shared/edits.js";
 import { insideRepository, readRepositoryFile } from "./shared/source.js";
 
 type Rewrite = { text: string } | { reason: string };
@@ -112,14 +113,14 @@ async function planFile(
       return edit ? [edit] : [];
     })
     .sort((a, b) => b.start - a.start);
-  let text = before;
+  const replacements: Edit[] = [];
   let previous = before.length;
   for (const edit of edits) {
     if (edit.end > previous) continue;
-    text = text.slice(0, edit.start) + edit.text + text.slice(edit.end);
+    replacements.push({ start: edit.start, end: edit.end, replacement: edit.text });
     previous = edit.start;
   }
-  return diffFor(path, before, text);
+  return patchFor(path, before, replacements);
 }
 
 /** Plans literal echo migrations only; repository scripts are never executed. */

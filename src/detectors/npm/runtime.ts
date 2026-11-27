@@ -1,4 +1,4 @@
-import { resolve } from "node:path";
+import { basename, resolve } from "node:path";
 
 import semver from "semver";
 
@@ -6,9 +6,10 @@ import type { DeprecationRule, Severity } from "../../domain.js";
 import { relativePosix } from "../../paths.js";
 import type { DetectorFinding, DetectorUnclassifiedReference } from "../../sdk.js";
 import { MISE_FILES, miseDeclarations, noVersionData } from "../../version-files/mise.js";
+import { parseToolVersionEntries } from "../../version-files/tool-versions.js";
 import { devEngineEntries, otherDevEngineFindings } from "./dev-engines.js";
 import type { PackageManifest } from "./manifest.js";
-import { propertyLine } from "./manifest.js";
+import { declarationLine } from "./manifest.js";
 import type { NpmProject } from "./project.js";
 import { readOptional } from "../read-optional.js";
 
@@ -49,10 +50,7 @@ function manifestRuntimeDeclarations(path: string, contents: string, manifest: P
   if (manifest.engines?.node) {
     declarations.push({
       path,
-      line:
-        propertyLine(contents.slice(contents.indexOf('"engines"')), "node") +
-        contents.slice(0, contents.indexOf('"engines"')).split(/\r?\n/).length -
-        1,
+      line: declarationLine(contents, "engines", "node"),
       value: manifest.engines.node,
       kind: "compatibility range",
     });
@@ -60,10 +58,7 @@ function manifestRuntimeDeclarations(path: string, contents: string, manifest: P
   if (manifest.volta?.node) {
     declarations.push({
       path,
-      line:
-        propertyLine(contents.slice(contents.indexOf('"volta"')), "node") +
-        contents.slice(0, contents.indexOf('"volta"')).split(/\r?\n/).length -
-        1,
+      line: declarationLine(contents, "volta", "node"),
       value: manifest.volta.node,
       kind: "pinned runtime",
     });
@@ -166,16 +161,23 @@ async function runtimeDeclarations(
       }
     }
   }
-  declarations.push(...(await miseRuntimeDeclarations(root, project?.directory ?? "", unclassified)));
+  declarations.push(...(await toolRuntimeDeclarations(root, project?.directory ?? "", unclassified)));
   return declarations;
 }
 
-export async function miseRuntimeDeclarations(
+export async function toolRuntimeDeclarations(
   root: string,
   directory: string,
   unclassified: DetectorUnclassifiedReference[],
 ): Promise<RuntimeDeclaration[]> {
   const declarations: RuntimeDeclaration[] = [];
+  const asdf = resolve(root, directory, ".tool-versions");
+  for (const { tool, versions, line } of parseToolVersionEntries((await readOptional(asdf)) ?? "")) {
+    if (tool !== "nodejs") continue;
+    for (const value of versions) {
+      if (/^v?\d+(?:\.\d+){0,2}$/.test(value)) declarations.push({ path: asdf, line, value, kind: "pinned runtime" });
+    }
+  }
   for (const filename of MISE_FILES) {
     const path = resolve(root, directory, filename);
     const contents = await readOptional(path);
@@ -217,7 +219,7 @@ export function judgeRuntimeDeclarations(
       declaration.value,
       newestRuleMajor,
       (major) => ruleForMajor(endedRules, major) !== undefined,
-      scheduledMajors,
+      basename(declaration.path) === ".tool-versions" ? [] : scheduledMajors,
     );
     for (const major of majors) {
       const rule = ruleForMajor([...nodeRules], major);

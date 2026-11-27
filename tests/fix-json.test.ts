@@ -28,7 +28,7 @@ jobs:
 const PACKAGE = `{
   "name": "fixture",
   "engines": {
-    "node": ">=18"
+    "node": ">=18 <21"
   }
 }
 `;
@@ -70,7 +70,7 @@ test("fix --dry-run --json reports patches and refusals that match fix.v1.schema
     ],
   );
 
-  // The SHA-pinned reference is in a fixer's scope but cannot be raised; the engines range is not an exact pin.
+  // The SHA-pinned reference is in a fixer's scope but cannot be raised; the engines range has multiple bounds.
   assert.deepEqual(
     parsed.refusals.map((refusal: { fixer: string; path: string; line: number; reason: string }) => [
       refusal.fixer,

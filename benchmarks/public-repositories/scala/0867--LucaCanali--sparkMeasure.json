@@ -30,6 +30,15 @@
         "note": "Reviewed at this commit: read line 54 of .github/workflows/build_with_scala_and_python_tests.yml, which holds `uses: actions/upload-artifact@v4`; it matches the declared range of registry rule github-actions.upload-artifact.retired, whose sources record a GitHub Actions ref the actions lifecycle rules mark as using a retired Node runtime or retired action major. Checked by AI agent under maintainer direction on 2026-11-07 by reading the cited line in the pinned checkout. Outcome: confirmed."
       },
       "line": 54
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/build_with_scala_and_python_tests.yml",
+      "line": 69,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/build_with_scala_and_python_tests.yml line 69."
+      }
     }
   ]
 }

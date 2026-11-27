@@ -26,14 +26,9 @@ const establishedOrder = [
   "codemods/dockerfile-legacy",
   "codemods/node-util-is",
 ];
-// These fixers retain their existing contract until the coverage epic migrates them.
-const existingFixers = new Set(["github-actions", "runtime-pins", "python", "kubernetes"]);
-
 async function fixerImport(path) {
   const source = await readFile(join(directory, path + ".ts"), "utf8");
-  const pattern = existingFixers.has(path)
-    ? /^export const (\w+): Fixer\s*=\s*\{\s*id: "([a-z][a-z0-9-]*)"/gm
-    : /^export const (\w+)\s*=\s*defineCodemod\(\{\s*id: "([a-z][a-z0-9-]*)"/gm;
+  const pattern = /^export const (\w+)\s*=\s*defineCodemod\(\{\s*id: "([a-z][a-z0-9-]*)"/gm;
   const matched = [...source.matchAll(pattern)];
   if (matched.length !== 1) throw new Error(`Expected one exported fixer with a literal id in src/fix/${path}.ts`);
   const [, name, id] = matched[0];

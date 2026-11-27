@@ -66,6 +66,15 @@
         "kind": "maintainer-review",
         "note": "Read test-helpers/https-server/go.mod:3 at this commit: `go 1.21`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": "pyproject.toml",
+      "line": 14,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned pyproject.toml explicitly advertises Python 3.10 compatibility in a Trove classifier at pyproject.toml line 14."
+      }
     }
   ]
 }

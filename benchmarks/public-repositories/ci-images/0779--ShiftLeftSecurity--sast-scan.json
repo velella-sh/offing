@@ -201,6 +201,15 @@
         "kind": "maintainer-review",
         "note": "Read ci/Dockerfile-dynamic-lang:36 at this commit: `FROM ubuntu:jammy as sast-scan-tools`: the image tag is at or below the bound of rule container.ubuntu.eol-22.04."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/pythonapp.yml",
+      "line": 11,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10.12 to actions/setup-python at .github/workflows/pythonapp.yml line 11."
+      }
     }
   ]
 }

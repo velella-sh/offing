@@ -43,9 +43,9 @@ test("the fixer output matches the after fixture and leaves spec-change findings
   assert.deepEqual(rebuilt, after.split("\n").slice(start, start + rebuilt.length));
   assert.ok(patches[0]!.diff.includes("\n-apiVersion: batch/v1beta1\n"));
   assert.ok(patches[0]!.diff.includes('+apiVersion: "rbac.authorization.k8s.io/v1"\n'));
-  // The Ingress and the PodDisruptionBudget need a spec change, so they stay as the scan reports them.
+  // The typed Ingress migration remains with its own fixer and the scoped PDB can advance.
   assert.ok(rebuilt.includes("apiVersion: networking.k8s.io/v1beta1"));
-  assert.ok(rebuilt.includes("apiVersion: policy/v1beta1"));
+  assert.ok(rebuilt.includes("apiVersion: policy/v1"));
   assert.equal(await readFile(join(root, "manifests", "workloads.yml"), "utf8"), before);
 });
 

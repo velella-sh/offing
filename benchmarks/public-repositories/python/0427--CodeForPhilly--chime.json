@@ -165,6 +165,15 @@
         "kind": "maintainer-review",
         "note": "Read environment.yml:6 at the pinned commit: `python>=3.6`. The compatibility floor admits Python 3.6, which is past end of life (https://devguide.python.org/versions/)."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.9-and-older",
+      "path": ".github/workflows/pythonapp.yml",
+      "line": 23,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.8 to actions/setup-python at .github/workflows/pythonapp.yml line 23."
+      }
     }
   ]
 }

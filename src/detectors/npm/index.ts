@@ -18,7 +18,7 @@ import type { NpmProject } from "./project.js";
 import { readOptional } from "../read-optional.js";
 import { loadNodeRules, loadPackageRules, matchPackageRules, matchedRuleFinding } from "./rules.js";
 import type { MatchedPackageRule } from "./rules.js";
-import { judgeRuntimeDeclarations, miseRuntimeDeclarations, runtimeFindings, runtimeRuleContext } from "./runtime.js";
+import { judgeRuntimeDeclarations, toolRuntimeDeclarations, runtimeFindings, runtimeRuleContext } from "./runtime.js";
 
 /** Turns usage-analysis skip lines (`path: reason`) into unclassified references for the report. */
 function unclassifiedFromUsageSkips(skips: readonly string[]): DetectorUnclassifiedReference[] {
@@ -34,9 +34,9 @@ function unclassifiedFromUsageSkips(skips: readonly string[]): DetectorUnclassif
   });
 }
 
-async function scanMiseOnly(root: string): Promise<DetectorAnalysis> {
+async function scanToolVersionsOnly(root: string): Promise<DetectorAnalysis> {
   const unclassified: DetectorUnclassifiedReference[] = [];
-  const declarations = await miseRuntimeDeclarations(root, "", unclassified);
+  const declarations = await toolRuntimeDeclarations(root, "", unclassified);
   if (declarations.length === 0) return { findings: [], unclassified };
   const rules = await loadNodeRules();
   const findings = judgeRuntimeDeclarations(root, declarations, rules, runtimeRuleContext(rules), new Set());
@@ -74,6 +74,7 @@ export class NpmDetector implements Detector {
       "bun.lockb",
       ".nvmrc",
       ".node-version",
+      ".tool-versions",
       ...MISE_FILES,
       "pnpm-workspace.yaml",
       "lerna.json",
@@ -89,7 +90,7 @@ export class NpmDetector implements Detector {
     const rootManifest = await readOptional(resolve(context.root, "package.json"));
     const workspaceDirectories = await discoverNpmWorkspaces(context.root);
     const unclassified: DetectorUnclassifiedReference[] = [];
-    if (!rootManifest && workspaceDirectories.length === 0) return scanMiseOnly(context.root);
+    if (!rootManifest && workspaceDirectories.length === 0) return scanToolVersionsOnly(context.root);
     if ((await readOptional(resolve(context.root, "bun.lockb"))) !== undefined) {
       unclassified.push(binaryBunLockReference("bun.lockb"));
     }

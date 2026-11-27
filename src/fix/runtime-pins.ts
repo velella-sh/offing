@@ -1,3 +1,4 @@
+import { defineCodemod } from "./kit/define.js";
 import { readFile } from "node:fs/promises";
 import { isAbsolute, relative, resolve } from "node:path";
 
@@ -7,8 +8,11 @@ import { renderDiff } from "../agent-instructions.js";
 import { loadDataFile } from "@velella/ebb/data-source";
 import type { Finding, ScanResult } from "../domain.js";
 import { validateRegistryV2 } from "@velella/ebb/registry";
+import { declarationOffset, parsePackageManifest } from "../detectors/npm/manifest.js";
+import { MISE_FILE_NAMES, parseMisePins } from "../version-files/mise.js";
+import { parseToolVersionEntries } from "../version-files/tool-versions.js";
 import { required } from "../required.js";
-import type { FilePatch, Fixer, Refuse } from "./types.js";
+import type { FilePatch, Refuse } from "./types.js";
 
 /** An exact runtime pin: `20`, `v20`, `20.11`, or `20.11.0`. Ranges such as `>=20`, `^20`, `20.x`, or `18 || 20` never match. */
 const EXACT_PIN = /^v?\d+(?:\.\d+){0,2}$/;
@@ -22,7 +26,7 @@ type Runtime = "node" | "python";
 interface Pin {
   runtime: Runtime;
   /** Whether the whole line is the pin or the pin is an `engines.node` value inside it. */
-  kind: "file" | "engines";
+  kind: "file" | "engines" | "tool";
   /** The exact value the line pins, or undefined when the line does not hold an exact pin. */
   value(line: string): string | undefined;
   /** Rewrites the pinned value on its line, or returns the line unchanged when it is not an exact pin. */
@@ -36,7 +40,8 @@ const VERSION_FILES: Record<string, Runtime> = {
   ".python-version": "python",
 };
 
-function pinFor(path: string): Pin | undefined {
+function pinFor(finding: Finding): Pin | undefined {
+  const path = finding.location.path;
   const name = path.slice(path.lastIndexOf("/") + 1);
   const runtime = VERSION_FILES[name];
   if (runtime)
@@ -46,6 +51,8 @@ function pinFor(path: string): Pin | undefined {
       value: versionFileValue,
       rewrite: rewriteVersionFile,
     };
+  if (name === ".tool-versions" || MISE_FILE_NAMES.has(name))
+    return toolPin(name, isRuntimeRule(finding, "node") ? "node" : "python");
   if (name === "package.json")
     return {
       runtime: "node",
@@ -62,8 +69,8 @@ function versionFileValue(line: string): string | undefined {
 }
 
 function enginesValue(line: string): string | undefined {
-  const match = ENGINES_NODE.exec(line);
-  return match && EXACT_PIN.test(required(match[2], "engines.node value")) ? match[2] : undefined;
+  const value = ENGINES_NODE.exec(line)?.[2];
+  return value && EXACT_PIN.test(value) ? value : undefined;
 }
 
 /** Replaces the version in `value` with `target`, keeping a leading `v`; returns undefined when `value` is not an exact pin. */
@@ -98,16 +105,18 @@ interface Targets {
 /**
  * Moves an exact Node.js or Python pin past every runtime rule that covers it. A Node.js pin goes to the lowest line
  * at or above it that no runtime rule covers, so it never stops on a line another rule reports (including a scheduled
- * end of life); Python goes to the highest end-of-life bound. It handles `.nvmrc`, `.node-version`, `.python-version`,
- * and an exact `engines.node`; a range is a compatibility statement, not a pin, and is never rewritten. A finding it
+ * end of life); Python goes to the highest end-of-life bound. It handles version files and a literal
+ * `engines.node` pin or single lower bound. A finding it
  * cannot rewrite is reported through `refuse` with the reason.
  */
-export const runtimePinsFixer: Fixer = {
+export const runtimePinsFixer = defineCodemod({
   id: "runtime-pins",
+  rules: ["nodejs.runtime.*", "python.runtime.*"],
   async plan(result, refuse) {
     const targets = runtimeTargets(result.findings, refuse);
     if (targets.size === 0) return [];
-    const targetFor = targetResolver(result);
+    const resolveTarget = runtimeTarget(result);
+    const targetFor = (pin: Pin, value: string) => resolveTarget(pin.runtime, value);
     const patches: FilePatch[] = [];
     for (const [path, entry] of [...targets].sort(([a], [b]) => a.localeCompare(b))) {
       const patch = await planFile(result.root, path, entry, targetFor, refuse);
@@ -115,13 +124,13 @@ export const runtimePinsFixer: Fixer = {
     }
     return patches;
   },
-};
+});
 
 /** The pin files that carry a finding of their runtime, each with the pin per line; a finding without a line is refused. */
 function runtimeTargets(findings: readonly Finding[], refuse: Refuse | undefined): Map<string, Targets> {
   const targets = new Map<string, Targets>();
   for (const finding of findings) {
-    const pin = pinFor(finding.location.path);
+    const pin = pinFor(finding);
     if (!pin || !isRuntimeRule(finding, pin.runtime)) continue;
     if (finding.location.line === undefined) {
       refuse?.(finding, "The finding names no line to rewrite.");
@@ -139,11 +148,11 @@ function runtimeTargets(findings: readonly Finding[], refuse: Refuse | undefined
 }
 
 /** The target version for a pin: the lowest uncovered Node.js major, or the lowest supported Python line; each registry is read once. */
-function targetResolver(result: ScanResult): (pin: Pin, value: string) => Promise<string | undefined> {
+export function runtimeTarget(result: ScanResult): (runtime: Runtime, value: string) => Promise<string | undefined> {
   let covered: Promise<Set<number>> | undefined;
   let python: Promise<string | undefined> | undefined;
-  return async (pin, value) => {
-    if (pin.runtime === "node") return nextSupportedNode(await (covered ??= coveredNodeMajors()), value);
+  return async (runtime, value) => {
+    if (runtime === "node") return nextSupportedNode(await (covered ??= coveredNodeMajors()), value);
     return (python ??= lowestSupportedPython(result.asOf ?? result.scannedAt.slice(0, 10)));
   };
 }
@@ -168,6 +177,7 @@ async function planFile(
     return undefined;
   }
   const original = before.split("\n");
+  validatePins(path, before, lines);
   const text = [...original];
   const rewritten = await rewritePins(text, lines, targetFor);
   const after = text.join("\n");
@@ -203,7 +213,7 @@ async function rewritePins(
     const value = pin?.value(required(text[index], "the pinned line"));
     if (!pin || value === undefined) continue;
     const next = await targetFor(pin, value);
-    if (next === undefined) continue;
+    if (next === undefined || (pin.kind === "tool" && !raisesVersion(value, next))) continue;
     const line = pin.rewrite(required(text[index], "the pinned line"), next);
     if (line === text[index]) continue;
     text[index] = line;
@@ -215,6 +225,7 @@ async function rewritePins(
 /** Why the pin on `line` still holds the finding's value, or undefined when it is already past the target. */
 function refusalReason(line: string, pin: Pin, target: string | undefined): string | undefined {
   if (pin.value(line) === undefined) {
+    if (pin.kind === "tool") return "The tool declaration is not a single literal version.";
     if (pin.kind === "engines" && !ENGINES_NODE.test(line)) return "The file has no `engines.node` value to rewrite.";
     if (pin.kind === "file" && line.trim() === "") return "The file has no version to rewrite.";
     return "The pin is a range, not an exact version.";
@@ -269,4 +280,84 @@ async function lowestSupportedPython(day: string): Promise<string | undefined> {
       lowest = bound;
   }
   return lowest;
+}
+
+function toolPin(name: string, runtime: Runtime): Pin {
+  const tool = runtime === "node" ? "(?:nodejs|node)" : "python";
+  const syntax =
+    name === ".tool-versions"
+      ? new RegExp(`^([ \\t]*${tool}[ \\t]+)(v?\\d+(?:\\.\\d+){0,2})([ \\t]*(?:#.*)?\\r?)$`)
+      : new RegExp(`^([ \\t]*["']?${tool}["']?[ \\t]*=[ \\t]*["'])(v?\\d+(?:\\.\\d+){0,2})(["'][ \\t]*(?:#.*)?\\r?)$`);
+  return {
+    kind: "tool",
+    runtime,
+    value: (line) => syntax.exec(line)?.[2],
+    rewrite: (line, target) =>
+      line.replace(
+        syntax,
+        (_, prefix: string, version: string, tail: string) => `${prefix}${pinned(version, target)}${tail}`,
+      ),
+  };
+}
+
+/** Only edit the same single tool pin the detector parser recognized. */
+function validateToolPins(path: string, before: string, lines: Map<number, Pin>): void {
+  const asdf = path.endsWith(".tool-versions");
+  const pins = asdf
+    ? parseToolVersionEntries(before, { spacedComments: true })
+    : parseMisePins(before).map(({ line, tool, value }) => ({ line, tool, versions: [value] }));
+  for (const [line, pin] of lines) {
+    const declarations = pins.filter((entry) => entry.line === line);
+    const entry = declarations[0];
+    const tools = pin.runtime === "node" ? ["nodejs", "node"] : ["python"];
+    if (declarations.length !== 1 || !entry || !tools.includes(entry.tool) || entry.versions.length !== 1) {
+      lines.set(line, { ...pin, value: () => undefined });
+    }
+  }
+}
+
+function validatePins(path: string, before: string, lines: Map<number, Pin>): void {
+  if (path.endsWith(".tool-versions") || MISE_FILE_NAMES.has(path.slice(path.lastIndexOf("/") + 1))) {
+    validateToolPins(path, before, lines);
+    return;
+  }
+  if (!path.endsWith("package.json")) return;
+  const version = readEnginesNode(before);
+  const offset = declarationOffset(before, "engines", "node");
+  if (offset === undefined) return;
+  const prefixLines = before.slice(0, offset).split("\n");
+  const line = prefixLines.length;
+  const column = prefixLines[line - 1]?.length ?? 0;
+  const pin = lines.get(line);
+  if (pin === undefined || version === undefined) return;
+  const floor = /^(>=\s*)(v?\d+(?:\.\d+){0,2})$/.exec(version);
+  if (!floor) return;
+  lines.set(line, {
+    ...pin,
+    value: (text) => (ENGINES_NODE.exec(text.slice(column))?.[2] === version ? floor[2] : undefined),
+    rewrite: (text, target) =>
+      text.slice(0, column) +
+      text
+        .slice(column)
+        .replace(
+          ENGINES_NODE,
+          (_, key: string, _value: string, end: string) =>
+            `${key}${floor[1]}${floor[2]?.startsWith("v") ? "v" : ""}${target}${end}`,
+        ),
+  });
+}
+
+function readEnginesNode(before: string): string | undefined {
+  try {
+    const value = parsePackageManifest(before).engines?.node;
+    return typeof value === "string" ? value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function raisesVersion(original: string, target: string): boolean {
+  const previous = semver.coerce(original);
+  const next = semver.coerce(target);
+  return !!previous && !!next && semver.gt(next, previous);
 }

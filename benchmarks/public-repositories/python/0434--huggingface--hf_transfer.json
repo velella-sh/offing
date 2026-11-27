@@ -138,6 +138,15 @@
         "kind": "maintainer-review",
         "note": "Read pyproject.toml:10 at this commit: `requires-python = \">=3.7\"`; the declaration matches the rule's affected range."
       }
+    },
+    {
+      "ruleId": "python.runtime.eol-3.10-and-older",
+      "path": ".github/workflows/test.yml",
+      "line": 29,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned workflow supplies Python 3.10 to actions/setup-python at .github/workflows/test.yml line 29."
+      }
     }
   ]
 }

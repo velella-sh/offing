@@ -103,6 +103,15 @@
         "url": "https://alpinelinux.org/releases/",
         "note": "Reviewed at this commit: line 36 of Dockerfile reads `FROM alpine:3.18.2 AS app`. Alpine Linux image release lines 3.20 and older are end-of-life. Alpine Linux releases (https://alpinelinux.org/releases/)."
       }
+    },
+    {
+      "ruleId": "nodejs.runtime.legacy",
+      "path": ".tool-versions",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The pinned asdf nodejs entry names 16.20.2 at .tool-versions line 3."
+      }
     }
   ]
 }
