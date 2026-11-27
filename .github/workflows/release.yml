@@ -173,6 +173,7 @@ jobs:
     permissions:
       contents: write
       id-token: write
+      attestations: write
     with:
       dry_run: ${{ github.event_name == 'workflow_dispatch' }}
 

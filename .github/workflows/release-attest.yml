@@ -1,0 +1,117 @@
+# Prepare lifecycle evidence for the release's exact npm tarball and standalone binaries.
+# The signing job gets only the derived predicate and subject checksums.
+name: Release lifecycle attestation
+
+on:
+  workflow_call:
+    inputs:
+      dry_run:
+        description: Prepare and check unsigned statements without signing or publishing
+        type: boolean
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  PREDICATE_TYPE: https://velella.sh/offing/attestation/v1/
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: binary-*
+          path: subjects
+          merge-multiple: true
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: lifecycle-release-sbom
+      - name: Prepare a release tarball alongside the five binary assets
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          version="$(node -p 'require("./package.json").version')"
+          npm run build --silent
+          if [ "$DRY_RUN" = true ]; then
+            test -f "subjects/offing-$version-linux-x64"
+            npm pack --ignore-scripts --pack-destination subjects
+          else
+            test "$GITHUB_REF" = "refs/tags/v$version"
+            for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win32-x64.exe; do
+              test -f "subjects/offing-$version-$target"
+            done
+            npm pack --ignore-scripts --registry https://registry.npmjs.org --pack-destination subjects "@velella/offing@$version"
+          fi
+          test -f "subjects/velella-offing-$version.tgz"
+      - name: Generate the shared lifecycle predicate and subject digests
+        run: |
+          set -euo pipefail
+          mkdir lifecycle-release
+          cli="$PWD/dist/src/cli.js"
+          sbom="$PWD/sbom.cdx.json"
+          evidence="$PWD/lifecycle-release"
+          (
+            cd subjects
+            sha256sum offing-* velella-offing-*.tgz > "$evidence/lifecycle-subjects.sha256"
+            node "$cli" attest --subject velella-offing-*.tgz --sbom "$sbom" --data-version bundled > "$evidence/draft.json"
+          )
+          jq -e --arg type "$PREDICATE_TYPE" 'select(.predicateType == $type) | .predicate' lifecycle-release/draft.json > lifecycle-release/predicate.json
+          jq -R -s --slurpfile draft lifecycle-release/draft.json '
+            [split("\n")[] | select(length > 0) | split("  ") | {name: .[1], digest: {sha256: .[0]}}] as $subjects
+            | $draft[0] | .subject = $subjects
+          ' lifecycle-release/lifecycle-subjects.sha256 > lifecycle-release/lifecycle.intoto.json
+          node docs/spec/lifecycle-attestation/conformance/check.mjs lifecycle-release/lifecycle.intoto.json
+          rm lifecycle-release/draft.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: lifecycle-release
+          path: lifecycle-release/
+          if-no-files-found: error
+      - name: Upload the candidate tarball for independent verification
+        if: inputs.dry_run
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: lifecycle-release-tarball
+          path: subjects/velella-offing-*.tgz
+          if-no-files-found: error
+
+  sign:
+    if: ${{ !inputs.dry_run && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: lifecycle-release
+      - name: Sign the release lifecycle predicate
+        id: attest
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-checksums: lifecycle-subjects.sha256
+          predicate-type: ${{ env.PREDICATE_TYPE }}
+          predicate-path: predicate.json
+      - name: Attach the signed statement and digests to the GitHub release
+        env:
+          BUNDLE: ${{ steps.attest.outputs.bundle-path }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cp -- "$BUNDLE" lifecycle.sigstore.json
+          jq -er '.dsseEnvelope.payload' lifecycle.sigstore.json | base64 -d > lifecycle.intoto.json
+          sha256sum lifecycle.intoto.json lifecycle.sigstore.json lifecycle-subjects.sha256 > lifecycle-evidence.sha256
+          gh release upload --repo "$GITHUB_REPOSITORY" "$GITHUB_REF_NAME"             lifecycle.intoto.json lifecycle.sigstore.json lifecycle-subjects.sha256 lifecycle-evidence.sha256 --clobber

@@ -94,6 +94,12 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/drift" label="Runtime drift report fields"}
 
+### Lifecycle attestation
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/lifecycle-attestation.v1.schema.json)
+
+::schema-table{data="publicSchemas/lifecycle-attestation" label="Lifecycle attestation statement fields"}
+
 ### Lifecycle finding
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/finding.v1.schema.json)

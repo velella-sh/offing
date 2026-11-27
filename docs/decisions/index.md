@@ -94,3 +94,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0048](0048-upgrade-blocker-graph.md) | Upgrade blocker graph | Add evidence-backed dependency chains and deterministic views of confirmed upgrade blockers. |
 | [0050](0050-lifecycle-policy-gates.md) | Lifecycle policy gates | Share named, expiring rules across scan interfaces and expose optional violations. |
 | [0055](0055-fleet-policy-contract.md) | Fleet policy v1 | Merge organization, team, and repository lifecycle gates with commit-pinned policy sources and line-aware precedence. |
+| [0058](0058-lifecycle-attestation.md) | Lifecycle attestation v1 | Bind lifecycle evidence to artifact and Ebb digests and re-evaluate UTC dates independently. |

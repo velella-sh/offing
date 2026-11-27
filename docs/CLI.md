@@ -469,6 +469,15 @@ offing watch --board [--json]
 | `--board` | Rank every watched project by severity-weighted findings, with trend arrows since the last board. |
 | `--json` | Print `list`, the digest, or the board as JSON. |
 
+## `attest`
+
+```sh
+offing attest [path] --subject <file|sha256:...> [--sbom <file>] [--data-version <version>]
+offing attest check <statement|bundle> [--subject <file|sha256:...>] [--today <YYYY-MM-DD>]
+```
+
+Generate an unsigned lifecycle statement for exact artifact bytes or a SHA-256 digest. Supply a local SBOM to record its components or a repository path to record its scan observations. Use `attest check` to validate a statement or Sigstore bundle payload and re-evaluate its recorded deadlines on a UTC day. See [Artifact lifecycle attestations](ATTESTATION.md) for signing and authentication commands.
+
 ## Setup and authoring
 
 ### `init`

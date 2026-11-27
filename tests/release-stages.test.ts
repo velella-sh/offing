@@ -83,6 +83,7 @@ test("a dry run passes dry_run into every stage and publishes nothing from those
   const files = [
     "publish.yml",
     "release-verify.yml",
+    "release-attest.yml",
     "release-build-action.yml",
     "release-build-binaries.yml",
     "release-publish-tags.yml",
@@ -113,4 +114,32 @@ test("a dry run passes dry_run into every stage and publishes nothing from those
   const tags = await readFile(join(workflowsDir, "release-publish-tags.yml"), "utf8");
   assert.match(tags, /DRY_RUN != 'true'/);
   assert.match(tags, /git push origin "refs\/tags\/\$MAJOR_TAG"/);
+});
+
+test("lifecycle signing is tag-only and the release verifies on a separate fresh consumer", async () => {
+  const sbom = parse(await readFile(join(workflowsDir, "release-sbom.yml"), "utf8"));
+  const chain = sbom.jobs;
+  assert.equal(chain.attest.needs, "sbom");
+  assert.equal(chain.attest.uses, "./.github/workflows/release-attest.yml");
+  assert.equal(chain["verify-attestation"].needs, "attest");
+  assert.equal(chain["verify-attestation"].uses, "./.github/workflows/release-verify.yml");
+  assert.equal(chain["verify-attestation"].with.run_lifecycle, true);
+  assert.equal(chain["verify-attestation"].with.dry_run, "${{ inputs.dry_run }}");
+
+  const attest = parse(await readFile(join(workflowsDir, "release-attest.yml"), "utf8"));
+  assert.deepEqual(attest.permissions, { contents: "read" });
+  const { sign } = attest.jobs;
+  assert.equal(sign.needs, "prepare");
+  assert.match(sign.if, /!inputs\.dry_run.*github\.event_name == 'push'.*refs\/tags\/v/);
+  assert.equal(sign.permissions.attestations, "write");
+  assert.equal(sign.permissions["id-token"], "write");
+
+  const verifier = parse(await readFile(join(workflowsDir, "release-verify.yml"), "utf8"));
+  const steps = verifier.jobs.lifecycle.steps as Array<{ if?: string; run?: string; uses?: string }>;
+  assert.ok(steps.every((step) => !step.uses?.includes("actions/checkout")));
+  const signed = steps.find(({ run }) => run?.includes("gh attestation verify"));
+  assert.match(signed?.if ?? "", /!inputs\.dry_run/);
+  assert.match(signed?.run ?? "", /--signer-workflow.*--source-ref.*--source-digest/);
+  assert.match(signed?.run ?? "", /verify-blob-attestation.*--check-claims=true/);
+  assert.match(signed?.run ?? "", /verify_gh tampered\.tgz \|\| verify_cosign tampered\.tgz/);
 });
