@@ -28,6 +28,12 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/agent-guard-response" label="Agent Guard response fields"}
 
+### Autopilot run
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/autopilot-run.v1.schema.json)
+
+::schema-table{data="publicSchemas/autopilot-run" label="Autopilot run fields"}
+
 ### Accepted findings baseline
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/baseline.v1.schema.json)

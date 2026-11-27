@@ -99,3 +99,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0059](0059-codemod-kit.md) | Codemod v1 kit | Use reviewed code for built-in planners and declarative fixture packs for outside authors. |
 | [0060](0060-test-plan-and-run-results.md) | Test plans and test outcomes | Add an offline doctor plan and a versioned record for approved test attempts. |
 | [0064](0064-autopilot-guardrails-config.md) | Autopilot guardrails configuration | Add optional budgets, path controls, test argv and secret names to config v1. |
+| [0066](0066-autopilot-run-state.md) | Autopilot run state | Record phase transitions, the selected migration wave and an optional isolated checkout. |

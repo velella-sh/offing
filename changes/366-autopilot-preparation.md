@@ -1,0 +1,1 @@
+- Preview an Autopilot migration wave, candidate commands and a prompt, or prepare and undo an isolated Git worktree with a versioned phase record. (#366)

@@ -14,14 +14,17 @@ export interface BranchResult {
   files: string[];
 }
 
-async function git(root: string, args: string[], input?: string): Promise<string> {
-  const child = execute("git", args, { cwd: root, maxBuffer: 64 * 1024 * 1024 });
+export async function git(root: string, args: string[], input?: string, env?: NodeJS.ProcessEnv): Promise<string> {
+  const child = execute("git", args, { cwd: root, env, maxBuffer: 64 * 1024 * 1024 });
   if (input !== undefined) child.child.stdin?.end(input);
   try {
     return (await child).stdout;
   } catch (error) {
-    const stderr = (error as { stderr?: string }).stderr?.trim();
-    throw new Error(stderr || (error as Error).message);
+    const stderr =
+      typeof error === "object" && error !== null && "stderr" in error && typeof error.stderr === "string"
+        ? error.stderr.trim()
+        : "";
+    throw new Error(stderr || (error instanceof Error ? error.message : String(error)), { cause: error });
   }
 }
 
