@@ -122,9 +122,9 @@ test("fix --json reports an empty plan for a repository with nothing to fix", as
   assert.equal(result.stderr, "");
 });
 
-test("fix --json refuses to combine with --branch, and the schema rejects undeclared properties", async () => {
+test("fix --json refuses to combine with --show, and the schema rejects undeclared properties", async () => {
   const root = await repository();
-  const branch = await invokeCli("fix", root, "--branch", "--json");
+  const branch = await invokeCli("fix", root, "--show", "--json");
   assert.equal(branch.code, 2);
   assert.match(branch.stderr, /Usage: offing fix/);
 

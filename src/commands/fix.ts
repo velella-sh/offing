@@ -10,6 +10,8 @@ import { afterGates, preScanPhase, repositoryPhase } from "./runtime.js";
 import type { ScanResult } from "../domain.js";
 import type { FilePatch, FixPlan } from "../fix/types.js";
 import type { CliCommand } from "./types.js";
+import { buildReceipt } from "../receipt.js";
+import { buildVerifyResult, identifyScan } from "../verify-result.js";
 
 const FIX_FLAGS = new Set(["--dry-run", "--branch", "--data-version", "--json", "--show", "--no-animation"]);
 
@@ -21,7 +23,7 @@ function validFixArguments(args: readonly string[], positional: readonly string[
     unknownFlag !== undefined ||
     positional.length > 1 ||
     (has("--dry-run") && has("--branch")) ||
-    (has("--json") && (has("--branch") || has("--show"))) ||
+    (has("--json") && has("--show")) ||
     (has("--no-animation") && !has("--show"))
   );
 }
@@ -53,8 +55,13 @@ async function fixOnBranch(run: FixRun): Promise<number> {
   process.stderr.write(
     `Committed ${files(applied.files.length)} on branch ${applied.branch} (${applied.commit}). Nothing was pushed; undo with: git branch -D ${applied.branch}\n`,
   );
-  process.stderr.write(renderVerification(verifyFix(run.scanned, rescanned)));
+  if (run.args.includes("--json")) printVerificationResult(run.scanned, await identifyScan(rescanned));
+  else process.stderr.write(renderVerification(verifyFix(run.scanned, rescanned)));
   return 0;
+}
+
+function printVerificationResult(before: ScanResult, after: ScanResult): void {
+  process.stdout.write(`${JSON.stringify(buildVerifyResult(buildReceipt(before, after), before, after), null, 2)}\n`);
 }
 
 async function fixDryRun(run: FixRun): Promise<number> {
@@ -76,7 +83,7 @@ export const command: CliCommand = {
   example: "offing fix . --dry-run",
   usage: [
     "  offing fix [path] [--dry-run] [--json]   # print patches for deterministic fixes; nothing is written",
-    "  offing fix [path] --branch               # apply the fixes on a local offing/fix branch and commit; never pushes",
+    "  offing fix [path] --branch [--json]      # apply the fixes on a local offing/fix branch and commit; never pushes",
     "  offing fix [path] --show [--branch] [--no-animation]   # play the fixes as a before-and-after view; nothing is written without --branch",
   ],
   usageSlots: [34, 35, 35.5],
@@ -90,14 +97,18 @@ export const command: CliCommand = {
       if (!validFixArguments(state.args, state.positional)) {
         return ctx.fail("usage", "Usage: offing fix [path] [--dry-run | --branch] [--json | --show [--no-animation]]");
       }
-      const scanned = await scanRepository(state.pathArgument, builtInDetectors, { noCache: state.noCache });
+      const branch = state.args.includes("--branch");
+      const json = state.args.includes("--json");
+      const scan = await scanRepository(state.pathArgument, builtInDetectors, { noCache: state.noCache });
+      const scanned = branch && json ? await identifyScan(scan) : scan;
       const plan = await planFixReport(scanned);
-      if (state.args.includes("--json")) {
+      if (json && !branch) {
         process.stdout.write(`${JSON.stringify({ schemaVersion: "offing.fix.v1", ...plan }, null, 2)}\n`);
         return 0;
       }
       const patches = plan.patches.map(({ path, diff }) => ({ path, diff }));
       if (patches.length === 0) {
+        if (branch && json) printVerificationResult(scanned, scanned);
         process.stderr.write("No deterministic fixes found.\n");
         return 0;
       }
@@ -109,7 +120,7 @@ export const command: CliCommand = {
         plan,
         patches,
       };
-      return state.args.includes("--branch") ? await fixOnBranch(run) : await fixDryRun(run);
+      return branch ? await fixOnBranch(run) : await fixDryRun(run);
     });
   },
 };

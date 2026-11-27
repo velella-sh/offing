@@ -162,6 +162,7 @@
         "after": "<data: ageDays, createdAt, reviewedThrough, source, stale, version>"
       }
     },
-    "receipt_markdown": "<!-- offing-receipt -->\n## Offing receipt: Findings remain\n\n| Resolved | Remaining | Introduced |\n| --- | --- | --- |\n| 0 | 2 | 0 |\n\n### Resolved\n\n_None._\n\n### Remaining\n\n| Severity | Finding | Location |\n| --- | --- | --- |\n| high | Node\\.js 20 is end\\-of\\-life | \\.github/workflows/ci\\.yml:7 |\n| high | request is deprecated | package\\.json:5 |\n\n### Introduced\n\n_None._\n\n### Suggested commands\n\n```\nnode --version  # Confirm the active Node.js runtime is supported.\nnpm run build --if-present  # Verify the project builds on the target runtime.\nnpm run test --if-present  # Run the repository test suite on the target runtime when defined.\n```\n\nReproduce with: `offing receipt <path> --before <scan.json>`\n"
+    "receipt_markdown": "<!-- offing-receipt -->\n## Offing receipt: Findings remain\n\n| Resolved | Remaining | Introduced |\n| --- | --- | --- |\n| 0 | 2 | 0 |\n\n### Resolved\n\n_None._\n\n### Remaining\n\n| Severity | Finding | Location |\n| --- | --- | --- |\n| high | Node\\.js 20 is end\\-of\\-life | \\.github/workflows/ci\\.yml:7 |\n| high | request is deprecated | package\\.json:5 |\n\n### Introduced\n\n_None._\n\n### Suggested commands\n\n```\nnode --version  # Confirm the active Node.js runtime is supported.\nnpm run build --if-present  # Verify the project builds on the target runtime.\nnpm run test --if-present  # Run the repository test suite on the target runtime when defined.\n```\n\nReproduce with: `offing receipt <path> --before <scan.json>`\n",
+    "verifyResultUnavailable": "tool-size-limit"
   }
 }

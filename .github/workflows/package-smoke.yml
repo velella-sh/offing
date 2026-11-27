@@ -140,6 +140,23 @@ jobs:
             printf -- '- The installed CLI and MCP server passed the standalone Agent Guard cases.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-verify-contract
+        working-directory: ${{ runner.temp }}
+        env:
+          OFFING_DATA_VERSION: bundled
+          OFFING_NO_CACHE: "1"
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          node "$GITHUB_WORKSPACE/.github/scripts/acc-verify-contract.mjs" "$bin"
+          {
+            printf '### acc-verify-contract\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI version %s\n' "$("$bin" --version)"
+            printf -- '- Branch, receipt, Markdown and independent checker passed.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build the Docker image and scan the fixture
         id: docker
         run: |

@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/verify-result.v1.schema.json",
+  "title": "Offing verification result v1",
+  "description": "Two scan identities, lifecycle finding comparison, verdict, and verification command evidence.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "before",
+    "after",
+    "counts",
+    "resolved",
+    "remaining",
+    "introduced",
+    "verdict",
+    "commands"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "offing.verify-result.v1"
+    },
+    "before": {
+      "$ref": "verify-result.v1.schema.json#/$defs/identity"
+    },
+    "after": {
+      "$ref": "verify-result.v1.schema.json#/$defs/identity"
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "resolved",
+        "remaining",
+        "introduced"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "resolved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "remaining": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "introduced": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "resolved": {
+      "type": "array",
+      "items": {
+        "$ref": "verify-result.v1.schema.json#/$defs/finding"
+      }
+    },
+    "remaining": {
+      "type": "array",
+      "items": {
+        "$ref": "verify-result.v1.schema.json#/$defs/finding"
+      }
+    },
+    "introduced": {
+      "type": "array",
+      "items": {
+        "$ref": "verify-result.v1.schema.json#/$defs/finding"
+      }
+    },
+    "verdict": {
+      "enum": [
+        "passed",
+        "failed"
+      ]
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "command",
+          "purpose",
+          "status",
+          "exitCode",
+          "logSha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "command": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "not-run",
+              "passed",
+              "failed",
+              "skipped"
+            ]
+          },
+          "exitCode": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "logSha256": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "required": [
+        "commit",
+        "offingVersion",
+        "ebbDataVersion"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "commit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "offingVersion": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "ebbDataVersion": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": [
+        "id",
+        "rule",
+        "title",
+        "severity",
+        "path"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The scan's finding id, so the entry joins the finding in `scan --json`."
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Repository-relative path."
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

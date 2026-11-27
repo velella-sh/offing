@@ -85,6 +85,31 @@
             }
           }
         },
+        "identity": {
+          "type": "object",
+          "description": "Optional producer identity in a scan. A Git HEAD does not certify a clean checkout.",
+          "additionalProperties": false,
+          "required": [
+            "commit",
+            "offingVersion"
+          ],
+          "properties": {
+            "commit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+            },
+            "offingVersion": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          }
+        },
         "schemaVersion": {
           "const": "offing.scan.v1"
         },
@@ -2017,6 +2042,8 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://velella.sh/offing/schemas/verification.v1.schema.json",
       "title": "Offing migration verification v1",
+      "deprecated": true,
+      "$comment": "Deprecated in Offing 0.1.4. Use https://velella.sh/offing/schemas/verify-result.v1.schema.json for new integrations.",
       "type": "object",
       "required": [
         "schemaVersion",
@@ -2376,6 +2403,8 @@
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "$id": "https://velella.sh/offing/schemas/receipt.v1.schema.json",
           "title": "Offing verification receipt v1",
+          "deprecated": true,
+          "$comment": "Deprecated in Offing 0.1.4. Use https://velella.sh/offing/schemas/verify-result.v1.schema.json for new integrations.",
           "description": "What the change since the session's last scan did to the repository's findings. Present when a scan was observed before verification.",
           "type": "object",
           "required": [
@@ -2626,6 +2655,393 @@
           "type": "string",
           "minLength": 1,
           "description": "The receipt rendered for a pull request body, with the offing-receipt marker."
+        },
+        "verifyResult": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://velella.sh/offing/schemas/verify-result.v1.schema.json",
+          "title": "Offing verification result v1",
+          "description": "The verification contract for the same two scans, when it fits the tool answer.",
+          "type": "object",
+          "required": [
+            "schemaVersion",
+            "before",
+            "after",
+            "counts",
+            "resolved",
+            "remaining",
+            "introduced",
+            "verdict",
+            "commands"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "schemaVersion": {
+              "const": "offing.verify-result.v1"
+            },
+            "before": {
+              "type": "object",
+              "required": [
+                "commit",
+                "offingVersion",
+                "ebbDataVersion"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "commit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+                },
+                "offingVersion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                },
+                "ebbDataVersion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                }
+              }
+            },
+            "after": {
+              "type": "object",
+              "required": [
+                "commit",
+                "offingVersion",
+                "ebbDataVersion"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "commit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+                },
+                "offingVersion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                },
+                "ebbDataVersion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                }
+              }
+            },
+            "counts": {
+              "type": "object",
+              "required": [
+                "resolved",
+                "remaining",
+                "introduced"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "resolved": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "remaining": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "introduced": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "resolved": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "rule",
+                  "title",
+                  "severity",
+                  "path"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The scan's finding id, so the entry joins the finding in `scan --json`."
+                  },
+                  "rule": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "severity": {
+                    "enum": [
+                      "info",
+                      "low",
+                      "medium",
+                      "high",
+                      "critical"
+                    ]
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Repository-relative path."
+                  },
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            },
+            "remaining": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "rule",
+                  "title",
+                  "severity",
+                  "path"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The scan's finding id, so the entry joins the finding in `scan --json`."
+                  },
+                  "rule": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "severity": {
+                    "enum": [
+                      "info",
+                      "low",
+                      "medium",
+                      "high",
+                      "critical"
+                    ]
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Repository-relative path."
+                  },
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            },
+            "introduced": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "rule",
+                  "title",
+                  "severity",
+                  "path"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The scan's finding id, so the entry joins the finding in `scan --json`."
+                  },
+                  "rule": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "severity": {
+                    "enum": [
+                      "info",
+                      "low",
+                      "medium",
+                      "high",
+                      "critical"
+                    ]
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Repository-relative path."
+                  },
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            },
+            "verdict": {
+              "enum": [
+                "passed",
+                "failed"
+              ]
+            },
+            "commands": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "command",
+                  "purpose",
+                  "status",
+                  "exitCode",
+                  "logSha256"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "command": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "purpose": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "enum": [
+                      "not-run",
+                      "passed",
+                      "failed",
+                      "skipped"
+                    ]
+                  },
+                  "exitCode": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "logSha256": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                }
+              }
+            }
+          },
+          "$defs": {
+            "identity": {
+              "type": "object",
+              "required": [
+                "commit",
+                "offingVersion",
+                "ebbDataVersion"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "commit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+                },
+                "offingVersion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                },
+                "ebbDataVersion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                }
+              }
+            },
+            "finding": {
+              "type": "object",
+              "required": [
+                "id",
+                "rule",
+                "title",
+                "severity",
+                "path"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The scan's finding id, so the entry joins the finding in `scan --json`."
+                },
+                "rule": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "severity": {
+                  "enum": [
+                    "info",
+                    "low",
+                    "medium",
+                    "high",
+                    "critical"
+                  ]
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Repository-relative path."
+                },
+                "line": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          }
+        },
+        "verifyResultUnavailable": {
+          "type": "string",
+          "const": "tool-size-limit",
+          "description": "The full verification document was omitted to preserve its integrity. Use the CLI with the saved before scan."
         },
         "more": {
           "type": "object",
@@ -4806,6 +5222,31 @@
             "stale": {
               "type": "boolean",
               "description": "True when the data is older than 30 days."
+            }
+          }
+        },
+        "identity": {
+          "type": "object",
+          "description": "Optional producer identity in a scan. A Git HEAD does not certify a clean checkout.",
+          "additionalProperties": false,
+          "required": [
+            "commit",
+            "offingVersion"
+          ],
+          "properties": {
+            "commit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+            },
+            "offingVersion": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
             }
           }
         },

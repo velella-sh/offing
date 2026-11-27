@@ -1,3 +1,4 @@
+import { identifyScan } from "../verify-result.js";
 import { stat, writeFile } from "node:fs/promises";
 import process from "node:process";
 import { resolve } from "node:path";
@@ -303,7 +304,7 @@ export async function prepare(
 }
 
 /** Every `--format` value the reporters know; anything else is a usage error for any command. */
-const KNOWN_FORMATS = KNOWN_FORMAT_IDS;
+const KNOWN_FORMATS = new Set([...KNOWN_FORMAT_IDS, "verify-result"]);
 
 /** The message a command with a narrow output set prints for a format outside it. */
 // Maps, not objects: a plain object answers for inherited names such as `constructor`, so a lookup by user input needs a Map.
@@ -314,7 +315,13 @@ const COMMAND_FORMATS: ReadonlyMap<string, { readonly allowed: readonly string[]
       "check-snippet",
       { allowed: ["text", "json"], rejection: "check-snippet supports --json and --format text|json only." },
     ],
-    ["receipt", { allowed: ["markdown", "json"], rejection: "receipt supports --format markdown|json only." }],
+    [
+      "receipt",
+      {
+        allowed: ["markdown", "json", "verify-result"],
+        rejection: "receipt supports --format markdown|json|verify-result only.",
+      },
+    ],
   ]);
 
 /** Formats only `scan` renders, with the commands besides `scan` and `receipt` that take them too. */
@@ -352,6 +359,8 @@ const USAGE_GATES: readonly ((state: Prepared) => string | undefined)[] = [
     return `Unknown format: ${state.format ?? ""} (expected ${formatExpectedList()}).`;
   },
   (state) => {
+    if (state.format === "verify-result" && state.command !== "receipt")
+      return "--format verify-result is only available for the receipt command.";
     const rule = COMMAND_FORMATS.get(state.command);
     return rule && state.format !== undefined && !rule.allowed.includes(state.format) ? rule.rejection : undefined;
   },
@@ -658,7 +667,7 @@ async function printFindings(
     return undefined;
   }
   if (state.command === "scan" && args.includes("--by-owner")) return printByOwner(state, result, ctx);
-  const output = await renderScanReport(state, result, asOfValue);
+  const output = await renderScanReport(state, await identifyJsonScan(state, result), asOfValue);
   process.stdout.write(`${output}\n`);
   if (!args.includes("--write-status")) return undefined;
   const statusRoot = resolve(state.pathArgument);
@@ -723,6 +732,11 @@ async function printByOwner(state: Gated, result: ScanResult, ctx: CommandContex
   const groups = await groupScanByOwner(result);
   process.stdout.write(`${json ? JSON.stringify(groups, null, 2) : renderOwnerGroupsText(groups)}\n`);
   return undefined;
+}
+
+async function identifyJsonScan(state: Gated, result: ScanResult): Promise<ScanResult> {
+  const format = state.format ?? (state.json ? "json" : "text");
+  return state.command === "scan" && !state.demo && format === "json" ? identifyScan(result) : result;
 }
 
 /** The scan report in the format asked for; text and JSON are the fallback. */

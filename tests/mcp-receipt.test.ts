@@ -10,6 +10,8 @@ import { Ajv2020 } from "ajv/dist/2020.js";
 import { createOffingMcpServer } from "../src/mcp.js";
 import { RECEIPT_MARKER } from "../src/receipt-markdown.js";
 import type { Receipt } from "../src/receipt.js";
+import type { VerifyResult } from "../src/verify-result.js";
+import { runCli } from "./cli-runner.js";
 
 interface RpcResponse {
   id: number;
@@ -84,6 +86,7 @@ interface VerificationContent {
   remainingFindings: Array<{ id: string }>;
   receipt?: Receipt;
   receipt_markdown?: string;
+  verifyResult?: VerifyResult;
 }
 
 async function scanFindingId(client: Awaited<ReturnType<typeof connectTestClient>>, root: string): Promise<string> {
@@ -96,6 +99,8 @@ test("verify_migration returns a receipt when the migration resolved the finding
   const client = await connectTestClient();
   try {
     const findingId = await scanFindingId(client, root);
+    const beforePath = join(root, "before.json");
+    await writeFile(beforePath, (await runCli(["scan", root, "--json"])).stdout);
     await writeFile(workflow, "jobs:\n  test:\n    steps:\n      - uses: actions/checkout@v7\n");
 
     const verification = await client.request("tools/call", {
@@ -119,6 +124,10 @@ test("verify_migration returns a receipt when the migration resolved the finding
 
     assert.ok(content.receipt_markdown!.startsWith(RECEIPT_MARKER));
     assert.match(content.receipt_markdown!, /All findings resolved/);
+    assert.match(content.receipt_markdown!, /offing-verify-result:v1/);
+    assert.equal(content.verifyResult?.verdict, "passed");
+    const cli = await runCli(["receipt", root, "--before", beforePath, "--format", "verify-result"]);
+    assert.deepEqual(content.verifyResult, JSON.parse(cli.stdout));
 
     const validate = await receiptValidator();
     assert.equal(validate(receipt), true, JSON.stringify(validate.errors?.slice(0, 2)));

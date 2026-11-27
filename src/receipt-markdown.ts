@@ -1,6 +1,7 @@
 import { basename, isAbsolute } from "node:path";
 
 import type { Receipt, ReceiptFinding } from "./receipt.js";
+import { renderVerifyResultBlock, type VerifyResult } from "./verify-result.js";
 
 /** Marks a Markdown receipt so a tool can find and replace it in a pull request body. */
 export const RECEIPT_MARKER = "<!-- offing-receipt -->";
@@ -28,6 +29,7 @@ const REPRODUCE_TEMPLATE = "offing receipt <path> --before <scan.json>";
 /** Options for the Markdown receipt; `reproduce` is the command that rebuilds it. */
 export type ReceiptMarkdownOptions = {
   reproduce?: string;
+  verifyResult?: VerifyResult;
 };
 
 /** Escapes untrusted text for Markdown (and HTML-in-Markdown) while keeping one physical line. */
@@ -141,5 +143,6 @@ export function renderReceiptMarkdown(receipt: Receipt, options: ReceiptMarkdown
   const commands = commandsSection(receipt.commands);
   if (commands.length > 0) lines.push("", ...commands);
   lines.push("", `Reproduce with: ${codeSpan(options.reproduce ?? REPRODUCE_TEMPLATE)}`);
+  if (options.verifyResult) lines.push("", renderVerifyResultBlock(options.verifyResult).trimEnd());
   return `${lines.join("\n")}\n`;
 }
