@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "offing.campaign-state.v1",
+  "id": "node-upgrade",
+  "asOf": "2026-11-27",
+  "batching": {
+    "size": 5,
+    "concurrency": 2,
+    "minGapMinutes": 60,
+    "maxFailureRate": 0.25
+  },
+  "repositories": [
+    {
+      "host": "https://github.com",
+      "name": "example/service",
+      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "batch": 1,
+      "owners": [
+        "@example/platform"
+      ],
+      "deadline": "2025-04-30",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "status": "queued",
+      "transitions": []
+    }
+  ],
+  "omissions": []
+}

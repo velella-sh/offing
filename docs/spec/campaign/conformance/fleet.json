@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "offing.fleet.v1",
+  "forecastAsOf": "2026-11-27",
+  "repositoryStatus": [
+    {
+      "host": "https://github.com",
+      "name": "example/service",
+      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": "scanned",
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "deadline": "2025-04-30",
+            "owners": [
+              "@example/platform"
+            ],
+            "location": {
+              "path": ".nvmrc",
+              "line": 1
+            }
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [
+          {
+            "runtime": "nodejs",
+            "version": "18.0.0"
+          }
+        ],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      },
+      "defaultBranch": "main",
+      "reason": null
+    }
+  ],
+  "repositories": 1,
+  "findings": 1,
+  "severities": {
+    "info": 0,
+    "low": 0,
+    "medium": 0,
+    "high": 1,
+    "critical": 0
+  },
+  "byProduct": [
+    {
+      "name": "nodejs",
+      "findings": 1,
+      "repositories": [
+        "example/service"
+      ],
+      "severities": {
+        "info": 0,
+        "low": 0,
+        "medium": 0,
+        "high": 1,
+        "critical": 0
+      }
+    }
+  ],
+  "byOwner": [
+    {
+      "name": "unowned",
+      "findings": 1,
+      "repositories": [
+        "example/service"
+      ],
+      "severities": {
+        "info": 0,
+        "low": 0,
+        "medium": 0,
+        "high": 1,
+        "critical": 0
+      }
+    }
+  ],
+  "byRepository": [
+    {
+      "name": "example/service",
+      "findings": 1,
+      "severities": {
+        "info": 0,
+        "low": 0,
+        "medium": 0,
+        "high": 1,
+        "critical": 0
+      },
+      "deadlines": [
+        "2025-04-30"
+      ],
+      "nearestDeadline": "2025-04-30"
+    }
+  ],
+  "deadlines": [
+    {
+      "deadline": "2025-04-30",
+      "findings": 1,
+      "repositories": [
+        "example/service"
+      ]
+    }
+  ]
+}

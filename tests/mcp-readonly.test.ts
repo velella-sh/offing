@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { mkdtemp, mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, relative } from "node:path";
+import { join, relative, resolve } from "node:path";
 import { after, test } from "node:test";
 
 import { InMemoryTransport } from "@modelcontextprotocol/server";
@@ -151,6 +151,7 @@ test("no tool, resource, or prompt changes the repository tree", async () => {
     const calls = {
       scan_repository: { repository_path: root },
       image_lineage: { repository_path: root },
+      campaign_status: { state_path: resolve("docs/spec/campaign/conformance/valid-state.json") },
       simulate_upgrade: { repository_path: root, targets: ["nodejs@22"], as_of: "2026-01-01", effort: true },
       scan_sbom: { sbom_path: sbom },
       list_deprecations: { repository_path: root },

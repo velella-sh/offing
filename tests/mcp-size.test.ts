@@ -8,6 +8,7 @@ import { Ajv2020 } from "ajv/dist/2020.js";
 
 import { estimateTokens, MAX_TOOL_TOKENS, type MorePointer } from "../src/mcp/limit.js";
 import { MCP_TOOL_NAMES } from "../src/mcp.js";
+import { readCampaignState } from "../src/campaign/document.js";
 import type { McpToolName } from "../src/mcp/tool-names.js";
 import { connectMcpClient } from "./mcp-client.js";
 
@@ -95,10 +96,20 @@ test("every tool keeps its answer under 2,000 tokens on a large input, valid aga
       }),
     );
 
+    const state = await readCampaignState("docs/spec/campaign/conformance/valid-state.json");
+    const sample = state.repositories[0]!;
+    const statePath = join(root, "campaign-state.json");
+    const repositories = Array.from({ length: 80 }, (_, index) => ({
+      ...sample,
+      name: `example/repository-${index}`,
+      batch: Math.floor(index / state.batching.size) + 1,
+    }));
+    await writeFile(statePath, JSON.stringify({ ...state, repositories }));
     // Declared for every tool, so a new tool cannot be added without a large input here.
     const calls = {
       scan_repository: { repository_path: root },
       image_lineage: { repository_path: root },
+      campaign_status: { state_path: statePath },
       simulate_upgrade: { repository_path: root, targets: ["nodejs@22"], as_of: "2026-01-01", effort: true },
       scan_sbom: { sbom_path: sbom },
       list_deprecations: { repository_path: root },

@@ -31,6 +31,7 @@ const options = {
   "fail-on": { type: "string" },
   progress: { type: "boolean" },
   "forecast-input": { type: "boolean" },
+  "campaign-input": { type: "boolean" },
   "what-if-target": { type: "string", multiple: true },
   "as-of": { type: "string" },
 } as const;
@@ -63,6 +64,7 @@ function renderFormat(values: Flags): string {
 
 function evidenceScanOptions(values: Flags) {
   return {
+    campaign: values["campaign-input"] ?? false,
     ...(values["what-if-target"]
       ? {
           whatIf: {
@@ -71,7 +73,7 @@ function evidenceScanOptions(values: Flags) {
           },
         }
       : {}),
-    ...(values["forecast-input"]
+    ...(values["forecast-input"] || values["campaign-input"]
       ? {
           forecast: {
             gitlab: Boolean(values.gitlab || values["gitlab-url"]),
@@ -108,8 +110,14 @@ function severityIndex(threshold: string): number {
 function validateEvidenceFlags(values: Flags, format: string): void {
   if (values["forecast-input"] && format !== "json") throw new FleetHostError("--forecast-input requires JSON output.");
   if (values["what-if-target"] && format !== "json") throw new FleetHostError("--what-if-target requires JSON output.");
-  if (values["as-of"] !== undefined && !values["forecast-input"] && !values["what-if-target"]) {
-    throw new FleetHostError("--as-of on fleet requires --forecast-input or --what-if-target.");
+  if (values["campaign-input"] && format !== "json") throw new FleetHostError("--campaign-input requires JSON output.");
+  if (
+    values["as-of"] !== undefined &&
+    !values["forecast-input"] &&
+    !values["what-if-target"] &&
+    !values["campaign-input"]
+  ) {
+    throw new FleetHostError("--as-of on fleet requires --forecast-input, --campaign-input, or --what-if-target.");
   }
 }
 
@@ -165,6 +173,7 @@ export const command: CliCommand = {
     "  offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs",
     "  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>] [--image-lineage --json]",
     "  offing fleet <organization|group> --json --forecast-input [--as-of <YYYY-MM-DD>]   # save private forecast evidence",
+    "  offing fleet <organization|group> --json --campaign-input [--as-of <YYYY-MM-DD>]   # save private planning evidence",
     "  offing fleet <organization|group> --json --what-if-target <runtime@version> [--as-of <YYYY-MM-DD>]",
   ],
   run,

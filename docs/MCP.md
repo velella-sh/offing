@@ -167,6 +167,7 @@ The pointer is published as `more.v1.schema.json`. Every tool schema carries the
 | `recommend_version` | `product`, `minimumSupportDays?`, `as_of?` | `offing.recommend.v1` (`recommend.v1.schema.json`) | Which release line to write today (a name such as `node`, or a Package URL), from bundled lifecycle data only: the recommended line and its end date, alternatives, lines to avoid, and sources. `no-data` is not a statement that any version is safe. |
 | `simulate_upgrade` | `targets`, `repository_path?`, `as_of?`, `months?`, `effort?` | `offing.whatif.v1` (`whatif.v1.schema.json`) | Compare independent runtime changes using local pin, blocker and forecast evidence. |
 | `image_lineage` | `repository_path?` | `offing.lineage.v1` (`lineage.v1.schema.json`) | Trace a repository’s container image bases with exact file and line evidence offline. |
+| `campaign_status` | `state_path` | `offing.campaign-state.v1` (`campaign-state.v1.schema.json`) | Validate and read saved campaign batches and repository status offline. |
 | `scan_sbom` | `sbom_path`, `repository_path?` | `offing.scan.v1` (`scan.v1.schema.json`) | Scan a local CycloneDX, SPDX or Syft JSON file offline and report findings at JSON Pointer locations. |
 | `plan_migrations` | `repository_path?` | `offing.plan.v1` (`plan.v1.schema.json`) | Migration plan: waves of independent tasks a coordinating agent can hand out. |
 

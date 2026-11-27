@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "offing.campaign.v1",
+  "id": "node-upgrade",
+  "asOf": "2026-02-30",
+  "select": {
+    "release": {
+      "product": "nodejs",
+      "line": "18"
+    }
+  },
+  "batching": {
+    "size": 5,
+    "concurrency": 2,
+    "minGapMinutes": 60,
+    "maxFailureRate": 0.25
+  }
+}

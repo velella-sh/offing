@@ -6,6 +6,7 @@ import { getActiveData } from "@velella/ebb/data-source";
 import { isIsoDate } from "@velella/ebb/registry";
 
 import { CODEOWNERS_LOCATIONS } from "../codeowners.js";
+import { campaignInputPaths, captureCampaignEvidence, type CampaignEvidence } from "../campaign/capture.js";
 import { CONFIG_FILE_NAME } from "../config.js";
 import { fleetPolicyCompliance, type FleetPolicyCompliance } from "../fleet-policy/compliance.js";
 import { parsePolicyReference } from "../fleet-policy/reference.js";
@@ -52,6 +53,7 @@ export interface FleetOptions {
   readonly repositories?: readonly string[];
   readonly includeForks?: boolean;
   readonly includeArchived?: boolean;
+  readonly campaign?: boolean;
   readonly onProgress?: (event: FleetProgress) => void;
   readonly whatIf?: { readonly targets: readonly UpgradeTarget[]; readonly asOf?: string };
   readonly forecast?: { readonly gitlab: boolean; readonly asOf?: string };
@@ -70,6 +72,7 @@ interface FleetContext {
   readonly fingerprint: string;
   readonly scannedAt: string;
   readonly noCache: boolean;
+  readonly campaign: boolean;
   readonly forecast?: FleetOptions["forecast"];
   readonly whatIf: FleetOptions["whatIf"];
   readonly policy?: string;
@@ -115,6 +118,7 @@ function selectedInputs(context: FleetContext): FleetSelection {
   const locations = new Set([
     ...(context.forecast ? ownershipLocations(context.forecast.gitlab) : []),
     ...(context.policy ? policyPaths : []),
+    ...(context.campaign ? campaignInputPaths : []),
     ...(context.whatIf ? upgradePaths : []),
   ]);
   if (locations.size === 0) return selection;
@@ -127,6 +131,7 @@ function selectedInputs(context: FleetContext): FleetSelection {
 interface PinnedScan extends Omit<RepositoryScan, "state"> {
   readonly compliance?: FleetPolicyCompliance;
   readonly forecastEvidence?: ForecastCapture;
+  readonly campaignEvidence?: CampaignEvidence;
   readonly whatIfEvidence?: FleetWhatIfEvidence;
 }
 
@@ -145,6 +150,9 @@ async function scanPinned(context: FleetContext, repository: FleetRepository, co
         })
       : undefined;
     const forecastEvidence = context.forecast ? await captureForecast(report, context.forecast.gitlab) : undefined;
+    const campaignEvidence = context.campaign
+      ? await captureCampaignEvidence(report, context.scannedAt.slice(0, 10))
+      : undefined;
     const whatIf = context.whatIf ? captureWhatIf(await simulateScan(report, context.whatIf.targets)) : undefined;
     return {
       bytesFetched,
@@ -160,6 +168,7 @@ async function scanPinned(context: FleetContext, repository: FleetRepository, co
         : {}),
       ...(forecastEvidence ? { forecastEvidence } : {}),
       ...(whatIf ? { whatIfEvidence: whatIf } : {}),
+      ...(campaignEvidence ? { campaignEvidence } : {}),
     };
   } finally {
     await rm(directory, { recursive: true, force: true });
@@ -182,7 +191,11 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
     if (cached) {
       return { state: { ...state, commit, status: "cached", reason: null }, findings: cached, bytesFetched: 0 };
     }
-    const { compliance, forecastEvidence, whatIfEvidence, ...report } = await scanPinned(context, repo, commit);
+    const { compliance, forecastEvidence, campaignEvidence, whatIfEvidence, ...report } = await scanPinned(
+      context,
+      repo,
+      commit,
+    );
     if (!context.noCache) {
       // A read-only cache directory must not turn a successful scan into a failed repository.
       await writeFleetCache(context.cache, key, report.findings).catch(() => undefined);
@@ -196,6 +209,7 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
         ...(compliance ? { compliance } : {}),
         ...(forecastEvidence ? { forecastEvidence } : {}),
         ...(whatIfEvidence ? { whatIfEvidence } : {}),
+        ...(campaignEvidence ? { campaignEvidence } : {}),
       },
       ...report,
     };
@@ -217,6 +231,7 @@ async function fleetContext(host: FleetHost, options: FleetOptions): Promise<Fle
     scannedAt,
     // Optional evidence needs the pinned inputs, while cache entries contain aggregates.
     noCache:
+      options.campaign === true ||
       options.forecast !== undefined ||
       options.whatIf !== undefined ||
       options.policy !== undefined ||
@@ -224,6 +239,7 @@ async function fleetContext(host: FleetHost, options: FleetOptions): Promise<Fle
       (options.noCache ?? false),
     imageLineage: options.imageLineage ?? false,
     forecast: options.forecast,
+    campaign: options.campaign ?? false,
     whatIf: options.whatIf,
     ...(options.policy
       ? { policy: parsePolicyReference(options.policy) ? options.policy : resolve(options.policy) }

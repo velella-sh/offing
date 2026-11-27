@@ -40,6 +40,18 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/baseline" label="Accepted findings baseline fields"}
 
+### Campaign
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/campaign.v1.schema.json)
+
+::schema-table{data="publicSchemas/campaign" label="Campaign fields"}
+
+### Campaign state
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/campaign-state.v1.schema.json)
+
+::schema-table{data="publicSchemas/campaign-state" label="Campaign state fields"}
+
 ### Capability manifest
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/capabilities.v1.schema.json)
