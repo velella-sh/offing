@@ -1,3 +1,4 @@
+import { isIsoDate } from "@velella/ebb/registry";
 import assert from "node:assert/strict";
 import { glob, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -22,7 +23,9 @@ async function repository(t: TestContext) {
 
 test("config schema and the runtime validator accept and reject the same values", async () => {
   const schema = JSON.parse(await readFile("schemas/config.v1.schema.json", "utf8"));
-  const validate = new Ajv2020({ allowUnionTypes: true, ownProperties: true }).compile(schema);
+  const validate = new Ajv2020({ allowUnionTypes: true, ownProperties: true })
+    .addFormat("date", isIsoDate)
+    .compile(schema);
   assert.deepEqual(new Set(Object.keys(schema.properties)), KNOWN_CONFIG_KEYS);
   const values = [null, false, 9, {}, [], ["dist"], [false], ["ok", " "], "", " ", "dist", "high", "offing.config.v1"];
   const cases = [

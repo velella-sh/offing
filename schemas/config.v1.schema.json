@@ -147,6 +147,105 @@
       },
       "description": "Alias for baseline.",
       "pattern": "\\S"
+    },
+    "policy": {
+      "type": "object",
+      "description": "Named gates over lifecycle findings and their ordered, expiring exceptions.",
+      "additionalProperties": false,
+      "required": [
+        "rules"
+      ],
+      "properties": {
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id"
+            ],
+            "minProperties": 2,
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+              },
+              "days-left": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 3650
+              },
+              "after-eol": {
+                "type": "boolean"
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "low",
+                  "medium",
+                  "high",
+                  "critical"
+                ]
+              },
+              "ecosystem": {
+                "type": "string",
+                "pattern": "\\S",
+                "description": "Detector id or rule-id prefix to match."
+              },
+              "path": {
+                "type": "string",
+                "pattern": "\\S",
+                "description": "Repository-relative path or ignore-style glob."
+              }
+            }
+          }
+        },
+        "exceptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "reason",
+              "expires"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "path"
+                ]
+              },
+              {
+                "required": [
+                  "ecosystem"
+                ]
+              }
+            ],
+            "properties": {
+              "ecosystem": {
+                "type": "string",
+                "pattern": "\\S",
+                "description": "Detector id or rule-id prefix to match."
+              },
+              "path": {
+                "type": "string",
+                "pattern": "\\S",
+                "description": "Repository-relative path or ignore-style glob."
+              },
+              "reason": {
+                "type": "string",
+                "pattern": "\\S"
+              },
+              "expires": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -1,7 +1,8 @@
+import { isIsoDate } from "@velella/ebb/registry";
 import { readFile, stat } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 
-import type { ScanResult, Severity } from "./domain.js";
+import type { LifecyclePolicy, PolicyException, PolicyRule, ScanResult, Severity } from "./domain.js";
 import { severityValues } from "./domain.js";
 import { OffingError } from "./offing-error.js";
 
@@ -21,6 +22,7 @@ export interface OffingConfig {
   ignore?: string[];
   dataVersion?: string;
   baseline?: string[];
+  policy?: LifecyclePolicy;
   configPath?: string;
 }
 
@@ -40,6 +42,7 @@ export const KNOWN_CONFIG_KEYS = new Set([
   "baselines",
   "baselineFiles",
   "baseline-files",
+  "policy",
 ]);
 
 /**
@@ -54,7 +57,7 @@ export function validateConfig(raw: unknown, filePath = CONFIG_FILE_NAME): Offin
   const unknownKeys = Object.keys(record).filter((key) => !KNOWN_CONFIG_KEYS.has(key));
   if (unknownKeys.length > 0) {
     throw new ConfigError(
-      `Unknown key in ${filePath}: "${unknownKeys[0]}" (allowed keys: fail-on, ignore, data-version, baseline).`,
+      `Unknown key in ${filePath}: "${unknownKeys[0]}" (allowed keys: fail-on, ignore, data-version, baseline, policy).`,
     );
   }
 
@@ -83,7 +86,81 @@ export function validateConfig(raw: unknown, filePath = CONFIG_FILE_NAME): Offin
     ...(dataVersion !== undefined ? { dataVersion } : {}),
     ...(ignore !== undefined ? { ignore } : {}),
     ...(baseline !== undefined ? { baseline } : {}),
+    ...parsePolicy(record.policy, filePath),
   };
+}
+
+function policyObject<T extends object>(raw: unknown, keys: readonly string[], location: string): Partial<T> {
+  if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
+    throw new ConfigError(`Invalid policy at ${location}: expected an object.`);
+  }
+  const unknown = Object.keys(raw).find((key) => !keys.includes(key));
+  if (unknown !== undefined) throw new ConfigError(`Unknown policy key "${unknown}" at ${location}.`);
+  return raw;
+}
+
+function nonblank(value: unknown): value is string {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function validPolicyScope(value: { path?: string; ecosystem?: string }): boolean {
+  return (
+    (value.path === undefined || nonblank(value.path)) && (value.ecosystem === undefined || nonblank(value.ecosystem))
+  );
+}
+
+function parsePolicyRule(value: unknown, location: string): PolicyRule {
+  const rule = policyObject<PolicyRule>(
+    value,
+    ["id", "days-left", "after-eol", "severity", "ecosystem", "path"],
+    location,
+  );
+  if (!nonblank(rule.id) || !/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(rule.id)) {
+    throw new ConfigError(`Invalid policy rule id at ${location}: use letters, digits, underscores or hyphens.`);
+  }
+  if (!validPolicyScope(rule) || Object.keys(rule).length === 1) {
+    throw new ConfigError(`Invalid policy rule at ${location}: at least one valid condition is required.`);
+  }
+  const days = rule["days-left"];
+  if (days !== undefined && (!Number.isInteger(days) || days < 0 || days > 3650)) {
+    throw new ConfigError(`Invalid policy days-left at ${location}: use a whole number from 0 to 3650.`);
+  }
+  if (rule["after-eol"] !== undefined && typeof rule["after-eol"] !== "boolean") {
+    throw new ConfigError(`Invalid policy after-eol at ${location}: expected a boolean.`);
+  }
+  if (rule.severity !== undefined && !severityValues.includes(rule.severity)) {
+    throw new ConfigError(`Invalid policy severity at ${location}.`);
+  }
+  return { ...rule, id: rule.id };
+}
+
+function parsePolicyException(value: unknown, location: string): PolicyException {
+  const item = policyObject<PolicyException>(value, ["path", "ecosystem", "reason", "expires"], location);
+  if (!validPolicyScope(item) || (item.path === undefined && item.ecosystem === undefined)) {
+    throw new ConfigError(`Invalid policy exception at ${location}: a path or ecosystem is required.`);
+  }
+  if (!nonblank(item.reason) || !isIsoDate(item.expires)) {
+    throw new ConfigError(
+      `Invalid policy exception at ${location}: a reason and expiry date (YYYY-MM-DD) are required.`,
+    );
+  }
+  return { ...item, reason: item.reason, expires: item.expires };
+}
+
+function parsePolicy(value: unknown, filePath: string): Pick<OffingConfig, "policy"> {
+  if (value === undefined) return {};
+  const config = policyObject<LifecyclePolicy>(value, ["rules", "exceptions"], filePath);
+  if (!Array.isArray(config.rules) || config.rules.length === 0) {
+    throw new ConfigError(`Invalid policy rules in ${filePath}: expected a nonempty array.`);
+  }
+  if (config.exceptions !== undefined && !Array.isArray(config.exceptions)) {
+    throw new ConfigError(`Invalid policy exceptions in ${filePath}: expected an array.`);
+  }
+  const rules = config.rules.map((rule, index) => parsePolicyRule(rule, `${filePath} policy.rules[${index}]`));
+  const exceptions = config.exceptions?.map((entry, index) =>
+    parsePolicyException(entry, `${filePath} policy.exceptions[${index}]`),
+  );
+  return { policy: { rules, ...(exceptions ? { exceptions } : {}) } };
 }
 
 /** Validate each spelling and retain the first non-null value. */

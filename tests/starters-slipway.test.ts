@@ -1,3 +1,4 @@
+import { isIsoDate } from "@velella/ebb/registry";
 import assert from "node:assert/strict";
 import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -32,7 +33,7 @@ const observed = async (directory: string) => {
 test("the starter configuration validates against the published schema and loads with the real loader", async () => {
   const raw = JSON.parse(await readFile(join(starter, ".offing.json"), "utf8")) as unknown;
   const schema = JSON.parse(await readFile(resolve("schemas/config.v1.schema.json"), "utf8"));
-  const validate = new Ajv2020({ allErrors: true }).compile(schema);
+  const validate = new Ajv2020({ allErrors: true }).addFormat("date", isIsoDate).compile(schema);
   assert.equal(validate(raw), true, JSON.stringify(validate.errors));
 
   const config = await loadConfig(starter);

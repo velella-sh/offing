@@ -1,5 +1,6 @@
 import type { DependencyCheck } from "../check-dependency.js";
 import { COVERAGE_WALK_LIMIT, type ScanCoverage, type ScanResult } from "../domain.js";
+import { policyViolationText } from "../policy.js";
 import type { MigrationPacket, UpgradePath } from "../migration-packet.js";
 import { REPORTER_API_VERSION, displayLocation, compare, describeData, type Reporter } from "./shared.js";
 
@@ -108,6 +109,10 @@ function findingTextLines(finding: ScanResult["findings"][number]): string[] {
   return lines;
 }
 
+function policyReportLines(result: ScanResult): string[] {
+  return (result.policy?.violations ?? []).flatMap((violation) => ["", policyViolationText(violation)]);
+}
+
 export function renderText(result: ScanResult, options: TextOptions = {}): string {
   const lines = [
     ...(options.firstRun ? renderFirstRunSummary(result) : []),
@@ -138,6 +143,8 @@ export function renderText(result: ScanResult, options: TextOptions = {}): strin
       `Baseline: ${state.suppressed} finding${state.suppressed === 1 ? "" : "s"} suppressed, ${state.expiring.length} expiring${state.warnWithinDays === undefined ? "" : ` within ${state.warnWithinDays} days`}, ${state.expired.length} expired.`,
     );
   }
+
+  lines.push(...policyReportLines(result));
 
   for (const diagnostic of result.diagnostics) {
     lines.push("", `Note: ${diagnostic}`);

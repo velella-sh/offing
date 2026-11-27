@@ -226,6 +226,30 @@ test("deriveScanCoverage lists ecosystems and files in sorted order without dupl
   assert.deepEqual(coverage.unsupportedFiles, ["a/Cargo.toml", "z/package.json"]);
 });
 
+test("text reports the policy rule and the expired exception after a blank line", () => {
+  const result = emptyScan();
+  const passing = emptyScan({ policy: { violations: [] } });
+  assert.equal(renderText(passing), renderText(result));
+  const blocked = emptyScan({
+    policy: {
+      violations: [
+        {
+          rule: "upgrade-services",
+          findingId: "nodejs.runtime.eol-22:services/package.json:1",
+          path: "services/package.json",
+          expiredException: { expires: "2026-10-26", reason: "Temporary migration approval" },
+        },
+      ],
+    },
+  });
+  assert.equal(
+    renderText(blocked),
+    renderText(result) +
+      "\n\nPolicy rule upgrade-services failed for services/package.json (nodejs.runtime.eol-22:services/package.json:1)." +
+      " Exception expired on 2026-10-26: Temporary migration approval.",
+  );
+});
+
 test("text output names each selector independently and the text reporter passes firstRun through", async () => {
   const { renderText } = await import("../src/reporters.js");
   const { textReporter } = await import("../src/reporters/text.js");

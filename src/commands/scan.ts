@@ -15,6 +15,7 @@ export const command: CliCommand = {
     "--write-status",
     "--interactive",
     "--fail-on",
+    "--lookahead",
     "--all",
     "--by-owner",
     "--data-version",
@@ -38,8 +39,9 @@ export const command: CliCommand = {
     "  offing scan <path> <path>... [--all <dir>] [--json]   # several projects, per-project and combined counts",
     "  offing scan [path] --by-owner [--json]   # group findings by CODEOWNERS owner; files with no owner are listed as unowned",
     "  offing scan --sbom <file|-> [--json | --format <format>]   # scan a CycloneDX, SPDX or Syft JSON SBOM",
+    "  offing scan [path] --lookahead <duration>   # fail when a supported deadline is within the lookahead",
   ],
-  usageSlots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 30, 30.1],
+  usageSlots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 30, 30.1, 30.2],
   run(args, ctx) {
     return runScanPipeline("scan", args, ctx);
   },
