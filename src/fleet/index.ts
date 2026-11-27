@@ -12,6 +12,9 @@ import { parsePolicyReference } from "../fleet-policy/reference.js";
 import { defaultCacheDirectory } from "../cache-paths.js";
 import { declaresInput, detectorSparsePatterns } from "../detector-inputs.js";
 import { builtInDetectors } from "../detectors/index.js";
+import { loadImageRules } from "../detectors/container/image-lifecycle.js";
+import { buildImageLineage } from "../lineage/index.js";
+import { readLineageInputs, type LineageInputs } from "../lineage/inputs.js";
 import { captureForecast, ownershipLocations } from "../fleet-forecast/capture.js";
 import type { ForecastCapture } from "../fleet-forecast/model.js";
 import { rollup, type FleetRepositoryStatus, type FleetResult, type RollupFinding } from "../rollup.js";
@@ -35,6 +38,7 @@ export interface FleetProgress extends FleetRepositoryStatus {
 
 export interface FleetOptions {
   readonly jobs?: number;
+  readonly imageLineage?: boolean;
   readonly cacheDirectory?: string;
   readonly noCache?: boolean;
   readonly policy?: string;
@@ -51,6 +55,7 @@ export interface FleetOptions {
 interface RepositoryScan {
   readonly state: FleetRepositoryStatus;
   readonly findings: readonly RollupFinding[];
+  readonly lineage?: LineageInputs;
   readonly bytesFetched: number;
 }
 
@@ -62,6 +67,7 @@ interface FleetContext {
   readonly noCache: boolean;
   readonly forecast?: FleetOptions["forecast"];
   readonly policy?: string;
+  readonly imageLineage: boolean;
 }
 
 function matches(name: string, patterns: readonly string[] = []): boolean {
@@ -135,6 +141,14 @@ async function scanPinned(context: FleetContext, repository: FleetRepository, co
       bytesFetched,
       findings: safeFindings(report.findings),
       ...(compliance ? { compliance } : {}),
+      ...(context.imageLineage
+        ? {
+            lineage: {
+              ...(await readLineageInputs(directory)),
+              repository: { name: repository.name, host: context.host.origin, commit },
+            },
+          }
+        : {}),
       ...(forecastEvidence ? { forecastEvidence } : {}),
     };
   } finally {
@@ -180,28 +194,37 @@ async function scanOne(repo: FleetRepository, context: FleetContext, options: Fl
   }
 }
 
-export async function scanFleet(host: FleetHost, namespace: string, options: FleetOptions = {}): Promise<FleetResult> {
-  const jobs = options.jobs ?? 4;
-  if (!Number.isInteger(jobs) || jobs < 1 || jobs > 16) {
-    throw new FleetHostError("Fleet concurrency must be an integer between 1 and 16.");
-  }
+async function fleetContext(host: FleetHost, options: FleetOptions): Promise<FleetContext> {
   const data = await getActiveData();
   const asOf = options.forecast?.asOf;
   if (asOf !== undefined && !isIsoDate(asOf)) throw new FleetHostError("--as-of needs a date (YYYY-MM-DD).");
   const scannedAt = asOf === undefined ? new Date().toISOString() : `${asOf}T00:00:00.000Z`;
   const fingerprint = fleetCacheKey([VERSION, data.info.version, scannedAt.slice(0, 10), ...selection.patterns]);
-  const context = {
+  return {
     host,
     fingerprint,
     scannedAt,
-    // Existing scan-cache entries contain aggregate findings only.
-    noCache: options.forecast !== undefined || options.policy !== undefined || (options.noCache ?? false),
+    // Optional evidence needs the pinned inputs, while cache entries contain aggregates.
+    noCache:
+      options.forecast !== undefined ||
+      options.policy !== undefined ||
+      options.imageLineage === true ||
+      (options.noCache ?? false),
+    imageLineage: options.imageLineage ?? false,
     forecast: options.forecast,
     ...(options.policy
       ? { policy: parsePolicyReference(options.policy) ? options.policy : resolve(options.policy) }
       : {}),
     cache: options.cacheDirectory ?? join(defaultCacheDirectory(), "fleet-v1"),
   };
+}
+
+export async function scanFleet(host: FleetHost, namespace: string, options: FleetOptions = {}): Promise<FleetResult> {
+  const jobs = options.jobs ?? 4;
+  if (!Number.isInteger(jobs) || jobs < 1 || jobs > 16) {
+    throw new FleetHostError("Fleet concurrency must be an integer between 1 and 16.");
+  }
+  const context = await fleetContext(host, options);
   const repos = [...(await host.listRepositories(namespace))].sort((a, b) => a.name.localeCompare(b.name, "en"));
   const remaining = repos.entries();
   const results: RepositoryScan[] = [];
@@ -214,11 +237,20 @@ export async function scanFleet(host: FleetHost, namespace: string, options: Fle
       }
     }),
   );
+  return fleetResult(results, context);
+}
+
+async function fleetResult(results: readonly RepositoryScan[], context: FleetContext): Promise<FleetResult> {
   const aggregated = rollup(results.map(({ state, findings }) => ({ repository: state.name, report: { findings } })));
-  return {
+  const fleet: FleetResult = {
     ...aggregated,
     schemaVersion: "offing.fleet.v1",
     repositoryStatus: results.map(({ state }) => state),
-    ...(options.forecast ? { forecastAsOf: scannedAt.slice(0, 10) } : {}),
+    ...(context.forecast ? { forecastAsOf: context.scannedAt.slice(0, 10) } : {}),
   };
+  if (context.imageLineage) {
+    const sources = results.flatMap(({ lineage }) => (lineage === undefined ? [] : [lineage]));
+    fleet.imageLineage = buildImageLineage(sources, await loadImageRules());
+  }
+  return fleet;
 }

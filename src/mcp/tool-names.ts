@@ -13,6 +13,7 @@ export const MCP_TOOL_NAMES = [
   "plan_migrations",
   "recommend_version",
   "scan_sbom",
+  "image_lineage",
 ] as const;
 
 export type McpToolName = (typeof MCP_TOOL_NAMES)[number];
@@ -32,6 +33,7 @@ export const MCP_OUTPUT_SCHEMA_FILES = {
   plan_migrations: "plan.v1.schema.json",
   recommend_version: "recommend.v1.schema.json",
   scan_sbom: "scan.v1.schema.json",
+  image_lineage: "lineage.v1.schema.json",
 } as const satisfies Record<McpToolName, string>;
 
 /** MCP hints shared by every tool: read-only, idempotent, closed-world, and non-destructive. */
@@ -59,4 +61,5 @@ export const MCP_TOOL_MORE_HINTS = {
   plan_migrations: "The complete plan: offing plan <path> --json.",
   recommend_version: "The complete answer: offing recommend <product> --json.",
   scan_sbom: "The complete report: offing scan --sbom <file> --json.",
+  image_lineage: "The complete report: offing lineage <path> --json.",
 } as const satisfies Record<Exclude<McpToolName, "agent_guard">, string>;

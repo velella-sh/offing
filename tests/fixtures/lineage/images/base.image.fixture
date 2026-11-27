@@ -1,0 +1,3 @@
+FROM debian:buster AS published
+LABEL org.opencontainers.image.source="https://github.com/acme/base"
+FROM scratch AS other

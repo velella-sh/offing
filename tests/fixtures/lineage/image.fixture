@@ -1,0 +1,8 @@
+ARG RELEASE=18
+ARG BASE=node:${RELEASE}
+FROM ${BASE} AS build
+FROM python:3.7 AS unused
+FROM scratch AS empty
+FROM empty AS final
+COPY --from=0 /app /app
+COPY --from=build /tools /tools

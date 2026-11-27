@@ -3,6 +3,7 @@ import { basename, dirname, extname } from "node:path";
 
 import { severityValues } from "./domain.js";
 import type { Finding, ScanResult, Severity } from "./domain.js";
+import type { ImageLineage } from "./lineage/index.js";
 import type { ForecastCapture } from "./fleet-forecast/model.js";
 import type { FleetPolicyCompliance } from "./fleet-policy/compliance.js";
 import { required } from "./required.js";
@@ -72,6 +73,7 @@ export interface FleetRepositoryStatus {
 export interface FleetResult extends Omit<RollupResult, "schemaVersion"> {
   schemaVersion: "offing.fleet.v1";
   repositoryStatus: FleetRepositoryStatus[];
+  imageLineage?: ImageLineage;
   forecastAsOf?: string;
 }
 

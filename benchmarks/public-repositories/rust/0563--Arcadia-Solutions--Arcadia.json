@@ -264,6 +264,36 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 2 of rust-toolchain reads `channel = \"1.94.0\"`. Rust 1.98 and older are no longer supported. The Rust project only provides support and security updates for the most recent stable release, so a release line is unsupported once the next stable release ships. Rust 1.99 was released on 2026-10-01. Source: https://www.rust-lang.org/policies/security. The pinned file was re-fetched at the recorded commit and the cited line matches. Outcome: confirmed."
       }
+    },
+    {
+      "ruleId": "container.node.eol-22-and-older",
+      "path": "frontend/Dockerfile",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "frontend/Dockerfile:5. NODE_VERSION=22 supplies the node:22-slim frontend builder.",
+        "url": "https://github.com/Arcadia-Solutions/Arcadia/blob/4e15ab3cf8c124f420ba3ba17b5fd713a8e7b446/frontend/Dockerfile#L1-L5"
+      }
+    },
+    {
+      "ruleId": "container.node.eol-22-and-older",
+      "path": "frontend/Dockerfile",
+      "line": 26,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "frontend/Dockerfile:26. The kiwi-true stage uses node:22-slim through the NODE_VERSION=22 default at line 1.",
+        "url": "https://github.com/Arcadia-Solutions/Arcadia/blob/4e15ab3cf8c124f420ba3ba17b5fd713a8e7b446/frontend/Dockerfile#L26"
+      }
+    },
+    {
+      "ruleId": "container.node.eol-22-and-older",
+      "path": "frontend/Dockerfile",
+      "line": 41,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "frontend/Dockerfile:41. The build-elysia stage uses node:22-slim through the NODE_VERSION=22 default at line 1.",
+        "url": "https://github.com/Arcadia-Solutions/Arcadia/blob/4e15ab3cf8c124f420ba3ba17b5fd713a8e7b446/frontend/Dockerfile#L41"
+      }
     }
   ]
 }

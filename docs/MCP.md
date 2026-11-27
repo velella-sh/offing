@@ -165,6 +165,7 @@ The pointer is published as `more.v1.schema.json`. Every tool schema carries the
 | `agent_guard` | [Guard v1 request fields](spec/agent-guard/v1.md#request) | `offing.agent-guard.response.v1` (`agent-guard-response.v1.schema.json`) | Return an allow, warn, or block decision for a proposed operation with its evidence. |
 | `forecast_repository` | `repository_path?`, `months?`, `as_of?` | `ebb.forecast.v1` (`forecast.v1.schema.json`) | What reaches a dated end of life in the coming months: buckets by how many months away each event is, listing the events that affect this repository, then the same events by month. |
 | `recommend_version` | `product`, `minimumSupportDays?`, `as_of?` | `offing.recommend.v1` (`recommend.v1.schema.json`) | Which release line to write today (a name such as `node`, or a Package URL), from bundled lifecycle data only: the recommended line and its end date, alternatives, lines to avoid, and sources. `no-data` is not a statement that any version is safe. |
+| `image_lineage` | `repository_path?` | `offing.lineage.v1` (`lineage.v1.schema.json`) | Trace a repository’s container image bases with exact file and line evidence offline. |
 | `scan_sbom` | `sbom_path`, `repository_path?` | `offing.scan.v1` (`scan.v1.schema.json`) | Scan a local CycloneDX, SPDX or Syft JSON file offline and report findings at JSON Pointer locations. |
 | `plan_migrations` | `repository_path?` | `offing.plan.v1` (`plan.v1.schema.json`) | Migration plan: waves of independent tasks a coordinating agent can hand out. |
 
@@ -199,7 +200,7 @@ Read the numbers for what they measure, which is the wording and nothing else. T
 
 The trigger evals did not move, because they classify a prompt by its words alone and read no description: scan-and-migrate has recall 1.00 and a false-trigger rate of 0.00 on 114 prompts, check-before-add 1.00 and 0.00 on 54, and upgrade-runtime-action 1.00 and 0.00 on 42.
 
-The corpus now includes five Agent Guard v1 prompts. With the current tool list, 37 of 61 prompts rank their expected tool first, including all five Agent Guard prompts.
+The corpus now includes five Agent Guard v1 prompts. With the tool list from that run, 37 of 61 prompts rank their expected tool first, including all five Agent Guard prompts.
 
 To score the current corpus against the current and historical tool lists:
 

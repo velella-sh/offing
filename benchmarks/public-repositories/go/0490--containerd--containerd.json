@@ -12,6 +12,16 @@
         "kind": "maintainer-review",
         "note": "Reviewed line 3 of api/go.mod at this commit: `go 1.25.0`. Go supports only its two newest release lines (https://go.dev/doc/devel/release#policy); the declared 1.25.0 line is older than both and receives no security fixes."
       }
+    },
+    {
+      "ruleId": "container.ubuntu.eol-22.04",
+      "path": ".github/workflows/release/Dockerfile",
+      "line": 22,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": ".github/workflows/release/Dockerfile:22. The UBUNTU_VERSION=22.04 default resolves BASE_IMAGE to ubuntu:22.04.",
+        "url": "https://github.com/containerd/containerd/blob/aefce4e7cdbf9a8ce754cd4edb1de5d44f0c704d/.github/workflows/release/Dockerfile#L15-L22"
+      }
     }
   ]
 }

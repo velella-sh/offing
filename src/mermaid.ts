@@ -19,6 +19,11 @@ export function escapeMermaid(value: string): string {
     .replace(/[#:;]/g, (character) => required(escapes[character], "the mermaid escape"));
 }
 
+/** Escape one untrusted label inside a quoted Mermaid flowchart node. */
+export function escapeMermaidLabel(value: string): string {
+  return escapeMermaid(value).replace(/["<>&]/g, (character) => "#" + character.charCodeAt(0) + ";");
+}
+
 interface SupportWindow {
   ecosystem: string;
   subject: string;

@@ -187,6 +187,25 @@ jobs:
             printf -- '- CLI and MCP blocker graph parity, Mermaid and both SVG themes passed.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-base-image-lineage
+        working-directory: ${{ runner.temp }}
+        env:
+          OFFING_DATA_VERSION: bundled
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          bin="$out/npm-install/node_modules/.bin/offing"
+          tarball="$(ls "$out"/*.tgz)"
+          node "$GITHUB_WORKSPACE/.github/scripts/acc-base-image-lineage.mjs" "$bin"
+          {
+            printf '### acc-base-image-lineage\n\n'
+            printf -- '- Tarball %s\n' "$(basename "$tarball")"
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$tarball" | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI version %s\n' "$("$bin" --version)"
+            printf -- '- Tested commit %s\n' "$GITHUB_SHA"
+            printf -- '- Packaged schema, scan evidence, MCP parity, and opt-in digest lookup passed.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: acc-policy
         working-directory: ${{ runner.temp }}
         env:

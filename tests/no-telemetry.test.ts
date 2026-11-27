@@ -13,6 +13,8 @@ const approved = new Map([
   ["action-tracking-issue.ts", ["fetch"]],
   ["commands/data.ts", ["@velella/ebb/data-update", "node:http"]],
   ["fleet/http.ts", ["fetch"]],
+  // Anonymous registry lookup occurs only through offing lineage --resolve-digests.
+  ["lineage/registry.ts", ["fetch"]],
   ["pr-comment.ts", ["fetch"]],
 ]);
 const networkGlobals = /^(fetch|WebSocket|XMLHttpRequest|EventSource|sendBeacon|WebTransport)$/;

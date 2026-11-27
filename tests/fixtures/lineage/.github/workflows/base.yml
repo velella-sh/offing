@@ -1,0 +1,8 @@
+jobs:
+  package:
+    steps:
+      - uses: docker/build-push-action@fixture
+        with:
+          file: images/base.Dockerfile
+          target: published
+          tags: ghcr.io/acme/base:3
