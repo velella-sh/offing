@@ -449,6 +449,7 @@ jobs:
 
       - name: acc-guardrails
         env:
+          OFFING_DATA_VERSION: bundled
           OFFING_GUARDRAILS_CLI: ${{ runner.temp }}/package-smoke/npm-install/node_modules/@velella/offing/dist/src/cli.js
         run: |
           set -euo pipefail
