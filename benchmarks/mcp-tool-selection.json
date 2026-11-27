@@ -366,6 +366,36 @@
       "prompt": "Can the Agent Guard protocol check the operation with a critical threshold?",
       "tool": "agent_guard",
       "reason": "The caller needs the transport-independent guard verdict."
+    },
+    {
+      "id": "scan-sbom-syft",
+      "tool": "scan_sbom",
+      "reason": "The user already has a local SBOM document to scan.",
+      "prompt": "Find lifecycle risks in this local Syft SBOM JSON file."
+    },
+    {
+      "id": "scan-sbom-cyclonedx",
+      "tool": "scan_sbom",
+      "reason": "The user already has a local SBOM document to scan.",
+      "prompt": "Check a CycloneDX SBOM for deprecated components and give their JSON Pointer locations."
+    },
+    {
+      "id": "scan-sbom-spdx",
+      "tool": "scan_sbom",
+      "reason": "The user already has a local SBOM document to scan.",
+      "prompt": "Scan the local SPDX JSON SBOM offline."
+    },
+    {
+      "id": "scan-sbom-coverage",
+      "tool": "scan_sbom",
+      "reason": "The user already has a local SBOM document to scan.",
+      "prompt": "Given the SBOM file already on disk, list end-of-life packages and missing package URLs."
+    },
+    {
+      "id": "scan-sbom-image",
+      "tool": "scan_sbom",
+      "reason": "The user already has a local SBOM document to scan.",
+      "prompt": "Check the image SBOM for lifecycle findings without fetching the image."
     }
   ]
 }

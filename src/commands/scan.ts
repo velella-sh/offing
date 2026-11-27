@@ -5,6 +5,7 @@ export const command: CliCommand = {
   name: "scan",
   flags: [
     "--demo",
+    "--sbom",
     "--json",
     "--format",
     "--baseline",
@@ -36,8 +37,9 @@ export const command: CliCommand = {
     "  offing scan [path] --no-cache   # bypass the scan cache and re-scan all files fresh",
     "  offing scan <path> <path>... [--all <dir>] [--json]   # several projects, per-project and combined counts",
     "  offing scan [path] --by-owner [--json]   # group findings by CODEOWNERS owner; files with no owner are listed as unowned",
+    "  offing scan --sbom <file|-> [--json | --format <format>]   # scan a CycloneDX, SPDX or Syft JSON SBOM",
   ],
-  usageSlots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 30],
+  usageSlots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 30, 30.1],
   run(args, ctx) {
     return runScanPipeline("scan", args, ctx);
   },

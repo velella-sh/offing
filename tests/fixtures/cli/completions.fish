@@ -58,6 +58,7 @@ complete -c offing -n '__fish_seen_subcommand_from scan' -l format -x -a 'text j
 complete -c offing -n '__fish_seen_subcommand_from forecast' -l format -x -a 'text json sarif rdjson compact html mermaid'
 complete -c offing -n '__fish_seen_subcommand_from scan' -l on-expired -x -a 'resurface fail'
 complete -c offing -n '__fish_seen_subcommand_from scan' -l demo
+complete -c offing -n '__fish_seen_subcommand_from scan' -l sbom
 complete -c offing -n '__fish_seen_subcommand_from scan' -l json
 complete -c offing -n '__fish_seen_subcommand_from scan' -l baseline
 complete -c offing -n '__fish_seen_subcommand_from scan' -l baseline-warn-days

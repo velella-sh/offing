@@ -736,3 +736,24 @@ test("action.yml declares mode with a scan default and passes it to the scan ste
   assert.equal(action.inputs.mode?.default, "scan");
   assert.equal(action.runs.steps[0]?.env?.INPUT_MODE, "${{ inputs.mode }}");
 });
+
+test("acc-sbom-scan: Action sbom input reports component findings and uses its severity gate", async () => {
+  const root = await fixtureRepository();
+  await writeFile(join(root, "consumer.sbom.json"), await readFile("examples/sbom/image.cdx.json"));
+  const outcome = await runActionFixture(root, {
+    INPUT_SBOM: "consumer.sbom.json",
+    INPUT_SARIF: "true",
+    "INPUT_FAIL-ON-SEVERITY": "info",
+  });
+  assert.equal(outcome.code, 1);
+  const reportPath = outcome.outputs.match(/^report-path=(.+)$/m)?.[1];
+  assert.ok(reportPath, outcome.outputs);
+  const report = JSON.parse(await readFile(reportPath, "utf8"));
+  assert.equal(report.findings[0].ruleId, "npm.package.request.deprecated");
+  assert.equal(report.findings[0].location.jsonPointer, "/components/0");
+  assert.match(outcome.outputs, /^sarif-path=/m);
+
+  const conflict = await runActionFixture(root, { INPUT_SBOM: "consumer.sbom.json", INPUT_PATHS: "." });
+  assert.equal(conflict.code, 1);
+  assert.match(conflict.stdout, /cannot be combined with paths/);
+});

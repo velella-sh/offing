@@ -11,6 +11,7 @@ import {
   highestSeverity,
   nextEndOfLife,
   parsePathsInput,
+  parseSbomInput,
   PR_COMMENT_MARKER,
   renderFindingsJson,
   renderComment,
@@ -427,6 +428,7 @@ interface RunContext {
   workspace: string;
   root: string;
   scanPaths: string[] | undefined;
+  sbom: string | undefined;
   event: PullRequestEvent;
   diff: DiffScope | undefined;
   fork: boolean;
@@ -543,6 +545,7 @@ function scanOptionsFor(ctx: RunContext): Partial<RunOptions> {
   const { env, diff, scanPaths, reportPaths } = ctx;
   return {
     ...(scanPaths ? { paths: scanPaths } : {}),
+    ...(ctx.sbom ? { sbom: ctx.sbom } : {}),
     ...(reportPaths.sarifPath ? { sarifPath: reportPaths.sarifPath } : {}),
     ...(reportPaths.badgePath ? { badgePath: reportPaths.badgePath } : {}),
     ...(diff ? { mode: "diff" as const } : {}),
@@ -655,6 +658,7 @@ interface PreparedRun {
 async function prepareRun(env: Env, root: string, workspace: string): Promise<PreparedRun> {
   const { inputMode, inputAnnotations } = readModeInputs(env);
   const pathPatterns = parsePathsInput(env.INPUT_PATHS ?? "");
+  const sbom = parseSbomInput(env.INPUT_SBOM, inputMode, pathPatterns);
   const event = await readEvent(env.GITHUB_EVENT_PATH);
   const diff = inputMode === "diff" ? resolveDiffMode(event) : undefined;
   const suggestFixes = env["INPUT_SUGGEST-FIXES"] === "true";
@@ -684,6 +688,7 @@ async function prepareRun(env: Env, root: string, workspace: string): Promise<Pr
     workspace,
     root,
     scanPaths,
+    sbom,
     event,
     diff,
     fork,

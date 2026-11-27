@@ -1,5 +1,12 @@
 import type { ScanResult } from "../domain.js";
-import { REPORTER_API_VERSION, describeData, escapeMarkdown, findingOrder, type Reporter } from "./shared.js";
+import {
+  REPORTER_API_VERSION,
+  displayLocation,
+  describeData,
+  escapeMarkdown,
+  findingOrder,
+  type Reporter,
+} from "./shared.js";
 
 /** Only trusted web schemes become Markdown links; unsafe or malformed URLs stay plain text. */
 function markdownSource(source: { title: string; url: string }): string {
@@ -39,9 +46,7 @@ export function renderMarkdown(result: ScanResult): string {
     ...(findings.length === 0
       ? ["| — | No findings | — | No lifecycle risks found. | — | — |"]
       : findings.map((finding) => {
-          const location = finding.location.line
-            ? finding.location.path + ":" + finding.location.line
-            : finding.location.path;
+          const location = displayLocation(finding.location);
           const evidence = finding.sources.length > 0 ? finding.sources.map(markdownSource).join("<br>") : "—";
           return (
             "| " +

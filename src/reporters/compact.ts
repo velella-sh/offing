@@ -1,5 +1,5 @@
 import type { ScanResult } from "../domain.js";
-import { REPORTER_API_VERSION, findingOrder, severityRank, type Reporter } from "./shared.js";
+import { REPORTER_API_VERSION, displayLocation, findingOrder, severityRank, type Reporter } from "./shared.js";
 
 /** The most findings `--format compact` lists. The rest are counted, not listed. */
 export const COMPACT_MAX_FINDINGS = 25;
@@ -19,9 +19,8 @@ export function renderCompact(result: ScanResult): string {
   );
   const lines = [`Offing: ${findings.length} finding${findings.length === 1 ? "" : "s"}`];
   for (const finding of findings.slice(0, COMPACT_MAX_FINDINGS)) {
-    const line = finding.location.line ? `:${finding.location.line}` : "";
     const text =
-      `${finding.id} ${finding.location.path}${line} ${finding.severity} ${finding.replacement ?? "-"}`.replace(
+      `${finding.id} ${displayLocation(finding.location)} ${finding.severity} ${finding.replacement ?? "-"}`.replace(
         /\s+/g,
         " ",
       );

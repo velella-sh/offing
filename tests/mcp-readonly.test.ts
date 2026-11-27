@@ -135,6 +135,11 @@ test("every MCP tool is annotated read-only and takes no write option", async ()
 
 test("no tool, resource, or prompt changes the repository tree", async () => {
   const root = await fixtureRepository();
+  const sbom = join(root, "offing-fixture.sbom.json");
+  await writeFile(
+    sbom,
+    JSON.stringify({ bomFormat: "CycloneDX", specVersion: "1.6", components: [{ purl: "pkg:npm/request@2.88.2" }] }),
+  );
   const client = await connect();
   try {
     const before = await snapshot(root);
@@ -145,6 +150,7 @@ test("no tool, resource, or prompt changes the repository tree", async () => {
 
     const calls = {
       scan_repository: { repository_path: root },
+      scan_sbom: { sbom_path: sbom },
       list_deprecations: { repository_path: root },
       explain_deprecation: { finding_id: findingId, repository_path: root },
       create_migration_context: { finding_id: findingId, repository_path: root },

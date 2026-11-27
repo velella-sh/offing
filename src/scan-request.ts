@@ -5,11 +5,13 @@ import type { ExpiredPolicy } from "./baseline.js";
 import type { ScanResult } from "./domain.js";
 import type { ScanOptions } from "./engine/index.js";
 import { applyMinSupport } from "@velella/ebb/min-support";
+import { scanSbomFile } from "./sbom-scan.js";
 import { scanWithBuiltIns } from "./scan-builtins.js";
 
 /** One scan as an interface asks for it: the repository and the policies applied to what the engine finds. */
 export interface ScanRequest {
   root: string;
+  sbom?: string;
   /** A baseline file, relative to `root`, whose suppressions are applied. */
   baselinePath?: string;
   /** The reference day (YYYY-MM-DD) for baseline expiry and minimum support. Defaults to today in UTC. */
@@ -34,7 +36,9 @@ export interface ScanRequestOutcome {
  * outcome into their output.
  */
 export async function runScanRequest(request: ScanRequest): Promise<ScanRequestOutcome> {
-  let result = await scanWithBuiltIns(request.root, request.engine);
+  let result = request.sbom
+    ? await scanSbomFile(request.sbom, request.root, true)
+    : await scanWithBuiltIns(request.root, request.engine);
   const today = request.today ?? new Date().toISOString().slice(0, 10);
   if (request.minSupportDays !== undefined) result = applyMinSupport(result, request.minSupportDays, today);
   if (!request.baselinePath) return { result, expiredFailure: false };

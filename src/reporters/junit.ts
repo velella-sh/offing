@@ -1,5 +1,5 @@
 import type { ScanResult } from "../domain.js";
-import { REPORTER_API_VERSION, findingOrder, type Reporter } from "./shared.js";
+import { REPORTER_API_VERSION, displayLocation, findingOrder, type Reporter } from "./shared.js";
 
 /** Strips characters XML 1.0 cannot represent, then escapes the rest for use in text or attribute values. */
 function escapeXml(value: string | number): string {
@@ -19,9 +19,7 @@ function escapeXml(value: string | number): string {
 export function renderJunit(result: ScanResult): string {
   const findings = [...result.findings].sort(findingOrder);
   const cases = findings.map((finding) => {
-    const location = finding.location.line
-      ? finding.location.path + ":" + finding.location.line
-      : finding.location.path;
+    const location = displayLocation(finding.location);
     const body = [
       "Severity: " + finding.severity,
       "Location: " + location,

@@ -24,6 +24,18 @@ export function parsePathsInput(value: string): string[] {
     .filter((line) => line.length > 0);
 }
 
+export function parseSbomInput(
+  value: string | undefined,
+  mode: "scan" | "diff",
+  paths: readonly string[],
+): string | undefined {
+  const path = value?.trim();
+  if (!path) return undefined;
+  if (mode === "diff" || paths.length > 0)
+    throw new Error("sbom requires scan mode and cannot be combined with paths.");
+  return path;
+}
+
 function isGlobPattern(pattern: string): boolean {
   return /[*?]/.test(pattern);
 }

@@ -1,4 +1,4 @@
-import type { DataInfo, Finding, ScanResult, Severity } from "../domain.js";
+import type { DataInfo, Finding, SourceLocation, ScanResult, Severity } from "../domain.js";
 import { severityValues } from "../domain.js";
 import type { Forecast } from "@velella/ebb/forecast";
 
@@ -38,6 +38,12 @@ export interface Reporter {
    */
   readonly commandRejection?: string;
   render(result: ScanResult, options?: ReporterOptions): string;
+}
+
+/** Formatter for reports that display a finding's file and position together. */
+export function displayLocation(location: SourceLocation): string {
+  if (location.jsonPointer) return `${location.path}#${location.jsonPointer}`;
+  return location.line ? `${location.path}:${location.line}` : location.path;
 }
 
 export const compare = (left: string, right: string): number => (left < right ? -1 : left > right ? 1 : 0);

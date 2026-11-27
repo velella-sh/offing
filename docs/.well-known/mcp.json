@@ -83,6 +83,10 @@
     {
       "name": "recommend_version",
       "description": "Say which release line of a runtime, image, GitHub Action, or package to write today, from Offing's bundled lifecycle data only. Never says latest and reads no network."
+    },
+    {
+      "name": "scan_sbom",
+      "description": "Scan a local CycloneDX, SPDX or Syft JSON SBOM offline and report component lifecycle risks and JSON Pointer locations."
     }
   ],
   "authentication": {

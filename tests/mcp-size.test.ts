@@ -82,9 +82,19 @@ test("every tool keeps its answer under 2,000 tokens on a large input, valid aga
       ]),
     );
 
+    const sbom = join(root, "many.sbom.json");
+    await writeFile(
+      sbom,
+      JSON.stringify({
+        descriptor: { name: "syft" },
+        artifacts: Array.from({ length: 40 }, () => ({ purl: "pkg:npm/request@2.88.2" })),
+      }),
+    );
+
     // Declared for every tool, so a new tool cannot be added without a large input here.
     const calls = {
       scan_repository: { repository_path: root },
+      scan_sbom: { sbom_path: sbom },
       list_deprecations: { repository_path: root },
       explain_deprecation: { finding_id: "npm.package.request.deprecated:package.json:5", repository_path: root },
       create_migration_context: { finding_id: "npm.package.request.deprecated:package.json:5", repository_path: root },

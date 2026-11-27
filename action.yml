@@ -18,6 +18,10 @@ inputs:
       a job-summary section per package. Leave empty to scan only path.
     required: false
     default: ""
+  sbom:
+    description: CycloneDX, SPDX or Syft JSON SBOM file under path. Use with scan mode and leave paths empty.
+    required: false
+    default: ""
   baseline:
     description: >-
       Optional baseline path relative to path. Leave empty to report every finding. On the first run of an
@@ -195,6 +199,7 @@ runs:
       env:
         INPUT_PATH: ${{ inputs.path }}
         INPUT_PATHS: ${{ inputs.paths }}
+        INPUT_SBOM: ${{ inputs.sbom }}
         INPUT_BASELINE: ${{ inputs.baseline }}
         INPUT_BASELINE-WARN-DAYS: ${{ inputs.baseline-warn-days }}
         INPUT_ON-EXPIRED: ${{ inputs.on-expired }}

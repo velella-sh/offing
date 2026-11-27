@@ -41,6 +41,7 @@ Finds lifecycle risks in a repository and prints each one with its severity, exa
 | `--format <format>` | Output format; see the table below. |
 | `--json` | Same as `--format json`. |
 | `--demo` | Scan an in-memory demo project that always has findings. Takes no path and cannot be combined with `--all`, `--baseline`, or `--write-status`. |
+| `--sbom <file\|->` | Read a local CycloneDX, SPDX or Syft JSON SBOM from a file or stdin. See [Scan an SBOM](SBOM_SCAN.md). |
 | `--fail-on <severity\|none>` | Exit `1` when at least one finding is at or above this severity. Severities, lowest to highest: `info`, `low`, `medium`, `high`, `critical`. Default: the config's `failOn`, else `none`. |
 | `--all <dir>` | Scan every Git repository found under `<dir>`. |
 | `--ignore <path>` | Skip a path or glob during the scan. Repeatable; overrides the config's `ignore` list. |

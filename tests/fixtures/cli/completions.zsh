@@ -18,7 +18,7 @@ _offing() {
     data) compadd status update --json --data-version ;;
     watch) compadd add remove run list --weekly --board --json ;;
     config) compadd validate --json ;;
-        scan) _arguments '--demo' '--json' '--format' '--baseline' '--baseline-warn-days' '--on-expired' '--today' '--write-status' '--interactive' '--fail-on' '--all' '--by-owner' '--data-version' '--only' '--exclude' '*:path:_files' ;;
+        scan) _arguments '--demo' '--sbom' '--json' '--format' '--baseline' '--baseline-warn-days' '--on-expired' '--today' '--write-status' '--interactive' '--fail-on' '--all' '--by-owner' '--data-version' '--only' '--exclude' '*:path:_files' ;;
         baseline) _arguments '--output' '--data-version' '*:path:_files' ;;
         forecast) _arguments '--months' '--as-of' '--today' '--svg' '--animate' '--timeline' '--json' '--format' '--data-version' '--ics' '--force' '*:path:_files' ;;
         forecast) _arguments '--months' '--as-of' '--today' '--timeline' '--json' '--format' '--data-version' '*:path:_files' ;;
