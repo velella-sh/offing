@@ -1,0 +1,1 @@
+- First run now reports confirmed offline Autopilot codemods in the first wave and gives the exact read-only preview command.

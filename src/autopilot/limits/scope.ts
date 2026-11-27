@@ -1,3 +1,4 @@
+import type { FilePatch } from "../../fix/types.js";
 import type { MigrationPacket } from "../../migration-packet.js";
 import { isAutopilotPath, type AutopilotConfig } from "./config.js";
 
@@ -38,4 +39,13 @@ export function createPathScope(
     const candidate = canonical(path);
     return !denied.has(candidate) && !protectedPath(candidate);
   };
+}
+
+/** Codemods are allowed only when every patch stays within scope and is free of secrets. */
+export function permitsCodemodPatches(
+  patches: readonly FilePatch[],
+  permits: (path: string) => boolean,
+  containsSecret: (text: string) => boolean,
+): boolean {
+  return patches.every(({ path, diff }) => permits(path) && !containsSecret(path) && !containsSecret(diff));
 }

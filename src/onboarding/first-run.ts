@@ -90,5 +90,12 @@ export async function runOnboarding(args: readonly string[], ctx: CommandContext
       history,
     ),
   );
+  // Historical forecasts have no equivalent Autopilot invocation.
+  if (asOf === undefined && scan.findings.length > 0) {
+    const { countFirstWaveCodemods } = await import("../autopilot/plan.js");
+    const count = await countFirstWaveCodemods(scan).catch(() => 0);
+    if (count > 0)
+      process.stdout.write(`Autopilot can fix ${count}; run offing autopilot . --dry-run --wave 0 to preview.\n`);
+  }
   return 0;
 }
