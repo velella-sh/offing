@@ -4,9 +4,10 @@ import { dirname, resolve } from "node:path";
 import { renderBadgeSvg } from "../badge.js";
 import type { Finding, ScanResult } from "../domain.js";
 import { renderJson, renderSarif } from "../reporters.js";
-import { required } from "../required.js";
+import { loadConfig } from "../config.js";
+import { applyPolicy, findingsAtSeverity } from "../policy.js";
 import { changedLines, planFixSuggestions, selectChangedAnnotations } from "./diff.js";
-import { parseAnnotations, parseGate, severityRank } from "./inputs.js";
+import { parseAnnotations, parseGate } from "./inputs.js";
 import { annotationFor, renderBadge } from "./render.js";
 import { scanInMode } from "./scan.js";
 import type { AnnotationScope, GitHubActionOptions, GitHubActionOutcome, LineRange } from "./types.js";
@@ -76,14 +77,14 @@ async function planAnnotations(
 export async function runGitHubAction(options: GitHubActionOptions): Promise<GitHubActionOutcome> {
   const root = resolve(options.root);
   const gate = parseGate(options.failOnSeverity);
+  const policy = (await loadConfig(root))?.policy;
   const scanned = await scanInMode(root, options);
-  const { result, expiredFailure, diff, packages, agent } = scanned;
+  const { expiredFailure, diff, packages, agent } = scanned;
+  const result = applyPolicy(scanned.result, policy, options.today ?? scanned.result.scannedAt.slice(0, 10));
   const { reportPath, sarifPath } = await writeReports(options, result);
 
-  const gateRank = gate === "none" ? Number.POSITIVE_INFINITY : required(severityRank.get(gate), "gate severity rank");
-  const gateFailed = result.findings.some(
-    (finding) => required(severityRank.get(finding.severity), "finding severity rank") >= gateRank,
-  );
+  const gateFailed = findingsAtSeverity(result.findings, gate).length > 0;
+  const policyFailed = (result.policy?.violations.length ?? 0) > 0;
   const badge = await writeBadge(options, result, expiredFailure);
   const planned = await planAnnotations(root, options, result);
 
@@ -96,7 +97,7 @@ export async function runGitHubAction(options: GitHubActionOptions): Promise<Git
     annotations: planned.annotations,
     unannotated: planned.unannotated,
     suggestions: planned.suggestions,
-    failed: expiredFailure || gateFailed,
+    failed: expiredFailure || gateFailed || policyFailed,
     gateFailed,
     gate,
     expiredFailure,

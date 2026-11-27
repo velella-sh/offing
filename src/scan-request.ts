@@ -4,7 +4,7 @@ import { evaluateBaseline, expiredSuppressionsFail, readBaseline } from "./basel
 import type { ExpiredPolicy } from "./baseline.js";
 import type { ScanResult } from "./domain.js";
 import type { ScanOptions } from "./engine/index.js";
-import { applyMinSupport } from "@velella/ebb/min-support";
+import { supportWarning } from "./policy.js";
 import { scanSbomFile } from "./sbom-scan.js";
 import { scanWithBuiltIns } from "./scan-builtins.js";
 
@@ -40,7 +40,7 @@ export async function runScanRequest(request: ScanRequest): Promise<ScanRequestO
     ? await scanSbomFile(request.sbom, request.root, true)
     : await scanWithBuiltIns(request.root, request.engine);
   const today = request.today ?? new Date().toISOString().slice(0, 10);
-  if (request.minSupportDays !== undefined) result = applyMinSupport(result, request.minSupportDays, today);
+  result = supportWarning(result, request.minSupportDays, today);
   if (!request.baselinePath) return { result, expiredFailure: false };
   const evaluated = evaluateBaseline(result, await readBaseline(resolve(request.root, request.baselinePath)), {
     today,

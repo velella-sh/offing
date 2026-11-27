@@ -1,9 +1,33 @@
+import type { OffingConfig } from "../config.js";
+import type { ScanSelection } from "../domain.js";
 import type { ActionableMessage } from "../errors.js";
 
 import { EXIT_CODES, type ErrorCode, type FailureClass } from "../offing-error.js";
 
 export { EXIT_CODES };
 export type { FailureClass };
+
+export interface Prepared {
+  readonly command: string;
+  readonly args: string[];
+  readonly positional: string[];
+  readonly findingId: string | undefined;
+  readonly pathArgument: string;
+  readonly demo: boolean;
+  readonly config: OffingConfig | undefined;
+  readonly dataVersionFlag: string | undefined;
+  readonly dataVersionIndex: number;
+  readonly format: string | undefined;
+  readonly formatIndex: number;
+  optionValue(name: string): string | undefined;
+  optionValues(name: string): string[];
+}
+
+export interface Gated extends Prepared {
+  readonly json: boolean;
+  readonly noCache: boolean;
+  readonly selection: ScanSelection | undefined;
+}
 
 /** Shared helpers a command handler needs. Command files take this instead of importing the CLI entry. */
 export interface CommandContext {
