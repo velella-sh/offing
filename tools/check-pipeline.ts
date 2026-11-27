@@ -227,12 +227,13 @@ export const TEST_FILE_GLOB = "dist/tests/**/*.test.js";
 export const HOOK_LATENCY_TEST = "dist/tests/agent-hooks-latency.test.js";
 
 /**
- * Files that spawn the CLI keep fixtures in their own mkdtemp directory, so more test
- * processes do not share temporary files. Twice the CPU count cut a warm run from about
- * 55s to about 36s on a 6-core machine; Node's default is one under the CPU count.
+ * CLI tests keep their fixtures private. Windows uses one worker per available CPU because
+ * the hosted suite also runs the linter and Action build and process startup competes for CPU.
+ * On other platforms, twice the CPU count has improved warm suite wall time.
  */
-export function testProcessArgs(parallelism = availableParallelism()): string[] {
-  return ["--test", `--test-concurrency=${parallelism * 2}`, TEST_FILE_GLOB];
+export function testProcessArgs(parallelism = availableParallelism(), platform = process.platform): string[] {
+  const workers = platform === "win32" ? parallelism : parallelism * 2;
+  return ["--test", `--test-concurrency=${workers}`, TEST_FILE_GLOB];
 }
 
 /**

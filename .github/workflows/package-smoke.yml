@@ -387,6 +387,24 @@ jobs:
             printf -- '- Offline campaign plan, state, MCP and standalone checker passed.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-campaign-board
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/campaign-board-tools"
+          mkdir -p "$tools"
+          cp .github/site-tools/package.json .github/site-tools/package-lock.json "$tools/"
+          (cd "$tools" && npm ci --ignore-scripts --no-audit --no-fund)
+          out="$RUNNER_TEMP/package-smoke"
+          package="$out/npm-install/node_modules/@velella/offing"
+          cli="$package/dist/src/cli.js"
+          node .github/scripts/acc-campaign-board.mjs "$cli" "$package" "$tools/node_modules" tests/fixtures/campaign-board/synthetic-state.json
+          {
+            printf '### acc-campaign-board\n\n'
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Installed CLI %s at %s\n' "$(node "$cli" --version)" "$GITHUB_SHA"
+            printf -- '- Released Mizzen and Lateen built a board from the synthetic state fixture.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build the Docker image and scan the fixture
         id: docker
         run: |

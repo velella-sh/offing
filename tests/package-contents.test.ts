@@ -3,6 +3,7 @@ import { execFile } from "node:child_process";
 import { readFile, readdir } from "node:fs/promises";
 import { test } from "node:test";
 import { promisify } from "node:util";
+import { packageBudget, readPackageReport } from "../tools/package-size-budget.js";
 
 const execute = promisify(execFile);
 
@@ -30,12 +31,19 @@ test("the npm tarball ships only the root package.json as a dependency manifest"
     maxBuffer: 16 * 1024 * 1024,
     shell: process.platform === "win32",
   });
-  const packed = JSON.parse(stdout) as Array<{ files: Array<{ path: string }> }> | { files: Array<{ path: string }> };
-  const files = (Array.isArray(packed) ? packed[0]?.files : packed.files) ?? [];
+  const packed = readPackageReport(stdout);
+  const budget = packageBudget(packed);
+  assert.ok(budget.passed, budget.summary);
+  const { files } = packed;
   const nested = files.map((file) => file.path).filter((path) => path !== "package.json" && NESTED_MANIFEST.test(path));
   assert.deepEqual(nested, [], "fixture and example manifests must stay out of the published tarball");
 
   const paths = files.map((file) => file.path);
+  assert.ok(paths.includes("examples/starters/slipway/README.md"));
+  assert.deepEqual(
+    paths.filter((path) => path.startsWith("examples/") && !path.startsWith("examples/starters/slipway/")),
+    ["examples/forecast/fleet.json"],
+  );
   assert.ok(
     paths.some((path) => path.endsWith("usage/vendor/tree-sitter/tree-sitter-python.wasm.b64")),
     "trimmed tree-sitter payloads must ship in the tarball",
@@ -72,4 +80,16 @@ test("runtime dependencies omit @vscode/tree-sitter-wasm and vendor only the gra
   );
   const vendor = await readdir("src/usage/vendor/tree-sitter");
   assert.deepEqual(new Set(vendor), TREE_SITTER_VENDOR_FILES);
+});
+
+test("the package budget applies both limits and reports the largest additions", () => {
+  const files = Array.from({ length: 1_450 }, (_, index) => ({ path: `old-${index}`, size: 1 }));
+  const baseline = { size: 2_000_000, entryCount: files.length, files };
+  assert.equal(packageBudget(baseline).passed, true);
+  assert.equal(packageBudget({ ...baseline, size: baseline.size + 1 }).passed, false);
+  const grown = [...files, { path: "new-large-file.js", size: 123 }];
+  const excess = packageBudget({ ...baseline, entryCount: grown.length, files: grown }, baseline);
+  assert.equal(excess.passed, false);
+  assert.match(excess.summary, /123 bytes  new-large-file\.js/);
+  assert.throws(() => readPackageReport("[]"), /complete file list/);
 });
