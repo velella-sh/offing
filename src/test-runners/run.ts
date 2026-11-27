@@ -113,18 +113,24 @@ async function runAttempt(
   return { attempt, repaired };
 }
 
-/** Records an explicitly approved test command and retries once when it reports a test failure. */
-export async function runApprovedTest(command: Command, execute: TestExecutor, timeoutMs: number): Promise<TestRun> {
+/** Records an approved test command, retrying once within the caller's optional monotonic deadline. */
+export async function runApprovedTest(
+  command: Command,
+  execute: TestExecutor,
+  timeoutMs: number,
+  deadline = Infinity,
+): Promise<TestRun> {
   if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 2_147_483_647) {
     throw new RangeError("Test timeout must be an integer between 1 and 2147483647 milliseconds.");
   }
-  const { attempt: first } = await runAttempt(command, execute, timeoutMs, new Set());
+  const remaining = () => Math.max(1, Math.min(timeoutMs, Math.ceil(deadline - performance.now())));
+  const { attempt: first } = await runAttempt(command, execute, remaining(), new Set());
   const result: TestRun = { schemaVersion: "offing.test-run.v1", command, attempts: [first], flaky: [] };
-  if (first.status !== "failed" || first.exitCode === null) return result;
+  if (first.status !== "failed" || first.exitCode === null || performance.now() >= deadline) return result;
   const { attempt: retry, repaired } = await runAttempt(
     command,
     execute,
-    timeoutMs,
+    remaining(),
     new Set(first.failures.map(testKey)),
   );
   result.attempts = [first, retry];

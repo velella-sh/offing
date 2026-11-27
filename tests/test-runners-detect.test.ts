@@ -39,7 +39,11 @@ const commands = {
     ["./.offing-venv/bin/python", "-m", "pip", "install", "--no-deps", "-r", "requirements.txt"],
     ["./.offing-venv/bin/python", "-m", "pytest"],
   ],
-  tox: [["python3", "-m", "tox"]],
+  tox: [
+    ["python3", "-m", "venv", ".offing-venv"],
+    ["./.offing-venv/bin/python", "-m", "pip", "install", "--no-deps", "-r", "requirements.txt"],
+    ["./.offing-venv/bin/python", "-m", "tox"],
+  ],
   go: [
     ["go", "build", "-mod=readonly", "./..."],
     ["go", "test", "-mod=readonly", "./..."],

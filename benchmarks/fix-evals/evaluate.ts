@@ -6,9 +6,9 @@ import { builtInDetectors } from "../../src/detectors/index.js";
 import { compareFindings } from "../../src/diff.js";
 import { scanRepository } from "../../src/engine/index.js";
 import { type Fixer, planFixReport, renderPatches } from "../../src/fix/index.js";
+import type { ContainerExecutor } from "../../src/test-runners/docker.js";
+import { type Profile, profiles } from "../../src/test-runners/profiles.js";
 import { runApprovedTest } from "../../src/test-runners/run.js";
-import type { BenchmarkExecutor } from "./docker.js";
-import { type Profile, profiles } from "./profiles.js";
 import { applyDiff, tempSource } from "./source.js";
 
 type Command = Parameters<typeof runApprovedTest>[0];
@@ -59,7 +59,7 @@ export const sha256 = (bytes: Buffer | string): string => createHash("sha256").u
 interface Options {
   output: string;
   fixers: Fixer[];
-  backend: (profile: Profile, root: string) => Promise<BenchmarkExecutor>;
+  backend: (profile: Profile, root: string) => Promise<ContainerExecutor>;
 }
 
 async function recordFile(root: string, file: string, bytes: Buffer | string): Promise<void> {
@@ -69,7 +69,7 @@ async function recordFile(root: string, file: string, bytes: Buffer | string): P
 
 async function recordCheck(
   command: Command,
-  execute: BenchmarkExecutor,
+  execute: ContainerExecutor,
   output: string,
   prefix: string,
   collectReports = false,

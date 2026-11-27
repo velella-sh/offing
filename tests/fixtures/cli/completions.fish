@@ -221,12 +221,14 @@ complete -c offing -n '__fish_seen_subcommand_from attest' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from attest' -l today
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l dry-run
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l prepare
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l replay
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l test-only
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l container
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l undo
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l wave
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l finding
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l to
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l agent
-complete -c offing -n '__fish_seen_subcommand_from autopilot' -l replay
 complete -c offing -n '__fish_seen_subcommand_from campaign-board' -l out
 complete -c offing -n '__fish_seen_subcommand_from campaign' -l fleet
 complete -c offing -n '__fish_seen_subcommand_from campaign' -l json

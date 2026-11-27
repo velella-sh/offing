@@ -10,7 +10,7 @@ import { Ajv2020 } from "ajv/dist/2020.js";
 
 import { fixers } from "../src/fix/index.js";
 import { runApprovedTest } from "../src/test-runners/run.js";
-import { dockerArgs, dockerExecArgs, sandbox } from "../benchmarks/fix-evals/docker.js";
+import { dockerArgs, dockerExecArgs, sandbox } from "../src/test-runners/docker.js";
 import { evaluate, type Case, type Input, sha256 } from "../benchmarks/fix-evals/evaluate.js";
 import { summarize } from "../benchmarks/fix-evals/report.js";
 import { fixtureSource, tempSource } from "../benchmarks/fix-evals/source.js";

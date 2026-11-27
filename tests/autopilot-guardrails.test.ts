@@ -52,6 +52,7 @@ test("autopilot config is optional and has the same nested validation and defaul
     allowedPaths: ["project with spaces/tests.good.js"],
     deniedPaths: ["private.txt"],
     tests: [["node", "--test", "test.js"]],
+    testRuntime: "container",
     secretEnv: ["MY_SECRET", "A_KEY_2"],
   };
   const invalid = [
@@ -61,6 +62,8 @@ test("autopilot config is optional and has the same nested validation and defaul
     { enabled: true },
     { driver: "bogus-driver" },
     { driver: null },
+    { testRuntime: "host" },
+    { testRuntime: null },
     { budget: [] },
     { budget: { total: {} } },
     { budget: { run: false } },

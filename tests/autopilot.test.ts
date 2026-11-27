@@ -50,6 +50,23 @@ async function repository(t: TestContext, withGit = true) {
 
 const autopilot = (root: string, ...args: string[]) => runCli(["autopilot", root, ...args]);
 
+test("container tests require explicit test-only intent and a selected runtime", async (t) => {
+  const root = await repository(t);
+  for (const args of [["--container"], ["--prepare", "--container"], ["--test-only", "--dry-run"]]) {
+    const result = await autopilot(root, ...args);
+    assert.equal(result.code, 2, result.stderr);
+    assert.match(result.stderr, /Usage: offing autopilot .*--test-only/);
+  }
+  const noRuntime = await autopilot(root, "--test-only");
+  assert.equal(noRuntime.code, 2, noRuntime.stderr);
+  assert.match(noRuntime.stderr, /Use --container or configure autopilot\.testRuntime/);
+  assert.equal(await git(root, "branch", "--list", "offing/autopilot/*"), "");
+  await writeFile(join(root, "uncommitted.txt"), "outside the approved snapshot");
+  const dirty = await autopilot(root, "--test-only", "--container");
+  assert.equal(dirty.code, 2, dirty.stderr);
+  assert.match(dirty.stderr, /requires a clean working tree/);
+});
+
 function recordPath(output: string): string {
   const path = /Run record: ([^\r\n]+)/.exec(output)?.[1];
   assert.ok(path, output);

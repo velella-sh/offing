@@ -40,3 +40,28 @@ lockfile is missing. Build tools may still resolve their own dependencies if som
 
 If the plan is empty, use the directory containing a supported manifest or add the required scripts or test tool
 configuration.
+
+## Run tests in the pinned container
+
+Use a clean Git checkout after reviewing the commit and its candidate commands. An explicit test-only request
+executes those repository commands inside the pinned Fix Evals sandbox.
+
+```bash
+offing autopilot ./project --test-only --container
+```
+
+Set `autopilot.testRuntime` to `"container"` in the committed `.offing.json` to omit `--container` from that
+command. Test-only uses one detected Linux runtime profile and honors committed `autopilot.tests` as literal
+argv. It has no local process fallback. The streamed snapshot excludes Git internals and stays separate from the
+original checkout. The sandbox uses an unprivileged user, a read-only image, temporary space, and limits on time,
+processes, CPU and memory. It has no network or host mounts. Tool image downloads happen before execution.
+
+The test environment uses the bundled Node, Python, Go or Java image. Supply any project dependencies as
+offline materials. npm can use `.npm-cache`, pnpm and modern Yarn can use a pinned Corepack archive named
+`.offing-corepack.tgz`, Python can use `.wheelhouse`, and Maven can use `.m2/repository`. A Gradle wrapper needs
+its own offline distribution. The .NET plan is available in Doctor with no pinned test-only profile yet.
+Go's container command uses vendored modules. Maven's native command uses its offline repository.
+
+The runtime retries a failed command once when time remains. Each attempt starts from the same clean snapshot
+and sets `OFFING_TEST_ATTEMPT` to `1` or `2`. A case is reported as flaky when JUnit evidence shows that it failed
+first and passed on retry. The command succeeds when its last attempt passes.
