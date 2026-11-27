@@ -1,3 +1,4 @@
+import { isIsoDate } from "@velella/ebb/registry";
 import { readFile, stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
@@ -39,7 +40,9 @@ async function compileSchema(): Promise<ValidateFunction<unknown>> {
   if (typeof schema !== "object" || schema === null || Array.isArray(schema)) {
     throw new Error("The packaged Offing config schema must be an object.");
   }
-  return new Ajv2020({ allErrors: true, allowUnionTypes: true, ownProperties: true }).compile<unknown>(schema);
+  return new Ajv2020({ allErrors: true, allowUnionTypes: true, ownProperties: true })
+    .addFormat("date", isIsoDate)
+    .compile<unknown>(schema);
 }
 
 function pointerFor(path: JSONPath): string {
@@ -65,8 +68,7 @@ function sourceLocations(text: string, file: string) {
   const keys = new Map<string, Position>();
   const errors: ConfigDiagnostic[] = [];
   const recordValue = (_offset: number, _length: number, line: number, column: number, path: () => JSONPath) => {
-    const parts = path();
-    if (parts.length <= 2) values.set(pointerFor(parts), { line: line + 1, column: column + 1 });
+    values.set(pointerFor(path()), { line: line + 1, column: column + 1 });
   };
   visit(
     text,
@@ -75,7 +77,7 @@ function sourceLocations(text: string, file: string) {
       onArrayBegin: recordValue,
       onLiteralValue: (_value, ...location) => recordValue(...location),
       onObjectProperty(key, _offset, _length, line, column, path) {
-        if (path().length === 0) keys.set(pointerFor([key]), { line: line + 1, column: column + 1 });
+        keys.set(pointerFor([...path(), key]), { line: line + 1, column: column + 1 });
       },
       onError(code, _offset, _length, line, column) {
         errors.push(
@@ -116,7 +118,7 @@ function schemaDiagnostic(
 ): ConfigDiagnostic {
   if (error.keyword === "additionalProperties") {
     const key = String(error.params.additionalProperty);
-    const pointer = pointerFor([key]);
+    const pointer = `${error.instancePath}${pointerFor([key])}`;
     return diagnostic(
       file,
       {

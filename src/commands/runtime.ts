@@ -26,11 +26,12 @@ import { builtInDetectors } from "../detectors/index.js";
 import { scanWithBuiltIns } from "../scan-builtins.js";
 import type { ScanSelection, ScanResult, Severity } from "../domain.js";
 import { severityValues } from "../domain.js";
-import { applyScanSelection, findRepositories, renderMultiScanText, scanProjects } from "../engine/index.js";
+import { applyScanSelection } from "../engine/index.js";
 import { invalidConfig, renderActionable, unreadablePath, type ActionableMessage } from "../errors.js";
 import { buildForecast } from "@velella/ebb/forecast";
 import { hasPersonalConfig } from "../init-personal.js";
-import { applyMinSupport, parseMinSupportDays } from "@velella/ebb/min-support";
+import { parseMinSupportDays } from "@velella/ebb/min-support";
+import { applyPolicy, policyViolationText, supportWarning } from "../policy.js";
 import { createMigrationPacket } from "../migration-packet.js";
 import { readPinnedRuntimes } from "../runtime-pin.js";
 import { isIsoDate } from "@velella/ebb/registry";
@@ -52,6 +53,13 @@ import { scanSbomFile } from "../sbom-scan.js";
 import { selectorValuesSummary, unknownSelectors } from "../scan-selectors.js";
 import { classifyError, DEFAULT_REASONS, type ErrorCode } from "../offing-error.js";
 import { EXIT_CODES, type CommandContext, type FailureClass } from "./types.js";
+import {
+  checkLookahead,
+  failOnSeverity,
+  multiScanPhase,
+  requestedLookahead,
+  scanPolicyDay,
+} from "./internal/scan-policy.js";
 
 export type { FailureClass };
 export { EXIT_CODES };
@@ -66,6 +74,7 @@ const valueOptions = new Set([
   "--today",
   "--as-of",
   "--min-support-days",
+  "--lookahead",
   "--baseline-warn-days",
   "--on-expired",
   "--all",
@@ -334,6 +343,10 @@ const FORMAT_COMMANDS = formatCommandGates();
 const SCAN_ONLY_FLAGS: readonly { readonly taken: (state: Prepared) => boolean; readonly rejection: string }[] = [
   { taken: (state) => state.demo, rejection: "--demo is only available for the scan command." },
   {
+    taken: (state) => state.args.includes("--lookahead"),
+    rejection: "--lookahead is only available for the scan command.",
+  },
+  {
     taken: (state) => state.args.includes("--write-status"),
     rejection: "--write-status is only available for the scan command.",
   },
@@ -428,50 +441,13 @@ function repositoryFlagProblem(state: Gated, all: AllDirectories, ctx: CommandCo
   return undefined;
 }
 
-/** Several paths, or every repository under `--all`, scanned and printed as one document. */
-async function multiScanPhase(state: Gated, allDirectory: string | undefined, ctx: CommandContext): Promise<number> {
-  if (state.format !== undefined && state.format !== "text" && state.format !== "json") {
-    return ctx.fail("usage", "Scanning several paths supports --json and --format text|json only.");
-  }
-  if (state.args.includes("--baseline") || state.args.includes("--write-status")) {
-    return ctx.fail("usage", "--baseline and --write-status are not available when scanning several paths.");
-  }
-  let found: string[] = [];
-  if (allDirectory !== undefined) {
-    try {
-      found = await findRepositories(allDirectory);
-    } catch (error) {
-      return ctx.fail(
-        "usage",
-        `Cannot read ${allDirectory}: ${error instanceof Error ? error.message : String(error)}`,
-      );
-    }
-  }
-  const paths = [...state.positional, ...found];
-  if (paths.length === 0) return ctx.fail("usage", `No Git repositories found in ${allDirectory}.`);
-  const multi = await scanProjects(paths, builtInDetectors, { noCache: state.noCache });
-  const selection = state.selection;
-  if (selection) {
-    multi.projects = multi.projects.map((project) => {
-      const result = applyScanSelection(project.result, selection);
-      return { ...project, findings: result.findings.length, result };
-    });
-    multi.total = {
-      projects: multi.projects.length,
-      findings: multi.projects.reduce((sum, project) => sum + project.findings, 0),
-    };
-  }
-  process.stdout.write(`${state.json ? JSON.stringify(multi, null, 2) : renderMultiScanText(multi)}\n`);
-  return 0;
-}
-
 /** `--all`, `--demo`, and the repository-root check. A multi-path scan is handled here and returns its exit code. */
 export async function repositoryPhase(state: Gated, ctx: CommandContext): Promise<number | undefined> {
   const all = allDirectoriesOption(state.args);
   const refusal = repositoryFlagProblem(state, all, ctx);
   if (refusal !== undefined) return refusal;
   if (state.command === "scan" && (state.positional.length > 1 || all.directory !== undefined)) {
-    return multiScanPhase(state, all.directory, ctx);
+    return preScanPhase(state, ctx) ?? multiScanPhase(state, all.directory, ctx);
   }
   if (!state.demo) {
     const rootProblem = await repositoryRootProblem(state.pathArgument);
@@ -528,7 +504,11 @@ export async function runScanPipeline(command: string, args: readonly string[], 
   if (typeof gated === "number") return gated;
   const takesFindingId = command === "explain" || command === "context" || command === "report-issue";
   if (takesFindingId && !gated.findingId) return ctx.fail("usage", "Missing finding ID.", `\n${ctx.help}`);
-  if (gated.args.includes("--sbom")) return runSbomScan(gated, ctx);
+  const lookaheadError = checkLookahead(gated, ctx);
+  if (lookaheadError !== undefined) return lookaheadError;
+  if (gated.args.includes("--sbom")) {
+    return preScanPhase(gated, ctx) ?? runSbomScan(gated, ctx);
+  }
   const early = await repositoryPhase(gated, ctx);
   if (early !== undefined) return early;
   const pre = preScanPhase(gated, ctx);
@@ -556,12 +536,17 @@ async function runScanFamily(state: Gated, ctx: CommandContext): Promise<number>
   if (state.command === "baseline") return writeBaselineFile(state, result);
   const suppressed = await suppressFromBaselines(state, result, asOfValue, ctx);
   if (typeof suppressed === "number") return suppressed;
-  const early = await printFindings(state, suppressed.result, asOfValue, ctx);
+  const reviewed =
+    state.command === "scan"
+      ? applyPolicy(suppressed.result, state.config?.policy, scanPolicyDay(state), requestedLookahead(state))
+      : suppressed.result;
+  const early = await printFindings(state, reviewed, asOfValue, ctx);
   if (early !== undefined) return early;
   if (suppressed.expiredFailure) {
     return ctx.fail("policy", "Failing because a baseline suppression has expired (--on-expired fail).");
   }
-  return failOnSeverity(state, suppressed.result, ctx);
+  const first = reviewed.policy?.violations[0];
+  return first ? ctx.fail("policy", policyViolationText(first)) : failOnSeverity(state, reviewed, ctx);
 }
 
 /** The scan every `scan`-family command reads, with the date, support, ignore, and selector filters in that order. */
@@ -577,8 +562,7 @@ async function scanWithFilters(
   const asOfValue = state.optionValue("--as-of") ?? state.optionValue("--today");
   let result = await scanInput(state);
   if (asOfValue !== undefined) result = await applyAsOf(result, asOfValue);
-  if (minSupportDays !== undefined)
-    result = applyMinSupport(result, minSupportDays, asOfValue ?? new Date().toISOString().slice(0, 10));
+  result = supportWarning(result, minSupportDays, scanPolicyDay(state));
   const ignorePatterns = state.args.includes("--ignore")
     ? state.optionValues("--ignore")
     : (state.config?.ignore ?? []);
@@ -760,20 +744,6 @@ async function renderScanReport(state: Gated, result: ScanResult, asOfValue: str
   }
   if (json) return renderJson(result);
   return renderText(result, { firstRun });
-}
-
-/** `--fail-on`: the policy gate on the scan's own severity floor. */
-function failOnSeverity(state: Gated, result: ScanResult, ctx: CommandContext): number {
-  if (state.command !== "scan") return 0;
-  const scanGate = state.optionValue("--fail-on") ?? state.config?.failOn ?? "none";
-  if (scanGate === "none") return 0;
-  const floor = severityValues.indexOf(scanGate as Severity);
-  const blocking = result.findings.filter((finding) => severityValues.indexOf(finding.severity) >= floor);
-  if (blocking.length === 0) return 0;
-  return ctx.fail(
-    "policy",
-    `${blocking.length} finding${blocking.length === 1 ? "" : "s"} at ${scanGate} or above (--fail-on ${scanGate}).`,
-  );
 }
 
 /** Context always has a finding id by the time runScanFamily runs; this keeps TypeScript aligned. */

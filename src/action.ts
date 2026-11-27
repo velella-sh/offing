@@ -157,10 +157,14 @@ function isForkPullRequest(event: PullRequestEvent): boolean {
   return head?.fork === true;
 }
 
-function expiredNote(outcome: GitHubActionOutcome): string {
-  return outcome.expiredFailure
+function policyFailureNote(outcome: GitHubActionOutcome): string {
+  const rules = [...new Set(outcome.result.policy?.violations.map(({ rule }) => rule))];
+  const expired = outcome.expiredFailure
     ? "\n> **Failed:** a baseline suppression has expired and `on-expired` is set to `fail`.\n"
     : "";
+  const policy =
+    rules.length > 0 ? `\n> **Failed lifecycle policy:** ${rules.map((rule) => `\`${rule}\``).join(", ")}.\n` : "";
+  return expired + policy;
 }
 
 function scanCommentBody(
@@ -187,7 +191,7 @@ function scanCommentBody(
   );
   const proposalNote = proposal ? `\n${renderBaselineProposal(proposal.path, proposal.baseline)}` : "";
   const forecastNote = forecast ? `\n${forecast}` : "";
-  const full = `${body}${expiredNote(outcome)}${proposalNote}${forecastNote}`;
+  const full = `${body}${policyFailureNote(outcome)}${proposalNote}${forecastNote}`;
   return limitPullRequestComment(full, () =>
     compactPullRequestComment(result.findings, gateFailed, gate, attribution, countdown),
   );
@@ -216,7 +220,7 @@ function stepSummaryBody(
   const proposalNote = proposal
     ? `\n> **Suggested baseline:** \`${proposal.path}\` does not exist yet, so this first run recorded its ${count} finding${plural(count)} in a baseline proposal on the pull request comment.\n`
     : "";
-  return `${summary}${expiredNote(outcome)}${proposalNote}${forecast ? `\n${forecast}` : ""}`;
+  return `${summary}${policyFailureNote(outcome)}${proposalNote}${forecast ? `\n${forecast}` : ""}`;
 }
 
 /** Posts or updates the one summary comment. A comment that cannot be posted warns without failing the scan. */

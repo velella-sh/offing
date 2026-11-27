@@ -65,6 +65,7 @@ complete -c offing -n '__fish_seen_subcommand_from scan' -l baseline-warn-days
 complete -c offing -n '__fish_seen_subcommand_from scan' -l today
 complete -c offing -n '__fish_seen_subcommand_from scan' -l write-status
 complete -c offing -n '__fish_seen_subcommand_from scan' -l interactive
+complete -c offing -n '__fish_seen_subcommand_from scan' -l lookahead
 complete -c offing -n '__fish_seen_subcommand_from scan' -l all
 complete -c offing -n '__fish_seen_subcommand_from scan' -l by-owner
 complete -c offing -n '__fish_seen_subcommand_from scan' -l data-version

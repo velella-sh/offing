@@ -1,3 +1,4 @@
+import type { PolicyViolation } from "./policy.js";
 import type {
   DataInfo,
   EvidenceSource,
@@ -189,6 +190,7 @@ export interface ScanResult {
   root: string;
   scannedAt: string;
   identity?: ScanIdentity;
+  policy?: { violations: PolicyViolation[] };
   findings: Finding[];
   unclassified?: UnclassifiedSummary;
   diagnostics: string[];

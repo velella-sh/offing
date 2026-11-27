@@ -5,7 +5,7 @@ import type { DiffResult } from "../diff.js";
 import type { DataInfo, Finding, ScanResult, Severity, SuppressionRef, SuppressionState } from "../domain.js";
 import { severityValues } from "../domain.js";
 import { buildForecast } from "@velella/ebb/forecast";
-import { required } from "../required.js";
+import { findingsAtSeverity, policyViolationText } from "../policy.js";
 import { describeData } from "../reporters.js";
 import { severityRank } from "./inputs.js";
 import { renderPrCountdown } from "./pr-countdown.js";
@@ -56,16 +56,16 @@ export function renderFailure(outcome: GitHubActionFailure): string | undefined 
 
   const reasons: string[] = [];
   if (outcome.gateFailed) {
-    const gateRank = required(severityRank.get(outcome.gate as Severity), "gate severity rank");
-    const count = outcome.result.findings.filter(
-      (finding) => required(severityRank.get(finding.severity), "finding severity rank") >= gateRank,
-    ).length;
+    const count = findingsAtSeverity(outcome.result.findings, outcome.gate).length;
     reasons.push(`${count} finding${count === 1 ? "" : "s"} met or exceeded the ${outcome.gate} severity gate`);
   }
   if (outcome.expiredFailure) {
     const count = outcome.result.suppressions?.expired.length ?? 0;
     reasons.push(`${count} baseline suppression${count === 1 ? "" : "s"} expired while on-expired is fail`);
   }
+
+  const first = outcome.result.policy?.violations[0];
+  if (first) reasons.push(policyViolationText(first).replace(/\.$/, ""));
 
   return `Offing failed: ${reasons.join("; ")}. JSON report: ${outcome.reportPath}. Next steps: review the annotations and JSON report, then fix the findings or update the baseline and rerun Offing.`;
 }

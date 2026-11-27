@@ -67,3 +67,8 @@ repos:
 ```
 
 The hook runs when the root `.offing.json` changes. Run `pre-commit run offing-config --all-files` to check it on demand.
+
+## Gate lifecycle findings
+
+Use [lifecycle policy](https://velella.sh/offing/POLICY/) to fail scans on named deadline,
+severity, ecosystem, or path conditions and document time-limited exceptions.
