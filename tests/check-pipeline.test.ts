@@ -252,15 +252,15 @@ test("a failed action build does not publish the bundle or diff it", async () =>
   assert.equal(diffed, false);
 });
 
-test("CLI tests get two processes per core because their temporary directories are private", () => {
-  assert.deepEqual(testProcessArgs(6), ["--test", "--test-concurrency=12", "dist/tests/**/*.test.js"]);
-  assert.deepEqual(testProcessArgs(1), ["--test", "--test-concurrency=2", "dist/tests/**/*.test.js"]);
+test("Windows CLI tests use one worker per core", () => {
+  assert.deepEqual(testProcessArgs(6, "win32"), ["--test", "--test-concurrency=6", "dist/tests/**/*.test.js"]);
+  assert.deepEqual(testProcessArgs(6, "linux"), ["--test", "--test-concurrency=12", "dist/tests/**/*.test.js"]);
 });
 
 test("coverage mode keeps the runner, concurrency, and glob of the plain test run", () => {
   const args = coverageTestArgs(1);
   assert.equal(args[0], "--test");
-  assert.equal(args[1], "--test-concurrency=2");
+  assert.equal(args[1], testProcessArgs(1)[1]);
   assert.equal(args.at(-1), "dist/tests/**/*.test.js");
   // One suite, one file argument.
   assert.equal(args.filter((arg) => arg.endsWith(".test.js")).length, 1);

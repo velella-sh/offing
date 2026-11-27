@@ -10,6 +10,11 @@ on:
       - ".github/**"
       - "action.yml"
   workflow_dispatch:
+    inputs:
+      windows_timing:
+        description: Run the Windows test scheduling verification.
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -56,3 +61,23 @@ jobs:
           -ignore 'reusable workflow call "\$/.+" at "uses" is not following the format'
       - name: Audit the workflows and the Action with zizmor
         run: '"${RUNNER_TEMP}/zizmor" --persona=regular .github action.yml'
+
+  windows-timing:
+    if: github.event_name == 'workflow_dispatch' && inputs.windows_timing
+    runs-on: windows-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - run: git config --global core.autocrlf false
+      - uses: $/.github/actions/setup
+        with:
+          node-version: 24
+          cache: ''
+      - name: Verify the full Windows suite under its existing timing budget
+        env:
+          OFFING_HOOK_LATENCY: '0'
+        run: npm run check
