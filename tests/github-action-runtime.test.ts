@@ -3,7 +3,7 @@ import { execFileSync, spawn } from "node:child_process";
 import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { after, test } from "node:test";
 
 import { parse as parseYaml } from "yaml";
@@ -16,6 +16,7 @@ import { scanRepository } from "../src/engine/index.js";
 import type { Finding } from "../src/domain.js";
 import { renderBadgeSvg } from "../src/badge.js";
 import { renderBadge, renderFailure, runGitHubAction } from "../src/github-action.js";
+import { changedLines } from "../src/github-action/diff.js";
 import { validateMigrationPacket } from "../src/migration-packet.js";
 
 import { copyFixtureTree } from "./fixture-copies.js";
@@ -1115,13 +1116,52 @@ test("acc-ai-pr-review reconciles only its current bot-authored threads and leav
   assert.deepEqual(writes, []);
 });
 
-test("acc-ai-pr-review replays Claude, Copilot, Codex, Jules and Devin payloads with a recorded lifecycle diff", async (t) => {
+interface RecordedProviderDiff {
+  path: string;
+  status: "added" | "modified";
+  hunks: Array<{ oldStart: number; newStart: number; lines: string }>;
+  addedRanges: Array<{ start: number; end: number }>;
+}
+
+/** Rebuild line positions from the provider's recorded hunk classes without storing or executing source. */
+function neutralProviderFiles(diff: RecordedProviderDiff): { before: string; after: string } {
+  const before: string[] = [];
+  const after: string[] = [];
+  const context = () => {
+    const line = `unchanged_${before.length}`;
+    before.push(line);
+    after.push(line);
+  };
+  for (const hunk of diff.hunks) {
+    while (before.length < Math.max(0, hunk.oldStart - 1)) context();
+    assert.equal(after.length, hunk.newStart - 1);
+    for (const kind of hunk.lines) {
+      if (kind === "C") context();
+      else if (kind === "A") after.push(`added_${after.length}`);
+      else if (kind === "D") before.push(`deleted_${before.length}`);
+      else assert.fail("Unknown recorded diff line class.");
+    }
+  }
+  return { before: before.join("\n") + "\n", after: after.join("\n") + "\n" };
+}
+
+test("acc-ai-pr-review replays five recorded provider payloads and diffs with a common positive lifecycle case", async (t) => {
   const { root, base } = await gitRepositoryWithFinding();
-  const repo = { full_name: "owner/project" };
   const fixture = resolve("tests/fixtures/agent-review");
   const recordings = JSON.parse(await readFile(join(fixture, "provider-replays.json"), "utf8")) as {
     cases: Array<{
       provider: string;
+      observed: {
+        pullRequest: string;
+        number: number;
+        login: string;
+        actorType: string;
+        headRef: string;
+        headCommit: string;
+        baseRepository: string;
+        headRepository: string;
+        diff: RecordedProviderDiff;
+      };
       pullRequest: { user: { login: string }; head: { ref: string } };
       commitMessage?: string;
       commit?: Record<string, unknown>;
@@ -1129,7 +1169,9 @@ test("acc-ai-pr-review replays Claude, Copilot, Codex, Jules and Devin payloads 
     }>;
   };
   const eventPath = join(root, "provider-event.json");
+  let replayBase = base;
   let revision = "";
+  let endpoint = "";
   let commits: unknown[] = [];
   const bodies: Array<{ commit_id: string; comments: Array<{ path: string; line: number; body: string }> }> = [];
   const server = createServer(async (request, response) => {
@@ -1142,7 +1184,7 @@ test("acc-ai-pr-review replays Claude, Copilot, Codex, Jules and Devin payloads 
             repository: {
               pullRequest: {
                 state: "OPEN",
-                baseRefOid: base,
+                baseRefOid: replayBase,
                 headRefOid: revision,
                 reviews: { nodes: [] },
                 reviewThreads: { nodes: [], pageInfo: { hasNextPage: false } },
@@ -1151,7 +1193,7 @@ test("acc-ai-pr-review replays Claude, Copilot, Codex, Jules and Devin payloads 
           },
         }),
       );
-    assert.equal(request.url, "/repos/owner/project/pulls/17/reviews");
+    assert.equal(request.url, endpoint);
     const parts = [];
     for await (const chunk of request) parts.push(String(chunk));
     bodies.push(JSON.parse(parts.join("")));
@@ -1163,50 +1205,77 @@ test("acc-ai-pr-review replays Claude, Copilot, Codex, Jules and Devin payloads 
   assert.ok(address && typeof address === "object");
   assert.equal(recordings.cases.length, 5);
   for (const sample of recordings.cases) {
+    const { observed } = sample;
+    assert.equal(observed.actorType, "Bot");
+    assert.equal(observed.pullRequest, `https://github.com/${observed.baseRepository}/pull/${observed.number}`);
+    assert.match(observed.headCommit, /^[a-f0-9]{40}$/u);
     git(root, ["checkout", "--quiet", "--detach", base]);
+    const { before, after } = neutralProviderFiles(observed.diff);
+    const file = join(root, observed.diff.path);
+    await mkdir(dirname(file), { recursive: true });
+    if (observed.diff.status === "modified") {
+      await writeFile(file, before);
+      git(root, ["add", "--", observed.diff.path]);
+      git(root, ["commit", "--quiet", "-m", "Replay the recorded baseline line classes"]);
+    }
+    replayBase = git(root, ["rev-parse", "HEAD"]).trim();
+    await writeFile(file, after);
     git(root, ["apply", join(fixture, "checkout.patch")]);
-    git(root, ["add", ".github/workflows/ci.yml"]);
+    git(root, ["add", "--", ".github/workflows/ci.yml", observed.diff.path]);
     git(root, ["commit", "--quiet", "-m", sample.commitMessage ?? "Review fixture"]);
     revision = git(root, ["rev-parse", "HEAD"]).trim();
-    commits = sample.commit ? [{ sha: revision, ...sample.commit }] : [];
-    await writeFile(
-      eventPath,
-      JSON.stringify({
-        pull_request: {
-          number: 17,
-          user: sample.pullRequest.user,
-          base: { sha: base, repo },
-          head: { ...sample.pullRequest.head, sha: revision, repo },
-        },
-      }),
-    );
-    const run = await runActionFixture(
-      root,
-      {
-        GITHUB_EVENT_NAME: "pull_request",
-        GITHUB_EVENT_PATH: eventPath,
-        GITHUB_REPOSITORY: repo.full_name,
-        GITHUB_API_URL: `http://127.0.0.1:${address.port}`,
-        INPUT_MODE: "diff",
-        "INPUT_AGENT-REVIEW": "true",
-        "INPUT_GITHUB-TOKEN": "fixture-token",
-        "INPUT_FAIL-ON-SEVERITY": "none",
-        OFFING_DATA_VERSION: "bundled",
-      },
-      process.env.OFFING_ACTION_FOR_REVIEW_TEST,
-    );
-    assert.equal(run.code, 0, sample.provider);
-    assert.ok(run.summary.includes(`Agent attribution: ${sample.signal}.`), sample.provider);
-    const payload = bodies.at(-1);
-    assert.ok(payload, sample.provider);
-    assert.equal(payload.commit_id, revision, sample.provider);
     assert.deepEqual(
-      payload.comments.map(({ path, line }) => [path, line]),
-      [[".github/workflows/ci.yml", 4]],
+      changedLines(root, `${replayBase}..${revision}`).get(observed.diff.path),
+      observed.diff.addedRanges,
       sample.provider,
     );
+    const repo = { full_name: observed.baseRepository };
+    const headRepo = { full_name: observed.headRepository };
+    endpoint = `/repos/${repo.full_name}/pulls/${observed.number}/reviews`;
+    commits = sample.commit ? [{ sha: revision, ...sample.commit }] : [];
+    const execute = async (login: string, ref: string, signal: string) => {
+      await writeFile(
+        eventPath,
+        JSON.stringify({
+          pull_request: {
+            number: observed.number,
+            user: { login, type: observed.actorType },
+            base: { sha: replayBase, repo },
+            head: { ref, sha: revision, repo: headRepo },
+          },
+        }),
+      );
+      const run = await runActionFixture(
+        root,
+        {
+          GITHUB_EVENT_NAME: "pull_request",
+          GITHUB_EVENT_PATH: eventPath,
+          GITHUB_REPOSITORY: repo.full_name,
+          GITHUB_API_URL: `http://127.0.0.1:${address.port}`,
+          INPUT_MODE: "diff",
+          "INPUT_AGENT-REVIEW": "true",
+          "INPUT_GITHUB-TOKEN": "fixture-token",
+          "INPUT_FAIL-ON-SEVERITY": "none",
+          OFFING_DATA_VERSION: "bundled",
+        },
+        process.env.OFFING_ACTION_FOR_REVIEW_TEST,
+      );
+      assert.equal(run.code, 0, sample.provider);
+      assert.ok(run.summary.includes(`Agent attribution: ${signal}.`), sample.provider);
+      const payload = bodies.at(-1);
+      assert.ok(payload, sample.provider);
+      assert.equal(payload.commit_id, revision, sample.provider);
+      assert.deepEqual(
+        payload.comments.map(({ path, line }) => [path, line]),
+        [[".github/workflows/ci.yml", 4]],
+        sample.provider,
+      );
+    };
+    await execute(observed.login, observed.headRef, "author-login");
+    if (sample.signal !== "author-login")
+      await execute(sample.pullRequest.user.login, sample.pullRequest.head.ref, sample.signal);
   }
-  assert.equal(bodies.length, 5);
+  assert.equal(bodies.length, 8);
 });
 
 test("acc-ai-pr-review replays the fork signal and separate read/write jobs without checking out fork content", async (t) => {
