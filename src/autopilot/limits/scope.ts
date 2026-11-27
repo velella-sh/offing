@@ -21,6 +21,7 @@ function protectedPath(path: string): boolean {
     path.startsWith(".github/workflows/") ||
     parts.some((part) => part.startsWith(".env") || part === ".git" || /^\.?git~\d+$/u.test(part)) ||
     /(?:^id_(?:rsa|dsa|ecdsa|ed25519)(?:_sk)?$|\.(?:pem|key|ppk|p12|pfx|keystore|jks)$)/.test(name) ||
+    name === ".offing.json" ||
     lockfile.test(name)
   );
 }

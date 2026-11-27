@@ -114,7 +114,7 @@ async function deleteRunBranch(git: Git, root: string, branch: string, baseCommi
 
 export interface AutopilotCheckout {
   evidenceDirectory: string;
-  git(...args: string[]): Promise<string>;
+  git: (...args: string[]) => Promise<string>;
 }
 
 export async function withAutopilotWorktree(
@@ -190,7 +190,7 @@ async function registeredTrees(git: Git, root: string, temporary: string) {
   });
 }
 
-export async function undoAutopilotWorktree(path: string, id: string | undefined): Promise<string> {
+async function findRun(path: string, id: string | undefined) {
   const localGit = restrictedGit();
   const root = await repositoryRoot(localGit, path);
   const inspectGit = await withoutFilters(localGit, root);
@@ -201,7 +201,72 @@ export async function undoAutopilotWorktree(path: string, id: string | undefined
       trees.length > 1 && id === undefined ? ` Choose a run ID: ${trees.map((tree) => tree.id).join(", ")}.` : "";
     throw new OffingError("invalid-argument", `No unique prepared Autopilot worktree found.${detail}`);
   }
-  const git = withoutHooks(inspectGit, location.record);
+  return { root, location, git: withoutHooks(inspectGit, location.record) };
+}
+
+async function scanRecordedBase(git: Git, root: string, base: string): Promise<ScanResult> {
+  const folder = await mkdtemp(join(await realpath(tmpdir()), "offing-autopilot-base-"));
+  const tree = join(folder, "checkout");
+  let added = false;
+  try {
+    await git(root, "worktree", "add", "--quiet", "--detach", tree, base);
+    added = true;
+    return await scanLoopCheckout(tree);
+  } finally {
+    if (added) await git(root, "worktree", "remove", tree);
+    await rmdir(folder);
+  }
+}
+
+export async function resumeAutopilotWorktree(
+  path: string,
+  id: string,
+  resume: (tree: string, checkout: AutopilotCheckout, run: AutopilotRun, before: ScanResult) => Promise<void>,
+) {
+  const { root, location, git } = await findRun(path, id);
+  if (
+    !(await lstat(location.tree).catch(() => undefined))?.isDirectory() ||
+    !(await readBaseCommit(location).catch(() => undefined))
+  ) {
+    throw new OffingError("invalid-argument", "Invalid Autopilot run record.");
+  }
+  const lock = join(location.directory, "resume.lock");
+  await writeFile(lock, "", { flag: "wx", mode: 0o600 }).catch(() => {
+    throw new OffingError("invalid-argument", "This Autopilot run already has a resume lock.");
+  });
+  try {
+    const { checkedAutopilotRun } = await import("../proof/document.js");
+    const run = await checkedAutopilotRun(await readJsonFile(location.record, 1024 * 1024));
+    if (run.state !== "stopped" || run.stopReason !== "recording-exhausted" || !run.replay || !run.checkout) {
+      throw new OffingError("invalid-argument", "Resume requires a replay stopped at the end of its recording.");
+    }
+    const checkout = { evidenceDirectory: location.directory, git: (...args: string[]) => git(location.tree, ...args) };
+    await checkReplayCheckout(checkout, run.checkout.branch, run.replay.head, run.checkout.baseCommit);
+    await resume(location.tree, checkout, run, await scanRecordedBase(git, root, run.checkout.baseCommit));
+    await saveRecord(location.record, run);
+    return { location, run };
+  } finally {
+    await unlink(lock);
+  }
+}
+
+async function checkReplayCheckout(checkout: AutopilotCheckout, branch: string, head: string, base: string) {
+  const { git } = checkout;
+  if (
+    (await git("symbolic-ref", "-q", "HEAD").catch(() => "")).trim() !== "refs/heads/" + branch ||
+    (await git("rev-parse", "HEAD")).trim() !== head ||
+    !(await git("merge-base", "--is-ancestor", base, head).then(
+      () => true,
+      () => false,
+    )) ||
+    (await git("status", "--porcelain", "--untracked-files=all", "--ignored", "--ignore-submodules=none"))
+  ) {
+    throw new OffingError("invalid-argument", "Autopilot can resume only its unchanged recorded worktree and branch.");
+  }
+}
+
+export async function undoAutopilotWorktree(path: string, id: string | undefined): Promise<string> {
+  const { root, location, git } = await findRun(path, id);
   const entries = await readdir(location.directory).catch(() => []);
   if (entries.some((name) => name !== "checkout" && name !== recordName)) {
     throw new OffingError("invalid-argument", "Autopilot preserved the checkout and its recorded migration evidence.");

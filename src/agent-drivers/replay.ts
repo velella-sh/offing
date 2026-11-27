@@ -140,14 +140,15 @@ interface ReplayGuardrails {
   environment?: NodeJS.ProcessEnv;
   now?: () => number;
   started?: number;
+  used?: BudgetUsage;
   beforeTurn?: (number: number) => Promise<(path: string) => boolean>;
-  afterTurn?: (number: number, files: readonly string[]) => Promise<boolean>;
+  afterTurn?: (number: number, files: readonly string[], usage: BudgetUsage) => Promise<boolean>;
 }
 
 function guardrails(options: ReplayGuardrails) {
   return {
     permits: createPathScope(options.config, options.packets, options.testFiles),
-    budget: createBudget(options.config.budget, options.now, options.started),
+    budget: createBudget(options.config.budget, options.now, options.started, options.used),
     ...childEnvironments(options.environment ?? process.env, "replay", options.config.secretEnv),
   };
 }
@@ -357,7 +358,7 @@ async function replayTurns(
     await applyReplayTurn(data.root, turn, usage, guard, confirm);
     for (const path of files) progress.applied.add(path);
     progress.completed = number;
-    if (await options?.afterTurn?.(number, files)) break;
+    if (await options?.afterTurn?.(number, files, usage)) break;
   }
   if (stopped) rejectBudget(stopped);
 }

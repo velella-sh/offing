@@ -9,8 +9,13 @@ type Admission =
   | { stop: Stop }
   | { limits: Limits; check(usage: BudgetUsage): Stop | null; finish(usage: BudgetUsage): Stop | null };
 
-export function createBudget(budget: AutopilotConfig["budget"], now = () => performance.now(), started = now()) {
-  const spent: BudgetUsage = { turns: 0, tokens: 0, costCents: 0 };
+export function createBudget(
+  budget: AutopilotConfig["budget"],
+  now = () => performance.now(),
+  started = now(),
+  used: BudgetUsage = { turns: 0, tokens: 0, costCents: 0 },
+) {
+  const spent = { ...used };
   let active = false;
   let stop: Stop | null = null;
 

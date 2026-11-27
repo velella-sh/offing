@@ -45,12 +45,41 @@
         "baseCommit": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }
       }
     },
-    "stopReason": { "type": "string", "minLength": 1 }
+    "stopReason": { "type": "string", "minLength": 1 },
+    "replay": {
+      "description": "Local replay checkpoint and observable progress.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "context", "usage", "elapsedMs", "tests", "turn", "resume"],
+      "properties": {
+        "head": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+        "context": { "$ref": "#/$defs/digest" },
+        "usage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["turns", "tokens", "costCents"],
+          "properties": {
+            "turns": { "$ref": "#/$defs/count" },
+            "tokens": { "$ref": "#/$defs/count" },
+            "costCents": { "$ref": "#/$defs/count" }
+          }
+        },
+        "elapsedMs": { "$ref": "#/$defs/count" },
+        "tests": { "enum": ["pending", "passed", "failed", "unavailable"] },
+        "turn": { "$ref": "#/$defs/count" },
+        "resume": { "$ref": "#/$defs/count" },
+        "previous": { "$ref": "#/$defs/digest" },
+        "remaining": { "$ref": "#/$defs/count" },
+        "introduced": { "$ref": "#/$defs/count" }
+      }
+    }
   },
   "if": { "properties": { "state": { "const": "stopped" } } },
   "then": { "required": ["stopReason"] },
   "else": { "not": { "required": ["stopReason"] } },
   "$defs": {
+    "count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "state": {
       "enum": ["scan", "plan", "baseline-tests", "codemods", "agent-turn", "tests", "verify", "done", "stopped"]
     }
