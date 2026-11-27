@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import type { ValidateFunction } from "ajv";
+import { Ajv2020 } from "ajv/dist/2020.js";
 import { isIsoDate } from "@velella/ebb/registry";
 import { visit, type JSONPath } from "jsonc-parser";
 
@@ -25,7 +26,6 @@ export interface LocatedPolicy {
 let validator: Promise<ValidateFunction<FleetPolicyDocument>> | undefined;
 
 async function schemaValidator(): Promise<ValidateFunction<FleetPolicyDocument>> {
-  const { Ajv2020 } = await import("ajv/dist/2020.js");
   const path = await findPackageFile("schemas/fleet-policy.v1.schema.json", import.meta.url);
   const schema: unknown = JSON.parse(await readFile(path, "utf8"));
   if (typeof schema !== "object" || schema === null || Array.isArray(schema)) {
