@@ -152,6 +152,7 @@ test("no tool, resource, or prompt changes the repository tree", async () => {
       scan_repository: { repository_path: root },
       image_lineage: { repository_path: root },
       campaign_status: { state_path: resolve("docs/spec/campaign/conformance/valid-state.json") },
+      stack_context: { repository_path: root },
       simulate_upgrade: { repository_path: root, targets: ["nodejs@22"], as_of: "2026-01-01", effort: true },
       scan_sbom: { sbom_path: sbom },
       list_deprecations: { repository_path: root },

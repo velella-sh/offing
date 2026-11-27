@@ -1,0 +1,44 @@
+{
+  "request": {
+    "name": "stack_context",
+    "arguments": {
+      "repository_path": "<repository>"
+    }
+  },
+  "response": {
+    "schemaVersion": "offing.stack-context.v1",
+    "asOf": "<current day>",
+    "dataDate": "2026-11-11",
+    "status": "known",
+    "components": [
+      {
+        "kind": "runtime",
+        "component": "nodejs",
+        "inUse": "20",
+        "status": "known",
+        "endOfLife": "2026-04-30",
+        "ruleId": "nodejs.runtime.eol-20",
+        "source": "https://github.com/nodejs/Release/blob/main/schedule.json",
+        "supportedVersions": [
+          {
+            "version": "22",
+            "endOfLife": "2027-04-30",
+            "ruleId": "nodejs.runtime.eol-22",
+            "source": "https://github.com/nodejs/Release/blob/main/schedule.json"
+          }
+        ]
+      }
+    ],
+    "avoid": [
+      {
+        "kind": "package",
+        "component": "pkg:npm/request",
+        "ruleId": "npm.package.request.deprecated",
+        "replacement": "Native fetch or a maintained HTTP client",
+        "endOfLife": "2020-02-11",
+        "source": "https://www.npmjs.com/package/request"
+      }
+    ],
+    "omitted": 0
+  }
+}

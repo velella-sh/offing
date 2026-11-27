@@ -110,6 +110,7 @@ test("every tool keeps its answer under 2,000 tokens on a large input, valid aga
       scan_repository: { repository_path: root },
       image_lineage: { repository_path: root },
       campaign_status: { state_path: statePath },
+      stack_context: { repository_path: root },
       simulate_upgrade: { repository_path: root, targets: ["nodejs@22"], as_of: "2026-01-01", effort: true },
       scan_sbom: { sbom_path: sbom },
       list_deprecations: { repository_path: root },
@@ -144,6 +145,12 @@ test("every tool keeps its answer under 2,000 tokens on a large input, valid aga
 
       if (name === "agent_guard") {
         assert.equal(answer.more, undefined, "a verdict carries one finding at most");
+        continue;
+      }
+
+      if (name === "stack_context") {
+        assert.ok(tokens <= 1_000, `stack_context: ${tokens} estimated tokens`);
+        assert.equal(typeof answer.omitted, "number", "the document carries its own omission count");
         continue;
       }
 

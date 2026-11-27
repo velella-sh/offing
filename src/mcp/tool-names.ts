@@ -16,6 +16,7 @@ export const MCP_TOOL_NAMES = [
   "image_lineage",
   "simulate_upgrade",
   "campaign_status",
+  "stack_context",
 ] as const;
 
 export type McpToolName = (typeof MCP_TOOL_NAMES)[number];
@@ -38,6 +39,7 @@ export const MCP_OUTPUT_SCHEMA_FILES = {
   image_lineage: "lineage.v1.schema.json",
   simulate_upgrade: "whatif.v1.schema.json",
   campaign_status: "campaign-state.v1.schema.json",
+  stack_context: "stack-context.v1.schema.json",
 } as const satisfies Record<McpToolName, string>;
 
 /** MCP hints shared by every tool: read-only, idempotent, closed-world, and non-destructive. */
@@ -66,6 +68,8 @@ export const MCP_TOOL_MORE_HINTS = {
   recommend_version: "The complete answer: offing recommend <product> --json.",
   scan_sbom: "The complete report: offing scan --sbom <file> --json.",
   simulate_upgrade: "The complete report: offing forecast <path> --target <runtime>@<version> --effort --json.",
+  stack_context:
+    "Call scan_repository for complete dependency findings or use offing lookup for a release's lifecycle rules.",
   image_lineage: "The complete report: offing lineage <path> --json.",
   campaign_status: "The complete state: offing campaign status <state.json> --json.",
 } as const satisfies Record<Exclude<McpToolName, "agent_guard">, string>;

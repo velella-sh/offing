@@ -144,6 +144,10 @@ export async function runHook(
   const pin = (options.env ?? process.env).OFFING_DATA_VERSION;
   if (pin) configureActiveData({ pinnedVersion: pin });
   const read = options.stdin ?? readStdin;
+  if (argv[0] === "session-start") {
+    const { runSessionStart } = await import("./session-start.js");
+    return runSessionStart(argv.slice(1), read);
+  }
   const response = await hookResponse(argv, await read().catch(() => ""), options);
   if (response.stdout !== "") process.stdout.write(response.stdout);
   if (response.stderr !== "") process.stderr.write(response.stderr);

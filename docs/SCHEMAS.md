@@ -148,6 +148,12 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/fleet-forecast" label="Fleet forecast fields"}
 
+### Stack context
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/stack-context.v1.schema.json)
+
+::schema-table{data="publicSchemas/stack-context" label="Stack context fields"}
+
 ### Stack inventory
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/inventory.v1.schema.json)

@@ -238,3 +238,7 @@ npx @velella/offing watch remove ~/code/my-app  # stop watching
 The project list and what each digest already reported live in `~/.config/offing/watch.json` (honoring `XDG_CONFIG_HOME`). A finding is reported again only when its deadline changes. A project that cannot be scanned is named in the digest and keeps its history. Scans stay offline.
 
 For a weekly reminder, run it from cron or a login script, for example `0 9 * * 1 npx @velella/offing watch --weekly`. `--json` prints an `offing.watch.v1` document.
+
+## Session-start context
+
+`offing init --hooks` installs a supported host's session-start command alongside its file-write hooks. It reads reviewed lifecycle evidence when the project has a current local scan cache. See the [stack context guide](STACK_CONTEXT.md) for supported hosts and output.

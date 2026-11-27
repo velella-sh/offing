@@ -27,6 +27,8 @@ export interface ScanFileSystem {
   /** Size and modification time. Rejects when the path does not exist. */
   stat(path: string): Promise<FileStat>;
   exists(path: string): Promise<boolean>;
+  /** Resolves aliases for paths on filesystems that support them. */
+  realPath?(path: string): Promise<string>;
   /** Writes `content` to `path`, creating parent directories first. */
   writeText(path: string, content: string): Promise<void>;
   /** Writes `content` to a sibling temporary file, then renames it over `path`, so readers never see half a file. */

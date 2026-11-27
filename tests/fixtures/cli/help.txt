@@ -94,6 +94,7 @@ Usage:
   offing forecast [path] --target <runtime@version> [--target <runtime@version>] [--effort] [--format markdown|json]
   offing forecast --fleet <fleet.json> --target <runtime@version> [--format markdown|json]
   offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol
+  offing hook session-start <host>   # supply cached lifecycle evidence at session start
   offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one detected agent host
   offing init --hooks --list [path]   # show agent hook stability and availability
   offing init --hooks --remove [--hooks-for <host>] [path] [--dry-run]   # remove managed agent hooks

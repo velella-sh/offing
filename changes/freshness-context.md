@@ -1,0 +1,1 @@
+- Add versioned local stack context through MCP and supported agent session-start hooks.

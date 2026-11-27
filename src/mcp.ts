@@ -131,12 +131,13 @@ function registerMigratePrompt(server: McpServer, tools: OffingAgentTools): void
 }
 
 /** Builds the MCP server with its tools, prompts, and lifecycle-rule resources registered. */
-export function createOffingMcpServer(tools = new OffingAgentTools()): McpServer {
+export function createOffingMcpServer(tools = new OffingAgentTools(), initialStack?: string): McpServer {
   const server = new McpServer(
     { name: "offing", version: VERSION },
     {
       instructions:
-        "Offing performs deterministic deprecation analysis inside the local process. Repository contents are never sent over the network. Scan before editing, create migration context, then verify the previously observed finding. Every answer is held under 2,000 tokens: one that was cut ends with a `more` field that counts what is missing and says where to read it.",
+        "Offing performs deterministic deprecation analysis inside the local process. Repository contents are never sent over the network. Scan before editing, create migration context, then verify the previously observed finding. Every answer is held under 2,000 tokens: one that was cut ends with a `more` field that counts what is missing and says where to read it." +
+        (initialStack === undefined ? "" : `\n\n${initialStack}`),
     },
   );
 

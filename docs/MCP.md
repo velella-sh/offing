@@ -166,6 +166,7 @@ The pointer is published as `more.v1.schema.json`. Every tool schema carries the
 | `forecast_repository` | `repository_path?`, `months?`, `as_of?` | `ebb.forecast.v1` (`forecast.v1.schema.json`) | What reaches a dated end of life in the coming months: buckets by how many months away each event is, listing the events that affect this repository, then the same events by month. |
 | `recommend_version` | `product`, `minimumSupportDays?`, `as_of?` | `offing.recommend.v1` (`recommend.v1.schema.json`) | Which release line to write today (a name such as `node`, or a Package URL), from bundled lifecycle data only: the recommended line and its end date, alternatives, lines to avoid, and sources. `no-data` is not a statement that any version is safe. |
 | `simulate_upgrade` | `targets`, `repository_path?`, `as_of?`, `months?`, `effort?` | `offing.whatif.v1` (`whatif.v1.schema.json`) | Compare independent runtime changes using local pin, blocker and forecast evidence. |
+| `stack_context` | Read observed runtime pins, reviewed support dates, and replacements for known packages or APIs. | [stack-context.v1.schema.json](https://velella.sh/offing/schemas/stack-context.v1.schema.json) |
 | `image_lineage` | `repository_path?` | `offing.lineage.v1` (`lineage.v1.schema.json`) | Trace a repository’s container image bases with exact file and line evidence offline. |
 | `campaign_status` | `state_path` | `offing.campaign-state.v1` (`campaign-state.v1.schema.json`) | Validate and read saved campaign batches and repository status offline. |
 | `scan_sbom` | `sbom_path`, `repository_path?` | `offing.scan.v1` (`scan.v1.schema.json`) | Scan a local CycloneDX, SPDX or Syft JSON file offline and report findings at JSON Pointer locations. |
@@ -408,3 +409,7 @@ Verification is deliberately conservative. Offing remembers the original finding
 - Tool results can include file paths and short source excerpts already present in findings; the local MCP host receives those results so it can act on them.
 
 The versioned JSON contracts live in `schemas/`: `scan.v1.schema.json`, `deprecations.v1.schema.json`, `finding.v1.schema.json`, `context.v1.schema.json`, `verification.v1.schema.json`, `check.v1.schema.json`, `upgrade.v1.schema.json`, `check-snippet.v1.schema.json`, `forecast.v1.schema.json`, `plan.v1.schema.json`, and `recommend.v1.schema.json`, one per tool, and `more.v1.schema.json` for the pointer.
+
+## Session-start context
+
+Hosts can read `offing://stack/context` for the server workspace or call `stack_context` with a repository path. The server adds a short summary to its startup instructions when its workspace has a current local scan cache. See the [stack context guide](STACK_CONTEXT.md).

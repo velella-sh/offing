@@ -486,6 +486,36 @@
       "prompt": "Check the saved campaign status for the pinned repositories in batch two.",
       "tool": "campaign_status",
       "reason": "The existing state contains pinned batch assignments."
+    },
+    {
+      "id": "stack-session-support",
+      "prompt": "I'm starting a coding session. What runtime pins and support dates should I keep in mind?",
+      "tool": "stack_context",
+      "reason": "Session context summarizes observed pins and dated lifecycle rules."
+    },
+    {
+      "id": "stack-context-handoff",
+      "prompt": "Give me a short stack context handoff with lifecycle status for our current runtime versions.",
+      "tool": "stack_context",
+      "reason": "The stack context tool returns a bounded summary of pins and reviewed lifecycle evidence."
+    },
+    {
+      "id": "stack-api-replacements",
+      "prompt": "At session startup, list APIs and packages I should avoid in this stack, with replacements.",
+      "tool": "stack_context",
+      "reason": "Separate avoidance entries include confirmed usages or packages and reviewed replacements."
+    },
+    {
+      "id": "stack-supported-release-lines",
+      "prompt": "For my session context, which runtime release lines still have announced support in this project?",
+      "tool": "stack_context",
+      "reason": "Stack context can show supported release lines for the runtimes the project pins."
+    },
+    {
+      "id": "stack-freshness-budget",
+      "prompt": "Give me a token-bounded stack context before I start making changes to this codebase.",
+      "tool": "stack_context",
+      "reason": "The stack context report is intended for session start and has a fixed budget."
     }
   ]
 }
