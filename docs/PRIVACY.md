@@ -13,7 +13,7 @@ The plugin launches the exact published `offing` npm version recorded in its man
 
 ## Lifecycle data channel
 
-Scans use no network. The one exception is `offing data update`, which you run yourself to fetch newer lifecycle rules between releases. Rules ship inside each release; that command downloads a public release list and two public files (the signed bundle and its signature) from the project's GitHub releases, verifies the Sigstore signature offline against a trusted root that ships in the package, and activates the new rules only after verification succeeds. If verification fails, Offing keeps the rules bundled with the installed release and reports why. Pinning with `--data-version` or `OFFING_DATA_VERSION` makes CI use an exact verified bundle (or `bundled`). It sends nothing about you or your repository. See [Lifecycle data](DATA.md).
+Local scans use no network. You can run `offing data update` to fetch newer lifecycle rules between releases. Rules ship inside each release; that command downloads a public release list and two public files (the signed bundle and its signature) from the project's GitHub releases, verifies the Sigstore signature offline against a trusted root that ships in the package, and activates the new rules only after verification succeeds. If verification fails, Offing keeps the rules bundled with the installed release and reports why. Pinning with `--data-version` or `OFFING_DATA_VERSION` makes CI use an exact verified bundle (or `bundled`). It sends nothing about you or your repository. See [Lifecycle data](DATA.md).
 
 ## Command and surface access
 
@@ -27,6 +27,7 @@ Supply-chain scanners correctly report that the published package can read files
 | **CLI `usage`** | Reads the local usage-log file when logging was enabled | `OFFING_USAGE_LOG`, or `--file` | None | None |
 | **CLI `baseline`** | Reads the scan path; writes `.offing-baseline.json` (or `--output`) | Same data-pin and cache variables as `scan` | None | None |
 | **CLI `report-issue`** | Reads the scan path and a few lines of the declaring file; optional `--output` write | Same data-pin and cache variables as `scan` | None | None (prints Markdown; never opens an issue) |
+| **CLI `fleet`** | Reads a requested repository list and pinned detector inputs in temporary directories. Stores counts and rule keys in a local commit-keyed cache. Output includes repository metadata and findings aggregates | `GITHUB_TOKEN`, `GH_TOKEN`, or `GITLAB_TOKEN` for host access | Git reads pinned trees. When no GitHub token is in the environment, reads the existing token through `gh auth token` | Contacts only the selected host and GitHub's archive download origin. The scan engine runs offline |
 | **CLI `rollup`** | Reads the saved report JSON files you name (and optional `--owners` file) | None beyond process defaults | None | None |
 | **CLI `inventory`** | Reads only the export files named on the command line and the bundled or cached lifecycle data; no cloud or cluster API | `EBB_DATA_DIR` / cache home variables for lifecycle data | None | None |
 | **CLI `sbom enrich`**, `export` | Reads the SBOM (CycloneDX or SPDX 2.3) or bundled/cached lifecycle data; prints enriched JSON or CLE snapshots to stdout; leaves the input unchanged | Data-pin and cache variables as above | None | None |

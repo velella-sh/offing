@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { promisify } from "node:util";
 
+import { detectorSparsePatterns } from "../src/detector-inputs.js";
 import { builtInDetectors } from "../src/detectors/index.js";
 import type { DetectorInputs } from "../src/sdk.js";
 import { directorySize } from "./corpus-cost.js";
@@ -35,25 +36,13 @@ export interface FetchOutcome {
 
 const GIT_ENV = { ...process.env, GIT_TERMINAL_PROMPT: "0" };
 
-/** `Package.JSON` becomes `[Pp]ackage.[Jj][Ss][Oo][Nn]`: git sparse-checkout patterns are case-sensitive, declarations are not. */
-function caseInsensitive(text: string): string {
-  return text.replace(/[A-Za-z]/g, (letter) => `[${letter.toLowerCase()}${letter.toUpperCase()}]`);
-}
-
-/** Sparse-checkout patterns (gitignore syntax) for every file any detector's declaration allows it to read. */
+/** Sparse-checkout patterns for every file any built-in detector can read. */
 export function sparsePatterns(
   declarations: readonly DetectorInputs[] = builtInDetectors.flatMap((detector) =>
     detector.inputs ? [detector.inputs] : [],
   ),
 ): string[] {
-  const patterns = new Set<string>();
-  for (const inputs of declarations) {
-    for (const name of inputs.fileNames ?? []) patterns.add(caseInsensitive(name));
-    for (const extension of [...(inputs.extensions ?? []), ...(inputs.sourceExtensions ?? [])])
-      patterns.add(`*${caseInsensitive(extension)}`);
-    for (const directory of inputs.directories ?? []) patterns.add(`${directory.replace(/\/+$/, "")}/`);
-  }
-  return [...patterns].sort();
+  return detectorSparsePatterns(declarations);
 }
 
 /** Identifies the declarations a sparse checkout was built from; a change to what detectors read changes it. */

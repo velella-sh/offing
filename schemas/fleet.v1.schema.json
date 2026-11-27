@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://velella.sh/offing/schemas/fleet.v1.schema.json",
+  "title": "Offing fleet result v1",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "offing.fleet.v1"
+    },
+    "repositories": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "findings": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "severities": {
+      "$ref": "#/$defs/counts"
+    },
+    "byProduct": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    },
+    "byOwner": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    },
+    "byRepository": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/repository"
+      }
+    },
+    "deadlines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/deadline"
+      }
+    },
+    "repositoryStatus": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/status"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "repositories",
+    "findings",
+    "severities",
+    "byProduct",
+    "byOwner",
+    "byRepository",
+    "deadlines",
+    "repositoryStatus"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "low": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "medium": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "high": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "critical": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "additionalProperties": false
+    },
+    "group": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "findings": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "repositories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "severities": {
+          "$ref": "#/$defs/counts"
+        }
+      },
+      "required": [
+        "name",
+        "findings",
+        "repositories",
+        "severities"
+      ],
+      "additionalProperties": false
+    },
+    "repository": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "findings": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "severities": {
+          "$ref": "#/$defs/counts"
+        },
+        "nearestDeadline": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "deadlines": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "findings",
+        "severities",
+        "deadlines"
+      ],
+      "additionalProperties": false
+    },
+    "deadline": {
+      "type": "object",
+      "properties": {
+        "deadline": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "findings": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "repositories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "deadline",
+        "findings",
+        "repositories"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "defaultBranch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "commit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+        },
+        "status": {
+          "enum": [
+            "scanned",
+            "cached",
+            "skipped",
+            "failed"
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "host",
+        "defaultBranch",
+        "commit",
+        "status",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

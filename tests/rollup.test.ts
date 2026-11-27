@@ -304,7 +304,7 @@ test("templates/rollup contains a valid GitHub Pages workflow and owners file", 
   assert.ok(downloadStep, "download step must exist");
   assert.equal(downloadStep.with?.["run-id"], "${{ github.event.workflow_run.id }}");
   assert.equal(downloadStep.with?.["github-token"], "${{ secrets.GITHUB_TOKEN }}");
-  assert.equal(downloadStep.with?.pattern, "offing-report-*");
+  assert.equal(downloadStep.with?.name, "offing-fleet");
 
   const deployJob = workflow.jobs?.deploy;
   assert.ok(deployJob, "deploy job must exist");

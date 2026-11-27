@@ -75,6 +75,8 @@ Usage:
   offing config validate [path] [--json]
   offing drivers list
   offing drivers test <driver|command>
+  offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs
+  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>]
   offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol
   offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one detected agent host
   offing init --hooks --list [path]   # show agent hook stability and availability
@@ -135,6 +137,7 @@ Examples:
   offing completions zsh > ~/.zfunc/_offing
   offing config validate
   offing drivers test replay
+  offing fleet my-organization --json --jobs 4
   offing hook claude-code
   offing lsp
   offing migrate <finding-id> --agent 'my-agent "$OFFING_MIGRATION_PROMPT_FILE"'

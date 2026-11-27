@@ -40,6 +40,7 @@ complete -c offing -n __fish_use_subcommand -a capabilities
 complete -c offing -n __fish_use_subcommand -a completions
 complete -c offing -n __fish_use_subcommand -a config
 complete -c offing -n __fish_use_subcommand -a drivers
+complete -c offing -n __fish_use_subcommand -a fleet
 complete -c offing -n __fish_use_subcommand -a hook
 complete -c offing -n __fish_use_subcommand -a lsp
 complete -c offing -n __fish_use_subcommand -a migrate
@@ -188,6 +189,21 @@ complete -c offing -n '__fish_seen_subcommand_from report-issue' -l output
 complete -c offing -n '__fish_seen_subcommand_from report-issue' -l data-version
 complete -c offing -n '__fish_seen_subcommand_from capabilities' -l json
 complete -c offing -n '__fish_seen_subcommand_from config' -l json
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l include
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l exclude
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l topic
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l repos
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l jobs
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l gitlab
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l gitlab-url
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l include-forks
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l include-archived
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l json
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l html
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l format
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l no-cache
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l fail-on
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l progress
 complete -c offing -n '__fish_seen_subcommand_from hook' -l fail-on
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l agent
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l driver

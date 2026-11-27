@@ -66,3 +66,20 @@ export function declaresInput(inputs: DetectorInputs, path: string): boolean {
     (prefix) => normalized.startsWith(prefix) || normalized.includes(`/${prefix}`),
   );
 }
+
+function gitCasePattern(text: string): string {
+  return text.replace(/[A-Za-z]/g, (letter) => `[${letter.toLowerCase()}${letter.toUpperCase()}]`);
+}
+
+/** Non-cone Git sparse checkout patterns for a set of detector input declarations. */
+export function detectorSparsePatterns(declarations: readonly DetectorInputs[]): string[] {
+  const patterns = new Set<string>();
+  for (const { fileNames, extensions, sourceExtensions, directories } of declarations) {
+    for (const name of fileNames ?? []) patterns.add(gitCasePattern(name));
+    for (const extension of [...(extensions ?? []), ...(sourceExtensions ?? [])]) {
+      patterns.add(`*${gitCasePattern(extension)}`);
+    }
+    for (const directory of directories ?? []) patterns.add(`${trimTrailingSlashes(directory)}/`);
+  }
+  return [...patterns].sort();
+}

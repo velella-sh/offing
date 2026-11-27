@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { basename, dirname, extname } from "node:path";
 
 import { severityValues } from "./domain.js";
-import type { ScanResult, Severity } from "./domain.js";
+import type { Finding, ScanResult, Severity } from "./domain.js";
 import { required } from "./required.js";
 import { OffingError } from "./offing-error.js";
 
@@ -54,11 +54,110 @@ export interface RollupResult {
   deadlines: RollupDeadline[];
 }
 
+export type RollupFinding = Pick<Finding, "ruleId" | "severity" | "deadline">;
+
+export interface FleetRepositoryStatus {
+  readonly name: string;
+  readonly host: string;
+  readonly defaultBranch: string | null;
+  readonly commit: string | null;
+  readonly status: "scanned" | "cached" | "skipped" | "failed";
+  readonly reason: string | null;
+}
+
+export interface FleetResult extends Omit<RollupResult, "schemaVersion"> {
+  schemaVersion: "offing.fleet.v1";
+  repositoryStatus: FleetRepositoryStatus[];
+}
+
+export type RollupDocument = RollupResult | FleetResult;
+
+const fleetStatuses = new Set(["scanned", "cached", "skipped", "failed"]);
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isCount(value: unknown): boolean {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+}
+
+function isCountRecord(value: unknown): boolean {
+  return isRecord(value) && severityValues.every((severity) => isCount(value[severity]));
+}
+
+function isStringArray(value: unknown): boolean {
+  return Array.isArray(value) && value.every((item) => typeof item === "string");
+}
+
+function isFleetGroup(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    typeof value.name === "string" &&
+    isCount(value.findings) &&
+    isCountRecord(value.severities) &&
+    isStringArray(value.repositories)
+  );
+}
+
+function isFleetRepository(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    typeof value.name === "string" &&
+    isCount(value.findings) &&
+    isCountRecord(value.severities) &&
+    isStringArray(value.deadlines) &&
+    (value.owner === undefined || typeof value.owner === "string")
+  );
+}
+
+function isFleetDeadline(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    typeof value.deadline === "string" &&
+    isCount(value.findings) &&
+    isStringArray(value.repositories)
+  );
+}
+
+function isFleetStatus(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    typeof value.name === "string" &&
+    typeof value.host === "string" &&
+    (value.defaultBranch === null || typeof value.defaultBranch === "string") &&
+    (value.commit === null || typeof value.commit === "string") &&
+    typeof value.status === "string" &&
+    fleetStatuses.has(value.status) &&
+    (value.reason === null || typeof value.reason === "string")
+  );
+}
+
+function isFleetResult(value: unknown): value is FleetResult {
+  return (
+    isRecord(value) &&
+    value.schemaVersion === "offing.fleet.v1" &&
+    isCount(value.findings) &&
+    isCount(value.repositories) &&
+    isCountRecord(value.severities) &&
+    Array.isArray(value.byProduct) &&
+    value.byProduct.every(isFleetGroup) &&
+    Array.isArray(value.byOwner) &&
+    value.byOwner.every(isFleetGroup) &&
+    Array.isArray(value.byRepository) &&
+    value.byRepository.every(isFleetRepository) &&
+    Array.isArray(value.deadlines) &&
+    value.deadlines.every(isFleetDeadline) &&
+    Array.isArray(value.repositoryStatus) &&
+    value.repositoryStatus.every(isFleetStatus)
+  );
+}
+
 /** A repository's scan report and who owns it. */
 export interface RollupInput {
   repository: string;
   owner?: string;
-  report: Pick<ScanResult, "findings">;
+  report: { findings: readonly RollupFinding[] };
 }
 
 /** Resolves repository name from a scan report file path or matrix artifact path. */
@@ -205,7 +304,7 @@ async function readJson(path: string): Promise<unknown> {
  * report file or directory, so `payments.json` or `offing-report-payments.json` is `payments`.
  * `ownersFile` is a JSON object mapping repository names to owners.
  */
-export async function rollupFiles(reportPaths: readonly string[], ownersFile?: string): Promise<RollupResult> {
+export async function rollupFiles(reportPaths: readonly string[], ownersFile?: string): Promise<RollupDocument> {
   if (reportPaths.length === 0) throw new RollupError("Give at least one scan report (offing scan --json).");
   const owners = ownersFile === undefined ? {} : await readJson(ownersFile);
   if (
@@ -217,18 +316,106 @@ export async function rollupFiles(reportPaths: readonly string[], ownersFile?: s
     throw new RollupError(`${ownersFile} must be a JSON object mapping repository names to owner names.`);
   }
   const inputs: RollupInput[] = [];
+  const fleet: FleetResult[] = [];
+  const ownerByRepository = owners as Record<string, string>;
   for (const path of reportPaths) {
-    const report = (await readJson(path)) as Partial<ScanResult> | null;
+    const raw = await readJson(path);
+    if (isFleetResult(raw)) {
+      fleet.push(raw);
+      continue;
+    }
+    const report = raw as Partial<ScanResult> | null;
     if (report?.schemaVersion !== "offing.scan.v1" || !Array.isArray(report.findings))
-      throw new RollupError(`${path} is not an offing.scan.v1 report.`);
+      throw new RollupError(`${path} is not an offing.scan.v1 or offing.fleet.v1 report.`);
     const repository = repositoryNameFromPath(path);
-    const owner = (owners as Record<string, string>)[repository];
+    const owner = Object.hasOwn(ownerByRepository, repository) ? ownerByRepository[repository] : undefined;
     inputs.push({ repository, ...(owner === undefined ? {} : { owner }), report: { findings: report.findings } });
   }
-  return rollup(inputs);
+  const local = rollup(inputs);
+  if (fleet.length === 0) return local;
+  return mergeFleetReports([local, ...fleet], ownerByRepository);
 }
 
-export function renderRollupText(result: RollupResult): string {
+function addCounts(target: SeverityCounts, source: SeverityCounts): void {
+  for (const severity of severityValues) target[severity] += source[severity];
+}
+
+function mergeGroups(groups: readonly RollupGroup[]): RollupGroup[] {
+  const map = new Map<string, { findings: number; repositories: Set<string>; severities: SeverityCounts }>();
+  for (const group of groups) {
+    const value = map.get(group.name) ?? { findings: 0, repositories: new Set<string>(), severities: emptyCounts() };
+    value.findings += group.findings;
+    for (const repo of group.repositories) value.repositories.add(repo);
+    addCounts(value.severities, group.severities);
+    map.set(group.name, value);
+  }
+  return sortedGroups(map);
+}
+
+function mergeFleetReports(reports: readonly RollupDocument[], owners: Record<string, string>): FleetResult {
+  const repos = new Map<string, RepoAccumulator>();
+  const deadlines = new Map<string, { findings: number; repositories: Set<string> }>();
+  const statuses = new Map<string, FleetRepositoryStatus>();
+  const severities = emptyCounts();
+  let findings = 0;
+  for (const report of reports) {
+    addCounts(severities, report.severities);
+    findings += report.findings;
+    for (const repo of report.byRepository) {
+      const owner = Object.hasOwn(owners, repo.name) ? owners[repo.name] : repo.owner;
+      const accumulator = repositoryFor(repos, {
+        repository: repo.name,
+        ...(owner === undefined ? {} : { owner }),
+        report: { findings: [] },
+      });
+      accumulator.findings += repo.findings;
+      addCounts(accumulator.severities, repo.severities);
+      for (const day of repo.deadlines) accumulator.deadlines.add(day);
+    }
+    for (const day of report.deadlines) {
+      const value = deadlines.get(day.deadline) ?? { findings: 0, repositories: new Set<string>() };
+      value.findings += day.findings;
+      for (const repo of day.repositories) value.repositories.add(repo);
+      deadlines.set(day.deadline, value);
+    }
+    if (report.schemaVersion === "offing.fleet.v1") {
+      for (const status of report.repositoryStatus)
+        statuses.set(JSON.stringify([status.host, status.name, status.commit]), status);
+    }
+  }
+  const byRepository = repositorySummaries(repos);
+  return {
+    schemaVersion: "offing.fleet.v1",
+    repositories: repos.size,
+    findings,
+    severities,
+    byProduct: mergeGroups(reports.flatMap((report) => report.byProduct)),
+    byOwner: repositoryOwners(byRepository),
+    byRepository,
+    deadlines: deadlineSummaries(deadlines),
+    repositoryStatus: [...statuses.values()].sort(
+      (a, b) =>
+        a.name.localeCompare(b.name, "en") ||
+        a.host.localeCompare(b.host, "en") ||
+        (a.commit ?? "").localeCompare(b.commit ?? "", "en"),
+    ),
+  };
+}
+
+function repositoryOwners(repositories: readonly RollupRepository[]): RollupGroup[] {
+  return mergeGroups(
+    repositories
+      .filter(({ findings }) => findings > 0)
+      .map((repo) => ({
+        name: repo.owner ?? UNOWNED,
+        findings: repo.findings,
+        repositories: [repo.name],
+        severities: repo.severities,
+      })),
+  );
+}
+
+export function renderRollupText(result: RollupDocument): string {
   const lines = [`Offing rollup: ${result.findings} findings across ${result.repositories} repositories`];
   const section = (title: string, groups: RollupGroup[]): void => {
     if (groups.length === 0) return;
@@ -250,6 +437,12 @@ export function renderRollupText(result: RollupResult): string {
         .map((severity) => `${repo.severities[severity]} ${severity}`);
       const deadline = repo.nearestDeadline ? `; nearest deadline ${repo.nearestDeadline}` : "";
       lines.push(`  ${repo.name}: ${repo.findings} (${counts.join(", ") || "0 findings"}${deadline})`);
+    }
+  }
+  if (result.schemaVersion === "offing.fleet.v1") {
+    lines.push("", "Fleet scan status:");
+    for (const repo of result.repositoryStatus) {
+      lines.push(`  ${repo.name}: ${repo.status}${repo.reason ? ` (${repo.reason})` : ""}`);
     }
   }
   section("By product", result.byProduct);
@@ -289,7 +482,7 @@ function severityBadges(severities: SeverityCounts): string {
   return parts.length > 0 ? parts.join("") : `<span class="badge clean">clean</span>`;
 }
 
-function repositoryRows(result: RollupResult): string[] {
+function repositoryRows(result: RollupDocument): string[] {
   return result.byRepository.map((repo) => {
     const owner = repo.owner ? escapeHtml(repo.owner) : `<span class="meta">${UNOWNED}</span>`;
     const deadline = repo.nearestDeadline
@@ -307,7 +500,7 @@ function repositoryRows(result: RollupResult): string[] {
   });
 }
 
-function deadlineTableRows(result: RollupResult): string[] {
+function deadlineTableRows(result: RollupDocument): string[] {
   return result.deadlines.map((dl) => {
     const repos = dl.repositories.map((r) => `<code>${escapeHtml(r)}</code>`).join(", ");
     return [
@@ -320,7 +513,7 @@ function deadlineTableRows(result: RollupResult): string[] {
   });
 }
 
-function productTableRows(result: RollupResult): string[] {
+function productTableRows(result: RollupDocument): string[] {
   return result.byProduct.map((group) => {
     const repos = group.repositories.map((r) => `<code>${escapeHtml(r)}</code>`).join(", ");
     return [
@@ -334,7 +527,7 @@ function productTableRows(result: RollupResult): string[] {
   });
 }
 
-function ownerTableRows(result: RollupResult): string[] {
+function ownerTableRows(result: RollupDocument): string[] {
   return result.byOwner.map((group) => {
     const repos = group.repositories.map((r) => `<code>${escapeHtml(r)}</code>`).join(", ");
     return [
@@ -362,11 +555,20 @@ function tableSection(heading: string, columns: readonly string[], rows: readonl
   ];
 }
 
+function fleetStatusTable(result: RollupDocument): string[] {
+  if (result.schemaVersion !== "offing.fleet.v1") return [];
+  const rows = result.repositoryStatus.map(
+    (repo) =>
+      `<tr><td>${escapeHtml(repo.name)}</td><td>${escapeHtml(repo.status)}</td><td>${escapeHtml(repo.reason ?? "")}</td></tr>`,
+  );
+  return tableSection("Fleet scan status", ["Repository", "Status", "Reason"], rows);
+}
+
 /**
  * Renders rollup results as a self-contained static HTML page for GitHub Pages: inline styles,
  * no external requests, no scripts (CSP enforces this), and deterministic layout.
  */
-export function renderRollupHtml(result: RollupResult): string {
+export function renderRollupHtml(result: RollupDocument): string {
   const data = JSON.stringify(result, null, 2).replace(/</g, "\\u003c");
 
   const repoRows = repositoryRows(result);
@@ -408,6 +610,8 @@ export function renderRollupHtml(result: RollupResult): string {
     ...tableSection("By product", ["Product", "Findings", "Repositories", "Severities"], productRows),
     ...tableSection("By owner", ["Owner", "Findings", "Repositories", "Severities"], ownerRows),
   );
+
+  sections.push(...fleetStatusTable(result));
 
   sections.push(`<script type="application/json" id="offing-rollup">${data}</script>`, "</body>", "</html>");
 

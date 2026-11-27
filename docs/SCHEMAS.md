@@ -178,6 +178,12 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/agent-run" label="Agent driver run fields"}
 
+### Fleet scan
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/fleet.v1.schema.json)
+
+::schema-table{data="publicSchemas/fleet" label="Fleet scan fields"}
+
 ## Internal formats
 
 | Schema | Repository use |
