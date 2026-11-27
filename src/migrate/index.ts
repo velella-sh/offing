@@ -128,6 +128,7 @@ async function migrateFinding(
       prompt: instructions + prompt,
       worktreePath: worktree,
       timeoutMs: options.timeoutMs,
+      allowedPaths: allowedChangePaths({ findingPath: finding.location.path, relatedPaths: affectedFiles }),
     });
     if (result.exitCode !== 0) {
       const failure = result.timedOut

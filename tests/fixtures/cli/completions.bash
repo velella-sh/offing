@@ -5,7 +5,7 @@ _offing() {
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   command="${COMP_WORDS[1]}"
   if [ "$COMP_CWORD" -eq 1 ]; then
-    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions config hook lsp migrate prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
+    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions config drivers hook lsp migrate prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
     return
   fi
   case "$prev" in
@@ -19,6 +19,7 @@ _offing() {
     data) opts="status update --json --data-version" ;;
     watch) opts="add remove run list --weekly --board --json" ;;
     config) opts="validate --json" ;;
+    drivers) opts="list test" ;;
     scan) opts="--demo --sbom --json --format --baseline --baseline-warn-days --on-expired --today --write-status --interactive --fail-on --lookahead --all --by-owner --data-version --only --exclude" ;;
     baseline) opts="--output --data-version" ;;
     forecast) opts="--months --as-of --today --svg --animate --timeline --json --format --data-version --ics --force" ;;
@@ -58,9 +59,10 @@ _offing() {
     capabilities) opts="--json" ;;
     completions) opts="" ;;
     config) opts="--json" ;;
+    drivers) opts="" ;;
     hook) opts="--fail-on" ;;
     lsp) opts="" ;;
-    migrate) opts="--agent --from-refusals --timeout-ms" ;;
+    migrate) opts="--agent --driver --from-refusals --replay --timeout-ms" ;;
     prompt) opts="--format --symbol" ;;
     recommend) opts="--min-days --as-of --json" ;;
     rollback-readiness) opts="--candidate --within-days --json" ;;

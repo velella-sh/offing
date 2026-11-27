@@ -172,6 +172,12 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/verify-result" label="Verification result fields"}
 
+### Agent driver run
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/agent-run.v1.schema.json)
+
+::schema-table{data="publicSchemas/agent-run" label="Agent driver run fields"}
+
 ## Internal formats
 
 | Schema | Repository use |

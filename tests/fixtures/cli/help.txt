@@ -73,10 +73,13 @@ Usage:
   offing completions <bash|zsh|fish>   # print a shell completion script
   offing lsp
   offing config validate [path] [--json]
+  offing drivers list
+  offing drivers test <driver|command>
   offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol
   offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one detected agent host
   offing init --hooks --list [path]   # show agent hook stability and availability
   offing init --hooks --remove [--hooks-for <host>] [path] [--dry-run]   # remove managed agent hooks
+  offing migrate <finding-id> [path] --driver <name> [--replay <recording>] [--timeout-ms <n>]
   offing migrate <finding-id> [path] --agent <command> [--timeout-ms <n>]
   offing migrate --from-refusals [path] --agent <command> [--timeout-ms <n>]
   offing prompt [path] [--format <text|json>] [--symbol <s>]   # shell prompt segment such as ⏳2, read from the scan cache only
@@ -131,6 +134,7 @@ Examples:
   offing capabilities --json
   offing completions zsh > ~/.zfunc/_offing
   offing config validate
+  offing drivers test replay
   offing hook claude-code
   offing lsp
   offing migrate <finding-id> --agent 'my-agent "$OFFING_MIGRATION_PROMPT_FILE"'

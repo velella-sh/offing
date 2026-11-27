@@ -2,7 +2,7 @@
 # zsh completion for offing. Save it as _offing in a directory on $fpath, or: source <(offing completions zsh)
 _offing() {
   local -a commands
-  commands=('scan' 'baseline' 'forecast' 'forecast' 'countdown' 'plan' 'status-card' 'glance' 'lookup' 'drift' 'upgrade-check' 'inventory' 'badge' 'diff' 'drift' 'receipt' 'rollup' 'renovate-preset' 'dependabot-config' 'fix' 'check' 'check-snippet' 'guard' 'usage' 'mcp' 'data' 'watch' 'init' 'setup' 'new-detector' 'new-rule' 'rules' 'explain' 'context' 'doctor' 'report-issue' 'capabilities' 'completions' 'config' 'hook' 'lsp' 'migrate' 'prompt' 'recommend' 'rollback-readiness' 'timelapse' 'verify' 'wrapped')
+  commands=('scan' 'baseline' 'forecast' 'forecast' 'countdown' 'plan' 'status-card' 'glance' 'lookup' 'drift' 'upgrade-check' 'inventory' 'badge' 'diff' 'drift' 'receipt' 'rollup' 'renovate-preset' 'dependabot-config' 'fix' 'check' 'check-snippet' 'guard' 'usage' 'mcp' 'data' 'watch' 'init' 'setup' 'new-detector' 'new-rule' 'rules' 'explain' 'context' 'doctor' 'report-issue' 'capabilities' 'completions' 'config' 'drivers' 'hook' 'lsp' 'migrate' 'prompt' 'recommend' 'rollback-readiness' 'timelapse' 'verify' 'wrapped')
   if (( CURRENT == 2 )); then
     compadd -a commands -- --help --version
     return
@@ -18,6 +18,7 @@ _offing() {
     data) compadd status update --json --data-version ;;
     watch) compadd add remove run list --weekly --board --json ;;
     config) compadd validate --json ;;
+    drivers) compadd list test ;;
         scan) _arguments '--demo' '--sbom' '--json' '--format' '--baseline' '--baseline-warn-days' '--on-expired' '--today' '--write-status' '--interactive' '--fail-on' '--lookahead' '--all' '--by-owner' '--data-version' '--only' '--exclude' '*:path:_files' ;;
         baseline) _arguments '--output' '--data-version' '*:path:_files' ;;
         forecast) _arguments '--months' '--as-of' '--today' '--svg' '--animate' '--timeline' '--json' '--format' '--data-version' '--ics' '--force' '*:path:_files' ;;
@@ -55,7 +56,7 @@ _offing() {
         capabilities) _arguments '--json' '*:path:_files' ;;
         hook) _arguments '--fail-on' '*:path:_files' ;;
         lsp) _arguments  '*:path:_files' ;;
-        migrate) _arguments '--agent' '--from-refusals' '--timeout-ms' '*:path:_files' ;;
+        migrate) _arguments '--agent' '--driver' '--from-refusals' '--replay' '--timeout-ms' '*:path:_files' ;;
         prompt) _arguments '--format' '--symbol' '*:path:_files' ;;
         recommend) _arguments '--min-days' '--as-of' '--json' '*:path:_files' ;;
         rollback-readiness) _arguments '--candidate' '--within-days' '--json' '*:path:_files' ;;
