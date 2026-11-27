@@ -10,16 +10,19 @@ default branch's commit, and runs the normal scanner against that pinned
 content. It resolves remote files first so the scan engine runs offline.
 No collected repository code runs.
 
-For a workflow run pinned to source, check out that same Offing commit
-and run `npm ci` and `npm run build`. The built CLI is available at
-`node dist/src/cli.js`.
+These examples target the `0.1.6` release. Run the pinned package directly:
 
 ```sh
-offing fleet my-org --json --jobs 4 > fleet.json
-offing fleet my-group/subgroup --gitlab --progress
-offing fleet my-group --gitlab-url https://gitlab.example.net --html > fleet.html
-offing rollup fleet.json --html > rollup.html
+npx @velella/offing@0.1.6 fleet my-org --json --jobs 4 > fleet.json
+npx @velella/offing@0.1.6 fleet my-group/subgroup --gitlab --progress
+npx @velella/offing@0.1.6 fleet my-group --gitlab-url https://gitlab.example.net --html > fleet.html
+npx @velella/offing@0.1.6 rollup fleet.json --html > rollup.html
 ```
+
+Before the release is published, install the candidate tarball to run the
+same commands with its local `offing` binary. To run from the same source
+as the reusable workflow, check out its exact commit, run `npm ci` and
+`npm run build`, and use `node dist/src/cli.js`.
 
 For GitHub, Offing reads `GITHUB_TOKEN`, `GH_TOKEN`, or the token from
 `gh auth token` in that order. Use a token with read access to the selected
@@ -53,8 +56,8 @@ exception text. Violations and invalid policies produce exit status 1.
 
 The [fleet schema](https://velella.sh/offing/schemas/fleet.v1.schema.json)
 defines the JSON format, including repository status and failure reasons.
-For offline validation with a Fleet-capable npm package that exposes the
-schema, import the schema from the same installed package as the CLI:
+For offline validation, install `@velella/offing@0.1.6` in the validation
+project and import the schema from the same package as the CLI:
 
 ```js
 import fleetSchema from "@velella/offing/schemas/fleet.v1.schema.json" with { type: "json" };
