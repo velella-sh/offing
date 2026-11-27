@@ -7,7 +7,7 @@ import type { ScanResult } from "../src/domain.js";
 import { nodeUtilIsFixer } from "../src/fix/index.js";
 import { apply, assertParses, cleanup, normalized, plan, repository } from "./codemod-helpers.js";
 
-const fixtures = resolve("tests/fixtures/fix/node-util-is");
+const fixtures = resolve("tests/fixtures/codemods/node-util-is");
 
 after(cleanup);
 
@@ -37,8 +37,8 @@ for (const [extension, language] of [
   ["ts", "typescript"],
 ] as const) {
   test(`rewrites every replacement row in ${extension} and the patch applies cleanly`, async () => {
-    const before = await readFile(join(fixtures, `before.${extension}`), "utf8");
-    const expected = await readFile(join(fixtures, `after.${extension}`), "utf8");
+    const before = await readFile(join(fixtures, "syntax", "before", `index.${extension}`), "utf8");
+    const expected = await readFile(join(fixtures, "syntax", "after", `index.${extension}`), "utf8");
     for (const [call, replacement] of rows) {
       assert.ok(before.includes(call), `the before fixture must use ${call}`);
       assert.ok(expected.includes(replacement), `the after fixture must use ${replacement}`);
@@ -54,7 +54,7 @@ for (const [extension, language] of [
   });
 
   test(`plans nothing for already-rewritten ${extension}`, async () => {
-    const expected = await readFile(join(fixtures, `after.${extension}`), "utf8");
+    const expected = await readFile(join(fixtures, "syntax", "after", `index.${extension}`), "utf8");
     assert.deepEqual((await plan({ [`index.${extension}`]: expected }, "node-util-is")).patches, []);
   });
 }
@@ -173,9 +173,9 @@ test("rewrites the usages a scan finding carries", async () => {
 test("refuses every call it cannot rewrite exactly, with a reason", async () => {
   const { patches, refusals } = await plan(
     {
-      "index.js": await readFile(join(fixtures, "refusals.js"), "utf8"),
-      "index.ts": await readFile(join(fixtures, "refusals.ts"), "utf8"),
-      "destructured.js": await readFile(join(fixtures, "destructured.js"), "utf8"),
+      "index.js": await readFile(join(fixtures, "refusals", "before", "index.js"), "utf8"),
+      "index.ts": await readFile(join(fixtures, "refusals", "before", "index.ts"), "utf8"),
+      "destructured.js": await readFile(join(fixtures, "refusals", "before", "destructured.js"), "utf8"),
     },
     "node-util-is",
   );

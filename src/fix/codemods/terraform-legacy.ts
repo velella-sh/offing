@@ -1,3 +1,4 @@
+import { defineCodemod } from "../kit/define.js";
 import {
   parseTerraformLegacy,
   type TerraformInterpolationOnlyDeclaration,
@@ -6,7 +7,7 @@ import {
 } from "../../detectors/terraform/parse-terraform.js";
 import type { Finding, ScanResult } from "../../domain.js";
 import { required } from "../../required.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { type Edit, diffFor } from "./shared/edits.js";
 import { newlineReason, readRepositoryText } from "./shared/source.js";
 
@@ -147,8 +148,9 @@ function generated(contents: string): boolean {
  * `map()` without key/value pairs, a map key that is not a string or identifier, and a string used as an object
  * key or block label are refused with the reason instead of guessed.
  */
-export const terraformLegacyFixer: Fixer = {
+export const terraformLegacyFixer = defineCodemod({
   id: "terraform-legacy",
+  rules: [INTERPOLATION_RULE_ID, LEGACY_FUNCTION_RULE_ID],
   async plan(result, refuse) {
     const byPath = groupByPath(result, refuse);
     const patches: FilePatch[] = [];
@@ -158,7 +160,7 @@ export const terraformLegacyFixer: Fixer = {
     }
     return patches;
   },
-};
+});
 
 /** The legacy findings the codemod may rewrite, grouped by file; a finding it cannot reach is refused on the spot. */
 function groupByPath(result: ScanResult, refuse: Refuse | undefined): Map<string, Finding[]> {

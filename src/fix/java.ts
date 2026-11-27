@@ -1,3 +1,4 @@
+import { defineCodemod } from "./kit/define.js";
 import { readFile } from "node:fs/promises";
 import { basename, isAbsolute, relative, resolve } from "node:path";
 
@@ -12,7 +13,7 @@ import type {
 import { parseGradle } from "../detectors/java/parse-gradle.js";
 import { parsePom } from "../detectors/java/parse-pom.js";
 import type { Finding } from "../domain.js";
-import type { FilePatch, Fixer, Refuse } from "./types.js";
+import type { FilePatch, Refuse } from "./types.js";
 
 const JAVA_REPLACEMENT = /^Java (\d+)(?: \(LTS\))? or later$/;
 const SUPPORTED_FILES = new Set(["pom.xml", "build.gradle", "build.gradle.kts"]);
@@ -79,8 +80,9 @@ interface Targets {
  * other declaration survived untouched. `maven.compiler.source`/`target`, `targetCompatibility`, and the version pin
  * files are left for their own findings.
  */
-export const javaFixer: Fixer = {
+export const javaFixer = defineCodemod({
   id: "java",
+  rules: ["java.jdk.*"],
   async plan(result, refuse) {
     const targets = javaTargets(result.findings, refuse);
     const patches: FilePatch[] = [];
@@ -90,7 +92,7 @@ export const javaFixer: Fixer = {
     }
     return patches;
   },
-};
+});
 
 /** The Java build files that carry a `java.jdk.` finding, each with the target level per line; unsupported findings are refused. */
 function javaTargets(findings: readonly Finding[], refuse: Refuse | undefined): Map<string, Targets> {

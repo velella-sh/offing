@@ -1,69 +1,10 @@
-import type { FilePatch, FixPlan, Fixer, FixerPatch, FixRefusal, Refuse } from "./types.js";
-import { workflowCommandsFixer } from "./codemods/workflow-commands.js";
 import type { ScanResult } from "../domain.js";
-import { dockerfileLegacyFixer } from "./codemods/dockerfile-legacy.js";
-import { renameCodemodsFixer } from "./codemods/index.js";
-import { kubernetesIngressV1Fixer } from "./codemods/k8s-ingress-v1.js";
-import { nodeRenamesFixer } from "./codemods/node-renames.js";
-import { pythonImpFixer } from "./codemods/python-imp.js";
-import { pythonRenamesFixer } from "./codemods/python-renames.js";
-import { terraformLegacyFixer } from "./codemods/terraform-legacy.js";
-import { nodeBufferFixer } from "./codemods/node-buffer.js";
-import { nodeUtilIsFixer } from "./codemods/node-util-is.js";
-import { pythonUtcnowFixer } from "./codemods/python-utcnow.js";
-import { dockerfileBaseImageFixer } from "./dockerfile.js";
-import { githubActionsUsesFixer } from "./github-actions.js";
-import { goModFixer } from "./go-mod.js";
-import { javaFixer } from "./java.js";
-import { kubernetesApiVersionFixer } from "./kubernetes.js";
-import { runtimePinsFixer } from "./runtime-pins.js";
-import { pythonFixer } from "./python.js";
+import { fixers } from "./registry.generated.js";
+import type { FilePatch, FixPlan, Fixer, FixerPatch, FixRefusal, Refuse } from "./types.js";
 
 export type { FilePatch, FixPlan, FixRefusal, Fixer, FixerPatch } from "./types.js";
+export * from "./registry.generated.js";
 export { renderPatches } from "./render-patches.js";
-
-export {
-  workflowCommandsFixer,
-  dockerfileBaseImageFixer,
-  githubActionsUsesFixer,
-  goModFixer,
-  javaFixer,
-  kubernetesApiVersionFixer,
-  kubernetesIngressV1Fixer,
-  nodeBufferFixer,
-  nodeUtilIsFixer,
-  renameCodemodsFixer,
-  runtimePinsFixer,
-  pythonFixer,
-  terraformLegacyFixer,
-  pythonImpFixer,
-  pythonRenamesFixer,
-  pythonUtcnowFixer,
-  nodeRenamesFixer,
-  dockerfileLegacyFixer,
-};
-
-/** Every fixer Offing ships, in the order their patches are printed. */
-export const fixers: Fixer[] = [
-  workflowCommandsFixer,
-  githubActionsUsesFixer,
-  runtimePinsFixer,
-  pythonFixer,
-  goModFixer,
-  javaFixer,
-  kubernetesApiVersionFixer,
-  kubernetesIngressV1Fixer,
-  dockerfileBaseImageFixer,
-  renameCodemodsFixer,
-  nodeBufferFixer,
-  terraformLegacyFixer,
-  pythonImpFixer,
-  pythonRenamesFixer,
-  pythonUtcnowFixer,
-  nodeRenamesFixer,
-  dockerfileLegacyFixer,
-  nodeUtilIsFixer,
-];
 
 /**
  * Plans every fixer over a scan and returns the patches with the fixer that produced them, ordered by file, along with

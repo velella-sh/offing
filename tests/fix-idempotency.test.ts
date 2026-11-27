@@ -1,53 +1,48 @@
 import assert from "node:assert/strict";
-import { execFile } from "node:child_process";
-import { readdir, rm, stat, writeFile } from "node:fs/promises";
+import { mkdtemp, readdir, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { promisify } from "node:util";
-import { after, test } from "node:test";
+import { test } from "node:test";
 
-import { builtInDetectors as detectors } from "../src/detectors/index.js";
+import { fixtureFiles, writeFixture } from "../src/fix/kit/fixture.js";
+import { planFixture, testCases } from "../src/fix/kit/conformance.js";
+import { fixers, planFixReport } from "../src/fix/index.js";
+import { builtInDetectors } from "../src/detectors/index.js";
 import { scanRepository } from "../src/engine/index.js";
-import { fixers, renderPatches, type Fixer } from "../src/fix/index.js";
-import { copyFixtureTree } from "./fixture-copies.js";
 
-const execute = promisify(execFile);
-const fixtures = resolve("tests/fixtures/fix-idempotency");
-const temporaryRoots: string[] = [];
+const fixtures = resolve("tests/fixtures/codemods");
 
-after(async () => {
-  await Promise.all(temporaryRoots.map((root) => rm(root, { recursive: true, force: true })));
-});
-
-/** Copies a fixer's fixture repository into a scratch git repository. */
-async function repository(fixer: Fixer): Promise<string> {
-  const root = await copyFixtureTree(join(fixtures, fixer.id), temporaryRoots);
-  await execute("git", ["init", "-q"], { cwd: root });
-  await execute("git", ["config", "core.autocrlf", "false"], { cwd: root });
-  return root;
-}
-
-for (const fixer of fixers) {
-  test(`${fixer.id}: applying the planned patch leaves nothing for a second pass`, async () => {
-    const registered = await stat(join(fixtures, fixer.id)).then(
-      () => true,
-      () => false,
-    );
-    if (!registered) assert.fail(`fixer "${fixer.id}" has no registered fixture under tests/fixtures/fix-idempotency`);
-
-    const root = await repository(fixer);
-    const scan = () => scanRepository(root, detectors);
-    const patches = await fixer.plan(await scan());
-    assert.ok(patches.length > 0, "the fixture must give the fixer something to fix");
-
-    await writeFile(join(root, "fix.patch"), renderPatches(patches));
-    await execute("git", ["apply", "--check", "fix.patch"], { cwd: root });
-    await execute("git", ["apply", "fix.patch"], { cwd: root });
-
-    assert.deepEqual(await fixer.plan(await scan()), []);
+for (const { id } of fixers) {
+  test(`${id}: fixtures conform under the planning guard`, async () => {
+    const directory = join(fixtures, id);
+    const cases = await testCases(directory, planFixture({ builtIn: id }));
+    assert.ok(cases.includes("idempotency") || cases.includes("example"));
   });
 }
 
+test("guarded plans match the normal fixer path on baseline cases", async (t) => {
+  const roots: string[] = [];
+  t.after(async () => {
+    await Promise.all(roots.map((root) => rm(root, { recursive: true, force: true })));
+  });
+  for (const fixer of fixers) {
+    const before = join(fixtures, fixer.id, "idempotency", "before");
+    if (!(await stat(before).catch(() => undefined))?.isDirectory()) continue;
+    const root = await mkdtemp(join(tmpdir(), "offing-fix-parity-"));
+    roots.push(root);
+    await writeFixture(root, await fixtureFiles(before, true));
+    const scan = await scanRepository(root, builtInDetectors, { noCache: true });
+    assert.deepEqual(await planFixture({ builtIn: fixer.id })(root), await planFixReport(scan, [fixer]));
+  }
+});
+
 test("every registered fixture directory belongs to a shipped fixer", async () => {
-  const ids = new Set(fixers.map((fixer) => fixer.id));
-  for (const entry of await readdir(fixtures)) assert.ok(ids.has(entry), `fixture "${entry}" has no fixer`);
+  assert.deepEqual((await readdir(fixtures)).sort(), fixers.map(({ id }) => id).sort());
+});
+
+test("codemod fixture names stay neutral, including workflow and Dockerfile names", async () => {
+  const files = await fixtureFiles(join(fixtures, "workflow-commands/syntax/before"), true);
+  assert.deepEqual([...files.keys()], [".github/workflows/ci.yml"]);
+  const docker = await fixtureFiles(join(fixtures, "dockerfile-legacy/syntax/before"), true);
+  assert.deepEqual([...docker.keys()], ["Dockerfile"]);
 });

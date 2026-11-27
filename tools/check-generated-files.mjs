@@ -69,6 +69,12 @@ export const GENERATED_PATHS = Object.freeze([
     target: "Build time",
     generator: "node tools/generate-commands-index.mjs",
   },
+  {
+    path: "src/fix/registry.generated.ts",
+    directory: false,
+    target: "Build time",
+    generator: "node tools/generate-codemod-registry.mjs",
+  },
   { path: "dist/action/index.js", directory: false, target: "Release time", generator: "npm run build:action" },
   { path: "CHANGELOG.md", directory: false, target: "Release time", generator: "node dist/tools/changelog.js --write" },
 ]);

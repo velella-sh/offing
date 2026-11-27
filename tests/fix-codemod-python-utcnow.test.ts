@@ -5,7 +5,7 @@ import { after, test } from "node:test";
 
 import { apply, assertParses, cleanup, normalized, plan as planCodemod } from "./codemod-helpers.js";
 
-const fixtures = resolve("tests/fixtures/fix/python-utcnow");
+const fixtures = resolve("tests/fixtures/codemods/python-utcnow");
 
 after(cleanup);
 
@@ -23,8 +23,8 @@ const rows = [
 
 for (const row of rows) {
   test(`${row} is rewritten exactly, parses, and is idempotent`, async () => {
-    const before = await readFile(join(fixtures, row, "before.py"), "utf8");
-    const expected = await readFile(join(fixtures, row, "after.py"), "utf8");
+    const before = await readFile(join(fixtures, row, "before", "app.py"), "utf8");
+    const expected = await readFile(join(fixtures, row, "after", "app.py"), "utf8");
     const { root, patches, refusals } = await plan({ "app.py": before });
 
     assert.deepEqual(refusals, []);
@@ -38,8 +38,8 @@ for (const row of rows) {
 }
 
 test("a rewritable call and a refused call in one file produce one patch and one refusal", async () => {
-  const before = await readFile(join(fixtures, "mixed", "before.py"), "utf8");
-  const expected = await readFile(join(fixtures, "mixed", "after.py"), "utf8");
+  const before = await readFile(join(fixtures, "mixed", "before", "app.py"), "utf8");
+  const expected = await readFile(join(fixtures, "mixed", "after", "app.py"), "utf8");
   const { root, patches, refusals } = await plan({ "app.py": before });
 
   assert.equal(patches.length, 1);
@@ -65,7 +65,7 @@ test("each refused shape is reported and the file is left unchanged", async () =
   ];
   for (const { file, reason } of cases) {
     const { root, patches, refusals } = await plan({
-      "app.py": await readFile(join(fixtures, "refusals", file), "utf8"),
+      "app.py": await readFile(join(fixtures, `refuse-${file.slice(0, -3)}`, "before", "app.py"), "utf8"),
     });
     assert.deepEqual(patches, [], `${file} is unchanged`);
     assert.ok(refusals.length > 0, `${file} is refused`);
@@ -75,13 +75,15 @@ test("each refused shape is reported and the file is left unchanged", async () =
     );
     assert.equal(
       await readFile(join(root, "app.py"), "utf8"),
-      await readFile(join(fixtures, "refusals", file), "utf8"),
+      await readFile(join(fixtures, `refuse-${file.slice(0, -3)}`, "before", "app.py"), "utf8"),
     );
   }
 });
 
 test("every refused argument shape in one file is refused by name", async () => {
-  const { refusals } = await plan({ "app.py": await readFile(join(fixtures, "refusals", "arguments.py"), "utf8") });
+  const { refusals } = await plan({
+    "app.py": await readFile(join(fixtures, "refuse-arguments", "before", "app.py"), "utf8"),
+  });
 
   assert.equal(refusals.length, 4);
   assert.ok(refusals.some((refusal) => refusal.reason.includes("takes no arguments")));

@@ -11,7 +11,7 @@ import { runCli } from "./cli-runner.js";
 // The per-codemod tests assert the same reasons on the planner; these run the CLI so the JSON surface is covered
 // for all ten codemods, node-renames and python-renames included in their own files.
 
-const fixtures = resolve("tests/fixtures/fix");
+const fixtures = resolve("tests/fixtures/codemods");
 
 after(cleanup);
 
@@ -40,8 +40,8 @@ function assertReasons(refusals: FixRefusal[], expected: Array<string | RegExp>)
 
 test("node-util-is refusals appear in fix --json", async () => {
   const refusals = await refusalsFor("node-util-is", {
-    "index.js": await readFile(join(fixtures, "node-util-is", "refusals.js"), "utf8"),
-    "destructured.js": await readFile(join(fixtures, "node-util-is", "destructured.js"), "utf8"),
+    "index.js": await readFile(join(fixtures, "node-util-is", "refusals", "before", "index.js"), "utf8"),
+    "destructured.js": await readFile(join(fixtures, "node-util-is", "refusals", "before", "destructured.js"), "utf8"),
   });
   assertReasons(refusals, [
     "no exact native equivalent of `util.isError`",
@@ -53,7 +53,7 @@ test("node-util-is refusals appear in fix --json", async () => {
 
 test("node-buffer refusals appear in fix --json", async () => {
   const refusals = await refusalsFor("node-buffer", {
-    "index.js": await readFile(join(fixtures, "node-buffer", "refusals.js"), "utf8"),
+    "index.js": await readFile(join(fixtures, "node-buffer", "refusals", "before", "index.js"), "utf8"),
   });
   assertReasons(refusals, ["is an identifier", /binary expression|template literal|SlowBuffer/u]);
 });

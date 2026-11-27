@@ -1,9 +1,10 @@
+import { defineCodemod } from "../kit/define.js";
 import type { Finding, ScanResult, Severity, SourceUsage, UsageMatcher } from "../../domain.js";
 import { required } from "../../required.js";
 import { analyzeSourceUsage } from "../../source-usage.js";
 import { parseSource } from "../../usage/tree-sitter.js";
 import type { Node } from "../../usage/vendor/tree-sitter/tree-sitter.js";
-import type { FilePatch, Fixer, Refuse } from "../types.js";
+import type { FilePatch, Refuse } from "../types.js";
 import { type Edit, patchFor } from "./shared/edits.js";
 import { declineAll, groupByPath, planEachFile, sortTargets } from "./shared/plan.js";
 import { locate, offsetOf, readRepositoryFile } from "./shared/source.js";
@@ -86,8 +87,9 @@ interface Target {
  * through a local alias and an alias with no replacement are refused with the reason. The replacement name is the
  * only text that changes; the receiver, arguments, and every other byte are kept.
  */
-export const pythonRenamesFixer: Fixer = {
+export const pythonRenamesFixer = defineCodemod({
   id: "python-renames",
+  rules: [...moduleRenames.map(({ id }) => id), aliasRuleId],
   async plan(result, refuse) {
     const { targets, unittestPaths } = await targetsFor(result.root, result);
     const byPath = groupByPath(targets);
@@ -96,7 +98,7 @@ export const pythonRenamesFixer: Fixer = {
       planPath(result.root, path, fileTargets, unittestPaths.has(path), refuse),
     );
   },
-};
+});
 
 async function planPath(
   repositoryRoot: string,

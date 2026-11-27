@@ -8,7 +8,7 @@ import { builtInDetectors as detectors } from "../src/detectors/index.js";
 import { scanRepository } from "../src/engine/index.js";
 import { kubernetesApiVersionFixer } from "../src/fix/kubernetes.js";
 
-const fixtures = resolve("tests/fixtures/fix-kubernetes");
+const fixtures = resolve("tests/fixtures/codemods/kubernetes/syntax");
 const temporaryRoots: string[] = [];
 
 after(async () => {
@@ -26,8 +26,8 @@ async function repository(files: Record<string, string>): Promise<string> {
 }
 
 test("the fixer output matches the after fixture and leaves spec-change findings alone", async () => {
-  const before = await readFile(join(fixtures, "before.yml"), "utf8");
-  const after = await readFile(join(fixtures, "after.yml"), "utf8");
+  const before = await readFile(join(fixtures, "before", "manifests/workloads.yml"), "utf8");
+  const after = await readFile(join(fixtures, "after", "manifests/workloads.yml"), "utf8");
   const root = await repository({ "manifests/workloads.yml": before });
   const patches = await kubernetesApiVersionFixer.plan(await scanRepository(root, detectors));
 
@@ -50,7 +50,9 @@ test("the fixer output matches the after fixture and leaves spec-change findings
 });
 
 test("the planned patch is idempotent: scanning the fixed file plans nothing", async () => {
-  const root = await repository({ "manifests/workloads.yml": await readFile(join(fixtures, "after.yml"), "utf8") });
+  const root = await repository({
+    "manifests/workloads.yml": await readFile(join(fixtures, "after", "manifests/workloads.yml"), "utf8"),
+  });
   assert.deepEqual(await kubernetesApiVersionFixer.plan(await scanRepository(root, detectors)), []);
 });
 

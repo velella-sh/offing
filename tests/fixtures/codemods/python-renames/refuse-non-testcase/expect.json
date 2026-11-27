@@ -1,0 +1,16 @@
+{
+  "refusals": [
+    {
+      "ruleId": "python.symbol.unittest.removed-aliases",
+      "path": "app.py",
+      "line": 6,
+      "reason": "The `assertEquals()` call is not inside a class that subclasses unittest.TestCase, so it is not one of the removed TestCase aliases."
+    },
+    {
+      "ruleId": "python.symbol.unittest.removed-aliases",
+      "path": "app.py",
+      "line": 9,
+      "reason": "The `failUnless()` call is not inside a class that subclasses unittest.TestCase, so it is not one of the removed TestCase aliases."
+    }
+  ]
+}

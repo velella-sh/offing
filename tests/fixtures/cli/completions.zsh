@@ -2,7 +2,7 @@
 # zsh completion for offing. Save it as _offing in a directory on $fpath, or: source <(offing completions zsh)
 _offing() {
   local -a commands
-  commands=('scan' 'baseline' 'forecast' 'forecast' 'countdown' 'plan' 'status-card' 'glance' 'lookup' 'drift' 'upgrade-check' 'inventory' 'badge' 'diff' 'drift' 'receipt' 'rollup' 'renovate-preset' 'dependabot-config' 'fix' 'check' 'check-snippet' 'guard' 'usage' 'mcp' 'data' 'watch' 'init' 'setup' 'new-detector' 'new-rule' 'rules' 'explain' 'context' 'doctor' 'report-issue' 'capabilities' 'completions' 'attest' 'config' 'drivers' 'fleet' 'hook' 'lineage' 'lsp' 'migrate' 'policy' 'prompt' 'recommend' 'rollback-readiness' 'timelapse' 'verify' 'wrapped')
+  commands=('scan' 'baseline' 'forecast' 'forecast' 'countdown' 'plan' 'status-card' 'glance' 'lookup' 'drift' 'upgrade-check' 'inventory' 'badge' 'diff' 'drift' 'receipt' 'rollup' 'renovate-preset' 'dependabot-config' 'fix' 'check' 'check-snippet' 'guard' 'usage' 'mcp' 'data' 'watch' 'init' 'setup' 'new-detector' 'new-rule' 'rules' 'explain' 'context' 'doctor' 'report-issue' 'capabilities' 'completions' 'attest' 'codemod' 'config' 'drivers' 'fleet' 'hook' 'lineage' 'lsp' 'migrate' 'policy' 'prompt' 'recommend' 'rollback-readiness' 'timelapse' 'verify' 'wrapped')
   if (( CURRENT == 2 )); then
     compadd -a commands -- --help --version
     return
@@ -18,6 +18,7 @@ _offing() {
     data) compadd status update --json --data-version ;;
     watch) compadd add remove run list --weekly --board --json ;;
     attest) compadd check ;;
+    codemod) compadd test ;;
     config) compadd validate --json ;;
     drivers) compadd list test ;;
     policy) compadd validate explain pull ;;

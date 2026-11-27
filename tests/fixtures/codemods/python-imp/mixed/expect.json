@@ -1,0 +1,10 @@
+{
+  "refusals": [
+    {
+      "ruleId": "python.symbol.imp.find-module",
+      "path": "app.py",
+      "line": 4,
+      "reason": "No exact replacement exists for `imp.find_module`; `importlib.util.find_spec` returns a different shape."
+    }
+  ]
+}

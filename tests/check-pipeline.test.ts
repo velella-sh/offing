@@ -36,11 +36,15 @@ test("npm test builds first, and npm run check builds only once", () => {
     scripts.check,
     "npm run format:check && npm run check:dead-code && npm run build && node dist/tools/check-pipeline.js",
   );
-  assert.equal(scripts["check:dead-code"], "node tools/generate-commands-index.mjs && node tools/check-dead-code.mjs");
+  assert.equal(
+    scripts["check:dead-code"],
+    "node tools/generate-commands-index.mjs && node tools/generate-codemod-registry.mjs && node tools/check-dead-code.mjs",
+  );
   assert.equal(scripts.check.match(/npm run build/g)?.length, 1);
   assert.match(scripts["check:plugins"]!, /^npm run build --silent && /);
   assert.match(scripts["eval:plugins"]!, /^npm run build --silent && /);
   assert.match(scripts["eval:agent-loop"]!, /^npm run build --silent && /);
+  assert.equal(scripts["prebuild:action"], "node tools/generate-codemod-registry.mjs");
   assert.match(
     scripts["build:action"]!,
     /^ncc build src\/action\.ts -o dist\/action --minify --transpile-only && node tools\/copy-ebb-data\.mjs dist\/action$/,
@@ -52,7 +56,10 @@ test("npm test builds first, and npm run check builds only once", () => {
 
 test("the TypeScript build uses build mode, so an unchanged tree is skipped", () => {
   // `tsc -p` re-parses and re-binds every file on each run; `tsc -b` skips the project when its outputs are newer than its inputs.
-  assert.match(scripts.build!, /^node tools\/generate-commands-index\.mjs && tsc -b tsconfig\.json && /);
+  assert.match(
+    scripts.build!,
+    /^node tools\/generate-commands-index\.mjs && node tools\/generate-codemod-registry\.mjs && tsc -b tsconfig\.json && /,
+  );
 });
 
 test("check:rules names every rule the pre-push hook runs", () => {
@@ -89,10 +96,11 @@ test("check runs the action build, tests, plugin drift, and plugin eval together
     },
   });
 
-  await until(() => events.filter((event) => event.endsWith(":start")).length === 10);
+  await until(() => events.filter((event) => event.endsWith(":start")).length === 11);
   assert.deepEqual(events.filter((event) => event.endsWith(":start")).sort(), [
     "build:action:start",
     "check:binaries:start",
+    "check:codemod-registry:start",
     "check:commands:start",
     "check:plugins:start",
     "check:quality:start",
@@ -152,6 +160,7 @@ test("an ordinary pull request builds the action bundle but neither publishes no
   assert.deepEqual(steps.sort(), [
     "build:action",
     "check:binaries",
+    "check:codemod-registry",
     "check:commands",
     "check:plugins",
     "check:quality",
@@ -593,6 +602,7 @@ function stepName(args: readonly string[]): string {
   if (args[0] === "tools/run-tests.mjs") return "test";
   if (args.some((arg) => arg.includes("eslint"))) return "lint";
   if (args.some((arg) => arg.includes("generate-commands-index"))) return "check:commands";
+  if (args.some((arg) => arg.includes("generate-codemod-registry"))) return "check:codemod-registry";
   if (args.some((arg) => arg.includes("check-quality"))) return "check:quality";
   if (args.some((arg) => arg.includes("check-binary-artifacts"))) return "check:binaries";
   if (args.some((arg) => arg.includes("check-workflow-change"))) return "check:workflows";
