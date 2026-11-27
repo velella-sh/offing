@@ -192,6 +192,36 @@
         "kind": "maintainer-review",
         "note": "Reviewed at this commit: line 39 of Dockerfile.heroku reads `FROM alpine:3.12`. These Alpine Linux releases no longer receive security updates from the vendor. (Alpine Linux releases, https://alpinelinux.org/releases/)."
       }
+    },
+    {
+      "ruleId": "container.golang.eol-1.25-and-older",
+      "path": "Dockerfile",
+      "line": 8,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "GOLANG_VERSION=1.15 supplies the golang:1.15-alpine API builder.",
+        "url": "https://github.com/souramoo/commentoplusplus/blob/106d7b42d56c4e0a1304c800d758e26cdb3be97f/Dockerfile#L4-L8"
+      }
+    },
+    {
+      "ruleId": "container.node.eol-21-and-older",
+      "path": "Dockerfile",
+      "line": 18,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "NODE_VERSION=16 and ALPINE_VERSION=3.15 supply the node:16-alpine3.15 frontend builder.",
+        "url": "https://github.com/souramoo/commentoplusplus/blob/106d7b42d56c4e0a1304c800d758e26cdb3be97f/Dockerfile#L3-L18"
+      }
+    },
+    {
+      "ruleId": "container.alpine.eol-3.20-and-older",
+      "path": "Dockerfile",
+      "line": 28,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "The ALPINE_VERSION=3.15 default at line 3 supplies the alpine:3.15 templates builder.",
+        "url": "https://github.com/souramoo/commentoplusplus/blob/106d7b42d56c4e0a1304c800d758e26cdb3be97f/Dockerfile#L28"
+      }
     }
   ]
 }

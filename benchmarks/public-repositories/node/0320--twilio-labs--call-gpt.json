@@ -3,5 +3,16 @@
   "commit": "db0aecda0058f222bfc26ad626d831c365ecfcea",
   "ecosystem": "node",
   "selection": "blind",
-  "expected": []
+  "expected": [
+    {
+      "ruleId": "container.node.eol-21-and-older",
+      "path": "Dockerfile",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "NODE_VERSION=18.9.0 supplies the release line for node:18.9.0-slim.",
+        "url": "https://github.com/twilio-labs/call-gpt/blob/db0aecda0058f222bfc26ad626d831c365ecfcea/Dockerfile#L4-L5"
+      }
+    }
+  ]
 }

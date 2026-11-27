@@ -13,6 +13,16 @@
         "url": "https://github.com/oven-sh/bun/releases/tag/bun-v1.1.0",
         "note": "Reviewed at this commit: line 1 of .tool-versions reads `bun 1.0.3`. Bun 1.0.x is outside the supported release lines after the Bun 1.1.0 release (https://github.com/oven-sh/bun/releases/tag/bun-v1.1.0); the bundled rule covers the 1.0.x line."
       }
+    },
+    {
+      "ruleId": "container.node.eol-21-and-older",
+      "path": "remix-ts-p2p/Dockerfile",
+      "line": 5,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "NODE_VERSION=20.5.1 supplies the node:20.5.1-slim base.",
+        "url": "https://github.com/cowlingj/p2pp/blob/2edcaefc8c958b7b95def1b47b21e0bca1baf5a9/remix-ts-p2p/Dockerfile#L4-L5"
+      }
     }
   ]
 }
