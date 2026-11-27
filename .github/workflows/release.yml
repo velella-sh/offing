@@ -1,6 +1,6 @@
 name: Release
 
-# A version tag runs it; `dry_run` exercises every stage and publishes nothing. npm trusted publishing matches this filename.
+# A version tag publishes; `dry_run` builds and checks the candidate without publishing. npm trusted publishing matches this filename.
 # Every channel's provenance is checked with slsa-verifier, so a missing or mismatched attestation fails the run. See docs/RELEASING.md for the full chain and the dry_run/release_tag manual runs.
 on:
   push:
@@ -43,15 +43,15 @@ jobs:
       release_gate_fixture: ${{ inputs.release_gate_fixture || false }}
   first-minute:
     needs: [npm-candidate]
-    if: ${{ !cancelled() && needs.npm-candidate.result == 'success' }}
+    if: ${{ !cancelled() && needs.npm-candidate.result == 'success' && inputs.dry_run }}
     uses: ./.github/workflows/first-minute.yml # zizmor: ignore[self-repository] -- measure this release's candidate artifact
     with:
       candidate: true
 
   # The npm publish lives here, not in a reusable stage: Scorecard's Packaging check needs a publish in a workflow with its own runs.
   npm-publish:
-    needs: [first-minute]
-    if: ${{ !cancelled() && needs.first-minute.result == 'success' }}
+    needs: [npm-candidate]
+    if: ${{ !cancelled() && needs.npm-candidate.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -68,7 +68,7 @@ jobs:
         with:
           name: first-minute-candidate
           path: ${{ runner.temp }}/offing-candidate
-      - name: Publish the measured tarball
+      - name: Publish the budget-checked tarball
         if: github.event_name != 'workflow_dispatch'
         run: |
           candidates=("$RUNNER_TEMP"/offing-candidate/*.tgz)

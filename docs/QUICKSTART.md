@@ -53,15 +53,15 @@ On macOS arm64 with Node.js 22.23.1 and npm 10.9.8, a clean-cache `npx` install 
 
 ### Time to the first forecast
 
-A locally packed candidate on macOS arm64 reached its first forecast at these times, with a fresh npm cache for each repository. The candidate tarball was already on disk. These timings include dependency downloads, installation, and the first forecast. The weekly run uses an exact published npm version and also measures transfer of the Offing tarball itself.
+A hosted release dry run measured a local candidate tarball on three pinned public repositories. Each run used a fresh npm cache and measured dependency downloads, installation, and the first forecast. The weekly run uses an exact published npm version and also measures transfer of the Offing tarball itself.
 
-| Pinned repository | Node.js 22.23.1 | Node.js 24.22.3 |
+| Hosted runner | Node.js 22.23.5 | Node.js 24.22.3 |
 | --- | ---: | ---: |
-| koa | 5.477 s | 4.324 s |
-| sampleproject | 4.144 s | 4.479 s |
-| bubbletea | 4.286 s | 4.207 s |
+| Linux x64 | 2.875–3.310 s | 3.961–4.513 s |
+| macOS arm64 | 4.761–5.152 s | 3.003–4.766 s |
+| Windows x64 | 10.987–12.888 s | 7.067–8.798 s |
 
-The release run measures the candidate tarball before publication and records each runner's results even when a check fails. It requires the first forecast in under 10 seconds on Linux, macOS, and Windows with Node.js 22 and 24. Offing requires Node.js 22 or later. Downloads and installation overlap, so the reports show the tarball download span, npm's full install phase, and the time after install separately. [First minute workflow](https://github.com/velella-sh/offing/actions/workflows/first-minute.yml)
+The dry run and weekly benchmark require each first forecast in under 10 seconds and retain timings when a runner misses. In this candidate run, Windows with Node.js 22 exceeded the budget. Downloads and installation overlap, so the reports show the tarball download span, npm's full install phase, and the time after install separately. [Candidate timing evidence](https://github.com/velella-sh/offing/actions/runs/45940201878) · [Weekly First minute runs](https://github.com/velella-sh/offing/actions/workflows/first-minute.yml)
 
 ## 2. Check one dependency before adding it
 
