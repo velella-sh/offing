@@ -1,0 +1,65 @@
+name: Attest an Offing migration proof
+
+on:
+  workflow_call:
+    inputs:
+      proof-artifact:
+        description: Name of the same-run artifact containing a verified, redacted offing-proof.json and its log sidecars
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ${{ inputs.proof-artifact }}
+          path: proof
+      - name: Attest the exact proof bytes
+        id: attest
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: proof/offing-proof.json
+      - name: Verify the signed proof and write its attestation sidecar
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUNDLE: ${{ steps.attest.outputs.bundle-path }}
+          ATTESTATION_URL: ${{ steps.attest.outputs.attestation-url }}
+          # actionlint 1.7.12 predates job.workflow_ref; the runner supplies it for reusable jobs.
+          SIGNER_REF: ${{ fromJSON(toJSON(job)).workflow_ref }}
+          SIGNER_DIGEST: ${{ fromJSON(toJSON(job)).workflow_sha }}
+        run: |
+          set -euo pipefail
+          [[ "$ATTESTATION_URL" == "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/attestations/"?* ]]
+          signer="${SIGNER_REF%@*}"
+          [[ -n "$signer" && "$SIGNER_DIGEST" =~ ^[0-9a-f]{40}$ ]]
+          cd proof
+          cp -- "$BUNDLE" offing-proof.sigstore.json
+          gh attestation verify offing-proof.json --bundle offing-proof.sigstore.json \
+            --repo "$GITHUB_REPOSITORY" --signer-workflow "$signer" --signer-digest "$SIGNER_DIGEST" \
+            --source-ref "$GITHUB_REF" --source-digest "$GITHUB_SHA" --deny-self-hosted-runners
+          sha256="$(sha256sum offing-proof.json | cut -d ' ' -f 1)"
+          # shellcheck disable=SC2016
+          jq -n --arg url "$ATTESTATION_URL" --arg sha256 "$sha256" \
+            --arg signerWorkflow "$signer" --arg signerDigest "$SIGNER_DIGEST" \
+            --arg sourceRef "$GITHUB_REF" --arg sourceDigest "$GITHUB_SHA" \
+            '{url: $url, sha256: $sha256, signerWorkflow: $signerWorkflow, signerDigest: $signerDigest, sourceRef: $sourceRef, sourceDigest: $sourceDigest}' \
+            > offing-proof.attestation.json
+          printf 'Verified proof SHA-256: %s\n\nAttestation: %s\n' "$sha256" "$ATTESTATION_URL" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: ${{ inputs.proof-artifact }}-attested
+          path: |
+            proof/offing-proof.json
+            proof/offing-log-*.txt
+            proof/offing-proof.attestation.json
+            proof/offing-proof.sigstore.json
+          if-no-files-found: error

@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "offing.proof.v1",
+  "outcome": "done",
+  "range": {
+    "base": "8c0c151c7dc1a5971857456040a75fb973b3487c",
+    "head": "7a9e964bebd52175e075e4ccaee1efd608e7506c"
+  },
+  "verify": {
+    "schemaVersion": "offing.verify-result.v1",
+    "before": {
+      "commit": "8c0c151c7dc1a5971857456040a75fb973b3487c",
+      "offingVersion": "0.1.1",
+      "ebbDataVersion": "0.2.0"
+    },
+    "after": {
+      "commit": "7a9e964bebd52175e075e4ccaee1efd608e7506c",
+      "offingVersion": "0.1.1",
+      "ebbDataVersion": "0.2.0"
+    },
+    "counts": {
+      "resolved": 1,
+      "remaining": 0,
+      "introduced": 0
+    },
+    "resolved": [
+      {
+        "id": "container.dockerfile.maintainer:Dockerfile:2",
+        "rule": "container.dockerfile.maintainer",
+        "title": "The Dockerfile MAINTAINER instruction is deprecated",
+        "severity": "low",
+        "path": "Dockerfile",
+        "line": 2
+      }
+    ],
+    "remaining": [],
+    "introduced": [],
+    "verdict": "passed",
+    "commands": [
+      {
+        "command": "docker build .",
+        "purpose": "Build the image with the rewritten Dockerfile.",
+        "status": "not-run",
+        "exitCode": null,
+        "logSha256": null
+      },
+      {
+        "command": "docker inspect IMAGE",
+        "purpose": "Confirm the image carries the org.opencontainers.image.authors label.",
+        "status": "not-run",
+        "exitCode": null,
+        "logSha256": null
+      },
+      {
+        "command": "node tests/check.cjs",
+        "purpose": "Check that the codemod preserves the base image and maintainer metadata.",
+        "status": "passed",
+        "exitCode": 0,
+        "logSha256": "af536520c79261a45e8e0cfacbb661b19198291168009a59da4c2f5303760922"
+      }
+    ]
+  },
+  "testRuns": [
+    {
+      "schemaVersion": "offing.test-run.v1",
+      "command": [
+        "node",
+        "tests/check.cjs"
+      ],
+      "attempts": [
+        {
+          "exitCode": 0,
+          "durationMs": 897,
+          "status": "passed",
+          "totals": null,
+          "failures": [],
+          "logs": {
+            "stdout": {
+              "sha256": "8c67ac8bb965912143116b85c8738c16ecc77dcd3de5ec5080d70fcfc4145d1f",
+              "tail": ""
+            },
+            "stderr": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            }
+          }
+        }
+      ],
+      "flaky": []
+    }
+  ],
+  "agentRuns": [],
+  "diff": {
+    "added": 0,
+    "changed": 1,
+    "deleted": 0
+  },
+  "budget": {
+    "elapsedMs": 3776,
+    "costUsd": null
+  },
+  "tools": {
+    "offing": "0.1.1",
+    "git": "git version 2.54.0 (Apple Git-157)"
+  }
+}

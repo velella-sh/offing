@@ -29,6 +29,16 @@ jobs:
     with:
       build: true
 
+  attest-proof:
+    needs: smoke
+    permissions:
+      contents: read
+      attestations: write
+      id-token: write
+    uses: ./.github/workflows/proof-attestation.yml # zizmor: ignore[self-repository] -- tests the reusable signer from this revision
+    with:
+      proof-artifact: proof-acceptance
+
   smoke:
     if: ${{ !inputs.action_conformance_only }}
     name: npm, Docker, and Action
@@ -471,12 +481,24 @@ jobs:
           test -f "$package/docs/spec/proof/v1.md"
           test -f "$package/schemas/proof.v1.schema.json"
           node "$package/docs/spec/proof/conformance/suite.mjs" "$bin"
+          example="$package/docs/spec/proof/example"
+          git clone --quiet --branch proof-evaluation "$example/evaluation.bundle" "$out/proof-evaluation"
+          "$bin" proof verify "$example/offing-proof.json" --repo "$out/proof-evaluation"
+          node "$package/docs/spec/proof/conformance/check.mjs" "$example/offing-proof.json" "$out/proof-evaluation"
+          mkdir "$out/proof-acceptance"
+          cp "$example"/offing-proof.json "$example"/offing-log-*.txt "$out/proof-acceptance/"
           {
             printf '### acc-proof-bundle\n\n'
             printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
-            printf -- '- Installed and independent verifiers agreed on five synthetic fixtures and the redacted producer output.\n'
+            printf -- '- Installed and independent verifiers agreed on five synthetic fixtures, redacted producer output and the recorded evaluation proof.\n'
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: proof-acceptance
+          path: ${{ runner.temp }}/package-smoke/proof-acceptance/
+          if-no-files-found: error
 
       - name: Build the Docker image and scan the fixture
         id: docker
