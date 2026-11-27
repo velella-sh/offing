@@ -10,15 +10,15 @@
     "projectVerificationStatus": "not-run"
   },
   "plannedTasks": 40,
-  "measuredTasks": 3,
+  "measuredTasks": 8,
   "conditions": {
     "baseline": {
-      "attempts": 3,
-      "successful": 2
+      "attempts": 8,
+      "successful": 5
     },
     "packet": {
-      "attempts": 3,
-      "successful": 3
+      "attempts": 8,
+      "successful": 7
     }
   },
   "cases": [
@@ -40,6 +40,7 @@
           "staticVerificationPassed": true,
           "projectVerificationStatus": "not-run",
           "filesTouched": [".github/workflows/main.yml"],
+          "noUnrelatedChanges": true,
           "success": true
         },
         {
@@ -53,7 +54,156 @@
           "staticVerificationPassed": true,
           "projectVerificationStatus": "not-run",
           "filesTouched": [".github/workflows/main.yml"],
+          "noUnrelatedChanges": true,
           "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "avonrylew-environment-checkout",
+      "repository": "https://github.com/avonrylew/environment",
+      "commit": "4ed9413038d47019c1e11bd4a159f28f9739611c",
+      "startedAt": "2026-11-27T01:00:12.401Z",
+      "finishedAt": "2026-11-27T01:00:59.207Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 25413,
+          "wallMs": 25677,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build-node.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 20856,
+          "wallMs": 21100,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build-node.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "fabasoad-broadsage-scorecard-action-checkout",
+      "repository": "https://github.com/fabasoad/broadsage-scorecard-action",
+      "commit": "d984aee64316072a5b66ccb1362334593d8d4de5",
+      "startedAt": "2026-11-27T00:59:26.998Z",
+      "finishedAt": "2026-11-27T01:00:12.324Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22098,
+          "wallMs": 22363,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/release.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 22705,
+          "wallMs": 22940,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/release.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "mdn-mdn-http-observatory-setup-node",
+      "repository": "https://github.com/mdn/mdn-http-observatory",
+      "commit": "1c41f2043a03c3ab953a65cf184b7fa6b8c2af2f",
+      "startedAt": "2026-11-27T01:01:46.389Z",
+      "finishedAt": "2026-11-27T01:02:37.771Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 25301,
+          "wallMs": 25797,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build-and-test.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 25140,
+          "wallMs": 25550,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/build-and-test.yml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "ms-dev01-sample-blogapp-checkout",
+      "repository": "https://github.com/ms-dev01/sample-blogapp",
+      "commit": "1558502890d1eb30f8cb1126796c8448557f55bb",
+      "startedAt": "2026-11-27T01:00:59.284Z",
+      "finishedAt": "2026-11-27T01:01:46.317Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 24664,
+          "wallMs": 24956,
+          "findingResolved": false,
+          "noNewFinding": true,
+          "staticVerificationPassed": false,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ci.yml"],
+          "noUnrelatedChanges": true,
+          "success": false
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 21792,
+          "wallMs": 22043,
+          "findingResolved": false,
+          "noNewFinding": true,
+          "staticVerificationPassed": false,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/ci.yml"],
+          "noUnrelatedChanges": true,
+          "success": false
         }
       ]
     },
@@ -75,6 +225,7 @@
           "staticVerificationPassed": true,
           "projectVerificationStatus": "not-run",
           "filesTouched": [".github/workflows/ios-main.yml"],
+          "noUnrelatedChanges": true,
           "success": true
         },
         {
@@ -88,6 +239,7 @@
           "staticVerificationPassed": true,
           "projectVerificationStatus": "not-run",
           "filesTouched": [".github/workflows/ios-main.yml"],
+          "noUnrelatedChanges": true,
           "success": true
         }
       ]
@@ -110,6 +262,7 @@
           "staticVerificationPassed": false,
           "projectVerificationStatus": "not-run",
           "filesTouched": [".github/workflows/lint.yaml"],
+          "noUnrelatedChanges": true,
           "success": false
         },
         {
@@ -123,6 +276,44 @@
           "staticVerificationPassed": true,
           "projectVerificationStatus": "not-run",
           "filesTouched": [".github/workflows/lint.yaml"],
+          "noUnrelatedChanges": true,
+          "success": true
+        }
+      ]
+    },
+    {
+      "taskId": "vmorkhat-skills-github-pages-checkout",
+      "repository": "https://github.com/vmorkhat/skills-github-pages",
+      "commit": "c28d0a5a71ab7fad2310efcbb181142e90ced925",
+      "startedAt": "2026-11-27T00:58:34.786Z",
+      "finishedAt": "2026-11-27T00:59:26.862Z",
+      "conditions": [
+        {
+          "condition": "baseline",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 26420,
+          "wallMs": 27186,
+          "findingResolved": false,
+          "noNewFinding": true,
+          "staticVerificationPassed": false,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/0-welcome.yml"],
+          "noUnrelatedChanges": true,
+          "success": false
+        },
+        {
+          "condition": "packet",
+          "agentExitCode": 0,
+          "agentTimedOut": false,
+          "agentWallMs": 24522,
+          "wallMs": 24798,
+          "findingResolved": true,
+          "noNewFinding": true,
+          "staticVerificationPassed": true,
+          "projectVerificationStatus": "not-run",
+          "filesTouched": [".github/workflows/0-welcome.yml"],
+          "noUnrelatedChanges": true,
           "success": true
         }
       ]
