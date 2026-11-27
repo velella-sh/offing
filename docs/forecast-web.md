@@ -49,3 +49,23 @@ The file record gives the selected filename or identifies pasted input. A
 `no-data` notice names an unclassified reference and explains the gap.
 `no-supported-declarations` reports an input with no recognized declarations.
 The final record contains the locally generated iCalendar text and its media type.
+
+## Repository link adapter in development
+
+The adapter accepts the tool host's URL value `github/<owner>/<repo>` or
+`github/<owner>/<repo>@<ref>`, with `HEAD` as the default ref. Its focused
+acceptance check, `acc-forecast-link`, runs the adapter against a GitHub-shaped
+fixture. The public page uses the file and paste inputs described above.
+
+The adapter makes one unauthenticated Git Trees request to
+`https://api.github.com` and reads selected files from
+`https://raw.githubusercontent.com` using the fetch supplied by the host.
+It omits credentials and refuses redirects. It selects regular files with
+the supported names above and YAML files directly under `.github/workflows/`.
+The limits are 40 files, 1 MiB per file and 5 MiB across the selected files.
+A truncated or invalid tree produces an error before any file downloads.
+
+A branch or tag can move during a forecast. The adapter checks the Git blob
+ID of each downloaded file against the tree listing. Use a commit SHA for
+a reproducible link. A rate-limit message gives the remaining requests and
+the UTC reset time when GitHub sends those values.
