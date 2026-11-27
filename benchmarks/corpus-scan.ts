@@ -150,37 +150,27 @@ export async function scanWithinMemoryLimit(
   let timer: NodeJS.Timeout | undefined;
   try {
     return await new Promise<CorpusScannedFinding[]>((resolve, reject) => {
-      let settled = false;
-      const settle = (action: () => void): void => {
-        if (settled) return;
-        settled = true;
-        action();
-      };
+      let report: ScanMessage | undefined;
       timer = setTimeout(() => {
-        settle(() => reject(new CorpusScanError("timeout", `scan did not finish within ${timeoutSeconds} s`)));
+        reject(new CorpusScanError("timeout", `scan did not finish within ${timeoutSeconds} s`));
+        child.kill("SIGKILL");
       }, timeoutSeconds * 1000);
-      child.once("message", (message: ScanMessage) =>
-        settle(() => {
-          if ("error" in message) {
-            // The scan's own guard (src/usage/memory-guard.ts) sends its heap message over IPC.
-            reject(
-              isOutOfMemory(message.error)
-                ? new CorpusScanError("memory", `scan exceeded the ${options.memoryMb} MB per-repository memory limit`)
-                : new CorpusScanError("crash", `scan failed: ${message.error}`),
-            );
-          } else {
-            resolve(message.findings);
-          }
-        }),
-      );
-      child.once("error", (error: unknown) => settle(() => reject(describeScanFailure(error, options.memoryMb))));
-      child.once("exit", (code, signal) =>
-        settle(() => reject(describeChildExit(code, signal, stderr, options.memoryMb))),
-      );
+      child.once("message", (message: ScanMessage) => {
+        report = message;
+      });
+      child.once("error", (error: unknown) => reject(describeScanFailure(error, options.memoryMb)));
+      // IPC and stderr can still deliver data after exit. Let completed workers flush coverage before settling.
+      child.once("close", (code, signal) => {
+        if (report === undefined) {
+          reject(describeChildExit(code, signal, stderr, options.memoryMb));
+        } else if ("error" in report) {
+          reject(describeScanFailure(report.error, options.memoryMb));
+        } else {
+          resolve(report.findings);
+        }
+      });
     });
   } finally {
     if (timer !== undefined) clearTimeout(timer);
-    // A timed-out child is still running; killing an already-exited one is harmless.
-    child.kill("SIGKILL");
   }
 }
