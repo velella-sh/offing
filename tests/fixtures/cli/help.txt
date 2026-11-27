@@ -78,11 +78,12 @@ Usage:
   offing drivers test <driver|command>
   offing fleet <organization|group> --policy <file|reference> [--json | --html]
   offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs
-  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>]
+  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>] [--image-lineage --json]
   offing hook <host> [--fail-on <severity|none>]   # check the file an agent just wrote and answer in its hook protocol
   offing init --hooks-for <host> [path] [--dry-run]   # post-edit hook for one detected agent host
   offing init --hooks --list [path]   # show agent hook stability and availability
   offing init --hooks --remove [--hooks-for <host>] [path] [--dry-run]   # remove managed agent hooks
+  offing lineage [path] [--json | --format mermaid] [--resolve-digests]   # trace container base images
   offing migrate <finding-id> [path] --driver <name> [--replay <recording>] [--timeout-ms <n>]
   offing migrate <finding-id> [path] --agent <command> [--timeout-ms <n>]
   offing migrate --from-refusals [path] --agent <command> [--timeout-ms <n>]
@@ -144,6 +145,7 @@ Examples:
   offing drivers test replay
   offing fleet my-organization --json --jobs 4
   offing hook claude-code
+  offing lineage . --format mermaid
   offing lsp
   offing migrate <finding-id> --agent 'my-agent "$OFFING_MIGRATION_PROMPT_FILE"'
   offing policy validate

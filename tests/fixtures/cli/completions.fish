@@ -42,6 +42,7 @@ complete -c offing -n __fish_use_subcommand -a config
 complete -c offing -n __fish_use_subcommand -a drivers
 complete -c offing -n __fish_use_subcommand -a fleet
 complete -c offing -n __fish_use_subcommand -a hook
+complete -c offing -n __fish_use_subcommand -a lineage
 complete -c offing -n __fish_use_subcommand -a lsp
 complete -c offing -n __fish_use_subcommand -a migrate
 complete -c offing -n __fish_use_subcommand -a policy
@@ -204,12 +205,16 @@ complete -c offing -n '__fish_seen_subcommand_from fleet' -l gitlab-url
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l include-forks
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l include-archived
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l json
+complete -c offing -n '__fish_seen_subcommand_from fleet' -l image-lineage
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l html
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l format
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l no-cache
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l fail-on
 complete -c offing -n '__fish_seen_subcommand_from fleet' -l progress
 complete -c offing -n '__fish_seen_subcommand_from hook' -l fail-on
+complete -c offing -n '__fish_seen_subcommand_from lineage' -l json
+complete -c offing -n '__fish_seen_subcommand_from lineage' -l format
+complete -c offing -n '__fish_seen_subcommand_from lineage' -l resolve-digests
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l agent
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l driver
 complete -c offing -n '__fish_seen_subcommand_from migrate' -l from-refusals

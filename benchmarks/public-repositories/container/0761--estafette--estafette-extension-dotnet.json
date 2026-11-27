@@ -12,6 +12,16 @@
         "kind": "maintainer-review",
         "note": "Read go.mod:3 at this commit: `go 1.20` declares a runtime version the rule judges."
       }
+    },
+    {
+      "ruleId": "dotnet.runtime.end-of-support-3.0",
+      "path": "Dockerfile.3.0",
+      "line": 3,
+      "groundTruthSource": {
+        "kind": "maintainer-review",
+        "note": "Dockerfile.3.0:2 defines DOCKER_REPOSITORY=mcr.microsoft.com/dotnet/core/sdk. Line 3 uses that default with tag 3.0, whose .NET release reached end of support on 2020-03-03.",
+        "url": "https://github.com/estafette/estafette-extension-dotnet/blob/f59bf2474023c42f0d8bb31eff5d8683c5b09f88/Dockerfile.3.0#L2-L3"
+      }
     }
   ]
 }

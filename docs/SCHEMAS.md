@@ -124,6 +124,12 @@ Vendor schemas keep the compatibility policies of their respective standards.
 
 ::schema-table{data="publicSchemas/inventory" label="Stack inventory fields"}
 
+### Container image lineage
+
+[Schema source](https://github.com/velella-sh/offing/blob/main/schemas/lineage.v1.schema.json)
+
+::schema-table{data="publicSchemas/lineage" label="Container image lineage fields"}
+
 ### MCP truncated-answer pointer
 
 [Schema source](https://github.com/velella-sh/offing/blob/main/schemas/more.v1.schema.json)

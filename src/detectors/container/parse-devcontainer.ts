@@ -1,3 +1,5 @@
+import { parseTree } from "jsonc-parser";
+
 import { parseImageReference } from "./parse-image.js";
 import { required } from "../../required.js";
 
@@ -116,15 +118,11 @@ function stripTrailingCommas(text: string): string {
   return chars.join("");
 }
 
-/** Return the 1-based line number of the first occurrence of `needle` in `text`. */
-function lineOf(text: string, needle: string): number {
-  const index = text.indexOf(needle);
-  if (index === -1) return 1;
-  let line = 1;
-  for (let i = 0; i < index; i++) {
-    if (text[i] === "\n") line++;
-  }
-  return line;
+/** Locate the top-level property assignment, ignoring nested or escaped key text. */
+function imageLine(text: string): number {
+  const properties = parseTree(text)?.children ?? [];
+  const property = properties.filter((node) => node.children?.[0]?.value === "image").at(-1);
+  return text.slice(0, property?.offset ?? 0).split("\n").length;
 }
 
 /** Parse the `image` declaration from a devcontainer.json file without any I/O. */
@@ -143,7 +141,7 @@ export function parseDevcontainer(contents: string): DevcontainerDeclaration[] {
     if (!parseImageReference(value)) return [];
 
     // Find the line of the "image" key in the stripped text.
-    const line = lineOf(stripped, `"image"`);
+    const line = imageLine(stripped);
     return [{ kind: "image", value, line }];
   } catch {
     return [];

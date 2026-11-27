@@ -5,7 +5,7 @@ _offing() {
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   command="${COMP_WORDS[1]}"
   if [ "$COMP_CWORD" -eq 1 ]; then
-    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions config drivers fleet hook lsp migrate policy prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
+    COMPREPLY=($(compgen -W "scan baseline forecast forecast countdown plan status-card glance lookup drift upgrade-check inventory badge diff drift receipt rollup renovate-preset dependabot-config fix check check-snippet guard usage mcp data watch init setup new-detector new-rule rules explain context doctor report-issue capabilities completions config drivers fleet hook lineage lsp migrate policy prompt recommend rollback-readiness timelapse verify wrapped --help --version" -- "$cur"))
     return
   fi
   case "$prev" in
@@ -61,8 +61,9 @@ _offing() {
     completions) opts="" ;;
     config) opts="--json" ;;
     drivers) opts="" ;;
-    fleet) opts="--include --exclude --topic --repos --jobs --policy --gitlab --gitlab-url --include-forks --include-archived --json --html --format --no-cache --fail-on --progress" ;;
+    fleet) opts="--include --exclude --topic --repos --jobs --policy --gitlab --gitlab-url --include-forks --include-archived --json --image-lineage --html --format --no-cache --fail-on --progress" ;;
     hook) opts="--fail-on" ;;
+    lineage) opts="--json --format --resolve-digests" ;;
     lsp) opts="" ;;
     migrate) opts="--agent --driver --from-refusals --replay --timeout-ms" ;;
     policy) opts="--policy --today" ;;

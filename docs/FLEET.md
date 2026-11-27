@@ -51,6 +51,12 @@ The [fleet schema](https://velella.sh/offing/schemas/fleet.v1.schema.json)
 defines the JSON format, including repository status and failure reasons.
 Text goes to standard output by default. Use `--json` for data, `--html`
 for a self-contained report, or `--progress` to write status lines to
-standard error while the fleet is scanning. The
+standard error while the fleet is scanning. Add `--image-lineage --json` to
+trace container bases to producers in other pinned repositories. The
+`imageLineage` field includes image references and file paths. This mode
+reads pinned inputs again instead of using the aggregate cache.
+[Container image lineage](LINEAGE.md)
+
+The
 [organization rollout guide](https://velella.sh/offing/ORG_ROLLOUT/) shows
 the reusable GitHub workflow.

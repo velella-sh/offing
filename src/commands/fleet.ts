@@ -21,6 +21,7 @@ const options = {
   "include-forks": { type: "boolean" },
   "include-archived": { type: "boolean" },
   json: { type: "boolean" },
+  "image-lineage": { type: "boolean" },
   html: { type: "boolean" },
   format: { type: "string" },
   "no-cache": { type: "boolean" },
@@ -50,12 +51,14 @@ function renderFormat(values: Flags): string {
   if (selectors.filter(Boolean).length > 1 || !["text", "json", "html"].includes(format)) {
     throw new FleetHostError("Choose one fleet format: text, json, or html.");
   }
+  if (values["image-lineage"] && format !== "json") throw new FleetHostError("--image-lineage requires JSON output.");
   return format;
 }
 
 async function scanOptions(values: Flags): Promise<FleetOptions> {
   return {
     jobs: Number(values.jobs ?? "4"),
+    imageLineage: values["image-lineage"] ?? false,
     noCache: values["no-cache"] ?? false,
     include: values.include ?? [],
     exclude: values.exclude ?? [],
@@ -125,7 +128,7 @@ export const command: CliCommand = {
   usage: [
     "  offing fleet <organization|group> --policy <file|reference> [--json | --html]",
     "  offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs",
-    "  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>]",
+    "  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>] [--image-lineage --json]",
   ],
   run,
 };

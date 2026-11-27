@@ -6,6 +6,7 @@ import { bundledRules } from "@velella/ebb/bundled-rules";
 import type { DataInfo, Finding, ScanResult, Severity, SourceLocation, VerificationCommand } from "./domain.js";
 import { buildRepositoryForecast, replayScanOptions } from "./forecast.js";
 import type { RepositoryForecast } from "./forecast.js";
+import { repositoryLineage, type ImageLineage } from "./lineage/index.js";
 import { createMigrationPacket } from "./migration-packet.js";
 import type { Receipt } from "./receipt.js";
 import { buildReceipt } from "./receipt.js";
@@ -95,6 +96,10 @@ export class OffingAgentTools {
   }
 
   /** Scan once and preserve the finding references exposed by the forecast tool. */
+  async imageLineage(repositoryPath: string): Promise<ImageLineage> {
+    return repositoryLineage(repositoryPath);
+  }
+
   async forecast(repositoryPath: string, months: number, asOf: string | undefined): Promise<RepositoryForecast> {
     const { result } = await runScanRequest({
       root: repositoryPath,

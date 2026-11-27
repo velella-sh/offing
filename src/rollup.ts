@@ -3,6 +3,7 @@ import { basename, dirname, extname } from "node:path";
 
 import { severityValues } from "./domain.js";
 import type { Finding, ScanResult, Severity } from "./domain.js";
+import type { ImageLineage } from "./lineage/index.js";
 import { required } from "./required.js";
 import { OffingError } from "./offing-error.js";
 
@@ -71,6 +72,7 @@ export interface FleetRepositoryStatus {
 export interface FleetResult extends Omit<RollupResult, "schemaVersion"> {
   schemaVersion: "offing.fleet.v1";
   repositoryStatus: FleetRepositoryStatus[];
+  imageLineage?: ImageLineage;
 }
 
 export type RollupDocument = RollupResult | FleetResult;

@@ -163,7 +163,10 @@ test("public API shape: package.json exposes exactly the reviewed entry points",
   const manifest = JSON.parse(readFileSync("package.json", "utf8")) as {
     exports: Record<string, unknown>;
   };
-  assert.deepEqual(Object.keys(manifest.exports).sort(), [...Object.keys(EXPORTS), "./package.json"].sort());
+  assert.deepEqual(
+    Object.keys(manifest.exports).sort(),
+    [...Object.keys(EXPORTS), "./package.json", "./schemas/lineage.v1.schema.json"].sort(),
+  );
 });
 
 test("public API shape: the root entry point re-exports the whole detector SDK", () => {

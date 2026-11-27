@@ -396,6 +396,36 @@
       "tool": "scan_sbom",
       "reason": "The user already has a local SBOM document to scan.",
       "prompt": "Check the image SBOM for lifecycle findings without fetching the image."
+    },
+    {
+      "id": "image-lineage-base-file",
+      "prompt": "Trace the container image lineage through my Dockerfile build stages.",
+      "tool": "image_lineage",
+      "reason": "Names the image lineage and Dockerfile evidence."
+    },
+    {
+      "id": "image-lineage-compose",
+      "prompt": "Which container bases do my Compose services use? Trace their image lineage.",
+      "tool": "image_lineage",
+      "reason": "Compose service declarations are lineage roots."
+    },
+    {
+      "id": "image-lineage-devcontainer",
+      "prompt": "Trace the lineage of the base used by my dev container.",
+      "tool": "image_lineage",
+      "reason": "A dev container image is a lineage root."
+    },
+    {
+      "id": "image-lineage-file-line",
+      "prompt": "Show exact Dockerfile file and line evidence for each link in the image lineage.",
+      "tool": "image_lineage",
+      "reason": "Lineage reports exact source locations."
+    },
+    {
+      "id": "image-lineage-copy-stage",
+      "prompt": "Trace the Dockerfile container base build stages used by the last image.",
+      "tool": "image_lineage",
+      "reason": "A final stage can use bases through COPY."
     }
   ]
 }

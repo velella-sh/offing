@@ -1,0 +1,30 @@
+{
+  "request": {
+    "name": "image_lineage",
+    "arguments": {
+      "repository_path": "<repository>"
+    }
+  },
+  "response": {
+    "schemaVersion": "offing.lineage.v1",
+    "chains": [
+      {
+        "image": "Dockerfile:final",
+        "path": "Dockerfile",
+        "line": 1,
+        "stage": "final",
+        "links": [
+          {
+            "reference": "scratch",
+            "path": "Dockerfile",
+            "line": 1,
+            "stage": "final",
+            "relationship": "from",
+            "parents": [],
+            "status": "not-applicable"
+          }
+        ]
+      }
+    ]
+  }
+}

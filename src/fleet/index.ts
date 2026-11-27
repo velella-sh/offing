@@ -11,6 +11,9 @@ import { parsePolicyReference } from "../fleet-policy/reference.js";
 import { defaultCacheDirectory } from "../cache-paths.js";
 import { declaresInput, detectorSparsePatterns } from "../detector-inputs.js";
 import { builtInDetectors } from "../detectors/index.js";
+import { loadImageRules } from "../detectors/container/image-lifecycle.js";
+import { buildImageLineage } from "../lineage/index.js";
+import { readLineageInputs, type LineageInputs } from "../lineage/inputs.js";
 import { rollup, type FleetRepositoryStatus, type FleetResult, type RollupFinding } from "../rollup.js";
 import { scanWithBuiltIns } from "../scan-builtins.js";
 import { globToRegExp } from "../workspaces.js";
@@ -37,6 +40,7 @@ export interface FleetProgress extends FleetRepositoryStatus {
 
 export interface FleetOptions {
   readonly jobs?: number;
+  readonly imageLineage?: boolean;
   readonly cacheDirectory?: string;
   readonly noCache?: boolean;
   readonly policy?: string;
@@ -52,6 +56,7 @@ export interface FleetOptions {
 interface RepositoryScan {
   readonly state: FleetRepositoryStatus;
   readonly findings: readonly RollupFinding[];
+  readonly lineage?: LineageInputs;
   readonly bytesFetched: number;
 }
 
@@ -62,6 +67,7 @@ interface FleetContext {
   readonly scannedAt: string;
   readonly noCache: boolean;
   readonly policy?: string;
+  readonly imageLineage: boolean;
 }
 
 function matches(name: string, patterns: readonly string[] = []): boolean {
@@ -121,7 +127,19 @@ async function scanPinned(
           today: context.scannedAt.slice(0, 10),
         })
       : undefined;
-    return { bytesFetched, findings: safeFindings(report.findings), ...(compliance ? { compliance } : {}) };
+    return {
+      bytesFetched,
+      findings: safeFindings(report.findings),
+      ...(compliance ? { compliance } : {}),
+      ...(context.imageLineage
+        ? {
+            lineage: {
+              ...(await readLineageInputs(directory)),
+              repository: { name: repository.name, host: context.host.origin, commit },
+            },
+          }
+        : {}),
+    };
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
@@ -170,8 +188,9 @@ export async function scanFleet(host: FleetHost, namespace: string, options: Fle
     host,
     fingerprint,
     scannedAt,
-    // Existing scan-cache entries contain aggregate findings, not the pinned config or CODEOWNERS.
-    noCache: options.policy !== undefined || (options.noCache ?? false),
+    // Existing cache entries only have aggregate findings. Policy and lineage need the pinned inputs.
+    noCache: options.policy !== undefined || options.imageLineage === true || (options.noCache ?? false),
+    imageLineage: options.imageLineage ?? false,
     ...(options.policy
       ? { policy: parsePolicyReference(options.policy) ? options.policy : resolve(options.policy) }
       : {}),
@@ -190,5 +209,14 @@ export async function scanFleet(host: FleetHost, namespace: string, options: Fle
     }),
   );
   const aggregated = rollup(results.map(({ state, findings }) => ({ repository: state.name, report: { findings } })));
-  return { ...aggregated, schemaVersion: "offing.fleet.v1", repositoryStatus: results.map(({ state }) => state) };
+  const fleet: FleetResult = {
+    ...aggregated,
+    schemaVersion: "offing.fleet.v1",
+    repositoryStatus: results.map(({ state }) => state),
+  };
+  if (context.imageLineage) {
+    const sources = results.flatMap(({ lineage }) => (lineage === undefined ? [] : [lineage]));
+    fleet.imageLineage = buildImageLineage(sources, await loadImageRules());
+  }
+  return fleet;
 }

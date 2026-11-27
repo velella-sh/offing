@@ -8,6 +8,7 @@ import { registerCheckUpgrade } from "./tools/check-upgrade.js";
 import { registerCreateMigrationContext } from "./tools/create-migration-context.js";
 import { registerExplainDeprecation } from "./tools/explain-deprecation.js";
 import { registerForecastRepository } from "./tools/forecast-repository.js";
+import { registerImageLineage } from "./tools/image-lineage.js";
 import { registerListDeprecations } from "./tools/list-deprecations.js";
 import { registerPlanMigrations } from "./tools/plan-migrations.js";
 import { registerRecommendVersion } from "./tools/recommend-version.js";
@@ -33,6 +34,7 @@ export const MCP_TOOL_REGISTRARS = [
   registerPlanMigrations,
   registerRecommendVersion,
   registerScanSbom,
+  registerImageLineage,
 ] as const;
 
 /** Registers every MCP tool on the server. */
