@@ -199,6 +199,22 @@ test("scan and Action apply the same local inheritance and fail on an unavailabl
   await assert.rejects(runGitHubAction({ root, today, reportPath, policy: "missing.json" }), /missing\.json/);
 });
 
+test("scan reports bad policy arguments and unavailable policy files as configuration errors", async (t) => {
+  const root = await fixture(t);
+  const repeated = await runCli(["scan", root, "--policy", "org.json", "--policy", "org.json"]);
+  assert.notEqual(repeated.code, 0);
+  assert.match(repeated.stderr, /--policy expects one local policy path or remote policy reference/);
+
+  const explicit = await runCli(["scan", root, "--policy", "missing.json"]);
+  assert.notEqual(explicit.code, 0);
+  assert.match(explicit.stderr, /Cannot read policy file .*missing\.json: file not found/);
+
+  await writeFile(join(root, ".offing.json"), json({ extends: "missing.json" }));
+  const inherited = await runCli(["scan", root]);
+  assert.notEqual(inherited.code, 0);
+  assert.match(inherited.stderr, /Cannot load fleet policy: .*missing\.json/);
+});
+
 test("repository-owned config cannot follow a policy symlink outside the scanned root", async (t) => {
   if (process.platform === "win32") return t.skip("symlink creation requires developer mode on Windows");
   const root = await fixture(t);
