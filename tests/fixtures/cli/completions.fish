@@ -223,6 +223,7 @@ complete -c offing -n '__fish_seen_subcommand_from autopilot' -l dry-run
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l prepare
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l replay
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l run-replay
+complete -c offing -n '__fish_seen_subcommand_from autopilot' -l resume
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l allow-red-baseline
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l test-only
 complete -c offing -n '__fish_seen_subcommand_from autopilot' -l container
