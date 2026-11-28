@@ -117,7 +117,7 @@ Usage:
   offing recommend <product|purl> [--min-days <n>] [--as-of <date>] [--json]   # which release line to write today (default 180 days of support)
   offing release-gate <ref|path> | --sbom <file|-> | --attestation <bundle> [--within-days <days> | --support-until <date>] [--today <date>] [--no-data fail|warn|ignore] [--json | --format text|json|sarif]
     --attestation also requires --subject <artifact> --repo <owner/repo> --signer-workflow <workflow> --trusted-root <file>
-  offing rollback-readiness <release-ref> --candidate <tag> [--within-days <days> | --support-until <date>] [--today <date>] [--no-data fail|warn|ignore] [--json]
+  offing rollback-readiness <release-ref> --candidate <tag> [--within-days <days> | --support-until <date>] [--today <date>] [--no-data fail|warn|ignore] [--json | --format text|json|sarif]
     Repeat --candidate 1 to 3 times. --within-days defaults to 30.
   offing timelapse [path] [--from <YYYY-MM>] [--to <YYYY-MM>] [--svg <file>] [--json]   # month-by-month aging: files turn red as deadlines pass
   offing verify [path]   # check the installed release's files against its manifest and say what it cannot check offline

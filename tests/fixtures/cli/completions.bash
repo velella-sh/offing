@@ -79,7 +79,7 @@ _offing() {
     proof) opts="--repo" ;;
     recommend) opts="--min-days --as-of --json" ;;
     release-gate) opts="--sbom --attestation --subject --repo --signer-workflow --trusted-root --within-days --support-until --today --no-data --json --format" ;;
-    rollback-readiness) opts="--candidate --within-days --support-until --today --no-data --json" ;;
+    rollback-readiness) opts="--candidate --within-days --support-until --today --no-data --json --format" ;;
     timelapse) opts="--from --to --svg --json --no-animation" ;;
     verify) opts="--data-version" ;;
     wrapped) opts="--year --svg --json --no-animation" ;;
