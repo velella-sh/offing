@@ -249,15 +249,20 @@ const outreach = "docs/launch/state-of-eol-2027";
 const publicOutreach = "https://velella.sh/offing/launch/state-of-eol-2027/";
 const publicReport = "https://velella.sh/offing/reports/state-of-eol-2027/";
 
+function markdownDestinations(text: string): Set<string> {
+  return new Set([...text.matchAll(/\]\(([^\s()]+)\)/g)].flatMap(([, url]) => (url ? [url] : [])));
+}
+
 test("the State of EOL outreach drafts carry the dated report link and fit the short-post budgets", async () => {
-  const outlets = ["show-hn.md", "reddit-devops.md", "reddit-node.md", "dev.md", "social.md"];
-  const index = await readFile(join(outreach, "README.md"), "utf8");
-  assert.ok((await readFile("docs/launch/README.md", "utf8")).includes(publicOutreach));
+  const outlets = ["show-hn", "reddit-devops", "reddit-node", "dev"];
+  const index = markdownDestinations(await readFile(join(outreach, "README.md"), "utf8"));
+  assert.ok(markdownDestinations(await readFile("docs/launch/README.md", "utf8")).has(publicOutreach));
   for (const outlet of outlets) {
-    const text = await readFile(join(outreach, outlet), "utf8");
-    assert.ok(text.includes(publicReport), `${outlet} should link to the dated study`);
-    assert.ok(index.includes(`${publicOutreach}${outlet.slice(0, -3)}/`), `${outlet} should be indexed under /offing`);
+    const text = await readFile(join(outreach, `${outlet}.md`), "utf8");
+    assert.ok(markdownDestinations(text).has(publicReport), `${outlet} should link to the dated study`);
+    assert.ok(index.has(`${publicOutreach}${outlet}/`), `${outlet} should be indexed under /offing`);
   }
+  assert.ok(index.has(`${publicOutreach}social/`));
   const social = await readFile(join(outreach, "social.md"), "utf8");
   const drafts = [...social.matchAll(/^## (.+)\n\n```text\n([^`]+)```/gm)];
   assert.deepEqual(
@@ -266,7 +271,7 @@ test("the State of EOL outreach drafts carry the dated report link and fit the s
   );
   for (const [index, limit] of [280, 300, 500].entries()) {
     const draft = drafts[index]?.[2]?.trim() ?? assert.fail("missing social copy");
-    assert.ok(draft.includes(publicReport));
+    assert.equal(draft.split(/\s+/u).at(-1), publicReport);
     assert.ok([...draft].length <= limit);
   }
 });
@@ -294,7 +299,7 @@ test("acc-state-of-eol builds the real report collection and accessible chart wi
     JSON.parse(reportData);
   const readme = await readFile("README.md", "utf8");
   const { scanned, cohort } = report.coverage;
-  assert.ok(readme.includes(publicReport));
+  assert.ok(markdownDestinations(readme).has(publicReport));
   assert.ok(readme.includes(`${scanned} of ${cohort.toLocaleString("en")} pinned public GitHub repositories`));
   assert.ok(readme.includes(`${report.headlines.ended.count} of the ${scanned} successful scans`));
   for (const [file, contents] of Object.entries(data)) await writeFile(join(docs, "_data", file), contents);
