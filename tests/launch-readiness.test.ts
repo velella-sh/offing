@@ -256,7 +256,10 @@ function releaseFixture(score: number, exact: boolean, lifecycle: string): typeo
           {
             name: "sbom / verify-attestation / lifecycle",
             conclusion: lifecycle,
-            steps: [{ name: "Verify published bytes with the GitHub CLI and Cosign", conclusion: lifecycle }],
+            steps: [
+              { name: "Verify published bytes with the GitHub CLI and Cosign", conclusion: "success" },
+              { name: "Check signed or candidate statement with the independent verifier", conclusion: lifecycle },
+            ],
           },
         ],
       });

@@ -1,20 +1,24 @@
 import { githubApi, githubJson, isDate, object, publicGet, repository } from "./evidence.js";
 
 const verifierSteps = {
-  provenance: { job: "publish-npm / verify-provenance", step: "Verify the npm provenance" },
+  provenance: { job: "publish-npm / verify-provenance", steps: ["Verify the npm provenance"] },
   attestation: {
     job: "sbom / verify-attestation / lifecycle",
-    step: "Verify published bytes with the GitHub CLI and Cosign",
+    steps: [
+      "Verify published bytes with the GitHub CLI and Cosign",
+      "Check signed or candidate statement with the independent verifier",
+    ],
   },
 };
 
 function stepResult(jobs: Record<string, unknown>[], role: keyof typeof verifierSteps): "green" | "red" | undefined {
-  const { job, step } = verifierSteps[role];
+  const { job, steps } = verifierSteps[role];
   const jobRun = jobs.find(({ name }) => name === job);
   if (!jobRun || !Array.isArray(jobRun.steps)) return undefined;
-  const check = jobRun.steps.map(object).find(({ name }) => name === step);
-  if (check?.conclusion === "failure") return "red";
-  if (check?.conclusion === "success" && jobRun.conclusion === "success") return "green";
+  const checks = jobRun.steps.map(object);
+  const results = steps.map((step) => checks.find(({ name }) => name === step)?.conclusion);
+  if (results.includes("failure")) return "red";
+  if (jobRun.conclusion === "success" && results.every((result) => result === "success")) return "green";
   return undefined;
 }
 
