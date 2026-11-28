@@ -9,7 +9,5 @@ const { result } = await createReplayDriver("recording.json").run({
   allowedPaths: [target],
   timeoutMs: 10_000,
 });
-const output = result.filesTouched.includes(target)
-  ? await readFile("checkout/" + target, "utf8")
-  : null;
+const output = result.filesTouched.includes(target) ? await readFile("checkout/" + target, "utf8") : null;
 process.stdout.write(JSON.stringify({ result, output }));
