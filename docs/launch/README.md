@@ -9,6 +9,9 @@ For setup and support, use the [forecast guide](https://velella.sh/offing/launch
 [FAQ](https://velella.sh/offing/launch/FAQ/), [Offing and Ebb overview](https://velella.sh/offing/launch/offing-and-ebb/), and
 [troubleshooting guide](https://velella.sh/offing/launch/TROUBLESHOOTING/).
 
+Follow a [recorded Autopilot upgrade](let-autopilot-do-the-upgrade.md) or walk through
+[signing and gating a release](prove-what-you-ship.md).
+
 Ready-to-post drafts for the Offing launch. Every claim in these drafts is
 backed by a file in this repository; the [fact check](#fact-check) maps each
 claim to its source. Adjust the first-person opening, confirm the release tag,
@@ -65,7 +68,7 @@ and read the channel's rules before posting.
 ## Assets
 
 All screenshots are existing files under
-[`docs/assets/screenshots/`](../assets/screenshots/); none were generated for
+[`docs/assets/screenshots/`](https://github.com/velella-sh/offing/tree/main/docs/assets/screenshots); none were generated for
 this kit. [screenshots.md](screenshots.md) lists what each one shows, its alt
 text, and which draft uses it.
 
