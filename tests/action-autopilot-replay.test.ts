@@ -140,11 +140,12 @@ async function mockGitHub(t: TestContext) {
     return {};
   };
   const server = createServer((req, res) => {
+    res.setHeader("content-type", "application/json");
     void handle(req).then(
       (response) => res.end(JSON.stringify(response)),
-      (error: unknown) => {
+      () => {
         res.statusCode = 500;
-        res.end(String(error));
+        res.end('{"error":"invalid fixture request"}');
       },
     );
   });
