@@ -245,6 +245,28 @@ test("counts only evidence-backed lineage when the consumer has no direct ended 
   );
 });
 
+const outreach = "docs/launch/state-of-eol-2027";
+const publicReport = "https://velella.sh/offing/reports/state-of-eol-2027/";
+
+test("the State of EOL outreach drafts carry the dated report link and fit the short-post budgets", async () => {
+  const outlets = ["show-hn.md", "reddit-devops.md", "reddit-node.md", "dev.md", "social.md"];
+  for (const outlet of outlets) {
+    const text = await readFile(join(outreach, outlet), "utf8");
+    assert.ok(text.includes(publicReport), `${outlet} should link to the dated study`);
+  }
+  const social = await readFile(join(outreach, "social.md"), "utf8");
+  const drafts = [...social.matchAll(/^## (.+)\n\n```text\n([^`]+)```/gm)];
+  assert.deepEqual(
+    drafts.map(([, outlet]) => outlet),
+    ["X", "Bluesky", "Mastodon"],
+  );
+  for (const [index, limit] of [280, 300, 500].entries()) {
+    const draft = drafts[index]?.[2]?.trim() ?? assert.fail("missing social copy");
+    assert.ok(draft.includes(publicReport));
+    assert.ok([...draft].length <= limit);
+  }
+});
+
 test("acc-state-of-eol builds the real report collection and accessible chart with pinned site tools", async (t) => {
   const tools = resolve(process.env.OFFING_SITE_TOOLS ?? ".github/site-tools");
   const mizzen = join(tools, "node_modules/@velella/mizzen/bin/mizzen.js");
@@ -263,6 +285,14 @@ test("acc-state-of-eol builds the real report collection and accessible chart wi
   await copyFile("docs/_templates/state-of-eol-2027-gallery.md", join(docs, "_templates/state-of-eol-2027-gallery.md"));
   await writeFile(join(docs, "mizzen.yml"), JSON.stringify({ title: "Offing", base: "/offing", collections }));
   const data = await renderStudyCollections(".", process.env.OFFING_STATE_OF_EOL_TEST_ARCHIVE);
+  const reportData = data["state-of-eol-2027.json"] ?? assert.fail("Missing study report");
+  const report: { coverage: { scanned: number; cohort: number }; headlines: { ended: { count: number } } } =
+    JSON.parse(reportData);
+  const readme = await readFile("README.md", "utf8");
+  const { scanned, cohort } = report.coverage;
+  assert.ok(readme.includes(publicReport));
+  assert.ok(readme.includes(`${scanned} of ${cohort.toLocaleString("en")} pinned public GitHub repositories`));
+  assert.ok(readme.includes(`${report.headlines.ended.count} of the ${scanned} successful scans`));
   for (const [file, contents] of Object.entries(data)) await writeFile(join(docs, "_data", file), contents);
   const deny = join(directory, "deny-network.mjs");
   await writeFile(

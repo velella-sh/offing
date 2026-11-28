@@ -12,6 +12,8 @@ For setup and support, use the [forecast guide](https://velella.sh/offing/launch
 Follow a [recorded Autopilot upgrade](https://velella.sh/offing/launch/let-autopilot-do-the-upgrade/) or walk through
 [signing and gating a release](https://velella.sh/offing/launch/prove-what-you-ship/).
 
+The [State of EOL 2027 outreach drafts](/launch/state-of-eol-2027/) cover the dated study and its interactive gallery.
+
 Ready-to-post drafts for the Offing launch. Every claim in these drafts is
 backed by a file in this repository; the [fact check](#fact-check) maps each
 claim to its source. Adjust the first-person opening, confirm the release tag,
