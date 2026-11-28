@@ -20,9 +20,9 @@ npx --yes @velella/offing
 
 No subcommand is needed. Offing scans the current directory and prints the top findings and upcoming lifecycle deadlines. After installation, it reads repository files such as manifests, lockfiles, workflows, and source files, plus local Ebb lifecycle data. The first run never prompts, writes files, or uses the network. If Git history is unavailable, it still scans the files on disk. For the full report with finding IDs, replacements, and evidence, run `npx --yes @velella/offing scan .`. Use `npx --yes @velella/offing --json` for the structured forecast without the next-step hints.
 
-If the first Autopilot wave has confirmed offline codemods, the forecast ends with their count. Run `offing autopilot . --dry-run --wave 0` to see which findings have a deterministic edit available. The preview uses the current files without applying patches or running tests.
+If the first Autopilot wave has confirmed offline codemods, the forecast ends with their count. Run `npx --yes @velella/offing autopilot . --dry-run --wave 0` to see which findings have a deterministic edit available. The preview uses the current files without applying patches or running tests. If the wave has no offline fixes, the forecast says there is nothing for Autopilot to fix and omits the preview command.
 
-The bare invocation starts working with the release that includes this change. To try it before then, use a checkout of Offing as shown below.
+The bare invocation requires Offing 0.1.2 or later. Use a checkout of Offing to try it before release.
 
 ### Try the demo
 
@@ -55,15 +55,15 @@ On macOS arm64 with Node.js 22.23.1 and npm 10.9.8, a clean-cache `npx` install 
 
 ### Time to the first forecast
 
-A hosted release dry run measured a local candidate tarball on three pinned public repositories. Each run used a fresh npm cache and measured dependency downloads, installation, and the first forecast. The weekly run uses an exact published npm version and also measures transfer of the Offing tarball itself.
+A hosted release dry run measured a candidate tarball on three pinned public repositories. Each run used a fresh npm cache and measured dependency downloads, installation, and the first forecast. The weekly run uses an exact published npm version and also measures transfer of the Offing tarball itself.
 
 | Hosted runner | Node.js 22.23.5 | Node.js 24.22.3 |
 | --- | ---: | ---: |
-| Linux x64 | 2.875–3.310 s | 3.961–4.513 s |
-| macOS arm64 | 4.761–5.152 s | 3.003–4.766 s |
-| Windows x64 | 10.987–12.888 s | 7.067–8.798 s |
+| Linux x64 | 2.687–3.249 s | 3.691–4.264 s |
+| macOS arm64 | 4.727–7.012 s | 4.279–7.011 s |
+| Windows x64 | 6.873–16.733 s | 7.369–9.430 s |
 
-The dry run and weekly benchmark require each first forecast in under 10 seconds and retain timings when a runner misses. In this candidate run, Windows with Node.js 22 exceeded the budget. Downloads and installation overlap, so the reports show the tarball download span, npm's full install phase, and the time after install separately. [Candidate timing evidence](https://github.com/velella-sh/offing/actions/runs/45940201878) · [Weekly First minute runs](https://github.com/velella-sh/offing/actions/workflows/first-minute.yml)
+The release, dry run, and weekly benchmark require each first forecast in under 10 seconds and retain timings when a runner misses. One Windows run with Node.js 22 exceeded the budget and blocked the dry run's publish stage. The timing report separates the tarball download span, npm's full install phase (which includes downloads), and time after install. [Candidate timing evidence](https://github.com/velella-sh/offing/actions/runs/46086052323) · [Weekly First minute runs](https://github.com/velella-sh/offing/actions/workflows/first-minute.yml)
 
 ## 2. Check one dependency before adding it
 

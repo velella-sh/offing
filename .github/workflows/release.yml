@@ -43,15 +43,15 @@ jobs:
       release_gate_fixture: ${{ inputs.release_gate_fixture || false }}
   first-minute:
     needs: [npm-candidate]
-    if: ${{ !cancelled() && needs.npm-candidate.result == 'success' && inputs.dry_run }}
+    if: ${{ !cancelled() && needs.npm-candidate.result == 'success' }}
     uses: ./.github/workflows/first-minute.yml # zizmor: ignore[self-repository] -- measure this release's candidate artifact
     with:
       candidate: true
 
   # The npm publish lives here, not in a reusable stage: Scorecard's Packaging check needs a publish in a workflow with its own runs.
   npm-publish:
-    needs: [npm-candidate]
-    if: ${{ !cancelled() && needs.npm-candidate.result == 'success' }}
+    needs: [first-minute]
+    if: ${{ !cancelled() && needs.first-minute.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

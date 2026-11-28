@@ -5,7 +5,6 @@ import process from "node:process";
 import { parseArgs, promisify } from "node:util";
 import { DEFAULT_FORECAST_MONTHS } from "@velella/ebb/forecast";
 import { isIsoDate } from "@velella/ebb/registry";
-import { command as forecastCommand } from "../commands/forecast.js";
 import type { CommandContext } from "../commands/types.js";
 import type { ScanResult } from "../domain.js";
 import { forecastWeather, locationText, singleLine } from "../forecast-core.js";
@@ -73,8 +72,15 @@ export async function runOnboarding(args: readonly string[], ctx: CommandContext
     return ctx.fail("usage", "Usage: offing [--as-of <YYYY-MM-DD>] [--json]");
   }
   if (asOf !== undefined && !isIsoDate(asOf)) return ctx.fail("usage", "--as-of must be a date (YYYY-MM-DD).");
-  if (json) return forecastCommand.run(asOf === undefined ? ["--json"] : ["--json", "--as-of", asOf], ctx, true);
+  if (json) {
+    const { command } = await import("../commands/forecast.js");
+    return command.run(asOf === undefined ? ["--json"] : ["--json", "--as-of", asOf], ctx, true);
+  }
+  return runFirstForecast(asOf);
+}
 
+/** The bare executable shares this path without importing the full command table. */
+export async function runFirstForecast(asOf?: string): Promise<number> {
   const root = process.cwd();
   const [scan, entries, history] = await Promise.all([
     scanWithBuiltIns(root, asOf === undefined ? { noCache: true } : replayScanOptions(asOf)),
@@ -91,11 +97,21 @@ export async function runOnboarding(args: readonly string[], ctx: CommandContext
     ),
   );
   // Historical forecasts have no equivalent Autopilot invocation.
-  if (asOf === undefined && scan.findings.length > 0) {
-    const { countFirstWaveCodemods } = await import("../autopilot/plan.js");
-    const count = await countFirstWaveCodemods(scan).catch(() => 0);
-    if (count > 0)
-      process.stdout.write(`Autopilot can fix ${count}; run offing autopilot . --dry-run --wave 0 to preview.\n`);
-  }
+  if (asOf === undefined) await printAutopilotPreview(scan);
   return 0;
+}
+
+async function printAutopilotPreview(scan: ScanResult): Promise<void> {
+  let count = 0;
+  if (scan.findings.length > 0) {
+    const { countFirstWaveCodemods } = await import("../autopilot/plan.js");
+    const assessed = await countFirstWaveCodemods(scan).catch(() => undefined);
+    if (assessed === undefined) return;
+    count = assessed;
+  }
+  process.stdout.write(
+    count === 0
+      ? "There is nothing for Autopilot to fix.\n"
+      : `Autopilot can fix ${count}; run offing autopilot . --dry-run --wave 0 to preview.\n`,
+  );
 }
