@@ -27,7 +27,9 @@ test("release.yml calls verify, build, publish-per-channel, and smoke stages", a
   const orchestrator = parse(await readFile(join(workflowsDir, "release.yml"), "utf8")) as {
     on: {
       push?: { branches?: string[]; tags?: string[] };
-      workflow_dispatch: { inputs: Record<string, { type?: string; default?: boolean }> };
+      workflow_dispatch: {
+        inputs: Record<string, { type?: string; default?: boolean }>;
+      };
       workflow_run?: unknown;
     };
     jobs: Record<string, { uses?: string; if?: string; needs?: string | string[] }>;
@@ -147,15 +149,33 @@ test("lifecycle signing is tag-only and the release verifies on a separate fresh
   assert.match(sign.if, /!inputs\.dry_run.*github\.event_name == 'push'.*refs\/tags\/v/);
   assert.equal(sign.permissions.attestations, "write");
   assert.equal(sign.permissions["id-token"], "write");
+  assert.ok(
+    attest.jobs.prepare.steps.some(
+      (step: { with?: { name?: string; path?: string } }) =>
+        step.with?.name === "first-minute-candidate" && step.with.path === "subjects",
+    ),
+  );
+  assert.ok(!attest.jobs.prepare.steps.some(({ run }: { run?: string }) => run?.includes("npm pack")));
+  assert.ok(
+    sign.steps.some(
+      (step: { with?: Record<string, string> }) => step.with?.["subject-checksums"] === "lifecycle-subjects.sha256",
+    ),
+  );
 
   const verifier = parse(await readFile(join(workflowsDir, "release-verify.yml"), "utf8"));
-  const steps = verifier.jobs.lifecycle.steps as Array<{ if?: string; run?: string; uses?: string }>;
+  const steps = verifier.jobs.lifecycle.steps as Array<{
+    if?: string;
+    run?: string;
+    uses?: string;
+    with?: { name?: string };
+  }>;
   assert.ok(steps.every((step) => !step.uses?.includes("actions/checkout")));
+  assert.ok(steps.some((step) => step.if === "inputs.dry_run" && step.with?.name === "first-minute-candidate"));
   const signed = steps.find(({ run }) => run?.includes("gh attestation verify"));
   assert.match(signed?.if ?? "", /!inputs\.dry_run/);
   assert.match(signed?.run ?? "", /--signer-workflow.*--source-ref.*--source-digest/);
   assert.match(signed?.run ?? "", /verify-blob-attestation.*--check-claims=true/);
-  assert.match(signed?.run ?? "", /verify_gh tampered\.tgz \|\| verify_cosign tampered\.tgz/);
+  assert.match(signed?.run ?? "", /verify_gh "\$tampered" \|\| verify_cosign "\$tampered"/);
 });
 
 test("release publication and consumer workflows wire the same opt-in lifecycle gate", async () => {
@@ -192,6 +212,9 @@ test("release publication and consumer workflows wire the same opt-in lifecycle 
 
   const consumer = parse(await readFile("templates/workflows/offing-release-gate.yml", "utf8"));
   assert.deepEqual(consumer.permissions, { contents: "read" });
-  assert.deepEqual(consumer.on, { release: { types: ["published"] }, push: { tags: ["v*"] } });
+  assert.deepEqual(consumer.on, {
+    release: { types: ["published"] },
+    push: { tags: ["v*"] },
+  });
   assert.equal(consumer.jobs.lifecycle.steps[1].with["release-gate-days"], "30");
 });

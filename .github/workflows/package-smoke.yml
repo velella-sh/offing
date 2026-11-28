@@ -93,23 +93,59 @@ jobs:
         with:
           name: lifecycle-acceptance
           path: fixture
-      - uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532 # v4.1.3
       - name: Sign the fixture's lifecycle predicate
         id: attest
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
         with:
-          subject-path: fixture/lifecycle-sample.txt
+          subject-checksums: fixture/lifecycle-subjects.sha256
           predicate-type: ${{ env.PREDICATE_TYPE }}
           predicate-path: fixture/predicate.json
-      - name: Test both verifiers against the signed fixture
+      - name: Stage the signature bundle
+        env:
+          BUNDLE: ${{ steps.attest.outputs.bundle-path }}
+        run: cp -- "$BUNDLE" lifecycle.sigstore.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: lifecycle-acceptance-signed
+          path: lifecycle.sigstore.json
+          if-no-files-found: error
+
+  gate-signed-lifecycle:
+    if: github.event_name == 'workflow_dispatch'
+    needs: attest-lifecycle
+    name: acc-release-gate (signed lifecycle fixture)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    env:
+      PREDICATE_TYPE: https://velella.sh/offing/attestation/v1/
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: lifecycle-acceptance
+          path: fixture
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: lifecycle-acceptance-signed
+          path: fixture
+      - name: Install the exact packed candidate
+        working-directory: fixture/npm-install
+        run: npm ci --omit=dev --ignore-scripts --no-fund --no-audit
+      - name: Fetch trust roots for offline verification
+        working-directory: fixture
+        run: gh attestation trusted-root > trusted_root.jsonl
+      - uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532 # v4.1.3
+      - name: acc-lifecycle-attestation (clean consumer)
         working-directory: fixture
         env:
           GH_TOKEN: ${{ github.token }}
-          BUNDLE: ${{ steps.attest.outputs.bundle-path }}
-          ATTESTATION_URL: ${{ steps.attest.outputs.attestation-url }}
         run: |
           set -euo pipefail
-          cp -- "$BUNDLE" lifecycle.sigstore.json
           signer="$GITHUB_REPOSITORY/.github/workflows/package-smoke.yml"
           verify_gh() {
             gh attestation verify "$1" --bundle lifecycle.sigstore.json --repo "$GITHUB_REPOSITORY" \
@@ -127,57 +163,53 @@ jobs:
               exit 1
             fi
           }
-          verify_gh lifecycle-sample.txt "$signer"
-          verify_cosign lifecycle-sample.txt "$signer"
-          cp lifecycle-sample.txt modified.txt
-          printf 'modified\n' >> modified.txt
-          expect_rejection verify_gh modified.txt "$signer"
-          expect_rejection verify_cosign modified.txt "$signer"
+          sha256sum offing-* velella-offing-*.tgz | cmp - lifecycle-subjects.sha256
+          jq -er '.dsseEnvelope.payload' lifecycle.sigstore.json | base64 -d > lifecycle.intoto.json
+          jq -e --slurpfile expected prepared.intoto.json '
+            def ordered: .subject |= sort_by(.name);
+            ordered == ($expected[0] | ordered)
+          ' lifecycle.intoto.json > /dev/null
+          tarballs=(velella-offing-*.tgz)
+          tar -xzf "${tarballs[0]}" \
+            package/docs/spec/lifecycle-attestation/conformance/check.mjs \
+            package/docs/spec/lifecycle-attestation/example/verify.mjs
+          verifier=package/docs/spec/lifecycle-attestation/example/verify.mjs
+          node package/docs/spec/lifecycle-attestation/conformance/check.mjs lifecycle.intoto.json
+          for subject in offing-* velella-offing-*.tgz; do
+            verify_gh "$subject" "$signer"
+            verify_cosign "$subject" "$signer"
+            node "$verifier" lifecycle.intoto.json "$subject" > /dev/null
+          done
           wrong_signer="$GITHUB_REPOSITORY/.github/workflows/release-attest.yml"
-          expect_rejection verify_gh lifecycle-sample.txt "$wrong_signer"
-          expect_rejection verify_cosign lifecycle-sample.txt "$wrong_signer"
-          printf 'Both verifiers accepted the fixture and rejected modified bytes and the wrong signer.\n\nAttestation: %s\n' \
-            "$ATTESTATION_URL" >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        with:
-          name: lifecycle-acceptance-signed
-          path: |
-            fixture/lifecycle-sample.txt
-            fixture/lifecycle.sigstore.json
-          if-no-files-found: error
-
-  gate-signed-lifecycle:
-    if: github.event_name == 'workflow_dispatch'
-    needs: attest-lifecycle
-    name: acc-release-gate (signed lifecycle fixture)
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
-        with:
-          node-version: '24'
-          package-manager-cache: false
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: lifecycle-gate-candidate
-          path: candidate
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: lifecycle-acceptance-signed
-          path: fixture
-      - name: Install the exact packed candidate
-        working-directory: candidate/npm-install
-        run: npm ci --omit=dev --ignore-scripts --no-fund --no-audit
-      - name: Fetch trust roots for offline verification
-        working-directory: fixture
-        run: gh attestation trusted-root > trusted_root.jsonl
+          expect_rejection verify_gh "${tarballs[0]}" "$wrong_signer"
+          expect_rejection verify_cosign "${tarballs[0]}" "$wrong_signer"
+          mkdir tampered
+          tampered="tampered/${tarballs[0]}"
+          cp -- "${tarballs[0]}" "$tampered"
+          printf 'tampered' >> "$tampered"
+          expect_rejection verify_gh "$tampered" "$signer"
+          expect_rejection verify_cosign "$tampered" "$signer"
+          expect_rejection node "$verifier" lifecycle.intoto.json "$tampered"
+          for example in 2026-03-31:1 2026-04-01:0 2026-04-02:-1; do
+            npm-install/node_modules/.bin/offing attest check lifecycle.sigstore.json \
+              --subject "${tarballs[0]}" --today "${example%:*}" |
+              rg --fixed-strings -- '"pkg:docker/library/alpine@3.18"' |
+              rg --fixed-strings -- ": ${example#*:} days left"
+          done
+          {
+            printf '### acc-lifecycle-attestation (clean consumer)\n\n'
+            printf 'Signed subjects at %s\n\n' "$GITHUB_SHA"
+            printf '```text\n'
+            cat lifecycle-subjects.sha256
+            printf '```\n\nBoth signature verifiers rejected the wrong signer and modified bytes. The installed CLI reproduced the documented day counts.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Evaluate the signed predicate on either side of the deadline
         working-directory: fixture
         run: |
           set -euo pipefail
-          bin=../candidate/npm-install/node_modules/.bin/offing
+          bin=npm-install/node_modules/.bin/offing
+          tarballs=(velella-offing-*.tgz)
+          tarball="${tarballs[0]}"
           signer="$GITHUB_REPOSITORY/.github/workflows/package-smoke.yml"
           export GH_CONFIG_DIR="$RUNNER_TEMP/offing-gate-gh"
           export OFFING_DATA_VERSION=bundled
@@ -187,10 +219,10 @@ jobs:
               --today "$2" --within-days 0 --no-data ignore --json
           }
 
-          gate lifecycle-sample.txt 2026-03-31 |
+          gate "$tarball" 2026-03-31 |
             jq -e '.asOf == "2026-03-31" and .decisions[0].input.kind == "attestation" and .decisions[0].verdict == "pass"'
           status=0
-          gate lifecycle-sample.txt 2026-04-01 > gate.json || status=$?
+          gate "$tarball" 2026-04-01 > gate.json || status=$?
           test "$status" -eq 1
           jq -e '
             .asOf == "2026-04-01" and .decisions[0].verdict == "block" and
@@ -199,10 +231,8 @@ jobs:
                 .deadline == "2026-04-01" and .daysLeft == 0 and .outcome == "block")
           ' gate.json
 
-          cp lifecycle-sample.txt modified.txt
-          printf 'modified\n' >> modified.txt
           status=0
-          gate modified.txt 2026-04-01 > rejected.json 2> rejected.err || status=$?
+          gate "tampered/$tarball" 2026-04-01 > rejected.json 2> rejected.err || status=$?
           test "$status" -eq 4
           jq -e '
             .schemaVersion == "offing.error.v1" and .error.reason == "invalid-input" and .error.exitCode == 4 and
@@ -211,7 +241,7 @@ jobs:
 
           {
             printf '### acc-release-gate (signed lifecycle fixture)\n\n'
-            printf -- '- Candidate tarball SHA-256 %s\n' "$(sha256sum ../candidate/*.tgz | cut -d ' ' -f 1)"
+            printf -- '- Candidate tarball SHA-256 %s\n' "$(sha256sum "$tarball" | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
             printf -- '- The verified predicate passed before the deadline, blocked on it, and refused modified bytes.\n'
           } >> "$GITHUB_STEP_SUMMARY"
@@ -817,37 +847,34 @@ jobs:
             printf -- '- Unsigned statement, packaged schema and template, and standalone conformance verified.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Prepare a synthetic subject for live lifecycle signing
+      - name: Stage the exact packed candidate and five synthetic binary subjects
         if: github.event_name == 'workflow_dispatch'
         working-directory: ${{ runner.temp }}
         run: |
           set -euo pipefail
-          mkdir lifecycle-acceptance
+          mkdir -p lifecycle-acceptance/npm-install
+          cp package-smoke/*.tgz lifecycle-acceptance/
+          cp package-smoke/npm-install/{package.json,package-lock.json} lifecycle-acceptance/npm-install/
           cd lifecycle-acceptance
-          printf 'Offing lifecycle attestation test fixture\n' > lifecycle-sample.txt
+          version="$("$RUNNER_TEMP/package-smoke/npm-install/node_modules/.bin/offing" --version)"
+          for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win32-x64.exe; do
+            printf 'Offing lifecycle attestation synthetic %s binary\n' "$target" > "offing-$version-$target"
+          done
+          sha256sum offing-* velella-offing-*.tgz > lifecycle-subjects.sha256
           "$RUNNER_TEMP/package-smoke/npm-install/node_modules/.bin/offing" attest \
-            --subject lifecycle-sample.txt --sbom "$GITHUB_WORKSPACE/tests/fixtures/attestation/bom.cdx.json" \
-            --data-version bundled | jq -e '.predicate' > predicate.json
+            --subject velella-offing-*.tgz --sbom "$GITHUB_WORKSPACE/tests/fixtures/attestation/bom.cdx.json" \
+            --data-version bundled > draft.json
+          jq -e '.predicate' draft.json > predicate.json
+          jq -R -s --slurpfile draft draft.json '
+            [split("\n")[] | select(length > 0) | split("  ") | {name: .[1], digest: {sha256: .[0]}}] as $subjects
+            | $draft[0] | .subject = $subjects
+          ' lifecycle-subjects.sha256 > prepared.intoto.json
+          rm draft.json
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: github.event_name == 'workflow_dispatch'
         with:
           name: lifecycle-acceptance
           path: ${{ runner.temp }}/lifecycle-acceptance/
-          if-no-files-found: error
-
-      - name: Stage the exact packed candidate for signed gate acceptance
-        if: github.event_name == 'workflow_dispatch'
-        working-directory: ${{ runner.temp }}
-        run: |
-          set -euo pipefail
-          mkdir -p lifecycle-gate-candidate/npm-install
-          cp package-smoke/*.tgz lifecycle-gate-candidate/
-          cp package-smoke/npm-install/{package.json,package-lock.json} lifecycle-gate-candidate/npm-install/
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        if: github.event_name == 'workflow_dispatch'
-        with:
-          name: lifecycle-gate-candidate
-          path: ${{ runner.temp }}/lifecycle-gate-candidate/
           if-no-files-found: error
 
       - name: acc-release-gate (installed CLI and standalone fixtures)
