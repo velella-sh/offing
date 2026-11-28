@@ -482,3 +482,93 @@ test("a resumed run preserves its previous turn when the test backend becomes un
   assert.equal(result.record.replay.turn, 1);
   assert.equal(await git(result.tree, "rev-parse", "HEAD"), head);
 });
+
+const scoreboardCapture = process.env.OFFING_AUTOPILOT_SCOREBOARD_CAPTURE;
+test("acc-autopilot-evals records real replay runs for the fixture scoreboard", {
+  skip: !scoreboardCapture,
+}, async (t) => {
+  assert.ok(scoreboardCapture);
+  const output = resolve(scoreboardCapture);
+  await mkdir(output);
+  const project = await fixture(t, { docker: true });
+  const green = await project.run([greenTurn], ...redBaseline);
+  const phases = ["first", "second", "third", "fourth"].map((value) => ({ "tests/state.txt": `${value}\n` }));
+  const exhausted = await project.run([...phases, greenTurn], ...redBaseline);
+  const failed = await project.run([{ "tests/state.txt": "done\n" }], ...redBaseline);
+  const ineligible = await fixture(t, { withProfile: false, docker: true });
+  const excluded = await ineligible.run([]);
+  assert.equal(green.result.code, 0, green.result.stderr + green.result.stdout);
+  assert.equal(exhausted.record.stopReason, "run.turns", exhausted.result.stderr + exhausted.result.stdout);
+  assert.equal(failed.record.stopReason, "recording-exhausted");
+  const excludedRun = await checkedAutopilotRun(excluded.record);
+  assert.equal(excludedRun.stopReason, "container-tests-unavailable");
+  const excludedTurns = excludedRun.transitions.filter((phase) => phase === "agent-turn").length;
+  assert.equal(excludedTurns, 0);
+
+  async function proofFor(result: typeof green) {
+    const run = await checkedAutopilotRun(result.record);
+    assert.ok(run.replay && run.replay.turn > 0);
+    const turn = run.replay.turn;
+    const attempted = run.transitions.filter((phase) => phase === "agent-turn").length;
+    const verify = await checkedVerifyResult(await result.evidence("final-verify-result.json"));
+    assert.ok(verify.after.offingVersion);
+    const { proof } = await buildAutopilotProof(
+      run,
+      {
+        repo: result.tree,
+        verify,
+        testRuns: await result.evidence(`turn-${turn}-tests.json`),
+        agentRuns: await Promise.all(
+          Array.from({ length: attempted }, (_, i) => result.evidence(`turn-${i + 1}-agent.json`)),
+        ),
+        budget: { elapsedMs: run.replay.elapsedMs, costUsd: run.replay.usage.costCents / 100 },
+        tools: { offing: verify.after.offingVersion, git: await git(result.tree, "--version") },
+        commandResults: [{ commandIndex: 0, testRunIndex: 0 }],
+      },
+      new Map([[digest(""), ""]]),
+    );
+    return { run, proof };
+  }
+  async function failure(file: string, lines: readonly string[]) {
+    const text = `${lines.join("\n")}\n`;
+    await writeFile(join(output, file), text, { flag: "wx" });
+    return { file, sha256: digest(text) };
+  }
+  const done = await proofFor(green);
+  const budget = await proofFor(exhausted);
+  const unresolved = await proofFor(failed);
+  assert.equal(done.proof.verify.verdict, "passed");
+  const rows = [
+    { id: "completed-replay", outcome: "green", ...done },
+    {
+      id: "turn-budget-replay",
+      outcome: "stopped-by-budget",
+      ...budget,
+      lastFailure: await failure("exhausted.txt", [
+        `Recorded stop: ${budget.run.stopReason}`,
+        `Accepted replay turns: ${budget.run.replay?.usage.turns}`,
+      ]),
+    },
+    {
+      id: "unresolved-replay",
+      outcome: "failed",
+      ...unresolved,
+      lastFailure: await failure("failed.txt", [
+        `Recorded stop: ${unresolved.run.stopReason}`,
+        `Verification: ${unresolved.proof.verify.verdict}`,
+        `Remaining selected findings: ${unresolved.proof.verify.counts.remaining}`,
+      ]),
+    },
+    {
+      id: "missing-profile-replay",
+      outcome: "excluded",
+      lastFailure: await failure("excluded.txt", [
+        `Recorded preflight stop: ${excludedRun.stopReason}`,
+        `Recorded replay turns: ${excludedTurns}`,
+      ]),
+    },
+  ];
+  await writeFile(join(output, "results.json"), `${JSON.stringify({ source: "synthetic-fixture", rows }, null, 2)}\n`, {
+    flag: "wx",
+  });
+});

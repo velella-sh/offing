@@ -2,6 +2,7 @@ import { constants } from "node:fs";
 import { lstat, open, readFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import process from "node:process";
+import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import { z } from "zod";
@@ -33,7 +34,7 @@ const fixture = z.strictObject({
 type Row = z.infer<typeof fixture>["rows"][number];
 type Measurements = { turns: number | null; elapsedMs: number; costUsd: number | null };
 
-async function readRegular(path: string): Promise<Buffer> {
+export async function readRegular(path: string): Promise<Buffer> {
   const entry = await lstat(path);
   if (!entry.isFile() || entry.size > MAXIMUM_READ_BYTES) throw new Error("Expected a bounded regular evidence file.");
   const file = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
@@ -126,7 +127,7 @@ function medianOf(values: (number | null)[]) {
   };
 }
 
-async function report(path: string) {
+export async function reportAutopilotFixture(path: string) {
   const bytes = await readRegular(path);
   const document = parseBoundedJson(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
   const input = fixture.safeParse(document?.value);
@@ -175,11 +176,13 @@ async function main(): Promise<void> {
   const { values } = parseArgs({ options: { fixture: { type: "string" } } });
   if (!values.fixture) throw new Error("Usage: npm run autopilot-evals:report -- --fixture <file>");
   const path = resolve(values.fixture);
-  const summary = await report(path);
+  const summary = await reportAutopilotFixture(path);
   process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);
 }
 
-await main().catch((error: unknown) => {
-  process.stderr.write(`autopilot-evals: ${error instanceof Error ? error.message : String(error)}\n`);
-  process.exitCode = 1;
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  await main().catch((error: unknown) => {
+    process.stderr.write(`autopilot-evals: ${error instanceof Error ? error.message : String(error)}\n`);
+    process.exitCode = 1;
+  });
+}

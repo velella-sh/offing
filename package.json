@@ -151,6 +151,7 @@
     "leaderboard": "npm run build --silent && node dist/benchmarks/agent-harness/leaderboard.js",
     "fix-evals": "npm run build --silent && node dist/benchmarks/fix-evals/index.js",
     "autopilot-evals:report": "node dist/benchmarks/autopilot-evals/report.js",
+    "autopilot-evals:scoreboard": "npm run build --silent && node dist/benchmarks/autopilot-evals/scoreboard.js",
     "eval:skill-triggers": "npm run build --silent && node dist/benchmarks/skill-trigger-eval.js",
     "eval:plugins": "npm run build --silent && node dist/benchmarks/plugin-host-eval.js",
     "eval:agent-loop": "npm run build --silent && node dist/benchmarks/agent-loop/index.js",
