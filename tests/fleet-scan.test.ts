@@ -679,6 +679,17 @@ test("fleet forecast acceptance records exact CODEOWNERS and works from an offli
   assert.ok(validate(captured), JSON.stringify(validate.errors));
   const redacted = await cli("rollup", "fleet.json", "--json");
   assert.doesNotMatch(redacted.stdout, /forecastEvidence|forecastAsOf|\.nvmrc/u);
+  const planning: FleetResult = JSON.parse(
+    (await cli("fleet", "example", "--json", "--campaign-input", ...live)).stdout,
+  );
+  assert.equal(planning.forecastAsOf, asOf);
+  assert.deepEqual(
+    planning.repositoryStatus.map(({ name, commit, forecastEvidence }) => ({ name, commit, forecastEvidence })),
+    captured.repositoryStatus.map(({ name, commit, forecastEvidence }) => ({ name, commit, forecastEvidence })),
+  );
+  for (const repository of planning.repositoryStatus) {
+    assert.deepEqual(repository.campaignEvidence?.runtimePins, [{ runtime: "nodejs", version: "18" }]);
+  }
   await writeFile(join(root, "owners.json"), JSON.stringify({ "example/edge": "Edge owners" }));
   const online = await cli("forecast", "--fleet", "example", "--json", ...live);
   const recordedRequests = requests;
