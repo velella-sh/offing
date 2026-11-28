@@ -32,11 +32,13 @@ export function parseRequirement(value: string): { name: string; constraint: str
   if (!clean || clean.startsWith("#") || clean.startsWith("-") || /^(?:git\+|https?:)/i.test(clean)) {
     return undefined;
   }
-  const match = /^([A-Za-z0-9][A-Za-z0-9._-]*)(?:\[[^\]]+\])?\s*(.*)$/.exec(clean);
+  const match = /^([A-Za-z0-9][A-Za-z0-9._-]*)(?:\[[^\]]+\])?/.exec(clean);
   if (!match?.[1]) return undefined;
+  const rest = clean.slice(match[0].length).trimStart();
+  if (/[\r\n\u2028\u2029]/.test(rest)) return undefined;
   return {
     name: normalizePackageName(match[1]),
-    constraint: (match[2] ?? "").split(";")[0]?.trim() ?? "",
+    constraint: rest.split(";")[0]?.trim() ?? "",
   };
 }
 

@@ -21,7 +21,8 @@ function minimumVersion(constraint: string): string | undefined {
 export function parseRequirements(contents: string, path = "requirements.txt"): Reference[] {
   const references: Reference[] = [];
   for (const [index, line] of contents.split(/\r?\n/).entries()) {
-    const requirement = parseRequirement(line.replace(/\s+#.*$/, ""));
+    const comment = line.search(/\s#/);
+    const requirement = parseRequirement(comment < 0 ? line : line.slice(0, comment));
     if (!requirement) continue;
     references.push(reference(`pkg:pypi/${requirement.name}`, minimumVersion(requirement.constraint), path, index + 1));
   }

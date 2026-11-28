@@ -176,13 +176,12 @@ const CLAUSES_BY_OP: Readonly<Record<string, ClauseBuilder>> = {
   "~=": (raw) => boundedRange(raw, compatibleUpper),
 };
 
-const CLAUSE = /^(===|==|!=|>=|<=|~=|>|<|\^|~)?\s*(.+)$/;
+const OPERATOR = /^(===|==|!=|>=|<=|~=|>|<|\^|~)/;
 
 function parseClause(text: string): readonly Comparator[] | undefined {
-  const match = CLAUSE.exec(text.trim());
-  if (match === null) return undefined;
-  const op = match[1] ?? "";
-  const raw = (match[2] ?? "").trim();
+  const clause = text.trim();
+  const op = OPERATOR.exec(clause)?.[0] ?? "";
+  const raw = clause.slice(op.length).trim();
   if (!raw) return undefined;
   if (raw === "*") return op === "" || op === "==" ? [{ kind: "any" }] : undefined;
   return CLAUSES_BY_OP[op]?.(raw, op);
@@ -218,7 +217,9 @@ function matchesAll(text: string, version: ParsedVersion): boolean | undefined {
   const parts = text.split(",").flatMap((part) =>
     part
       .trim()
-      .replace(/\s+(?=[<>=!~^])/g, ",")
+      .replace(/\s+/g, (space: string, start: number, clause: string) =>
+        /[<>=!~^]/.test(clause.charAt(start + space.length)) ? "," : space,
+      )
       .split(","),
   );
   if (parts.length === 0) return undefined;

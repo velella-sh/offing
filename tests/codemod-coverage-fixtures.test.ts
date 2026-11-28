@@ -3,6 +3,7 @@ import { test } from "node:test";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
+import { parsedClassifierLists } from "../src/detectors/python/classifiers.js";
 import { builtInDetectors } from "../src/detectors/index.js";
 import { scanRepository } from "../src/engine/index.js";
 import { fixers, planFixReport } from "../src/fix/index.js";
@@ -146,4 +147,18 @@ test("classifier arrays preserve long comments containing repeated hash characte
     await readFile(join(root, "pyproject.toml"), "utf8"),
     text.replace('  "Programming Language :: Python :: 3.9",\n', ""),
   );
+});
+
+test("classifier entries preserve literal strings, escapes and source offsets", () => {
+  const tokens = [String.raw`"Topic :: Say \"Hi\" and \\ keep going"`, "'Programming Language :: Python :: 3.11'"];
+  const source = "[project]\nclassifiers = [\n  " + tokens.join(",\n  ") + "\n]\n";
+  const entries = parsedClassifierLists(source).flatMap((list) => list.entries);
+  assert.deepEqual(
+    entries.map(({ start, end, line, text }) => [source.slice(start, end), line, text]),
+    [
+      [tokens[0], 3, 'Topic :: Say "Hi" and \\ keep going'],
+      [tokens[1], 4, "Programming Language :: Python :: 3.11"],
+    ],
+  );
+  assert.deepEqual(parsedClassifierLists("[project]\nclassifiers = [3.11]\n"), []);
 });

@@ -65,6 +65,8 @@ const clauseCases: ReadonlyArray<readonly [string, string, boolean | undefined]>
   [">=1.4,<2.0", "1.9", true],
   [">=1.4,<2.0", "2.0", false],
   [">= 1.4 < 2.0", "1.9", true],
+  [">= 1.4\t  < 2.0", "2.0", false],
+  [">= 1. 4", "1.4", undefined],
   [">=1.4,", "1.9", undefined],
   // `||` joins alternatives; one alternative this cannot read makes the whole specifier unknown.
   ["1.4 || >=2.0", "2.1", true],
