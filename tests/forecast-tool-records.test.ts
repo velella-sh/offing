@@ -378,3 +378,28 @@ test("acc-forecast-island bounds the number of declarations before generating re
     records: [],
   });
 });
+
+test("acc-forecast-island rejects oversized serialized records for valid input", async () => {
+  const { bytes, release } = await localRelease();
+  const dependencies = Object.fromEntries(
+    Array.from({ length: 7200 }, (_, index) => [`forecast-result-bound-${index}`, "1.0.0"]),
+  );
+  const file = new TextEncoder().encode(JSON.stringify({ dependencies }));
+  assert.ok(file.length < maxInputBytes);
+  for (const name of [
+    `${"nested-directory/".repeat(48)}package.json`,
+    ("日".repeat(60) + "/").repeat(5) + "package.json",
+  ]) {
+    const result = await runForecastTool(
+      { kind: "file", name, type: "application/json", bytes: file },
+      { signal: new AbortController().signal, data: async () => bytes },
+      release,
+      today,
+    );
+    assert.deepEqual(result, {
+      status: "error",
+      message: "The forecast records exceed the 5 MiB result limit.",
+      records: [],
+    });
+  }
+});
