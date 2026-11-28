@@ -113,10 +113,19 @@ const rowSchema = z.object({
   capture: z.custom<StudyCapture>((value) => captureBoundary.safeParse(value).success).optional(),
 });
 
+const retrySchema = z.object({
+  rank: rowSchema.shape.rank,
+  scanIndex: count,
+  status: z.enum(["scanned", "failed", "skipped"]),
+  reason: rowSchema.shape.state.shape.reason,
+  bytesFetched: count,
+});
+
 const archiveInput = z.object({
   schemaVersion: z.literal("offing.state-of-eol.evidence.v1"),
   scans: z.array(z.object({ plan: planSchema, finishedAt: timestamp.nullable() })).min(1),
   rows: z.array(rowSchema).max(1000),
+  retries: z.array(retrySchema).default([]),
 });
 
 const lineageBoundary = z.object({
@@ -151,6 +160,36 @@ const maximumArchiveBytes = 40 * 1024 * 1024;
 
 function parse(text: string): unknown {
   return JSON.parse(text);
+}
+
+type ArchiveInput = z.infer<typeof archiveInput>;
+
+function verifyRetries(archive: ArchiveInput): void {
+  const rows = new Map(archive.rows.map((row) => [row.rank, row]));
+  const groups = new Map<number, ArchiveInput["retries"]>();
+  for (const attempt of archive.retries) {
+    const group = groups.get(attempt.rank) ?? [];
+    const plan = archive.scans[attempt.scanIndex]?.plan;
+    if (!plan || !rows.has(attempt.rank) || attempt.rank < plan.start || attempt.rank > plan.end)
+      throw new Error(`The retry evidence does not match cohort rank ${attempt.rank}.`);
+    if (group.some(({ scanIndex }) => scanIndex >= attempt.scanIndex))
+      throw new Error(`Repeated or out-of-order retry evidence for rank ${attempt.rank}.`);
+    group.push(attempt);
+    groups.set(attempt.rank, group);
+  }
+  for (const [rank, group] of groups) {
+    const success = group.filter(({ status }) => status === "scanned");
+    const selected = success[0] ?? group[0];
+    const state = rows.get(rank)?.state;
+    if (!selected || !state || group.length < 2 || group[0]?.status === "scanned" || success.length > 1)
+      throw new Error(`Invalid retry history for rank ${rank}.`);
+    if (
+      selected.status !== state.status ||
+      selected.reason !== state.reason ||
+      selected.bytesFetched !== state.bytesFetched
+    )
+      throw new Error(`Selected observation does not match retry evidence for rank ${rank}.`);
+  }
 }
 
 function verifyArchive<T extends z.infer<typeof archiveInput>>(archive: T, cohort: Cohort, cohortDigest: string): T {
@@ -192,6 +231,7 @@ function verifyArchive<T extends z.infer<typeof archiveInput>>(archive: T, cohor
     }
     previous = row.rank;
   }
+  verifyRetries(archive);
   return archive;
 }
 
@@ -209,17 +249,22 @@ export async function freezeStudyArchive(
 ): Promise<void> {
   const scans: StudyArchive["scans"] = [];
   const rows = new Map<number, StudyObservation>();
+  const attempts = new Map<number, StudyArchive["retries"]>();
   for (const directory of directories) {
     const plan = planSchema.parse(parse(await readFile(join(directory, "plan.json"), "utf8")));
     const finished = await readFile(join(directory, "finished.json"), "utf8").catch(() => undefined);
     const finishedAt = finished ? z.object({ finishedAt: timestamp }).parse(parse(finished)).finishedAt : null;
-    scans.push({ plan, finishedAt });
+    const scanIndex = scans.push({ plan, finishedAt }) - 1;
     for (const file of (await readdir(directory)).filter((name) => /^\d{4}\.json$/.test(name)).sort()) {
       const row = rowSchema.parse(parse(await readFile(join(directory, file), "utf8")));
       const earlier = rows.get(row.rank);
-      if (row.rank < plan.start || row.rank > plan.end || (earlier?.capture && row.capture)) {
+      if (row.rank < plan.start || row.rank > plan.end || earlier?.capture) {
         throw new Error(`Conflicting scan evidence for rank ${row.rank}.`);
       }
+      const { status, reason, bytesFetched } = row.state;
+      const history = attempts.get(row.rank) ?? [];
+      history.push(retrySchema.parse({ rank: row.rank, scanIndex, status, reason, bytesFetched }));
+      attempts.set(row.rank, history);
       if (!earlier || row.capture) rows.set(row.rank, row);
     }
   }
@@ -228,6 +273,7 @@ export async function freezeStudyArchive(
       schemaVersion: "offing.state-of-eol.evidence.v1",
       scans,
       rows: [...rows.values()].sort((a, b) => a.rank - b.rank),
+      retries: [...attempts.values()].filter((history) => history.length > 1).flat(),
     },
     cohort,
     cohortDigest,

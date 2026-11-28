@@ -5,9 +5,11 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { test, type TestContext } from "node:test";
 import { promisify } from "node:util";
+import { configureActiveData, getActiveData } from "@velella/ebb/data-source";
 import { parse } from "yaml";
 import { readLineageInputs } from "../src/lineage/inputs.js";
-import type { StudyArchive } from "../tools/state-of-eol/archive.js";
+import { freezeStudyArchive, loadStudyArchive, type StudyArchive } from "../tools/state-of-eol/archive.js";
+import type { Cohort } from "../tools/state-of-eol/cohort.js";
 import type { StudyCapture } from "../tools/state-of-eol/capture.js";
 import { imageBreakdown, resolveStudyLineage } from "../tools/state-of-eol/lineage.js";
 import {
@@ -154,6 +156,60 @@ async function scratch(t: TestContext): Promise<string> {
   t.after(() => rm(directory, { recursive: true, force: true }));
   return directory;
 }
+
+test("retains the initial failed exact pin when a verified retry succeeds", async (t) => {
+  const root = await scratch(t);
+  const success = observed(1, {});
+  const startedAt = `${asOf}T12:00:00.000Z`;
+  const cohort: Cohort = {
+    schemaVersion: "offing.state-of-eol.cohort.v1",
+    startedAt,
+    retrievedAt: startedAt,
+    activeSince: "2025-11-27",
+    cutoff: { stars: 100, available: 1, selected: 1 },
+    repositories: [{ repository: success.repository, commit, pushedAt: startedAt, branch: "main", stars: 100 }],
+  };
+  configureActiveData({ pinnedVersion: "bundled" });
+  const { info } = await getActiveData();
+  const digest = "a".repeat(64);
+  const plan = {
+    schemaVersion: "offing.state-of-eol.scan.v1",
+    sourceCommit: commit,
+    offing: "0.0.0-fixture",
+    data: { version: info.version, digest: info.contentDigest },
+    packageLockDigest: digest,
+    cohortDigest: digest,
+    node: process.version,
+    platform: process.platform,
+    asOf,
+    startedAt,
+    start: 1,
+    end: 1,
+    jobs: 1,
+  };
+  const { capture, ...initial } = success;
+  const failure = {
+    ...initial,
+    state: { ...initial.state, status: "failed", reason: "Fixture read failed", bytesFetched: 0 },
+  };
+  const directories = [join(root, "initial"), join(root, "retry")];
+  for (const [index, directory] of directories.entries()) {
+    await mkdir(directory);
+    await writeFile(join(directory, "plan.json"), JSON.stringify(plan));
+    await writeFile(join(directory, "0001.json"), JSON.stringify(index === 0 ? failure : { ...initial, capture }));
+  }
+  const path = join(root, "evidence.json.gz");
+  await freezeStudyArchive(directories, path, cohort, digest);
+  const archive = await loadStudyArchive(path, cohort, digest);
+  assert.deepEqual(
+    archive.rows.map(({ state }) => state.status),
+    ["scanned"],
+  );
+  assert.deepEqual(archive.retries, [
+    { rank: 1, scanIndex: 0, status: "failed", reason: "Fixture read failed", bytesFetched: 0 },
+    { rank: 1, scanIndex: 1, status: "scanned", reason: null, bytesFetched: 12 },
+  ]);
+});
 
 test("counts only evidence-backed lineage when the consumer has no direct ended image", async (t) => {
   const root = await scratch(t);

@@ -27,6 +27,7 @@ export function evaluateStudy(archive: StudyArchive, cohort: number) {
   const plan = archive.scans[0]?.plan;
   if (!plan) throw new Error("The study has no scan metadata.");
   const rows = attachRuleCatalog(measuredRows(archive.rows), archive.rules);
+  const retried = new Set(archive.retries.map(({ rank }) => rank)).size;
   return {
     schemaVersion: "offing.state-of-eol.report.v1",
     asOf: plan.asOf,
@@ -36,6 +37,11 @@ export function evaluateStudy(archive: StudyArchive, cohort: number) {
       null,
     ),
     provenance: archive.scans,
+    retries: {
+      repositories: retried,
+      attempts: archive.retries.length - retried,
+      recovered: archive.retries.filter(({ status }) => status === "scanned").length,
+    },
     coverage: coverageCounts(archive, cohort),
     headlines: headlines(rows, cohort, plan.asOf),
     ecosystems: ecosystemBreakdown(rows, cohort),
@@ -110,6 +116,9 @@ function documentationRecord(report: Report, rawDigest: string) {
       ebb: plan?.data.version ?? "Unavailable",
       rawDigest,
       ...report.coverage,
+      retried: report.retries.repositories,
+      retryAttempts: report.retries.attempts,
+      recovered: report.retries.recovered,
       lineage: divide(report.lineage.lineageOnly, report.lineage.denominator),
       lineageNoData: divide(report.lineage.noData, report.lineage.denominator),
       lineageUnknown: divide(report.lineage.unknown, report.lineage.denominator),
