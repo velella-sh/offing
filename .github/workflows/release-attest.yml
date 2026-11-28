@@ -35,24 +35,29 @@ jobs:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: lifecycle-release-sbom
-      - name: Prepare a release tarball alongside the five binary assets
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: first-minute-candidate
+          path: subjects
+      - name: Check the candidate tarball and required binary assets
         env:
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
           set -euo pipefail
           version="$(node -p 'require("./package.json").version')"
           npm run build --silent
-          if [ "$DRY_RUN" = true ]; then
-            test -f "subjects/offing-$version-linux-x64"
-            npm pack --ignore-scripts --pack-destination subjects
-          else
+          targets=(linux-x64)
+          if [ "$DRY_RUN" = false ]; then
             test "$GITHUB_REF" = "refs/tags/v$version"
-            for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win32-x64.exe; do
-              test -f "subjects/offing-$version-$target"
-            done
-            npm pack --ignore-scripts --registry https://registry.npmjs.org --pack-destination subjects "@velella/offing@$version"
+            targets+=(linux-arm64 darwin-x64 darwin-arm64 win32-x64.exe)
           fi
-          test -f "subjects/velella-offing-$version.tgz"
+          subjects=("subjects/velella-offing-$version.tgz")
+          for target in "${targets[@]}"; do
+            subjects+=("subjects/offing-$version-$target")
+          done
+          for subject in "${subjects[@]}"; do test -f "$subject"; done
+          actual=(subjects/offing-* subjects/velella-offing-*.tgz)
+          test "${#actual[@]}" -eq "${#subjects[@]}"
       - name: Generate the shared lifecycle predicate and subject digests
         run: |
           set -euo pipefail
@@ -76,13 +81,6 @@ jobs:
         with:
           name: lifecycle-release
           path: lifecycle-release/
-          if-no-files-found: error
-      - name: Upload the candidate tarball for independent verification
-        if: inputs.dry_run
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        with:
-          name: lifecycle-release-tarball
-          path: subjects/velella-offing-*.tgz
           if-no-files-found: error
 
   sign:
@@ -112,6 +110,12 @@ jobs:
         run: |
           set -euo pipefail
           cp -- "$BUNDLE" lifecycle.sigstore.json
-          jq -er '.dsseEnvelope.payload' lifecycle.sigstore.json | base64 -d > lifecycle.intoto.json
+          jq -er '.dsseEnvelope.payload' lifecycle.sigstore.json | base64 -d > signed.json
+          jq -e --slurpfile expected lifecycle.intoto.json '
+            def ordered: .subject |= sort_by(.name);
+            ordered == ($expected[0] | ordered)
+          ' signed.json > /dev/null
+          mv signed.json lifecycle.intoto.json
           sha256sum lifecycle.intoto.json lifecycle.sigstore.json lifecycle-subjects.sha256 > lifecycle-evidence.sha256
-          gh release upload --repo "$GITHUB_REPOSITORY" "$GITHUB_REF_NAME"             lifecycle.intoto.json lifecycle.sigstore.json lifecycle-subjects.sha256 lifecycle-evidence.sha256 --clobber
+          gh release upload --repo "$GITHUB_REPOSITORY" "$GITHUB_REF_NAME" \
+            lifecycle.intoto.json lifecycle.sigstore.json lifecycle-subjects.sha256 lifecycle-evidence.sha256 --clobber
