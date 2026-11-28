@@ -180,13 +180,11 @@ test("release publication and consumer workflows wire the same opt-in lifecycle 
   assert.equal(steps[packIndex]?.env?.OFFING_HOOK_LATENCY, "0");
   assert.equal(steps[packIndex]?.if, undefined);
   assert.deepEqual(release.jobs["first-minute"].needs, ["npm-candidate"]);
-  assert.match(
-    release.jobs["first-minute"].if,
-    /!cancelled\(\).*needs\.npm-candidate\.result == 'success'.*inputs\.dry_run/,
-  );
+  assert.match(release.jobs["first-minute"].if, /!cancelled\(\).*needs\.npm-candidate\.result == 'success'/);
+  assert.doesNotMatch(release.jobs["first-minute"].if, /dry_run/);
   assert.equal(release.jobs["first-minute"].with.candidate, true);
-  assert.deepEqual(release.jobs["npm-publish"].needs, ["npm-candidate"]);
-  assert.match(release.jobs["npm-publish"].if, /!cancelled\(\).*needs\.npm-candidate\.result == 'success'/);
+  assert.deepEqual(release.jobs["npm-publish"].needs, ["first-minute"]);
+  assert.match(release.jobs["npm-publish"].if, /!cancelled\(\).*needs\.first-minute\.result == 'success'/);
   assert.match(steps[gateIndex]?.env?.USE_BLOCKED_FIXTURE ?? "", /inputs.dry_run.*inputs.release_gate_fixture/);
   const script = await readFile(".github/scripts/release-gate.sh", "utf8");
   assert.match(script, /set -euo pipefail/);
