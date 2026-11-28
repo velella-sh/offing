@@ -42,10 +42,10 @@ Review `final-verify-result.json` for the selected findings and test commands. T
 records sit beside the checkout. For the verified wave, the approved tests pass, the selected findings
 clear, and the scan finds no newly introduced lifecycle findings.
 
-The committed [guardrails](../AUTOPILOT_SAFETY.md) bound wall time, turns, tokens and cost and protect
+The committed [guardrails](https://velella.sh/offing/AUTOPILOT_SAFETY/) bound wall time, turns, tokens and cost and protect
 files such as workflows, lockfiles, dotenv files and private keys. An unapproved red baseline, exhausted
 budget, refused edit or repeated diff with the same test failures stops the run. Review the recorded
 reason and commit range before continuing or removing the worktree.
 
-See the [CLI walkthrough](../AUTOPILOT.md) for evidence files and local cleanup. For the optional CI
-path, use the [Autopilot Action guide](../AUTOPILOT_ACTION.md).
+See the [CLI walkthrough](https://velella.sh/offing/AUTOPILOT/) for evidence files and local cleanup. For the optional CI
+path, use the [Autopilot Action guide](https://velella.sh/offing/AUTOPILOT_ACTION/).

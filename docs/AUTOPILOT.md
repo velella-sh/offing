@@ -22,7 +22,7 @@ A nonempty `autopilot.tests` list replaces detected commands. `--agent` changes 
 
 `offing autopilot . --prepare` requires a clean Git working tree and a commit.
 It creates a temporary worktree from `HEAD` on a local `offing/autopilot/<run>`
-branch and prints the path to its [run record](SCHEMAS.md#autopilot-run).
+branch and prints the path to its [run record](https://velella.sh/offing/SCHEMAS/#autopilot-run).
 Use preparation to inspect the branch before you request test execution.
 
 `offing autopilot . --prepare --replay /path/to/turns.json` applies a
@@ -74,7 +74,7 @@ or install the npm tarball of the candidate you plan to test. The
 records the same verified replay against a disposable fixture, with no
 model or credentials.
 
-![An Autopilot replay completes one verified turn](assets/demos/autopilot.gif)
+![An Autopilot replay completes one verified turn](https://velella.sh/offing/assets/demos/autopilot.gif)
 
 ## Resume a stopped recording
 

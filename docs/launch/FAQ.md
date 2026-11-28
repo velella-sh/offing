@@ -61,14 +61,14 @@ feedback. See the [host guides](https://velella.sh/offing/guides/) and
 
 The run leaves its accepted edits in an isolated Git worktree. The run record names the stop reason
 and records the tests and budget used. Review those before resuming a recording or removing the
-worktree. See the [recorded migration walkthrough](let-autopilot-do-the-upgrade.md).
+worktree. See the [recorded migration walkthrough](https://velella.sh/offing/launch/let-autopilot-do-the-upgrade/).
 
 ## Can I see lifecycle risks across several repositories?
 
-Use a [fleet scan](../FLEET.md) to combine results from a GitHub organization or GitLab group. The
+Use a [fleet scan](https://velella.sh/offing/FLEET/) to combine results from a GitHub organization or GitLab group. The
 report retains each repository's status, including when its scan failed or it was skipped.
 
 ## Does signing an attestation extend a dependency's support?
 
 The signature authenticates the artifact and its recorded evidence. Support deadlines still apply
-when you re-evaluate the statement. See the [artifact and release gate walkthrough](prove-what-you-ship.md).
+when you re-evaluate the statement. See the [artifact and release gate walkthrough](https://velella.sh/offing/launch/prove-what-you-ship/).

@@ -22,7 +22,7 @@ offing attest check lifecycle.intoto.json --subject artifact.tgz --today 2026-03
 ```
 
 The first command writes the unsigned statement. The second matches the subject bytes and re-evaluates the
-recorded observations for the given date. To try the date math, use the [Alpine 3.18 sample SBOM](../ATTESTATION.md#generate-at-build-time).
+recorded observations for the given date. To try the date math, use the [Alpine 3.18 sample SBOM](https://velella.sh/offing/ATTESTATION/#generate-at-build-time).
 Its deadline is April 1, 2026, so it has one day left on March 31.
 
 ## Sign the artifact in GitHub Actions
@@ -47,9 +47,9 @@ offing release-gate --attestation lifecycle.sigstore.json --subject artifact.tgz
 
 Place the gate before publication. A policy block exits with status 1. With the signed Alpine fixture,
 adding `--today 2026-03-31` produces a block because the deadline falls within seven days. The
-[release gate examples](../RELEASE_GATE.md) cover libraries, services and images.
+[release gate examples](https://velella.sh/offing/RELEASE_GATE/) cover libraries, services and images.
 
-The [independent conformance suite](../spec/lifecycle-attestation/v1.md#conformance) checks the statement contract.
+The [independent conformance suite](https://velella.sh/offing/spec/lifecycle-attestation/v1/#conformance) checks the statement contract.
 The [signed package-smoke fixture](https://github.com/velella-sh/offing/actions/runs/46094393841) verified the
 packed candidate with GitHub CLI and Cosign, rejected modified bytes and a wrong signer, and reproduced the
-recorded dates. The [attestation reference](../ATTESTATION.md) includes the verification commands for each tool.
+recorded dates. The [attestation reference](https://velella.sh/offing/ATTESTATION/) includes the verification commands for each tool.
