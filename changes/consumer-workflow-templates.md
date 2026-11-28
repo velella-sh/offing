@@ -1,0 +1,1 @@
+- Ship the manual Autopilot and opt-in scheduled Campaign workflow templates with the npm package. (#957, #1015)

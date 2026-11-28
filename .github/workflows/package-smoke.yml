@@ -83,10 +83,14 @@ jobs:
         with:
           cache: npm
       - name: Build the Action bundle and its acceptance fixture
-        run: npm run build --silent && npm run build:action --silent
+        run: |
+          npm run build --silent && npm run build:action --silent
+          npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP" --silent
+          tar -C "$RUNNER_TEMP" -xzf "$RUNNER_TEMP"/velella-offing-*.tgz package/templates/workflows/offing-autopilot.yml
       - name: acc-autopilot-action (dispatch and replay fixtures)
         env:
           OFFING_AUTOPILOT_ACTION_BUNDLE: ${{ github.workspace }}/dist/action/index.js
+          OFFING_AUTOPILOT_CONSUMER_TEMPLATE: ${{ runner.temp }}/package/templates/workflows/offing-autopilot.yml
           OFFING_AUTOPILOT_FIXTURE_EVIDENCE: ${{ runner.temp }}/offing-autopilot-fixture
           OFFING_DATA_VERSION: bundled
         run: |
@@ -103,7 +107,7 @@ jobs:
             printf -- '- Action bundle SHA-256 %s\n' "$(sha256sum "$OFFING_AUTOPILOT_ACTION_BUNDLE" | cut -d ' ' -f 1)"
             printf -- '- Tested commit %s\n' "$GITHUB_SHA"
             printf -- '- Pinned driver setup, a synthetic-key turn, Docker tests, and missing-key refusal passed.\n'
-            printf -- '- Clean Action replay passed through the Docker runner, local Git remote and in-process GitHub API fixture with no provider key.\n'
+            printf -- '- The packed manual-only workflow was installed in a clean local consumer and its Action ran with replay, Docker, a local Git remote and a GitHub API fixture without a provider key.\n'
             printf -- '- Verified event refusals, turn-cap usage, green and draft retests, protected human commits, stale PR closure, and proof/log digests.\n'
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Upload the verified replay fixture evidence
@@ -711,6 +715,7 @@ jobs:
           OFFING_CAMPAIGN_DOCKER=1 OFFING_CAMPAIGN_CLI="$package/dist/src/cli.js" \
             node --test --test-name-pattern 'campaigns process|pinned local repository|campaign operations issue' "$GITHUB_WORKSPACE/dist/tests/campaign-run.test.js"
           OFFING_CAMPAIGN_20=1 OFFING_CAMPAIGN_CLI="$package/dist/src/cli.js" \
+            OFFING_CAMPAIGN_BIN="$bin" \
             OFFING_CAMPAIGN_20_OUTPUT="$RUNNER_TEMP/campaign-20" \
             node --test "$GITHUB_WORKSPACE/dist/tests/campaign-20-fixture.test.js"
           {
@@ -718,7 +723,7 @@ jobs:
             printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
             printf -- '- Offline planner, MCP, checker, installed Docker replay, isolated GitHub and GitLab writes, and operations tracking passed.\n'
-            printf -- '- Replayed 20 pinned repositories, verified 18 proof heads, and reproduced the final recorded Campaign Board.\n'
+            printf -- '- Ran the packed scheduled step locally across four batches, replayed 20 pinned repositories, verified 18 proof heads, and reproduced the final recorded Campaign Board.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the verified 20-repository campaign replay

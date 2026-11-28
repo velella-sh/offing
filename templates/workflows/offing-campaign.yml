@@ -1,0 +1,34 @@
+name: Offing Campaign
+
+on:
+  schedule:
+    - cron: "17 6 * * 1-5"
+
+permissions: {}
+
+concurrency:
+  group: offing-campaign
+  cancel-in-progress: false
+
+jobs:
+  batch:
+    if: >-
+      github.event.repository.fork == false &&
+      github.ref_name == github.event.repository.default_branch &&
+      vars.OFFING_CAMPAIGN_DIRECTORY != '' &&
+      vars.OFFING_CAMPAIGN_VERSION != ''
+    runs-on: [self-hosted, linux, offing-campaign]
+    timeout-minutes: 60
+    steps:
+      - name: Run one approved campaign batch
+        shell: bash
+        env:
+          OFFING_CAMPAIGN_DIRECTORY: ${{ vars.OFFING_CAMPAIGN_DIRECTORY }}
+          OFFING_CAMPAIGN_VERSION: ${{ vars.OFFING_CAMPAIGN_VERSION }}
+        run: |
+          if [[ "$OFFING_CAMPAIGN_DIRECTORY" != /* || "$(offing --version)" != "$OFFING_CAMPAIGN_VERSION" ]]; then
+            echo "Use an absolute campaign directory and install the approved Offing version." >&2
+            exit 1
+          fi
+          cd -- "$OFFING_CAMPAIGN_DIRECTORY"
+          offing campaign run state.json --inputs local.json --one-batch

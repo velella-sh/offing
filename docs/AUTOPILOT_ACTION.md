@@ -9,6 +9,10 @@ Copy [`templates/workflows/offing-autopilot.yml`](https://github.com/velella-sh/
 into your repository's `.github/workflows/` directory. Review the proposed test commands with `offing doctor --tests`
 and commit the approved argument arrays in `.offing.json`.
 
+When the installed Offing package includes this template, you can copy the
+matching file from `node_modules/@velella/offing/templates/workflows/`.
+Dispatch requires the GitHub Action tag `velella-sh/offing@v1` to be available.
+
 ```json
 {"autopilot":{"tests":[["npm","test"]]}}
 ```
