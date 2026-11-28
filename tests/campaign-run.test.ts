@@ -8,7 +8,7 @@ import { test, type TestContext } from "node:test";
 import { promisify } from "node:util";
 
 import { createReplayDriver } from "../src/agent-drivers/replay.js";
-import { type CampaignState, readCampaignState } from "../src/campaign/document.js";
+import { campaignBranch, type CampaignState, readCampaignState } from "../src/campaign/document.js";
 import type { HostPermissions, HostTarget } from "../src/campaign/host-config.js";
 import {
   controlCampaign,
@@ -598,6 +598,13 @@ test("pinned local repository publishing reconciles GitHub and writes one GitLab
   await run("refresh", saved, "--hosts", hostFile);
   const second = github.reviews[0];
   assert.ok(second);
+  const tampered = structuredClone(observed);
+  const receipt = tampered.repositories[0]?.publication;
+  assert.ok(receipt);
+  receipt.branch = "offing-campaign/" + "0".repeat(32);
+  const forged = join(root, "forged.json");
+  await writeFile(forged, JSON.stringify(tampered));
+  await assert.rejects(readCampaignState(forged), /publication branch does not match its repository/);
   const beforeTerminalRefresh = await readFile(saved, "utf8");
   first.status = "merged";
   second.status = "closed";
@@ -636,7 +643,7 @@ async function cleanRun(state: CampaignState, git: (...argv: string[]) => Promis
   }
 }
 
-test("campaign operations issue upserts one owned private tracker from durable state", async () => {
+test("campaign operations issue upserts one owned private tracker from durable state", async (t) => {
   const cli = process.env.OFFING_CAMPAIGN_CLI ?? resolve("dist/src/cli.js");
   const { trackCampaign } = (await import(
     pathToFileURL(join(dirname(cli), "campaign/tracking.js")).href
@@ -692,7 +699,7 @@ test("campaign operations issue upserts one owned private tracker from durable s
     { from: "verified", to: "review", at: new Date(base).toISOString() },
   ];
   row.publication = {
-    branch: "offing-campaign/" + "a".repeat(32),
+    branch: campaignBranch(state.id, row),
     baseBranch: "main",
     actorId: actor,
     head: "b".repeat(40),
@@ -707,4 +714,22 @@ test("campaign operations issue upserts one owned private tracker from durable s
   assert.match(body, /review · 1/u);
   assert.ok(body.includes(row.host + "/" + row.name + "/pull/42"));
   assert.ok(body.includes(new Date(base).toISOString()));
+
+  const root = await folder(t);
+  const saved = join(root, "state.json");
+  const operations = join(root, "operations.json");
+  await writeFile(saved, JSON.stringify(state));
+  await writeFile(operations, JSON.stringify(scope));
+  t.mock.method(globalThis, "fetch", request);
+  const env = { [tokenKey]: marker };
+  const cliTrack = (...args: string[]) =>
+    runCli(["campaign", "track", saved, "--operations", operations, ...args], { env });
+  const result = await cliTrack("--json");
+  assert.equal(result.code, 0, result.stderr);
+  assert.deepEqual(JSON.parse(result.stdout), { url: "https://github.com/example/operations/issues/16" });
+  assert.equal((await cliTrack()).stdout.trim(), "https://github.com/example/operations/issues/16");
+  assert.equal((await cliTrack("--hosts", operations)).code, 2);
+  assert.equal((await cliTrack("--inputs", operations)).code, 2);
+  assert.equal((await runCli(["campaign", "publish", saved, "--hosts", operations], { env })).code, 2);
+  assert.equal(writes, 2, "CLI tracking of the same ledger made no extra writes");
 });
