@@ -13,7 +13,7 @@ permissions: {}
 
 concurrency:
   group: campaign-board-pages
-  cancel-in-progress: false
+  queue: max
 
 jobs:
   build:
@@ -36,14 +36,14 @@ jobs:
         with:
           name: offing-campaign-state
           path: ${{ runner.temp }}/campaign-state
+      - name: Install locked tools
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Build the board
         env:
           FROM_CAMPAIGN: ${{ inputs.from_campaign }}
           REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
-          # The operations repository's lockfile pins these packages.
-          npm ci --ignore-scripts --no-audit --no-fund
           state=state.json
           if [[ "$FROM_CAMPAIGN" == true ]]; then
             state="$RUNNER_TEMP/campaign-state/state.json"

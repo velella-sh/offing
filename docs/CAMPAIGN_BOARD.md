@@ -41,14 +41,18 @@ Copy `templates/campaign-board/pages.yml` from the installed Offing package to
 `.github/workflows/campaign-board.yml` in the operations repository and
 configure GitHub Pages to deploy from Actions. Commit a package lock that pins an
 Offing build supplying `campaign-board` and the stated site tools. Use
-`workflow_dispatch` with a reviewed `state.json` on the default branch. For
-automatic rebuilds, have the default-branch campaign job upload a reviewed
-`state.json` as the **offing-campaign-state** artifact and call the board
-workflow in a dependent job in the same run.
+`workflow_dispatch` with a reviewed `state.json` on the default branch.
+
+For automatic rebuilds, upload the reviewed `state.json` as the
+`offing-campaign-state` artifact after each campaign run. Call the board
+workflow in a dependent job in that same run. Keep publishing the reviewed
+state if a completed run records failed repositories. Set the producer job's
+`board_state_ready` output to `true` only after the state artifact has uploaded.
 
 ```yaml
   board:
     needs: campaign
+    if: ${{ !cancelled() && needs.campaign.outputs.board_state_ready == 'true' }}
     permissions:
       actions: read
       contents: read
@@ -56,6 +60,11 @@ workflow in a dependent job in the same run.
       id-token: write
     uses: ./.github/workflows/campaign-board.yml
 ```
+
+The called workflow builds from the artifact on the default branch and
+queues Pages deployments. The build job reads repository contents and
+artifacts. The deploy job has the Pages write and ID-token permissions.
+[GitHub Actions concurrency](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency)
 
 To try the renderer from a repository checkout, copy
 `tests/fixtures/campaign-board/synthetic-state.json` to `state.json`. A separate public demo depends on the
