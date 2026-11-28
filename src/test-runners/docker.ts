@@ -26,7 +26,7 @@ const captureLimit = 8 * 1024 * 1024;
 const worktree = "/work/tree";
 const reportLimit = 32;
 
-export async function connectDocker(config: string) {
+export async function connectDocker(config: string, maxBuffer = captureLimit) {
   const sockets = [join(homedir(), ".docker/run/docker.sock"), "/var/run/docker.sock"];
   const { tests } = childEnvironments(process.env, "replay", []);
   for (const socket of sockets) {
@@ -35,7 +35,7 @@ export async function connectDocker(config: string) {
       execute("docker", ["--host", `unix://${socket}`, ...args], {
         env: { ...tests, DOCKER_CONFIG: config },
         encoding: "buffer",
-        maxBuffer: captureLimit,
+        maxBuffer,
         ...(signal ? { signal } : { timeout: 180_000 }),
       });
   }

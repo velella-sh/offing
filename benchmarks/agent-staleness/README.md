@@ -7,7 +7,7 @@ Measures how often coding agents write end-of-life or deprecated choices when th
 | Path | Role |
 | --- | --- |
 | `tasks.json` | Prompt set (≥40 tasks). Prompts never name versions. |
-| `run.ts` | Benchmark entry point for offline replay and the existing maintainer live run. |
+| `run.ts` | Benchmark entry point for task listing, isolated replay and static rescoring. |
 | `score.ts` | Offline scorer: restores scanner-neutral fixture names, then scores repository findings and removed source APIs offline. |
 | `outputs/<agent>/<arm>/<task>/` | Produced files plus `meta.json`. |
 | `results.json` | Last offline score (`npm run bench:staleness:score -- --write`). |
@@ -31,10 +31,10 @@ npm run build --silent
 npm run bench:staleness:score
 npm run bench:staleness:score -- --write   # refresh results.json
 
-# Maintainer-only agent run (network + agent CLIs):
+# List tasks for a replay plan:
 npm run bench:staleness:run -- --list
-npm run bench:staleness:run -- --agent claude-code
-npm run bench:staleness:run -- --agent codex --task dockerfile-node-app --arm plain
 ```
+
+Use the [recorded replay instructions](../agent-harness/README.md) to run or score captured edits. Live `--agent` invocations are disabled until the vendor path can enforce task isolation.
 
 Method, limits, and the published table live in [docs/BENCHMARKS.md](../../docs/BENCHMARKS.md#agent-staleness-benchmark).

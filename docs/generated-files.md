@@ -30,6 +30,7 @@ Targets:
 | `docs/_data/comparison.json`, `docs/_data/comparison-losses.json` | `npm run build:dashboard` (comparison pin and result files) | Comparison charts and loss table | new | Pages | Build time. Gitignored. |
 | `docs/_data/state-of-eol-2027.json`, `docs/_data/state-of-eol-2027-run.json`, `docs/_data/state-of-eol-2027-gallery.json` | `npm run state-of-eol` and `npm run build:dashboard` from the archived cohort evidence | State of EOL 2027 report and forecast gallery | new | Pages, report workflow | Build time. Gitignored. |
 | `docs/_data/state-of-eol-2027-headlines.json`, `docs/_data/state-of-eol-2027-ecosystems.json`, `docs/_data/state-of-eol-2027-actions.json`, `docs/_data/state-of-eol-2027-blockers.json`, `docs/_data/state-of-eol-2027-upgrade-coverage.json` | `npm run state-of-eol` and `npm run build:dashboard` from the archived cohort evidence | State of EOL 2027 chart and tables | new | Pages, report workflow | Build time. Gitignored. |
+| `docs/_data/agent-leaderboard.json` | `npm run leaderboard` from committed measured outputs | Agent leaderboard | new | Pages, CI | Keep once measured runs are committed. `--check-committed` verifies its bytes. |
 | `docs/differential-report.json`, `docs/differential-report.md` | `npm run differential:report` (`benchmarks/differential/report.ts`, `--check` mode) | Pages site (`docs/differential-report.md` links to the JSON) | 2 | Pages | Keep. Not part of `npm run check`, so its drift check runs only when someone runs it. |
 
 ## Outputs that code and packages consume

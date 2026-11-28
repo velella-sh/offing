@@ -224,6 +224,9 @@ jobs:
           npm run build:forecast-web
           npx --no-install playwright install --with-deps chromium
           npm run test:forecast-web
+      - name: Check committed agent leaderboard data
+        if: matrix.node == 24 && matrix.shard == 0
+        run: node dist/benchmarks/agent-harness/leaderboard.js --check-committed
       - name: Guard the quality gate against main
         # A pull request must not raise an allowlist ceiling, add an entry, or loosen TARGETS — even by editing the checker.
         if: (github.event_name == 'pull_request' || github.event_name == 'merge_group') && runner.os == 'Linux' && matrix.node == 24 && matrix.shard == 0
@@ -509,6 +512,8 @@ jobs:
         run: node dist/tools/build-reference-pages.js --check
       - name: Check the LLM full text is buildable from the index
         run: node dist/tools/build-llms-full.js --check
+      - name: Check committed agent leaderboard data
+        run: node dist/benchmarks/agent-harness/leaderboard.js --check-committed
       - name: Build the State of EOL tables for the site
         run: node dist/tools/coverage-matrix.js --site
       - name: Build docs/llms-full.txt for the site

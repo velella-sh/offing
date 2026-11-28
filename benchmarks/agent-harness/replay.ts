@@ -3,6 +3,7 @@ import { lstat, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:f
 import { tmpdir } from "node:os";
 import { dirname, join, sep } from "node:path";
 import { createReplayDriver } from "../../src/agent-drivers/replay.js";
+import { record, validPaths } from "../../src/agent-drivers/result.js";
 import { materializeExample } from "../../tools/examples.js";
 import type { StalenessTask } from "../agent-staleness/score.js";
 import {
@@ -13,6 +14,7 @@ import {
   type RunMeta,
   type ScoringPin,
 } from "./contract.js";
+import { replaySandboxTask, type TaskSandbox } from "./sandbox.js";
 import { sessionPrompt } from "./session.js";
 
 const maximumRecordingBytes = 8 * 1024 * 1024;
@@ -30,6 +32,7 @@ interface RunOptions {
   recordings: string;
   output: string;
   offingCommit: string;
+  sandbox?: TaskSandbox;
 }
 
 async function attemptsFor(options: RunOptions): Promise<Attempt[]> {
@@ -56,13 +59,44 @@ async function attemptsFor(options: RunOptions): Promise<Attempt[]> {
   return attempts;
 }
 
-async function writeProducedTarget(root: string, target: string, destination: string): Promise<string | null> {
-  const bytes = await readRecordedTarget(root, target);
+async function writeProducedTarget(
+  bytes: Buffer | undefined,
+  target: string,
+  destination: string,
+): Promise<string | null> {
   if (!bytes) return null;
   const output = join(destination, target);
   await mkdir(dirname(output), { recursive: true });
   await writeFile(output, bytes, { flag: "wx" });
   return createHash("sha256").update(bytes).digest("hex");
+}
+
+async function replayStatic(project: string, recording: string, bytes: Buffer, prompt: string, target: string) {
+  await writeFile(recording, bytes);
+  const { result } = await createReplayDriver(recording).run({
+    prompt,
+    worktreePath: project,
+    timeoutMs: 10_000,
+    allowedPaths: [target],
+  });
+  return {
+    result,
+    output: result.filesTouched.includes(target) ? await readRecordedTarget(project, target) : undefined,
+  };
+}
+
+async function prepareTargetParent(project: string, target: string): Promise<void> {
+  if (!validPaths([target])) throw new Error("Invalid agent benchmark target.");
+  let directory = project;
+  for (const part of target.split("/").slice(0, -1)) {
+    directory = join(directory, part);
+    const existing = await lstat(directory).catch((error: unknown) => {
+      if (record(error)?.code !== "ENOENT") throw error;
+      return undefined;
+    });
+    if (!existing) await mkdir(directory);
+    else if (!existing.isDirectory()) throw new Error("The agent benchmark target parent is not a directory.");
+  }
 }
 
 async function runAttempt(options: RunOptions, entry: Attempt, pin: ScoringPin): Promise<RunMeta> {
@@ -73,22 +107,21 @@ async function runAttempt(options: RunOptions, entry: Attempt, pin: ScoringPin):
   try {
     const project = plan.fixture ? (fixture = await materializeExample(plan.fixture)) : join(scratch, "project");
     await mkdir(project, { recursive: true });
+    await prepareTargetParent(project, task.target);
     const bytes = await readFile(entry.path);
     const recording = join(scratch, "recording.json");
-    await writeFile(recording, bytes);
     const prompt = await sessionPrompt(task, arm, project, plan.identity.agent, plan.asOf);
-    const driver = createReplayDriver(recording);
-    const { result } = await driver.run({
-      prompt,
-      worktreePath: project,
-      timeoutMs: 10_000,
-      allowedPaths: [task.target],
-    });
+    const { result, output: produced } = options.sandbox
+      ? await replaySandboxTask(options.sandbox, join(scratch, "sandbox"), {
+          project,
+          prompt,
+          target: task.target,
+          recording: bytes,
+        })
+      : await replayStatic(project, recording, bytes, prompt, task.target);
     const destination = join(output, arm, task.id, String(attempt));
     await mkdir(destination, { recursive: true });
-    const outputSha256 = result.filesTouched.includes(task.target)
-      ? await writeProducedTarget(project, task.target, destination)
-      : null;
+    const outputSha256 = await writeProducedTarget(produced, task.target, destination);
     const meta: RunMeta = {
       schemaVersion: "offing.agent-run.v1",
       identity: plan.identity,
@@ -114,7 +147,7 @@ async function runAttempt(options: RunOptions, entry: Attempt, pin: ScoringPin):
   }
 }
 
-/** Replay approved fixture recordings. The driver writes text and the experiment never executes it. */
+/** Replay approved recordings with the selected backend. Neither backend executes the generated target. */
 export async function runRecordedExperiment(options: RunOptions): Promise<RunMeta[]> {
   const attempts = await attemptsFor(options);
   const pin = await bundledScoringPin(options.offingCommit, options.plan.asOf);
