@@ -8,7 +8,8 @@ archive="$root/dist/benchmarks/fix-evals/archive.js"
 verify="$root/benchmarks/fix-evals/verify-archive.py"
 publish="$root/.github/scripts/publish-fix-evals.sh"
 reported="$root/benchmarks/fix-evals/results/2026-11-28"
-python3 "$verify" "$reported" --extract "$scratch/raw"
+selection="$root/benchmarks/fix-evals/selection.json"
+python3 "$verify" "$reported" --selection "$selection" --extract "$scratch/raw"
 
 export GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null
 export GITHUB_RUN_ID=77 GITHUB_SERVER_URL=https://example.invalid GITHUB_REPOSITORY=fixture/fix-evals
@@ -47,7 +48,7 @@ git push -q origin main
 main=$(git rev-parse HEAD)
 
 node "$archive" "$scratch/raw" 2026-11-29 --changed
-python3 "$verify" "$next"
+python3 "$verify" "$next" --selection "$selection"
 bash "$publish"
 branch=$(git rev-parse HEAD)
 [[ -s $PR_TRACE && $(git --git-dir="$scratch/remote.git" rev-parse refs/heads/main) == "$main" ]]

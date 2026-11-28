@@ -143,7 +143,8 @@ denominators separately. [Agent migration method](/BENCHMARKS/)
 Verify a saved run with the standard-library archive reader. It reads the gzip archive as data, verifies the archive SHA-256 and each referenced patch, stdout and stderr digest, matches saved command receipts, and recomputes the report's case counts and rates. It distinguishes validation from a separate test and preserves exclusions without receipts.
 
 ```bash
-python3 benchmarks/fix-evals/verify-archive.py benchmarks/fix-evals/results/2026-11-28
+python3 benchmarks/fix-evals/verify-archive.py benchmarks/fix-evals/results/2026-11-28 \
+  --selection benchmarks/fix-evals/selection.json
 ```
 
 The November 28 archive contains 50 passing baseline records and 51 patch digests. Three post-apply cases have a separate test. The other post-apply checks in the archive are build or validation commands. Ten selected repositories lack a comparable offline baseline and have no recorded project commands. Successful `git apply` operations are represented by the applied metric and patch bytes. The archive has a separate apply-error receipt when applying a patch fails.

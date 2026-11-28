@@ -107,7 +107,7 @@ def check_summary(report, by_fixer):
                     f"Metric mismatch: {fixer['id']} {key}")
 
 
-def verify(directory):
+def verify(directory, selection):
     report = json.loads((directory / "report.json").read_bytes())
     require(report["schemaVersion"] == "offing.fix-evals.v1" and report["fixtures"] is False,
             "Expected a measured Fix Evals report")
@@ -122,6 +122,7 @@ def verify(directory):
     require(raw == report, "Archived and published reports differ")
     counts = Counter()
     excluded = {}
+    observed_pins = {}
     by_fixer = defaultdict(dict)
     for path, content in files.items():
         if not path.endswith("/evidence.json"):
@@ -130,6 +131,7 @@ def verify(directory):
         repository = evidence["id"]
         require(path == f"{repository}/evidence.json" and evidence["repository"] and evidence["commit"],
                 f"Missing repository identity: {path}")
+        observed_pins[evidence["repository"].lower()] = evidence["commit"]
         if baseline := evidence.get("baseline"):
             counts["logs"] += sum(1 for _ in verify_checks(files, baseline, f"{repository}/baseline"))
             counts["baselines"] += 1
@@ -144,6 +146,11 @@ def verify(directory):
     require(excluded == {item["id"]: item["reason"] for item in report["excluded"]}, "Exclusions differ")
     require(counts["measured"] == report["repositories"] and counts["measured"] + len(excluded) == report["selected"],
             "Repository totals differ")
+    if selection:
+        selected = json.loads(selection.read_bytes())["repositories"]
+        expected = {item["repository"].lower(): item["commit"] for item in selected}
+        require(len(observed_pins) == len(selected) and observed_pins == expected,
+                "Evidence repository pins differ from the selected cohort")
     check_summary(report, by_fixer)
     print(f"acc-fix-evals: {report['selected']} selected, {counts['measured']} measured, {len(excluded)} excluded, "
           f"{counts['baselines']} baseline records, {counts['postTests']} post-apply tests, "
@@ -154,10 +161,11 @@ def verify(directory):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
+    parser.add_argument("--selection", type=Path, help="also verify each source pin against this selection")
     parser.add_argument("--extract", type=Path, help="write the verified files into a new directory")
     args = parser.parse_args()
     try:
-        files = verify(args.directory)
+        files = verify(args.directory, args.selection)
         if args.extract:
             args.extract.mkdir()
             for name, content in files.items():

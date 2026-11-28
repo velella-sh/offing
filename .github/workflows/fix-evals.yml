@@ -98,7 +98,7 @@ jobs:
           node dist/benchmarks/fix-evals/archive.js artifacts/fix-evals "$date" --changed
           snapshot="benchmarks/fix-evals/results/$date"
           if [[ -n $(git status --porcelain -- "$snapshot") ]]; then
-            python3 benchmarks/fix-evals/verify-archive.py "$snapshot"
+            python3 benchmarks/fix-evals/verify-archive.py "$snapshot" --selection benchmarks/fix-evals/selection.json
           fi
       - name: Open a reviewable evidence refresh
         env:
