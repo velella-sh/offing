@@ -8,7 +8,7 @@ description: "Plan deterministic repairs and verify new codemods with fixtures."
 The codemod kit checks deterministic repairs against source fixtures. Use `offing fix` to preview built-in
 repairs, or use the [codemod v1 specification](spec/codemod/v1.md) to write and test your own codemod.
 The planner produces unified diffs and records findings it declines to repair in `offing fix --json`.
-See [codemod coverage](CODEMOD_COVERAGE.md) for supported runtime and Kubernetes edits and the pinned measurement.
+See [codemod coverage](CODEMOD_COVERAGE.md) for supported runtime and Kubernetes edits and the pinned measurement. The [package successor audit](REPLACEMENT_AUDIT.md) records gaps in the released Ebb data.
 
 ```bash
 offing fix --dry-run           # print the patches
