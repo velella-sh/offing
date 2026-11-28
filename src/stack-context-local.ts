@@ -28,15 +28,16 @@ async function readCachedFindings(root: string, scannedAt: string, version: stri
 }
 
 export async function readStackContext(path: string, mode: "cached"): Promise<StackContext | undefined>;
-export async function readStackContext(path: string, mode?: "scan"): Promise<StackContext>;
+export async function readStackContext(path: string, mode?: "scan", scannedAt?: string): Promise<StackContext>;
 export async function readStackContext(
   path: string,
   mode: "cached" | "scan" = "scan",
+  pinnedScanTime?: string,
 ): Promise<StackContext | undefined> {
   const root = resolve(path);
-  const scannedAt = new Date().toISOString();
+  const scannedAt = pinnedScanTime ?? new Date().toISOString();
   const active = await getActiveData();
-  const cached = await readCachedFindings(root, scannedAt, active.info.version);
+  const cached = pinnedScanTime ? undefined : await readCachedFindings(root, scannedAt, active.info.version);
   if (mode === "cached" && cached === undefined) return undefined;
 
   const [findings, registries, pins] = await Promise.all([

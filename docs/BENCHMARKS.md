@@ -123,7 +123,7 @@ console.log(JSON.stringify(rateByCondition(scoreMigrationRun(task, result).condi
 
 The agent staleness benchmark measures how often coding agents write end-of-life or deprecated choices when they produce common project files — Dockerfiles, GitHub Actions workflows, Kubernetes manifests, package manifests, Terraform modules, and small Python or Node helpers — and whether Offing's agent hook changes that rate.
 
-Each task is a version-free prompt that names only the file to write. The harness runs every task twice in a fresh temporary directory: once with no Offing setup (`plain`), and once after `offing init --agents` plus `init --hooks-for <host>` when the host supports it (`hooks`). The produced file is saved under `outputs/<agent>/<arm>/<task>/` with a `meta.json` that records the agent version and date. Scoring is offline: `score.ts` scans each output directory with `scanRepository` and reports, per agent, arm, and category, the share of tasks with at least one finding, findings per task, and the rule ids seen.
+Each task is a version-free prompt that names only the file to write. The harness runs every task twice in a fresh temporary directory: once with no Offing setup (`plain`), and once after `offing init --agents` plus `init --hooks-for <host>` when the host supports it (`hooks`). The produced file is saved under `outputs/<agent>/<arm>/<task>/` with a `meta.json` that records the agent version and date. Scoring is offline: `score.ts` combines repository findings with removed source APIs and reports, per agent, arm, and category, the share of tasks with at least one finding, findings per task, and the rule ids seen.
 
 ### Run metadata
 
@@ -173,7 +173,8 @@ Per-category seed rows and rule ids are in [`benchmarks/agent-staleness/results.
 ### Artefacts
 
 - Task definitions: [`benchmarks/agent-staleness/tasks.json`](../benchmarks/agent-staleness/tasks.json)
-- Harness (network): [`benchmarks/agent-staleness/run.ts`](../benchmarks/agent-staleness/run.ts)
+- [Recorded replay, result format and scoring pins](../benchmarks/agent-harness/README.md)
+- Legacy live harness: [`benchmarks/agent-staleness/run.ts`](../benchmarks/agent-staleness/run.ts)
 - Offline scorer: [`benchmarks/agent-staleness/score.ts`](../benchmarks/agent-staleness/score.ts)
 - Seed outputs: [`benchmarks/agent-staleness/outputs/seed/`](../benchmarks/agent-staleness/outputs/seed/)
 - Tests: [`tests/agent-staleness-score.test.ts`](../tests/agent-staleness-score.test.ts)
