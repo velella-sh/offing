@@ -42,6 +42,8 @@ jobs:
           node --test dist/tests/state-of-eol.test.js
           "$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs \
             --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out "$RUNNER_TEMP/state-of-eol-site" --workers 2
+          grep -Fq '/reports/state-of-eol-2027/' "$RUNNER_TEMP/state-of-eol-site/state-of-eol/index.html"
+          grep -Fq 'State of EOL benchmark corpus' "$RUNNER_TEMP/state-of-eol-site/reports/state-of-eol-corpus/index.html"
           cp "$RUNNER_TEMP/state-of-eol-site/reports/state-of-eol-2027/index.html" \
             "$RUNNER_TEMP/state-of-eol/state-of-eol-2027.html"
           {
