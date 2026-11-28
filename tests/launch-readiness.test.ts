@@ -1,12 +1,14 @@
 import assert from "node:assert/strict";
-import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { Socket } from "node:net";
 import { test, type TestContext } from "node:test";
 import { collectReadiness, renderReadiness } from "../tools/launch-readiness.js";
 import { countMilestoneIssues } from "../tools/launch-readiness/evidence.js";
 import { checkSitemap, sitemapUrl } from "../tools/launch-readiness/site.js";
 import { readColdInstall } from "../tools/launch-readiness/timing.js";
+import { assertReadinessParity } from "./launch-readiness-parity.js";
 
 const home = "https://velella.sh/offing/";
 const guide = `${home}guide/`;
@@ -148,11 +150,7 @@ test("reports measured zeros, unavailable evidence, and matching Markdown status
   assert.deepEqual(checks.get("Adoption")?.evidence, [
     `https://github.com/velella-sh/offing/blob/${commit}/metrics/2026-W47.json`,
   ]);
-  const markdown = renderReadiness(result);
-  for (const check of result.checks) {
-    assert.ok(markdown.includes(`| ${check.name} | ${check.status} | ${check.observed} | ${check.thresholds} |`));
-    assert.ok(check.evidence.every((address) => markdown.includes(address)));
-  }
+  assertReadinessParity(renderReadiness(result), JSON.stringify(result));
 });
 
 const timingMatrix = [
@@ -212,7 +210,7 @@ test("reports the latest valid exact npm install timings and rejects candidate a
   assert.match(failed?.evidence ?? "", /runs\/100$/);
 });
 
-function releaseFixture(score: number, exact: boolean, lifecycle: string): typeof fetch {
+function releaseFixture(score: number, exact: boolean, lifecycle: string, provenance = "success"): typeof fetch {
   return async (input, options) => {
     assert.equal(options?.credentials, "omit");
     assert.equal(options.redirect, "manual");
@@ -250,8 +248,8 @@ function releaseFixture(score: number, exact: boolean, lifecycle: string): typeo
         jobs: [
           {
             name: "publish-npm / verify-provenance",
-            conclusion: "success",
-            steps: [{ name: "Verify the npm provenance", conclusion: "success" }],
+            conclusion: provenance,
+            steps: [{ name: "Verify the npm provenance", conclusion: provenance }],
           },
           {
             name: "sbom / verify-attestation / lifecycle",
@@ -348,4 +346,90 @@ test("acc-launch-readiness verifies the published demos and links stale or missi
 
   await rm(manifest);
   assert.equal(check(await collect())?.status, "amber");
+});
+
+type Report = Awaited<ReturnType<typeof collectReadiness>>;
+
+function recordedReportFetch(passing: boolean): typeof fetch {
+  const release = releaseFixture(
+    passing ? 7.8 : 5.8,
+    true,
+    passing ? "success" : "failure",
+    passing ? "success" : "failure",
+  );
+  return async (input, options) => {
+    const address = new URL(String(input));
+    if (input === sitemapUrl) return new Response(sitemap(home, guide));
+    if (input === home) return new Response(html("Offing"));
+    if (input === guide) return new Response(html(passing ? "Guide · Offing" : "Incorrect title"));
+    if (address.pathname.endsWith("/issues")) {
+      return Response.json(passing ? [] : [{ number: 47, state: "open" }]);
+    }
+    if (/\/actions\/workflows\/(docs-doctor|package-smoke)\.yml\/runs$/u.test(address.pathname)) {
+      return Response.json({ workflow_runs: [] });
+    }
+    return release(input, options);
+  };
+}
+
+function verifyScenario(report: Report, statuses: ReadonlyArray<Report["checks"][number]["status"]>): void {
+  assert.deepEqual(
+    report.checks.map(({ status }) => status),
+    statuses,
+  );
+  assertReadinessParity(renderReadiness(report), JSON.stringify(report));
+}
+
+test("acc-launch-readiness reports complete, failing and unavailable recorded evidence offline", async (context) => {
+  const denyNetwork = () => assert.fail("The recorded evidence checks attempted a network request");
+  context.mock.method(globalThis, "fetch", denyNetwork);
+  context.mock.method(Socket.prototype, "connect", denyNetwork);
+  const directory = await siteFixture(context);
+  const timing = await temporary(context);
+  const input = { commit, date: "2026-11-28", milestone: 2, version: "0.1.1", site: { directory, run: "123" }, timing };
+  const snapshot = join(directory, "2026-W48.json");
+  await writeFile(
+    snapshot,
+    JSON.stringify({
+      date: "2026-11-27",
+      github: { stars: 9, forks: 1, dependents: 0, publicWorkflowUsage: 0 },
+      npm: { downloads: 15 },
+    }),
+  );
+  await timingFixture(timing, "2026-11-27--12", { output: 9_999 });
+  const complete = await collectReadiness(input, recordedReportFetch(true), directory);
+  verifyScenario(complete, ["green", "green", "green", "amber", "green", "green", "green", "green", "green", "green"]);
+  const changedEvidence = renderReadiness(complete).replace(
+    "https://github.com/velella-sh/offing/actions/runs/123",
+    "https://github.com/velella-sh/offing/actions/runs/999",
+  );
+  assert.throws(() => assertReadinessParity(changedEvidence, JSON.stringify(complete)));
+
+  await writeFile(snapshot, JSON.stringify({ date: "2026-11-27", github: { stars: 9 } }));
+  await timingFixture(timing, "2026-11-27--13", { output: 10_000 });
+  const failed = await collectReadiness(input, recordedReportFetch(false), directory);
+  verifyScenario(failed, ["red", "green", "red", "amber", "amber", "red", "red", "red", "red", "amber"]);
+  assert.ok(failed.pageIssues.some(({ address, kind }) => address === guide && kind === "mismatch"));
+
+  await rm(snapshot);
+  const unknown = await collectReadiness(input, async () => new Response(null, { status: 404 }), directory);
+  verifyScenario(
+    unknown,
+    Array.from({ length: 10 }, () => "amber" as const),
+  );
+});
+
+test("acc-launch-readiness saved Markdown and JSON agree row by row", {
+  skip: !process.env.OFFING_LAUNCH_READINESS_REPORT,
+}, async () => {
+  const directory = process.env.OFFING_LAUNCH_READINESS_REPORT;
+  assert.ok(directory);
+  const names = (await readdir(directory)).filter((name) => /^\d{4}-\d{2}-\d{2}\.(json|md)$/u.test(name));
+  const [json, markdown] = names.sort();
+  assert.ok(names.length === 2 && json && markdown && json.endsWith(".json") && markdown.endsWith(".md"));
+  assert.equal(json.slice(0, -5), markdown.slice(0, -3));
+  assertReadinessParity(
+    await readFile(join(directory, markdown), "utf8"),
+    await readFile(join(directory, json), "utf8"),
+  );
 });

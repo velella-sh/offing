@@ -1,0 +1,54 @@
+{
+  "commands": {
+    "run": {
+      "event": "workflow_dispatch",
+      "head_repository": {
+        "full_name": "velella-sh/offing"
+      },
+      "head_sha": "53362508b2532e695accac3a609e7ff253e7c3c2",
+      "id": 46125092398,
+      "path": ".github/workflows/package-smoke.yml",
+      "status": "completed",
+      "updated_at": "2026-11-28T08:28:44Z"
+    },
+    "job": {
+      "id": 140917824318,
+      "name": "npm, Docker, and Action",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "acc-launch-docs",
+          "number": 6,
+          "status": "completed"
+        }
+      ]
+    }
+  },
+  "links": {
+    "run": {
+      "event": "pull_request",
+      "head_repository": {
+        "full_name": "velella-sh/offing"
+      },
+      "head_sha": "2ff5d594ed9cd018daa557d9cfe00e4377555795",
+      "id": 46127003792,
+      "path": ".github/workflows/docs-doctor.yml",
+      "status": "completed",
+      "updated_at": "2026-11-28T08:44:23Z"
+    },
+    "job": {
+      "id": 140923705098,
+      "name": "mizzen check (docs)",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Check built launch links",
+          "number": 9,
+          "status": "completed"
+        }
+      ]
+    }
+  }
+}
