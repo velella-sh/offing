@@ -7,7 +7,7 @@ title: State of EOL short post drafts
 ## X
 
 ```text
-In the State of EOL 2027 study, Offing scanned 999 of 1,000 pinned public GitHub repos. We found a runtime past end of life in 383 of 999 as of Nov 27, 2026 UTC. The report includes the method and evidence gaps. https://velella.sh/offing/reports/state-of-eol-2027/
+In the State of EOL 2027 study, Offing scanned all 1,000 pinned public GitHub repos. We found a runtime past end of life in 383 of 1,000 as of Nov 27, 2026 UTC. The report includes the method and evidence gaps. https://velella.sh/offing/reports/state-of-eol-2027/
 ```
 
 ## Bluesky
@@ -19,5 +19,5 @@ What is the next observed support deadline? In the State of EOL study, 289 pinne
 ## Mastodon
 
 ```text
-Offing's State of EOL study scanned 999 of 1,000 pinned public GitHub repositories as of Nov 27, 2026 UTC. We observed a runtime past end of life in 383 of 999, and 556 successful scans had at least one evidence gap. The report links the raw observations and explains how to reproduce the figures. https://velella.sh/offing/reports/state-of-eol-2027/
+Offing's State of EOL study scanned all 1,000 pinned public GitHub repositories as of Nov 27, 2026 UTC. We observed a runtime past end of life in 383 of 1,000, and 557 successful scans had at least one evidence gap. The report links the raw observations and explains how to reproduce the figures. https://velella.sh/offing/reports/state-of-eol-2027/
 ```

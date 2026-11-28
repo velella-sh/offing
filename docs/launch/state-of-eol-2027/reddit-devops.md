@@ -12,9 +12,9 @@ What an end-of-life scan picked up in 999 pinned GitHub repositories
 
 **Body**
 
-I work on Offing. We wanted to see how often a repo still refers to a runtime past end of life, so we pinned 1,000 popular and recently active public GitHub repositories and analyzed them as of November 27, 2026 UTC. Of the 999 successful scans, 383 had at least one observed runtime past end of life.
+I work on Offing. We wanted to see how often a repo still refers to a runtime past end of life, so we pinned 1,000 popular and recently active public GitHub repositories and analyzed them as of November 27, 2026 UTC. Of the 1,000 successful scans, 383 had at least one observed runtime past end of life.
 
-The deadline figure has a smaller denominator. For the 289 repositories with an observed, dated event in the next year, the median time to the nearest event was 154 days. The study also records 556 successful scans with at least one evidence gap. This sample describes public GitHub projects selected by stars and activity.
+The deadline figure has a smaller denominator. For the 289 repositories with an observed, dated event in the next year, the median time to the nearest event was 154 days. The study also records 557 successful scans with at least one evidence gap. This sample describes public GitHub projects selected by stars and activity.
 
 If you check for runtime retirements across several teams, which is hardest to inventory in practice among build images, CI runtimes, and application manifests?
 

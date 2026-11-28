@@ -8,7 +8,7 @@ AI assisted with the wording of this article. The counts come from the independe
 
 The first choice in a repository lifecycle study is what to count. We selected 1,000 public GitHub repositories by stars and recent activity, pinned their default-branch commits, and used November 27, 2026 UTC as the analysis date. Offing scanned 999 of those revisions. One pinned revision remained unavailable after retry.
 
-We counted each successfully scanned repository once if it had at least one observed runtime past end of life. That gave 383 of 999. For the deadline measure, we took one nearest dated support event per repository within the following year. The median was 154 days across the 289 repositories with a qualifying date. Reporting the denominator matters because the median applies to that group.
+We counted each successfully scanned repository once if it had at least one observed runtime past end of life. That gave 383 of 1,000. For the deadline measure, we took one nearest dated support event per repository within the following year. The median was 154 days across the 289 repositories with a qualifying date. Reporting the denominator matters because the median applies to that group.
 
 We also kept evidence gaps visible. There were 556 successful scans with at least one unclassified reference, and five repositories with unavailable or incomplete coverage. The upgrade rankings used the subset with applicable lockfile analyzers and counted each package once per affected repository. Those groups covered 241 repositories for Node.js 22 and 84 for Python 3.13.
 
