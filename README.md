@@ -59,6 +59,19 @@ offing forecast . --target nodejs@22
 
 The blocker graph groups recorded dependency paths by direct dependency. The target forecast compares current lifecycle deadlines with a proposed target and includes the migration blockers. [Upgrade blocker graph](https://velella.sh/offing/UPGRADE_CHECK/#group-blockers-by-direct-dependency) · [Target forecast](https://velella.sh/offing/WHAT_IF/)
 
+## Fleet and campaigns
+
+With Offing built from this checkout, scan an organization with
+`offing fleet` and use a saved Fleet recording to plan the Node.js 18 to 22
+example.
+
+```sh
+offing fleet example-org --json
+offing campaign plan tests/fixtures/campaign-20/campaign.json --fleet tests/fixtures/campaign-20/fleet.json
+```
+
+[Campaign Board demo](https://velella.sh/offing/campaigns/demo/) · [Fleet guide](https://velella.sh/offing/FLEET/) · [Campaign walkthrough](https://velella.sh/offing/CAMPAIGNS/)
+
 ## Compare
 
 | Tool | Comparison | Measurements |

@@ -720,6 +720,36 @@ jobs:
             printf -- '- Released Mizzen and Lateen built boards from the compact and 20-repository campaign fixtures.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Audit the generated Campaign Board demo
+        id: campaign-demo-browser
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/campaign-board-tools"
+          site="$RUNNER_TEMP/campaign-demo-site"
+          evidence="$RUNNER_TEMP/campaign-demo-browser"
+          node dist/tools/build-dashboard-data.js --today run-date
+          node dist/tools/build-campaign-demo.js
+          "$tools/node_modules/.bin/mizzen" build docs --theme "$tools/node_modules/@velella/lateen" --out "$site/offing" --workers auto
+          mkdir "$evidence"
+          docker run --rm --platform linux/amd64 --network none --shm-size=1g --workdir /repo \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/.github,dst=/repo/.github,readonly" \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/tests/fixtures/campaign-20,dst=/repo/tests/fixtures/campaign-20,readonly" \
+            --mount "type=bind,src=$tools,dst=/tools,readonly" \
+            --mount "type=bind,src=$site,dst=/site,readonly" \
+            --mount "type=bind,src=$evidence,dst=/out" \
+            mcr.microsoft.com/playwright@sha256:1507cbfc550a63a6b7396791ca4f00df17beb56342d2447b3f106c306f525579 \
+            node .github/scripts/check-campaign-demo.mjs /tools /site /out
+          printf -- '- The production demo route passed the WCAG axe audit, forced-colors and keyboard checks, and Lateen desktop and mobile visual comparison.\n' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload Campaign Board browser evidence
+        if: always() && steps.campaign-demo-browser.outcome != 'skipped'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: offing-campaign-demo-browser
+          path: ${{ runner.temp }}/campaign-demo-browser/
+          if-no-files-found: warn
+          retention-days: 30
+
       - name: acc-guardrails
         env:
           OFFING_DATA_VERSION: bundled

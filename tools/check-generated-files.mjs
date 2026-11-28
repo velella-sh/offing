@@ -77,6 +77,12 @@ export const GENERATED_PATHS = Object.freeze([
       generator: "npm run state-of-eol",
     }),
   ),
+  ...["summary", "repositories", "owners", "activity"].map((name) => ({
+    path: `docs/_data/campaign-demo-${name}.json`,
+    directory: false,
+    target: "Build time",
+    generator: "node dist/tools/build-campaign-demo.js",
+  })),
   { path: "docs/api/v1", directory: true, target: "Build time", generator: "npm run build:data-api" },
   {
     path: "src/commands/index.generated.ts",

@@ -10,6 +10,20 @@ network:
 include:
   - .well-known
 collections:
+  campaign-demo-summary:
+    source: _data/campaign-demo-summary.json
+    id: id
+    template: _templates/campaign-demo.md
+    permalink: /campaigns/{id}/
+  campaign-demo-repositories:
+    source: _data/campaign-demo-repositories.json
+    id: id
+  campaign-demo-owners:
+    source: _data/campaign-demo-owners.json
+    id: id
+  campaign-demo-activity:
+    source: _data/campaign-demo-activity.json
+    id: id
   state-of-eol-2027-run:
     source: _data/state-of-eol-2027-run.json
     id: id
@@ -100,6 +114,15 @@ theme:
   options:
     # Lateen 0.2.5 ships an Offing preset (accent and neutral tints); the logo, favicon and footer below stay ours.
     preset: offing
+    status:
+      values:
+        verified: { tone: positive, label: Verified }
+        review: { tone: caution, label: Awaiting review }
+        merged: { tone: positive, label: Merged }
+        closed: { tone: neutral, label: Closed }
+        failed: { tone: negative, label: Failed }
+        completed: { tone: positive, label: Completed }
+        incomplete: { tone: caution, label: Incomplete }
     logo:
       light: /assets/brand/offing-mark-adaptive.svg
       dark: /assets/brand/offing-mark-adaptive.svg
