@@ -66,9 +66,23 @@ queues Pages deployments. The build job reads repository contents and
 artifacts. The deploy job has the Pages write and ID-token permissions.
 [GitHub Actions concurrency](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency)
 
-To try the renderer from a repository checkout, copy
-`tests/fixtures/campaign-board/synthetic-state.json` to `state.json`. A separate public demo depends on the
-[recorded campaign fixture](https://github.com/velella-sh/offing/issues/1019).
-The board uses the released Lateen list, status, timeline, stat strip, and
-charts. The progress bar and burndown chart are deferred until their components
+## Recorded demo
+
+The [Campaign Board demo](https://velella.sh/offing/campaigns/demo/) displays the recorded migration
+from Node.js 18 to a minimum of 22 across 20 fixture repositories. The
+[recorded ledger and proofs](https://github.com/velella-sh/offing/tree/48274e1d97a9fbcbdf1093d83847174a7a751cf1/tests/fixtures/campaign-20)
+include the final recorded Git refs.
+
+From an Offing checkout, run these commands with a build that supplies
+`campaign-board` and a new output directory.
+
+```sh
+offing campaign status tests/fixtures/campaign-20/state.json
+offing campaign-board tests/fixtures/campaign-20/state.json --out demo-board
+mizzen build demo-board --theme node_modules/@velella/lateen --out demo-board-site
+```
+
+The demo uses Lateen's record tables and status labels. The standalone
+export also uses Lateen's list, stat strip, timeline and charts. The
+progress bar and burndown chart remain deferred until their components
 ship. Follow the [Lateen roadmap](https://github.com/velella-sh/org/blob/main/lateen/ROADMAP.md).

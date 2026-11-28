@@ -48,11 +48,13 @@ jobs:
           cache: npm
       - name: Build dashboard data for Mizzen
         run: npm run build:dashboard --silent
+      - name: Build Campaign Board demo data
+        run: node dist/tools/build-campaign-demo.js
       - name: Install the site tools
         run: |
           mkdir "$RUNNER_TEMP/site-tools"
           cp .github/site-tools/package.json .github/site-tools/package-lock.json "$RUNNER_TEMP/site-tools/"
-          npm ci --prefix "$RUNNER_TEMP/site-tools" --no-audit --no-fund
+          (cd "$RUNNER_TEMP/site-tools" && npm ci --no-audit --no-fund)
       - name: acc-accuracy-dashboard
         env:
           OFFING_SITE_TOOLS: ${{ runner.temp }}/site-tools
