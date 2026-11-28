@@ -29,3 +29,13 @@ Status below matches [Where the server is listed](MCP.md#where-the-server-is-lis
 The official registry published [`@velella/offing@0.1.1`](https://registry.modelcontextprotocol.io/v0/servers/io.github.velella-sh%2Foffing/versions/0.1.1) on 2026-11-12 at 08:47:51.506722 UTC.
 
 When the weekly check finds a listing whose shown version differs from `server.json`, it writes the mismatches into the job summary and opens one tracking issue (or updates the open one) so a maintainer can republish or chase the directory.
+
+## GitHub repository metadata
+
+On 2026-11-28 UTC, the [repository About section](https://github.com/velella-sh/offing) showed `Local-first end-of-life and deprecation scanner. See what's in the offing. Fix it before it lands.` The public topics included `end-of-life`, `deprecation`, `mcp`, `ai-agents` and `github-actions`.
+
+The [maintainer decision](https://github.com/velella-sh/org/blob/c23e4c2f20189061c2059e08369ad1c83eb737b7/offing/DECISIONS.md#L11) contains the approved About text.
+
+> Finds deprecated and end-of-life runtimes, packages and GitHub Actions, with a source for every finding. Runs locally, in CI, or inside your coding agent.
+
+[#139](https://github.com/velella-sh/offing/issues/139) tracks matching the repository About setting to that text.

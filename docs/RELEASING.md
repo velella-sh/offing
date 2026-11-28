@@ -102,15 +102,46 @@ workflow ref, but `verify-npm-package` does not support `--source-tag`; it check
 
 ```bash
 version=X.Y.Z
-curl -Sso "offing-$version.tgz" "$(npm view "offing@$version" dist.tarball)"
-curl -Sso attestations.json "$(npm view "offing@$version" --json | jq -r '.dist.attestations.url')"
+package="@velella/offing@$version"
+npm view "$package" version dist.integrity --json --registry https://registry.npmjs.org
+curl -fsSL -o "offing-$version.tgz" "$(npm view "$package" dist.tarball --registry https://registry.npmjs.org)"
+curl -fsSL -o attestations.json "$(npm view "$package" dist.attestations.url --registry https://registry.npmjs.org)"
 SLSA_VERIFIER_EXPERIMENTAL=1 slsa-verifier verify-npm-package "offing-$version.tgz" \
   --attestations-path attestations.json \
   --builder-id https://github.com/actions/runner/github-hosted \
   --package-name @velella/offing \
   --package-version "$version" \
   --source-uri github.com/velella-sh/offing
+shasum -a 256 "offing-$version.tgz"
 ```
+
+### Release-day evidence record
+
+Use the exact version and tag reconciled with the [pre-tag candidate evidence](https://github.com/velella-sh/offing/issues/1173). For 0.1.3, add the verified evidence to [#1159](https://github.com/velella-sh/offing/issues/1159) under [#1175](https://github.com/velella-sh/offing/issues/1175). Record each result with its source, version or commit, and UTC observation time.
+
+| Evidence | How to verify |
+| --- | --- |
+| npm provenance | Run the exact package verification above. Record the npm integrity, tarball SHA-256, verifier result and tag commit. Link the matching tag-push [Release](https://github.com/velella-sh/offing/actions/workflows/release.yml) job. |
+| Signed GitHub tag | Read the published release and the annotated tag object with the commands below. Record the tag commit and GitHub's `verified` value and `reason`. |
+| OpenSSF Scorecard | Read the [public result](https://api.securityscorecards.dev/projects/github.com/velella-sh/offing). Record `score`, `date` and `repo.commit`. For 0.1.3 the score must be at least 7 and belong to the verified tag commit. |
+| Adoption | Run the public aggregate collector on the UTC date in the release's `publishedAt`. Save and link its dated JSON snapshot. Record any unavailable fields with their source outcome. |
+
+```bash
+version=0.1.3
+repo=velella-sh/offing
+tag="v$version"
+gh release view "$tag" --repo "$repo" --json tagName,publishedAt,url
+tag_object="$(gh api "repos/$repo/git/ref/tags/$tag" --jq '.object | select(.type == "tag") | .sha')"
+test -n "$tag_object"
+gh api "repos/$repo/git/tags/$tag_object" --jq '{tag, commit: .object.sha, verified: .verification.verified, reason: .verification.reason}'
+curl -fsSL "https://api.securityscorecards.dev/projects/github.com/$repo" | jq '{score,date,repo}'
+
+# Run the adoption collector from the repository checkout.
+evidence_dir="$(mktemp -d)"
+npm run metrics:adoption -- --out "$evidence_dir/adoption.json"
+```
+
+The 2026-11-28 rehearsal found `0.1.3` unavailable in npm and GitHub Releases. For the public [0.1.1 release](https://github.com/velella-sh/offing/releases/tag/v0.1.1), the [npm provenance job](https://github.com/velella-sh/offing/actions/runs/43185121008/job/131072778062) passed. GitHub returned `unsigned` for its [annotated tag](https://api.github.com/repos/velella-sh/offing/git/tags/5cf2eaf25cd8e2bf9c5f3b39fdbbd05f71b0ced3). The Scorecard API returned 7.8 on 2026-11-26 for commit `0b88bbfb`. The 0.1.1 tag resolves to `af42440a`. The 0.1.3 release-day evidence remains pending.
 
 ## One-time npm setup
 
