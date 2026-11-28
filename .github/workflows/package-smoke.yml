@@ -193,8 +193,8 @@ jobs:
           for example in 2026-03-31:1 2026-04-01:0 2026-04-02:-1; do
             npm-install/node_modules/.bin/offing attest check lifecycle.sigstore.json \
               --subject "${tarballs[0]}" --today "${example%:*}" |
-              rg --fixed-strings -- '"pkg:docker/library/alpine@3.18"' |
-              rg --fixed-strings -- ": ${example#*:} days left"
+              grep -F -- '"pkg:docker/library/alpine@3.18"' |
+              grep -F -- ": ${example#*:} days left"
           done
           {
             printf '### acc-lifecycle-attestation (clean consumer)\n\n'
