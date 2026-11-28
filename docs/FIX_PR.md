@@ -16,4 +16,4 @@ The pull request begins with its evidence table, then lists patches by fixer, re
 
 A later run updates the bot branch only when all its extra commits match the bot's recorded author, committer and fix subject. An explicit Git lease rejects a branch changed after inspection. A human commit causes a notice on the open PR. Fork runs and rejected writes are explained in the job summary.
 
-[Offing's dry-run workflow](https://github.com/velella-sh/offing/blob/main/.github/workflows/offing-fix-pr.yml) builds the candidate and exercises it with a local Git remote and stubbed GitHub responses.
+[Offing's dry-run workflow](https://github.com/velella-sh/offing/blob/main/.github/workflows/offing-fix-pr.yml) runs a read-only fix plan on Offing's tracked files and reports the result in the job summary. It excludes the intentionally outdated test fixtures, examples and benchmark outputs. In the same run, the candidate Action opens and updates one fixture PR through a local Git remote and stubbed GitHub responses. Download `acc-fix-pr-evidence-<attempt>` from the run's **Artifacts** section to inspect the fixture's verification result, patch, fix plan and summary.

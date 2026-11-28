@@ -228,19 +228,24 @@ test("a merged pull request is not reopened; the next run opens a new one", asyn
 });
 
 /** Runs the compiled Action entry point against a checkout with a fake step summary. */
-async function runAction(root: string, inputs: Record<string, string>, status = 200) {
+async function runAction(root: string, inputs: Record<string, string>, status = 200, existingPull?: number) {
   const runner = await scratch("offing-fix-pr-runner-");
   const output = join(runner, "outputs.txt");
   const summary = join(runner, "summary.md");
-  await Promise.all([writeFile(output, ""), writeFile(summary, "")]);
+  const requests = join(runner, "requests.txt");
+  await Promise.all([writeFile(output, ""), writeFile(summary, ""), writeFile(requests, "")]);
   const stub = join(runner, "api.mjs");
   await writeFile(
     stub,
     `
-    globalThis.fetch = async (_url, options) => {
+    import { appendFileSync } from "node:fs";
+    globalThis.fetch = async (url, options) => {
+      appendFileSync(${JSON.stringify(requests)}, options.method + " " + new URL(url).pathname + "\\n");
       if (${status} !== 200) return Response.json({}, { status: ${status} });
-      if (options.method === "GET") return Response.json([]);
-      return Response.json({ number: 7, html_url: "https://github.com/o/r/pull/7" });
+      const number = ${existingPull ?? 7};
+      const pull = { number, state: "open", head: { ref: "offing/fixes" }, html_url: "https://github.com/o/r/pull/" + number };
+      if (options.method === "GET") return Response.json(${existingPull === undefined ? "[]" : "[pull]"});
+      return Response.json(pull);
     };
   `,
   );
@@ -266,7 +271,13 @@ async function runAction(root: string, inputs: Record<string, string>, status = 
     child.once("error", reject);
     child.once("close", (status) => resolveCode(status ?? 1));
   });
-  return { code, stdout, outputs: await readFile(output, "utf8"), summary: await readFile(summary, "utf8") };
+  return {
+    code,
+    stdout,
+    outputs: await readFile(output, "utf8"),
+    summary: await readFile(summary, "utf8"),
+    requests: (await readFile(requests, "utf8")).trim().split("\n"),
+  };
 }
 
 test("the Action skips fix-pr on events other than schedule and workflow_dispatch", async () => {
@@ -333,7 +344,7 @@ test("the fix branch and the PR stay intact when any branch commit belongs to a 
   }
 });
 
-test("the Action summarizes fork, read-only, protected branch, and no-change outcomes", async () => {
+test("the Action publishes and refreshes the same fixture PR before producing a no-change summary", async () => {
   const { root, remote } = await repositoryWithFinding();
   const forkEvent = join(await scratch("offing-fix-fork-"), "event.json");
   await writeFile(forkEvent, JSON.stringify({ repository: { fork: true, default_branch: "main" } }));
@@ -356,21 +367,36 @@ test("the Action summarizes fork, read-only, protected branch, and no-change out
   assert.match(await readFile(join(artifactPath, "offing-fix-plan.json"), "utf8"), /github-actions/);
   assert.match(await readFile(join(artifactPath, "offing-fix.patch"), "utf8"), /actions\/checkout/);
   assert.match(first.summary, /opened fix pull request #7/);
-  const evidenceDirectory = process.env.OFFING_FIX_PR_EVIDENCE;
-  if (evidenceDirectory) await cp(artifactPath, evidenceDirectory, { recursive: true });
+  assert.deepEqual(first.requests, ["GET /repos/o/r/pulls", "POST /repos/o/r/pulls"]);
+
+  git(root, ["checkout", "-q", "main"]);
+  const rerun = await runAction(root, FIX_RUN, 200, 7);
+  assert.equal(rerun.code, 0);
+  assert.match(rerun.summary, /updated fix pull request #7/);
+  assert.match(rerun.outputs, /fix-pr-number=7/);
+  assert.deepEqual(rerun.requests, ["GET /repos/o/r/pulls", "PATCH /repos/o/r/pulls/7"]);
 
   git(remote, ["config", "receive.denyNonFastForwards", "true"]);
   git(root, ["checkout", "-q", "main"]);
   git(root, ["commit", "--allow-empty", "-m", "Update default branch"]);
-  const protectedBranch = await runAction(root, FIX_RUN);
+  const protectedBranch = await runAction(root, FIX_RUN, 200, 7);
   assert.equal(protectedBranch.code, 0);
   assert.match(protectedBranch.summary, /Branch protection rejected/);
+  assert.deepEqual(protectedBranch.requests, ["GET /repos/o/r/pulls"]);
 
   git(root, ["checkout", "-q", "main"]);
   await rm(join(root, ".github", "workflows", "ci.yml"));
   const clean = await runAction(root, FIX_RUN);
   assert.equal(clean.code, 0);
   assert.match(clean.summary, /no deterministic fixes/);
+  assert.deepEqual(clean.requests, ["GET /repos/o/r/pulls"]);
+
+  const evidenceDirectory = process.env.OFFING_FIX_PR_EVIDENCE;
+  if (evidenceDirectory) {
+    await cp(artifactPath, evidenceDirectory, { recursive: true });
+    const summaries = [first, rerun, protectedBranch, clean].map(({ summary }) => summary.trim().split("\n").at(-1));
+    await writeFile(join(evidenceDirectory, "fixture-summary.md"), summaries.map((line) => `- ${line}\n`).join(""));
+  }
 });
 
 test("existing bot PRs update with checkout's original shallow history default", async () => {

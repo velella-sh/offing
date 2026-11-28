@@ -14,7 +14,9 @@ concurrency:
 
 jobs:
   acc-fix-pr:
-    if: github.repository == 'velella-sh/offing' && github.ref_name == github.event.repository.default_branch
+    if: >-
+      github.repository == 'velella-sh/offing' &&
+      (github.event_name == 'workflow_dispatch' || github.ref_name == github.event.repository.default_branch)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -28,9 +30,41 @@ jobs:
         run: |
           npm run build
           npm run build:action
+      - name: Plan fixes on Offing's tracked files without writing
+        env:
+          OFFING_DATA_VERSION: bundled
+        run: |
+          set -euo pipefail
+          checkout="$RUNNER_TEMP/offing-dogfood"
+          mkdir "$checkout"
+          # These directories intentionally contain old versions and APIs for fixtures.
+          git archive HEAD | tar --extract --directory "$checkout" \
+            --exclude='examples' --exclude='tests/fixtures' --exclude='benchmarks/agent-staleness/outputs'
+          node dist/src/cli.js fix "$checkout" --dry-run --json > "$RUNNER_TEMP/offing-dogfood-plan.json"
+          {
+            printf '### Offing fix plan at %s\n\n' "$GITHUB_SHA"
+            printf 'Read-only snapshot of tracked files excluding examples/, tests/fixtures/ and benchmarks/agent-staleness/outputs/.\n\n'
+            jq -er '
+              select(.schemaVersion == "offing.fix.v1") |
+              if (.patches | length) == 0 then "No deterministic patches were planned for the scanned files."
+              else "Deterministic patches planned for review: " + (.patches | length | tostring) end,
+              ("Refusals: " + (.refusals | length | tostring))
+            ' "$RUNNER_TEMP/offing-dogfood-plan.json"
+            printf '\nThis read-only workflow makes no GitHub branch or pull request writes.\n'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Run the candidate Action against an isolated Git remote
         env:
           OFFING_FIX_PR_ACTION: ${{ github.workspace }}/dist/action/index.js
+          OFFING_FIX_PR_EVIDENCE: ${{ runner.temp }}/acc-fix-pr-evidence
         run: |
           node --test dist/tests/action-fix-pr.test.js dist/tests/fix-pr-body.test.js
-          printf '### acc-fix-pr\n\nCandidate Action exercised against local Git and a stubbed GitHub API. Live PR publication is disabled.\n' >> "$GITHUB_STEP_SUMMARY"
+          {
+            printf '### acc-fix-pr\n\nCandidate Action exercised against local Git and a stubbed GitHub API.\n'
+            cat "$OFFING_FIX_PR_EVIDENCE/fixture-summary.md"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: acc-fix-pr-evidence-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/acc-fix-pr-evidence
+          if-no-files-found: error
+          retention-days: 14
