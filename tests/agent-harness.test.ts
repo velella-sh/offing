@@ -137,6 +137,20 @@ test("overridden repeats work and invalid metadata, changed outputs and scoring 
   await assert.rejects(rescoreRecordedOutputs([output], tasks, commit), /Incomplete replay experiment/);
 });
 
+test("an unavailable task sandbox aborts the experiment instead of falling back to static replay", async (t) => {
+  const root = await fixtureRoot(t);
+  const plan = planSchema.parse({ ...planInput, arms: ["plain"], repeats: 1 });
+  const recordings = join(root, "input");
+  await createRecordings(recordings, plan);
+  const output = join(root, "output");
+  const sandbox = () => Promise.reject(new Error("Fixture container unavailable"));
+  await assert.rejects(
+    runRecordedExperiment({ plan, tasks, recordings, output, offingCommit: commit, sandbox }),
+    /Fixture container unavailable/,
+  );
+  await assert.rejects(readFile(join(output, "plan.json")), { code: "ENOENT" });
+});
+
 test("the offline scorer reports a stale dependency and removed API with evidence", async (t) => {
   const root = await fixtureRoot(t);
   await put(root, "package.json", '{"name":"fixture","dependencies":{"request":"2.88.2"}}');

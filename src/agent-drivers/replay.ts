@@ -210,10 +210,7 @@ type PlannedTurn = Awaited<ReturnType<typeof plan>>["turns"][number];
 type ReplayReceipt = { completed: number; stopped: string | null };
 type ConnectDocker = typeof import("../test-runners/docker.js").connectDocker;
 
-async function stageWorker(staging: string, turns: readonly PlannedTurn[], config: AutopilotConfig, remaining: number) {
-  const paths = new Set(turns.flatMap(({ turn }) => turn.map(([path]) => path)));
-  await mkdir(join(staging, "checkout"));
-  for (const path of paths) await mkdir(dirname(join(staging, "checkout", path)), { recursive: true });
+export async function stageReplayWorker(staging: string): Promise<void> {
   for (const module of replayWorkerModules) {
     const target = join(staging, module);
     await mkdir(dirname(target), { recursive: true });
@@ -223,6 +220,13 @@ async function stageWorker(staging: string, turns: readonly PlannedTurn[], confi
     });
   }
   await writeFile(join(staging, "package.json"), '{"type":"module"}');
+}
+
+async function stageWorker(staging: string, turns: readonly PlannedTurn[], config: AutopilotConfig, remaining: number) {
+  const paths = new Set(turns.flatMap(({ turn }) => turn.map(([path]) => path)));
+  await mkdir(join(staging, "checkout"));
+  for (const path of paths) await mkdir(dirname(join(staging, "checkout", path)), { recursive: true });
+  await stageReplayWorker(staging);
   await writeFile(
     join(staging, "recording.json"),
     JSON.stringify({

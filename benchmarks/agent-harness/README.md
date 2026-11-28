@@ -1,10 +1,10 @@
 # Recorded agent experiments
 
-This harness replays recorded edits for Offing's [public staleness tasks](../agent-staleness/tasks.json). The replay driver writes the task's target file in a fresh temporary workspace. Scoring parses that file offline. The legacy maintainer live run and the [historical seed report](../agent-staleness/README.md) are separate experiments.
+This harness replays recorded edits for Offing's [public staleness tasks](../agent-staleness/tasks.json). The CLI gives each attempt its own pinned Docker container and writes the target there. Scoring parses the saved target offline. The [historical seed report](../agent-staleness/README.md) records a separate experiment.
 
 ## Repeatable fixture
 
-Run this fixture from a clean, committed Offing checkout.
+Run this fixture from a clean, committed Offing checkout with a local Docker daemon. The runner may fetch the pinned Node image during setup.
 
 ```bash
 npm ci
@@ -38,6 +38,14 @@ npm run bench:staleness:run -- --rescore "$fixture/output"
 ```
 
 The summary reports one completed output and one with a finding. The evidence records the rule and its source. This example is hand-written fixture data.
+
+## Isolation and compatibility
+
+Each replay unpacks a bounded archive into a new container with `--network none`, a read-only root, bounded scratch space and an unprivileged user. The container receives the starting project at `checkout/`, the task prompt at `prompt.md`, and the selected recording at `recording.json`. The `hooks` arm also receives its generated project instructions and hook settings. The launcher uses a fresh Docker configuration and the container has its own temporary home. Each attempt exports only the declared target and the replay result. Normal scoring parses the target as data.
+
+For a Docker-free replay of existing text data, pass `--static-replay` with the same plan and recordings. This mode writes and parses text in a temporary directory and launches no generated program. The default mode fails if the container is unavailable. `--rescore` remains a static operation. The old `--agent` entry point refuses live vendor CLIs because their subprocess isolation is unverified. Use recordings from an independently approved capture host for measured experiments.
+
+To run the boundary fixture locally, build the checkout and set `OFFING_AGENT_LEADERBOARD_DOCKER=1` for `node --test dist/tests/agent-harness-sandbox.test.js`. The fixture executes a harmless generated script in the replay container. It verifies network denial, an inaccessible synthetic host agent-config marker, access to declared inputs, and a fresh workspace on retry. The [Package smoke workflow](https://github.com/velella-sh/offing/actions/workflows/package-smoke.yml) can run it with `agent_leaderboard_only=true`.
 
 ## Inputs and outputs
 

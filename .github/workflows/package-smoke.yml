@@ -22,6 +22,10 @@ on:
         description: Generate the launch readiness report and test the workflow without updating an issue.
         type: boolean
         default: false
+      agent_leaderboard_only:
+        description: Run the isolated agent replay fixture and refusal checks.
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -31,6 +35,24 @@ concurrency:
   cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 
 jobs:
+  agent-leaderboard:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.agent_leaderboard_only }}
+    name: acc-agent-leaderboard (isolated replay)
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          cache: npm
+      - run: npm run build --silent
+      - name: Check network denial and task inputs with generated fixture code
+        env:
+          OFFING_AGENT_LEADERBOARD_DOCKER: "1"
+        run: node --test dist/tests/agent-harness-sandbox.test.js dist/tests/agent-harness.test.js
+
   launch-readiness:
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.launch_readiness_only }}
     uses: ./.github/workflows/launch-readiness-report.yml # zizmor: ignore[self-repository] -- exercise only the read-only report
@@ -100,7 +122,7 @@ jobs:
       proof-artifact: proof-acceptance
 
   attest-lifecycle:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && !inputs.agent_leaderboard_only
     needs: smoke
     name: acc-lifecycle-attestation (signed fixture)
     runs-on: ubuntu-latest
@@ -134,7 +156,7 @@ jobs:
           if-no-files-found: error
 
   gate-signed-lifecycle:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && !inputs.agent_leaderboard_only
     needs: attest-lifecycle
     name: acc-release-gate (signed lifecycle fixture)
     runs-on: ubuntu-latest
@@ -246,7 +268,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   smoke:
-    if: ${{ !inputs.action_conformance_only && !inputs.autopilot_action_only && !inputs.launch_readiness_only }}
+    if: ${{ !inputs.action_conformance_only && !inputs.autopilot_action_only && !inputs.launch_readiness_only && !inputs.agent_leaderboard_only }}
     name: npm, Docker, and Action
     runs-on: ubuntu-latest
     timeout-minutes: 25
