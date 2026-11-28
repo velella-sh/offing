@@ -29,7 +29,7 @@ known secrets and list candidates for review. Running a command requires a separ
 | tox | `tox.ini` | `python3 -m tox` |
 | Go | `go.mod` | `go build -mod=readonly ./...` and `go test -mod=readonly ./...` |
 | Maven | `pom.xml` | `mvn -DskipTests package` and `mvn test`, preferring the available Maven wrapper |
-| Gradle | `gradlew` or `gradlew.bat` | `./gradlew assemble` and `./gradlew test`, with the batch wrapper on Windows |
+| Gradle | `gradlew` on Unix or `gradlew.bat` on Windows | `./gradlew assemble` and `./gradlew test`, with the batch wrapper on Windows |
 | .NET | `*.sln` or `*.slnx`, otherwise `*.csproj` | `dotnet build ./{target}` and `dotnet test ./{target}` for each target |
 
 Set `packageManager` in `package.json` to choose the Node manager when several lockfiles are present. For Python,
@@ -38,23 +38,27 @@ a `requirements.txt` made entirely of exact pins adds a plan to create `.offing-
 `python` and the corresponding virtual environment path. The plan omits install commands when the supported
 lockfile is missing. Build tools may still resolve their own dependencies if someone later runs a shown command.
 
-If the plan is empty, use the directory containing a supported manifest or add the required scripts or test tool
-configuration.
+If the plan is empty, read `tests.notes`, then point Doctor at the directory containing the manifest. For a Node
+project, define a nonempty `test` script in `package.json`. For pytest, add a supported pytest configuration
+from the table. A test suite outside these detection rules can still be previewed with `autopilot.tests`.
 
 ## Run tests in the pinned container
 
-Use a clean Git checkout after reviewing the commit and its candidate commands. An explicit test-only request
-executes those repository commands inside the pinned Fix Evals sandbox.
+Use a clean Git checkout after reviewing the commit and its candidate commands. An explicit test-only request runs
+tests inside the same pinned Docker runner that Fix Evals uses for its benchmark checks.
 
 ```bash
 offing autopilot ./project --test-only --container
 ```
 
 `--test-only` uses the pinned Docker runtime by default. `--container` and the committed setting
-`autopilot.testRuntime: "container"` explicitly select that same runtime. Test-only uses one detected Linux runtime
-profile and honors committed `autopilot.tests` as literal
-argv. It has no local process fallback. The streamed snapshot excludes Git internals and stays separate from the
-original checkout. The sandbox uses an unprivileged user, a read-only image, temporary space, and limits on time,
+`autopilot.testRuntime: "container"` explicitly select that same runtime. Test-only uses the detected test steps
+with their offline prerequisites. To choose the commands yourself, commit an `autopilot.tests` array like the
+example above. Offing uses the configured argument arrays and skips automatically detected setup and install steps.
+Both modes require exactly one supported Linux runtime profile inferred from the project's detected test tools.
+If several profiles are detected, use a checkout with just the project you want to test at its root.
+The streamed snapshot excludes Git internals and stays separate from the original checkout.
+The sandbox uses an unprivileged user, a read-only image, temporary space, and limits on time,
 processes, CPU and memory. It has no network or host mounts. Tool image downloads happen before execution.
 
 The test environment uses the bundled Node, Python, Go or Java image. Supply any project dependencies as

@@ -6,7 +6,7 @@ import { configureActiveData, getActiveDataSync } from "@velella/ebb/data-source
 
 import { fixers } from "../../src/fix/index.js";
 import { readBounded } from "../../src/forecast-tool/remote/body.js";
-import { archiveTree, connectDocker, prepareImage, sandbox } from "../../src/test-runners/docker.js";
+import { connectDocker, pinnedDockerRunner } from "../../src/test-runners/docker.js";
 import { isProfile } from "../../src/test-runners/profiles.js";
 import { type Asset, type Candidate, readCohort } from "./cohort.js";
 import { evaluate, type Evidence, scannedAt, sha256 } from "./evaluate.js";
@@ -50,8 +50,9 @@ async function run(out: string, rows: Awaited<ReturnType<typeof inputs>>, select
   await mkdir(output);
   await tempSource(async (config) => {
     configureActiveData({ cacheDirectory: config });
-    const docker = await connectDocker(config);
-    const images = new Map<string, string>();
+    const runner = pinnedDockerRunner(await connectDocker(config), () =>
+      readFile("benchmarks/fix-evals/Dockerfile.kubeconform", "utf8"),
+    );
     const evidence: Evidence[] = [];
     for (const { input, commands, paths, image: expectedImage, assets = [] } of rows.candidates) {
       const load = async (root: string) => {
@@ -67,17 +68,8 @@ async function run(out: string, rows: Awaited<ReturnType<typeof inputs>>, select
         fixers: selected,
         ...(commands === undefined ? {} : { commands }),
         ...(paths === undefined ? {} : { paths }),
-        async backend(profile, root) {
-          const profileKey = expectedImage === undefined ? profile : `${profile}:${expectedImage}`;
-          let image = images.get(profileKey);
-          if (image === undefined) {
-            const dockerfile =
-              profile === "kubernetes" ? await readFile("benchmarks/fix-evals/Dockerfile.kubeconform", "utf8") : "";
-            image = await prepareImage(docker, profile, dockerfile, expectedImage);
-            images.set(profileKey, image);
-          }
-          return sandbox(docker, image, await archiveTree(root));
-        },
+        backend: (profile, root) =>
+          runner.prepare(profile, root, expectedImage === undefined ? {} : { image: expectedImage }),
       });
       evidence.push(result);
       await writeJson(join(output, input.id, "evidence.json"), result);
@@ -93,7 +85,7 @@ async function run(out: string, rows: Awaited<ReturnType<typeof inputs>>, select
       selectionRevision: rows.selectionRevision,
       selected: rows.candidates.length,
       fixtures: rows.selectionRevision === null,
-      images: Object.fromEntries(images),
+      images: Object.fromEntries(runner.images),
     });
   });
   process.stdout.write(`Fix evaluation evidence: ${output}\n`);

@@ -11,7 +11,8 @@ import { z } from "zod";
 
 import { fixers } from "../src/fix/index.js";
 import { runApprovedTest } from "../src/test-runners/run.js";
-import { dockerArgs, dockerExecArgs, sandbox } from "../src/test-runners/docker.js";
+import { dockerArgs, dockerExecArgs, pinnedDockerRunner, sandbox } from "../src/test-runners/docker.js";
+import { profiles } from "../src/test-runners/profiles.js";
 import { evaluate, type Case, type Input, sha256 } from "../benchmarks/fix-evals/evaluate.js";
 import { summarize } from "../benchmarks/fix-evals/report.js";
 import { fixtureSource, tempSource } from "../benchmarks/fix-evals/source.js";
@@ -282,4 +283,58 @@ test("a command deadline preserves received bytes and removes the container on a
   assert.equal(result.attempts[0].status, "timed-out");
   assert.equal(result.attempts[0].logs.stdout.tail, "started");
   assert.equal(result.attempts[0].logs.stderr.tail, "waiting");
+});
+
+test("the shared Docker runner caches each pinned image and snapshots the current checkout", async () => {
+  const inspected: string[] = [];
+  const archives: Buffer[] = [];
+  const recipe = "FROM scratch";
+  const builtImage = "sha256:" + "a".repeat(64);
+  const docker: Parameters<typeof pinnedDockerRunner>[0] = (args) => {
+    const stdin = new PassThrough();
+    const child = Object.assign(new ChildProcess(), { stdin });
+    const result = (async () => {
+      let stdout = "";
+      if (args[0] === "image") {
+        inspected.push(args.at(-1) ?? "");
+        stdout = "linux/amd64";
+      }
+      if (args[0] === "build" || (args[0] === "exec" && args[1] === "-i")) {
+        const payload: Buffer[] = [];
+        for await (const chunk of stdin) payload.push(Buffer.from(chunk));
+        const bytes = Buffer.concat(payload);
+        if (args[0] === "build") {
+          assert.equal(bytes.toString(), recipe);
+          stdout = builtImage;
+        } else archives.push(bytes);
+      }
+      return { stdout: Buffer.from(stdout), stderr: Buffer.alloc(0) };
+    })();
+    return Object.assign(result, { child });
+  };
+  const runner = pinnedDockerRunner(docker, async () => recipe);
+  const pinnedImage = "node@sha256:" + "b".repeat(64);
+  await tempSource(async (root) => {
+    const snapshot = join(root, "fixture.txt");
+    const command = ["npm", "test"] as const;
+    await writeFile(snapshot, "first checkout");
+    const earlier = await runner.prepare("npm", root);
+    await writeFile(snapshot, "later checkout");
+    const later = await runner.prepare("npm", root);
+    await runner.prepare("npm", root, { image: pinnedImage });
+    await runner.prepare("kubernetes", root);
+    for (const executor of [earlier, later]) {
+      await runApprovedTest(command, (argv, output) => executor(argv, output, false), 1000);
+    }
+  });
+  assert.deepEqual(inspected, [profiles.npm.image, pinnedImage]);
+  assert.deepEqual(Object.fromEntries(runner.images), {
+    npm: profiles.npm.image,
+    [`npm:${pinnedImage}`]: pinnedImage,
+    kubernetes: builtImage,
+  });
+  assert.deepEqual(
+    archives.map((bytes) => bytes.includes("later checkout")),
+    [false, true],
+  );
 });
