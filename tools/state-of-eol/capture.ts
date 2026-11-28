@@ -38,9 +38,9 @@ function workflowRuntimes(contents: string): string[] {
 function manifestRuntime(contents: string): string {
   const document = parseDocument(contents, { prettyErrors: false });
   const runs = isMap(document.contents) ? document.contents.get("runs", true) : undefined;
-  const using = isMap(runs) ? runs.get("using") : undefined;
-  return document.errors.length === 0 && typeof using === "string" && /^(?:node\d+|docker|composite)$/i.test(using)
-    ? `action:${using.toLowerCase()}`
+  const runtime = isMap(runs) ? runs.get("using") : undefined;
+  return document.errors.length === 0 && typeof runtime === "string" && /^(?:node\d+|docker|composite)$/i.test(runtime)
+    ? `action:${runtime.toLowerCase()}`
     : "action:unknown";
 }
 
