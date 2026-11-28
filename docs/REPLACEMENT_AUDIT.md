@@ -1,5 +1,6 @@
 ---
 title: Package successor audit
+description: Review replacement guidance in the npm and PyPI deprecation rules shipped in Ebb 0.2.0.
 ---
 
 # Package successor audit

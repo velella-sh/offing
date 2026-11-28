@@ -82,7 +82,9 @@ encode() {
 encode guard-agent.srt guard-agent.mp4
 if [[ $1 == 1 ]]; then
   sed '3c Manifest drift fixture caption.' guard-agent.srt > drift.srt
+  start=$SECONDS
   encode drift.srt drift.mp4
+  echo "Manifest regression MP4 encode took $((SECONDS - start)) seconds."
 fi
 RENDER
 }
