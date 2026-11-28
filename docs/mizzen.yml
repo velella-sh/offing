@@ -10,6 +10,9 @@ network:
 include:
   - .well-known
 collections:
+  comparison-losses:
+    source: _data/comparison-losses.json
+    id: id
   dashboard:
     source: _data/dashboard-detectors.json
     id: id
@@ -150,6 +153,8 @@ redirects:
   /compare/dependabot.html: /compare/dependabot/
   /compare/endoflife-date.html: /compare/endoflife-date/
   /compare/renovate.html: /compare/renovate/
+  /compare/xeol.html: /compare/xeol/
+  /compare/herodevs.html: /compare/herodevs/
   /compatibility/android.html: /compatibility/android/
   /compatibility/ci-runner-images.html: /compatibility/ci-runner-images/
   /compatibility/cpp.html: /compatibility/cpp/

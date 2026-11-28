@@ -1,0 +1,142 @@
+{
+  "checkedAt": "2026-11-28",
+  "totals": {
+    "repositories": 5,
+    "inventoried": 8043,
+    "excluded": 576,
+    "matched": 7,
+    "noPublicDate": 8036,
+    "agree": 3,
+    "date-differs": 1,
+    "hero-only": 3,
+    "ambiguous-offing": 0
+  },
+  "rows": [
+    {
+      "repository": "excalidraw/excalidraw",
+      "commit": "1caec99b290c75cda05385e637138998807a65ae",
+      "purl": "pkg:npm/next@14.0.4",
+      "claim": {
+        "purl": "pkg:npm/next",
+        "major": 14,
+        "eol": "2025-10-26",
+        "publishedAt": "2026-07-07",
+        "source": "https://www.herodevs.com/blog-posts/nextjs-eol-dates-version-support-timeline"
+      },
+      "offing": [
+        {
+          "purl": "pkg:npm/next@14.0.4",
+          "ruleId": "npm.package.next.14.support-end",
+          "eol": "2025-10-26",
+          "source": "https://nextjs.org/support-policy"
+        }
+      ],
+      "outcome": "agree"
+    },
+    {
+      "repository": "excalidraw/excalidraw",
+      "commit": "1caec99b290c75cda05385e637138998807a65ae",
+      "purl": "pkg:npm/next@14.1.4",
+      "claim": {
+        "purl": "pkg:npm/next",
+        "major": 14,
+        "eol": "2025-10-26",
+        "publishedAt": "2026-07-07",
+        "source": "https://www.herodevs.com/blog-posts/nextjs-eol-dates-version-support-timeline"
+      },
+      "offing": [
+        {
+          "purl": "pkg:npm/next@14.1.4",
+          "ruleId": "npm.package.next.14.support-end",
+          "eol": "2025-10-26",
+          "source": "https://nextjs.org/support-policy"
+        }
+      ],
+      "outcome": "agree"
+    },
+    {
+      "repository": "mealie-recipes/mealie",
+      "commit": "50a341ed3febc98a5a20b61fad5e74a290394f16",
+      "purl": "pkg:npm/nuxt@2.15.8",
+      "claim": {
+        "purl": "pkg:npm/nuxt",
+        "major": 2,
+        "eol": "2024-06-30",
+        "publishedAt": "2024-06-20",
+        "source": "https://www.herodevs.com/press-releases/herodevs-partners-with-nuxt-for-security-solutions-past-end-of-life"
+      },
+      "offing": [],
+      "outcome": "hero-only"
+    },
+    {
+      "repository": "mealie-recipes/mealie",
+      "commit": "50a341ed3febc98a5a20b61fad5e74a290394f16",
+      "purl": "pkg:npm/vue@2.6.14",
+      "claim": {
+        "purl": "pkg:npm/vue",
+        "major": 2,
+        "eol": "2023-12-31",
+        "publishedAt": null,
+        "source": "https://www.herodevs.com/support/nes-vue"
+      },
+      "offing": [
+        {
+          "purl": "pkg:npm/vue@2.6.14",
+          "ruleId": "npm.package.vue.eol-2",
+          "eol": "2023-12-31",
+          "source": "https://v2.vuejs.org/lts/"
+        }
+      ],
+      "outcome": "agree"
+    },
+    {
+      "repository": "mealie-recipes/mealie",
+      "commit": "50a341ed3febc98a5a20b61fad5e74a290394f16",
+      "purl": "pkg:npm/vuetify@2.5.8",
+      "claim": {
+        "purl": "pkg:npm/vuetify",
+        "major": 2,
+        "eol": "2025-01-23",
+        "publishedAt": "2025-03-27",
+        "source": "https://www.herodevs.com/blog-posts/herodevs-partners-with-vuetify-to-provide-extended-long-term-support-for-vuetify-2-in-vue-2-nes-essentials"
+      },
+      "offing": [],
+      "outcome": "hero-only"
+    },
+    {
+      "repository": "mealie-recipes/mealie",
+      "commit": "50a341ed3febc98a5a20b61fad5e74a290394f16",
+      "purl": "pkg:npm/vuetify@2.6.2",
+      "claim": {
+        "purl": "pkg:npm/vuetify",
+        "major": 2,
+        "eol": "2025-01-23",
+        "publishedAt": "2025-03-27",
+        "source": "https://www.herodevs.com/blog-posts/herodevs-partners-with-vuetify-to-provide-extended-long-term-support-for-vuetify-2-in-vue-2-nes-essentials"
+      },
+      "offing": [],
+      "outcome": "hero-only"
+    },
+    {
+      "repository": "umami-software/umami",
+      "commit": "43499eb4fd0b1d617f6f052174f1da6f21653892",
+      "purl": "pkg:npm/next@13.2.4",
+      "claim": {
+        "purl": "pkg:npm/next",
+        "major": 13,
+        "eol": "2024-12-21",
+        "publishedAt": "2026-07-07",
+        "source": "https://www.herodevs.com/blog-posts/nextjs-eol-dates-version-support-timeline"
+      },
+      "offing": [
+        {
+          "purl": "pkg:npm/next@13.2.4",
+          "ruleId": "npm.package.next.13.support-end",
+          "eol": "2024-10-26",
+          "source": "https://nextjs.org/support-policy"
+        }
+      ],
+      "outcome": "date-differs"
+    }
+  ]
+}

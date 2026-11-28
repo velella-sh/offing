@@ -6,7 +6,7 @@ This page applies the protocol in [the comparison method](../docs/COMPARISON_MET
 
 * Snapshot: 2026-11-06, 44 products with 835 release cycles.
 * Offing: 782 registry rules across 416 product families.
-* Ground truth: 1638 repositories, 10680 expected findings, 255 distinct rules.
+* Ground truth: 1647 repositories, 11193 expected findings, 256 distinct rules.
 
 ## Product coverage
 
@@ -91,11 +91,11 @@ A cycle is measured only when endoflife.date publishes an end date for every cyc
 | Sample | Measured | Agree | Disagree | Agreement |
 | --- | ---: | ---: | ---: | ---: |
 | All 782 registry rules | 214 | 205 | 9 | 95.8% |
-| Ground-truth set (255 distinct rules) | 101 | 94 | 7 | 93.1% |
+| Ground-truth set (256 distinct rules) | 101 | 94 | 7 | 93.1% |
 
 | Bucket | All registry rules | Ground-truth set |
 | --- | ---: | ---: |
-| Not a mapped product | 411 | 144 |
+| Not a mapped product | 411 | 145 |
 | Not a lifecycle event | 142 | 2 |
 | No snapshot entry | 0 | 0 |
 | No release cycle in range | 2 | 1 |

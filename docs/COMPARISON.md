@@ -1,6 +1,6 @@
 ---
 title: Measured comparison
-description: Measured results of Offing against Renovate, Dependabot's declared update surface, and endoflife.date — including where Offing loses — under the published comparison method.
+description: Measured results for Renovate, declared Dependabot configurations, endoflife.date and public HeroDevs dates, including where Offing loses.
 ---
 
 # Measured comparison
@@ -25,11 +25,11 @@ The known pins and headline counts are in
 
 These are the headlines the runs produced. Each links to the full table and every disagreement row.
 
-| Loss | What the other side has that Offing does not | Blind (or product) count | Full result |
-| --- | --- | ---: | --- |
-| Renovate-only npm deprecations | An npm deprecation notice for a package Offing has no rule for | **400** comparable pairs | [Renovate comparison](../benchmarks/comparison/renovate/renovate.md#renovate-only-419) |
-| endoflife.date product breadth | A product page with no mapped Offing rule | **446** of 489 snapshot products | [endoflife.date comparison](../benchmarks/comparison/endoflife-date.md#product-coverage) |
-| Date disagreements with endoflife.date | A different lifecycle date for the same release cycle | **9** of 214 measured rules | [Where the data differs](../benchmarks/comparison/endoflife-date.md#where-the-data-differs) |
+::record-table{from="comparison-losses" caption="Where Offing loses" columns='[{"field":"label","label":"Gap"},{"field":"count","label":"Count","kind":"number"},{"field":"unit","label":"Unit"},{"field":"source","label":"Evidence","kind":"url"}]'}
+
+The [endoflife.date date differences](https://github.com/velella-sh/offing/blob/main/benchmarks/comparison/endoflife-date.md#where-the-data-differs)
+and [HeroDevs differences](https://github.com/velella-sh/offing/blob/main/benchmarks/comparison/herodevs/herodevs.md)
+are available for review against upstream evidence.
 
 Dependabot was **not run** against a pinned commit ([Comparison method](COMPARISON_METHOD.md),
 section 7), so this page does not claim a head-to-head miss count for it. What is measured is how
@@ -116,10 +116,19 @@ Each disagreement is a date difference with both sources linked in
 11 ground-truth rules that carry an independently vendor-checked date, both Offing and endoflife.date
 match the vendor date (11 / 11).
 
-## Capability pages (not measurements)
+## SBOM comparisons
+
+The [HeroDevs results](compare/herodevs.md) and [xeol evidence](compare/xeol.md) use the
+[common-inventory method](COMPARISON_METHOD.md#11-common-inventory-comparison-with-xeol-and-herodevs).
+The HeroDevs output lists outcomes per repository and package version. The xeol page links the
+earlier directory measurements and records the current database outage.
+
+## Capability pages
 
 | Tool | What it does better (with sources) | Measured result |
 | --- | --- | --- |
 | Renovate | [Compared with Renovate](compare/renovate.md) | [renovate.md](../benchmarks/comparison/renovate/renovate.md) |
 | Dependabot | [Compared with Dependabot](compare/dependabot.md) | [dependabot.md](../benchmarks/comparison/dependabot/dependabot.md) |
 | endoflife.date | [Compared with endoflife.date](compare/endoflife-date.md) | [endoflife-date.md](../benchmarks/comparison/endoflife-date.md) |
+| HeroDevs public dates | [Compared with HeroDevs](compare/herodevs.md) | [herodevs.md](../benchmarks/comparison/herodevs/herodevs.md) |
+| xeol | [Compared with xeol](compare/xeol.md) | [Historical directory scan](validation/differential-testing.md#differential-testing-against-xeol) |

@@ -23,6 +23,7 @@ import { buildDashboardAccuracy, HELD_OUT_RESULT_FILE, loadHeldOutResult } from 
 import type { HeldOutResult } from "./dashboard-accuracy.js";
 
 import { corpusCounts, loadCorpusTargets, TARGETS_PATH } from "../benchmarks/corpus-targets.js";
+import { renderComparisonCollections } from "../benchmarks/comparison/site.js";
 import type { CorpusTargets } from "../benchmarks/corpus-targets.js";
 import { loadPublicCorpus, PUBLIC_CORPUS_DIR } from "../benchmarks/public-corpus.js";
 import { countEvidence, earnedLevel, evidenceMinimums } from "../benchmarks/thresholds.js";
@@ -510,9 +511,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const args = process.argv.slice(2);
   const today = todayArgument(args);
   const target = resolve(OUTPUT_FILE);
-  buildDashboardDataFromRoot(".", today).then(
-    async (data) => {
+  buildDashboardDataFromRoot(".", today)
+    .then(async (data) => {
       const text = `${JSON.stringify(data, null, 2)}\n`;
+      const comparison = await renderComparisonCollections(".");
       if (args.includes("--check")) {
         const expectedDay = today === "run-date" ? data.referenceDay : today;
         if (!isWellFormedDashboardData(text, expectedDay)) {
@@ -524,15 +526,14 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       }
       await mkdir(dirname(target), { recursive: true });
       await writeFile(target, text);
-      const collections = renderDashboardCollections(data);
+      const collections = { ...renderDashboardCollections(data), ...comparison };
       for (const [path, contents] of Object.entries(collections)) {
         await writeFile(resolve(path), contents);
       }
       process.stdout.write(`Wrote ${target} and collection sources (${text.length} characters)\n`);
-    },
-    (error: unknown) => {
+    })
+    .catch((error: unknown) => {
       process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
-      process.exit(1);
-    },
-  );
+      process.exitCode = 1;
+    });
 }
