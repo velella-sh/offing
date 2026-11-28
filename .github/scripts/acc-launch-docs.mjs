@@ -27,6 +27,34 @@ function run(cwd, args, status = 0, options = {}) {
   return result;
 }
 
+function checkAutopilotPreview() {
+  const project = join(root, "autopilot");
+  mkdirSync(project);
+  writeFileSync(join(project, "package.json"), JSON.stringify({ dependencies: { request: "2.88.2" } }));
+  writeFileSync(join(project, ".offing.json"), JSON.stringify({ autopilot: { tests: [["node", "tests/check.cjs"]] } }));
+  const result = run(project, ["autopilot", ".", "--dry-run", "--wave", "0"]).stdout;
+  assert.match(result, /Plan: wave 0[\s\S]*request is deprecated/);
+  assert.match(result, /\["node","tests\/check\.cjs"\]/);
+}
+
+function checkUnsignedAttestation() {
+  const sbom = {
+    bomFormat: "CycloneDX",
+    specVersion: "1.5",
+    components: [{ type: "platform", name: "Alpine 3.18", purl: "pkg:docker/library/alpine@3.18" }],
+  };
+  writeFileSync(join(root, "artifact.tgz"), "launch guide sample artifact\n");
+  writeFileSync(join(root, "bom.cdx.json"), JSON.stringify(sbom));
+  const statement = run(root, [
+    "attest", "--subject", "artifact.tgz", "--sbom", "bom.cdx.json", "--data-version", "bundled",
+  ]);
+  writeFileSync(join(root, "lifecycle.intoto.json"), statement.stdout);
+  const result = run(root, [
+    "attest", "check", "lifecycle.intoto.json", "--subject", "artifact.tgz", "--today", "2026-03-31",
+  ]);
+  assert.match(result.stdout, /alpine@3\.18[^\n]*: 1 days? left/u);
+}
+
 function checkReadmeQuickstart() {
   const readme = readFileSync(resolve(dirname(realpathSync(bin)), "../../README.md"), "utf8");
   const block = readme.match(/^## Quickstart[\s\S]*?```bash\n([^`]+)```/m)?.[1];
@@ -65,7 +93,7 @@ try {
   const guardBin = join(root, "bin");
   mkdirSync(guardBin);
   writeFileSync(join(guardBin, "npm"), "#!/bin/sh\ntouch npm-ran\n", { mode: 0o755 });
-  const guard = run(root, ["guard", "--data-version", "bundled", "npm", "install", "--dry-run", "request@2.88.2"], 1, {
+  const guard = run(root, ["guard", "--data-version", "bundled", "npm", "install", "--dry-run", "--offline", "request@2.88.2"], 1, {
     env: { ...env, PATH: `${guardBin}${delimiter}${env.PATH}` },
   });
   assert.match(guard.stderr, /refused to run npm[\s\S]*https:\/\/www\.npmjs\.com\/package\/request/);
@@ -103,6 +131,9 @@ try {
     run(project, ["init", "--hooks", "--remove", "--hooks-for", host]);
     assert.ok(!readFileSync(config, "utf8").includes(`offing hook ${host}`), host);
   }
+  checkAutopilotPreview();
+  checkUnsignedAttestation();
+  console.log("acc-launch-docs: packed Autopilot preview and unsigned lifecycle attestation examples passed");
   console.log("acc-launch-docs: installed forecast, dependency refusal, data status, and three host setup/replay/removal flows passed");
 } finally {
   rmSync(root, { recursive: true, force: true });

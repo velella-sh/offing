@@ -22,7 +22,7 @@ A nonempty `autopilot.tests` list replaces detected commands. `--agent` changes 
 
 `offing autopilot . --prepare` requires a clean Git working tree and a commit.
 It creates a temporary worktree from `HEAD` on a local `offing/autopilot/<run>`
-branch and prints the path to its [run record](SCHEMAS.md#autopilot-run).
+branch and prints the path to its [run record](https://velella.sh/offing/SCHEMAS/#autopilot-run).
 Use preparation to inspect the branch before you request test execution.
 
 `offing autopilot . --prepare --replay /path/to/turns.json` applies a
@@ -44,7 +44,7 @@ test execution and verification.
 ## Run a recorded migration
 
 ```sh
-npx @velella/offing@0.1.5 autopilot . --agent replay --run-replay /path/to/turns.json --wave 0
+offing autopilot . --agent replay --run-replay /path/to/turns.json --wave 0
 offing autopilot . --run-replay /path/to/turns.json --allow-red-baseline exact-test-name
 ```
 
@@ -68,13 +68,13 @@ remaining or introduced findings for the wave. Inspect `final-verify-result.json
 for those findings. The run record, test results, turn summaries and prompts
 live beside the isolated checkout shown in the command output.
 
-The version-pinned example targets `0.1.5`. Before publication, use a CLI
-built from the candidate source or installed from its npm tarball. The
+Use a CLI build with replay support. Check the [published releases](https://github.com/velella-sh/offing/releases/latest)
+or install the npm tarball of the candidate you plan to test. The
 [terminal tape](https://github.com/velella-sh/offing/blob/main/demos/autopilot.tape)
 records the same verified replay against a disposable fixture, with no
 model or credentials.
 
-![An Autopilot replay completes one verified turn](assets/demos/autopilot.gif)
+![An Autopilot replay completes one verified turn](https://velella.sh/offing/assets/demos/autopilot.gif)
 
 ## Resume a stopped recording
 

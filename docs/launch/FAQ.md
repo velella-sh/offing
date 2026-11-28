@@ -56,3 +56,19 @@ You or the agent choose what to write next. See the
 The host controls where it shows pre-write decisions or after-edit
 feedback. See the [host guides](https://velella.sh/offing/guides/) and
 [troubleshooting steps](https://velella.sh/offing/launch/TROUBLESHOOTING/).
+
+## Where do Autopilot's edits go if it stops?
+
+The run leaves its accepted edits in an isolated Git worktree. The run record names the stop reason
+and records the tests and budget used. Review those before resuming a recording or removing the
+worktree. See the [recorded migration walkthrough](https://velella.sh/offing/launch/let-autopilot-do-the-upgrade/).
+
+## Can I see lifecycle risks across several repositories?
+
+Use a [fleet scan](https://velella.sh/offing/FLEET/) to combine results from a GitHub organization or GitLab group. The
+report retains each repository's status, including when its scan failed or it was skipped.
+
+## Does signing an attestation extend a dependency's support?
+
+The signature authenticates the artifact and its recorded evidence. Support deadlines still apply
+when you re-evaluate the statement. See the [artifact and release gate walkthrough](https://velella.sh/offing/launch/prove-what-you-ship/).

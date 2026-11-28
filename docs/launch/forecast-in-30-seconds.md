@@ -16,6 +16,11 @@ An **affecting this repository** event names the deadline and the file that
 uses the affected version. **Elsewhere** counts dated events in the same
 window that Offing did not match to this repository.
 
+![A 12-month Offing forecast flags the September 23 checkout runtime deadline and points to the workflow line](https://velella.sh/offing/launch/img/forecast-release-0.1.1.webp)
+
+This frame shows the [0.1.1 forecast recording](https://velella.sh/offing/demos/forecast.mp4) for its demo checkout.
+The example below uses a separate checkout and a shorter window.
+
 In the [GitHub Actions example](https://github.com/velella-sh/offing/tree/main/examples/forecast/actions-before),
 running `offing forecast . --as-of 2026-08-01 --months 3` inside the
 example directory prints these lines with bundled data.
