@@ -36,7 +36,7 @@ The [quickstart guide](https://velella.sh/offing/QUICKSTART/) covers the first-r
 - [Usage guide](https://velella.sh/offing/USAGE/) and [CLI reference](https://velella.sh/offing/CLI/) for migration packets, baselines, signed data updates, and the detector SDK.
 - [Ecosystems](https://velella.sh/offing/ECOSYSTEMS/) and [compatibility matrix](https://velella.sh/offing/COMPATIBILITY/#ecosystem-coverage) for what Offing reads and reports.
 - [Agent Skill](https://velella.sh/offing/AGENT_SKILLS/), [local MCP](https://velella.sh/offing/MCP/), [`llms.txt`](https://velella.sh/offing/llms.txt) and [`llms-full.txt`](https://velella.sh/offing/llms-full.txt).
-- [GitHub Action](https://velella.sh/offing/GITHUB_ACTION/), [versioned Action contract](https://velella.sh/offing/spec/action/v1/), and [onboarding App](https://velella.sh/offing/ONBOARDING_APP/).
+- [GitHub Action (`velella-sh/offing@v0.1.1`)](https://velella.sh/offing/GITHUB_ACTION/), [versioned Action contract](https://velella.sh/offing/spec/action/v1/), and [onboarding App](https://velella.sh/offing/ONBOARDING_APP/).
 - [Validation](https://velella.sh/offing/VALIDATION/), [roadmap](https://velella.sh/offing/ROADMAP/) and [architecture](https://velella.sh/offing/ARCHITECTURE/).
 
 **Fix evaluation, November 28, 2026.** [50 of 60 pinned repositories were measured, and workflow validation stayed green in all 45 GitHub Actions fixer cases](https://github.com/velella-sh/offing/blob/main/benchmarks/fix-evals/results/2026-11-28/report.json). [See per-fixer and agent results](https://velella.sh/offing/fix-evals/).
