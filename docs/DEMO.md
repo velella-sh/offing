@@ -28,6 +28,20 @@ The context packet identifies `package.json` and `src/client.js`, preserves HTTP
 
 For an agent-driven version of the same flow, start `offing mcp` and use `scan_repository`, `explain_deprecation`, `create_migration_context`, and `verify_migration` in one local session.
 
+## Terminal recordings
+
+| Recording | What it shows |
+| --- | --- |
+| [Scan](assets/demos/scan.gif) | Runtime, package and GitHub Action findings with file, line, severity and replacement |
+| [Check](assets/demos/check.gif) | `offing check pkg:npm/request@2.88.2` reports the deprecation and its source |
+| [Explain](assets/demos/explain.gif) | Rule evidence, deadline, replacement, and exact location for one finding |
+| [Baseline](assets/demos/baseline.gif) | Record accepted findings and check for new ones |
+| [Fix preview](assets/demos/fix.gif) | `offing fix --dry-run` shows the patch before any edits |
+| [Forecast](assets/demos/forecast.gif) | A twelve-month lifecycle timeline from `offing forecast --timeline` |
+| [Agent setup](assets/demos/setup.gif) | `offing setup --dry-run` previews the instructions for Claude Code |
+
+The [recording inventory](demos/README.md) includes the guard demo and rebuild commands. To get a one-line summary per finding, run the same demo with `scan --format compact`. Check a dependency before adding it with the [copy-paste recipe](QUICKSTART.md#2-check-one-dependency-before-adding-it).
+
 ## Example gallery
 
 `examples/gallery` holds one minimal repository per detector, each with the exact findings a scan must return in `expected.json`. They exist to show each detector working in thirty seconds; they are deliberately outdated, so do not copy them into a real project.

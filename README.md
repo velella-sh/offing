@@ -4,116 +4,56 @@
 <p align="center"><a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Coverage" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvelella-sh%2Foffing%2Fbadges%2Fcoverage.json&labelColor=1F1F28&style=flat"></a>
   <a href="https://www.npmjs.com/package/@velella/offing"><img alt="npm" src="https://img.shields.io/npm/v/@velella/offing?logo=npm&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
-  <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/github/license/velella-sh/offing?labelColor=1F1F28&color=6A5590&style=flat"></a>
+  <a href="https://github.com/velella-sh/offing/blob/main/LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/github/license/velella-sh/offing?labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Offing" src="https://raw.githubusercontent.com/velella-sh/offing/badges/offing-badge.svg"></a>
   <a href="https://securityscorecards.dev/viewer/?uri=github.com/velella-sh/offing"><img alt="OpenSSF Scorecard" src="https://img.shields.io/ossf-scorecard/github.com/velella-sh/offing?label=openssf%20scorecard&labelColor=1F1F28&color=6A5590&style=flat"></a>
+  <a href="https://github.com/velella-sh/ebb"><img alt="EOL data by Ebb" src="https://raw.githubusercontent.com/velella-sh/offing/main/brand/badges/eol-data-by-ebb.svg"></a>
   <a href="https://skills.sh/velella-sh/offing/offing"><img alt="skills.sh" src="https://skills.sh/b/velella-sh/offing"></a></p>
 
-Offing finds **end-of-life and deprecated** runtimes, packages, and GitHub Actions in your repository, at the exact file and line, each with an authoritative source, a replacement, and migration steps. It is deterministic, offline, and needs no account.
+Your scanner tells you what's vulnerable. Offing tells you what's ending.
 
-**Built for the AI era:** coding agents happily add packages and runtimes that are already deprecated. Offing gives them a check to run before they add one (`offing check`, MCP, or the Agent Skill), so an ending dependency is caught before it lands.
+Offing finds end-of-life and deprecated runtimes, packages, and GitHub Actions at the exact file and line, with sources and migration steps. It scans locally after installation. Coding agents can check a dependency before adding it through the CLI, MCP server, or Agent Skill.
+
+## Quickstart
+
+Run from your Git checkout with Node.js 22 or newer.
 
 ```bash
-npx @velella/offing scan .
+npx --yes @velella/offing scan .
+npx --yes @velella/offing forecast .
+npx --yes @velella/offing init --hooks --dry-run
 ```
+
+The [quickstart guide](https://velella.sh/offing/QUICKSTART/) covers the first-run forecast, dependency checks, and adopting a baseline. The hook command previews the Git hook before you install it.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/scan.gif" alt="Terminal recording: npx @velella/offing scan . lists the outdated runtime, package and GitHub Action in the demo project with file, line, severity and replacement">
 </p>
 
-```text
-Offing: 1 finding
-github-actions.checkout.node20:.github/workflows/ci.yml:9 .github/workflows/ci.yml:9 high actions/checkout@v5 or later
-```
+## Guides and evidence
 
-That is `scan --format compact` on the bundled demo project (`examples/demo`). Ask for the evidence behind one finding with `npx @velella/offing explain '<finding-id>' .`, or check a dependency before you add it:
-
-```bash
-npx @velella/offing check pkg:npm/request@2.88.2   # exits 1: deprecated, with the replacement and its source
-```
-
-Requirements: Node.js 22 or newer.
-
-## What you get
-
-- **Check before you add.** `check pkg:npm/request@2.88.2` answers for one dependency without scanning anything, and exits `1` when a rule at or above `--fail-on` applies.
-- **Exact location, real source.** Every finding names the file and line, links the authoritative source for the rule, and gives the replacement and migration steps. Nothing is guessed: a package with no rule reports `no-data`, never "safe".
-- **Only new problems.** `baseline` records accepted findings; `scan --baseline` then reports only regressions, so a legacy repository can adopt Offing on day one.
-- **Migration packets.** `context '<finding-id>' --json` hands a person or a coding agent the constraints, the affected files and usages, the sources, and suggested verification commands. Offing never runs them for you.
-- **Usage, not just declarations.** For npm and Ruby it finds the imports and calls that use a deprecated package, so you see what a migration has to touch.
-- **Fresh data, still offline.** Scans never touch the network. `data update` refreshes lifecycle rules from signed bundles when you ask, and refuses anything it cannot verify.
-- **Works where you work.** CLI, local MCP server, GitHub Action with SARIF for code scanning, and an Agent Skill. Setup for Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot and Kilo Code is one command: `setup`.
-- **Private by design.** No account needed, and no repository upload.
-
-## See it run
-
-<table>
-<tr>
-<td width="50%"><b>Check a dependency before you add it</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/check.gif" alt="Terminal recording: offing check pkg:npm/request@2.88.2 reports it as deprecated with the replacement and source"></td>
-<td width="50%"><b>Evidence behind one finding</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/explain.gif" alt="Terminal recording: offing explain shows the rule, location, replacement, deadline and sources for one finding"></td>
-</tr>
-<tr>
-<td width="50%"><b>Adopt on day one with a baseline</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/baseline.gif" alt="Terminal recording: offing baseline records accepted findings and scan --baseline then reports zero new ones"></td>
-<td width="50%"><b>Preview a fix as a diff</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/fix.gif" alt="Terminal recording: offing fix --dry-run prints the proposed diff without writing files"></td>
-</tr>
-<tr>
-<td width="50%"><b>See what is ending next</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/forecast.gif" alt="Terminal recording: offing forecast --timeline shows a twelve-month timeline of lifecycle events"></td>
-<td width="50%"><b>Teach your coding agents</b><br><img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/setup.gif" alt="Terminal recording: offing setup --dry-run previews the instructions added for Claude Code"></td>
-</tr>
-</table>
+- [Demo and terminal recordings](https://velella.sh/offing/DEMO/) for dependency checks, evidence, baselines, fix previews, forecasts, and agent setup.
+- [Usage guide](https://velella.sh/offing/USAGE/) and [CLI reference](https://velella.sh/offing/CLI/) for migration packets, baselines, signed data updates, and the detector SDK.
+- [Ecosystems](https://velella.sh/offing/ECOSYSTEMS/) and [compatibility matrix](https://velella.sh/offing/COMPATIBILITY/#ecosystem-coverage) for what Offing reads and reports.
+- [Agent Skill](https://velella.sh/offing/AGENT_SKILLS/), [local MCP](https://velella.sh/offing/MCP/), [`llms.txt`](https://velella.sh/offing/llms.txt) and [`llms-full.txt`](https://velella.sh/offing/llms-full.txt).
+- [GitHub Action](https://velella.sh/offing/GITHUB_ACTION/), [versioned Action contract](https://velella.sh/offing/spec/action/v1/), and [onboarding App](https://velella.sh/offing/ONBOARDING_APP/).
+- [Validation](https://velella.sh/offing/VALIDATION/), [roadmap](https://velella.sh/offing/ROADMAP/) and [architecture](https://velella.sh/offing/ARCHITECTURE/).
 
 **Fix evaluation, November 28, 2026.** [50 of 60 pinned repositories were measured, and workflow validation stayed green in all 45 GitHub Actions fixer cases](https://github.com/velella-sh/offing/blob/main/benchmarks/fix-evals/results/2026-11-28/report.json). [See per-fixer and agent results](https://velella.sh/offing/fix-evals/).
 
-## What it covers
+## Compare
 
-Runtimes, package manifests and lockfiles, CI and infrastructure files across:
+| Tool | Comparison | Measurements |
+| --- | --- | --- |
+| Renovate | [Compare](https://velella.sh/offing/compare/renovate/) | [Results](https://velella.sh/offing/COMPARISON/#renovate) |
+| Dependabot | [Compare](https://velella.sh/offing/compare/dependabot/) | [Results](https://velella.sh/offing/COMPARISON/#dependabot) |
+| endoflife.date | [Compare](https://velella.sh/offing/compare/endoflife-date/) | [Results](https://velella.sh/offing/COMPARISON/#endoflifedate) |
+| HeroDevs | [Compare](https://velella.sh/offing/compare/herodevs/) | [Results](https://velella.sh/offing/COMPARISON/#sbom-comparisons) |
+| xeol | [Compare](https://velella.sh/offing/compare/xeol/) | [Historical results](https://velella.sh/offing/compare/xeol/#measured-evidence) |
 
-Node.js, npm, Deno and Bun · Python · Go · Rust · Java and Kotlin · .NET · Ruby · PHP · Swift · Android · Dart and Flutter · Elixir · Scala · C and C++ · GitHub Actions · CI runner images · Container base images · Kubernetes APIs · Terraform · Serverless runtimes · Database runtimes · PowerShell.
-
-The full table, with the files read and what is reported for each, is in [Ecosystem coverage](docs/ECOSYSTEMS.md). Maturity per detector is in the [compatibility matrix](docs/COMPATIBILITY.md#ecosystem-coverage).
-
-## For coding agents
-
-```bash
-npx skills add velella-sh/offing        # the Agent Skill, listed on skills.sh
-npx @velella/offing setup               # tell each coding agent in the repo to check before adding
-npx @velella/offing context '<finding-id>' . --json   # migration packet for an agent
-npx --yes @velella/offing mcp           # local MCP server over stdio
-```
-
-Every report has a machine-readable form. The docs are also published as [`llms.txt`](https://velella.sh/offing/llms.txt) and [`llms-full.txt`](https://velella.sh/offing/llms-full.txt). See [Agent Skills](docs/AGENT_SKILLS.md) and the [local MCP guide](docs/MCP.md).
-
-## In CI
-
-```yaml
-steps:
-  - uses: actions/checkout@v7
-  - uses: velella-sh/offing@v0.1.1
-    with:
-      upload-report: "false"
-```
-
-Offing scans on the runner, annotates exact lines, and writes a local JSON report. The [GitHub Action guide](docs/GITHUB_ACTION.md) shows how to configure the severity gate, baselines, PR comments, and uploads. The [v1 contract](docs/spec/action/v1.md) defines the versioned interface. The [onboarding GitHub App](docs/ONBOARDING_APP.md) can open that workflow as one reviewed pull request per repository.
-
-## Why not just Renovate?
-
-Renovate, Dependabot, and endoflife.date each answer a question Offing does not, and Offing answers one none of them does: what is ending in this repository, and where is it used. Most repositories gain from running one of them **with** Offing, so the table states what each covers and what it does better, and links the source of every claim. Measured results, including where Offing loses, are in [Measured comparison](docs/COMPARISON.md); capability details per tool are in [Offing compared with other tools](docs/compare/index.md).
-
-| Tool | What it covers | What it does better | Evidence |
-| --- | --- | --- | --- |
-| [Renovate](https://docs.renovatebot.com/) | Dependency updates across the [package managers it supports](https://docs.renovatebot.com/modules/manager/), as automated pull requests | Opens the update pull requests Offing never writes, and reports npm deprecation notices for packages this registry has no rule for | [Measured comparison](docs/COMPARISON.md#renovate); [Compared with Renovate](docs/compare/renovate.md); the [differential report](docs/differential-report.md) measures both directions on pinned repositories and links the evidence for every disagreement |
-| [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-security-updates) | Version updates and security updates on GitHub, each as a pull request | Version updates keep dependencies current even when nothing is vulnerable; security pull requests and alerts draw on the GitHub Advisory Database | [Measured comparison](docs/COMPARISON.md#dependabot); [Compared with Dependabot](docs/compare/dependabot.md) |
-| [endoflife.date](https://endoflife.date/) | EOL dates and support lifecycles for many products, served through a [public API](https://endoflife.date/docs/api) | Product breadth beyond one reviewed rule set, and a date you can check without installing anything | [Measured comparison](docs/COMPARISON.md#endoflifedate); [Compared with endoflife.date](docs/compare/endoflife-date.md) |
-| **Offing** | The lifecycle status of what the repository's files declare and use — end-of-life runtimes, deprecated packages, retired APIs — at file and line, offline | Reports that a version is out of support, not only that a newer one exists, and names the usage a migration has to touch | [What it covers](#what-it-covers), [validation](docs/VALIDATION.md), [compatibility matrix](docs/COMPATIBILITY.md) |
-
-## Learn more
-
-- [Quickstart](docs/QUICKSTART.md): five copy-paste steps, first scan to CI.
-- [Using Offing](docs/USAGE.md): baselines, data updates, migration packets, agent setup, the detector SDK.
-- [What it covers](docs/ECOSYSTEMS.md): every ecosystem, the files read, and what is reported.
-- [CLI reference](docs/CLI.md), [validation report](docs/VALIDATION.md), [90-second demo](docs/DEMO.md), [roadmap](docs/ROADMAP.md), [architecture](docs/ARCHITECTURE.md).
-- Questions and ideas: [GitHub Discussions](https://github.com/velella-sh/offing/discussions). Bugs and rule requests: issues. Security: [SECURITY.md](SECURITY.md). Contributing: [CONTRIBUTING.md](CONTRIBUTING.md).
+[Comparison overview](https://velella.sh/offing/compare/) and [differential report](https://velella.sh/offing/differential-report/).
+[Questions and issues](https://github.com/velella-sh/offing/issues) · [Security](https://github.com/velella-sh/offing/blob/main/SECURITY.md) · [Contributing](https://github.com/velella-sh/offing/blob/main/CONTRIBUTING.md)
 
 ## License and brand
 
-Offing source code is licensed under the [Apache License 2.0](LICENSE). The lifecycle data it reads comes from [Ebb](https://github.com/velella-sh/ebb) (`@velella/ebb`): code under the [MIT License](https://github.com/velella-sh/ebb/blob/main/LICENSE), dataset under [CC BY 4.0](https://github.com/velella-sh/ebb/blob/main/LICENSE-DATA), attribution in [`ATTRIBUTION.md`](https://github.com/velella-sh/ebb/blob/main/ATTRIBUTION.md). The Offing name, logo, and files in [`brand/`](brand/) are proprietary brand assets under separate [brand asset terms](brand/LICENSE.md).
+Offing source code is licensed under the [Apache License 2.0](https://github.com/velella-sh/offing/blob/main/LICENSE). The lifecycle data it reads comes from [Ebb](https://github.com/velella-sh/ebb) (`@velella/ebb`): code under the [MIT License](https://github.com/velella-sh/ebb/blob/main/LICENSE), dataset under [CC BY 4.0](https://github.com/velella-sh/ebb/blob/main/LICENSE-DATA), attribution in [`ATTRIBUTION.md`](https://github.com/velella-sh/ebb/blob/main/ATTRIBUTION.md). The Offing name, logo, and files in [`brand/`](https://github.com/velella-sh/offing/tree/main/brand) are proprietary brand assets under separate [brand asset terms](https://github.com/velella-sh/offing/blob/main/brand/LICENSE.md).

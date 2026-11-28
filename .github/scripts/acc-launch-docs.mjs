@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { delimiter, dirname, join, resolve } from "node:path";
 
@@ -27,7 +27,30 @@ function run(cwd, args, status = 0, options = {}) {
   return result;
 }
 
+function checkReadmeQuickstart() {
+  const readme = readFileSync(resolve(dirname(realpathSync(bin)), "../../README.md"), "utf8");
+  const block = readme.match(/^## Quickstart[\s\S]*?```bash\n([^`]+)```/m)?.[1];
+  assert.ok(block, "The packed README has a quickstart shell block");
+  const commands = block.trim().split("\n").map((line) => {
+    const prefix = "npx --yes @velella/offing ";
+    assert.ok(line.startsWith(prefix), line);
+    return line.slice(prefix.length).split(" ");
+  });
+  assert.equal(commands.length, 3);
+  const project = join(root, "readme");
+  cpSync(new URL("../../examples/demo/", import.meta.url), project, { recursive: true });
+  const manifest = join(project, "package.json");
+  cpSync(join(project, "package.json.fixture"), manifest);
+  assert.equal(spawnSync("git", ["init", "-q", project]).status, 0);
+  assert.match(run(project, commands[0]).stdout, /actions\/checkout/);
+  assert.match(run(project, commands[1]).stdout, /Forecast from \d{4}-\d{2}-\d{2}/);
+  assert.match(run(project, commands[2]).stdout, /Would create \.git\/hooks\/pre-push/);
+  assert.equal(existsSync(join(project, ".git/hooks/pre-push")), false);
+  console.log("acc-readme: packed quickstart scanned the fixture, forecast deadlines, and previewed the Git hook");
+}
+
 try {
+  checkReadmeQuickstart();
   const forecast = join(root, "forecast");
   cpSync(new URL("../../examples/forecast/actions-before/", import.meta.url), forecast, { recursive: true });
   const output = run(forecast, ["forecast", ".", "--as-of", "2026-08-01", "--months", "3"]).stdout;
