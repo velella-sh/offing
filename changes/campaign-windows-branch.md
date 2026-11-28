@@ -1,0 +1,1 @@
+- Allow campaign branch creation on Windows while keeping Git configuration, hooks, and credentials isolated.
