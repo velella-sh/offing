@@ -19,6 +19,7 @@ import { advanceRun, type AutopilotRun, type Selection } from "./state.js";
 
 export interface PlanOptions {
   wave?: number;
+  allowEmptyWave?: boolean;
   finding?: string;
   target?: UpgradeTarget;
 }
@@ -31,7 +32,7 @@ function selectWave(plan: Plan, options: PlanOptions): Selection {
     return { wave: item.wave, findingIds: [item.findingId], ...target };
   }
   const wave = plan.waves[options.wave ?? 0];
-  if (!wave && options.wave !== undefined) {
+  if (!wave && options.wave !== undefined && !options.allowEmptyWave) {
     throw new OffingError("invalid-argument", `Plan has no wave at index ${options.wave}.`);
   }
   return { wave: wave?.index ?? null, findingIds: wave?.itemIds ?? [], ...target };

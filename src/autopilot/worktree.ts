@@ -13,7 +13,7 @@ import { git } from "../fix/git.js";
 import { OffingError } from "../offing-error.js";
 import { permitsCodemodPatches } from "./limits/scope.js";
 import { childEnvironments } from "./limits/secrets.js";
-import type { AutopilotRun } from "./state.js";
+import { autopilotCommitter, type AutopilotRun } from "./state.js";
 
 export const runIdPattern = /^[A-Za-z0-9]{6}$/;
 const prefix = "offing-autopilot-";
@@ -311,9 +311,9 @@ async function commitStaged(checkout: AutopilotCheckout, message: string, permit
   if (paths.length === 0) return false;
   await checkout.git(
     "-c",
-    "user.name=Offing",
+    `user.name=${autopilotCommitter.name}`,
     "-c",
-    "user.email=offing@example.invalid",
+    `user.email=${autopilotCommitter.email}`,
     "-c",
     "commit.gpgsign=false",
     "commit",

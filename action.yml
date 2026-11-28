@@ -127,6 +127,46 @@ inputs:
     description: Comma-separated existing repository labels to add when creating or updating the fix pull request.
     required: false
     default: ""
+  autopilot:
+    description: Run a guarded migration on the default branch of a non-fork repository. Accepts schedule and workflow_dispatch.
+    required: false
+    default: "false"
+  agent:
+    description: Autopilot driver. Use an installed pinned claude CLI or a committed local replay recording.
+    required: false
+    default: claude
+  agent-key-secret:
+    description: Name of the selected workflow secret for Claude. Pass its value in OFFING_ACTION_AUTOPILOT_KEY.
+    required: false
+    default: ""
+  autopilot-wave:
+    description: Zero-based migration wave to select. The resulting pull request uses offing/autopilot/<wave>.
+    required: false
+    default: "0"
+  autopilot-recording:
+    description: Repository-relative committed JSON file for the replay driver.
+    required: false
+    default: ""
+  autopilot-wall-time-ms:
+    description: Optional Autopilot run wall-time cap in milliseconds. Can only lower the approved repository run limit.
+    required: false
+    default: ""
+  autopilot-turns:
+    description: Optional Autopilot run turn cap. Can only lower the approved repository run limit.
+    required: false
+    default: ""
+  autopilot-tokens:
+    description: Optional Autopilot run token cap. Can only lower the approved repository run limit.
+    required: false
+    default: ""
+  autopilot-cost-cents:
+    description: Optional Autopilot run cost cap in US cents. Can only lower the approved repository run limit.
+    required: false
+    default: ""
+  autopilot-open-red:
+    description: Publish an unverified wave with edits and recorded evidence as a draft pull request.
+    required: false
+    default: "false"
   suggest-fixes:
     description: >-
       Post one pull request review whose suggestion blocks apply the deterministic fixes for findings on
@@ -228,6 +268,9 @@ outputs:
   fix-pr-number:
     description: Decimal number of the fix pull request opened, updated, or closed by this run, or empty if none was changed.
     value: ${{ steps.scan.outputs.fix-pr-number }}
+  autopilot-pr-urls:
+    description: JSON array of Autopilot wave pull request URLs reported by this run.
+    value: ${{ steps.scan.outputs.autopilot-pr-urls }}
 
 runs:
   using: composite
@@ -266,6 +309,16 @@ runs:
         INPUT_COMMANDS: ${{ inputs.commands }}
         INPUT_FIX-PR: ${{ inputs.fix-pr }}
         INPUT_FIX-PR-LABELS: ${{ inputs.fix-pr-labels }}
+        INPUT_AUTOPILOT: ${{ inputs.autopilot }}
+        INPUT_AGENT: ${{ inputs.agent }}
+        INPUT_AGENT-KEY-SECRET: ${{ inputs.agent-key-secret }}
+        INPUT_AUTOPILOT-WAVE: ${{ inputs.autopilot-wave }}
+        INPUT_AUTOPILOT-RECORDING: ${{ inputs.autopilot-recording }}
+        INPUT_AUTOPILOT-WALL-TIME-MS: ${{ inputs.autopilot-wall-time-ms }}
+        INPUT_AUTOPILOT-TURNS: ${{ inputs.autopilot-turns }}
+        INPUT_AUTOPILOT-TOKENS: ${{ inputs.autopilot-tokens }}
+        INPUT_AUTOPILOT-COST-CENTS: ${{ inputs.autopilot-cost-cents }}
+        INPUT_AUTOPILOT-OPEN-RED: ${{ inputs.autopilot-open-red }}
         INPUT_TRACKING-ISSUE: ${{ inputs.tracking-issue }}
         INPUT_GITHUB-TOKEN: ${{ inputs.github-token }}
         INPUT_ATTRIBUTION: ${{ inputs.attribution }}
@@ -323,5 +376,13 @@ runs:
       with:
         name: offing-fix-pr-${{ github.run_attempt }}
         path: ${{ steps.scan.outputs.fix-pr-artifact-path }}
+        if-no-files-found: error
+        retention-days: 14
+    - name: Upload Autopilot proof and test logs
+      if: always() && steps.scan.outputs.autopilot-artifact-path != ''
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: offing-autopilot-${{ inputs.autopilot-wave }}-${{ github.run_attempt }}
+        path: ${{ steps.scan.outputs.autopilot-artifact-path }}
         if-no-files-found: error
         retention-days: 14

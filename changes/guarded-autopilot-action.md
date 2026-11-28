@@ -1,0 +1,1 @@
+- Add opt-in guarded Autopilot waves, budget summaries, and verifiable pull request evidence to the GitHub Action.

@@ -9,6 +9,7 @@ const budgetBounds = {
 };
 
 export type Limits = typeof budgetBounds;
+export const limitKeys = ["wallTimeMs", "turns", "tokens", "costCents"] as const satisfies readonly (keyof Limits)[];
 
 interface Budget {
   run: Limits;
@@ -66,13 +67,20 @@ function limit(value: unknown, defaultValue: number, max: number, location: stri
 }
 
 function limits(value: unknown, defaults: Limits, location: string): Limits {
-  const fields = section<Limits>(value, ["wallTimeMs", "turns", "tokens", "costCents"], location);
+  const fields = section<Limits>(value, limitKeys, location);
   return {
     wallTimeMs: limit(fields.wallTimeMs, defaults.wallTimeMs, budgetBounds.wallTimeMs, location + ".wallTimeMs"),
     turns: limit(fields.turns, defaults.turns, budgetBounds.turns, location + ".turns"),
     tokens: limit(fields.tokens, defaults.tokens, budgetBounds.tokens, location + ".tokens"),
     costCents: limit(fields.costCents, defaults.costCents, budgetBounds.costCents, location + ".costCents", 0),
   };
+}
+
+/** Workflow inputs can reduce committed limits for one run. */
+export function capAutopilotBudget(budget: Budget, requested: Partial<Limits>): Budget {
+  const run = { ...budget.run };
+  for (const key of limitKeys) run[key] = Math.min(run[key], requested[key] ?? run[key]);
+  return { run, turn: budget.turn };
 }
 
 function list(value: unknown, valid: (entry: string) => boolean, location: string): string[] {

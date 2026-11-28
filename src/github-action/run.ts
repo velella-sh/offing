@@ -1,4 +1,3 @@
-import type { runReplayLoop as ReplayLoop } from "../autopilot/replay.js";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
@@ -118,60 +117,4 @@ export async function runGitHubAction(options: GitHubActionOptions): Promise<Git
     ...(packages ? { packages } : {}),
     ...(agent ? { agent } : {}),
   };
-}
-
-async function autopilotDispatchWorkspace(env: NodeJS.ProcessEnv): Promise<string> {
-  if (env.GITHUB_EVENT_NAME !== "workflow_dispatch")
-    throw new Error("Offing Autopilot requires an explicit workflow_dispatch on the default branch.");
-  const { readJsonFile, record } = await import("../agent-drivers/result.js");
-  const event = env.GITHUB_EVENT_PATH && record(await readJsonFile(env.GITHUB_EVENT_PATH, 1024 * 1024));
-  const repository = event ? record(event.repository) : undefined;
-  const branch = repository?.default_branch;
-  if (typeof branch !== "string" || !branch || repository?.fork !== false || env.GITHUB_REF !== `refs/heads/${branch}`)
-    throw new Error("Offing Autopilot requires the default branch of a non-fork repository.");
-  if (!env.GITHUB_WORKSPACE) throw new Error("Offing Autopilot requires a checked-out GITHUB_WORKSPACE.");
-  return env.GITHUB_WORKSPACE;
-}
-
-/** Opt-in Action driver entry. Public Autopilot Action inputs and PR publishing are wired separately. */
-export async function runActionAutopilot(
-  env: NodeJS.ProcessEnv,
-  runTests?: Parameters<typeof ReplayLoop>[4],
-): Promise<boolean> {
-  const key = env.OFFING_ACTION_AUTOPILOT_KEY;
-  delete env.OFFING_ACTION_AUTOPILOT_KEY;
-  if (env.OFFING_ACTION_AUTOPILOT !== "true") return false;
-  const workspace = await autopilotDispatchWorkspace(env);
-  const name = env.OFFING_ACTION_AUTOPILOT_SECRET_NAME;
-  if (!name || !/^[A-Z_][A-Z0-9_]{0,99}$/.test(name))
-    throw new Error("Set OFFING_ACTION_AUTOPILOT_SECRET_NAME to the workflow's selected secret name.");
-  if (!key?.trim())
-    throw new Error(`Offing Autopilot needs the selected secret ${name}. Wire it to OFFING_ACTION_AUTOPILOT_KEY.`);
-  const { runReplayLoop } = await import("../autopilot/replay.js");
-  const { startRun } = await import("../autopilot/state.js");
-  const { withAutopilotWorktree } = await import("../autopilot/worktree.js");
-  const run = startRun("prepare");
-  const location = await withAutopilotWorktree(workspace, run, async (tree, checkout) => {
-    await runReplayLoop(
-      tree,
-      checkout,
-      run,
-      {
-        file: "",
-        selection: {},
-        allowedBaseline: new Set<string>(),
-        started: performance.now(),
-        claude: { key, path: env.PATH },
-      },
-      runTests,
-    );
-  });
-  if (run.stopReason === "install-pinned-claude-code") {
-    throw new Error(
-      "Install the pinned Claude Code version from the Agent drivers guide before running Offing Autopilot.",
-    );
-  }
-  if (run.state !== "done") throw new Error(`Offing Autopilot stopped (${run.stopReason ?? "unknown"}).`);
-  console.log(`Offing Autopilot verified in ${location.branch}.`);
-  return true;
 }

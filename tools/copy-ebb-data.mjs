@@ -6,10 +6,11 @@
 //
 //   node tools/copy-ebb-data.mjs <bundle directory>
 
-import { cp, mkdir, readdir, rm } from "node:fs/promises";
+import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import ts from "typescript";
 
 const require = createRequire(import.meta.url);
 
@@ -43,6 +44,30 @@ async function copySourceParserAssets(destination) {
   ]);
 }
 
+async function copyReplayWorker(destination) {
+  // This closure matches replayWorkerModules. The container worker uses only committed Offing code and Node built-ins.
+  const modules = [
+    "agent-drivers/replay",
+    "agent-drivers/contract",
+    "agent-drivers/result",
+    "autopilot/limits/budget",
+    "autopilot/limits/config",
+    "autopilot/limits/scope",
+    "autopilot/limits/secrets",
+  ];
+  const directory = join(destination, "replay-worker");
+  await rm(directory, { recursive: true, force: true });
+  for (const file of modules) {
+    const source = await readFile(new URL(`../src/${file}.ts`, import.meta.url), "utf8");
+    const compiled = ts.transpileModule(source, {
+      compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+    });
+    const target = join(directory, file + ".js");
+    await mkdir(dirname(target), { recursive: true });
+    await writeFile(target, compiled.outputText);
+  }
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const destination = process.argv[2];
   if (!destination) {
@@ -51,4 +76,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   }
   await copyEbbData(destination);
   await copySourceParserAssets(destination);
+  await copyReplayWorker(destination);
 }

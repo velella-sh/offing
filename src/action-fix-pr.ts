@@ -9,6 +9,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 
+import { record } from "./agent-drivers/result.js";
+import { autopilotCommitter } from "./autopilot/state.js";
 import { builtInDetectors } from "./detectors/index.js";
 import type { ScanResult } from "./domain.js";
 import { scanRepository } from "./engine/index.js";
@@ -71,6 +73,10 @@ interface PullRequest {
   state: "open" | "closed";
   merged_at?: string | null;
   html_url?: string;
+  node_id?: string;
+  draft?: boolean;
+  user?: { login?: string };
+  body?: string | null;
   head?: { ref?: string; repo?: { full_name?: string } };
 }
 
@@ -156,7 +162,12 @@ async function isShallow(root: string): Promise<boolean> {
   return (await git(root, ["rev-parse", "--is-shallow-repository"])).trim() === "true";
 }
 
-async function inspectRemoteBranch(root: string, branch: string): Promise<RemoteBranch> {
+async function inspectRemoteBranch(
+  root: string,
+  branch: string,
+  owned = (commit: string) => commit === BOT_COMMIT,
+  base = "HEAD",
+): Promise<RemoteBranch> {
   const ref = `refs/heads/${branch}`;
   const output = await git(root, ["ls-remote", "--refs", "origin", ref]);
   const sha = output.trim().split("\t")[0] ?? "";
@@ -170,19 +181,23 @@ async function inspectRemoteBranch(root: string, branch: string): Promise<Remote
   if ((await git(root, ["rev-parse", "FETCH_HEAD"])).trim() !== sha) {
     throw new Error("The fix branch changed during inspection. Retry the workflow.");
   }
-  const commits = await git(root, ["log", "--format=%an%x09%ae%x09%cn%x09%ce%x09%s", `HEAD..${sha}`]);
+  const commits = await git(root, ["log", "--format=%an%x09%ae%x09%cn%x09%ce%x09%s", `${base}..${sha}`]);
   return {
     sha,
-    botOwned: commits
-      .split(/\r?\n/)
-      .filter(Boolean)
-      .every((commit) => commit === BOT_COMMIT),
+    botOwned: commits.split(/\r?\n/).filter(Boolean).every(owned),
   };
 }
 
-async function pushBranch(root: string, branch: string, remote: RemoteBranch): Promise<void> {
+async function pushBranch(root: string, branch: string, remote: RemoteBranch, source = "HEAD"): Promise<void> {
   const ref = `refs/heads/${branch}`;
-  await git(root, ["push", `--force-with-lease=${ref}:${remote.sha}`, "origin", `HEAD:${ref}`]);
+  await git(root, [
+    "-c",
+    "core.hooksPath=/dev/null",
+    "push",
+    `--force-with-lease=${ref}:${remote.sha}`,
+    "origin",
+    `${source}:${ref}`,
+  ]);
 }
 
 async function protectBranch(github: GitHubTarget, existing?: PullRequest): Promise<FixPullRequestOutcome> {
@@ -222,11 +237,12 @@ async function upsertFixPullRequest(
   body: string,
   fixes: number,
   existing: PullRequest | undefined,
+  details: { title: string; draft?: boolean } = { title: FIX_PR_TITLE },
 ): Promise<FixPullRequestOutcome> {
   // A closed pull request is reopened, but a merged one cannot be: the next run opens a new pull request instead.
   if (existing && (existing.state === "open" || !existing.merged_at)) {
     await githubRequest(github, "PATCH", `/repos/${github.repository}/pulls/${existing.number}`, {
-      title: FIX_PR_TITLE,
+      title: details.title,
       body,
       ...(existing.state === "open" ? {} : { state: "open" }),
     });
@@ -239,7 +255,7 @@ async function upsertFixPullRequest(
   }
 
   const created = (await githubRequest(github, "POST", `/repos/${github.repository}/pulls`, {
-    title: FIX_PR_TITLE,
+    ...details,
     head: branch,
     base: target.baseBranch,
     body,
@@ -249,6 +265,105 @@ async function upsertFixPullRequest(
     fixes,
     number: created.number,
     ...(created.html_url ? { url: created.html_url } : {}),
+  };
+}
+
+const autopilotMarker = "<!-- offing-autopilot-wave -->";
+const autopilotIdentity = [
+  autopilotCommitter.name,
+  autopilotCommitter.email,
+  autopilotCommitter.name,
+  autopilotCommitter.email,
+  "",
+].join("\t");
+
+function ownedAutopilotCommit(commit: string): boolean {
+  return (
+    commit.startsWith(autopilotIdentity) &&
+    /^chore: (apply Autopilot codemods|(?:claude|replay) Autopilot turn [1-9]\d*)$/u.test(
+      commit.slice(autopilotIdentity.length),
+    )
+  );
+}
+
+async function setDraft(github: GitHubTarget, graphqlUrl: string | undefined, pull: PullRequest, draft: boolean) {
+  if (pull.draft === draft) return;
+  if (!pull.node_id) throw new Error("Missing node ID for the Autopilot pull request.");
+  const operation = draft ? "convertPullRequestToDraft" : "markPullRequestReadyForReview";
+  const type = draft ? "ConvertPullRequestToDraftInput" : "MarkPullRequestReadyForReviewInput";
+  const url = new URL(graphqlUrl ?? github.apiUrl.replace(/\/api\/v3$/u, "/api") + "/graphql");
+  const endpoint = { ...github, apiUrl: url.origin };
+  const response = record(
+    await githubRequest(endpoint, "POST", url.pathname, {
+      query: `mutation($input: ${type}!) { ${operation}(input: $input) { pullRequest { isDraft } } }`,
+      variables: { input: { pullRequestId: pull.node_id } },
+    }),
+  );
+  const changed = record(record(record(response?.data)?.[operation])?.pullRequest);
+  if (changed?.isDraft !== draft) throw new Error("GitHub did not change the Autopilot pull request draft status.");
+}
+
+function ownedAutopilotPull(pull: PullRequest): boolean {
+  return pull.user?.login === BOT_NAME && pull.body?.startsWith(autopilotMarker) === true;
+}
+
+function reusableAutopilotPull(pull: PullRequest | undefined, draft: boolean) {
+  // Reopening a previously ready pull request would briefly expose red edits as ready.
+  return draft && pull?.state === "closed" && !pull.draft ? undefined : pull;
+}
+
+interface AutopilotPullRequestTarget extends GitHubTarget {
+  root: string;
+  baseBranch: string;
+  base: string;
+  wave: number;
+  graphqlUrl?: string;
+}
+
+/** Update the reviewed wave branch by lease and leave branches with human commits untouched. */
+export async function reconcileAutopilotPullRequest(
+  target: AutopilotPullRequestTarget,
+  proposal?: { head: string; draft: boolean; body: string },
+): Promise<FixPullRequestOutcome> {
+  const branch = `offing/autopilot/${target.wave}`;
+  const existing = await findPullRequest(target, branch);
+  if (!proposal && existing?.state !== "open") return { status: "nothing", fixes: 0 };
+  const remote = await inspectRemoteBranch(target.root, branch, ownedAutopilotCommit, target.base);
+  if (!remote.botOwned || (existing && !ownedAutopilotPull(existing))) {
+    return protectBranch(target, existing);
+  }
+  if (!proposal) return closeAutopilotPull(target, existing);
+  if (existing?.state === "open" && proposal.draft) await setDraft(target, target.graphqlUrl, existing, true);
+  await pushBranch(target.root, branch, remote, proposal.head);
+  const tracked = reusableAutopilotPull(existing, proposal.draft);
+  const outcome = await upsertFixPullRequest(
+    target,
+    target,
+    branch,
+    autopilotMarker + "\n" + proposal.body,
+    0,
+    tracked,
+    {
+      title: `Offing Autopilot: wave ${target.wave}`,
+      draft: proposal.draft,
+    },
+  );
+  if (tracked && outcome.status === "updated" && !proposal.draft)
+    await setDraft(target, target.graphqlUrl, tracked, false);
+  return outcome;
+}
+
+async function closeAutopilotPull(
+  target: GitHubTarget,
+  existing: PullRequest | undefined,
+): Promise<FixPullRequestOutcome> {
+  if (existing?.state !== "open") return { status: "nothing", fixes: 0 };
+  await githubRequest(target, "PATCH", `/repos/${target.repository}/pulls/${existing.number}`, { state: "closed" });
+  return {
+    status: "closed",
+    fixes: 0,
+    number: existing.number,
+    ...(existing.html_url ? { url: existing.html_url } : {}),
   };
 }
 
