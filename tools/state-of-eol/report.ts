@@ -63,6 +63,7 @@ function headlineRows(report: Report) {
       denominator: ended.denominator,
       noData: divide(ended.noData, cohort),
       unknown: divide(ended.unknown, cohort),
+      scannedWithoutEvent: "—",
     },
     {
       id: "days-to-next",
@@ -71,6 +72,7 @@ function headlineRows(report: Report) {
       denominator: median.denominator,
       noData: divide(median.noData, cohort),
       unknown: divide(median.unknown, cohort),
+      scannedWithoutEvent: divide(median.scannedWithoutEvent, cohort),
     },
     {
       id: "leading-item",
@@ -79,6 +81,7 @@ function headlineRows(report: Report) {
       denominator: common.denominator,
       noData: divide(common.noData, cohort),
       unknown: divide(common.unknown, cohort),
+      scannedWithoutEvent: divide(common.scannedWithoutEvent, cohort),
     },
     {
       id: "predictions",
@@ -87,6 +90,7 @@ function headlineRows(report: Report) {
       denominator: cohort,
       noData: "Unmeasured",
       unknown: divide(report.predictions.unknown, cohort),
+      scannedWithoutEvent: "—",
     },
   ];
 }

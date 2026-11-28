@@ -80,21 +80,22 @@ test("recalculates UTC headlines from one nearest event per repo, and exposes sp
         actions: [{ path: "build.yml", runtimes: ["setup-node:22", "setup-node:unknown"] }],
       }),
       observed(3, { coverage: null }),
+      observed(4, { coverage: { ecosystems: [], filesRead: [], unsupportedFiles: [] } }),
     ],
     catalog,
   );
-  assert.deepEqual(headlines(rows, 5, asOf), {
+  assert.deepEqual(headlines(rows, 6, asOf), {
     until: "2027-11-27",
-    ended: { count: 1, denominator: 3, noData: 1, unknown: 3 },
-    median: { days: 3, denominator: 2, noData: 1, unknown: 3 },
-    common: { rule: "node-next", count: 2, denominator: 2, noData: 1, unknown: 3 },
+    ended: { count: 1, denominator: 4, noData: 1, unknown: 3 },
+    median: { days: 3, denominator: 2, noData: 1, unknown: 3, scannedWithoutEvent: 1 },
+    common: { rule: "node-next", count: 2, denominator: 2, noData: 1, unknown: 3, scannedWithoutEvent: 1 },
   });
-  assert.deepEqual(ecosystemBreakdown(rows, 5), [
+  assert.deepEqual(ecosystemBreakdown(rows, 6), [
     { id: "github-actions", affected: 0, denominator: 2, noData: 1, unknown: 2 },
     { id: "nodejs", affected: 2, denominator: 2, noData: 0, unknown: 2 },
     { id: "python", affected: 1, denominator: 1, noData: 0, unknown: 2 },
   ]);
-  assert.deepEqual(actionBreakdown(rows, 5), [
+  assert.deepEqual(actionBreakdown(rows, 6), [
     { id: "setup-node:20", observed: 1, denominator: 2, noData: 1, unknown: 3 },
     { id: "setup-node:22", observed: 2, denominator: 2, noData: 1, unknown: 3 },
     { id: "setup-node:unknown", observed: 1, denominator: 2, noData: 1, unknown: 3 },

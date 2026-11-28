@@ -14,7 +14,7 @@ Collection began :field[scanStarted] and finished :field[scanFinished]. The scan
 
 The runtime figure counts each scanned repository once when a recorded language runtime rule shows that support ended by :field[asOf]. The median uses each repository's closest confirmed support event between :field[asOf] and :field[until], inclusive. The leading rule counts repositories with that rule in the same window, once per repository. Equal counts are ordered by rule ID. Repositories without a dated event contribute no value to the median.
 
-::record-table{from="state-of-eol-2027-headlines" caption="Headline estimates and evidence gaps" columns='[{"field":"label","label":"Measure"},{"field":"result","label":"Observed"},{"field":"denominator","label":"Measure denominator","kind":"number"},{"field":"noData","label":"No-data repositories / cohort"},{"field":"unknown","label":"Unknown or ineligible / cohort"}]'}
+::record-table{from="state-of-eol-2027-headlines" caption="Headline estimates and evidence gaps" columns='[{"field":"label","label":"Measure"},{"field":"result","label":"Observed"},{"field":"denominator","label":"Measure denominator","kind":"number"},{"field":"noData","label":"No-data repositories / cohort"},{"field":"unknown","label":"Unknown coverage / cohort"},{"field":"scannedWithoutEvent","label":"Complete scans without a dated event / cohort"}]'}
 
 ## Ecosystems and GitHub Actions runtimes
 
@@ -42,6 +42,6 @@ Reviewed lineage alone exposed ended support in :field[lineage] observed Dockerf
 
 ## Limits and reproduction
 
-The cohort describes popular GitHub repositories visible to search, including collections and documentation. The scan only observes recognized files and rules. This study has no published model evidence for predicted end-of-life dates. An observed finding is positive evidence. An empty scan can reflect compatible software, absent inputs, or a detector gap. No-data and unknown overlap and have different meanings. The headline no-data column counts successful repositories with at least one observed gap. The unknown column records unavailable or incomplete coverage, or lack of a qualifying date for the dated measures.
+The cohort describes popular GitHub repositories visible to search, including collections and documentation. The scan only observes recognized files and rules. This study has no published model evidence for predicted end-of-life dates. An observed finding is positive evidence. An empty scan can reflect compatible software, absent inputs, or a detector gap. The headline no-data column counts successful scans with at least one observed gap. Unknown coverage counts unavailable and incomplete scans, including scans with truncation or diagnostics. These groups can overlap, and a dated finding in an incomplete scan still contributes to the observed measure. Complete scans without a dated event have their own column for the two forward-looking measures.
 
 Run `npm ci` then `npm run state-of-eol` to rebuild the same collections from the committed data. The cohort README gives the exact pin format and demonstrates how to collect fresh evidence separately. [Reproduction commands](https://github.com/velella-sh/offing/tree/main/benchmarks/state-of-eol)

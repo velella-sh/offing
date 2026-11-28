@@ -106,6 +106,8 @@ export function headlines(rows: readonly Measured[], cohort: number, asOf: strin
   const next = nextDates(rows, asOf, until);
   const present = next.flatMap(([nearest]) => (nearest ? [(Date.parse(nearest.date) - Date.parse(asOf)) / day] : []));
   const noData = rows.filter(gap).length;
+  const unknown = cohort - rows.length + rows.filter(incomplete).length;
+  const scannedWithoutEvent = rows.filter((row, index) => !incomplete(row) && next[index]?.length === 0).length;
   const [leading] = endingRules(next);
   return {
     until,
@@ -113,15 +115,16 @@ export function headlines(rows: readonly Measured[], cohort: number, asOf: strin
       count: rows.filter(({ capture }) => capture.findings.some((finding) => endedRuntime(finding, asOf))).length,
       denominator: rows.length,
       noData,
-      unknown: cohort - rows.length + rows.filter(incomplete).length,
+      unknown,
     },
-    median: { days: median(present), denominator: present.length, noData, unknown: cohort - present.length },
+    median: { days: median(present), denominator: present.length, noData, unknown, scannedWithoutEvent },
     common: {
       rule: leading?.[0] ?? null,
       count: leading?.[1] ?? 0,
       denominator: present.length,
       noData,
-      unknown: cohort - present.length,
+      unknown,
+      scannedWithoutEvent,
     },
   };
 }
