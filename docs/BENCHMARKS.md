@@ -123,7 +123,7 @@ console.log(JSON.stringify(rateByCondition(scoreMigrationRun(task, result).condi
 
 The agent staleness benchmark measures how often coding agents write end-of-life or deprecated choices when they produce common project files — Dockerfiles, GitHub Actions workflows, Kubernetes manifests, package manifests, Terraform modules, and small Python or Node helpers — and whether Offing's agent hook changes that rate.
 
-Each task is a version-free prompt that names only the file to write. The harness runs every task twice in a fresh temporary directory: once with no Offing setup (`plain`), and once after `offing init --agents` plus `init --hooks-for <host>` when the host supports it (`hooks`). The produced file is saved under `outputs/<agent>/<arm>/<task>/` with a `meta.json` that records the agent version and date. Scoring is offline: `score.ts` combines repository findings with removed source APIs and reports, per agent, arm, and category, the share of tasks with at least one finding, findings per task, and the rule ids seen.
+Each task is a version-free prompt that names the file to write. Recorded replay starts each attempt in an isolated, disconnected container with the chosen starting files. A `plain` arm uses the task prompt and a `hooks` arm adds Offing instructions and supported project hooks. A `context` arm appends stack context. Scoring combines repository findings with removed source APIs and reports finding rates by agent, arm, and category. [Replay inputs and isolation](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-harness/README.md)
 
 ### Run metadata
 
@@ -134,7 +134,7 @@ Each task is a version-free prompt that names only the file to write. The harnes
 | Measured run                       | none recorded |
 | Agents and model versions measured | none recorded |
 
-A measured run needs installed agent CLIs (`claude -p`, `codex exec`, `gemini -p`, or equivalent) and network access. It is maintainer-only: after the first real run (at least three agents, both arms) the committed outputs and this table are updated. Until then the repository ships hand-written **seed** outputs under `outputs/seed/` so scoring stays tested in `npm run check`.
+Measured results require captured edits with explicit agent and model versions. The local benchmark accepts recorded inputs. The repository ships hand-written **seed** outputs under `outputs/seed/` so scoring stays tested in `npm run check`.
 
 ### Limits
 
@@ -153,10 +153,8 @@ npm run build --silent
 npm run bench:staleness:score
 npm run bench:staleness:score -- --write
 
-# Maintainer agent run (network + agent CLIs; not part of npm run check):
+# Show task IDs and output paths for a replay plan:
 npm run bench:staleness:run -- --list
-npm run bench:staleness:run -- --agent claude-code
-npm run bench:staleness:run -- --agent codex --task dockerfile-node-app --arm plain
 ```
 
 ### Results
@@ -173,8 +171,8 @@ Per-category seed rows and rule ids are in [`benchmarks/agent-staleness/results.
 ### Artefacts
 
 - Task definitions: [`benchmarks/agent-staleness/tasks.json`](../benchmarks/agent-staleness/tasks.json)
-- [Recorded replay, result format and scoring pins](../benchmarks/agent-harness/README.md)
-- Legacy live harness: [`benchmarks/agent-staleness/run.ts`](../benchmarks/agent-staleness/run.ts)
+- [Recorded replay, result format and scoring pins](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-harness/README.md)
+- [Replay entry point `benchmarks/agent-staleness/run.ts`](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-staleness/run.ts)
 - Offline scorer: [`benchmarks/agent-staleness/score.ts`](../benchmarks/agent-staleness/score.ts)
 - Seed outputs: [`benchmarks/agent-staleness/outputs/seed/`](../benchmarks/agent-staleness/outputs/seed/)
 - Tests: [`tests/agent-staleness-score.test.ts`](../tests/agent-staleness-score.test.ts)

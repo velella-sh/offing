@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "offing.agent-replay-results.v1",
+  "pin": {
+    "asOf": "2026-11-28",
+    "offingCommit": "d5e7dc194a59da49e20aee76fb03ea1fe0d123b2",
+    "ebbVersion": "0.2.0",
+    "ebbDigest": "sha256:87470d4eea7cd0cadc6ea80178bf32f9762bc0038dc941be3479373c3b036a53"
+  },
+  "attempts": [
+    {
+      "meta": {
+        "schemaVersion": "offing.agent-run.v1",
+        "identity": {
+          "agent": "offline-fixture",
+          "agentVersion": "1",
+          "model": "fixture-v1",
+          "settings": {}
+        },
+        "source": "fixture",
+        "pin": {
+          "asOf": "2026-11-28",
+          "offingCommit": "d5e7dc194a59da49e20aee76fb03ea1fe0d123b2",
+          "ebbVersion": "0.2.0",
+          "ebbDigest": "sha256:87470d4eea7cd0cadc6ea80178bf32f9762bc0038dc941be3479373c3b036a53"
+        },
+        "taskId": "node-dates-format",
+        "arm": "plain",
+        "attempt": 1,
+        "replaySha256": "94cbc367e6fc9c8559be000f370295f160f591cf7054ec165c5fa011c6ea5a3b",
+        "fixture": "demo",
+        "status": "completed",
+        "outputSha256": "e3481c4f8cfc883a4c5178d3fc46419f2a842fd951f728b237fe64c34ed127d2"
+      },
+      "score": {
+        "taskId": "node-dates-format",
+        "category": "node-dates",
+        "agent": "offline-fixture",
+        "arm": "plain",
+        "findingCount": 0,
+        "ruleIds": [],
+        "hasFinding": false,
+        "findings": []
+      }
+    }
+  ],
+  "arms": [
+    {
+      "identity": {
+        "agent": "offline-fixture",
+        "agentVersion": "1",
+        "model": "fixture-v1",
+        "settings": {}
+      },
+      "source": "fixture",
+      "arm": "plain",
+      "fixture": "demo",
+      "attempts": 1,
+      "completedOutputs": 1,
+      "outputsWithFinding": 0,
+      "interval95": {
+        "estimate": 0,
+        "low": 0,
+        "high": 0.7935
+      }
+    }
+  ]
+}
