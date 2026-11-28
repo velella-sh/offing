@@ -1,0 +1,31 @@
+name: Offing agent lifecycle review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions: {}
+
+jobs:
+  review:
+    if: github.event.pull_request.head.repo.id == github.event.pull_request.base.repo.id && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    permissions:
+      contents: read
+      pull-requests: write
+    concurrency:
+      group: offing-agent-review-${{ github.event.pull_request.number }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      # Use the full commit SHA of a published Offing Action that supports agent-review.
+      - uses: velella-sh/offing@REPLACE_WITH_OFFING_RELEASE_SHA
+        with:
+          mode: diff
+          agent-review: 'true'
+          review-event: comment
+          fail-on-severity: none

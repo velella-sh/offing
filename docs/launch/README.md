@@ -9,7 +9,7 @@ For setup and support, use the [forecast guide](https://velella.sh/offing/launch
 [FAQ](https://velella.sh/offing/launch/FAQ/), [Offing and Ebb overview](https://velella.sh/offing/launch/offing-and-ebb/), and
 [troubleshooting guide](https://velella.sh/offing/launch/TROUBLESHOOTING/).
 
-Use one pinned Fleet capture to [forecast and plan across repositories](every-repository-at-once.md).
+Use one pinned Fleet capture to [forecast and plan across repositories](https://velella.sh/offing/launch/every-repository-at-once/).
 Follow a [recorded Autopilot upgrade](https://velella.sh/offing/launch/let-autopilot-do-the-upgrade/) or walk through
 [signing and gating a release](https://velella.sh/offing/launch/prove-what-you-ship/).
 

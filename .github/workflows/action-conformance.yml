@@ -59,6 +59,23 @@ jobs:
           npm run build:action
       - name: Check the packaged Action
         uses: ./.offing-contract/.github/actions/action-conformance # zizmor: ignore[self-repository] -- separately checked out checker
+      - name: acc-ai-pr-review
+        working-directory: .offing-contract
+        env:
+          OFFING_ACTION_FOR_REVIEW_TEST: ${{ github.workspace }}/dist/action/index.js
+          OFFING_ACTION_METADATA_FOR_REVIEW_TEST: ${{ github.workspace }}/action.yml
+          SOURCE_BUILD: ${{ inputs.build }}
+        run: |
+          set -euo pipefail
+          if [[ "$SOURCE_BUILD" != "true" ]] &&
+            ! grep -Eq '^  (agent-review|review-event):' "$OFFING_ACTION_METADATA_FOR_REVIEW_TEST"; then
+            echo "acc-ai-pr-review: selected Action predates the agent review inputs."
+            exit 0
+          fi
+          npm ci --no-audit --no-fund
+          npm run build --silent
+          node --test --test-name-pattern '^acc-ai-pr-review' dist/tests/github-action-runtime.test.js
+          echo 'acc-ai-pr-review: bundled Action passed disabled, comment, request-changes, recorded attribution and fork isolation.' >> "$GITHUB_STEP_SUMMARY"
       - name: Record the tested Action
         if: always()
         env:

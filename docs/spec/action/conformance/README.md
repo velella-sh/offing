@@ -8,7 +8,10 @@ The [v1 contract](../v1.md) is exercised on a clean tree and a tree with a dated
 GitHub Actions runtime finding. The fixtures verify a passing scan with defaults,
 the failure gate and its outputs, and local SARIF without code scanning
 permissions. The workflow validates the [lifecycle SARIF profile](../../sarif/v1.md)
-and compares the SARIF result IDs with the JSON report.
+and compares the SARIF result IDs with the JSON report. For Action revisions with
+agent review inputs, `acc-ai-pr-review` runs the tested bundle against a local GitHub
+API fixture. It checks disabled, informational and request-changes review modes,
+recorded agent attribution, and the fork workflow’s separate read and write stages.
 
 ## Run from a consumer repository
 

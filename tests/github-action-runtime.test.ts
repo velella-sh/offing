@@ -777,7 +777,56 @@ test("acc-ai-pr-review reports committed source and dependency findings through 
   );
 });
 
+async function readAgentReviewTemplate(): Promise<Record<string, string>> {
+  const template = parseYaml(await readFile(resolve("templates/workflows/offing-agent-review.yml"), "utf8")) as {
+    on: { pull_request: { types: string[] } };
+    permissions: unknown;
+    jobs: {
+      review: {
+        if: string;
+        permissions: unknown;
+        steps: Array<{ uses: string; with: Record<string, string> }>;
+      };
+    };
+  };
+  const job = template.jobs.review;
+  assert.deepEqual(template.permissions, {});
+  assert.deepEqual(template.on.pull_request.types, ["opened", "synchronize", "reopened", "ready_for_review"]);
+  assert.equal(
+    job.if,
+    "github.event.pull_request.head.repo.id == github.event.pull_request.base.repo.id && !github.event.pull_request.draft",
+  );
+  assert.deepEqual(job.permissions, { contents: "read", "pull-requests": "write" });
+  assert.equal(job.steps.length, 2);
+  assert.match(job.steps[0]?.uses ?? "", /^actions\/checkout@[a-f0-9]{40}$/u);
+  assert.deepEqual(job.steps[0]?.with, { "fetch-depth": 0, "persist-credentials": false });
+  assert.equal(job.steps[1]?.uses, "velella-sh/offing@REPLACE_WITH_OFFING_RELEASE_SHA");
+  const inputs = job.steps[1]?.with;
+  assert.ok(inputs);
+  assert.deepEqual(inputs, {
+    mode: "diff",
+    "agent-review": "true",
+    "review-event": "comment",
+    "fail-on-severity": "none",
+  });
+  return inputs;
+}
+
+test("acc-ai-pr-review binds the bundled Action's review inputs to the documented defaults", async () => {
+  const path = process.env.OFFING_ACTION_METADATA_FOR_REVIEW_TEST ?? resolve("action.yml");
+  const metadata = parseYaml(await readFile(path, "utf8")) as {
+    inputs: Record<string, { default: string }>;
+    runs: { steps: Array<{ id?: string; env?: Record<string, string> }> };
+  };
+  const scan = metadata.runs.steps.find((step) => step.id === "scan");
+  assert.equal(metadata.inputs["agent-review"]?.default, "false");
+  assert.equal(metadata.inputs["review-event"]?.default, "comment");
+  assert.equal(scan?.env?.["INPUT_AGENT-REVIEW"], "${{ inputs.agent-review }}");
+  assert.equal(scan?.env?.["INPUT_REVIEW-EVENT"], "${{ inputs.review-event }}");
+});
+
 test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned reviews on changed lines", async (t) => {
+  const consumer = await readAgentReviewTemplate();
   const { root, base } = await gitRepositoryWithFinding();
   await writeFile(join(root, "package.json"), '{\n  "dependencies": { "request": "2.88.2" }\n}\n');
   git(root, ["add", "package.json"]);
@@ -868,7 +917,9 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
       process.env.OFFING_ACTION_FOR_REVIEW_TEST,
     );
 
-  assert.equal((await execute()).code, 0);
+  const disabled = await execute();
+  assert.equal(disabled.code, 0);
+  assert.match(disabled.outputs, /finding-count=2/u);
   assert.deepEqual(requests, []);
   await writeFile(
     join(root, ".github", "workflows", "ci.yml"),
@@ -878,7 +929,12 @@ test("acc-ai-pr-review verifies bot committers and posts opt-in head-pinned revi
   assert.doesNotMatch(unverified.summary, /bot-committer/u);
   assert.deepEqual(requests, ["GET /repos/owner/project/pulls/17/commits?per_page=100&page=1"]);
   verified = true;
-  const review = await execute({ "INPUT_AGENT-REVIEW": "true" });
+  const review = await execute({
+    INPUT_MODE: consumer.mode ?? "",
+    "INPUT_AGENT-REVIEW": consumer["agent-review"] ?? "",
+    "INPUT_REVIEW-EVENT": consumer["review-event"] ?? "",
+    "INPUT_FAIL-ON-SEVERITY": consumer["fail-on-severity"] ?? "",
+  });
   assert.equal(review.code, 0);
   assert.match(review.summary, /Agent attribution: bot-committer/u);
   assert.deepEqual(requests.slice(1), [
