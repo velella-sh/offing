@@ -69,4 +69,26 @@ npm run leaderboard -- --check-committed
 
 `--check` compares an existing output against a fresh byte-for-byte rescore. `--check-committed` always checks the quarantined fixture snapshot and checks the public file whenever measured input directories or a public dataset are present. The fixture snapshot uses hand-written edits with its original Offing and Ebb pins. [Committed fixture evidence](../../tests/fixtures/agent-leaderboard/)
 
+## Submit a new agent
+
+Open a pull request with one experiment in `benchmarks/agent-staleness/outputs/recorded/<experiment>/`. Use a directory name that identifies the agent, model, and run date. Include the generated `plan.json` and each `<arm>/<task-id>/<attempt>/` directory with `meta.json`, `result.json`, `prompt.md`, and the produced target when present. In the pull request, link the capture method and state the agent version, model, settings, starting fixture, and shared Offing and Ebb pins. Keep the raw attempt directories, including failed attempts, and remove any credentials or private data before committing evidence. If a capture contains private data, capture the experiment again using public inputs.
+
+Generate the attempt directories with the replay command above. Use `source: recorded` only for a measured capture with that provenance. The `offing.agent-run.v1` metadata carries the hashes of the recording and emitted target, the attempt status, and the run's pins. Use the same scoring date, Offing revision, and Ebb version and digest as the leaderboard inputs. Include each task, arm, and repeat listed in the plan. Generate `docs/_data/agent-leaderboard.json` with `npm run leaderboard` and include it in the same PR.
+
+Rehearse the submission offline from a clean checkout with dependencies installed. This example gives the [committed fixture](../../tests/fixtures/agent-leaderboard/) a different agent ID, rebuilds its attempt layout, and checks its rescore twice. It needs no Docker daemon or provider key. The temporary files use `fixture` provenance and stay outside the published data.
+
+```bash
+work=$(mktemp -d)
+seed=tests/fixtures/agent-leaderboard
+sed 's/"agent": "offline-fixture"/"agent": "contributor-fixture"/' \
+  "$seed/recorded/plan.json" > "$work/plan.json"
+npm run bench:staleness:run -- --static-replay --replay-plan "$work/plan.json" \
+  --recordings "$seed/recordings" --output "$work/experiment"
+npm run leaderboard -- --fixture --input "$work/experiment" --output "$work/leaderboard.json"
+npm run leaderboard -- --fixture --input "$work/experiment" --output "$work/leaderboard.json" --check
+npm run leaderboard -- --check-committed
+```
+
+CI validates the run layout and metadata, compares pins, checks the target digests, and compares the committed leaderboard byte for byte with a fresh rescore. Drop stale outputs and regenerate from the matching recordings when the comparison fails. Include the relevant [Package smoke](https://github.com/velella-sh/offing/actions/workflows/package-smoke.yml) run in the PR. Its `agent_leaderboard_only` dispatch runs `acc-agent-leaderboard` against the selected revision.
+
 [Ebb's cutoff-report dry run](https://github.com/velella-sh/ebb/issues/698) can use this replay-plan and result format for captured file-shaped responses. Ebb's [answer-key scorer](https://github.com/velella-sh/ebb/issues/743) scores raw recommendation answers. Offing's scorer measures lifecycle findings in produced files. The [recorded Codex migration evaluation](../agent-migrations/results/2026-11-28-codex-evaluation.json) measures a different cohort with its own verification criteria.
