@@ -9,10 +9,17 @@ import {
   countP0Bugs,
   milestoneIssues,
   p0Issues,
+  publishedRelease,
   readAdoption,
+  releaseCommit,
+  releaseScorecard,
+  releaseUrl,
   repository,
+  scorecardUrl,
 } from "./launch-readiness/evidence.js";
 import { checkSitemap, sitemapUrl } from "./launch-readiness/site.js";
+import { readColdInstall } from "./launch-readiness/timing.js";
+import { releaseVerification } from "./launch-readiness/verification.js";
 
 const thresholds = {
   "Public pages":
@@ -38,6 +45,14 @@ const thresholds = {
 type CheckName = keyof typeof thresholds;
 type Status = "green" | "amber" | "red";
 type SiteEvidence = { directory: string; run: string };
+type ReadinessInput = {
+  date: string;
+  milestone: number;
+  commit: string;
+  site?: SiteEvidence;
+  timing?: string;
+  version?: string;
+};
 
 function check(name: CheckName, status: Status, observed: string, evidence: string[]) {
   return { name, status, observed, thresholds: thresholds[name], evidence };
@@ -63,32 +78,79 @@ async function siteCheck(input: SiteEvidence | undefined, fetcher: typeof fetch)
   return { result, issues: observation?.issues ?? [] };
 }
 
-export async function collectReadiness(
-  input: { date: string; milestone: number; commit: string; site?: SiteEvidence },
-  fetcher: typeof fetch,
-  metricsDirectory: string,
-) {
-  const [p0, milestone, adoption, site] = await Promise.all([
+async function releaseChecks(input: ReadinessInput, fetcher: typeof fetch) {
+  const release = await publishedRelease(fetcher, input.version).catch(() => undefined);
+  const commit = release ? await releaseCommit(fetcher, release.version).catch(() => undefined) : undefined;
+  const [timing, scorecard, verification] = await Promise.all([
+    release && input.timing
+      ? readColdInstall(input.timing, input.date, release.version).catch(() => undefined)
+      : undefined,
+    release ? releaseScorecard(fetcher, commit).catch(() => undefined) : undefined,
+    release && commit ? releaseVerification(fetcher, release.version, commit).catch(() => undefined) : undefined,
+  ]);
+  const version = release ? `v${release.version}` : "Published version unavailable";
+  const label = release ? `${version} · ` : "";
+  const outcome = (status: Status | undefined) =>
+    !status || !verification
+      ? `${label}Released-artifact verification unavailable`
+      : `${label}${status === "green" ? "Verified" : "Verification failed"} on ${verification.date} (UTC)`;
+  const sources = verification ? [verification.source] : [];
+  const scoreScope = scorecard?.exact === false ? " for a different commit · release score unavailable" : "";
+  const score = scorecard
+    ? `${label}${scorecard.score.toFixed(1)} on ${scorecard.date}${commit ? scoreScope : " · release tag commit unavailable"}`
+    : `${label}Scorecard result unavailable`;
+  return {
+    release,
+    cold: check(
+      "Cold install",
+      timing?.status ?? "amber",
+      timing?.observed ?? `${label}Clean published-package timings unavailable`,
+      [timing?.evidence ?? `${repository}/actions/workflows/first-minute.yml`],
+    ),
+    scorecard: check("Scorecard", scorecard?.exact ? (scorecard.score >= 6 ? "green" : "red") : "amber", score, [
+      scorecardUrl,
+      ...(scorecard ? [scorecard.source] : []),
+    ]),
+    provenance: check("npm provenance", verification?.provenance ?? "amber", outcome(verification?.provenance), [
+      ...sources,
+      release ? `https://www.npmjs.com/package/@velella/offing/v/${release.version}` : `${repository}/issues/927`,
+    ]),
+    attestation: check(
+      "Release attestation",
+      verification?.attestation ?? "amber",
+      outcome(verification?.attestation),
+      [...sources, release?.url ?? releaseUrl, `${repository}/actions/workflows/release-verify.yml`],
+    ),
+  };
+}
+
+export async function collectReadiness(input: ReadinessInput, fetcher: typeof fetch, metricsDirectory: string) {
+  const [p0, milestone, adoption, site, release] = await Promise.all([
     countP0Bugs(fetcher).catch(() => undefined),
     countMilestoneIssues(input.milestone, fetcher).catch(() => undefined),
     readAdoption(metricsDirectory, input.date, input.commit).catch(() => undefined),
     siteCheck(input.site, fetcher),
+    releaseChecks(input, fetcher),
   ]);
   return {
     formatVersion: 1,
     date: input.date,
     milestone: input.milestone,
+    release: release.release ?? null,
     checks: [
       site.result,
       outstanding("Release demos", 1037),
-      outstanding("Cold install", 979),
+      release.cold,
       outstanding("Documentation and README", 1041),
-      check("Adoption", "amber", adoption?.values ?? "Dated snapshot unavailable", [
-        adoption?.evidence ?? `${repository}/tree/${input.commit}/metrics`,
-      ]),
-      outstanding("Scorecard", 927),
-      outstanding("npm provenance", 927),
-      outstanding("Release attestation", 916),
+      check(
+        "Adoption",
+        adoption?.complete ? "green" : "amber",
+        adoption ? `Snapshot ${adoption.date} · ${adoption.measures.join(" · ")}` : "Dated snapshot unavailable",
+        [adoption?.evidence ?? `${repository}/tree/${input.commit}/metrics`],
+      ),
+      release.scorecard,
+      release.provenance,
+      release.attestation,
       check("Open P0 bugs", p0 === undefined ? "amber" : p0 === 0 ? "green" : "red", p0?.toString() ?? "Unavailable", [
         p0Issues,
       ]),
@@ -111,6 +173,9 @@ export function renderReadiness(report: ReadinessReport): string {
     `# Launch readiness · ${report.date}`,
     "",
     `Milestone [#${report.milestone}](${milestoneIssues(report.milestone)}). The launch decision stays with the owner.`,
+    report.release
+      ? `Published release [v${report.release.version}](${report.release.url}) on ${report.release.published} (UTC).`
+      : "Published release information unavailable.",
     "",
     "| Check | Status | Observed | Thresholds | Evidence |",
     "| --- | --- | --- | --- | --- |",
@@ -129,16 +194,26 @@ function options(args: string[]) {
       out: { type: "string", default: "metrics/launch-readiness" },
       "site-dir": { type: "string" },
       "site-run": { type: "string" },
+      "timing-dir": { type: "string" },
+      version: { type: "string" },
     },
   });
-  const { milestone, out, "site-dir": directory, "site-run": run } = values;
+  const { milestone, out, "site-dir": directory, "site-run": run, "timing-dir": timing, version } = values;
   if (!milestone || !/^[1-9]\d*$/.test(milestone) || !Number.isSafeInteger(Number(milestone))) {
     throw new Error("Pass the current GitHub milestone number as --milestone.");
   }
   if ((run === undefined) !== (directory === undefined) || (run !== undefined && !/^[1-9]\d*$/.test(run))) {
     throw new Error("Pass --site-dir and its numeric --site-run together.");
   }
-  return { milestone: Number(milestone), out, ...(directory && run ? { site: { directory, run } } : {}) };
+  if (version && !/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(version))
+    throw new Error("Pass an exact release --version without the v prefix.");
+  return {
+    milestone: Number(milestone),
+    out,
+    ...(directory && run ? { site: { directory, run } } : {}),
+    ...(timing ? { timing } : {}),
+    ...(version ? { version } : {}),
+  };
 }
 
 async function main(args: string[]) {

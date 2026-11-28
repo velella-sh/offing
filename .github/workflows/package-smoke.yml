@@ -18,6 +18,10 @@ on:
         description: Run only the synthetic Autopilot Action dispatch acceptance.
         type: boolean
         default: false
+      launch_readiness_only:
+        description: Generate the launch readiness report and test the workflow without updating an issue.
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -27,14 +31,23 @@ concurrency:
   cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 
 jobs:
+  launch-readiness:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.launch_readiness_only }}
+    uses: ./.github/workflows/launch-readiness-report.yml # zizmor: ignore[self-repository] -- exercise only the read-only report
+    permissions:
+      actions: read
+      contents: read
+    with:
+      verify_only: true
+
   action-conformance:
-    if: ${{ inputs.action_conformance_only && !inputs.autopilot_action_only }}
+    if: ${{ inputs.action_conformance_only && !inputs.autopilot_action_only && !inputs.launch_readiness_only }}
     uses: ./.github/workflows/action-conformance.yml # zizmor: ignore[self-repository] -- tests the reusable workflow from this revision
     with:
       build: true
 
   autopilot-action:
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.autopilot_action_only }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.autopilot_action_only && !inputs.launch_readiness_only }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -257,7 +270,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   smoke:
-    if: ${{ !inputs.action_conformance_only && !inputs.autopilot_action_only }}
+    if: ${{ !inputs.action_conformance_only && !inputs.autopilot_action_only && !inputs.launch_readiness_only }}
     name: npm, Docker, and Action
     runs-on: ubuntu-latest
     timeout-minutes: 25
