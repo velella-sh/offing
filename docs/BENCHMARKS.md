@@ -123,7 +123,7 @@ console.log(JSON.stringify(rateByCondition(scoreMigrationRun(task, result).condi
 
 The agent staleness benchmark measures how often coding agents write end-of-life or deprecated choices when they produce common project files — Dockerfiles, GitHub Actions workflows, Kubernetes manifests, package manifests, Terraform modules, and small Python or Node helpers — and whether Offing's agent hook changes that rate.
 
-Each task is a version-free prompt that names the file to write. Recorded replay starts each attempt in an isolated, disconnected container with the chosen starting files. A `plain` arm uses the task prompt and a `hooks` arm adds Offing instructions and supported project hooks. A `context` arm appends stack context. Scoring combines repository findings with removed source APIs and reports finding rates by agent, arm, and category. [Replay inputs and isolation](../benchmarks/agent-harness/README.md)
+Each task is a version-free prompt that names the file to write. Recorded replay starts each attempt in an isolated, disconnected container with the chosen starting files. A `plain` arm uses the task prompt and a `hooks` arm adds Offing instructions and supported project hooks. A `context` arm appends stack context. Scoring combines repository findings with removed source APIs and reports finding rates by agent, arm, and category. [Replay inputs and isolation](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-harness/README.md)
 
 ### Run metadata
 
@@ -171,8 +171,8 @@ Per-category seed rows and rule ids are in [`benchmarks/agent-staleness/results.
 ### Artefacts
 
 - Task definitions: [`benchmarks/agent-staleness/tasks.json`](../benchmarks/agent-staleness/tasks.json)
-- [Recorded replay, result format and scoring pins](../benchmarks/agent-harness/README.md)
-- Replay entry point: [`benchmarks/agent-staleness/run.ts`](../benchmarks/agent-staleness/run.ts)
+- [Recorded replay, result format and scoring pins](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-harness/README.md)
+- [Replay entry point `benchmarks/agent-staleness/run.ts`](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-staleness/run.ts)
 - Offline scorer: [`benchmarks/agent-staleness/score.ts`](../benchmarks/agent-staleness/score.ts)
 - Seed outputs: [`benchmarks/agent-staleness/outputs/seed/`](../benchmarks/agent-staleness/outputs/seed/)
 - Tests: [`tests/agent-staleness-score.test.ts`](../tests/agent-staleness-score.test.ts)
