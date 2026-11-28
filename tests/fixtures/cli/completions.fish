@@ -295,6 +295,7 @@ complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l suppor
 complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l today
 complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l no-data
 complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l json
+complete -c offing -n '__fish_seen_subcommand_from rollback-readiness' -l format
 complete -c offing -n '__fish_seen_subcommand_from timelapse' -l from
 complete -c offing -n '__fish_seen_subcommand_from timelapse' -l to
 complete -c offing -n '__fish_seen_subcommand_from timelapse' -l svg

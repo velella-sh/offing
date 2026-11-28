@@ -116,3 +116,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0077](0077-recorded-autopilot-proof.md) | Build proof v1 from a recorded Autopilot run | Publish a local commit range and linked test outcomes with verified, redacted log digests. |
 | [0083](0083-resumable-replay.md) | Resume a recorded Autopilot migration | Continue a bounded replay from its recorded local checkout and verify the final wave. |
 | [0084](0084-forecast-tool-package.md) | Export the versioned forecast tool module | Provide typed offline input, consented public selectors and packaged forecast records validation. |
+| [0085](0085-release-gate-advisory-predictions.md) | Keep release-gate predictions advisory | Preserve confirmed deadlines and no-data enforcement while reporting labeled SBOM estimates as warnings. |

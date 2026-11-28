@@ -1,15 +1,38 @@
 {
   "asOf": "2024-02-28",
   "supportUntil": "2024-02-29",
+  "component": "pkg:npm/example@1.0.0",
+  "detector": "npm",
+  "path": "legacy/package.json",
+  "ruleId": "npm.example.support",
+  "sources": ["https://example.com/support"],
+  "prediction": {
+    "purl": "pkg:npm/example@1.0.0",
+    "date": "2024-02-29",
+    "interval": { "earliest": "2024-02-28", "latest": "2024-03-01" },
+    "confidence": 0.65,
+    "method": "fixture release cadence",
+    "sources": ["https://example.com/releases"],
+    "modelVersion": "fixture-v1"
+  },
   "cases": [
-    { "name": "after the window", "noData": "warn", "deadline": "2024-03-01", "expected": ["pass"] },
-    { "name": "inclusive leap day", "noData": "warn", "deadline": "2024-02-29", "expected": ["block", "block", 1] },
-    { "name": "release day", "noData": "warn", "deadline": "2024-02-28", "expected": ["block", "block", 0] },
-    { "name": "past deadline", "noData": "warn", "deadline": "2024-02-27", "expected": ["block", "block", -1] },
-    { "name": "warn on missing evidence", "noData": "warn", "expected": ["warn", "warn"] },
-    { "name": "fail on missing evidence", "noData": "fail", "expected": ["block", "block"] },
+    { "name": "after the window", "deadline": "2024-03-01", "expected": ["pass"] },
+    { "name": "inclusive leap day", "deadline": "2024-02-29", "expected": ["block", ["lifecycle", "block", 1]] },
+    { "name": "release day", "deadline": "2024-02-28", "expected": ["block", ["lifecycle", "block", 0]] },
+    { "name": "past deadline", "deadline": "2024-02-27", "expected": ["block", ["lifecycle", "block", -1]] },
+    { "name": "deprecation is not a deadline", "event": "deprecated", "deadline": "2024-02-28", "noData": "fail", "expected": ["pass"] },
+    { "name": "warn on missing evidence", "expected": ["warn", ["no-data", "warn"]] },
+    { "name": "fail on missing evidence", "noData": "fail", "expected": ["block", ["no-data", "block"]] },
     { "name": "omit missing evidence", "noData": "ignore", "expected": ["pass"] },
-    { "name": "active on expiry day", "noData": "warn", "deadline": "2024-02-29", "expires": "2024-02-28", "expected": ["pass", "excepted", 1] },
-    { "name": "expired exception", "noData": "warn", "deadline": "2024-02-29", "expires": "2024-02-27", "expected": ["block", "block", 1] }
+    { "name": "active on expiry day", "deadline": "2024-02-29", "exceptions": [{ "expires": "2024-02-28", "path": "legacy/package.json", "reason": "Scoped transition" }], "expected": ["pass", ["lifecycle", "excepted", 1, "Scoped transition"]] },
+    { "name": "wrong path does not cover a file", "deadline": "2024-02-29", "exceptions": [{ "expires": "2024-02-29", "path": "new/package.json", "reason": "Other file" }], "expected": ["block", ["lifecycle", "block", 1]] },
+    { "name": "wrong ecosystem does not cover a file", "deadline": "2024-02-29", "exceptions": [{ "expires": "2024-02-29", "ecosystem": "go", "reason": "Other ecosystem" }], "expected": ["block", ["lifecycle", "block", 1]] },
+    { "name": "expired scope takes precedence over an active scope", "deadline": "2024-02-29", "exceptions": [{ "expires": "2024-02-29", "ecosystem": "npm", "reason": "Active general scope" }, { "expires": "2024-02-27", "path": "legacy/package.json", "reason": "Expired transition" }], "expected": ["block", ["lifecycle", "block", 1, "Expired transition"]] },
+    { "name": "prediction under warn", "predicted": true, "expected": ["warn", ["no-data", "warn"], ["prediction", "warn"]] },
+    { "name": "prediction under ignore", "predicted": true, "noData": "ignore", "expected": ["warn", ["prediction", "warn"]] },
+    { "name": "prediction cannot mask missing confirmed evidence", "predicted": true, "noData": "fail", "expected": ["block", ["no-data", "block"], ["prediction", "warn"]] },
+    { "name": "prediction outside the window", "predicted": true, "predictionDate": "2024-03-01", "noData": "ignore", "expected": ["pass"] },
+    { "name": "confirmed deadline takes precedence over prediction", "deadline": "2024-02-29", "predicted": true, "expected": ["block", ["lifecycle", "block", 1]] },
+    { "name": "future confirmed deadline also supersedes prediction", "deadline": "2024-03-01", "predicted": true, "expected": ["pass"] }
   ]
 }

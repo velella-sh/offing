@@ -65,6 +65,16 @@ const invalidCases: readonly { name: string; args: string[]; error: RegExp }[] =
     error: /--within-days at most once/,
   },
   { name: "missing window value", args: ["release", "--candidate", "a", "--within-days"], error: /--within-days/ },
+  {
+    name: "an unknown output format",
+    args: ["release", "--candidate", "a", "--format", "yaml"],
+    error: /text, json or sarif/,
+  },
+  {
+    name: "a format conflicting with --json",
+    args: ["release", "--candidate", "a", "--format", "sarif"],
+    error: /--json requires JSON output/,
+  },
 ];
 
 for (const { name, args, error } of invalidCases) {

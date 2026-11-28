@@ -1,0 +1,1 @@
+- Warn about explicitly labeled end-of-life predictions in release-gate SBOMs and add SARIF output for rollback readiness.

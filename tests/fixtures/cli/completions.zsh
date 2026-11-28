@@ -69,7 +69,7 @@ _offing() {
         prompt) _arguments '--format' '--symbol' '*:path:_files' ;;
         recommend) _arguments '--min-days' '--as-of' '--json' '*:path:_files' ;;
         release-gate) _arguments '--sbom' '--attestation' '--subject' '--repo' '--signer-workflow' '--trusted-root' '--within-days' '--support-until' '--today' '--no-data' '--json' '--format' '*:path:_files' ;;
-        rollback-readiness) _arguments '--candidate' '--within-days' '--support-until' '--today' '--no-data' '--json' '*:path:_files' ;;
+        rollback-readiness) _arguments '--candidate' '--within-days' '--support-until' '--today' '--no-data' '--json' '--format' '*:path:_files' ;;
         timelapse) _arguments '--from' '--to' '--svg' '--json' '--no-animation' '*:path:_files' ;;
         verify) _arguments '--data-version' '*:path:_files' ;;
         wrapped) _arguments '--year' '--svg' '--json' '--no-animation' '*:path:_files' ;;
