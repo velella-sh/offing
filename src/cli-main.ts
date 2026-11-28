@@ -42,10 +42,14 @@ export async function run(rawArgs: readonly string[] = process.argv.slice(2)): P
   try {
     return await main(rawArgs);
   } catch (error) {
-    const { code, kind } = classifyError(error);
-    // Only Offing and Ebb errors classify as anything but internal, and both are Errors.
-    if (kind !== "internal" && error instanceof Error) return fail(kind, error.message, "", code);
-    const { message, appendix } = unexpectedFailure(error, cliOptionArgs(rawArgs).includes("--debug"));
-    return fail("internal", message, appendix, code);
+    return reportCliFailure(error, rawArgs);
   }
+}
+
+export function reportCliFailure(error: unknown, rawArgs: readonly string[]): number {
+  const { code, kind } = classifyError(error);
+  // Only Offing and Ebb errors classify as anything but internal, and both are Errors.
+  if (kind !== "internal" && error instanceof Error) return fail(kind, error.message, "", code);
+  const { message, appendix } = unexpectedFailure(error, cliOptionArgs(rawArgs).includes("--debug"));
+  return fail("internal", message, appendix, code);
 }

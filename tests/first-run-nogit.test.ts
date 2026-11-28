@@ -80,6 +80,21 @@ test("a denied codemod patch prevents the first run from suggesting the whole wa
   const cli = resolve("dist/src/cli.js");
   const run = (args: string[]) => promisify(execFile)(process.execPath, [cli, ...args], { cwd, timeout: 5000 });
 
-  assert.doesNotMatch((await run([])).stdout, /Autopilot can fix/);
+  const first = await run([]);
+  assert.match(first.stdout, /There is nothing for Autopilot to fix\.\n$/);
+  assert.doesNotMatch(first.stdout, /offing autopilot/);
   assert.match((await run(["autopilot", ".", "--dry-run", "--wave", "0"])).stdout, /Offline codemods: 0/);
+});
+
+test("the bare executable reports a scan that cannot read its working directory", async (t) => {
+  const cwd = await mkdtemp(join(tmpdir(), "offing-first-run-denied-read-"));
+  t.after(() => rm(cwd, { recursive: true, force: true }));
+  await assert.rejects(
+    promisify(execFile)(
+      process.execPath,
+      ["--permission", `--allow-fs-read=${process.cwd()}`, resolve("dist/src/cli.js")],
+      { cwd },
+    ),
+    { code: 5, stderr: /Offing failed unexpectedly:.*--allow-fs-read/ },
+  );
 });

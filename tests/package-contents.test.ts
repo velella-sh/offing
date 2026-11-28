@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { readFile, readdir } from "node:fs/promises";
+import { posix } from "node:path";
 import { test } from "node:test";
 import { promisify } from "node:util";
+import ts from "typescript";
 import { packageBudget, readPackageReport } from "../tools/package-size-budget.js";
 
 const execute = promisify(execFile);
@@ -30,6 +32,28 @@ const TREE_SITTER_VENDOR_FILES = new Set([
   "tree-sitter-typescript.wasm.b64",
 ]);
 
+async function assertPublicDeclarationsShip(paths: string[]): Promise<void> {
+  const { exports } = JSON.parse(await readFile("package.json", "utf8")) as {
+    exports: Record<string, string | { types?: string }>;
+  };
+  const pending = Object.values(exports).flatMap((entry) =>
+    typeof entry !== "string" && entry.types ? [posix.normalize(entry.types)] : [],
+  );
+  const packed = new Set(paths);
+  const visited = new Set<string>();
+  for (const path of pending) {
+    if (visited.has(path)) continue;
+    visited.add(path);
+    assert.ok(packed.has(path), `public type dependency ${path} must ship in the tarball`);
+    const { importedFiles } = ts.preProcessFile(await readFile(path, "utf8"), true, true);
+    for (const { fileName } of importedFiles) {
+      if (fileName.startsWith(".") && fileName.endsWith(".js")) {
+        pending.push(posix.join(posix.dirname(path), fileName.replace(/\.js$/, ".d.ts")));
+      }
+    }
+  }
+}
+
 test("the npm tarball ships only the root package.json as a dependency manifest", async () => {
   // Ignore scripts: prepack runs `npm run check`, which would recurse into this test.
   // npm.cmd needs the platform shell on Windows (same pattern as src/guard.ts).
@@ -45,6 +69,8 @@ test("the npm tarball ships only the root package.json as a dependency manifest"
   assert.deepEqual(nested, [], "fixture and example manifests must stay out of the published tarball");
 
   const paths = files.map((file) => file.path);
+  await assertPublicDeclarationsShip(paths);
+  assert.ok(!paths.includes("dist/src/commands/init.d.ts"), "CLI-only declarations stay out of the installed package");
   const vendorPath = "dist/src/usage/vendor/tree-sitter/";
   for (const name of TREE_SITTER_VENDOR_FILES) {
     assert.ok(paths.includes(vendorPath + name), `${name} must ship in the tarball`);

@@ -12,5 +12,7 @@ test("bare Offing explains what to scan and how to try a demo in an empty folder
   assert.equal(result.code, 0, result.stderr);
   assert.match(result.stdout, /^Weather: clear\nForecast:/);
   assert.match(result.stdout, /This folder is empty\. Offing looks for manifests, lockfiles, and CI workflows\./);
+  assert.match(result.stdout, /There is nothing for Autopilot to fix\.\n$/);
+  assert.doesNotMatch(result.stdout, /offing autopilot/);
   assert.match(result.stdout, /Try the demo: https:\/\/.*QUICKSTART\.md#try-the-demo/);
 });

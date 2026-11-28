@@ -26,6 +26,31 @@ test("the first-run forecast is short and stable on three examples", async (t) =
   assert.equal(outputs.join("\n"), await readFile(snapshot, "utf8"));
 });
 
+test("the live Autopilot advice matches the first offline wave on pinned examples", async (t) => {
+  t.mock.timers.enable({ apis: ["Date"], now: new Date("2026-11-27T12:00:00Z") });
+  const roots: string[] = [];
+  t.after(() => Promise.all(roots.map((root) => rm(root, { recursive: true, force: true }))));
+  const outputs: string[] = [];
+  for (const [name, count] of [
+    ["gallery/nodejs", 1],
+    ["demo", 0],
+  ] as const) {
+    const cwd = await copyFixtureTree(`examples/${name}`, roots);
+    const firstRun = await runCli([], { cwd });
+    assert.equal(firstRun.code, 0, firstRun.stderr);
+    const advice = firstRun.stdout.trimEnd().split("\n").at(-1);
+    assert.ok(advice);
+    assert.equal(advice.includes("offing autopilot"), count > 0);
+    const preview = await runCli(["autopilot", ".", "--dry-run", "--wave", "0"], { cwd });
+    assert.equal(preview.code, 0, preview.stderr);
+    assert.match(preview.stdout, new RegExp(`^Offline codemods: ${count}$`, "m"));
+    outputs.push(`examples/${name}: ${advice}\n`);
+  }
+  const snapshot = "tests/__snapshots__/first-run-autopilot.txt";
+  if (process.env.UPDATE_GOLDEN === "1") await writeFile(snapshot, outputs.join(""));
+  assert.equal(outputs.join(""), await readFile(snapshot, "utf8"));
+});
+
 test("first-run JSON is exactly forecast JSON, with no onboarding copy", async (t) => {
   const roots: string[] = [];
   t.after(() => Promise.all(roots.map((root) => rm(root, { recursive: true, force: true }))));
