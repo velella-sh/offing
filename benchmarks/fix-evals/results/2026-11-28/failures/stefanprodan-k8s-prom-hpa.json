@@ -1,0 +1,220 @@
+{
+  "id": "stefanprodan-k8s-prom-hpa",
+  "repository": "stefanprodan/k8s-prom-hpa",
+  "commit": "2dbaabafd360e5c1d0f8a9aaa7bfaa7cb80b6c4b",
+  "profile": "kubernetes",
+  "cases": [
+    {
+      "fixer": "kubernetes",
+      "patch": {
+        "path": "stefanprodan-k8s-prom-hpa/kubernetes/fix.patch",
+        "sha256": "5c33ec04fc1c0afc18220887255b87682684952145de6033320af79eb89e19be"
+      },
+      "checks": {
+        "build": {
+          "schemaVersion": "offing.test-run.v1",
+          "command": [
+            "/usr/local/bin/kubeconform",
+            "-strict",
+            "-summary",
+            "-schema-location",
+            "./.offing-kubeconform-schemas/{{.ResourceKind}}{{.KindSuffix}}.json",
+            "custom-metrics-api/custom-metrics-apiserver-auth-delegator-cluster-role-binding.yaml",
+            "custom-metrics-api/custom-metrics-apiserver-auth-reader-role-binding.yaml",
+            "custom-metrics-api/custom-metrics-apiserver-resource-reader-cluster-role-binding.yaml",
+            "custom-metrics-api/custom-metrics-apiservice.yaml",
+            "custom-metrics-api/custom-metrics-cluster-role.yaml",
+            "custom-metrics-api/custom-metrics-resource-reader-cluster-role.yaml",
+            "custom-metrics-api/hpa-custom-metrics-cluster-role-binding.yaml",
+            "ingress/ingress-nginx-rbac.yaml",
+            "metrics-server/auth-delegator.yaml",
+            "metrics-server/auth-reader.yaml",
+            "metrics-server/metrics-apiservice.yaml",
+            "podinfo/podinfo-hpa-custom.yaml",
+            "podinfo/podinfo-hpa.yaml",
+            "podinfo/podinfo-ingress.yaml",
+            "prometheus/prometheus-rbac.yaml"
+          ],
+          "attempts": [
+            {
+              "exitCode": 1,
+              "durationMs": 266,
+              "status": "failed",
+              "totals": null,
+              "failures": [],
+              "logs": {
+                "stdout": {
+                  "sha256": "46b91c0a005b3eccf6079c2f2f19e6b033a9ba173be02fa356c4fcbdb5c0c6f1",
+                  "tail": "custom-metrics-api/custom-metrics-apiserver-auth-delegator-cluster-role-binding.yaml - ClusterRoleBinding custom-metrics:system:auth-delegator failed validation: could not find schema for ClusterRoleBinding\ncustom-metrics-api/custom-metrics-apiserver-auth-reader-role-binding.yaml - RoleBinding custom-metrics-auth-reader failed validation: could not find schema for RoleBinding\ncustom-metrics-api/custom-metrics-apiserver-resource-reader-cluster-role-binding.yaml - ClusterRoleBinding custom-metrics-resource-reader failed validation: could not find schema for ClusterRoleBinding\ncustom-metrics-api/custom-metrics-apiservice.yaml - APIService v1beta1.custom.metrics.k8s.io failed validation: could not find schema for APIService\ncustom-metrics-api/custom-metrics-cluster-role.yaml - ClusterRole custom-metrics-server-resources failed validation: could not find schema for ClusterRole\ncustom-metrics-api/custom-metrics-resource-reader-cluster-role.yaml - ClusterRole custom-metrics-resource-reader failed validation: could not find schema for ClusterRole\ncustom-metrics-api/hpa-custom-metrics-cluster-role-binding.yaml - ClusterRoleBinding hpa-controller-custom-metrics failed validation: could not find schema for ClusterRoleBinding\ningress/ingress-nginx-rbac.yaml - RoleBinding nginx-ingress-role-nisa-binding failed validation: could not find schema for RoleBinding\ningress/ingress-nginx-rbac.yaml - ClusterRoleBinding nginx-ingress-clusterrole-nisa-binding failed validation: could not find schema for ClusterRoleBinding\ningress/ingress-nginx-rbac.yaml - ClusterRole nginx-ingress-clusterrole failed validation: could not find schema for ClusterRole\nmetrics-server/auth-delegator.yaml - ClusterRoleBinding metrics-server:system:auth-delegator failed validation: could not find schema for ClusterRoleBinding\ningress/ingress-nginx-rbac.yaml - Role nginx-ingress-role failed validation: could not find schema for Role\nmetrics-server/auth-reader.yaml - RoleBinding metrics-server-auth-reader failed validation: could not find schema for RoleBinding\nmetrics-server/metrics-apiservice.yaml - APIService v1beta1.metrics.k8s.io failed validation: could not find schema for APIService\npodinfo/podinfo-hpa-custom.yaml - HorizontalPodAutoscaler podinfo failed validation: could not find schema for HorizontalPodAutoscaler\npodinfo/podinfo-hpa.yaml - HorizontalPodAutoscaler podinfo failed validation: could not find schema for HorizontalPodAutoscaler\nprometheus/prometheus-rbac.yaml - ClusterRole prometheus failed validation: could not find schema for ClusterRole\nprometheus/prometheus-rbac.yaml - ClusterRoleBinding prometheus failed validation: could not find schema for ClusterRoleBinding\nSummary: 22 resources found in 15 files - Valid: 4, Invalid: 0, Errors: 18, Skipped: 0\n"
+                },
+                "stderr": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                }
+              }
+            },
+            {
+              "exitCode": 1,
+              "durationMs": 289,
+              "status": "failed",
+              "totals": null,
+              "failures": [],
+              "logs": {
+                "stdout": {
+                  "sha256": "46b91c0a005b3eccf6079c2f2f19e6b033a9ba173be02fa356c4fcbdb5c0c6f1",
+                  "tail": "custom-metrics-api/custom-metrics-apiserver-auth-delegator-cluster-role-binding.yaml - ClusterRoleBinding custom-metrics:system:auth-delegator failed validation: could not find schema for ClusterRoleBinding\ncustom-metrics-api/custom-metrics-apiserver-auth-reader-role-binding.yaml - RoleBinding custom-metrics-auth-reader failed validation: could not find schema for RoleBinding\ncustom-metrics-api/custom-metrics-apiserver-resource-reader-cluster-role-binding.yaml - ClusterRoleBinding custom-metrics-resource-reader failed validation: could not find schema for ClusterRoleBinding\ncustom-metrics-api/custom-metrics-apiservice.yaml - APIService v1beta1.custom.metrics.k8s.io failed validation: could not find schema for APIService\ncustom-metrics-api/custom-metrics-cluster-role.yaml - ClusterRole custom-metrics-server-resources failed validation: could not find schema for ClusterRole\ncustom-metrics-api/custom-metrics-resource-reader-cluster-role.yaml - ClusterRole custom-metrics-resource-reader failed validation: could not find schema for ClusterRole\ncustom-metrics-api/hpa-custom-metrics-cluster-role-binding.yaml - ClusterRoleBinding hpa-controller-custom-metrics failed validation: could not find schema for ClusterRoleBinding\ningress/ingress-nginx-rbac.yaml - RoleBinding nginx-ingress-role-nisa-binding failed validation: could not find schema for RoleBinding\ningress/ingress-nginx-rbac.yaml - ClusterRoleBinding nginx-ingress-clusterrole-nisa-binding failed validation: could not find schema for ClusterRoleBinding\ningress/ingress-nginx-rbac.yaml - ClusterRole nginx-ingress-clusterrole failed validation: could not find schema for ClusterRole\nmetrics-server/auth-delegator.yaml - ClusterRoleBinding metrics-server:system:auth-delegator failed validation: could not find schema for ClusterRoleBinding\ningress/ingress-nginx-rbac.yaml - Role nginx-ingress-role failed validation: could not find schema for Role\nmetrics-server/auth-reader.yaml - RoleBinding metrics-server-auth-reader failed validation: could not find schema for RoleBinding\nmetrics-server/metrics-apiservice.yaml - APIService v1beta1.metrics.k8s.io failed validation: could not find schema for APIService\npodinfo/podinfo-hpa-custom.yaml - HorizontalPodAutoscaler podinfo failed validation: could not find schema for HorizontalPodAutoscaler\npodinfo/podinfo-hpa.yaml - HorizontalPodAutoscaler podinfo failed validation: could not find schema for HorizontalPodAutoscaler\nprometheus/prometheus-rbac.yaml - ClusterRole prometheus failed validation: could not find schema for ClusterRole\nprometheus/prometheus-rbac.yaml - ClusterRoleBinding prometheus failed validation: could not find schema for ClusterRoleBinding\nSummary: 22 resources found in 15 files - Valid: 4, Invalid: 0, Errors: 18, Skipped: 0\n"
+                },
+                "stderr": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                }
+              }
+            }
+          ],
+          "flaky": [],
+          "files": [
+            {
+              "stdout": "stefanprodan-k8s-prom-hpa/kubernetes/build-1.stdout",
+              "stderr": "stefanprodan-k8s-prom-hpa/kubernetes/build-1.stderr"
+            },
+            {
+              "stdout": "stefanprodan-k8s-prom-hpa/kubernetes/build-2.stdout",
+              "stderr": "stefanprodan-k8s-prom-hpa/kubernetes/build-2.stderr"
+            }
+          ]
+        }
+      },
+      "metrics": {
+        "deterministic": true,
+        "applied": true,
+        "resolved": true,
+        "noNewFinding": true,
+        "idempotent": true,
+        "buildKeptGreen": false,
+        "testsKeptGreen": null
+      }
+    },
+    {
+      "fixer": "kubernetes-ingress-v1",
+      "patch": {
+        "path": "stefanprodan-k8s-prom-hpa/kubernetes-ingress-v1/fix.patch",
+        "sha256": "8478e2982da19b511faf61f1f1b61332702dffcf42256509df8267fadd1b554d"
+      },
+      "checks": {
+        "build": {
+          "schemaVersion": "offing.test-run.v1",
+          "command": [
+            "/usr/local/bin/kubeconform",
+            "-strict",
+            "-summary",
+            "-schema-location",
+            "./.offing-kubeconform-schemas/{{.ResourceKind}}{{.KindSuffix}}.json",
+            "custom-metrics-api/custom-metrics-apiserver-auth-delegator-cluster-role-binding.yaml",
+            "custom-metrics-api/custom-metrics-apiserver-auth-reader-role-binding.yaml",
+            "custom-metrics-api/custom-metrics-apiserver-resource-reader-cluster-role-binding.yaml",
+            "custom-metrics-api/custom-metrics-apiservice.yaml",
+            "custom-metrics-api/custom-metrics-cluster-role.yaml",
+            "custom-metrics-api/custom-metrics-resource-reader-cluster-role.yaml",
+            "custom-metrics-api/hpa-custom-metrics-cluster-role-binding.yaml",
+            "ingress/ingress-nginx-rbac.yaml",
+            "metrics-server/auth-delegator.yaml",
+            "metrics-server/auth-reader.yaml",
+            "metrics-server/metrics-apiservice.yaml",
+            "podinfo/podinfo-hpa-custom.yaml",
+            "podinfo/podinfo-hpa.yaml",
+            "podinfo/podinfo-ingress.yaml",
+            "prometheus/prometheus-rbac.yaml"
+          ],
+          "attempts": [
+            {
+              "exitCode": 0,
+              "durationMs": 282,
+              "status": "passed",
+              "totals": null,
+              "failures": [],
+              "logs": {
+                "stdout": {
+                  "sha256": "094c2b0a68d9331f2bee746013bf51863d83397f13b79c8437fec54c0869225a",
+                  "tail": "Summary: 22 resources found in 15 files - Valid: 22, Invalid: 0, Errors: 0, Skipped: 0\n"
+                },
+                "stderr": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                }
+              }
+            }
+          ],
+          "flaky": [],
+          "files": [
+            {
+              "stdout": "stefanprodan-k8s-prom-hpa/kubernetes-ingress-v1/build-1.stdout",
+              "stderr": "stefanprodan-k8s-prom-hpa/kubernetes-ingress-v1/build-1.stderr"
+            }
+          ]
+        }
+      },
+      "metrics": {
+        "deterministic": true,
+        "applied": true,
+        "resolved": true,
+        "noNewFinding": true,
+        "idempotent": true,
+        "buildKeptGreen": true,
+        "testsKeptGreen": null
+      }
+    }
+  ],
+  "baseline": {
+    "build": {
+      "schemaVersion": "offing.test-run.v1",
+      "command": [
+        "/usr/local/bin/kubeconform",
+        "-strict",
+        "-summary",
+        "-schema-location",
+        "./.offing-kubeconform-schemas/{{.ResourceKind}}{{.KindSuffix}}.json",
+        "custom-metrics-api/custom-metrics-apiserver-auth-delegator-cluster-role-binding.yaml",
+        "custom-metrics-api/custom-metrics-apiserver-auth-reader-role-binding.yaml",
+        "custom-metrics-api/custom-metrics-apiserver-resource-reader-cluster-role-binding.yaml",
+        "custom-metrics-api/custom-metrics-apiservice.yaml",
+        "custom-metrics-api/custom-metrics-cluster-role.yaml",
+        "custom-metrics-api/custom-metrics-resource-reader-cluster-role.yaml",
+        "custom-metrics-api/hpa-custom-metrics-cluster-role-binding.yaml",
+        "ingress/ingress-nginx-rbac.yaml",
+        "metrics-server/auth-delegator.yaml",
+        "metrics-server/auth-reader.yaml",
+        "metrics-server/metrics-apiservice.yaml",
+        "podinfo/podinfo-hpa-custom.yaml",
+        "podinfo/podinfo-hpa.yaml",
+        "podinfo/podinfo-ingress.yaml",
+        "prometheus/prometheus-rbac.yaml"
+      ],
+      "attempts": [
+        {
+          "exitCode": 0,
+          "durationMs": 297,
+          "status": "passed",
+          "totals": null,
+          "failures": [],
+          "logs": {
+            "stdout": {
+              "sha256": "094c2b0a68d9331f2bee746013bf51863d83397f13b79c8437fec54c0869225a",
+              "tail": "Summary: 22 resources found in 15 files - Valid: 22, Invalid: 0, Errors: 0, Skipped: 0\n"
+            },
+            "stderr": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            }
+          }
+        }
+      ],
+      "flaky": [],
+      "files": [
+        {
+          "stdout": "stefanprodan-k8s-prom-hpa/baseline/build-1.stdout",
+          "stderr": "stefanprodan-k8s-prom-hpa/baseline/build-1.stderr"
+        }
+      ]
+    }
+  }
+}

@@ -62,6 +62,8 @@ Requirements: Node.js 22 or newer.
 </tr>
 </table>
 
+**Fix evaluation, November 28, 2026.** [50 of 60 pinned repositories were measured, and workflow validation stayed green in all 45 GitHub Actions fixer cases](https://github.com/velella-sh/offing/blob/main/benchmarks/fix-evals/results/2026-11-28/report.json). [See per-fixer and agent results](https://velella.sh/offing/fix-evals/).
+
 ## What it covers
 
 Runtimes, package manifests and lockfiles, CI and infrastructure files across:

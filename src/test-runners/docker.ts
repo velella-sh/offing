@@ -42,8 +42,12 @@ export async function connectDocker(config: string) {
   throw new Error("A local Docker daemon is required. Start Docker and run again.");
 }
 
-export async function prepareImage(docker: Docker, profile: Profile, dockerfile: string): Promise<string> {
-  const { image } = profiles[profile];
+export async function prepareImage(
+  docker: Docker,
+  profile: Profile,
+  dockerfile: string,
+  image: string = profiles[profile].image,
+): Promise<string> {
   if (profile !== "kubernetes") {
     const installed = await docker(["image", "inspect", "--format", "{{.Os}}/{{.Architecture}}", image]).catch(
       () => null,
@@ -123,7 +127,8 @@ export function dockerArgs(name: string, image: string): string[] {
 
 export function dockerExecArgs(name: string, command: Command, attempt?: 1 | 2): string[] {
   const metadata = attempt === undefined ? [] : ["--env", "OFFING_TEST_ATTEMPT=" + attempt];
-  return ["exec", ...metadata, "--workdir", worktree, name, "timeout", "-k", "5s", "130s", ...command];
+  // BusyBox and GNU both accept a bare seconds value. The caller aborts and removes the sandbox first.
+  return ["exec", ...metadata, "--workdir", worktree, name, "timeout", "130", ...command];
 }
 
 function commandFailure(error: unknown): { exitCode: number; stdout: Buffer; stderr: Buffer } | null {

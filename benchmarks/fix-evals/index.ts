@@ -3,39 +3,27 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { configureActiveData, getActiveDataSync } from "@velella/ebb/data-source";
-import { z } from "zod";
 
 import { fixers } from "../../src/fix/index.js";
+import { readBounded } from "../../src/forecast-tool/remote/body.js";
 import { archiveTree, connectDocker, prepareImage, sandbox } from "../../src/test-runners/docker.js";
-import { isProfile, type Profile } from "../../src/test-runners/profiles.js";
-import { evaluate, type Evidence, type Input, scannedAt } from "./evaluate.js";
+import { isProfile } from "../../src/test-runners/profiles.js";
+import { type Asset, type Candidate, readCohort } from "./cohort.js";
+import { evaluate, type Evidence, scannedAt, sha256 } from "./evaluate.js";
 import { summarize } from "./report.js";
 import { proveRunnerProfiles } from "./runner-fixtures.js";
 import { checkoutPublic, fixtureSource, tempSource } from "./source.js";
 import { isFixtureTool, proveTestTools } from "./tool-fixtures.js";
 
-const repositoriesPath = "benchmarks/fix-evals/repositories.json";
-const fileName = z.string().regex(/^[a-z][a-z0-9-]*$/u);
-const publicCases = z
-  .array(
-    z.strictObject({
-      id: fileName,
-      repository: z.string().regex(/^[a-z0-9][a-z0-9_.-]*\/[a-z0-9][a-z0-9_.-]*$/iu),
-      commit: z.string().regex(/^[a-f0-9]{40}$/u),
-      profile: z.custom<Profile>((value) => typeof value === "string" && isProfile(value)),
-    }),
-  )
-  .min(1);
-
-async function inputs(fixtures: boolean): Promise<Input[]> {
-  if (fixtures) return ["green", "red"].map((id) => ({ id, repository: null, commit: null, profile: "npm" }));
-  const data: unknown = JSON.parse(await readFile(repositoriesPath, "utf8"));
-  const rows = publicCases.parse(data);
-  if (new Set(rows.map(({ id }) => id)).size !== rows.length) throw new Error("Duplicate fix-evals case ID.");
-  if (new Set(rows.map(({ repository }) => repository.toLowerCase())).size !== rows.length) {
-    throw new Error("A public repository can occur only once in the fix-evals selection.");
+async function inputs(fixtures: boolean): Promise<{ candidates: Candidate[]; selectionRevision: string | null }> {
+  if (fixtures) {
+    return {
+      selectionRevision: null,
+      candidates: ["green", "red"].map((id) => ({ input: { id, repository: null, commit: null, profile: "npm" } })),
+    };
   }
-  return rows;
+  const { revision, candidates } = await readCohort();
+  return { selectionRevision: revision, candidates };
 }
 
 async function writeJson(path: string, value: unknown): Promise<void> {
@@ -43,7 +31,19 @@ async function writeJson(path: string, value: unknown): Promise<void> {
   await writeFile(path, `${JSON.stringify(value, null, 2)}\n`, { flag: "wx" });
 }
 
-async function run(out: string, rows: Input[], selected: typeof fixers): Promise<void> {
+async function stageAsset(root: string, asset: Asset): Promise<void> {
+  const response = await fetch(asset.url, { credentials: "omit", signal: AbortSignal.timeout(30_000) });
+  if (!response.ok) throw new Error(`Could not read pinned evaluation input ${asset.path}.`);
+  const bytes = await readBounded(response, 24 * 1024 * 1024, asset.path);
+  if (asset.sha256 !== undefined && sha256(Buffer.from(bytes)) !== asset.sha256) {
+    throw new Error(`Pinned evaluation input ${asset.path} did not match its SHA-256.`);
+  }
+  const path = join(root, asset.path);
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, bytes, { flag: "wx" });
+}
+
+async function run(out: string, rows: Awaited<ReturnType<typeof inputs>>, selected: typeof fixers): Promise<void> {
   const output = resolve(out);
   const revision = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8", timeout: 5000 }).trim();
   await mkdir(dirname(output), { recursive: true });
@@ -51,23 +51,30 @@ async function run(out: string, rows: Input[], selected: typeof fixers): Promise
   await tempSource(async (config) => {
     configureActiveData({ cacheDirectory: config });
     const docker = await connectDocker(config);
-    const images = new Map<Profile, string>();
+    const images = new Map<string, string>();
     const evidence: Evidence[] = [];
-    for (const input of rows) {
-      const load = (root: string) =>
-        input.repository !== null && input.commit !== null
-          ? checkoutPublic(root, input.repository, input.commit)
-          : fixtureSource(root, join("tests/fixtures/fix-evals", input.id));
+    for (const { input, commands, paths, image: expectedImage, assets = [] } of rows.candidates) {
+      const load = async (root: string) => {
+        if (input.repository !== null && input.commit !== null) {
+          await checkoutPublic(root, input.repository, input.commit);
+        } else {
+          await fixtureSource(root, join("tests/fixtures/fix-evals", input.id));
+        }
+        for (const asset of assets) await stageAsset(root, asset);
+      };
       const result = await evaluate(input, load, {
         output,
         fixers: selected,
+        ...(commands === undefined ? {} : { commands }),
+        ...(paths === undefined ? {} : { paths }),
         async backend(profile, root) {
-          let image = images.get(profile);
+          const profileKey = expectedImage === undefined ? profile : `${profile}:${expectedImage}`;
+          let image = images.get(profileKey);
           if (image === undefined) {
             const dockerfile =
               profile === "kubernetes" ? await readFile("benchmarks/fix-evals/Dockerfile.kubeconform", "utf8") : "";
-            image = await prepareImage(docker, profile, dockerfile);
-            images.set(profile, image);
+            image = await prepareImage(docker, profile, dockerfile, expectedImage);
+            images.set(profileKey, image);
           }
           return sandbox(docker, image, await archiveTree(root));
         },
@@ -83,7 +90,9 @@ async function run(out: string, rows: Input[], selected: typeof fixers): Promise
       revision,
       scannedAt,
       ebb: getActiveDataSync().info.version,
-      fixtures: rows.every(({ repository }) => repository === null),
+      selectionRevision: rows.selectionRevision,
+      selected: rows.candidates.length,
+      fixtures: rows.selectionRevision === null,
       images: Object.fromEntries(images),
     });
   });

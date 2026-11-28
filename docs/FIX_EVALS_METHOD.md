@@ -16,7 +16,8 @@ npm run fix-evals -- --fixtures --runner-profile all
 npm run fix-evals -- --fixtures --runner-tool all
 ```
 
-The evaluation pilot uses the public candidate list in
+The command reads the checked-in public selection and records one outcome or exclusion for every pin. The
+earlier four-repository pilot is retained in
 [`benchmarks/fix-evals/repositories.json`](https://github.com/velella-sh/offing/blob/main/benchmarks/fix-evals/repositories.json).
 
 ## Selection and isolation
@@ -41,7 +42,10 @@ input hashes or source commits needed to recreate that environment.
 
 A candidate identifies a public GitHub repository, a full commit SHA, and the build or validation profile. An eligible
 repository must produce a patch with the current Offing registry and have a passing baseline for every check that
-profile defines. Static validators only score plans whose patched paths are all in the validation scope. The evidence lists candidates with no patch and those whose baseline failed or timed out. A failing
+profile defines. The current plan is limited to the recorded patch paths that the baseline validates. The evidence
+lists candidates with no patch, failed or timed-out baselines, and pins with no comparable offline profile. The last
+category includes upstream-only build jobs, a nested Docker build, and cases with dependency caches that cannot be
+recreated by the runner. A failing
 or timed-out baseline is retained with its first attempt and any retry. Retrying never promotes a failed baseline.
 
 The harness fetches pinned Git objects over HTTPS and no application credentials are forwarded. Trees containing
@@ -66,6 +70,10 @@ execution.
 | Terraform | `terraform validate` | No separate check |
 | Kubernetes | `kubeconform` with pinned inputs in `manifests/` and `schemas/` | No separate check |
 | GitHub Actions | `actionlint` over workflow files | No separate check |
+
+Several source pins include their own recorded checks. The Go profile keeps its scratch cache in the container, the
+small Node projects run their recorded syntax checks and tests, and the Terraform and Kubernetes pins stage their
+recorded public provider or schemas. Provider bytes are checked against their SHA-256 before the isolated run.
 
 The offline profiles exclude projects whose commands require missing dependencies, registries, live services, or
 unavailable fixtures. Use versioned vendored materials in the pinned source. Validation profiles do not run workflow
@@ -123,5 +131,11 @@ check one log against its attempt. Raw output may contain text printed by an eva
 data. An infrastructure failure aborts the run without a summary so partial output cannot be mistaken for a complete
 run. Individual command output and source archive sizes are bounded.
 
-The deterministic report is separate from the agent-assisted evaluation. The release page and its comparison
-require the completed public cohort and the independently verified agent results.
+The [fix evaluation page](/fix-evals/) displays the measured cohort and all exclusions. It reads the latest dated
+report under [`benchmarks/fix-evals/results/`](https://github.com/velella-sh/offing/tree/main/benchmarks/fix-evals/results).
+Each report includes a SHA-256 for its adjacent evidence archive. Extract it to inspect the raw logs and patches
+identified by the report and failure records. The weekly workflow proposes a pull request when the measured counts
+change. GitHub's artifact retains the run evidence when the counts stay the same.
+
+The page attributes the agent-assisted results to their separate runs and displays static and project-check
+denominators separately. [Agent migration method](/BENCHMARKS/)

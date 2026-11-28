@@ -10,6 +10,18 @@ network:
 include:
   - .well-known
 collections:
+  fix-evals-run:
+    source: _data/fix-evals-run.json
+    id: id
+    template: _templates/fix-evals.md
+    permalink: /{id}/
+    markdown: [evidence, failureLinks, agentLinks]
+  fix-evals-fixers:
+    source: _data/fix-evals-fixers.json
+    id: id
+  fix-evals-agent:
+    source: _data/fix-evals-agent.json
+    id: id
   comparison-losses:
     source: _data/comparison-losses.json
     id: id
