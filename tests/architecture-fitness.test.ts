@@ -6,6 +6,7 @@ import { after, test } from "node:test";
 
 import * as root from "../src/index.js";
 import * as conformance from "../src/conformance/index.js";
+import * as forecastTool from "../src/forecast-tool.js";
 import * as mcp from "../src/mcp.js";
 import * as proof from "../src/proof/publish.js";
 import * as sdk from "../src/sdk.js";
@@ -129,6 +130,10 @@ const EXPORTS = {
     module: conformance,
     names: ["CONFORMANCE_API_VERSION", "ConformanceError", "runDetectorConformance"],
   },
+  "./forecast-tool": {
+    module: forecastTool,
+    names: ["contractVersion", "inputs", "maxInputBytes", "name", "recordsSchema", "run"],
+  },
   "./proof": {
     module: proof,
     names: ["prepareAutopilotProofPublication", "prepareProofPublication"],
@@ -176,6 +181,7 @@ test("public API shape: package.json exposes exactly the reviewed entry points",
       "./schemas/campaign-state.v1.schema.json",
       "./schemas/campaign.v1.schema.json",
       "./schemas/fleet.v1.schema.json",
+      "./schemas/forecast-records.v1.schema.json",
       "./schemas/lineage.v1.schema.json",
       "./schemas/proof.v1.schema.json",
       "./schemas/whatif.v1.schema.json",

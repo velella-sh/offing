@@ -61,7 +61,12 @@
     "./schemas/lineage.v1.schema.json": "./schemas/lineage.v1.schema.json",
     "./schemas/proof.v1.schema.json": "./schemas/proof.v1.schema.json",
     "./schemas/whatif.v1.schema.json": "./schemas/whatif.v1.schema.json",
-    "./schemas/stack-context.v1.schema.json": "./schemas/stack-context.v1.schema.json"
+    "./schemas/stack-context.v1.schema.json": "./schemas/stack-context.v1.schema.json",
+    "./forecast-tool": {
+      "types": "./dist/src/forecast-tool.d.ts",
+      "import": "./dist/src/forecast-tool.js"
+    },
+    "./schemas/forecast-records.v1.schema.json": "./schemas/forecast-records.v1.schema.json"
   },
   "bin": {
     "offing": "dist/src/cli.js"

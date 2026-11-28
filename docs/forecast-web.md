@@ -45,22 +45,31 @@ date range, Ebb data version, weather and counts. Each time bucket precedes the
 findings it contains. A finding's `bucketUntil` identifies its bucket, and its
 `source` links to the lifecycle evidence.
 
-The file record gives the selected filename or identifies pasted input. A
+Each file record gives a processed file's name or identifies pasted input. A
 `no-data` notice names an unclassified reference and explains the gap.
 `no-supported-declarations` reports an input with no recognized declarations.
 The final record contains the locally generated iCalendar text and its media type.
 
-## Tool island adapter in development
+## Forecast tool module
 
-The forecast module accepts file bytes or pasted text from the host. It
-requests the named Ebb bundle through the host's relative data reader and
-verifies the signature and release version before using it. The file and
-paste modes process input locally. The result includes forecast records and
-a text calendar record for the host to present as a download.
+Import `run` and `contractVersion` from `@velella/offing/forecast-tool`.
+Version 1 of this Offing interface accepts a file's bytes, pasted text or a
+repository selector from the host. The module requests just the named Ebb
+bundle through `context.data(name)` and verifies its signature and version.
+File and paste modes process input locally and make no fetch calls.
 
-The `acc-forecast-island` fixture tests verify this behavior with a signed
-local dataset. Connecting the module to the public page depends on Mizzen
-0.2.8 and Lateen 0.2.6.
+Pass an `AbortSignal` in `context.signal` to cancel the run. A forecast
+returns a status, a message and typed records including a calendar download.
+Validate a populated record list using the schema exported as
+`@velella/offing/schemas/forecast-records.v1.schema.json`. Errors and
+repository selections with no supported files return an empty list.
+A run accepts up to 5 MiB of input, 10,000 declarations and 10,000
+matched lifecycle rules. Serialized records are limited to 5 MiB.
+
+The `acc-forecast-island` tests verify file, paste and repository modes with
+a signed local fixture. The public page continues to use its existing file and
+paste form. Integration and conformance checks with the Mizzen and Lateen
+tool host are tracked in [#565](https://github.com/velella-sh/offing/issues/565).
 
 ### Refresh the signed Ebb data pin
 
@@ -80,14 +89,16 @@ Update the file name, version, public key and signature in
 both the Sigstore attestation and the embedded key and signature against
 the downloaded bytes.
 
-## Repository link adapter in development
+## Public repository selectors
 
-The adapter accepts the tool host's URL value `github/<owner>/<repo>` or
-`github/<owner>/<repo>@<ref>`, with `HEAD` as the default ref. Its focused
-acceptance check, `acc-forecast-link`, runs the adapter against a GitHub-shaped
-fixture. The public page uses the file and paste inputs described above.
+The module accepts a `{ kind: "url", value }` input. The value is
+`github/<owner>/<repo>` or `github/<owner>/<repo>@<ref>`, with `HEAD` as
+the default ref. For a selector taken from a URL fragment, pass the value
+without the leading `#`. After the user approves access to GitHub, the host can
+provide `context.publicRepositoryFetch`. A selector submitted before that
+approval returns an error without requesting data or using the network.
 
-The adapter makes one unauthenticated Git Trees request to
+The module makes one unauthenticated Git Trees request to
 `https://api.github.com` and reads selected files from
 `https://raw.githubusercontent.com` using the fetch supplied by the host.
 It omits credentials and refuses redirects. It selects regular files with
@@ -98,5 +109,5 @@ A truncated or invalid tree produces an error before any file downloads.
 A branch or tag can move during a forecast. The adapter checks the Git blob
 ID of each downloaded file against the tree listing. Use a commit SHA for
 a reproducible link. A rate-limit message gives the remaining requests and
-the UTC reset time when GitHub sends those values. A host can cancel the
-current adapter request with its abort signal.
+the UTC reset time when GitHub sends those values. Each fetched file is
+listed in the result and contributes to the same forecast.
