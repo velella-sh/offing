@@ -116,6 +116,19 @@ test("namespace Fleet name filters still resolve the selected default branch nor
   );
 });
 
+test("the Fleet CLI distinguishes invalid public pins from invalid namespace repository names", async (t) => {
+  const root = await workspace(t);
+  const file = join(root, "repositories.txt");
+  await writeFile(file, "github/owner/project@HEAD\n");
+  const fleet = (...args: string[]) => run(process.execPath, [binary, "fleet", ...args], { cwd: root });
+  await assert.rejects(
+    fleet("--repos", file),
+    /Pinned --repos needs unique github\/owner\/repository@40-character-SHA/,
+  );
+  await assert.rejects(fleet("example", "--gitlab", "--repos", file), /must contain one repository name per line/);
+  await assert.rejects(fleet("--repos", file, "--gitlab"), /Usage: offing fleet <organization\|group>/);
+});
+
 async function fixture<T>(name: string): Promise<T> {
   return JSON.parse(await readFile(join(fixtures, `${name}.json`), "utf8")) as T;
 }
