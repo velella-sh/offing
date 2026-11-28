@@ -1,6 +1,9 @@
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-night.svg"><img src="https://raw.githubusercontent.com/velella-sh/offing/main/.github/assets/mark-day.svg" width="96" height="96" alt="Offing"></picture></p>
 <h1 align="center">Offing</h1>
 <p align="center"><strong>See what's in the offing. Fix it before it lands.</strong><br>Local-first end-of-life and deprecation scanner for your repository.</p>
+
+![Offing 0.1.1 terminal recording of a twelve-month forecast locating an unsupported actions/checkout runtime in a workflow](https://velella.sh/offing/demos/forecast.gif)
+
 <p align="center"><a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/velella-sh/offing/ci.yml?branch=main&label=CI&logo=github&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
   <a href="https://github.com/velella-sh/offing/actions/workflows/ci.yml"><img alt="Coverage" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fvelella-sh%2Foffing%2Fbadges%2Fcoverage.json&labelColor=1F1F28&style=flat"></a>
   <a href="https://www.npmjs.com/package/@velella/offing"><img alt="npm" src="https://img.shields.io/npm/v/@velella/offing?logo=npm&logoColor=white&labelColor=1F1F28&color=6A5590&style=flat"></a>
@@ -29,6 +32,10 @@ The [quickstart guide](https://velella.sh/offing/QUICKSTART/) covers the first-r
 <p align="center">
   <img src="https://raw.githubusercontent.com/velella-sh/offing/main/docs/assets/demos/scan.gif" alt="Terminal recording: npx @velella/offing scan . lists the outdated runtime, package and GitHub Action in the demo project with file, line, severity and replacement">
 </p>
+
+![Offing 0.1.1 terminal recording of the dependency guard showing the deprecation evidence for request 2.88.2](https://velella.sh/offing/demos/guard.gif)
+
+The dependency guard stops a dry-run install of deprecated `request@2.88.2` before npm runs.
 
 ## Guides and evidence
 
