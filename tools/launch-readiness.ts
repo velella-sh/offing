@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { nodeFileSystem } from "../src/node-file-system.js";
+import { readReleaseDemos } from "./launch-readiness/demos.js";
 import {
   countMilestoneIssues,
   countP0Bugs,
@@ -25,7 +26,7 @@ const thresholds = {
   "Public pages":
     "Green when every sitemap URL returns 200 with its built title. Amber when inventory or title evidence is unavailable. Red when an HTTP or title mismatch is observed.",
   "Release demos":
-    "Green when every demo names the released version. Amber when the manifest is unavailable. Red when recorded media is missing or built for a different version.",
+    "Green when the inventory matches the released version and recorded digests. Amber when the release or manifest is unavailable. Red when a version or file differs.",
   "Cold install":
     "Green when every supported OS and Node.js pair reaches first output in under 10 seconds. Amber when the matrix is incomplete. Red when a required pair fails or takes at least 10 seconds.",
   "Documentation and README":
@@ -52,6 +53,7 @@ type ReadinessInput = {
   site?: SiteEvidence;
   timing?: string;
   version?: string;
+  demoRoot?: string;
 };
 
 function check(name: CheckName, status: Status, observed: string, evidence: string[]) {
@@ -132,6 +134,7 @@ export async function collectReadiness(input: ReadinessInput, fetcher: typeof fe
     siteCheck(input.site, fetcher),
     releaseChecks(input, fetcher),
   ]);
+  const demos = await readReleaseDemos(input.demoRoot ?? ".", input.commit, release.release);
   return {
     formatVersion: 1,
     date: input.date,
@@ -139,7 +142,7 @@ export async function collectReadiness(input: ReadinessInput, fetcher: typeof fe
     release: release.release ?? null,
     checks: [
       site.result,
-      outstanding("Release demos", 1037),
+      check("Release demos", demos.status, demos.observed, demos.evidence),
       release.cold,
       outstanding("Documentation and README", 1041),
       check(

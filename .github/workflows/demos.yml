@@ -10,6 +10,7 @@ on:
       - "docs/assets/demos/**"
       - "docs/demos/**"
       - "tools/demo-manifest.ts"
+      - "tools/demo-captions.ts"
       - ".github/workflows/demos.yml"
   push:
     branches: [main]
@@ -18,6 +19,7 @@ on:
       - "docs/assets/demos/**"
       - "docs/demos/**"
       - "tools/demo-manifest.ts"
+      - "tools/demo-captions.ts"
       - ".github/workflows/demos.yml"
   workflow_dispatch:
     inputs:
@@ -69,9 +71,19 @@ jobs:
           sudo install -m 0755 "$RUNNER_TEMP/vhs" "$RUNNER_TEMP/ttyd" /usr/local/bin/
           vhs --version
           ttyd --version
-      - name: Check every tape
+      - name: Resolve the published demo version
+        id: release
+        if: inputs.version == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag=$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq .tag_name)
+          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          printf 'version=%s\n' "${tag#v}" >> "$GITHUB_OUTPUT"
+      - name: Verify the demo inventory and render tapes
         env:
           OFFING_VERSION: ${{ inputs.version }}
+          OFFING_DEMO_MANIFEST_VERSION: ${{ steps.release.outputs.version }}
           VHS_NO_SANDBOX: "true"
           OFFING_DEMO_MANIFEST_REGRESSION: ${{ github.event_name == 'pull_request' && '1' || '0' }}
         run: |

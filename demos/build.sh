@@ -172,26 +172,41 @@ check_tapes() {
 
 case ${1:-} in
   --check | --check-source)
-    if [[ $1 == --check-source ]]; then
+    check_mode=$1
+    if [[ $check_mode == --check-source ]]; then
       prepare_cli source
+      expected_version=${OFFING_DEMO_MANIFEST_VERSION:-}
     else
       prepare_cli release
+      expected_version=$OFFING_VERSION
     fi
     shift
+    if [[ -n $expected_version ]]; then
+      node dist/tools/demo-manifest.js --check "$expected_version"
+    else
+      node dist/tools/demo-manifest.js --check
+    fi
+    node dist/tools/demo-manifest.js --check-captions
+
     tapes=()
     for name in "$@"; do
       tapes+=("$(tape_path "$name")")
     done
     if (( ${#tapes[@]} == 0 )); then
-      tapes=(demos/*.tape)
+      if [[ $check_mode == --check-source ]]; then
+        tapes=(demos/*.tape)
+      else
+        released_tapes=$(node -p 'require("./docs/demos/manifest.json").recordings.map(({ tape }) => tape.path).join("\n")')
+        while IFS= read -r tape; do tapes+=("$tape"); done <<< "$released_tapes"
+      fi
     fi
-    node dist/tools/demo-manifest.js --check
     check_tapes "${tapes[@]}"
     exit ;;
   --record)
     tape=$(tape_path "${2:?pass a tape name}")
     prepare_cli release
     if [[ $tape == demos/guard-agent.tape ]]; then
+      node dist/tools/demo-manifest.js --write-captions
       render_guard_agent "$build_dir/agent"
       mv -- "$build_dir/agent/guard-agent.mp4" docs/demos/guard-agent.mp4
     else
@@ -206,6 +221,7 @@ case ${1:-} in
     exit 2 ;;
 esac
 
+node dist/tools/demo-manifest.js --write-captions
 for name in guard forecast; do
   vhs "demos/$name.tape" -o "$build_dir/$name-source.gif,$build_dir/$name-source.mp4"
   ffmpeg -v error -nostdin -y -i "$build_dir/$name-source.mp4" \

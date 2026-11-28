@@ -37,11 +37,14 @@ Sizes are rounded for media. The forecast GIF is also linked from the
 
 ## Release recording manifest
 
-The [manifest](manifest.json) records the npm version, tape hashes, and the hashes and byte sizes of the featured forecast and guard exports and captions. It covers the recordings rebuilt with the published package. The first-run candidate is documented above with its tarball digest.
+The [manifest](manifest.json) records the npm version and the tape, caption, and media digests for the released forecast, guard, and Codex guard recordings. Every file in `docs/demos/` and `docs/assets/demos/` is checked against the inventory, apart from this guide, the manifest, and the empty directory marker. All GIFs must be smaller than 3 MB.
+
+The inventory also records supplemental media by exact file and source commit. The seven historical README recordings of baseline, check, explain, fix, lookup, scan, and setup preserve the bytes from [the original recording change](https://github.com/velella-sh/offing/commit/08709fe36c752c64a3310599a1ea913dbc4a158b). The Autopilot GIF shows the [source replay](https://github.com/velella-sh/offing/commit/b821f1ce170475aea318e7e72dc93a1c1af700ee), and the first-run GIF uses the candidate described above. These files carry their own provenance in the manifest. Regenerating the manifest rejects a supplemental file whose bytes differ from its recorded source. Regenerate a released export against the published CLI before claiming its package version.
 
 After building the featured exports from the selected npm version, run:
 
 ```bash
+node dist/tools/demo-manifest.js --check-captions
 node dist/tools/demo-manifest.js --write 0.1.1
 node dist/tools/demo-manifest.js --check 0.1.1
 ```
@@ -60,11 +63,12 @@ OFFING_VERSION=0.1.1 bash demos/build.sh
 ```
 
 The script installs that exact npm version once with package scripts disabled.
-The guard and forecast tapes export 12 fps GIFs with 128-color palettes
-and captioned MP4s. The checkout supplies the example files. The
+The build turns the timed caption cues annotated in the featured tapes into SRT files before encoding the MP4s. The guard and forecast tapes export 12 fps GIFs with 128-color palettes and captioned MP4s. The checkout supplies the example files. The
 [Codex replay](https://github.com/velella-sh/offing/blob/main/demos/SCRIPT.md)
 uses a digest-pinned Docker renderer and preserves the recorded prompt, refusal,
-and fallback. Rebuild just that MP4 with
+and fallback. The published 0.1.1 CLI predates the Codex write hook, so the
+released-package replay validates the finding with `offing check` and uses
+the original recording for the refusal text. Rebuild just that MP4 with
 `OFFING_VERSION=0.1.1 bash demos/build.sh --record guard-agent`.
 
 Run `OFFING_VERSION=0.1.1 bash demos/build.sh --check guard-agent` to check
@@ -72,9 +76,7 @@ the replay against that release. Use `bash demos/build.sh --check-source`
 to smoke-test all tapes against the checkout, as pull request CI does. The Codex
 replay check compares two 30-second rebuilds and the checked-in MP4. The other
 tape checks shorten display pauses. The checks discard the rendered files.
-The Demos workflow accepts an exact version for a hosted check of the released
-package. To check a specific tape on a release that supports it, pass its name
-to the local check. Test the first-run tape from a candidate with
+The Demos workflow compares the inventory version with the latest published GitHub release. Dispatch it with an exact version to install that package and replay the released recordings. Pass a tape name to the local check when you want to replay one tape. Test the first-run tape from a candidate with
 `bash demos/build.sh --check-source first-run`.
 
 ## Other tape sources
