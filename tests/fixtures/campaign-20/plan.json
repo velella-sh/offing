@@ -1,0 +1,518 @@
+{
+  "schemaVersion": "offing.campaign-state.v1",
+  "id": "node-18-to-22-demo",
+  "asOf": "2026-11-27",
+  "batching": {
+    "size": 5,
+    "concurrency": 4,
+    "minGapMinutes": 30,
+    "maxFailureRate": 0.25
+  },
+  "target": {
+    "runtime": "nodejs",
+    "version": "22"
+  },
+  "repositories": [
+    {
+      "host": "https://github.com",
+      "name": "example/service-01",
+      "commit": "9a6b23435e8784e9bc913c32d29d51dd1820aa72",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-03",
+      "commit": "7d3c64af2e48e7f70281be83336b3b19845203c9",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-05",
+      "commit": "8dd9afe49c25d1b897fad256146611e16209936e",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-07",
+      "commit": "bb28476aeac1ea7764322f8b7e6855e3b385b35f",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-09",
+      "commit": "58e8a2ffd0befed5fcd9c18b71590eed889660f0",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-11",
+      "commit": "87c319784e65aca396fd45d8ba7fe30f2e82b743",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-13",
+      "commit": "47b71ad2127cac29aead39cc712723954efaf870",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-15",
+      "commit": "71bf8cbb9a6f52a6a554dade5dd294f685ff57c8",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-17",
+      "commit": "f922377d553b5d3755c8b884b60bdbf19d7df3e0",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-19",
+      "commit": "266d7bfa1d404f6a14371945f2bf8aca99b42ebd",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-02",
+      "commit": "33ff46c2bdae43fee553d5fff23e10e2f0822c9b",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-04",
+      "commit": "000434213ec7705d41d9a73c657a5552a2cb7fa8",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-06",
+      "commit": "99acf1563d3f3564a0e2230ccab5ad05c7bc751e",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-08",
+      "commit": "96e6b3cb9d9ee46ddc579f0bcb70059faa7ffec7",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-10",
+      "commit": "4a8352807c33bf39a0546ca7953a1bba0b15f37d",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-12",
+      "commit": "c32c59628965e3e99444144562236a612858cf97",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-14",
+      "commit": "ed9fc20a78d5e646ab09a378d85a20b63449ec29",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-16",
+      "commit": "912c5d2f8fdb80a54ee8d664253f4e21dd5b220e",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-18",
+      "commit": "8b2339ff6ec9900d8b9f1b5281ed50d8cf35eca8",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "queued",
+      "transitions": []
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-20",
+      "commit": "de3eba904ea26e44496ed8597d140533cc927302",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "queued",
+      "transitions": []
+    }
+  ],
+  "omissions": []
+}

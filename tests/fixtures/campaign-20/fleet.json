@@ -1,0 +1,826 @@
+{
+  "schemaVersion": "offing.fleet.v1",
+  "forecastAsOf": "2026-11-27",
+  "repositoryStatus": [
+    {
+      "name": "example/service-01",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "9a6b23435e8784e9bc913c32d29d51dd1820aa72",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "example/service-03",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "7d3c64af2e48e7f70281be83336b3b19845203c9",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/platform"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "example/service-05",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "8dd9afe49c25d1b897fad256146611e16209936e",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "example/service-07",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "bb28476aeac1ea7764322f8b7e6855e3b385b35f",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "example/service-09",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "58e8a2ffd0befed5fcd9c18b71590eed889660f0",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/platform"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "example/service-11",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "87c319784e65aca396fd45d8ba7fe30f2e82b743",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "example/service-13",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "47b71ad2127cac29aead39cc712723954efaf870",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "example/service-15",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "71bf8cbb9a6f52a6a554dade5dd294f685ff57c8",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/platform"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "example/service-17",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "f922377d553b5d3755c8b884b60bdbf19d7df3e0",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "example/service-19",
+      "host": "https://github.com",
+      "defaultBranch": "main",
+      "commit": "266d7bfa1d404f6a14371945f2bf8aca99b42ebd",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-02",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "33ff46c2bdae43fee553d5fff23e10e2f0822c9b",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-04",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "000434213ec7705d41d9a73c657a5552a2cb7fa8",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-06",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "99acf1563d3f3564a0e2230ccab5ad05c7bc751e",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/platform"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-08",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "96e6b3cb9d9ee46ddc579f0bcb70059faa7ffec7",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-10",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "4a8352807c33bf39a0546ca7953a1bba0b15f37d",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-12",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "c32c59628965e3e99444144562236a612858cf97",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/platform"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-14",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "ed9fc20a78d5e646ab09a378d85a20b63449ec29",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-16",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "912c5d2f8fdb80a54ee8d664253f4e21dd5b220e",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-18",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "8b2339ff6ec9900d8b9f1b5281ed50d8cf35eca8",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/platform"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "fixture/service-20",
+      "host": "https://gitlab.example.invalid/forge",
+      "defaultBranch": "main",
+      "commit": "de3eba904ea26e44496ed8597d140533cc927302",
+      "status": "scanned",
+      "reason": null,
+      "forecastEvidence": {
+        "findings": [
+          {
+            "ruleId": "nodejs.runtime.eol-18",
+            "location": {
+              "path": "package.json",
+              "line": 5
+            },
+            "deadline": "2025-04-30",
+            "owners": [
+              "@fixture/runtime"
+            ]
+          }
+        ],
+        "noData": []
+      },
+      "campaignEvidence": {
+        "date": "2026-11-27",
+        "runtimePins": [],
+        "codemods": [
+          "runtime-pins"
+        ],
+        "checks": [
+          {
+            "kind": "test",
+            "command": [
+              "npm",
+              "run",
+              "test"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

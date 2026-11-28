@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "offing.campaign.v1",
+  "id": "node-18-to-22-demo",
+  "asOf": "2026-11-27",
+  "select": {
+    "ruleId": "nodejs.runtime.eol-18"
+  },
+  "target": {
+    "runtime": "nodejs",
+    "version": "22"
+  },
+  "batching": {
+    "size": 5,
+    "concurrency": 4,
+    "minGapMinutes": 30,
+    "maxFailureRate": 0.25
+  }
+}

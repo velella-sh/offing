@@ -6,7 +6,7 @@ import { join, resolve } from "node:path";
 import { promisify } from "node:util";
 import { parse } from "yaml";
 
-const [cli, packageDirectory, tools, fixture] = process.argv.slice(2).map((path) => resolve(path));
+const [cli, packageDirectory, tools, fixture, demo] = process.argv.slice(2).map((path) => resolve(path));
 assert(cli && packageDirectory && tools && fixture, "Expected installed CLI, package directory, site tools and synthetic state");
 const run = promisify(execFile);
 const work = await mkdtemp(join(tmpdir(), "offing-campaign-board-smoke-"));
@@ -48,14 +48,27 @@ async function verifyDispatch() {
     assert.match(error.stderr, /Usage: offing fleet <organization\|group>/);
     return true;
   });
-  const { stdout } = await invoke(["campaign", "status", fixture, "--json"]);
-  assert.deepEqual(JSON.parse(stdout), JSON.parse(await read(fixture)));
-  const source = join(work, "export");
-  await invoke(["campaign-board", fixture, "--out", source]);
+  await verifyLedger(invoke, fixture, "compact");
+  if (demo) {
+    const board = await verifyLedger(invoke, demo, "twenty");
+    const [summary] = JSON.parse(await read(join(board, "_data/summary.json")));
+    assert.deepEqual(
+      [summary.total, summary.merged, summary.awaitingReview],
+      [20, 8, 3],
+    );
+  }
+}
+
+async function verifyLedger(invoke, file, name) {
+  const { stdout } = await invoke(["campaign", "status", file, "--json"]);
+  assert.deepEqual(JSON.parse(stdout), JSON.parse(await read(file)));
+  const source = join(work, "export-" + name);
+  await invoke(["campaign-board", file, "--out", source]);
   assert.equal((await readdir(source, { recursive: true })).some((path) => /\.(html|css)$/i.test(path)), false);
   await run(process.execPath, [
     join(tools, "@velella/mizzen/bin/mizzen.js"), "check", source, "--theme", join(tools, "@velella/lateen"),
   ], { cwd: work, timeout: 60_000, env: cleanEnv });
+  return source;
 }
 
 async function assertBoard(site, base) {
