@@ -222,9 +222,13 @@ function remoteFleetHost(
   };
 }
 
+export function forgeApi(gitlab: boolean, base: URL): URL {
+  return gitlab ? new URL("api/v4/", base) : new URL(GITHUB_API);
+}
+
 export function githubFleetHost(token?: string, options: RemoteOptions = {}): FleetHost {
   return remoteFleetHost(
-    new URL(options.api ?? GITHUB_API),
+    options.api ? new URL(options.api) : forgeApi(false, new URL(GITHUB_ORIGIN)),
     new URL(options.origin ?? GITHUB_ORIGIN),
     false,
     token,
@@ -234,7 +238,7 @@ export function githubFleetHost(token?: string, options: RemoteOptions = {}): Fl
 
 export function gitlabFleetHost(url: string, token?: string, options: RemoteOptions = {}): FleetHost {
   const base = gitlabBase(url);
-  return remoteFleetHost(new URL("api/v4/", base), base, true, token, options);
+  return remoteFleetHost(forgeApi(true, base), base, true, token, options);
 }
 
 export async function fleetHostFor(gitlab?: boolean, gitlabUrl?: string): Promise<FleetHost> {

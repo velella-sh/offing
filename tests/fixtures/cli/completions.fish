@@ -236,6 +236,8 @@ complete -c offing -n '__fish_seen_subcommand_from campaign-board' -l out
 complete -c offing -n '__fish_seen_subcommand_from campaign' -l fleet
 complete -c offing -n '__fish_seen_subcommand_from campaign' -l json
 complete -c offing -n '__fish_seen_subcommand_from campaign' -l inputs
+complete -c offing -n '__fish_seen_subcommand_from campaign' -l hosts
+complete -c offing -n '__fish_seen_subcommand_from campaign' -l operations
 complete -c offing -n '__fish_seen_subcommand_from campaign' -l one-batch
 complete -c offing -n '__fish_seen_subcommand_from campaign' -l failed
 complete -c offing -n '__fish_seen_subcommand_from config' -l json

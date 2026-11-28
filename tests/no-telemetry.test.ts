@@ -5,12 +5,14 @@ import { test } from "node:test";
 
 import ts from "typescript";
 
-// These are the shipped network entry points for user-directed data, fleet, and Action operations.
+// These are the shipped network entry points for user-directed data, fleet, campaign and Action operations.
 // GitHub Action writes answer an explicit repository workflow; the CLI data update downloads the rule bundle.
 const approved = new Map([
   ["action-commands.ts", ["fetch"]],
   ["action-fix-pr.ts", ["fetch"]],
   ["action-tracking-issue.ts", ["fetch"]],
+  // Campaign requests require explicit host or operations approval at the command boundary.
+  ["campaign/host-http.ts", ["fetch"]],
   ["commands/data.ts", ["@velella/ebb/data-update", "node:http"]],
   ["fleet/http.ts", ["fetch"]],
   // Anonymous registry lookup occurs only through offing lineage --resolve-digests.

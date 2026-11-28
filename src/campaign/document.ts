@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 
 import type { ValidateFunction } from "ajv";
@@ -49,6 +50,21 @@ export interface PlannedCheck {
   command: string[];
 }
 
+export interface CampaignPublication {
+  branch: string;
+  baseBranch: string;
+  head: string;
+  actorId: number;
+  bodySha256: string;
+  proofSha256: string;
+  number?: number;
+  observed?: {
+    at: string;
+    checks: "unknown" | "pending" | "passed" | "failed";
+    review: "unknown" | "pending" | "approved" | "changes-requested";
+  };
+}
+
 export interface CampaignRepository {
   host: string;
   name: string;
@@ -61,6 +77,7 @@ export interface CampaignRepository {
   status: RepositoryStatus;
   run?: string;
   reason?: string;
+  publication?: CampaignPublication;
   transitions: { from: RepositoryStatus; to: RepositoryStatus; at: string }[];
 }
 
@@ -176,6 +193,9 @@ export async function readCampaignState(file: string): Promise<CampaignState> {
       throw invalidCampaign("Campaign state has an inconsistent batch assignment.");
     }
     checkHistory(row);
+    if (row.publication && row.publication.branch !== campaignBranch(state.id, row)) {
+      throw invalidCampaign("Campaign publication branch does not match its repository.");
+    }
   }
   for (const row of state.omissions) {
     const identity = repositoryKey(row.host, row.name);
@@ -187,4 +207,18 @@ export async function readCampaignState(file: string): Promise<CampaignState> {
 
 export function readCampaignFleet(file: string): Promise<unknown> {
   return readInput(file, false);
+}
+
+export function campaignBranch(id: string, { host, name }: CampaignRepository): string {
+  const key = createHash("sha256")
+    .update(JSON.stringify([id, host, name]))
+    .digest("hex")
+    .slice(0, 32);
+  return "offing-campaign/" + key;
+}
+
+export function publicationUrl(row: CampaignRepository): string | undefined {
+  if (!row.publication?.number || row.status === "verified") return undefined;
+  const review = row.host === "https://github.com" ? "pull" : "-/merge_requests";
+  return `${row.host}/${row.name}/${review}/${row.publication.number}`;
 }

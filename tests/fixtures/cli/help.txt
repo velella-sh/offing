@@ -85,7 +85,11 @@ Usage:
   offing campaign plan <campaign.yml> --fleet <fleet.json> [--json]  # preview a pinned migration
   offing campaign status <state.json> [--json]  # read recorded campaign state
   offing campaign run <state.json> --inputs <local.json> [--one-batch] [--json]  # replay approved checkouts
-  offing campaign pause|resume|cancel <state.json> [--json]
+  offing campaign publish <state.json> --hosts <approval.json> [--one-batch] [--json]
+  offing campaign refresh <state.json> --hosts <approval.json> [--json]
+  offing campaign track <state.json> --operations <approval.json> [--json]
+  offing campaign pause|resume <state.json> [--json]
+  offing campaign cancel <state.json> [--hosts <approval.json>] [--json]
   offing campaign retry <state.json> <repository|--failed> [--json]
   offing codemod test <dir>    # check a codemod and its fixtures
   offing config validate [path] [--json]

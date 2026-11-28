@@ -7,18 +7,18 @@ interface ClientOptions {
   readonly wait?: (ms: number) => Promise<unknown>;
 }
 
-function delayMs(response: Response): number | undefined {
+export function fleetRateLimitDelay(response: Response, now = Date.now()): number | undefined {
   const { headers, status } = response;
   if (status !== 403 && status !== 429) return undefined;
   const retry = headers.get("retry-after");
   if (retry !== null) {
     const seconds = Number(retry);
-    const duration = Number.isFinite(seconds) ? seconds * 1000 : Date.parse(retry) - Date.now();
+    const duration = Number.isFinite(seconds) ? seconds * 1000 : Date.parse(retry) - now;
     if (Number.isFinite(duration)) return Math.max(duration, 0);
   }
   const reset = headers.get("x-ratelimit-reset");
   if (headers.get("x-ratelimit-remaining") === "0" && reset !== null && Number.isFinite(Number(reset))) {
-    return Math.max(Number(reset) * 1000 - Date.now(), 0);
+    return Math.max(Number(reset) * 1000 - now, 0);
   }
   return status === 429 ? 1000 : undefined;
 }
@@ -39,7 +39,7 @@ export function fleetClient(
       });
       if (response.ok || (redirect === "manual" && response.status === 302)) return response;
       await response.body?.cancel().catch(() => undefined);
-      const delay = delayMs(response);
+      const delay = fleetRateLimitDelay(response);
       if (delay !== undefined) {
         if (delay > 120_000 || attempt >= 3) throw new FleetHostError("Fleet host rate limit reached. Retry later.");
         blockedUntil = Math.max(blockedUntil, Date.now() + Math.max(delay, 100));

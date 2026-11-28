@@ -298,6 +298,30 @@
         }
       ]
     },
+    "publication": {
+      "type": "object",
+      "properties": {
+        "branch": { "type": "string", "pattern": "^offing-campaign/[a-f0-9]{32}$" },
+        "baseBranch": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "head": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+        "actorId": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "bodySha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "proofSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "number": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "observed": {
+          "type": "object",
+          "properties": {
+            "at": { "type": "string", "format": "date-time" },
+            "checks": { "enum": ["unknown", "pending", "passed", "failed"] },
+            "review": { "enum": ["unknown", "pending", "approved", "changes-requested"] }
+          },
+          "required": ["at", "checks", "review"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["branch", "baseBranch", "head", "actorId", "bodySha256", "proofSha256"],
+      "additionalProperties": false
+    },
     "repository": {
       "type": "object",
       "properties": {
@@ -382,6 +406,9 @@
           "items": {
             "$ref": "#/$defs/transition"
           }
+        },
+        "publication": {
+          "$ref": "#/$defs/publication"
         },
         "run": {
           "type": "string",
