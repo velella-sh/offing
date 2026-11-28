@@ -13,6 +13,7 @@ import { parsePolicyReference } from "../fleet-policy/reference.js";
 import { defaultCacheDirectory } from "../cache-paths.js";
 import { declaresInput, detectorSparsePatterns } from "../detector-inputs.js";
 import { builtInDetectors } from "../detectors/index.js";
+import type { ScanResult } from "../domain.js";
 import { loadImageRules } from "../detectors/container/image-lifecycle.js";
 import { buildImageLineage } from "../lineage/index.js";
 import { readLineageInputs, type LineageInputs } from "../lineage/inputs.js";
@@ -27,6 +28,7 @@ import { simulateScan } from "../what-if/index.js";
 import { VERSION } from "../version.js";
 import { fleetCacheKey, readFleetCache, writeFleetCache } from "./cache.js";
 import { FleetHostError, type FleetHost, type FleetRepository, type FleetSelection } from "./host.js";
+import type { FleetPin } from "./pins.js";
 import { validCommit } from "./remote.js";
 
 const inputs = builtInDetectors.flatMap((detector) => (detector.inputs ? [detector.inputs] : []));
@@ -51,6 +53,9 @@ export interface FleetOptions {
   readonly exclude?: readonly string[];
   readonly topics?: readonly string[];
   readonly repositories?: readonly string[];
+  readonly pins?: readonly FleetPin[];
+  readonly asOf?: string;
+  readonly observeScan?: (repository: FleetRepository, commit: string, report: ScanResult) => Promise<void>;
   readonly includeForks?: boolean;
   readonly includeArchived?: boolean;
   readonly campaign?: boolean;
@@ -77,6 +82,7 @@ interface FleetContext {
   readonly whatIf: FleetOptions["whatIf"];
   readonly policy?: string;
   readonly imageLineage: boolean;
+  readonly observeScan: FleetOptions["observeScan"];
 }
 
 function matches(name: string, patterns: readonly string[] = []): boolean {
@@ -84,11 +90,11 @@ function matches(name: string, patterns: readonly string[] = []): boolean {
   return patterns.map(globToRegExp).some((pattern) => pattern.test(name) || pattern.test(leaf));
 }
 
-function skipReason(repo: FleetRepository, options: FleetOptions): string | undefined {
+function skipReason(repo: FleetRepository, options: FleetOptions, pinned: boolean): string | undefined {
   if (repo.disabled) return "Repository is disabled.";
   if (repo.archived && !options.includeArchived) return "Repository is archived.";
   if (repo.fork && !options.includeForks) return "Repository is a fork.";
-  if (!repo.defaultBranch) return "Repository has no default branch.";
+  if (!repo.defaultBranch && !pinned) return "Repository has no default branch.";
   if (
     options.repositories &&
     !options.repositories.includes(repo.name) &&
@@ -140,6 +146,7 @@ async function scanPinned(context: FleetContext, repository: FleetRepository, co
   try {
     const bytesFetched = await context.host.fetchFilesAtCommit(repository, commit, directory, selectedInputs(context));
     const report = await scanWithBuiltIns(directory, { noCache: true, scannedAt: context.scannedAt });
+    await context.observeScan?.(repository, commit, report);
     const policy = context.policy;
     const compliance = policy
       ? await fleetPolicyCompliance(report, {
@@ -175,15 +182,20 @@ async function scanPinned(context: FleetContext, repository: FleetRepository, co
   }
 }
 
-async function scanOne(repo: FleetRepository, context: FleetContext, options: FleetOptions): Promise<RepositoryScan> {
+async function scanOne(
+  repo: FleetRepository,
+  context: FleetContext,
+  options: FleetOptions,
+  pin?: string,
+): Promise<RepositoryScan> {
   const state = { name: repo.name, host: context.host.origin, defaultBranch: repo.defaultBranch };
-  const skip = skipReason(repo, options);
+  const skip = skipReason(repo, options, pin !== undefined);
   if (skip)
     return { state: { ...state, commit: null, status: "skipped", reason: skip }, findings: [], bytesFetched: 0 };
 
-  let commit: string | null = null;
+  let commit: string | null = pin ?? null;
   try {
-    const head = await context.host.readDefaultBranchHead(repo);
+    const head = pin ?? (await context.host.readDefaultBranchHead(repo));
     if (!validCommit(head)) throw new FleetHostError("Invalid fleet commit SHA.");
     commit = head;
     const key = fleetCacheKey([context.fingerprint, context.host.origin, repo.name, commit]);
@@ -227,13 +239,14 @@ function needsPinnedInputs(options: FleetOptions): boolean {
       options.whatIf ||
       options.policy !== undefined ||
       options.imageLineage ||
+      options.observeScan ||
       options.noCache,
   );
 }
 
 async function fleetContext(host: FleetHost, options: FleetOptions): Promise<FleetContext> {
   const data = await getActiveData();
-  const asOf = options.forecast?.asOf ?? options.whatIf?.asOf;
+  const asOf = options.asOf ?? options.forecast?.asOf ?? options.whatIf?.asOf;
   if (asOf !== undefined && !isIsoDate(asOf)) throw new FleetHostError("--as-of needs a date (YYYY-MM-DD).");
   const scannedAt = asOf === undefined ? new Date().toISOString() : `${asOf}T00:00:00.000Z`;
   const fingerprint = fleetCacheKey([VERSION, data.info.version, scannedAt.slice(0, 10), ...selection.patterns]);
@@ -243,6 +256,7 @@ async function fleetContext(host: FleetHost, options: FleetOptions): Promise<Fle
     scannedAt,
     noCache: needsPinnedInputs(options),
     imageLineage: options.imageLineage ?? false,
+    observeScan: options.observeScan,
     forecast: options.forecast,
     campaign: options.campaign ?? false,
     whatIf: options.whatIf,
@@ -253,19 +267,36 @@ async function fleetContext(host: FleetHost, options: FleetOptions): Promise<Fle
   };
 }
 
+async function fleetInputs(host: FleetHost, namespace: string, pins?: readonly FleetPin[]) {
+  if (pins)
+    return pins.map(({ repository, branch, commit }) => ({
+      repo: {
+        name: repository,
+        defaultBranch: branch ?? null,
+        archived: false,
+        fork: false,
+        disabled: false,
+        topics: [],
+      },
+      pin: commit,
+    }));
+  const repos = [...(await host.listRepositories(namespace))].sort((a, b) => a.name.localeCompare(b.name, "en"));
+  return repos.map((repo) => ({ repo, pin: undefined }));
+}
+
 export async function scanFleet(host: FleetHost, namespace: string, options: FleetOptions = {}): Promise<FleetResult> {
   const jobs = options.jobs ?? 4;
   if (!Number.isInteger(jobs) || jobs < 1 || jobs > 16) {
     throw new FleetHostError("Fleet concurrency must be an integer between 1 and 16.");
   }
   const context = await fleetContext(host, options);
-  const repos = [...(await host.listRepositories(namespace))].sort((a, b) => a.name.localeCompare(b.name, "en"));
+  const repos = await fleetInputs(host, namespace, options.pins);
   const remaining = repos.entries();
   const results: RepositoryScan[] = [];
   await Promise.all(
     Array.from({ length: Math.min(jobs, repos.length) }, async () => {
-      for (const [index, repo] of remaining) {
-        const result = await scanOne(repo, context, options);
+      for (const [index, { repo, pin }] of remaining) {
+        const result = await scanOne(repo, context, options, pin);
         results[index] = result;
         options.onProgress?.({ ...result.state, bytesFetched: result.bytesFetched });
       }
