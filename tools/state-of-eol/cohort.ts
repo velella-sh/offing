@@ -38,7 +38,7 @@ interface SearchPage {
   readonly pageInfo: { endCursor: string | null; hasNextPage: boolean };
 }
 
-interface Cohort {
+export interface Cohort {
   readonly schemaVersion: typeof version;
   readonly startedAt: string;
   readonly retrievedAt: string;
@@ -307,11 +307,16 @@ async function main(args: string[]): Promise<void> {
     await saveCohort(destination, cohort);
     process.stdout.write(`Recorded ${size} repositories in ${destination}.\n`);
   } else {
-    const cohort: unknown = JSON.parse(await readFile(destination, "utf8"));
-    if (!isCohort(cohort)) throw new Error("Malformed State of EOL cohort file.");
-    verifyCohort(cohort);
+    await readCohort(destination);
     process.stdout.write(`Verified ${size} pinned repositories and cutoff ranks.\n`);
   }
+}
+
+export async function readCohort(path: string): Promise<Cohort> {
+  const cohort: unknown = JSON.parse(await readFile(path, "utf8"));
+  if (!isCohort(cohort)) throw new Error("Malformed State of EOL cohort file.");
+  verifyCohort(cohort);
+  return cohort;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
