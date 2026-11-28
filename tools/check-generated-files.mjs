@@ -62,6 +62,13 @@ export const GENERATED_PATHS = Object.freeze([
     target: "Build time",
     generator: "npm run build:dashboard",
   },
+  { path: "docs/_data/comparison.json", directory: false, target: "Build time", generator: "npm run build:dashboard" },
+  {
+    path: "docs/_data/comparison-losses.json",
+    directory: false,
+    target: "Build time",
+    generator: "npm run build:dashboard",
+  },
   { path: "docs/api/v1", directory: true, target: "Build time", generator: "npm run build:data-api" },
   {
     path: "src/commands/index.generated.ts",

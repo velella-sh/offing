@@ -13,6 +13,25 @@ tool is good at, links the evidence for every claim, and says where Offing is th
 | Renovate | Which dependencies have newer versions, and can the update be automated? | [Renovate compared](renovate.md) |
 | Dependabot | Which dependencies have updates or security advisories on GitHub? | [Dependabot compared](dependabot.md) |
 | endoflife.date | When does a product or release line stop receiving support? | [endoflife.date compared](endoflife-date.md) |
+| xeol | Which versions in an SBOM does its database mark as end-of-life? | [xeol compared](xeol.md) |
+| HeroDevs public dates | Which published upstream end-of-life dates match versions in the sample? | [HeroDevs compared](herodevs.md) |
+
+## Measured results
+
+[Read the method, pins and measured gaps](../COMPARISON.md). Each chart has its own unit and sample.
+
+::bar-chart{from="comparison.renovate" category="label" value="count" title="Renovate comparable pairs in the blind set"}
+
+::bar-chart{from="comparison.dependabot" category="label" value="count" title="Offing findings and declared Dependabot configurations in the blind set"}
+
+::bar-chart{from="comparison.endoflife" category="label" value="count" title="Dated release-line rules compared with endoflife.date"}
+
+::bar-chart{from="comparison.herodevs" category="label" value="count" title="Pinned package-version pairs with a dated HeroDevs claim"}
+
+::bar-chart{from="comparison.historicalXeol" category="label" value="count" title="Historical xeol directory scan product rows"}
+
+Find the [historical xeol directory results and fresh-run status](xeol.md#measured-evidence) on the
+xeol page.
 
 ## Where Offing differs
 

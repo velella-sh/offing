@@ -94,7 +94,7 @@
       },
       "inputs": {
         "registryRules": 782,
-        "corpusRepositories": 1638,
+        "corpusRepositories": 1647,
         "snapshotProducts": 44,
         "snapshotCycles": 835
       },
@@ -103,7 +103,7 @@
         "measured": 214,
         "agree": 205,
         "disagree": 9,
-        "groundTruthRules": 255,
+        "groundTruthRules": 256,
         "groundTruthMeasured": 101,
         "groundTruthAgree": 94,
         "groundTruthDisagree": 7,
@@ -112,11 +112,48 @@
       "files": [
         {
           "path": "benchmarks/comparison/endoflife-date.json",
-          "sha256": "1f59c19d5e59b475a01b86b1bae02980896334d762489128757766261a1b6e6f"
+          "sha256": "9ad326be86e79319f6fbba1a48b97933e2d42040f8c43074bb4e6f70b38d9839"
         },
         {
           "path": "benchmarks/comparison/endoflife-date.md",
-          "sha256": "d48fbbae8fd419d8279d00e5bd82da02698500e36b3ec35148f0070d565f5c70"
+          "sha256": "2ec461275c8303e3ccdfae6becae8b558fa854fa8b1577ad4fb927de4ab9662a"
+        }
+      ]
+    },
+    {
+      "name": "herodevs",
+      "pins": {
+        "offing": "0.1.1",
+        "offingCommit": "deedaed80ef807dc5cea5571c338295b9411c896",
+        "dataVersion": "0.2.0",
+        "syft": "0.92.0",
+        "claimsChecked": "2026-11-28",
+        "claimsSha256": "a057c5368784e7fd77d43afd18b44ba900f756b3c537e3bdb2c39b4cfff86510",
+        "sbomCaptureSha256": "e7bb26c8d060eea6afa38cb925ed2e89cff7f19f9922b71c8b0d0be04a7e47df"
+      },
+      "inputs": {
+        "repositories": 5,
+        "packageVersions": 8043
+      },
+      "known": {
+        "repositories": 5,
+        "inventoried": 8043,
+        "excluded": 576,
+        "matched": 7,
+        "noPublicDate": 8036,
+        "agree": 3,
+        "date-differs": 1,
+        "hero-only": 3,
+        "ambiguous-offing": 0
+      },
+      "files": [
+        {
+          "path": "benchmarks/comparison/herodevs/herodevs.json",
+          "sha256": "c07f6081563ecfeec75c4835ffebafb9f134106b86afdbf6897be06ab24f4152"
+        },
+        {
+          "path": "benchmarks/comparison/herodevs/herodevs.md",
+          "sha256": "88f9fd7d471e468d7f3c84509489504222dcd22bd150efd72be2c5733a8c6314"
         }
       ]
     }

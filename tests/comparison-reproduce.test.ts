@@ -169,7 +169,7 @@ test("the committed known result hashes exactly the committed tables", async () 
   assert.equal(record.command, "npm run comparison:reproduce");
   assert.deepEqual(
     record.comparisons.map((entry) => entry.name),
-    ["renovate", "dependabot", "endoflife-date"],
+    ["renovate", "dependabot", "endoflife-date", "herodevs"],
   );
   for (const entry of record.comparisons) {
     assert.ok(Object.keys(entry.pins).length > 0, `${entry.name} pins at least one input`);

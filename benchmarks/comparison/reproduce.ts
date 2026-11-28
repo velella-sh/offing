@@ -11,7 +11,7 @@
 // repository.
 //
 // Collecting new raw records is separate and documented in each comparison's README:
-//   renovate/README.md, dependabot/README.md, and README.md (endoflife.date).
+//   renovate/README.md, dependabot/README.md, herodevs/README.md, and README.md (endoflife.date).
 
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -35,6 +35,7 @@ import {
   renderMarkdown as renderEndoflifeDateMarkdown,
 } from "./endoflife/report.js";
 import { loadSnapshot } from "./endoflife/snapshot.js";
+import { buildHeroDevs } from "./herodevs/build.js";
 import { buildResult as buildRenovateResult } from "./renovate/aggregate.js";
 import { loadRecords as loadRenovateRecords } from "./renovate/build.js";
 import { renderJson as renderRenovateJson, renderMarkdown as renderRenovateMarkdown } from "./renovate/report.js";
@@ -168,7 +169,12 @@ async function buildEndoflifeDate(root: string): Promise<BuiltComparison> {
 }
 
 /** The comparisons in their documented order; a test can replace them. */
-export const BUILDERS: readonly ComparisonBuilder[] = [buildRenovate, buildDependabot, buildEndoflifeDate];
+export const BUILDERS: readonly ComparisonBuilder[] = [
+  buildRenovate,
+  buildDependabot,
+  buildEndoflifeDate,
+  buildHeroDevs,
+];
 
 /** Rebuilds every comparison from the committed inputs, in the order the tables are published. */
 export async function buildComparisons(

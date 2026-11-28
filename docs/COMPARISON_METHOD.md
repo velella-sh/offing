@@ -235,3 +235,38 @@ The tool-by-tool pages state what each alternative does better today, and each l
 [Dependabot](compare/dependabot.md), [endoflife.date](compare/endoflife-date.md). They are prose claims
 about capability, not measurements, and they do not cite this page's method as a result. When the runs
 land, the measured tables belong to `docs/COMPARISON.md` and point back here for the method.
+
+## 11. Common-inventory comparison with xeol and HeroDevs
+
+**Amended 2026-11-28, before collecting the common inventories.** The earlier differential
+results used directory scans. The common-inventory comparison uses the same five repositories as
+the existing [xeol continuity set](validation/differential-testing.md#differential-testing-against-xeol).
+It takes the exact commit from the corresponding entry under
+[`benchmarks/public-repositories/`](../benchmarks/public-repositories/). All five entries are
+targeted. Results describe this continuity set.
+
+For each checkout, Syft 0.92.0 reads the pinned source and emits one Syft JSON SBOM.
+Both scanners use the same subset, the distinct npm PURLs with exact semantic versions. The
+capture reports excluded artifacts and duplicates. The HeroDevs comparison matches versioned package URLs
+(purls) from the same inventory against exact upstream end-of-life dates described in publicly
+readable HeroDevs articles. We record the article date and the date we checked each statement.
+A public article supplies a dated claim about a release line. Hosted scanning coverage and
+commercial support fall outside this sample. Inputs outside the dated
+public claims are reported as unmeasured.
+
+The comparison reports the same boundary only when the provider and Offing both describe
+end of upstream support for the matching component version. An explicit date agreement,
+an explicit date disagreement and a public date with no matching Offing rule are separate
+outcomes. A missing vendor database or unmatched public claim is an explicit evidence gap.
+
+The [HeroDevs capture and reproduction instructions](../benchmarks/comparison/herodevs/README.md)
+keep the public claims and the Offing inventory evidence pinned. Published counts reflect repository
+and package-version pairs. A repeated version in the same repository counts once.
+
+For a concurrent xeol run, record the xeol binary version, the published database build timestamp,
+and the database archive checksum. Pass a local output directory to the collector to keep a copy
+of the exact filtered SBOMs. Import the verified archive with `xeol db import`, set
+`XEOL_DB_AUTO_UPDATE=false`, and pass each captured npm-only Syft SBOM to
+`xeol -o json sbom:<file>`. As of 2026-11-28, [the database endpoint is unavailable](https://github.com/xeol-io/xeol/issues/607).
+Fresh xeol headline counts remain unavailable. [Historical directory results](compare/xeol.md#measured-evidence)
+have their own scope and date.
