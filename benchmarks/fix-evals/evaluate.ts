@@ -18,7 +18,12 @@ export interface Input {
   id: string;
   repository: string | null;
   commit: string | null;
-  profile: Profile;
+  profile: Profile | null;
+}
+
+export interface Commands {
+  build: Command;
+  test?: Command;
 }
 
 interface Check extends Run {
@@ -39,7 +44,7 @@ export interface Case {
 }
 
 export interface Evidence extends Input {
-  excluded?: "no-patch" | "baseline-not-green";
+  excluded?: "no-patch" | "baseline-not-green" | "no-comparable-profile";
   baseline?: Checks;
   cases: Case[];
 }
@@ -60,6 +65,12 @@ interface Options {
   output: string;
   fixers: Fixer[];
   backend: (profile: Profile, root: string) => Promise<ContainerExecutor>;
+  commands?: Commands;
+  paths?: ReadonlySet<string>;
+}
+
+function withinScope(path: string, options: Options): boolean {
+  return options.paths?.has(path) ?? true;
 }
 
 async function recordFile(root: string, file: string, bytes: Buffer | string): Promise<void> {
@@ -105,11 +116,14 @@ async function recordCheck(
 }
 
 async function verify(input: Input, options: Options, root: string, prefix: string): Promise<Checks> {
-  const profile = profiles[input.profile];
+  if (input.profile === null) throw new Error("The case needs a comparable validation profile.");
+  const checks: Commands = options.commands ?? profiles[input.profile];
   const execute = await options.backend(input.profile, root);
-  const build = await recordCheck(profile.build, execute, options.output, `${prefix}/build`);
+  const build = await recordCheck(checks.build, execute, options.output, `${prefix}/build`);
   const test =
-    "test" in profile ? await recordCheck(profile.test, execute, options.output, `${prefix}/test`, true) : undefined;
+    checks.test === undefined
+      ? undefined
+      : await recordCheck(checks.test, execute, options.output, `${prefix}/test`, true);
   return { build, ...(test === undefined ? {} : { test }) };
 }
 
@@ -133,7 +147,7 @@ async function runCase(
   const prefix = `${input.id}/${fixer.id}`;
   const patch = { path: `${prefix}/fix.patch`, sha256: sha256(diff) };
   await recordFile(options.output, patch.path, diff);
-  const deterministic = renderPatches(repeat.patches) === diff;
+  const deterministic = renderPatches(repeat.patches.filter(({ path }) => withinScope(path, options))) === diff;
   return tempSource(async (temp): Promise<Case> => {
     const root = join(temp, "tree");
     await cp(pristine.root, root, { recursive: true, errorOnExist: true, force: false });
@@ -173,7 +187,7 @@ async function runCase(
         applied: true,
         resolved,
         noNewFinding: introduced.length === 0,
-        idempotent: second.patches.length === 0,
+        idempotent: !second.patches.some(({ path }) => withinScope(path, options)),
         buildKeptGreen: passed(checks.build),
         testsKeptGreen: checks.test === undefined ? null : passed(checks.test),
       },
@@ -193,15 +207,20 @@ export async function evaluate(
   load: (root: string) => Promise<void>,
   options: Options,
 ): Promise<Evidence> {
+  if (input.profile === null) return { ...input, cases: [], excluded: "no-comparable-profile" };
+  const profile = input.profile;
   return tempSource(async (root) => {
     const evidence: Evidence = { ...input, cases: [] };
     await load(root);
     const before = await scan(root);
     const { patches } = await planFixReport(before, options.fixers);
-    const scope = validationScopes[input.profile];
+    const scope = validationScopes[profile];
     const selected = options.fixers.flatMap((fixer) => {
-      const own = patches.filter((patch) => patch.fixer === fixer.id);
-      return own.length > 0 && own.every(({ path }) => scope === undefined || scope.test(path)) ? [{ fixer, own }] : [];
+      const own = patches.filter((patch) => patch.fixer === fixer.id && withinScope(patch.path, options));
+      return own.length > 0 &&
+        own.every(({ path }) => options.paths !== undefined || scope === undefined || scope.test(path))
+        ? [{ fixer, own }]
+        : [];
     });
     if (selected.length === 0) return { ...evidence, excluded: "no-patch" };
 
