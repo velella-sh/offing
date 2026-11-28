@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { devNull, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { test, type TestContext } from "node:test";
 import { pathToFileURL } from "node:url";
@@ -31,7 +31,7 @@ const cleanEnv: NodeJS.ProcessEnv = {
   TMPDIR: tmpdir(),
   OFFING_DATA_VERSION: "bundled",
   GIT_CONFIG_NOSYSTEM: "1",
-  GIT_CONFIG_GLOBAL: devNull,
+  GIT_CONFIG_GLOBAL: process.platform === "win32" ? "NUL" : "/dev/null",
 };
 
 const json = <T>(path: string): Promise<T> => readFile(path, "utf8").then((text) => JSON.parse(text));

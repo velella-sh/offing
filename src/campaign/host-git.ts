@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
 import { mkdtemp, rm } from "node:fs/promises";
-import { devNull, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 
@@ -11,10 +11,12 @@ import type { HostTarget } from "./host-config.js";
 const execute = promisify(execFile);
 
 function isolatedGit(directory: string) {
+  // Git for Windows rejects Node's null-device path when opening a global config file.
+  const hooks = join(directory, "unused-hooks");
   const env = {
     ...childEnvironments(process.env, "replay", []).tests,
     GIT_CONFIG_NOSYSTEM: "1",
-    GIT_CONFIG_GLOBAL: devNull,
+    GIT_CONFIG_GLOBAL: join(directory, "unused-global-git-config"),
     GIT_TERMINAL_PROMPT: "0",
     GIT_NO_REPLACE_OBJECTS: "1",
     GIT_NO_LAZY_FETCH: "1",
@@ -24,7 +26,7 @@ function isolatedGit(directory: string) {
       "git",
       [
         "-c",
-        `core.hooksPath=${devNull}`,
+        `core.hooksPath=${hooks}`,
         "-c",
         "credential.helper=",
         "-c",
