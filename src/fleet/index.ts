@@ -90,18 +90,16 @@ function matches(name: string, patterns: readonly string[] = []): boolean {
   return patterns.map(globToRegExp).some((pattern) => pattern.test(name) || pattern.test(leaf));
 }
 
+function inRequestedList(name: string, repositories?: readonly string[]): boolean {
+  return repositories === undefined || repositories.includes(name) || repositories.includes(posix.basename(name));
+}
+
 function skipReason(repo: FleetRepository, options: FleetOptions, pinned: boolean): string | undefined {
   if (repo.disabled) return "Repository is disabled.";
   if (repo.archived && !options.includeArchived) return "Repository is archived.";
   if (repo.fork && !options.includeForks) return "Repository is a fork.";
   if (!repo.defaultBranch && !pinned) return "Repository has no default branch.";
-  if (
-    options.repositories &&
-    !options.repositories.includes(repo.name) &&
-    !options.repositories.includes(posix.basename(repo.name))
-  ) {
-    return "Repository is not in the requested list.";
-  }
+  if (!inRequestedList(repo.name, options.repositories)) return "Repository is not in the requested list.";
   if ((options.include?.length && !matches(repo.name, options.include)) || matches(repo.name, options.exclude)) {
     return "Repository did not match the name filters.";
   }

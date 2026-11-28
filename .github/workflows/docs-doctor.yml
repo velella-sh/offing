@@ -15,6 +15,11 @@ on:
       - ".github/workflows/docs-doctor.yml"
   workflow_call:
   workflow_dispatch:
+    inputs:
+      state_of_eol_only:
+        description: Rebuild and validate only the State of EOL report.
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -25,7 +30,12 @@ concurrency:
   cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 
 jobs:
+  state-of-eol:
+    if: github.event_name == 'workflow_dispatch' && inputs.state_of_eol_only
+    uses: ./.github/workflows/state-of-eol.yml # zizmor: ignore[self-repository] -- verify the report from this revision
+
   doctor:
+    if: github.event_name != 'workflow_dispatch' || !inputs.state_of_eol_only
     name: mizzen check (docs)
     runs-on: ubuntu-latest
     timeout-minutes: 15

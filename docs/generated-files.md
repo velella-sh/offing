@@ -28,6 +28,7 @@ Targets:
 | `docs/ROADMAP.md` | `node planning/roadmap/roadmap-md.mjs` (source `planning/roadmap/`) | Pages site, contributors, `.github/workflows/ci.yml` (treats it as generated) | 25 | Pages, contributors | Keep. |
 | `docs/_data/dashboard.json` | `npm run build:dashboard` (`tools/build-dashboard-data.ts`), also run by `record:corpus-run` and the Pages workflow before Mizzen | Dashboard page (`docs/dashboard/index.md`), `tests/dashboard-data.test.ts` | 61 | Pages, tests | Build time. Gitignored; no pull request commits it. `check:dashboard` verifies it is buildable. |
 | `docs/_data/comparison.json`, `docs/_data/comparison-losses.json` | `npm run build:dashboard` (comparison pin and result files) | Comparison charts and loss table | new | Pages | Build time. Gitignored. |
+| `docs/_data/state-of-eol-2027*.json` | `npm run state-of-eol` and `npm run build:dashboard` from the archived cohort evidence | State of EOL 2027 report, chart and tables | new | Pages, report workflow | Build time. Gitignored. |
 | `docs/differential-report.json`, `docs/differential-report.md` | `npm run differential:report` (`benchmarks/differential/report.ts`, `--check` mode) | Pages site (`docs/differential-report.md` links to the JSON) | 2 | Pages | Keep. Not part of `npm run check`, so its drift check runs only when someone runs it. |
 
 ## Outputs that code and packages consume

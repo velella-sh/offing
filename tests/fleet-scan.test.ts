@@ -13,6 +13,7 @@ import { Ajv2020 } from "ajv/dist/2020.js";
 import { parse } from "yaml";
 import { fetchArchiveTree } from "../src/fleet/archive.js";
 import { scanFleet } from "../src/fleet/index.js";
+import { parseFleetPins } from "../src/fleet/pins.js";
 import { githubFleetHost, githubFleetToken, gitlabBase } from "../src/fleet/remote.js";
 import { renderRollupHtml, renderRollupText, rollup, rollupFiles, type FleetResult } from "../src/rollup.js";
 import { scanWithBuiltIns } from "../src/scan-builtins.js";
@@ -25,6 +26,95 @@ const contents = JSON.stringify({ name: privateText, dependencies: { request: "2
 const binary = resolve(process.env.OFFING_FLEET_TEST_CLI ?? "dist/src/cli.js");
 const pattern = /^[a-f0-9]{40}$/;
 const fixtures = resolve("tests/fixtures/fleet");
+
+test("cross-owner Fleet pins bypass discovery and keep the intended SHA after fetch failure", async () => {
+  const pins = parseFleetPins([`github/one/project@${commit}`, `github/two/project@${"5".repeat(40)}`]);
+  const fetched: string[] = [];
+  const observed: string[] = [];
+  const result = await scanFleet(
+    {
+      origin: "https://github.com",
+      async listRepositories() {
+        return assert.fail("Pinned input must bypass namespace discovery");
+      },
+      async readDefaultBranchHead() {
+        return assert.fail("Pinned input must bypass branch resolution");
+      },
+      async fetchFilesAtCommit({ name }, sha, root) {
+        fetched.push(`${name}@${sha}`);
+        if (name === "two/project") throw new Error("Unavailable pin");
+        await writeFile(join(root, "package.json"), contents);
+        return 100;
+      },
+    },
+    "",
+    {
+      pins,
+      jobs: 1,
+      asOf: "2026-11-27",
+      async observeScan({ name }, sha, report) {
+        observed.push(`${name}@${sha}`);
+        assert.equal(report.scannedAt, "2026-11-27T00:00:00.000Z");
+      },
+    },
+  );
+  assert.deepEqual(
+    fetched,
+    pins.map(({ repository, commit }) => `${repository}@${commit}`),
+  );
+  assert.deepEqual(observed, [`one/project@${commit}`]);
+  assert.deepEqual(
+    result.repositoryStatus.map(({ name, commit, status }) => ({ name, commit, status })),
+    [
+      { name: "one/project", commit, status: "scanned" },
+      { name: "two/project", commit: "5".repeat(40), status: "failed" },
+    ],
+  );
+  for (const lines of [
+    [],
+    ["org/project"],
+    [`github/org/project@HEAD`],
+    [`github/org/project@${commit}`, `github/Org/Project@${commit}`],
+  ]) {
+    assert.throws(() => parseFleetPins(lines), /Pinned --repos/);
+  }
+});
+
+test("namespace Fleet name filters still resolve the selected default branch normally", async () => {
+  const fetched: string[] = [];
+  const result = await scanFleet(
+    {
+      origin: "https://github.com",
+      async listRepositories(namespace) {
+        assert.equal(namespace, "example");
+        return ["excluded", "selected"].map((leaf) => ({
+          name: `example/${leaf}`,
+          defaultBranch: "main",
+          topics: [],
+          disabled: false,
+          archived: false,
+          fork: false,
+        }));
+      },
+      async readDefaultBranchHead({ name }) {
+        assert.equal(name, "example/selected");
+        return commit;
+      },
+      async fetchFilesAtCommit({ name }, sha, root) {
+        fetched.push(`${name}@${sha}`);
+        await writeFile(join(root, "package.json"), contents);
+        return 12;
+      },
+    },
+    "example",
+    { repositories: ["selected"], noCache: true },
+  );
+  assert.deepEqual(fetched, [`example/selected@${commit}`]);
+  assert.deepEqual(
+    result.repositoryStatus.map(({ status }) => status),
+    ["skipped", "scanned"],
+  );
+});
 
 async function fixture<T>(name: string): Promise<T> {
   return JSON.parse(await readFile(join(fixtures, `${name}.json`), "utf8")) as T;

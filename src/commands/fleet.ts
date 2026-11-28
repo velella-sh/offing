@@ -132,19 +132,28 @@ function validateEvidenceFlags(values: Flags, format: string): void {
   }
 }
 
+function fleetInvocation(positionals: string[], values: Flags) {
+  if (positionals.length === 0 && values.repos !== undefined && !values.gitlab && !values["gitlab-url"]) {
+    return { namespace: "", pinned: true };
+  }
+  const [namespace] = positionals;
+  if (positionals.length !== 1 || !namespace || !validRepositoryPath(namespace)) return undefined;
+  return { namespace, pinned: false };
+}
+
 async function run(args: string[], ctx: CommandContext): Promise<number> {
   try {
     const { values, positionals } = parseFleetArgs(args);
-    const [namespace] = positionals;
-    const pinned = positionals.length === 0 && values.repos !== undefined && !values.gitlab && !values["gitlab-url"];
-    if (!pinned && (positionals.length !== 1 || !namespace || !validRepositoryPath(namespace))) {
+    const selected = fleetInvocation(positionals, values);
+    if (!selected) {
       return ctx.fail("usage", "Usage: offing fleet <organization|group> [--gitlab] [--json | --html]");
     }
     const format = renderFormat(values);
     const index = severityIndex(values["fail-on"] ?? "none");
     validateEvidenceFlags(values, format);
+    const { namespace, pinned } = selected;
     const host = pinned ? githubFleetHost() : await fleetHostFor(values.gitlab, values["gitlab-url"]);
-    const result = await scanFleet(host, namespace ?? "", await scanOptions(values, pinned));
+    const result = await scanFleet(host, namespace, await scanOptions(values, pinned));
     const output =
       format === "json"
         ? JSON.stringify(result, null, 2)
