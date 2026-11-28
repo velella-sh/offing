@@ -1,10 +1,12 @@
 import { forecastWeather, renderForecastText } from "../../src/forecast-core.js";
 import type { RepositoryForecast } from "../../src/forecast-core.js";
-import { calendarRecord } from "../../src/forecast-tool/records.js";
+import { calendarRecord, maxInputBytes, prepareGitHubForecast } from "../../src/forecast-tool/records.js";
+import { repositoryNetworkNotice } from "../../src/forecast-tool/remote/github.js";
+import { parseGitHubForecastInput } from "../../src/forecast-tool/remote/input.js";
 import { loadData } from "./data.js";
 import { createReport } from "../../src/forecast-tool/report.js";
 
-const maxBytes = 5 * 1024 * 1024;
+type RepositorySources = NonNullable<Awaited<ReturnType<typeof prepareGitHubForecast>>>["repository"];
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -19,9 +21,13 @@ const dropArea = element("drop-area");
 const status = element("status");
 const results = element("results");
 const exportStatus = element("export-status");
+const repositoryInput = element<HTMLInputElement>("repository");
+const cancelFetch = element<HTMLButtonElement>("cancel-fetch");
+const repositoryFiles = element("repository-files");
 
 let active: ReturnType<typeof createReport> | undefined;
 let runId = 0;
+let repositoryRequest: AbortController | undefined;
 
 function textElement(tag: string, text: string): HTMLElement {
   const node = document.createElement(tag);
@@ -29,12 +35,15 @@ function textElement(tag: string, text: string): HTMLElement {
   return node;
 }
 
-function renderBuckets(forecast: RepositoryForecast): void {
+function renderBuckets(forecast: RepositoryForecast, subject: string): void {
   const panels = forecast.buckets.map((bucket) => {
     const affecting = bucket.events;
     const panel = document.createElement("section");
     const heading = textElement("h3", bucket.label.replace("-", "–"));
-    const count = textElement("p", `${affecting.length} for this file · ${bucket.total - affecting.length} elsewhere`);
+    const count = textElement(
+      "p",
+      `${affecting.length} for this ${subject} · ${bucket.total - affecting.length} elsewhere`,
+    );
     count.className = "bucket-count";
     panel.append(heading, count);
     if (affecting.length === 0) return panel;
@@ -55,9 +64,23 @@ function renderBuckets(forecast: RepositoryForecast): void {
   element("buckets").replaceChildren(...panels);
 }
 
-function renderReport(report: ReturnType<typeof createReport>, dataVersion: string): void {
+function renderRepositorySources(sources: RepositorySources): void {
+  const displayed = [
+    ...sources.read.map((path) => textElement("li", `Read: ${path}`)),
+    ...sources.skipped.map(({ path, reason }) => textElement("li", `Skipped: ${path} — ${reason}`)),
+  ];
+  if (sources.omitted) displayed.push(textElement("li", `${sources.omitted} more skipped paths.`));
+  element("repository-files-title").textContent =
+    `Repository files · ${sources.read.length} read · ${sources.skipped.length + sources.omitted} skipped`;
+  element("repository-files-list").replaceChildren(...displayed);
+  repositoryFiles.hidden = false;
+}
+
+function renderReport(report: ReturnType<typeof createReport>, dataVersion: string, sources?: RepositorySources): void {
   const { forecast, checked } = report;
-  renderBuckets(forecast);
+  const subject = sources ? "repository" : "file";
+  renderBuckets(forecast, subject);
+  if (sources) renderRepositorySources(sources);
   element("period").textContent = `${forecast.today} to ${forecast.until} · Ebb data ${dataVersion}`;
   const gaps = forecast.noData;
   element("unclassified").hidden = gaps.length === 0;
@@ -65,20 +88,38 @@ function renderReport(report: ReturnType<typeof createReport>, dataVersion: stri
   const rows = document.createDocumentFragment();
   for (const { reference, reason } of gaps) rows.append(textElement("li", `${reference} — ${reason}`));
   element("unclassified-list").replaceChildren(rows);
-  status.textContent = checked === 0 ? "No supported declarations found in this file." : "";
+  status.textContent = checked === 0 ? `No supported declarations found in this ${subject}.` : "";
   results.hidden = false;
 }
 
-async function run(file?: File): Promise<void> {
-  const current = ++runId;
-  const pasted = contents.value;
+function finishRepositoryRequest(): void {
+  repositoryRequest = undefined;
+  cancelFetch.hidden = true;
+}
+
+function cancelRepositoryRequest(): void {
+  if (!repositoryRequest) return;
+  repositoryRequest.abort();
+  finishRepositoryRequest();
+  status.textContent = "Repository fetch cancelled.";
+}
+
+function startRun(): number {
+  cancelRepositoryRequest();
   active = undefined;
   results.hidden = true;
+  repositoryFiles.hidden = true;
   exportStatus.textContent = "";
+  return ++runId;
+}
+
+async function run(file?: File): Promise<void> {
+  const current = startRun();
+  const pasted = contents.value;
   try {
     if (!file && !pasted.trim()) throw new Error("Choose a file or paste its contents.");
     const size = file?.size ?? new TextEncoder().encode(pasted).byteLength;
-    if (size > maxBytes) throw new Error("Choose a file or paste up to 5 MiB.");
+    if (size > maxInputBytes) throw new Error("Choose a file or paste up to 5 MiB.");
     status.textContent = "Preparing forecast…";
     const data = await loadData();
     const input = file ? await file.text() : pasted;
@@ -90,6 +131,53 @@ async function run(file?: File): Promise<void> {
   }
 }
 
+async function runRepository(): Promise<void> {
+  startRun();
+  const request = new AbortController();
+  try {
+    const value = repositoryInput.value.trim();
+    parseGitHubForecastInput(value);
+    const url = new URL(location.href);
+    url.hash = value;
+    history.replaceState(history.state, "", url);
+    repositoryRequest = request;
+    cancelFetch.hidden = false;
+    status.textContent = "Fetching public GitHub files…";
+    const forecast = await prepareGitHubForecast(
+      value,
+      fetch,
+      loadData,
+      new Date().toISOString().slice(0, 10),
+      request.signal,
+    );
+    if (repositoryRequest !== request) return;
+    if (!forecast) {
+      status.textContent = "No supported repository files found.";
+      return;
+    }
+    active = forecast.report;
+    renderReport(active, forecast.dataVersion, forecast.repository);
+  } catch (error) {
+    if (!request.signal.aborted) status.textContent = error instanceof Error ? error.message : String(error);
+  } finally {
+    if (repositoryRequest === request) finishRepositoryRequest();
+  }
+}
+
+function readFragment(): void {
+  cancelRepositoryRequest();
+  repositoryInput.value = location.hash.slice(1);
+}
+
+element("network-notice").textContent = repositoryNetworkNotice;
+element<HTMLFormElement>("repository-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  void runRepository();
+});
+repositoryInput.addEventListener("input", cancelRepositoryRequest);
+cancelFetch.addEventListener("click", cancelRepositoryRequest);
+window.addEventListener("hashchange", readFragment);
+readFragment();
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   void run();

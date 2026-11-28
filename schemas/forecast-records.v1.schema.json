@@ -16,6 +16,9 @@
           { "$ref": "#/$defs/timeBucket" },
           { "$ref": "#/$defs/finding" },
           { "$ref": "#/$defs/fileRead" },
+          { "$ref": "#/$defs/fileSkipped" },
+          { "$ref": "#/$defs/repositoryNetwork" },
+          { "$ref": "#/$defs/repositorySkippedOverflow" },
           { "$ref": "#/$defs/noData" },
           { "$ref": "#/$defs/noSupportedDeclarations" },
           { "$ref": "#/$defs/downloadableFile" }
@@ -23,7 +26,7 @@
       },
       "allOf": [
         { "contains": { "$ref": "#/$defs/timeBucket" } },
-        { "contains": { "$ref": "#/$defs/fileRead" } },
+        { "contains": { "anyOf": [{ "$ref": "#/$defs/fileRead" }, { "$ref": "#/$defs/fileSkipped" }] } },
         { "contains": { "$ref": "#/$defs/downloadableFile" }, "maxContains": 1 }
       ]
     }
@@ -103,6 +106,36 @@
       "if": { "properties": { "input": { "const": "file" } } },
       "then": { "required": ["path"] },
       "else": { "properties": { "path": false } }
+    },
+    "fileSkipped": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path", "reason"],
+      "properties": {
+        "kind": { "const": "file-skipped" },
+        "path": { "$ref": "#/$defs/text" },
+        "reason": { "$ref": "#/$defs/text" }
+      }
+    },
+    "repositoryNetwork": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "code", "message"],
+      "properties": {
+        "kind": { "const": "notice" },
+        "code": { "const": "repository-network" },
+        "message": { "$ref": "#/$defs/text" }
+      }
+    },
+    "repositorySkippedOverflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "code", "count"],
+      "properties": {
+        "kind": { "const": "notice" },
+        "code": { "const": "repository-skipped-overflow" },
+        "count": { "type": "integer", "minimum": 1 }
+      }
     },
     "noData": {
       "type": "object",

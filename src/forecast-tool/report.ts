@@ -72,22 +72,39 @@ export function createReport(contents: string, data: ForecastData, today: string
   return reportFromReferences(readReferences(contents, data, path), data, today, path ?? "");
 }
 
-export interface ForecastInputFile {
-  contents: string;
-  path?: string;
+const toolLimit = 10_000;
+
+function checkDeclarationLimit(total: number): void {
+  if (total > toolLimit) throw new Error("The input contains too many declarations for the forecast.");
 }
 
-/** Build one forecast over every selected file, sharing the rule index and event timeline. */
-export function createToolReport(files: readonly ForecastInputFile[], data: ForecastData, today: string, root: string) {
-  const limit = 10_000;
+export function createToolReport(contents: string, data: ForecastData, today: string, path?: string) {
+  const references = readReferences(contents, data, path);
+  checkDeclarationLimit(references.length);
+  return reportFromReferences(references, data, today, path ?? "", toolLimit);
+}
+
+/** Parse verified repository files without allowing an unreadable manifest to hide the rest. */
+export function createRepositoryReport(
+  files: readonly { path: string; contents: string }[],
+  data: ForecastData,
+  today: string,
+  root: string,
+) {
   const references: Reference[] = [];
+  const read: string[] = [];
+  const skipped: Array<{ path: string; reason: string }> = [];
   for (const { contents, path } of files) {
-    if (!contents.trim()) continue;
-    const entries = readReferences(contents, data, path);
-    if (entries.length + references.length > limit) {
-      throw new Error("The input contains too many declarations for the forecast.");
+    let entries: Reference[];
+    try {
+      entries = readReferences(contents, data, path);
+    } catch {
+      skipped.push({ path, reason: contents.trim() ? "Unsupported or invalid file contents." : "File is empty." });
+      continue;
     }
+    checkDeclarationLimit(references.length + entries.length);
     references.push(...entries);
+    read.push(path);
   }
-  return reportFromReferences(references, data, today, root, limit);
+  return { report: reportFromReferences(references, data, today, root, toolLimit), read, skipped };
 }

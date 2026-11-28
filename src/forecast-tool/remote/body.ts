@@ -8,7 +8,7 @@ export async function readBounded(response: Response, limit: number, label: stri
   const chunks: Uint8Array[] = [];
   let length = 0;
   try {
-    if (Number(response.headers.get("content-length")) > limit) throw tooLarge();
+    // Fetch decodes content encodings, while Content-Length can describe the wire bytes.
     for (;;) {
       const chunk = await reader.read();
       if (chunk.done) break;

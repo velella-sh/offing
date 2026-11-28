@@ -1,0 +1,25 @@
+{
+  "notFound": {
+    "status": 404,
+    "body": {
+      "message": "Not Found",
+      "documentation_url": "https://docs.github.com/rest/git/trees#get-a-tree",
+      "status": "404"
+    }
+  },
+  "empty": {
+    "status": 409,
+    "body": {
+      "message": "Git Repository is empty.",
+      "documentation_url": "https://docs.github.com/rest/git/trees#get-a-tree",
+      "status": "409"
+    }
+  },
+  "rateLimited": {
+    "status": 403,
+    "headers": {
+      "x-ratelimit-remaining": "0",
+      "x-ratelimit-reset": "1787831395"
+    }
+  }
+}

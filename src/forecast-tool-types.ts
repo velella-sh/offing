@@ -27,11 +27,20 @@ interface SummaryRecord {
   total: number;
 }
 
+/** Explain why a supported repository path could not contribute to the forecast. */
+export interface ForecastSkippedFile {
+  path: string;
+  reason: string;
+}
+
 type DetailRecord =
   | (Omit<ForecastBucket, "events"> & { kind: "time-bucket" })
   | (ForecastEvent & { kind: "finding"; bucketUntil: string })
   | { kind: "file-read"; input: "file"; path: string }
   | { kind: "file-read"; input: "paste" }
+  | ({ kind: "file-skipped" } & ForecastSkippedFile)
+  | { kind: "notice"; code: "repository-network"; message: string }
+  | { kind: "notice"; code: "repository-skipped-overflow"; count: number }
   | (Omit<UnclassifiedReference, "detector"> & { kind: "notice"; code: "no-data" })
   | { kind: "notice"; code: "no-supported-declarations" }
   | {

@@ -220,6 +220,7 @@ test("acc-forecast-island file and paste use only host data and return matching 
   const paste = await runForecastTool({ kind: "paste", text: privateText }, context, release, today);
   for (const result of [file, paste]) {
     assert.equal(result.status, "ok");
+    assert.ok(!result.records.some((entry) => entry.kind === "notice" && entry.code === "repository-network"));
     assert.ok(matchesSchema({ schemaVersion: "offing.forecast-records.v1", records: result.records }));
     const calendar = result.records.find((entry) => entry.kind === "downloadable-file");
     assert.ok(calendar?.kind === "downloadable-file");
@@ -347,6 +348,9 @@ test("acc-forecast-island runs a public repository forecast only with the approv
     paths.map((path) => ({ path, line: 3 })),
   );
   assert.equal(result.records.filter((entry) => entry.kind === "downloadable-file").length, 1);
+  const disclosure = result.records.find((entry) => entry.kind === "notice" && entry.code === "repository-network");
+  assert.ok(disclosure?.kind === "notice" && disclosure.code === "repository-network");
+  assert.match(disclosure.message, /api\.github\.com.*raw\.githubusercontent\.com.*sent to Velella/);
 
   const empty = await runForecastTool(
     input,
@@ -402,4 +406,96 @@ test("acc-forecast-island rejects oversized serialized records for valid input",
       records: [],
     });
   }
+});
+
+test("acc-forecast-link reports parsed, empty, invalid and budget-skipped verified files", async (t) => {
+  const { bytes, release } = await localRelease();
+  const data = t.mock.fn(async () => bytes);
+  const sources = new Map([
+    [".github/workflows/check.yml", "jobs:\n  job:\n    steps:\n      - uses: actions/checkout@v2"],
+    ["bad/package.json", "invalid JSON"],
+    ["empty/requirements.txt", ""],
+    ["package.json", '{"dependencies":{"next":"15.0.0"}}'],
+  ]);
+  const files = [...sources].map(([path, text]) => {
+    const size = Buffer.byteLength(text);
+    return {
+      type: "blob",
+      mode: "100644",
+      path,
+      size,
+      sha: createHash("sha1").update(`blob ${size}\0`).update(text).digest("hex"),
+    };
+  });
+  files.push(
+    ...Array.from({ length: 41 }, (_, index) => ({
+      type: "blob",
+      mode: "100644",
+      path: `large-${index}/package.json`,
+      size: 1024 * 1024 + 1,
+      sha: "0".repeat(40),
+    })),
+  );
+  const repositoryForecast = (entries: typeof files) =>
+    runForecastTool(
+      { kind: "url", value: "github/example/project" },
+      {
+        signal: new AbortController().signal,
+        data,
+        publicRepositoryFetch: async (url) => {
+          if (url === "https://api.github.com/repos/example/project/git/trees/HEAD?recursive=1") {
+            return Response.json({ truncated: false, tree: entries });
+          }
+          const prefix = "https://raw.githubusercontent.com/example/project/HEAD/";
+          assert.ok(typeof url === "string" && url.startsWith(prefix));
+          const text = sources.get(url.slice(prefix.length));
+          assert.notEqual(text, undefined, "Skipped paths must never download");
+          return new Response(text);
+        },
+      },
+      release,
+      today,
+    );
+  const result = await repositoryForecast(files);
+  assert.equal(result.status, "ok", result.message);
+  assert.ok(matchesSchema({ schemaVersion: "offing.forecast-records.v1", records: result.records }));
+  assert.deepEqual(
+    result.records.filter((entry) => entry.kind === "file-read"),
+    [
+      { kind: "file-read", input: "file", path: ".github/workflows/check.yml" },
+      { kind: "file-read", input: "file", path: "package.json" },
+    ],
+  );
+  const skips = result.records.filter((record) => record.kind === "file-skipped");
+  assert.equal(skips.length, 42);
+  assert.ok(
+    skips.some(
+      (entry) =>
+        entry.kind === "file-skipped" && entry.path === "empty/requirements.txt" && entry.reason === "File is empty.",
+    ),
+  );
+  assert.ok(
+    skips.some(
+      (entry) =>
+        entry.kind === "file-skipped" &&
+        entry.path === "bad/package.json" &&
+        entry.reason === "Unsupported or invalid file contents.",
+    ),
+  );
+  assert.ok(skips.some((entry) => entry.kind === "file-skipped" && entry.reason === "File exceeds 1 MiB."));
+  assert.deepEqual(
+    result.records.find((entry) => entry.kind === "notice" && entry.code === "repository-skipped-overflow"),
+    {
+      kind: "notice",
+      code: "repository-skipped-overflow",
+      count: 1,
+    },
+  );
+
+  const skippedOnly = await repositoryForecast(files.filter(({ path }) => path.startsWith("large-")));
+  assert.equal(skippedOnly.status, "no-data");
+  assert.equal(skippedOnly.records[0]?.checked, 0);
+  assert.ok(matchesSchema({ schemaVersion: "offing.forecast-records.v1", records: skippedOnly.records }));
+  assert.ok(skippedOnly.records.every(({ kind }) => kind !== "file-read"));
+  assert.equal(data.mock.callCount(), 2);
 });

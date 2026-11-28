@@ -1,0 +1,1 @@
+- Run public GitHub repository forecasts from shareable browser links with explicit approval, cancellation and per-file results.

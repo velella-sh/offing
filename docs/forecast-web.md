@@ -1,14 +1,15 @@
 ---
 title: Browser lifecycle forecast
-description: Check a single dependency file and export lifecycle deadlines from your browser.
+description: Check a local dependency file or a public GitHub repository for lifecycle deadlines in your browser.
 ---
 
 # Browser lifecycle forecast
 
 [Open the browser forecast](https://velella.sh/offing/forecast-web/app/).
 
-Drop or choose a file, or paste its contents and select **Run forecast**. The forecast
-groups dated events into 0–3, 3–6 and 6–12 months from today in UTC. The weather
+For a private or local file, drop or choose it, or paste its contents and select **Run forecast**.
+For a public GitHub repository, see [Public repository links](#public-repository-links).
+The forecast groups dated events into 0–3, 3–6 and 6–12 months from today in UTC. The weather
 summarizes the nearest bucket and any coverage gaps. Use **Download .ics** to import
 dates that affect your file into a calendar, or **Copy summary** to share the text.
 
@@ -24,13 +25,14 @@ dates that affect your file into a calendar, or **Copy summary** to share the te
 
 ## Privacy and limits
 
-File names, contents, and results stay in the browser. The page requests its assets and a
-fixed, signed Ebb data bundle from the Offing site. It verifies the bundle before using it
+Names and contents from the local file and paste forms stay in the browser, along with
+forecast results. The page requests its assets and a fixed, signed Ebb data bundle from
+the Offing site. It verifies the bundle before using it
 and reuses the verified data while the page is open. Downloads and clipboard text are
 generated locally. The page needs HTTPS or localhost for signature verification and
 clipboard access.
 
-Each forecast reads one file up to 5 MiB. Offing compares listed versions and written
+A local forecast accepts one file or paste up to 5 MiB. Offing compares listed versions and written
 minimums with published dates. It skips dynamic refs and version constraints without a
 supported explicit minimum. It does not resolve dependencies, follow requirements includes,
 evaluate Python environment markers or execute workflow expressions. Source-level rules,
@@ -45,8 +47,11 @@ date range, Ebb data version, weather and counts. Each time bucket precedes the
 findings it contains. A finding's `bucketUntil` identifies its bucket, and its
 `source` links to the lifecycle evidence.
 
-Each file record gives a processed file's name or identifies pasted input. A
-`no-data` notice names an unclassified reference and explains the gap.
+A `file-read` record gives a processed file's name or identifies pasted input.
+A repository forecast adds `file-skipped` records with the path and reason
+and a `repository-network` notice naming the two GitHub hosts and what they
+receive. A `repository-skipped-overflow` notice gives the count of budget
+skips beyond the listed paths. A `no-data` notice names an unclassified reference and explains the gap.
 `no-supported-declarations` reports an input with no recognized declarations.
 The final record contains the locally generated iCalendar text and its media type.
 
@@ -60,16 +65,17 @@ File and paste modes process input locally and make no fetch calls.
 
 Pass an `AbortSignal` in `context.signal` to cancel the run. A forecast
 returns a status, a message and typed records including a calendar download.
-Validate a populated record list using the schema exported as
-`@velella/offing/schemas/forecast-records.v1.schema.json`. Errors and
-repository selections with no supported files return an empty list.
+Wrap a populated record list with `{ schemaVersion: "offing.forecast-records.v1", records }`
+to validate it against `@velella/offing/schemas/forecast-records.v1.schema.json`.
+Errors and repositories with no supported paths to report return an empty list.
 A run accepts up to 5 MiB of input, 10,000 declarations and 10,000
 matched lifecycle rules. Serialized records are limited to 5 MiB.
 
 The `acc-forecast-island` tests verify file, paste and repository modes with
-a signed local fixture. The public page continues to use its existing file and
-paste form. Integration and conformance checks with the Mizzen and Lateen
-tool host are tracked in [#565](https://github.com/velella-sh/offing/issues/565).
+a signed local fixture. The `acc-forecast-link` checks exercise consent,
+cancellation, file reporting and recorded GitHub error responses.
+Mizzen and Lateen host conformance is tracked in
+[#565](https://github.com/velella-sh/offing/issues/565).
 
 ### Refresh the signed Ebb data pin
 
@@ -89,25 +95,39 @@ Update the file name, version, public key and signature in
 both the Sigstore attestation and the embedded key and signature against
 the downloaded bytes.
 
-## Public repository selectors
+## Public repository links
 
-The module accepts a `{ kind: "url", value }` input. The value is
-`github/<owner>/<repo>` or `github/<owner>/<repo>@<ref>`, with `HEAD` as
-the default ref. For a selector taken from a URL fragment, pass the value
-without the leading `#`. After the user approves access to GitHub, the host can
-provide `context.publicRepositoryFetch`. A selector submitted before that
-approval returns an error without requesting data or using the network.
+Enter `github/<owner>/<repo>` in the browser's **Public GitHub repository**
+field, or [open a public repository link](https://velella.sh/offing/forecast-web/app/#github/expressjs/express).
+A URL fragment fills the field without making requests. Review the notice
+and select **Fetch public files and run forecast** to approve the lookup.
+After submission you can copy the address to share the selected repository.
+For repeatable results, [link to a commit](https://velella.sh/offing/forecast-web/app/#github/expressjs/express@a419aa7350389a275ab45fde2e849ed1f02449ef)
+with `github/<owner>/<repo>@<commit-sha>`. Tags and branch names also work,
+with `HEAD` as the default ref. To stop a fetch, select **Cancel fetch**,
+change the repository or start a local forecast.
 
-The module makes one unauthenticated Git Trees request to
-`https://api.github.com` and reads selected files from
-`https://raw.githubusercontent.com` using the fetch supplied by the host.
-It omits credentials and refuses redirects. It selects regular files with
-the supported names above and YAML files directly under `.github/workflows/`.
-The limits are 40 files, 1 MiB per file and 5 MiB across the selected files.
-A truncated or invalid tree produces an error before any file downloads.
+The browser makes one anonymous Git Trees request to `api.github.com` and
+downloads selected files from `raw.githubusercontent.com`. Offing omits
+credentials and refuses redirects. No repository contents or forecast results
+are sent to Velella. For private, missing or empty repositories, use the
+file or paste form. A private repository and a missing repository can return
+the same GitHub response.
 
-A branch or tag can move during a forecast. The adapter checks the Git blob
-ID of each downloaded file against the tree listing. Use a commit SHA for
-a reproducible link. A rate-limit message gives the remaining requests and
-the UTC reset time when GitHub sends those values. Each fetched file is
-listed in the result and contributes to the same forecast.
+Offing reads the supported manifest and lockfile names above at any depth and
+YAML files directly in `.github/workflows/`. It selects regular files by
+path, with a limit of 40 files, 1 MiB per file, 5 MiB across downloads and
+8 MiB of decoded bytes for the tree response. An invalid or truncated tree stops the run.
+Offing verifies the Git blob ID of each download and stops if the contents
+changed during the fetch. It lists each parsed file, each empty or invalid
+download and up to 40 supported paths skipped before downloading. The
+remaining count is shown if the skip list hits its limit.
+
+A rate-limit message includes the remaining request count and UTC reset time
+when GitHub supplies them. Wait for the reset or choose a local file. Offing
+does not retry automatically.
+
+For a module host, pass `{ kind: "url", value }` with the selector and no
+leading `#`. Supply `context.publicRepositoryFetch` only after the user's
+approval. Without the capability, `run` returns a consent error before making
+a network request or reading data.

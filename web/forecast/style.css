@@ -49,6 +49,7 @@ form {
   border: 1px solid var(--rule);
   border-radius: .5rem;
 }
+#repository-form { margin-bottom: 1rem; }
 label { font-weight: 650; }
 .drop-area {
   display: grid;
@@ -61,10 +62,8 @@ label { font-weight: 650; }
 }
 .drop-area[data-active] { outline: 2px solid var(--accent); outline-offset: 2px; }
 input { max-width: 100%; }
-textarea {
+textarea, #repository {
   width: 100%;
-  min-height: 6rem;
-  resize: vertical;
   padding: .7rem;
   border: 1px solid var(--rule);
   border-radius: .25rem;
@@ -72,6 +71,7 @@ textarea {
   color: var(--ink);
   font: .92rem/1.5 ui-monospace, monospace;
 }
+textarea { min-height: 6rem; resize: vertical; }
 button, input::file-selector-button {
   font: inherit;
   font-weight: 650;
@@ -90,7 +90,7 @@ input::file-selector-button { margin-inline-end: .65rem; }
   gap: .7rem 1rem;
 }
 #status, #export-status { margin-block: .75rem; }
-.drop-area p, .form-footer p, #period, .bucket-count { color: var(--muted); font-size: .92rem; }
+.drop-area p, .form-footer p, #network-notice, #period, .bucket-count { color: var(--muted); font-size: .92rem; }
 .results-header { justify-content: space-between; margin-bottom: 1.25rem; }
 #period { margin-top: .4rem; }
 .exports button { background: var(--paper); color: var(--accent); }
