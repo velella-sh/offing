@@ -1,0 +1,96 @@
+{
+  "id": "agentgg-dev-agentgg",
+  "repository": "agentgg-dev/agentgg",
+  "commit": "20cca9c1896ef4fee26c93a8730c0f46e4ca44d6",
+  "profile": "github-actions",
+  "cases": [
+    {
+      "fixer": "github-actions-uses",
+      "patch": {
+        "path": "agentgg-dev-agentgg/github-actions-uses/fix.patch",
+        "sha256": "cb298ba05c5e3d9ed011d354bd1174add3a412a3f5e30f7011244e611bee6e35"
+      },
+      "checks": {
+        "build": {
+          "schemaVersion": "offing.test-run.v1",
+          "command": [
+            "sh",
+            "-ec",
+            "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+          ],
+          "attempts": [
+            {
+              "exitCode": 0,
+              "durationMs": 671,
+              "status": "passed",
+              "totals": null,
+              "failures": [],
+              "logs": {
+                "stdout": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                },
+                "stderr": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                }
+              }
+            }
+          ],
+          "flaky": [],
+          "files": [
+            {
+              "stdout": "agentgg-dev-agentgg/github-actions-uses/build-1.stdout",
+              "stderr": "agentgg-dev-agentgg/github-actions-uses/build-1.stderr"
+            }
+          ]
+        }
+      },
+      "metrics": {
+        "deterministic": true,
+        "applied": true,
+        "resolved": false,
+        "noNewFinding": true,
+        "idempotent": true,
+        "buildKeptGreen": true,
+        "testsKeptGreen": null
+      }
+    }
+  ],
+  "baseline": {
+    "build": {
+      "schemaVersion": "offing.test-run.v1",
+      "command": [
+        "sh",
+        "-ec",
+        "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+      ],
+      "attempts": [
+        {
+          "exitCode": 0,
+          "durationMs": 734,
+          "status": "passed",
+          "totals": null,
+          "failures": [],
+          "logs": {
+            "stdout": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            },
+            "stderr": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            }
+          }
+        }
+      ],
+      "flaky": [],
+      "files": [
+        {
+          "stdout": "agentgg-dev-agentgg/baseline/build-1.stdout",
+          "stderr": "agentgg-dev-agentgg/baseline/build-1.stderr"
+        }
+      ]
+    }
+  }
+}

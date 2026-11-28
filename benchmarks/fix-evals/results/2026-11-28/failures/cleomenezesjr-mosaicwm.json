@@ -1,0 +1,96 @@
+{
+  "id": "cleomenezesjr-mosaicwm",
+  "repository": "CleoMenezesJr/MosaicWM",
+  "commit": "db885f37744f8f427848f2f42237f8a77adff7a3",
+  "profile": "github-actions",
+  "cases": [
+    {
+      "fixer": "github-actions-uses",
+      "patch": {
+        "path": "cleomenezesjr-mosaicwm/github-actions-uses/fix.patch",
+        "sha256": "459db5183dae75c91a2d5bc8e0ce028fcbf9ab04df1c0eded32551ee1dc425ae"
+      },
+      "checks": {
+        "build": {
+          "schemaVersion": "offing.test-run.v1",
+          "command": [
+            "sh",
+            "-ec",
+            "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+          ],
+          "attempts": [
+            {
+              "exitCode": 0,
+              "durationMs": 408,
+              "status": "passed",
+              "totals": null,
+              "failures": [],
+              "logs": {
+                "stdout": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                },
+                "stderr": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                }
+              }
+            }
+          ],
+          "flaky": [],
+          "files": [
+            {
+              "stdout": "cleomenezesjr-mosaicwm/github-actions-uses/build-1.stdout",
+              "stderr": "cleomenezesjr-mosaicwm/github-actions-uses/build-1.stderr"
+            }
+          ]
+        }
+      },
+      "metrics": {
+        "deterministic": true,
+        "applied": true,
+        "resolved": false,
+        "noNewFinding": true,
+        "idempotent": true,
+        "buildKeptGreen": true,
+        "testsKeptGreen": null
+      }
+    }
+  ],
+  "baseline": {
+    "build": {
+      "schemaVersion": "offing.test-run.v1",
+      "command": [
+        "sh",
+        "-ec",
+        "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+      ],
+      "attempts": [
+        {
+          "exitCode": 0,
+          "durationMs": 451,
+          "status": "passed",
+          "totals": null,
+          "failures": [],
+          "logs": {
+            "stdout": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            },
+            "stderr": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            }
+          }
+        }
+      ],
+      "flaky": [],
+      "files": [
+        {
+          "stdout": "cleomenezesjr-mosaicwm/baseline/build-1.stdout",
+          "stderr": "cleomenezesjr-mosaicwm/baseline/build-1.stderr"
+        }
+      ]
+    }
+  }
+}

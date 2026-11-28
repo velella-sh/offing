@@ -1,0 +1,949 @@
+{
+  "schemaVersion": "offing.fix-evals.v1",
+  "selected": 60,
+  "repositories": 50,
+  "fixtures": false,
+  "revision": "f266972e666b1e61860698eb59c81fd5f689e198",
+  "ebb": "0.2.0",
+  "excluded": [
+    {
+      "id": "cnosdb-cnosdb",
+      "reason": "no-comparable-profile"
+    },
+    {
+      "id": "dpgaspar-flask-appbuilder",
+      "reason": "no-comparable-profile"
+    },
+    {
+      "id": "dynamicexpresso-dynamicexpresso",
+      "reason": "no-comparable-profile"
+    },
+    {
+      "id": "joserodpt-realscoreboard",
+      "reason": "no-comparable-profile"
+    },
+    {
+      "id": "knrt10-kubernetes-basiclearning",
+      "reason": "no-comparable-profile"
+    },
+    {
+      "id": "monogramm-autodiscover-email-settings",
+      "reason": "no-comparable-profile"
+    },
+    {
+      "id": "n8henrie-pycookiecheat",
+      "reason": "no-comparable-profile"
+    },
+    {
+      "id": "readme-workflows-recent-activity",
+      "reason": "no-comparable-profile"
+    },
+    {
+      "id": "streamich-fs-monkey",
+      "reason": "no-comparable-profile"
+    },
+    {
+      "id": "zhanyong-wan-dongbei",
+      "reason": "no-comparable-profile"
+    }
+  ],
+  "fixers": [
+    {
+      "id": "action-runtime",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "codemods",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "dockerfile",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "dockerfile-legacy",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "github-actions-uses",
+      "cases": 45,
+      "status": "measured",
+      "metrics": {
+        "deterministic": {
+          "passed": 45,
+          "applicable": 45,
+          "percent": 100
+        },
+        "applied": {
+          "passed": 45,
+          "applicable": 45,
+          "percent": 100
+        },
+        "resolved": {
+          "passed": 29,
+          "applicable": 45,
+          "percent": 64.44444444444444
+        },
+        "noNewFinding": {
+          "passed": 45,
+          "applicable": 45,
+          "percent": 100
+        },
+        "idempotent": {
+          "passed": 45,
+          "applicable": 45,
+          "percent": 100
+        },
+        "buildKeptGreen": {
+          "passed": 45,
+          "applicable": 45,
+          "percent": 100
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": [
+        {
+          "repository": "achtaitaipai-odyc",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "adamant-im-adamant-api-jsclient",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "agentgg-dev-agentgg",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "agions-dramaxis",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "alirezakj-bettersoundcloud",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "antfu-v-lazy-show",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "bikeshaving-repeater",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "billionsbobby-jevrouter",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "chilfish-weibo-archiver",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "cleomenezesjr-mosaicwm",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "cloudfour-lighthouse-parade",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "connectrpc-connect-playwright-es",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "connectrpc-connect-query-es",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "danieltyukov-studocuhack",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "davidpob99-nasa-wallpaper",
+          "failures": ["resolved"]
+        },
+        {
+          "repository": "dc7290-next-export-optimize-images",
+          "failures": ["resolved"]
+        }
+      ]
+    },
+    {
+      "id": "go-mod",
+      "cases": 1,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "applied": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "java",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "kubernetes",
+      "cases": 1,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "applied": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 1,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": [
+        {
+          "repository": "stefanprodan-k8s-prom-hpa",
+          "failures": ["buildKeptGreen"]
+        }
+      ]
+    },
+    {
+      "id": "kubernetes-ingress-v1",
+      "cases": 1,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "applied": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "node-buffer",
+      "cases": 1,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "applied": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "node-renames",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "node-util-is",
+      "cases": 1,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "applied": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "python",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "python-imp",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "python-renames",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "python-utcnow",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "runtime-pins",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "terraform-legacy",
+      "cases": 1,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "applied": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 1,
+          "applicable": 1,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    },
+    {
+      "id": "workflow-commands",
+      "cases": 0,
+      "status": "too few cases",
+      "metrics": {
+        "deterministic": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "applied": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "resolved": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "noNewFinding": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "idempotent": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "buildKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        },
+        "testsKeptGreen": {
+          "passed": 0,
+          "applicable": 0,
+          "percent": null
+        }
+      },
+      "failures": []
+    }
+  ],
+  "scannedAt": "2026-11-27T00:00:00.000Z",
+  "selectionRevision": "b821f1ce170475aea318e7e72dc93a1c1af700ee",
+  "images": {
+    "github-actions": "docker.io/rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7",
+    "terraform:docker.io/hashicorp/terraform@sha256:1c27ac61857ceeb75c4119ea908143791f3f05914142116181355bb360e61e33": "docker.io/hashicorp/terraform@sha256:1c27ac61857ceeb75c4119ea908143791f3f05914142116181355bb360e61e33",
+    "npm": "docker.io/library/node@sha256:e0e989b967dacc279681ed81774b2ce9eeebbb0efb8e0c427573235bebf1eda1",
+    "go": "docker.io/library/golang@sha256:66c04b389c4b0a2e0f0d51f3a37de0109650887a321b2a3b8cd9f573d7490a01",
+    "kubernetes": "sha256:5006303e972de19ed64bdc0efb57824960017450a7c0e59e4523dd1ac3cd9d8f"
+  },
+  "evidenceSha256": "a4449c04edc07e46c0543244d17670b62115763decd19926b09a9d514703ca6b"
+}

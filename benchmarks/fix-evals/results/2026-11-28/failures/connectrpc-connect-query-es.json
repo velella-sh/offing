@@ -1,0 +1,96 @@
+{
+  "id": "connectrpc-connect-query-es",
+  "repository": "connectrpc/connect-query-es",
+  "commit": "584732abf870b5561ba50052d02caf0c85635204",
+  "profile": "github-actions",
+  "cases": [
+    {
+      "fixer": "github-actions-uses",
+      "patch": {
+        "path": "connectrpc-connect-query-es/github-actions-uses/fix.patch",
+        "sha256": "95d0e0b534049510f4ecc5aaa78c73432e0dfb5833894aa1ef7c5c87036bb5ba"
+      },
+      "checks": {
+        "build": {
+          "schemaVersion": "offing.test-run.v1",
+          "command": [
+            "sh",
+            "-ec",
+            "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+          ],
+          "attempts": [
+            {
+              "exitCode": 0,
+              "durationMs": 472,
+              "status": "passed",
+              "totals": null,
+              "failures": [],
+              "logs": {
+                "stdout": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                },
+                "stderr": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                }
+              }
+            }
+          ],
+          "flaky": [],
+          "files": [
+            {
+              "stdout": "connectrpc-connect-query-es/github-actions-uses/build-1.stdout",
+              "stderr": "connectrpc-connect-query-es/github-actions-uses/build-1.stderr"
+            }
+          ]
+        }
+      },
+      "metrics": {
+        "deterministic": true,
+        "applied": true,
+        "resolved": false,
+        "noNewFinding": true,
+        "idempotent": true,
+        "buildKeptGreen": true,
+        "testsKeptGreen": null
+      }
+    }
+  ],
+  "baseline": {
+    "build": {
+      "schemaVersion": "offing.test-run.v1",
+      "command": [
+        "sh",
+        "-ec",
+        "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+      ],
+      "attempts": [
+        {
+          "exitCode": 0,
+          "durationMs": 457,
+          "status": "passed",
+          "totals": null,
+          "failures": [],
+          "logs": {
+            "stdout": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            },
+            "stderr": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            }
+          }
+        }
+      ],
+      "flaky": [],
+      "files": [
+        {
+          "stdout": "connectrpc-connect-query-es/baseline/build-1.stdout",
+          "stderr": "connectrpc-connect-query-es/baseline/build-1.stderr"
+        }
+      ]
+    }
+  }
+}

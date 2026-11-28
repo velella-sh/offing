@@ -1,0 +1,96 @@
+{
+  "id": "danieltyukov-studocuhack",
+  "repository": "danieltyukov/studocuhack",
+  "commit": "a01a3ecb50573d9a7e15b29ebcb368f7c292db18",
+  "profile": "github-actions",
+  "cases": [
+    {
+      "fixer": "github-actions-uses",
+      "patch": {
+        "path": "danieltyukov-studocuhack/github-actions-uses/fix.patch",
+        "sha256": "bfbda4d831be51c1ed6d9ee23723c261040590a772e3dfeaa5e35da4fc6c963f"
+      },
+      "checks": {
+        "build": {
+          "schemaVersion": "offing.test-run.v1",
+          "command": [
+            "sh",
+            "-ec",
+            "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+          ],
+          "attempts": [
+            {
+              "exitCode": 0,
+              "durationMs": 677,
+              "status": "passed",
+              "totals": null,
+              "failures": [],
+              "logs": {
+                "stdout": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                },
+                "stderr": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                }
+              }
+            }
+          ],
+          "flaky": [],
+          "files": [
+            {
+              "stdout": "danieltyukov-studocuhack/github-actions-uses/build-1.stdout",
+              "stderr": "danieltyukov-studocuhack/github-actions-uses/build-1.stderr"
+            }
+          ]
+        }
+      },
+      "metrics": {
+        "deterministic": true,
+        "applied": true,
+        "resolved": false,
+        "noNewFinding": true,
+        "idempotent": true,
+        "buildKeptGreen": true,
+        "testsKeptGreen": null
+      }
+    }
+  ],
+  "baseline": {
+    "build": {
+      "schemaVersion": "offing.test-run.v1",
+      "command": [
+        "sh",
+        "-ec",
+        "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+      ],
+      "attempts": [
+        {
+          "exitCode": 0,
+          "durationMs": 708,
+          "status": "passed",
+          "totals": null,
+          "failures": [],
+          "logs": {
+            "stdout": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            },
+            "stderr": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            }
+          }
+        }
+      ],
+      "flaky": [],
+      "files": [
+        {
+          "stdout": "danieltyukov-studocuhack/baseline/build-1.stdout",
+          "stderr": "danieltyukov-studocuhack/baseline/build-1.stderr"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "id": "achtaitaipai-odyc",
+  "repository": "achtaitaipai/odyc",
+  "commit": "6cb119e0bc90833ea0384cac9064f94e3c2f8d09",
+  "profile": "github-actions",
+  "cases": [
+    {
+      "fixer": "github-actions-uses",
+      "patch": {
+        "path": "achtaitaipai-odyc/github-actions-uses/fix.patch",
+        "sha256": "3ec204f83402d68cf6a8005cfc331baa22d1c953b7ce761ba0a4561a0a0a733d"
+      },
+      "checks": {
+        "build": {
+          "schemaVersion": "offing.test-run.v1",
+          "command": [
+            "sh",
+            "-ec",
+            "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+          ],
+          "attempts": [
+            {
+              "exitCode": 0,
+              "durationMs": 583,
+              "status": "passed",
+              "totals": null,
+              "failures": [],
+              "logs": {
+                "stdout": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                },
+                "stderr": {
+                  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "tail": ""
+                }
+              }
+            }
+          ],
+          "flaky": [],
+          "files": [
+            {
+              "stdout": "achtaitaipai-odyc/github-actions-uses/build-1.stdout",
+              "stderr": "achtaitaipai-odyc/github-actions-uses/build-1.stderr"
+            }
+          ]
+        }
+      },
+      "metrics": {
+        "deterministic": true,
+        "applied": true,
+        "resolved": false,
+        "noNewFinding": true,
+        "idempotent": true,
+        "buildKeptGreen": true,
+        "testsKeptGreen": null
+      }
+    }
+  ],
+  "baseline": {
+    "build": {
+      "schemaVersion": "offing.test-run.v1",
+      "command": [
+        "sh",
+        "-ec",
+        "set -- .github/workflows/*.yml .github/workflows/*.yaml; for f do if [ -f \"$f\" ]; then set -- \"$@\" \"$f\"; fi; shift; done; [ \"$#\" -gt 0 ]; actionlint \"$@\""
+      ],
+      "attempts": [
+        {
+          "exitCode": 0,
+          "durationMs": 602,
+          "status": "passed",
+          "totals": null,
+          "failures": [],
+          "logs": {
+            "stdout": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            },
+            "stderr": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "tail": ""
+            }
+          }
+        }
+      ],
+      "flaky": [],
+      "files": [
+        {
+          "stdout": "achtaitaipai-odyc/baseline/build-1.stdout",
+          "stderr": "achtaitaipai-odyc/baseline/build-1.stderr"
+        }
+      ]
+    }
+  }
+}
