@@ -9,22 +9,11 @@ description: "The agent migration benchmark: does a coding agent resolve a real 
 
 The agent migration benchmark measures whether a coding agent resolves a real lifecycle finding, and whether the finding's [migration packet](MIGRATION_PACKETS.md) changes that outcome. It runs every task twice — once from a bare task prompt and once from the packet prompt — in separate worktrees at the task's pinned commit.
 
-This page publishes the task set, the two arms, the scoring rules, and the reproduction commands. It deliberately contains no estimated numbers: the measured per-agent results are not recorded in this repository yet.
-
-### Run metadata
-
-| Field                              | Value             |
-| ---------------------------------- | ----------------- |
-| Page published                     | 2026-11-01        |
-| Benchmark implementation at        | commit `1acd0968` |
-| Measured run                       | none recorded     |
-| Agents and model versions measured | none recorded     |
-
-A measured run needs real agent hosts and local clones of the pinned repositories. It is tracked separately in [#1534](https://github.com/velella-sh/offing/issues/1534), which will publish the per-agent tables and link them here.
+The recorded runs identify the agent, toolchain, pinned project commits and checks that ran. Static verification and upstream project builds are reported separately.
 
 ### Task set
 
-The 20 tasks live in [`benchmarks/agent-migrations/tasks.json`](../benchmarks/agent-migrations/tasks.json). Each task pins a public repository and commit, one finding (`ruleId`, path, and line) that a scan of that commit reports, an expected end state, at least one verification command, and the real migration commit used as evidence.
+The tasks live in [`benchmarks/agent-migrations/tasks.json`](../benchmarks/agent-migrations/tasks.json). Each task pins a public repository and commit, one finding (`ruleId`, path, and line) that a scan of that commit reports, an expected end state, at least one verification command, and the real migration commit used as evidence.
 
 | Group                             | Tasks                                                                               |
 | --------------------------------- | ----------------------------------------------------------------------------------- |
@@ -35,8 +24,9 @@ The 20 tasks live in [`benchmarks/agent-migrations/tasks.json`](../benchmarks/ag
 | Node.js CI workflows              | `lighthouse-node`, `paperhanger-node`                                               |
 | PHP and Ruby runtimes             | `behat-php`, `packwerk-ruby`                                                        |
 | npm packages and Node.js          | `auth0-request`, `outline-koa-router`, `fork-corner-node-sass`, `outline-crypto-js` |
+| GitHub Actions versions and Python dependencies | The additional pinned cases in `tasks.json` |
 
-The expected end state is checked with regular expressions over the named files: each `mustNotMatch` must be absent and each `mustMatch` must be present. The verification commands are the project's own build or test commands, such as `cargo test --all --locked`, `go build ./...`, `dotnet build`, `docker build .`, or `yarn tsc`; they run in the migrated worktree.
+The expected end state is checked with regular expressions over the named files: each `mustNotMatch` must be absent and each `mustMatch` must be present. Tasks declare project checks such as `cargo test --all --locked` and `go build ./...`, or a static Git check when the case is limited to a manifest or workflow edit. The recorded evaluation runs project checks in disposable, offline containers.
 
 ### The two arms
 
@@ -53,8 +43,8 @@ For each arm the harness records the agent exit code, wall-clock duration, diff 
 
 [`benchmarks/agent-migrations/score.ts`](../benchmarks/agent-migrations/score.ts) applies three objective criteria. A migration succeeds only when all three hold:
 
-1. **Finding resolved** — every expected-end-state check passed.
-2. **Verification passed** — every task verification command exited 0.
+1. **Finding resolved** — the expected-end-state checks passed and an offline rescan confirmed the target finding was removed without introducing new findings.
+2. **Verification passed** — every verification command selected for that run exited 0.
 3. **No unrelated changes** — every path in the captured diff is allowed.
 
 The allowed set is the finding path, every expected-end-state check path, optional caller-supplied related paths (typically the packet's affected files), and companion lockfiles next to those paths (`Cargo.lock` next to `Cargo.toml`, `go.sum` next to `go.mod`, and the npm, Composer, Bundler, and other companion lockfiles listed in `score.ts`). Scoring is pure and offline: it does not invoke the agent, scan, or use the network.
@@ -65,13 +55,14 @@ When scoring a `packet` run, pass the packet's affected files as `relatedPaths` 
 
 ### Results per agent
 
-There are no result rows to publish yet. As of 2026-11-01, `benchmarks/agent-migrations/` contains the task set, the harness, and the scorer, but no result file from a real agent. The repository's discovery metrics in `metrics/discovery/` measure whether agent hosts recommend Offing; they are not migration results.
-
-When real runs exist, each row will record the agent and its version, the model and its version, the arm, attempts, successes, success rate, and the three criteria's counts and rates. Runs are not filtered: every failure and timeout is published with the row. The fake adapters used by the tests exercise the harness offline; they are not measurements, and CI never calls a model.
+- [Codex CLI pilot and static results](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-migrations/results/2026-11-27-codex-pilot.md) · [static run records](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-migrations/results/2026-11-27-codex-static.json)
+- [Codex CLI evaluation with isolated upstream project checks](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-migrations/results/2026-11-28-codex-evaluation.md) · [run records](https://github.com/velella-sh/offing/blob/main/benchmarks/agent-migrations/results/2026-11-28-codex-evaluation.json)
 
 ### Reproduction
 
-Requires Node.js 22 or newer, network access to clone the pinned repositories, and the toolchains the tasks verify with (Rust, Go, Docker, .NET, PHP, Ruby, Node.js, Bun, and Yarn as applicable).
+Requires Node.js 22 or newer, network access to clone the pinned repositories, and the toolchains the tasks verify with. Use a disposable evaluation environment. Run the project verification commands in isolated containers with networking disabled, credential storage absent, and dependency caches prepared from the pinned manifests and lockfiles.
+
+Copy `tasks.json` to `/tmp/isolated-tasks.json` and set the selected task's `verification` commands to invoke your isolated runner. Keep the task id, commit, finding, and end-state checks from the original task.
 
 ```bash
 npm ci
@@ -83,6 +74,7 @@ node dist/benchmarks/agent-migrations/run.js --list
 # Clone one pinned repository, then run both arms with a real agent.
 git clone https://github.com/sharkdp/hyperfine ~/src/hyperfine
 node dist/benchmarks/agent-migrations/run.js \
+  --tasks /tmp/isolated-tasks.json \
   --task hyperfine-atty \
   --repository ~/src/hyperfine \
   --agent-name claude-code \
@@ -91,6 +83,7 @@ node dist/benchmarks/agent-migrations/run.js \
 
 # One arm only, with explicit timeouts.
 node dist/benchmarks/agent-migrations/run.js \
+  --tasks /tmp/isolated-tasks.json \
   --task hyperfine-atty \
   --repository ~/src/hyperfine \
   --condition packet \
