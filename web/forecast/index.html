@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; form-action 'none'; base-uri 'none'; object-src 'none'">
   <title>Lifecycle forecast · Offing</title>
   <link rel="stylesheet" href="./style.css">
   <script type="module" src="./app.js"></script>
@@ -16,8 +16,18 @@
   </header>
   <main>
     <h1>Lifecycle forecast</h1>
-    <p class="intro">See which dependencies and runtimes in your file have published lifecycle deadlines in the next 12 months.</p>
+    <p class="intro">See which dependencies and runtimes in your dependency files have published lifecycle deadlines in the next 12 months.</p>
     <noscript><p>Enable JavaScript to check a file in your browser.</p></noscript>
+    <form id="repository-form">
+      <label for="repository">Public GitHub repository</label>
+      <input id="repository" type="text" maxlength="8192" placeholder="github/owner/repo@ref"
+        spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="network-notice" required>
+      <p id="network-notice"></p>
+      <div class="form-footer">
+        <button type="submit">Fetch public files and run forecast</button>
+        <button id="cancel-fetch" type="button" hidden>Cancel fetch</button>
+      </div>
+    </form>
     <form id="forecast-form">
       <div id="drop-area" class="drop-area">
         <label for="file">Drop a file here or choose one</label>
@@ -44,6 +54,10 @@
         </div>
       </div>
       <div id="buckets" class="buckets"></div>
+      <details id="repository-files" hidden>
+        <summary id="repository-files-title">Repository files</summary>
+        <ul id="repository-files-list"></ul>
+      </details>
       <details id="unclassified" hidden>
         <summary id="unclassified-title"></summary>
         <ul id="unclassified-list"></ul>

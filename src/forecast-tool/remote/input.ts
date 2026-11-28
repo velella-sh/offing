@@ -29,6 +29,7 @@ function readRef(value: string): string {
 
 /** Parse the URL input value supplied by the tool host, without the leading fragment marker. */
 export function parseGitHubForecastInput(value: string): GitHubLocation {
+  if (value.length > 8192) throw new Error("The repository selector is too long.");
   const [, owner, repo, ref = "HEAD"] = source.exec(value) ?? [];
   if (!owner || !repo || repo === "." || repo === "..") throw new Error(format);
   return { owner, repo, ref: readRef(ref) };

@@ -85,7 +85,7 @@ test("acc-forecast-link reads one tree and fetches only supported regular files 
     assert.notEqual(contents, undefined, path);
     return new Response(contents);
   });
-  const files = await readGitHubForecastFiles(input, fetchPublic);
+  const { files, skipped, omitted } = await readGitHubForecastFiles(input, fetchPublic);
   const paths = Object.keys(recorded.files).sort();
   assert.deepEqual(
     files,
@@ -94,20 +94,29 @@ test("acc-forecast-link reads one tree and fetches only supported regular files 
   assert.equal(requests[0], treeUrl);
   assert.equal(requests.length, paths.length + 1);
   assert.ok(requests.includes(`${raw}packages/app%20group/package.json`));
+  assert.deepEqual(skipped, [
+    { path: "bad-sha/package.json", reason: "Invalid GitHub file metadata." },
+    { path: "too-big/package-lock.json", reason: "File exceeds 1 MiB." },
+    { path: "unknown-size/package-lock.json", reason: "Invalid GitHub file metadata." },
+  ]);
+  assert.equal(omitted, 0);
 });
 
 test("acc-forecast-link caps repository file count and combined selected bytes", async () => {
   const empty = new Uint8Array();
   const million = new Uint8Array(1024 * 1024).fill(97);
-  const many = Array.from({ length: 42 }, (_, i) => blob(`pkg-${i}/package.json`, empty));
+  const many = Array.from({ length: 82 }, (_, i) => blob(`pkg-${i}/package.json`, empty));
   const large = Array.from({ length: 6 }, (_, i) => blob(`pkg-${i}/package.json`, million));
   for (const [entries, contents, max] of [
     [many, empty, 40],
     [large, million, 5],
   ] as const) {
     const { requests, fetchPublic } = fixtureFetch((url) => (url === treeUrl ? tree(entries) : new Response(contents)));
-    const files = await readGitHubForecastFiles(input, fetchPublic);
+    const { files, skipped, omitted } = await readGitHubForecastFiles(input, fetchPublic);
     assert.equal(files.length, max);
+    assert.equal(skipped.length, Math.min(entries.length - max, 40));
+    assert.equal(omitted, Math.max(0, entries.length - max - 40));
+    assert.ok(skipped.every(({ reason }) => reason === "Repository file count or byte limit reached."));
     assert.equal(requests.length, max + 1);
   }
 });
@@ -119,7 +128,7 @@ test("acc-forecast-link rejects untrusted, truncated and overlarge tree response
     [tree([duplicate, duplicate]), /duplicate repository path/u],
     [new Response("not-json"), /invalid repository tree/u],
     [Response.json({ tree: [] }), /invalid repository tree/u],
-    [new Response("", { headers: { "Content-Length": "8388609" } }), /repository tree exceeds 8388608 bytes/u],
+    [new Response(new Uint8Array(8 * 1024 * 1024 + 1)), /repository tree exceeds 8388608 bytes/u],
     [new Response(null, { status: 302, headers: { Location: "https://external.invalid" } }), /HTTP 302/u],
   ] as const) {
     const { requests, fetchPublic } = fixtureFetch(() => response);
@@ -150,13 +159,30 @@ test("acc-forecast-link checks the bytes as read and the Git blob before decodin
     [new Response(stream), file, /package.json exceeds 2 bytes/u],
     [new Response("[]"), file, /GitHub file changed while reading package.json/u],
     [new Response(""), file, /GitHub file changed while reading package.json/u],
-    [new Response(Uint8Array.of(255)), blob("package.json", Uint8Array.of(255)), /is not UTF-8 text/u],
   ] as const) {
     const { requests, fetchPublic } = fixtureFetch((url) => (url === treeUrl ? tree([listed]) : data));
     await assert.rejects(readGitHubForecastFiles(input, fetchPublic), message);
     assert.deepEqual(requests, [treeUrl, `${raw}package.json`]);
   }
   assert.equal(cancelled, true);
+  const compressed = fixtureFetch((url) =>
+    url === treeUrl
+      ? tree([file])
+      : new Response(valid, { headers: { "Content-Encoding": "gzip", "Content-Length": "22" } }),
+  );
+  const decoded = await readGitHubForecastFiles(input, compressed.fetchPublic);
+  assert.deepEqual(decoded.files, [{ path: "package.json", contents: "{}" }]);
+  assert.deepEqual(decoded.skipped, []);
+  const binary = Uint8Array.of(255);
+  const invalid = fixtureFetch((url) =>
+    url === treeUrl ? tree([blob("package.json", binary)]) : new Response(binary),
+  );
+  assert.deepEqual(await readGitHubForecastFiles(input, invalid.fetchPublic), {
+    files: [],
+    skipped: [{ path: "package.json", reason: "File is not UTF-8 text." }],
+    omitted: 0,
+  });
+  assert.deepEqual(invalid.requests, [treeUrl, `${raw}package.json`]);
 });
 
 test("acc-forecast-link explains the remaining request budget and reset time without retrying", async () => {
@@ -213,7 +239,11 @@ test("acc-forecast-link preserves rate and size errors when cancelling response 
   const empty = fixtureFetch((url) =>
     url === treeUrl ? tree([blob("package.json", new Uint8Array())]) : new Response(null),
   );
-  assert.deepEqual(await readGitHubForecastFiles(input, empty.fetchPublic), [{ path: "package.json", contents: "" }]);
+  assert.deepEqual(await readGitHubForecastFiles(input, empty.fetchPublic), {
+    files: [{ path: "package.json", contents: "" }],
+    skipped: [],
+    omitted: 0,
+  });
 });
 
 test("acc-forecast-link aborts an older request without fetching its remaining files", async () => {
@@ -254,10 +284,41 @@ test("acc-forecast-link aborts an older request without fetching its remaining f
     fetchPublic,
     current.signal,
   );
-  assert.deepEqual(result, [{ path: "package.json", contents: "{}" }]);
+  assert.deepEqual(result, { files: [{ path: "package.json", contents: "{}" }], skipped: [], omitted: 0 });
   await assert.rejects(
     readGitHubForecastFiles(input, fetchPublic, previous.signal),
     (error: unknown) => error === stop,
   );
   assert.deepEqual(requests, [treeUrl, `${raw}package-lock.json`, newUrl, newRaw]);
+});
+
+test("acc-forecast-link replays anonymous private, missing, empty and rate-limited repository replies offline", async () => {
+  interface RecordedReply {
+    status: number;
+    body?: object;
+    headers?: Record<string, string>;
+  }
+  const replies: Record<"notFound" | "empty" | "rateLimited", RecordedReply> = JSON.parse(
+    await readFile("tests/fixtures/forecast-link/http-replies.json", "utf8"),
+  );
+  for (const [repository, reply, message] of [
+    ["private", replies.notFound, /could not find a public repository or ref.*private files locally/u],
+    ["missing", replies.notFound, /could not find a public repository or ref.*private files locally/u],
+    ["empty", replies.empty, /repository is empty or unavailable/u],
+    ["rate-limited", replies.rateLimited, /Remaining requests: 0\. Reset time: 2026-08-27T11:49:55.000Z/u],
+  ] as const) {
+    const address = `https://api.github.com/repos/example/${repository}/git/trees/HEAD?recursive=1`;
+    const { requests, fetchPublic } = fixtureFetch((url) => {
+      assert.equal(url, address);
+      return Response.json(reply.body ?? null, {
+        status: reply.status,
+        ...(reply.headers ? { headers: reply.headers } : {}),
+      });
+    });
+    await assert.rejects(
+      readGitHubForecastFiles({ kind: "url", value: `github/example/${repository}` }, fetchPublic),
+      message,
+    );
+    assert.deepEqual(requests, [address]);
+  }
 });
