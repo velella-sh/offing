@@ -26,4 +26,6 @@ Status below matches [Where the server is listed](MCP.md#where-the-server-is-lis
 | awesome-mcp-servers | https://github.com/punkpeye/awesome-mcp-servers | Upstream PR (epic #1616) | `arminazimi` GitHub | Skipped until listed |
 | mcpservers.org | https://mcpservers.org | Upstream listing (epic #1616) | Maintainer account | Skipped until listed |
 
+The official registry published [`@velella/offing@0.1.1`](https://registry.modelcontextprotocol.io/v0/servers/io.github.velella-sh%2Foffing/versions/0.1.1) on 2026-11-12 at 08:47:51.506722 UTC.
+
 When the weekly check finds a listing whose shown version differs from `server.json`, it writes the mismatches into the job summary and opens one tracking issue (or updates the open one) so a maintainer can republish or chase the directory.

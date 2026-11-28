@@ -1,0 +1,1 @@
+- Add a least-privilege GitHub Actions template for informational lifecycle reviews of same-repository agent pull requests.

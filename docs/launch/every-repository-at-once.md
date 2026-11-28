@@ -28,7 +28,7 @@ offing fleet example-org --json --campaign-input --as-of 2026-11-27 > fleet.json
 ```
 
 The capture includes repository-relative locations and CODEOWNERS matches.
-Keep the file with your private operations data. See the [Fleet guide](../FLEET.md)
+Keep the file with your private operations data. See the [Fleet guide](https://velella.sh/offing/FLEET/)
 for scope filters, GitLab groups and credential setup.
 
 The [recorded fixture](https://github.com/velella-sh/offing/tree/48274e1d97a9fbcbdf1093d83847174a7a751cf1/tests/fixtures/campaign-20)
@@ -57,7 +57,7 @@ recorded Node.js 18 deadline, April 30, 2025, had already passed. Use the
 second command to place the same recorded deadline in a historical
 three-month window. It assigns six findings to `@fixture/platform` and 14
 to `@fixture/runtime`. This changes the forecast window over the saved
-evidence. See the [Fleet forecast guide](../FLEET_FORECAST.md) for how ownership,
+evidence. See the [Fleet forecast guide](https://velella.sh/offing/FLEET_FORECAST/) for how ownership,
 coverage and date buckets work.
 
 ## Plan the migration
@@ -70,6 +70,6 @@ offing campaign status campaign-state.json
 The campaign uses the capture date in its configuration and selects the
 recorded Node.js 18 end-of-life rule. It places the same 20 commits in four
 batches of five for a migration to a Node.js 22 minimum. The saved plan
-starts with queued repositories. See the [campaign walkthrough](../CAMPAIGNS.md#replay-the-recorded-nodejs-18-to-22-campaign)
+starts with queued repositories. See the [campaign walkthrough](https://velella.sh/offing/CAMPAIGNS/#replay-the-recorded-nodejs-18-to-22-campaign)
 for the verified replay and the [Campaign Board demo](https://velella.sh/offing/campaigns/demo/) for
 the recorded outcomes.
