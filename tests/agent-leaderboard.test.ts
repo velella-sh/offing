@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const fixture = "benchmarks/agent-harness/fixtures/leaderboard";
+const fixture = "tests/fixtures/agent-leaderboard";
 const input = join(fixture, "recorded");
 const expected = join(fixture, "expected.json");
 

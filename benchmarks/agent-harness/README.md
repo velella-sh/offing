@@ -62,11 +62,11 @@ For an offline example, pass `--fixture`, the committed fixture input, and an ou
 
 ```bash
 fixture=$(mktemp -d)
-npm run leaderboard -- --fixture --input benchmarks/agent-harness/fixtures/leaderboard/recorded \
+npm run leaderboard -- --fixture --input tests/fixtures/agent-leaderboard/recorded \
   --output "$fixture/leaderboard.json"
 npm run leaderboard -- --check-committed
 ```
 
-`--check` compares an existing output against a fresh byte-for-byte rescore. `--check-committed` always checks the quarantined fixture snapshot and checks the public file whenever measured input directories or a public dataset are present. The fixture snapshot uses hand-written edits with its original Offing and Ebb pins. [Committed fixture evidence](fixtures/leaderboard/)
+`--check` compares an existing output against a fresh byte-for-byte rescore. `--check-committed` always checks the quarantined fixture snapshot and checks the public file whenever measured input directories or a public dataset are present. The fixture snapshot uses hand-written edits with its original Offing and Ebb pins. [Committed fixture evidence](../../tests/fixtures/agent-leaderboard/)
 
 [Ebb's cutoff-report dry run](https://github.com/velella-sh/ebb/issues/698) can use this replay-plan and result format for captured file-shaped responses. Ebb's [answer-key scorer](https://github.com/velella-sh/ebb/issues/743) scores raw recommendation answers. Offing's scorer measures lifecycle findings in produced files. The [recorded Codex migration evaluation](../agent-migrations/results/2026-11-28-codex-evaluation.json) measures a different cohort with its own verification criteria.

@@ -10,7 +10,7 @@ const siteRoot = "docs";
 const publicData = join(siteRoot, "_data");
 const publicOutput = join(publicData, "agent-leaderboard.json");
 const measuredRuns = "benchmarks/agent-staleness/outputs/recorded";
-const fixtureRoot = "benchmarks/agent-harness/fixtures/leaderboard";
+const fixtureRoot = "tests/fixtures/agent-leaderboard";
 
 async function recordedInputs(): Promise<string[]> {
   const entries = await readdir(measuredRuns, { withFileTypes: true }).catch((error: unknown) => {
