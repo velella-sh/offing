@@ -139,3 +139,13 @@ change. GitHub's artifact retains the run evidence when the counts stay the same
 
 The page attributes the agent-assisted results to their separate runs and displays static and project-check
 denominators separately. [Agent migration method](/BENCHMARKS/)
+
+Verify a saved run with the standard-library archive reader. It reads the gzip archive as data, verifies the archive SHA-256 and each referenced patch, stdout and stderr digest, matches saved command receipts, and recomputes the report's case counts and rates. It distinguishes validation from a separate test and preserves exclusions without receipts.
+
+```bash
+python3 benchmarks/fix-evals/verify-archive.py benchmarks/fix-evals/results/2026-11-28
+```
+
+The November 28 archive contains 50 passing baseline records and 51 patch digests. Three post-apply cases have a separate test. The other post-apply checks in the archive are build or validation commands. Ten selected repositories lack a comparable offline baseline and have no recorded project commands. Successful `git apply` operations are represented by the applied metric and patch bytes. The archive has a separate apply-error receipt when applying a patch fails.
+
+The [November 28 main-branch run](https://github.com/velella-sh/offing/actions/runs/46094321774/job/140823148465) evaluated the public cohort and reported unchanged metrics, so it opened no review. The manual fixture path of [Fix Evals](https://github.com/velella-sh/offing/actions/workflows/fix-evals.yml) also runs the weekly review script on a disposable Git repository. It compares a captured 48-repository result from Offing revision `2a6b9538` with the verified 50-repository November 28 archive, pushes a review branch to a temporary bare remote, and records the `gh pr create` arguments at the GitHub boundary. A repeat with the same metrics leaves the archive and review request unchanged. These rehearsals use the real saved evaluation data. They leave the published results and GitHub review state untouched.
