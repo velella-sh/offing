@@ -70,8 +70,12 @@ test("the npm tarball ships only the root package.json as a dependency manifest"
 
   const paths = files.map((file) => file.path);
   await assertPublicDeclarationsShip(paths);
-  assert.ok(!paths.includes("dist/src/commands/init.d.ts"), "CLI-only declarations stay out of the installed package");
   const vendorPath = "dist/src/usage/vendor/tree-sitter/";
+  assert.deepEqual(
+    paths.filter((path) => path.startsWith("dist/src/") && path.endsWith(".d.ts")),
+    [vendorPath + "tree-sitter.d.ts"],
+    "compiled declarations ship through the public type graph",
+  );
   for (const name of TREE_SITTER_VENDOR_FILES) {
     assert.ok(paths.includes(vendorPath + name), `${name} must ship in the tarball`);
   }

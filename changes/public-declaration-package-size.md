@@ -1,0 +1,1 @@
+- Reduce the number of files npm unpacks by shipping only TypeScript declarations reachable from public exports.
