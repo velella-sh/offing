@@ -56,7 +56,7 @@ encode_mp4() {
 }
 
 render_guard_agent() {
-  local output_dir=$1
+  local output_dir=$1 drift_probe=${2:-0}
   # The amd64 VHS 0.12.1 image also pins Chromium, ttyd, fonts and FFmpeg.
   local renderer='ghcr.io/charmbracelet/vhs@sha256:3afed459e6d7860f6bb8b9a22ae29d5927d628dac6e30f32a250113406a348b9'
   mkdir "$output_dir"
@@ -67,18 +67,53 @@ render_guard_agent() {
   # Render delays and host CPU instruction sets do not affect the MP4.
   docker run --rm --platform linux/amd64 --network none --cap-drop ALL \
     --security-opt no-new-privileges --user "$(id -u):$(id -g)" --env HOME=/tmp \
-    --volume "$output_dir:/vhs" --entrypoint /bin/bash -i "$renderer" -es <<'RENDER'
+    --volume "$output_dir:/vhs" --entrypoint /bin/bash -i "$renderer" -es -- "$drift_probe" <<'RENDER'
 timeout 120s vhs guard-agent.tape
 [[ -s prompt.png && -s blocked.png && -s fallback.png ]]
 printf '%s\n' "file prompt.png" "duration 8" "file blocked.png" "duration 12" \
   "file fallback.png" "duration 10" "file fallback.png" > frames.txt
-ffmpeg -v error -nostdin -y -cpuflags 0 -threads 1 -filter_threads 1 -f concat -i frames.txt \
-  -t 30 -vf "setsar=1,fps=30,subtitles=guard-agent.srt:force_style='FontName=DejaVu Sans,FontSize=14,BorderStyle=3,Outline=1,Shadow=0,MarginV=12'" \
-  -an -c:v libx264 -preset veryfast -pix_fmt yuv420p -threads 1 -b:v 750k -minrate 750k -maxrate 750k \
-  -bufsize 1500k -x264-params asm=0:nal-hrd=cbr -map_metadata -1 -fflags +bitexact \
-  -flags +bitexact -movflags +faststart guard-agent.mp4
+encode() {
+  ffmpeg -v error -nostdin -y -cpuflags 0 -threads 1 -filter_threads 1 -f concat -i frames.txt \
+    -t 30 -vf "setsar=1,fps=30,subtitles=$1:force_style='FontName=DejaVu Sans,FontSize=14,BorderStyle=3,Outline=1,Shadow=0,MarginV=12'" \
+    -an -c:v libx264 -preset veryfast -pix_fmt yuv420p -threads 1 -b:v 750k -minrate 750k -maxrate 750k \
+    -bufsize 1500k -x264-params asm=0:nal-hrd=cbr -map_metadata -1 -fflags +bitexact \
+    -flags +bitexact -movflags +faststart "$2"
+}
+encode guard-agent.srt guard-agent.mp4
+if [[ $1 == 1 ]]; then
+  sed '3c Manifest drift fixture caption.' guard-agent.srt > drift.srt
+  start=$SECONDS
+  encode drift.srt drift.mp4
+  echo "Manifest regression MP4 encode took $((SECONDS - start)) seconds."
+fi
 RENDER
 }
+
+check_guard_agent_manifest_drift() (
+  local rendered=$1 manifest_tool="$PWD/dist/tools/demo-manifest.js"
+  local fixture="$build_dir/manifest-drift" version status=0
+  mkdir -p "$fixture/docs/assets"
+  cp -R demos "$fixture/"
+  cp -R docs/demos "$fixture/docs/"
+  cp -R docs/assets/demos "$fixture/docs/assets/"
+  cmp -s "$rendered/guard-agent.mp4" "$rendered/drift.mp4" && {
+    echo 'Rendering the altered caption should change the video bytes.' >&2
+    exit 1
+  }
+  cp "$rendered/drift.mp4" "$fixture/docs/demos/guard-agent.mp4"
+  cd "$fixture"
+  version=$(node -p 'require("./docs/demos/manifest.json").offingVersion')
+  node "$manifest_tool" --check "$version" > verify.log 2>&1 || status=$?
+  if [[ $status != 1 ]] || ! grep -F 'Demo manifest is stale.' verify.log; then
+    cat verify.log >&2
+    echo "Expected a stale manifest failure, got exit $status." >&2
+    exit 1
+  fi
+  cp "$rendered/drift.srt" "$fixture/docs/demos/guard-agent.srt"
+  node "$manifest_tool" --write "$version"
+  node "$manifest_tool" --check "$version"
+  echo 'acc-demo-tapes: regenerated guard-agent MP4 rejected the stale manifest and matched the refreshed manifest.'
+)
 
 check_tapes() {
     local tape name output status_file prompt_check smoke_tape
@@ -87,10 +122,13 @@ check_tapes() {
     for tape in "$@"; do
       name=${tape##*/}
       if [[ $name == guard-agent.tape ]]; then
-        render_guard_agent "$build_dir/agent-first"
+        render_guard_agent "$build_dir/agent-first" "${OFFING_DEMO_MANIFEST_REGRESSION:-0}"
         render_guard_agent "$build_dir/agent-second"
         cmp "$build_dir/agent-first/guard-agent.mp4" "$build_dir/agent-second/guard-agent.mp4"
         cmp "$build_dir/agent-first/guard-agent.mp4" docs/demos/guard-agent.mp4
+        if [[ ${OFFING_DEMO_MANIFEST_REGRESSION:-0} == 1 ]]; then
+          check_guard_agent_manifest_drift "$build_dir/agent-first"
+        fi
         echo "acc-demo-tapes: guard-agent replay, refusal evidence, native fetch, and byte-identical MP4 passed."
         continue
       fi

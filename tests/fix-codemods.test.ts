@@ -33,7 +33,7 @@ async function repository(source: string): Promise<string> {
   return root;
 }
 
-test("each codemod rewrites its import to the successor and the output matches the after fixture", async () => {
+test("acc-replacements: each codemod rewrites its import to the successor and the output matches the after fixture", async () => {
   const before = await readFile(join(fixtures, "before", "index.js"), "utf8");
   const after = await readFile(join(fixtures, "after", "index.js"), "utf8");
   const root = await repository(before);
@@ -53,7 +53,7 @@ test("each codemod rewrites its import to the successor and the output matches t
   assert.equal(await readFile(join(root, "index.js"), "utf8"), before);
 });
 
-test("the codemods cover five packages and each names the successor its rule names", async () => {
+test("acc-replacements: the codemods cover five packages and each names the successor its rule names", async () => {
   assert.equal(renameCodemods.length, 5);
   const rules = new Map(
     (await scanRepository(await repository('require("boom");\n'), detectors)).findings.map((finding) => [
