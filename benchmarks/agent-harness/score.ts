@@ -134,12 +134,16 @@ async function scoreRecordedAttempt(
 export async function rescoreRecordedOutputs(
   roots: readonly string[],
   tasks: readonly StalenessTask[],
-  offingCommit: string,
+  offingCommit?: string,
+  requiredSource?: RunMeta["source"],
 ) {
   const records = (await Promise.all(roots.map(readRecords))).flat();
   const first = records[0];
   if (!first) throw new Error("Pass at least one recorded output directory.");
-  const pin = await bundledScoringPin(offingCommit, first.meta.pin.asOf);
+  if (requiredSource && records.some(({ meta }) => meta.source !== requiredSource)) {
+    throw new Error(`The leaderboard requires ${requiredSource} provenance for every attempt.`);
+  }
+  const pin = await bundledScoringPin(offingCommit ?? first.meta.pin.offingCommit, first.meta.pin.asOf);
   const seen = new Set<string>();
   for (const { meta } of records) {
     assertMatchingPin(pin, meta.pin);

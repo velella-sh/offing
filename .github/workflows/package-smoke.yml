@@ -48,10 +48,13 @@ jobs:
         with:
           cache: npm
       - run: npm run build --silent
-      - name: Check network denial and task inputs with generated fixture code
+      - name: Verify isolated replay and committed offline rescore
         env:
           OFFING_AGENT_LEADERBOARD_DOCKER: "1"
-        run: node --test dist/tests/agent-harness-sandbox.test.js dist/tests/agent-harness.test.js
+        run: |
+          set -euo pipefail
+          node --test dist/tests/agent-harness-sandbox.test.js dist/tests/agent-harness.test.js dist/tests/agent-leaderboard.test.js
+          node dist/benchmarks/agent-harness/leaderboard.js --check-committed
 
   launch-readiness:
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.launch_readiness_only }}

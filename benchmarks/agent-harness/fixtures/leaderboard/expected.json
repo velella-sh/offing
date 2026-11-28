@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "offing.agent-replay-results.v1",
+  "pin": {
+    "asOf": "2026-11-28",
+    "offingCommit": "d5e7dc194a59da49e20aee76fb03ea1fe0d123b2",
+    "ebbVersion": "0.2.0",
+    "ebbDigest": "sha256:87470d4eea7cd0cadc6ea80178bf32f9762bc0038dc941be3479373c3b036a53"
+  },
+  "attempts": [
+    {
+      "meta": {
+        "schemaVersion": "offing.agent-run.v1",
+        "identity": {
+          "agent": "offline-fixture",
+          "agentVersion": "1",
+          "model": "fixture-v1",
+          "settings": {}
+        },
+        "source": "fixture",
+        "pin": {
+          "asOf": "2026-11-28",
+          "offingCommit": "d5e7dc194a59da49e20aee76fb03ea1fe0d123b2",
+          "ebbVersion": "0.2.0",
+          "ebbDigest": "sha256:87470d4eea7cd0cadc6ea80178bf32f9762bc0038dc941be3479373c3b036a53"
+        },
+        "taskId": "manifest-package-json-cli",
+        "arm": "plain",
+        "attempt": 1,
+        "replaySha256": "62d576975c22aa7307532c0ec7ee439787c7c54811d26e8613da5c6c5d06304d",
+        "status": "completed",
+        "outputSha256": "0f49497f8adebe1cebcde23bc292d7918d4cf335fe87b9abf529cd488688cae5"
+      },
+      "score": {
+        "taskId": "manifest-package-json-cli",
+        "category": "package-json",
+        "agent": "offline-fixture",
+        "arm": "plain",
+        "findingCount": 0,
+        "ruleIds": [],
+        "hasFinding": false,
+        "findings": []
+      }
+    }
+  ],
+  "arms": [
+    {
+      "identity": {
+        "agent": "offline-fixture",
+        "agentVersion": "1",
+        "model": "fixture-v1",
+        "settings": {}
+      },
+      "source": "fixture",
+      "arm": "plain",
+      "attempts": 1,
+      "completedOutputs": 1,
+      "outputsWithFinding": 0,
+      "interval95": {
+        "estimate": 0,
+        "low": 0,
+        "high": 0.7935
+      }
+    }
+  ]
+}

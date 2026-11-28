@@ -54,4 +54,19 @@ To run the boundary fixture locally, build the checkout and set `OFFING_AGENT_LE
 - Each attempt contains `meta.json` and `result.json` with `schemaVersion: "offing.agent-run.v1"`, the prompt sent to the replay driver, and its target file when produced. Metadata includes the replay and output SHA-256 values, attempt status and number, the Offing commit, and the bundled Ebb version and digest. `plan.json` seals the completed experiment directory.
 - Rescore accepts inputs with the same scoring date, Offing revision and Ebb version/digest as the first experiment. Pass `--rescore` once per output directory to compare disjoint agent/model groups. Duplicate attempts, incomplete experiments, missing model metadata and changed output bytes fail validation. Only completed attempts with a recorded target contribute to the rate. The 95% Wilson intervals describe those outcomes. Repeat fixture replays use the recorded data.
 
+## Rebuild the leaderboard offline
+
+`npm run leaderboard` reads the committed experiment directories in `benchmarks/agent-staleness/outputs/recorded/` and writes `docs/_data/agent-leaderboard.json`. Supply `--input <experiment>` for each explicit input directory. Every attempt must have `recorded` provenance. The generator keeps the common recorded Offing revision and verifies that the scoring date and bundled Ebb version and digest match across attempts. The CI run identifies the checkout used to rescore those inputs.
+
+For an offline example, pass `--fixture`, the committed fixture input, and an output path outside `docs/`.
+
+```bash
+fixture=$(mktemp -d)
+npm run leaderboard -- --fixture --input benchmarks/agent-harness/fixtures/leaderboard/recorded \
+  --output "$fixture/leaderboard.json"
+npm run leaderboard -- --check-committed
+```
+
+`--check` compares an existing output against a fresh byte-for-byte rescore. `--check-committed` always checks the quarantined fixture snapshot and checks the public file whenever measured input directories or a public dataset are present. The fixture snapshot uses hand-written edits with its original Offing and Ebb pins. [Committed fixture evidence](fixtures/leaderboard/)
+
 [Ebb's cutoff-report dry run](https://github.com/velella-sh/ebb/issues/698) can use this replay-plan and result format for captured file-shaped responses. Ebb's [answer-key scorer](https://github.com/velella-sh/ebb/issues/743) scores raw recommendation answers. Offing's scorer measures lifecycle findings in produced files. The [recorded Codex migration evaluation](../agent-migrations/results/2026-11-28-codex-evaluation.json) measures a different cohort with its own verification criteria.
