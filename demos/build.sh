@@ -102,6 +102,10 @@ check_tapes() {
         echo "$tape needs a committed recording: $output" >&2
         exit 1
       fi
+      if [[ $output == *.gif && -f $output ]] && (( $(wc -c < "$output") >= 3000000 )); then
+        echo "$output must be smaller than 3 MB" >&2
+        exit 1
+      fi
       status_file="$build_dir/${name%.tape}.status"
       prompt_check=''
       if [[ $name != guard.tape && $name != check.tape ]]; then
@@ -143,6 +147,7 @@ case ${1:-} in
     if (( ${#tapes[@]} == 0 )); then
       tapes=(demos/*.tape)
     fi
+    node dist/tools/demo-manifest.js --check
     check_tapes "${tapes[@]}"
     exit ;;
   --record)
