@@ -26,13 +26,17 @@ of the registry package so the host can find its `offing` command.
 Try a package refusal from the terminal with the bundled data.
 
 ```bash
-offing guard --data-version bundled npm install --dry-run request@2.88.2
+offing guard --data-version bundled npm install --dry-run --offline request@2.88.2
 ```
 
 ```text
 Replacement: Native fetch or a maintained HTTP client
 Evidence: https://www.npmjs.com/package/request
 ```
+
+![Offing refuses the offline installation of deprecated request 2.88.2 and suggests native fetch or a maintained HTTP client](https://velella.sh/offing/launch/img/guard-release-0.1.1.webp)
+
+This frame shows the refusal in the [0.1.1 guard recording](https://velella.sh/offing/demos/guard.mp4).
 
 That command exits with status 1 before npm starts. To remove Offing's
 project hook registrations for Claude Code, run the following. Use the same

@@ -93,7 +93,7 @@ try {
   const guardBin = join(root, "bin");
   mkdirSync(guardBin);
   writeFileSync(join(guardBin, "npm"), "#!/bin/sh\ntouch npm-ran\n", { mode: 0o755 });
-  const guard = run(root, ["guard", "--data-version", "bundled", "npm", "install", "--dry-run", "request@2.88.2"], 1, {
+  const guard = run(root, ["guard", "--data-version", "bundled", "npm", "install", "--dry-run", "--offline", "request@2.88.2"], 1, {
     env: { ...env, PATH: `${guardBin}${delimiter}${env.PATH}` },
   });
   assert.match(guard.stderr, /refused to run npm[\s\S]*https:\/\/www\.npmjs\.com\/package\/request/);

@@ -67,10 +67,9 @@ and read the channel's rules before posting.
 
 ## Assets
 
-All screenshots are existing files under
-[`docs/assets/screenshots/`](https://github.com/velella-sh/offing/tree/main/docs/assets/screenshots); none were generated for
-this kit. [screenshots.md](https://velella.sh/offing/launch/screenshots/) lists what each one shows, its alt
-text, and which draft uses it.
+The forecast and guard guides use stills from the 0.1.1 recordings. The other launch captures are in
+[`docs/assets/screenshots/`](https://github.com/velella-sh/offing/tree/main/docs/assets/screenshots).
+The [screenshot guide](https://velella.sh/offing/launch/screenshots/) records the source and purpose of each capture.
 
 ## After the launch
 
