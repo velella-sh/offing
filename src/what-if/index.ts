@@ -89,7 +89,7 @@ async function summarize(inputs: Awaited<ReturnType<typeof prepare>>, target: Up
     verdict: supportVerdict(upgrade, support),
     analyzers: upgrade.analyzers,
     issues,
-    blockers: buildBlockerGraph(upgrade),
+    blockers: await buildBlockerGraph(upgrade),
     support,
     pins,
     forecast: projectForecast(scan.findings, supplemental, planned, target, support, byId, images, today, months),

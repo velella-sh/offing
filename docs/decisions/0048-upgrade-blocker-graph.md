@@ -19,7 +19,10 @@ and keeps unresolved paths under `ungrouped`. The graph omits source line
 numbers so cosmetic lockfile reordering does not alter the rendered graph.
 The underlying issues retain their exact source locations. A graph entry's
 `firstSupported` is `unknown` without published evidence for the first
-package release that supports the runtime target.
+package release that supports the runtime target. When the installed Ebb
+package provides its compatibility reader, query it using the dependency
+and runtime package URLs and the target runtime version. The answer is
+advisory and does not change the upgrade verdict.
 
 `check_upgrade` supplies the graph. The CLI supplies it with `--graph` and
 uses the same data for the tree, Mermaid and SVG outputs. Both surfaces

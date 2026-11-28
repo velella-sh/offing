@@ -1,0 +1,1 @@
+- Upgrade blocker graphs show the first supporting dependency release when it is available in the installed Ebb compatibility data.
