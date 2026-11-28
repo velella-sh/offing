@@ -6,7 +6,7 @@ import { getActiveData } from "@velella/ebb/data-source";
 import { isIsoDate } from "@velella/ebb/registry";
 
 import { CODEOWNERS_LOCATIONS } from "../codeowners.js";
-import { campaignInputPaths, captureCampaignEvidence, type CampaignEvidence } from "../campaign/capture.js";
+import { campaignInputPaths, captureCampaignEvidence, type CampaignEvidence } from "../campaign/select.js";
 import { CONFIG_FILE_NAME } from "../config.js";
 import { fleetPolicyCompliance, type FleetPolicyCompliance } from "../fleet-policy/compliance.js";
 import { parsePolicyReference } from "../fleet-policy/reference.js";

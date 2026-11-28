@@ -65,7 +65,7 @@ _offing() {
     attest) opts="--subject --sbom --data-version --today" ;;
     autopilot) opts="--dry-run --prepare --replay --run-replay --resume --allow-red-baseline --test-only --container --undo --wave --finding --to --agent" ;;
     campaign-board) opts="--out" ;;
-    campaign) opts="--fleet --json" ;;
+    campaign) opts="--fleet --json --inputs --one-batch --failed" ;;
     codemod) opts="" ;;
     config) opts="--json" ;;
     drivers) opts="" ;;

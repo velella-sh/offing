@@ -1,0 +1,1 @@
+- Run approved local campaign replays in bounded batches and retain resumable per-repository verification evidence.

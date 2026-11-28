@@ -47,6 +47,56 @@ async function verifyMcp(state) {
   }
 }
 
+async function verifyOwnerPriority() {
+  const config = JSON.parse(await readFile(campaign, "utf8"));
+  const fleetPath = join(root, "owner-priority-fleet.json");
+  const configPath = join(root, "owner-priority-campaign.json");
+  const ruleId = "nodejs.runtime.eol-18";
+  function repository(name, deadline, owners) {
+    return {
+      host: "https://github.com",
+      name: `example/${name}`,
+      commit: "b".repeat(40),
+      status: "scanned",
+      forecastEvidence: { findings: [{ ruleId, deadline, owners }] },
+    };
+  }
+  await writeFile(configPath, JSON.stringify({
+    ...config,
+    select: { ruleId },
+    batching: { ...config.batching, size: 2, concurrency: 1 },
+  }));
+  await writeFile(fleetPath, JSON.stringify({
+    schemaVersion: "offing.fleet.v1",
+    forecastAsOf: config.asOf,
+    repositoryStatus: [
+      repository("unowned", null, []),
+      repository("third", "2025-05-01", ["@example/later"]),
+      repository("second", "2025-04-30", ["@example/earlier"]),
+      repository("first", "2025-05-30", ["@example/earlier"]),
+    ],
+  }));
+  const { stdout } = await cli("campaign", "plan", configPath, "--fleet", fleetPath, "--json");
+  const state = JSON.parse(stdout);
+  assert.deepEqual(state.repositories.map(({ name, batch }) => [name, batch]), [
+    ["example/first", 1], ["example/second", 1], ["example/third", 2], ["example/unowned", 2],
+  ]);
+  return state;
+}
+
+async function verifyFailureGate(state) {
+  const file = join(root, "limited-state.json");
+  const inputs = join(root, "empty-inputs.json");
+  await writeFile(file, JSON.stringify(state));
+  await writeFile(inputs, "[]");
+  const { stdout, stderr } = await cli("campaign", "run", file, "--inputs", inputs, "--json");
+  assert.match(stderr, /Batch 1 paused: 2\/2 failed/);
+  const stopped = JSON.parse(stdout);
+  assert.equal(stopped.rollout.state, "paused");
+  assert.deepEqual(stopped.repositories.map(({ status }) => status), ["failed", "failed", "queued", "queued"]);
+  assert.deepEqual(stopped, JSON.parse(await readFile(file, "utf8")));
+}
+
 try {
   const expected = JSON.parse(await readFile(join(vectors, "valid-state.json"), "utf8"));
   const { stdout } = await cli("campaign", "plan", campaign, "--fleet", join(vectors, "fleet.json"), "--json");
@@ -61,6 +111,10 @@ try {
   await assert.rejects(conform(join(vectors, "invalid-campaign.json"), statePath));
   await assert.rejects(conform(campaign, join(vectors, "invalid-state.json")));
   await verifyMcp(expected);
+  await verifyFailureGate(await verifyOwnerPriority());
+  const paused = JSON.parse((await cli("campaign", "pause", statePath, "--json")).stdout);
+  assert.deepEqual(paused.rollout, { state: "paused" });
+  await verifyMcp(paused);
   console.log("acc-campaigns: the installed CLI, MCP server and standalone checker agree");
 } finally {
   await rm(root, { recursive: true, force: true });

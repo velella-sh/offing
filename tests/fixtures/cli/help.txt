@@ -84,6 +84,9 @@ Usage:
   offing campaign-board <state.json> --out <dir>  # export recorded campaign progress
   offing campaign plan <campaign.yml> --fleet <fleet.json> [--json]  # preview a pinned migration
   offing campaign status <state.json> [--json]  # read recorded campaign state
+  offing campaign run <state.json> --inputs <local.json> [--one-batch] [--json]  # replay approved checkouts
+  offing campaign pause|resume|cancel <state.json> [--json]
+  offing campaign retry <state.json> <repository|--failed> [--json]
   offing codemod test <dir>    # check a codemod and its fixtures
   offing config validate [path] [--json]
   offing drivers list
