@@ -212,15 +212,17 @@ Independent forward tests exercise three different agent situations:
 | --- | --- | --- |
 | Skill discovery | Classify every trigger and non-trigger case through the metadata contract without reading expected answers. | Lifecycle, check-before-add, and upgrade-runtime-action corpora all pass across three lanes. |
 | MCP-capable agent | Discover, explain, create context, migrate, and verify through the real stdio protocol in one session. | Passed with all five tools; checkout finding verified absent. |
-| CLI-only agent | Complete the same lifecycle using only documented CLI fallbacks and a fresh final scan. | Passed; request migration changed only two packet files and ended with zero findings. |
+| CLI-only agent | Complete the same lifecycle using only documented CLI fallbacks. | The earlier replay changed only two packet files and ended with zero findings. Current Skill verification uses a saved before scan and the CLI receipt. |
 
 Forward-test observations are recorded on the Week 11 GitHub issue when the phase is completed. Discovery testing narrowed an ambiguous generic migration trigger to migrations from Offing findings. CLI testing replaced the packet's `npx` rescan suggestion with the already-installed `offing` executable so verification remains offline-capable and version-consistent. MCP testing clarified that an empty usage list means there are no additional usages beyond the declaration, rather than implying that the declaration itself is not relevant.
+
+The [first local fix pilot](https://github.com/velella-sh/offing/issues/1158) tracks real-host observations separately from the deterministic candidate replay.
 
 ## Limits and security assumptions
 
 - Offing currently covers its documented GitHub Actions, Node.js, npm, and Python rules. The Skills report unsupported ecosystems instead of inventing migration advice.
 - Dynamic references that detectors cannot classify remain explicit limitations.
-- MCP verification needs the same server session that observed the finding. The CLI fallback uses a fresh scan and conservatively compares the rule and declaration path.
+- MCP verification needs the same server session that observed the finding. The [CLI receipt](RECEIPTS.md#verify-one-local-edit) needs a before scan saved outside the repository before the edit. Report insufficient prior evidence after a session restart or when the before scan is missing. Report the selected finding, introduced findings, and project-check outcomes separately.
 - The Skills grant no permissions. Suggested verification commands remain subject to the host's normal authorization rules.
 - The bundles contain no executable skill scripts and declare no pre-approved tools.
 - Installing through the skills CLI copies or links instruction files into the selected host's Skill directory; it does not install the Offing runtime itself.
