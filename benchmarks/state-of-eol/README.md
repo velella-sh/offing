@@ -38,6 +38,8 @@ jq -r '.repositories[] | "github/\(.repository)@\(.commit)"' benchmarks/state-of
 node dist/src/cli.js fleet --repos /tmp/state-of-eol-pins.txt --jobs 4 --json
 ```
 
+The study recovered one exact pin from a verified GitHub snapshot after repeated sparse-fetch failures. The [rank 7 audit](2027-audit.md#rank-7-retry) records the commit, tree, acquisition bounds, and both blocker graphs.
+
 Use the collector for the additional research evidence. Check out the acquisition commit above to repeat the original detector implementation. A fresh run requires public HTTPS for the exact Git objects. Project and repository scripts are never run. Run the collector into a new directory from the acquisition checkout, then freeze the new observations from the study checkout. Current detectors can produce different observations from the same public trees.
 
 ```sh
