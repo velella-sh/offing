@@ -5,7 +5,7 @@ import type { FleetWhatIfEvidence } from "./what-if/fleet.js";
 import { severityValues } from "./domain.js";
 import type { Finding, ScanResult, Severity } from "./domain.js";
 import type { ImageLineage } from "./lineage/index.js";
-import type { CampaignEvidence } from "./campaign/capture.js";
+import type { CampaignEvidence } from "./campaign/select.js";
 import type { ForecastCapture } from "./fleet-forecast/model.js";
 import type { FleetPolicyCompliance } from "./fleet-policy/compliance.js";
 import { required } from "./required.js";

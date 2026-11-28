@@ -34,7 +34,15 @@ export interface Campaign {
   target?: UpgradeTarget;
 }
 
-type RepositoryStatus = "queued" | "running" | "verified" | "review" | "merged" | "closed" | "failed" | "cancelled";
+export type RepositoryStatus =
+  | "queued"
+  | "running"
+  | "verified"
+  | "review"
+  | "merged"
+  | "closed"
+  | "failed"
+  | "cancelled";
 
 export interface PlannedCheck {
   kind: "setup" | "install" | "build" | "test";
@@ -51,6 +59,8 @@ export interface CampaignRepository {
   codemods: string[] | null;
   checks: PlannedCheck[] | null;
   status: RepositoryStatus;
+  run?: string;
+  reason?: string;
   transitions: { from: RepositoryStatus; to: RepositoryStatus; at: string }[];
 }
 
@@ -68,6 +78,8 @@ export interface CampaignState {
   target?: UpgradeTarget;
   repositories: CampaignRepository[];
   omissions: Omission[];
+  rollout?: { state: "paused" | "cancelled"; reason?: string };
+  checkedBatch?: number;
 }
 
 export function invalidCampaign(message: string): OffingError {

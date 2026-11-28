@@ -60,7 +60,7 @@ _offing() {
         capabilities) _arguments '--json' '*:path:_files' ;;
         autopilot) _arguments '--dry-run' '--prepare' '--replay' '--run-replay' '--resume' '--allow-red-baseline' '--test-only' '--container' '--undo' '--wave' '--finding' '--to' '--agent' '*:path:_files' ;;
         campaign-board) _arguments '--out' '*:path:_files' ;;
-        campaign) _arguments '--fleet' '--json' '*:path:_files' ;;
+        campaign) _arguments '--fleet' '--json' '--inputs' '--one-batch' '--failed' '*:path:_files' ;;
         fleet) _arguments '--include' '--exclude' '--topic' '--repos' '--jobs' '--policy' '--gitlab' '--gitlab-url' '--include-forks' '--include-archived' '--json' '--image-lineage' '--html' '--format' '--no-cache' '--fail-on' '--progress' '--forecast-input' '--campaign-input' '--what-if-target' '--as-of' '*:path:_files' ;;
         hook) _arguments '--fail-on' '*:path:_files' ;;
         lineage) _arguments '--json' '--format' '--resolve-digests' '*:path:_files' ;;
