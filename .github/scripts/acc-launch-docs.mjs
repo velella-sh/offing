@@ -55,6 +55,37 @@ function checkUnsignedAttestation() {
   assert.match(result.stdout, /alpine@3\.18[^\n]*: 1 days? left/u);
 }
 
+function checkRecordedFleet() {
+  const project = join(root, "fleet-guide");
+  const fixture = "tests/fixtures/campaign-20";
+  mkdirSync(join(project, fixture), { recursive: true });
+  for (const name of ["fleet.json", "campaign.json", "plan.json"]) {
+    cpSync(new URL(`../../${fixture}/${name}`, import.meta.url), join(project, fixture, name));
+  }
+  const fleet = `${fixture}/fleet.json`;
+  const campaign = `${fixture}/campaign.json`;
+  const recorded = JSON.parse(readFileSync(join(project, fleet), "utf8"));
+  assert.equal(recorded.forecastAsOf, "2026-11-27");
+  assert.equal(recorded.repositoryStatus.length, 20);
+  assert.equal(new Set(recorded.repositoryStatus.map(({ commit }) => commit)).size, 20);
+  assert.ok(recorded.repositoryStatus.every(({ status }) => status === "scanned"));
+  const forecast = ["forecast", "--fleet", fleet, "--by", "owner"];
+  const captured = run(project, forecast).stdout;
+  assert.match(captured, /as of 2026-11-27 \(by owner\)/u);
+  assert.deepEqual(captured.match(/0–3 months: \d+/gu), ["0–3 months: 0", "0–3 months: 0"]);
+  const historical = run(project, [...forecast, "--as-of", "2025-03-01"]).stdout;
+  assert.match(historical, /as of 2025-03-01 \(by owner\)/u);
+  assert.match(historical, /@fixture\/platform[\s\S]*?0–3 months: 6/u);
+  assert.match(historical, /@fixture\/runtime[\s\S]*?0–3 months: 14/u);
+  const plan = run(project, ["campaign", "plan", campaign, "--fleet", fleet, "--json"]).stdout;
+  assert.deepEqual(JSON.parse(plan), JSON.parse(readFileSync(join(project, fixture, "plan.json"), "utf8")));
+  writeFileSync(join(project, "campaign-state.json"), plan);
+  const status = run(project, ["campaign", "status", "campaign-state.json"]).stdout;
+  assert.match(status, /Target: nodejs@22/u);
+  assert.equal(status.match(/· queued$/gmu)?.length, 20);
+  console.log("acc-launch-docs: one pinned Fleet capture replayed both owner windows and the exact four-batch Campaign plan");
+}
+
 function checkReadmeQuickstart() {
   const readme = readFileSync(resolve(dirname(realpathSync(bin)), "../../README.md"), "utf8");
   const block = readme.match(/^## Quickstart[\s\S]*?```bash\n([^`]+)```/m)?.[1];
@@ -133,6 +164,7 @@ try {
   }
   checkAutopilotPreview();
   checkUnsignedAttestation();
+  checkRecordedFleet();
   console.log("acc-launch-docs: packed Autopilot preview and unsigned lifecycle attestation examples passed");
   console.log("acc-launch-docs: installed forecast, dependency refusal, data status, and three host setup/replay/removal flows passed");
 } finally {

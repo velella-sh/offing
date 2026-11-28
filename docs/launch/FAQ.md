@@ -57,18 +57,23 @@ The host controls where it shows pre-write decisions or after-edit
 feedback. See the [host guides](https://velella.sh/offing/guides/) and
 [troubleshooting steps](https://velella.sh/offing/launch/TROUBLESHOOTING/).
 
-## Where do Autopilot's edits go if it stops?
+## What should I inspect when Autopilot stops before verification?
 
-The run leaves its accepted edits in an isolated Git worktree. The run record names the stop reason
-and records the tests and budget used. Review those before resuming a recording or removing the
-worktree. See the [recorded migration walkthrough](https://velella.sh/offing/launch/let-autopilot-do-the-upgrade/).
+The accepted diff remains in its isolated Git worktree. Read the stop
+reason and compare the worktree diff with the recorded test results before
+choosing whether to resume. A stopped run can contain edits that still need
+verification. Follow the [recorded migration walkthrough](let-autopilot-do-the-upgrade.md).
 
-## Can I see lifecycle risks across several repositories?
+## Does an empty Fleet forecast mean every repository was checked?
 
-Use a [fleet scan](https://velella.sh/offing/FLEET/) to combine results from a GitHub organization or GitLab group. The
-report retains each repository's status, including when its scan failed or it was skipped.
+Check the recorded repository statuses and the reference date. Failed and
+skipped scans reduce coverage. A scanned repository can have a deadline
+that already passed, which falls outside the upcoming buckets. The
+[Fleet walkthrough](every-repository-at-once.md) shows how to check coverage and the forecast date in one capture.
 
-## Does signing an attestation extend a dependency's support?
+## What should my release job verify before trusting a lifecycle attestation?
 
-The signature authenticates the artifact and its recorded evidence. Support deadlines still apply
-when you re-evaluate the statement. See the [artifact and release gate walkthrough](https://velella.sh/offing/launch/prove-what-you-ship/).
+Compare the statement's subject digest with the artifact you intend to
+ship. Verify the signer, workflow and source revision against independently
+trusted values, then evaluate the recorded lifecycle observations for the
+release date. Follow the [artifact and release gate walkthrough](prove-what-you-ship.md).
