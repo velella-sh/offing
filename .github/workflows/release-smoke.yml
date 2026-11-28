@@ -57,6 +57,45 @@ jobs:
       - name: Compare the summaries
         run: node .github/scripts/release-smoke.mjs "$RUNNER_TEMP/built.json" "$RUNNER_TEMP/published.json"
 
+      - name: Install the exact published package for first-fix replay # zizmor: ignore[adhoc-packages] -- Consumer install tests the version from the checked release tag with scripts disabled.
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/offing-local-first-fix"
+          mkdir "$dir"
+          (
+            cd "$dir"
+            npm init -y > /dev/null
+            npm install --ignore-scripts --no-audit --no-fund --save-exact "@velella/offing@$VERSION"
+          )
+          cli="$dir/node_modules/@velella/offing/dist/src/cli.js"
+          test "$(node "$cli" --version)" = "$VERSION"
+          # shellcheck disable=SC2016
+          integrity="$(node -p 'require(process.argv[1]).packages["node_modules/@velella/offing"].integrity' "$dir/package-lock.json")"
+          test -n "$integrity"
+          {
+            printf '### Installed first-fix evidence package\n\n'
+            printf -- '- npm package @velella/offing@%s at %s\n' "$VERSION" "$GITHUB_SHA"
+            printf -- '- npm package integrity %s\n' "$integrity"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: acc-local-first-fix-cli (published)
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          cli="$RUNNER_TEMP/offing-local-first-fix/node_modules/@velella/offing/dist/src/cli.js"
+          node .github/scripts/acc-local-first-fix-cli.mjs "$cli" "$VERSION" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: acc-local-first-fix-agent (published)
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          cli="$RUNNER_TEMP/offing-local-first-fix/node_modules/@velella/offing/dist/src/cli.js"
+          node .github/scripts/acc-local-first-fix-agent.mjs "$cli" "$VERSION" | tee -a "$GITHUB_STEP_SUMMARY"
+
   quickstart:
     # README quickstart must work from what users install. Dry run uses the local CLI.
     name: quickstart (${{ matrix.os }})

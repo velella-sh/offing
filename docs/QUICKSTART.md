@@ -75,19 +75,11 @@ The command prints the lifecycle problem, the replacement, and the evidence. It 
 
 ## 3. Read the evidence for one finding
 
-Take a finding ID from the full `scan .` report in step 1 and inspect it:
-
-```bash
-npx @velella/offing explain '<finding-id>' .
-```
-
-For structured context an agent can follow, including affected files, usages, constraints, and verification commands:
-
-```bash
-npx @velella/offing context '<finding-id>' . --json
-```
-
-Offing suggests verification commands; it never runs migration commands for you.
+Pick one supported finding from the full scan. To review its source and migration
+context, make a local edit, and verify the outcome before setting up CI, follow
+[Verify one local edit](RECEIPTS.md#verify-one-local-edit). The recipe uses the installed
+CLI and keeps its evidence outside your checkout. If the scan has no supported
+finding you can address, stop there.
 
 ## 4. Add the check to CI
 

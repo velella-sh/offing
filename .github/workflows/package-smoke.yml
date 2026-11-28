@@ -412,6 +412,32 @@ jobs:
             printf -- '- Branch, receipt, Markdown and independent checker passed.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: acc-local-first-fix-cli
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          cli="$out/npm-install/node_modules/@velella/offing/dist/src/cli.js"
+          version="$(node "$cli" --version)"
+          {
+            printf '### acc-local-first-fix-cli (candidate)\n\n'
+            printf -- '- Installed version %s from commit %s\n' "$version" "$GITHUB_SHA"
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            node .github/scripts/acc-local-first-fix-cli.mjs "$cli" "$version"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: acc-local-first-fix-agent
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/package-smoke"
+          cli="$out/npm-install/node_modules/@velella/offing/dist/src/cli.js"
+          version="$(node "$cli" --version)"
+          {
+            printf '### acc-local-first-fix-agent (candidate)\n\n'
+            printf -- '- Installed version %s from commit %s\n' "$version" "$GITHUB_SHA"
+            printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
+            node .github/scripts/acc-local-first-fix-agent.mjs "$cli" "$version"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
       - name: acc-upgrade-blockers
         working-directory: ${{ runner.temp }}
         env:

@@ -5,21 +5,54 @@ title: Verification receipts
 # Verification receipts
 
 A verification receipt records what a change resolved, left, or introduced.
-Save a JSON scan outside the repository before making the change, then
-produce the versioned [verification result](https://velella.sh/offing/spec/verify/v1/):
+## Verify one local edit
+
+Use the [installed Offing CLI](INSTALL.md) from your checkout. To practice,
+copy the [example workflow](https://github.com/velella-sh/offing/blob/main/examples/forecast/actions-before/.github/workflows/build.yml)
+to `.github/workflows/build.yml` in a disposable repository. Keep existing
+working-tree edits and choose a finding you can address without overwriting them.
+
+Save the before scan outside the project before changing any files.
 
 ```bash
-offing scan . --json > /tmp/before.json
-# Make and check the migration.
-offing receipt . --before /tmp/before.json --format verify-result > /tmp/verification.json
-offing scan . --json > /tmp/after.json
-node check.mjs /tmp/verification.json /tmp/before.json /tmp/after.json
+evidence_dir="$(mktemp -d)"
+offing scan . --json > "$evidence_dir/before.json"
 ```
 
+Open `before.json` and copy one exact `findings[].id`. If there are no
+supported findings you can address, stop. A clean scan alone cannot verify
+an edit. Replace `<finding-id>` with your selection, then check the rule, file
+and official sources. Read the migration steps and constraints before editing.
+
+```bash
+finding_id='<finding-id>'
+offing explain "$finding_id" . --json
+offing context "$finding_id" . --json
+```
+
+Make the edit without committing. Review the diff and run any appropriate
+project checks separately. Create the versioned
+[verification result](https://velella.sh/offing/spec/verify/v1/) and save the
+after scan with the same scan options and data.
+
+```bash
+offing receipt . --before "$evidence_dir/before.json" --format verify-result > "$evidence_dir/verification.json"
+offing scan . --json > "$evidence_dir/after.json"
+```
+
+Look for the selected ID under `resolved` or `remaining` and check the
+`introduced` list for new findings. A zero exit status alone does not show
+that the finding was fixed. `--fail-on-introduced` makes the receipt command
+exit 1 when a change introduces a finding. Offing reports suggested project
+checks as `not-run`. Record separately which checks you ran and whether they
+passed, failed, or were skipped.
+
 Download [check.mjs](https://velella.sh/offing/spec/verify/conformance/check.mjs)
-to validate the JSON. Use the same scan options and data for both sides when
-you want to isolate the effect of code changes. `--fail-on-introduced` makes
-the receipt command exit 1 when the change introduces a finding.
+and run the independent checker on the saved results.
+
+```bash
+node check.mjs "$evidence_dir/verification.json" "$evidence_dir/before.json" "$evidence_dir/after.json"
+```
 
 `offing fix . --branch --json` applies deterministic fixes on a local branch,
 commits them, and prints the same verification document. This command keeps
