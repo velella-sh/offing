@@ -1,0 +1,67 @@
+name: State of EOL
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    name: acc-state-of-eol
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          package-manager-cache: "false"
+      - name: Rebuild twice from the cohort and recorded scan evidence
+        run: |
+          set -euo pipefail
+          npm run state-of-eol -- --out "$RUNNER_TEMP/state-of-eol"
+          node dist/tools/state-of-eol/report.js --out "$RUNNER_TEMP/state-of-eol-repeat"
+          diff -r "$RUNNER_TEMP/state-of-eol" "$RUNNER_TEMP/state-of-eol-repeat"
+          npm run build:dashboard --silent
+          for report in "$RUNNER_TEMP"/state-of-eol/*.json; do
+            cmp "$report" "docs/_data/${report##*/}"
+          done
+      - name: Install pinned site tools
+        run: |
+          mkdir "$RUNNER_TEMP/site-tools"
+          cp .github/site-tools/{package.json,package-lock.json} "$RUNNER_TEMP/site-tools/"
+          npm ci --prefix "$RUNNER_TEMP/site-tools" --no-audit --no-fund
+      - name: Check the published report route and chart table
+        env:
+          OFFING_SITE_TOOLS: ${{ runner.temp }}/site-tools
+        run: |
+          set -euo pipefail
+          node --test dist/tests/state-of-eol.test.js
+          node dist/tools/coverage-matrix.js --site
+          "$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs \
+            --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out "$RUNNER_TEMP/state-of-eol-site" --workers 2
+          grep -Fq '/reports/state-of-eol-2027/' "$RUNNER_TEMP/state-of-eol-site/state-of-eol/index.html"
+          grep -Fq 'State of EOL benchmark corpus' "$RUNNER_TEMP/state-of-eol-site/reports/state-of-eol-corpus/index.html"
+          grep -Fq 'By product and release line' "$RUNNER_TEMP/state-of-eol-site/reports/state-of-eol-corpus/index.html"
+          grep -Fq '/offing/reports/state-of-eol-2027/' "$RUNNER_TEMP/state-of-eol-site/index.html"
+          grep -Fq '/offing/gallery/state-of-eol-2027/' "$RUNNER_TEMP/state-of-eol-site/index.html"
+          cp "$RUNNER_TEMP/state-of-eol-site/reports/state-of-eol-2027/index.html" \
+            "$RUNNER_TEMP/state-of-eol/state-of-eol-2027.html"
+          cp "$RUNNER_TEMP/state-of-eol-site/gallery/state-of-eol-2027/index.html" \
+            "$RUNNER_TEMP/state-of-eol/state-of-eol-2027-gallery.html"
+          {
+            printf '### acc-state-of-eol\n\n'
+            printf 'Verified source %s\n\n' "$GITHUB_SHA"
+            printf 'Raw archive SHA-256 %s\n\n' "$(sha256sum benchmarks/state-of-eol/2027-raw.json.gz | cut -d ' ' -f 1)"
+            jq -r '.coverage | "Scanned \(.scanned) / \(.cohort), failed \(.failed), unattempted \(.unscanned)."' \
+              "$RUNNER_TEMP/state-of-eol/state-of-eol-2027.json"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: state-of-eol-2027-report
+          path: ${{ runner.temp }}/state-of-eol/
+          if-no-files-found: error
+          retention-days: 30

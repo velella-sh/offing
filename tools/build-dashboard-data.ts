@@ -25,6 +25,7 @@ import type { HeldOutResult } from "./dashboard-accuracy.js";
 import { corpusCounts, loadCorpusTargets, TARGETS_PATH } from "../benchmarks/corpus-targets.js";
 import { renderComparisonCollections } from "../benchmarks/comparison/site.js";
 import { renderFixEvalCollections } from "../benchmarks/fix-evals/site.js";
+import { renderStudyCollections } from "./state-of-eol/report.js";
 import type { CorpusTargets } from "../benchmarks/corpus-targets.js";
 import { loadPublicCorpus, PUBLIC_CORPUS_DIR } from "../benchmarks/public-corpus.js";
 import { countEvidence, earnedLevel, evidenceMinimums } from "../benchmarks/thresholds.js";
@@ -528,7 +529,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       }
       await mkdir(dirname(target), { recursive: true });
       await writeFile(target, text);
-      const collections = { ...renderDashboardCollections(data), ...comparison, ...fixEvals };
+      const study = await renderStudyCollections(".");
+      const stateOfEol = Object.fromEntries(
+        Object.entries(study).map(([name, contents]) => [`docs/_data/${name}`, contents]),
+      );
+      const collections = { ...renderDashboardCollections(data), ...comparison, ...fixEvals, ...stateOfEol };
       for (const [path, contents] of Object.entries(collections)) {
         await writeFile(resolve(path), contents);
       }

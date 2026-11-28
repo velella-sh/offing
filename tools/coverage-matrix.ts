@@ -2,7 +2,7 @@
 // and docs/readme-coverage.json; "Ecosystem coverage" in docs/COMPATIBILITY.md from the capability
 // manifest and docs/coverage-descriptions.json; "Accuracy by detector" in docs/VALIDATION.md from the
 // last full corpus run in benchmarks/thresholds.json; and the State of EOL aggregates in
-// docs/state-of-eol.md from corpus expected findings joined to registry rules.
+// docs/reports/state-of-eol-corpus.md from corpus expected findings joined to registry rules.
 //
 //   node dist/tools/coverage-matrix.js            # rewrites the marked tables
 //   node dist/tools/coverage-matrix.js --check    # exits 1 if a committed table is out of date
@@ -46,7 +46,7 @@ export const THRESHOLDS_PATH = "benchmarks/thresholds.json";
 export const ACCURACY_START_MARKER = "<!-- accuracy-tables:start -->";
 export const ACCURACY_END_MARKER = "<!-- accuracy-tables:end -->";
 
-export const STATE_OF_EOL_PATH = "docs/state-of-eol.md";
+export const STATE_OF_EOL_PATH = "docs/reports/state-of-eol-corpus.md";
 export const CORPUS_PATH = PUBLIC_CORPUS_DIR;
 export const REGISTRY_DIRECTORY = "node_modules/@velella/ebb/registry";
 export const STATE_OF_EOL_START_MARKER = "<!-- state-of-eol:start -->";
@@ -501,15 +501,15 @@ export function replaceStateOfEolSection(document: string, section: string): str
 
 /** What the committed State of EOL page holds between its markers. */
 export const STATE_OF_EOL_PLACEHOLDER =
-  "The aggregate tables are built from the corpus and the last recorded full run when the site is built, so they are not committed and a corpus change never edits this page. Build them locally with `node dist/tools/coverage-matrix.js --site`; the live page is at <https://velella.sh/offing/state-of-eol/>.";
+  "The site builds these tables from the corpus and the last recorded full run. Build them locally with `node dist/tools/coverage-matrix.js --site`.";
 
-/** docs/state-of-eol.md as committed: the placeholder between the markers. */
+/** The corpus report as committed, with the placeholder between the markers. */
 export async function buildStateOfEolDocument(root = "."): Promise<string> {
   const document = await readFile(resolve(root, STATE_OF_EOL_PATH), "utf8");
   return replaceStateOfEolSection(document, STATE_OF_EOL_PLACEHOLDER);
 }
 
-/** docs/state-of-eol.md with the aggregate tables built from the corpus, for the site. */
+/** The corpus report with the aggregate tables built for the site. */
 export async function buildStateOfEolSiteDocument(root = "."): Promise<string> {
   const document = await readFile(resolve(root, STATE_OF_EOL_PATH), "utf8");
   const corpus = await loadPublicCorpus(root);

@@ -1,0 +1,1 @@
+- Scan exact public GitHub revisions across owners with a pinned `fleet --repos` file.
