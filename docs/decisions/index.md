@@ -119,3 +119,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0085](0085-release-gate-advisory-predictions.md) | Keep release-gate predictions advisory | Preserve confirmed deadlines and no-data enforcement while reporting labeled SBOM estimates as warnings. |
 | [0086](0086-forecast-repository-sources.md) | Record consented repository forecast sources | Report parsed and skipped public files and disclose network use on the standalone forecast page. |
 | [0087](0087-forecast-runtime-matching.md) | Share runtime matching across forecast inputs | Compare declared-version forecasts on the same supported files and keep standalone project evidence. |
+| [0088](0088-campaign-host-publication.md) | Publish approved campaign changes | Checkpoint proof-bound branches and review requests, refresh host evidence and track progress in a private operations issue. |

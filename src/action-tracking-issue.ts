@@ -325,18 +325,30 @@ async function githubRequest(
   return response.json();
 }
 
-/** Finds the one issue carrying the marker, newest first so the issue a previous run touched is found early. */
+/** Walk the bounded tracking search in updated order. The caller decides how to handle an exhausted search. */
+export async function findMarkedIssue<Issue extends GitHubIssue>(
+  loadPage: (page: number) => Promise<Issue[]>,
+  marker: string,
+  owns: (candidate: Issue) => boolean = () => true,
+): Promise<{ issue?: Issue; exhausted: boolean }> {
+  for (let page = 1; page <= REPOSITORY_LIST_LIMIT; page += 1) {
+    const issues = await loadPage(page);
+    const issue = issues.find(
+      (candidate) => candidate.pull_request === undefined && candidate.body?.includes(marker) && owns(candidate),
+    );
+    if (issue) return { issue, exhausted: false };
+    if (issues.length < 100) return { exhausted: false };
+  }
+  return { exhausted: true };
+}
+
 async function findTrackingIssue(target: TrackingIssueTarget): Promise<GitHubIssue | undefined> {
   const base = `/repos/${target.repository}/issues?state=all&sort=updated&direction=desc&per_page=100`;
-  for (let page = 1; page <= REPOSITORY_LIST_LIMIT; page += 1) {
-    const issues = (await githubRequest(target, "GET", `${base}&page=${page}`)) as GitHubIssue[];
-    const existing = issues.find(
-      (issue) => issue.pull_request === undefined && issue.body?.includes(TRACKING_ISSUE_MARKER),
-    );
-    if (existing) return existing;
-    if (issues.length < 100) break;
-  }
-  return undefined;
+  const { issue } = await findMarkedIssue(
+    async (page) => (await githubRequest(target, "GET", `${base}&page=${page}`)) as GitHubIssue[],
+    TRACKING_ISSUE_MARKER,
+  );
+  return issue;
 }
 
 /**

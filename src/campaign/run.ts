@@ -10,6 +10,7 @@ import { runReplayLoop } from "../autopilot/replay.js";
 import { startRun } from "../autopilot/state.js";
 import { withAutopilotWorktree } from "../autopilot/worktree.js";
 import { loadConfig } from "../config.js";
+import { autopilotEvidence } from "../github-action/autopilot-evidence.js";
 import { repositoryKey } from "../fleet-forecast/model.js";
 import { checkedAutopilotRun, checkedVerifyResult } from "../proof/document.js";
 import {
@@ -19,6 +20,8 @@ import {
   invalidCampaign,
   readCampaignState,
 } from "./document.js";
+import { campaignTokenNames } from "./host-config.js";
+import { saveCampaignProof } from "./proof.js";
 
 type Save = () => Promise<void>;
 type Clock = () => number;
@@ -138,6 +141,7 @@ export function localCampaign(
   inputs: ReadonlyMap<string, LocalInput>,
   backend: LocalRunBackend = {},
 ): CampaignExecution {
+  const secretEnv = campaignTokenNames(process.env);
   const execute: CampaignExecution["execute"] = async (row, checkpoint) => {
     if (row.run) return previousRun(row, row.run);
     const matched = inputs.get(repositoryKey(row.host, row.name));
@@ -150,6 +154,7 @@ export function localCampaign(
       const config = (await loadConfig(tree))?.autopilot;
       if (config?.driver !== "replay")
         throw invalidCampaign("Campaign local execution requires an approved replay driver.");
+      const evidence = autopilotEvidence(process.env, secretEnv);
       await checkpoint(run.checkout.id);
       await runReplayLoop(
         tree,
@@ -160,10 +165,17 @@ export function localCampaign(
           file: matched.recording,
           allowedBaseline: new Set(),
           started: performance.now(),
+          secretEnv,
+          capture: evidence.capture,
+          configure: (config) => evidence.configure(config.secretEnv),
           ...(backend.createReplay && { createReplay: backend.createReplay }),
         },
         backend.runTests,
       );
+      if (run.state === "done") {
+        const artifact = await evidence.publish(tree, checkout.evidenceDirectory, run).catch(() => undefined);
+        if (artifact) await saveCampaignProof(checkout.evidenceDirectory, row, artifact.files);
+      }
     }).catch(() => undefined);
     if (run.state === "done" && row.run) return previousRun(row, row.run);
     return result(run.state, run.stopReason ?? "local-execution-refused");
@@ -171,7 +183,7 @@ export function localCampaign(
   return { execute };
 }
 
-function transition(row: CampaignRepository, status: RepositoryStatus, clock: Clock): void {
+export function transition(row: CampaignRepository, status: RepositoryStatus, clock: Clock): void {
   const previous = row.transitions.at(-1)?.at;
   const at = new Date(Math.max(clock(), previous ? Date.parse(previous) : 0)).toISOString();
   row.transitions.push({ from: row.status, to: status, at });
@@ -209,7 +221,7 @@ async function runBatch(
   }
 }
 
-function gap(state: CampaignState, batch: number, now: number): string | undefined {
+export function gap(state: CampaignState, batch: number, now: number): string | undefined {
   const previous = state.repositories.filter((row) => row.batch < batch);
   let completedAt = 0;
   for (const row of previous) {
@@ -280,7 +292,9 @@ export function controlCampaign(
   if (action === "retry") retryCampaign(state, repository, clock);
   if (action === "cancel") {
     for (const row of state.repositories) {
-      if (active(row) || row.status === "verified" || row.status === "failed") transition(row, "cancelled", clock);
+      if (active(row) || (row.status === "verified" && !row.publication) || row.status === "failed") {
+        transition(row, "cancelled", clock);
+      }
     }
     state.rollout = { state: "cancelled" };
   }

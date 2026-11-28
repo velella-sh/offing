@@ -1,0 +1,1 @@
+- Publish verified campaign branches and proof bundles to approved GitHub and GitLab repositories, reconcile saved requests, refresh host evidence, and track progress in a private GitHub operations issue.

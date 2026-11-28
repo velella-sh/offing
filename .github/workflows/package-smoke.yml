@@ -682,12 +682,12 @@ jobs:
           package="$out/npm-install/node_modules/@velella/offing"
           node "$GITHUB_WORKSPACE/.github/scripts/acc-campaigns.mjs" "$bin" "$package"
           OFFING_CAMPAIGN_DOCKER=1 OFFING_CAMPAIGN_CLI="$package/dist/src/cli.js" \
-            node --test --test-name-pattern 'pinned local repository' "$GITHUB_WORKSPACE/dist/tests/campaign-run.test.js"
+            node --test --test-name-pattern 'campaigns process|pinned local repository|campaign operations issue' "$GITHUB_WORKSPACE/dist/tests/campaign-run.test.js"
           {
             printf '### acc-campaigns\n\n'
             printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
-            printf -- '- Offline planner, MCP, checker and installed local Docker replay passed.\n'
+            printf -- '- Offline planner, MCP, checker, installed Docker replay, isolated GitHub and GitLab writes, and operations tracking passed.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: acc-campaign-board
