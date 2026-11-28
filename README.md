@@ -41,6 +41,17 @@ The [quickstart guide](https://velella.sh/offing/QUICKSTART/) covers the first-r
 
 **Fix evaluation, November 28, 2026.** [50 of 60 pinned repositories were measured, and workflow validation stayed green in all 45 GitHub Actions fixer cases](https://github.com/velella-sh/offing/blob/main/benchmarks/fix-evals/results/2026-11-28/report.json). [See per-fixer and agent results](https://velella.sh/offing/fix-evals/).
 
+**State of EOL 2027.** The study analyzed 999 of 1,000 pinned public GitHub repositories and found at least one runtime past end of life in 383 of the 999 successful scans. [Read the report, methodology, and evidence gaps](https://velella.sh/offing/reports/state-of-eol-2027/).
+
+With Offing built from this checkout, run these commands from the repository you want to assess.
+
+```sh
+offing upgrade-check --to nodejs@22 . --graph
+offing forecast . --target nodejs@22
+```
+
+The blocker graph groups recorded dependency paths by direct dependency. The target forecast compares current lifecycle deadlines with a proposed target and includes the migration blockers. [Upgrade blocker graph](https://velella.sh/offing/UPGRADE_CHECK/#group-blockers-by-direct-dependency) · [Target forecast](https://velella.sh/offing/WHAT_IF/)
+
 ## Compare
 
 | Tool | Comparison | Measurements |
