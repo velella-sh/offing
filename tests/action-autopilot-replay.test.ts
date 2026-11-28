@@ -17,6 +17,8 @@ import { runApprovedTest, type TestLogFilter } from "../src/test-runners/run.js"
 
 const exec = promisify(execFile);
 const installed = process.env.OFFING_AUTOPILOT_ACTION_BUNDLE;
+const workflowTemplate =
+  process.env.OFFING_AUTOPILOT_CONSUMER_TEMPLATE ?? resolve("templates/workflows/offing-autopilot.yml");
 const repository = "fixture/consumer";
 const branch = "offing/autopilot/0";
 const url = "https://example.invalid/fixture/consumer/pull/1";
@@ -198,6 +200,19 @@ async function cleanup(root: string, folder: string) {
   await rm(folder, { recursive: true, force: true });
 }
 
+async function installConsumerWorkflow(root: string) {
+  const directory = join(root, ".github/workflows");
+  await mkdir(directory, { recursive: true });
+  const path = join(directory, "offing-autopilot.yml");
+  await cp(workflowTemplate, path);
+  const workflow = parse(await readFile(path, "utf8")) as {
+    jobs: { migrate: { steps: { uses?: string; with?: Record<string, string> }[] } };
+  };
+  const inputs = workflow.jobs.migrate.steps.find(({ uses }) => uses === "velella-sh/offing@v1")?.with;
+  assert.ok(inputs);
+  return inputs;
+}
+
 async function seedRepo(root: string, bare: string) {
   await mkdir(join(root, "tests"), { recursive: true });
   await mkdir(join(root, "replays"));
@@ -236,6 +251,10 @@ async function fixture(t: TestContext) {
   const event = join(folder, "event.json");
   t.after(() => cleanup(root, folder));
   await seedRepo(root, bare);
+  const templateInputs = await installConsumerWorkflow(root);
+  await git(root, "add", ".github/workflows/offing-autopilot.yml");
+  await commit(root, "Fixture", "Install the Autopilot consumer template");
+  await git(root, "push", "-q", "origin", "main");
   const mock = await mockGitHub(t);
   const bundle = await cleanAction(folder);
   const consumer = await consumerEnvironment(bundle ? join(folder, "action/action.yml") : resolve("action.yml"));
@@ -246,8 +265,9 @@ async function fixture(t: TestContext) {
     const output = join(folder, `output-${++sequence}`);
     const summary = join(folder, `summary-${sequence}`);
     const inputs = consumer({
-      autopilot: "true",
+      ...templateInputs,
       agent: "replay",
+      "agent-key-secret": "",
       "autopilot-recording": `replays/${variant}.json`,
       "github-token": apiToken,
       ...Object.fromEntries(

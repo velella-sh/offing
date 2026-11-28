@@ -106,6 +106,30 @@ process ID is inactive before removing the adjacent `.lock` file. A rerun
 uses completed records and marks an interrupted attempt with missing
 evidence as failed for review.
 
+### Schedule a batch from an operations repository
+
+Copy [`offing-campaign.yml`](https://github.com/velella-sh/offing/blob/main/templates/workflows/offing-campaign.yml)
+to `.github/workflows/` in the operations repository. An Offing package
+that includes the template also has it in
+`node_modules/@velella/offing/templates/workflows/`.
+
+Use a dedicated Linux Actions runner with the `offing-campaign` label.
+Restrict its runner group to the trusted operations repository and reserve it
+for this workflow. Install your approved Offing version and the offline
+Docker test prerequisites on the runner. Keep the runner's `TMPDIR`,
+campaign state, approved checkouts, and recordings on persistent private
+storage.
+
+Set the repository variables `OFFING_CAMPAIGN_DIRECTORY` to the absolute
+directory containing the saved `state.json` and approved `local.json`,
+and `OFFING_CAMPAIGN_VERSION` to the pinned version printed by
+`offing --version`. Both variables are required to enable the job. The
+template schedules a run at 06:17 UTC on weekdays. Each run reads the
+existing state and attempts up to one eligible batch. The minimum gap and
+pause controls apply without changes. The workflow uses no repository token
+permissions or project credentials. Use the separate publication command
+below for approved remote writes.
+
 ## Publish the verified batch
 
 Publication requires an operator-approved file scoped to the existing

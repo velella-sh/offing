@@ -217,7 +217,8 @@ test("regular Action runs drop an unused Autopilot key", async () => {
 
 test("the Autopilot template, composite inputs, and v1 contract agree", async () => {
   const metadata = parse(await readFile("action.yml", "utf8"));
-  const template = parse(await readFile("templates/workflows/offing-autopilot.yml", "utf8"));
+  const path = process.env.OFFING_AUTOPILOT_CONSUMER_TEMPLATE ?? "templates/workflows/offing-autopilot.yml";
+  const template = parse(await readFile(path, "utf8"));
   const spec = await readFile("docs/spec/action/v1.md", "utf8");
   const inputs = {
     autopilot: "false",
@@ -242,6 +243,10 @@ test("the Autopilot template, composite inputs, and v1 contract agree", async ()
   assert.deepEqual(template.on, { workflow_dispatch: null });
   assert.deepEqual(template.permissions, { contents: "read" });
   assert.deepEqual(template.jobs.migrate.permissions, { contents: "write", "pull-requests": "write" });
+  assert.equal(
+    template.jobs.migrate.if,
+    "github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch",
+  );
   const consumer = template.jobs.migrate.steps.at(-1);
   assert.equal(consumer.with.autopilot, "true");
   assert.equal(consumer.env.OFFING_ACTION_AUTOPILOT_KEY, "${{ secrets." + consumer.with["agent-key-secret"] + " }}");

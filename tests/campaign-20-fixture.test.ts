@@ -6,6 +6,7 @@ import { basename, dirname, join, resolve } from "node:path";
 import { test, type TestContext } from "node:test";
 import { pathToFileURL } from "node:url";
 import { promisify } from "node:util";
+import { parse } from "yaml";
 
 import type { CampaignRepository, CampaignState } from "../src/campaign/document.js";
 import type { HostTarget } from "../src/campaign/host-config.js";
@@ -220,6 +221,52 @@ async function replayInputs(root: string, sources: Source[]) {
   );
 }
 
+async function consumerBatch(root: string, clock: string) {
+  const bin = process.env.OFFING_CAMPAIGN_BIN;
+  if (!bin) return undefined;
+  const name = "offing-campaign.yml";
+  const source = resolve(dirname(bin), "../@velella/offing/templates/workflows", name);
+  const directory = join(root, ".github/workflows");
+  await mkdir(directory, { recursive: true });
+  const text = await readFile(source, "utf8");
+  await writeFile(join(directory, name), text);
+  const workflow = parse(text);
+  assert.deepEqual(Object.keys(workflow.on), ["schedule"]);
+  assert.deepEqual(workflow.permissions, {});
+  assert.equal(workflow.concurrency["cancel-in-progress"], false);
+  const job = workflow.jobs.batch;
+  assert.deepEqual(job["runs-on"], ["self-hosted", "linux", "offing-campaign"]);
+  assert.match(job.if, /github\.event\.repository\.fork == false/u);
+  assert.match(job.if, /github\.event\.repository\.default_branch/u);
+  assert.match(job.if, /vars\.OFFING_CAMPAIGN_DIRECTORY != ''/u);
+  assert.match(job.if, /vars\.OFFING_CAMPAIGN_VERSION != ''/u);
+  assert.equal(job.permissions, undefined);
+  assert.equal(job.steps.length, 1);
+  const [step] = job.steps;
+  assert.equal(step.uses, undefined);
+  assert.deepEqual(step.env, {
+    OFFING_CAMPAIGN_DIRECTORY: "${{ vars.OFFING_CAMPAIGN_DIRECTORY }}",
+    OFFING_CAMPAIGN_VERSION: "${{ vars.OFFING_CAMPAIGN_VERSION }}",
+  });
+  const version = (await execute(bin, ["--version"], { env: cleanEnv })).stdout.trim();
+  const invoke = (directory: string, pinned: string) =>
+    execute("bash", ["-euo", "pipefail", "-c", step.run], {
+      cwd: root,
+      env: {
+        ...cleanEnv,
+        PATH: dirname(bin) + ":" + cleanEnv.PATH,
+        NODE_OPTIONS: "--import=" + pathToFileURL(clock).href,
+        OFFING_CAMPAIGN_DIRECTORY: directory,
+        OFFING_CAMPAIGN_VERSION: pinned,
+      },
+      timeout: 180_000,
+    }).then(({ stdout }) => stdout);
+  const refusal = /Use an absolute campaign directory and install the approved Offing version/u;
+  await assert.rejects(invoke(".", version), refusal);
+  await assert.rejects(invoke(root, "unexpected-version"), refusal);
+  return () => invoke(root, version);
+}
+
 async function checkoutLedger(
   t: TestContext,
   root: string,
@@ -228,11 +275,14 @@ async function checkoutLedger(
   state: CampaignState,
   sources: Source[],
   tick: (minutes?: number) => Promise<number>,
+  clock: string,
 ) {
   const inputs = await replayInputs(root, sources);
   const inputPath = join(root, "local.json");
   const omitted = new Set([state.repositories[3]?.name, state.repositories[4]?.name, state.repositories[19]?.name]);
-  const run = () => command("campaign", "run", saved, "--inputs", inputPath, "--one-batch");
+  const run =
+    (await consumerBatch(root, clock)) ??
+    (() => command("campaign", "run", saved, "--inputs", inputPath, "--one-batch"));
   const read = () => json<CampaignState>(saved);
   t.after(async () => {
     const history = await read().catch(() => undefined);
@@ -564,7 +614,7 @@ test("installed candidate replays the 20-repository Node 18 to 22 fixture", {
   const command = cli(root, clock);
   const sources = await Promise.all(Array.from({ length: 20 }, (_, index) => source(root, index + 1)));
   const { initial, saved, state } = await plan(root, sources, command);
-  await checkoutLedger(t, root, command, saved, state, sources, tick);
+  await checkoutLedger(t, root, command, saved, state, sources, tick, clock);
   const forges = await publishLedger(t, root, saved, sources, tick);
   const out = recording ? fixture : resolve(process.env.OFFING_CAMPAIGN_20_OUTPUT ?? join(root, "out"));
   await storeEvidence(root, saved, sources, forges, out);
