@@ -7,6 +7,7 @@ import { test } from "node:test";
 
 import { Ajv2020 } from "ajv/dist/2020.js";
 import { isIsoDate } from "@velella/ebb/registry";
+import type { PolicyException } from "../src/domain.js";
 
 import { git } from "../src/diff.js";
 import { readReleaseGateDays, releaseGateSummary, runReleaseGate } from "../src/github-action/release-gate.js";
@@ -19,6 +20,7 @@ import {
   type LifecycleObservation,
   type NoDataMode,
 } from "../src/release-gate/decision.js";
+import type { GatePrediction } from "../src/release-gate/prediction.js";
 import { runCli } from "./cli-runner.js";
 
 const sbom = resolve("tests/fixtures/release-gate/blocked.cdx.json");
@@ -42,33 +44,53 @@ test("gate conforms to downloaded UTC, exception and missing-evidence examples",
   const vectors: {
     asOf: string;
     supportUntil: string;
-    cases: Array<{ name: string; noData: NoDataMode; deadline?: string; expires?: string; expected: unknown[] }>;
+    component: string;
+    detector: string;
+    path: string;
+    ruleId: string;
+    sources: string[];
+    prediction: GatePrediction;
+    cases: Array<{
+      name: string;
+      noData?: NoDataMode;
+      deadline?: string;
+      event?: "deprecated";
+      exceptions?: PolicyException[];
+      predicted?: boolean;
+      predictionDate?: string;
+      expected: unknown[];
+    }>;
   } = JSON.parse(await readFile("docs/spec/release-gate/conformance/fixtures.json", "utf8"));
-  for (const { name, noData, deadline, expires, expected } of vectors.cases) {
+  for (const { name, noData, deadline, event, exceptions, predicted, predictionDate, expected } of vectors.cases) {
     const window = gateWindow(vectors.asOf, undefined, vectors.supportUntil, noData);
-    const rule = {
-      id: "npm.example.support",
-      event: "end-of-support",
-      date: deadline,
-      sources: ["https://example.com"],
-    } as const;
-    const observation: LifecycleObservation = {
-      component: "example",
-      detector: "npm",
-      ...(deadline ? { rule: { ...rule, date: deadline } } : {}),
-    };
-    const exceptions = expires ? [{ ecosystem: "npm", expires, reason: "Transition" }] : [];
-    const decision = decideRelease({ kind: "path", target: "." }, [observation], window, exceptions);
-    const reason = decision.reasons[0];
+    const base = { component: vectors.component, detector: vectors.detector, location: { path: vectors.path } };
+    const prediction = { ...vectors.prediction, date: predictionDate ?? vectors.prediction.date };
+    const rule = deadline
+      ? ({ id: vectors.ruleId, event: event ?? "end-of-support", date: deadline, sources: vectors.sources } as const)
+      : undefined;
+    const observations: LifecycleObservation[] = rule
+      ? [{ ...base, rule, ...(predicted ? { prediction } : {}) }]
+      : [base, ...(predicted ? [{ ...base, prediction }] : [])];
+    const decision = decideRelease({ kind: "path", target: "." }, observations, window, exceptions);
     assert.deepEqual(
-      [decision.verdict, reason?.outcome, reason?.daysLeft].filter((item) => item !== undefined),
+      [
+        decision.verdict,
+        ...decision.reasons.map((reason) =>
+          [
+            reason.prediction ? "prediction" : reason.code,
+            reason.outcome,
+            reason.daysLeft,
+            reason.exception?.reason,
+          ].filter((item) => item !== undefined),
+        ),
+      ],
       expected,
       name,
     );
   }
   assert.match(
     execFileSync(process.execPath, ["docs/spec/release-gate/conformance/check.mjs"], { encoding: "utf8" }),
-    /9 standalone decision fixtures passed/,
+    new RegExp(`${vectors.cases.length} standalone decision fixtures passed`),
   );
 });
 
@@ -217,6 +239,58 @@ test("invalid syntax and dates use documented errors", async () => {
   ] as const) {
     assert.equal((await cli(["release-gate", ...args])).code, code, String(args));
   }
+});
+
+test("the Action exposes advisory SBOM predictions and the v1 schema prevents treating them as deadlines", async (t) => {
+  const root = await fixture(t);
+  const { prediction }: { prediction: GatePrediction } = JSON.parse(
+    await readFile("docs/spec/release-gate/conformance/fixtures.json", "utf8"),
+  );
+  const file = "prediction.cdx.json";
+  await writeFile(
+    join(root, file),
+    JSON.stringify({
+      bomFormat: "CycloneDX",
+      specVersion: "1.6",
+      components: [
+        {
+          name: "example",
+          purl: prediction.purl,
+          properties: [{ name: "offing:lifecycle:predictedEol:v1", value: JSON.stringify(prediction) }],
+        },
+      ],
+    }),
+  );
+  const result = await runGitHubAction({
+    root,
+    sbom: file,
+    reportPath: join(root, "scan.json"),
+    failOnSeverity: "none",
+    today: "2024-02-28",
+    releaseGateDays: 1,
+  });
+  assert.equal(result.failed, false);
+  assert.equal(result.releaseGate?.verdict, "warn");
+  assert.match(releaseGateSummary(result.releaseGate), /\[warn\].+predicted end of life 2024-02-29/);
+  const cliResult = await cli(
+    ["release-gate", "--sbom", file, "--today", "2024-02-28", "--within-days", "1", "--no-data", "ignore", "--json"],
+    root,
+  );
+  assert.equal(cliResult.code, 0);
+  const report: GateReport = JSON.parse(cliResult.stdout);
+  const reason = report.decisions[0]?.reasons[0];
+  assert.deepEqual(reason?.prediction, prediction);
+  const schema: object = JSON.parse(await readFile("schemas/release-gate.v1.schema.json", "utf8"));
+  const validate = new Ajv2020({ strictRequired: false, strictTypes: false })
+    .addFormat("date", isIsoDate)
+    .compile(schema);
+  assert(validate(report), JSON.stringify(validate.errors));
+  if (!reason) throw new Error("Expected a prediction reason.");
+  reason.outcome = "block";
+  assert.equal(validate(report), false);
+  reason.outcome = "warn";
+  reason.deadline = prediction.date;
+  assert.equal(validate(report), false);
 });
 
 test("Action gate fails separately from severity and writes readable summaries for clean consumers", async (t) => {

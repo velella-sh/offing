@@ -23,6 +23,7 @@ import {
   type GateWindow,
   type LifecycleObservation,
 } from "./decision.js";
+import { componentPredictions } from "./prediction.js";
 
 type RuleDetails = Pick<DependencyFinding, "ruleId" | "event" | "deadline" | "sources">;
 
@@ -72,11 +73,18 @@ export async function sbomObservations(
   const relative = relativePosix(root, resolve(root, file));
   const path = file === "-" ? "stdin.sbom.json" : relative.startsWith("../") ? basename(file) : relative;
   const unknown: LifecycleObservation[] = [];
+  const predictions: LifecycleObservation[] = [];
   const byPackage = lifecyclePackageRules(await lifecycleRules());
   const checks = await scanSbomInput(input, {
     check: (component) => checkAgainst(byPackage.get(purlIdentity(parsePurl(component.purl))) ?? [], component),
     onMissingPurl(component, jsonPointer) {
       unknown.push({ component, detector: "sbom", location: { path, jsonPointer } });
+    },
+    onComponent({ version, findings, location: jsonPointer }, purl, owner, format) {
+      if (!version || findings.some(({ event, deadline }) => deadline && event !== "deprecated")) return;
+      for (const prediction of componentPredictions(purl, version, owner, format)) {
+        predictions.push({ component: prediction.purl, detector: "sbom", location: { path, jsonPointer }, prediction });
+      }
     },
   });
   const dated = checks.flatMap(({ status, purl, version, location: jsonPointer, findings }) => {
@@ -88,7 +96,7 @@ export async function sbomObservations(
   });
   if (checks.length === 0 && unknown.length === 0)
     unknown.push({ component: "empty SBOM", detector: "sbom", location: { path } });
-  return [...dated, ...unknown];
+  return [...dated, ...unknown, ...predictions];
 }
 
 async function missingPath(path: string): Promise<boolean> {

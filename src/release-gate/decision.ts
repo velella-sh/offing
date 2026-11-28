@@ -5,6 +5,7 @@ import { daysBetween } from "../baseline.js";
 import type { PolicyException, SourceLocation } from "../domain.js";
 import { OffingError } from "../offing-error.js";
 import { matchingPolicyException } from "../policy.js";
+import type { GatePrediction } from "./prediction.js";
 
 export const DEFAULT_WITHIN_DAYS = 30;
 export type NoDataMode = "fail" | "warn" | "ignore";
@@ -25,6 +26,7 @@ export interface LifecycleObservation {
   detector: string;
   location?: SourceLocation;
   rule?: { id: string; event: LifecycleEvent; date?: string; sources: readonly string[] };
+  prediction?: GatePrediction;
 }
 
 export interface GateReason {
@@ -37,6 +39,7 @@ export interface GateReason {
   daysLeft?: number;
   sources?: readonly string[];
   exception?: Pick<PolicyException, "reason" | "expires">;
+  prediction?: GatePrediction;
 }
 
 export interface GateDecision {
@@ -87,8 +90,11 @@ function reasonFor(
   window: GateWindow,
   exceptions: readonly PolicyException[],
 ): GateReason[] {
-  const { component, detector, rule, location } = observation;
+  const { component, detector, rule, location, prediction } = observation;
   const common = { component, ...(location ? { location } : {}) };
+  if (prediction && (!rule?.date || rule.event === "deprecated")) {
+    return prediction.date <= window.supportUntil ? [{ ...common, code: "no-data", outcome: "warn", prediction }] : [];
+  }
   if (rule?.event === "deprecated") return [];
   if (!rule?.date) {
     if (window.noData === "ignore") return [];

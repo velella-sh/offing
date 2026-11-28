@@ -31,6 +31,28 @@
   "$defs": {
     "text": { "type": "string", "minLength": 1 },
     "date": { "type": "string", "format": "date", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "prediction": {
+      "type": "object",
+      "required": ["purl", "date", "interval", "confidence", "method", "sources", "modelVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "purl": { "type": "string", "pattern": "^pkg:[a-z][a-z0-9.+-]*/[^@?#\\s]+@[^@?#\\s]+(?:\\?[^#\\s]+)?(?:#[^\\s]+)?$" },
+        "date": { "$ref": "#/$defs/date" },
+        "interval": {
+          "type": "object",
+          "required": ["earliest", "latest"],
+          "additionalProperties": false,
+          "properties": {
+            "earliest": { "$ref": "#/$defs/date" },
+            "latest": { "$ref": "#/$defs/date" }
+          }
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "method": { "type": "string", "pattern": "\\S" },
+        "sources": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^https://[^/\\s?#@]+(?:[/?#][^\\s]*)?$" } },
+        "modelVersion": { "type": "string", "pattern": "\\S" }
+      }
+    },
     "decision": {
       "type": "object",
       "required": ["input", "verdict", "reasons"],
@@ -67,6 +89,7 @@
         "deadline": { "$ref": "#/$defs/date" },
         "daysLeft": { "type": "integer" },
         "sources": { "type": "array", "items": { "$ref": "#/$defs/text" } },
+        "prediction": { "$ref": "#/$defs/prediction" },
         "exception": {
           "type": "object",
           "required": ["reason", "expires"],
@@ -84,6 +107,13 @@
         {
           "if": { "properties": { "outcome": { "const": "excepted" } } },
           "then": { "required": ["exception"] }
+        },
+        {
+          "if": { "required": ["prediction"] },
+          "then": {
+            "properties": { "code": { "const": "no-data" }, "outcome": { "const": "warn" } },
+            "not": { "anyOf": [{ "required": ["deadline"] }, { "required": ["daysLeft"] }, { "required": ["exception"] }] }
+          }
         }
       ]
     }

@@ -14,6 +14,7 @@ interface RollbackReadinessArgs {
   readonly today?: string;
   readonly noData?: string;
   readonly json: boolean;
+  readonly format?: "text" | "json" | "sarif";
 }
 
 function candidateError(candidates: readonly string[]): string | undefined {
@@ -33,51 +34,65 @@ function parseWindow(windows: readonly string[], supportUntil: string | undefine
     : "--within-days must be a non-negative safe integer.";
 }
 
-export function parseRollbackReadinessArgs(args: readonly string[]): RollbackReadinessArgs | string {
-  let parsed;
-  try {
-    parsed = parseArgs({
-      args: [...args],
-      allowPositionals: true,
-      options: {
-        candidate: { type: "string", multiple: true },
-        "within-days": { type: "string", multiple: true },
-        "support-until": { type: "string" },
-        today: { type: "string" },
-        "no-data": { type: "string" },
-        json: { type: "boolean", default: false },
-      },
-    });
-  } catch (error) {
-    if (error instanceof TypeError) return error.message;
-    throw error;
-  }
+function readRollbackArgs(args: readonly string[]) {
+  return parseArgs({
+    args: [...args],
+    allowPositionals: true,
+    options: {
+      candidate: { type: "string", multiple: true },
+      "within-days": { type: "string", multiple: true },
+      "support-until": { type: "string" },
+      today: { type: "string" },
+      "no-data": { type: "string" },
+      json: { type: "boolean", default: false },
+      format: { type: "string" },
+    },
+  });
+}
 
-  const [releaseRef] = parsed.positionals;
-  if (!releaseRef || parsed.positionals.length !== 1) return "Provide exactly one <release-ref>.";
-  const candidates = parsed.values.candidate ?? [];
-  const error = candidateError(candidates);
-  if (error) return error;
-  const { "support-until": supportUntil, today, "no-data": noData, json } = parsed.values;
-  const withinDays = parseWindow(parsed.values["within-days"] ?? [], supportUntil);
+function rollbackOptions(
+  values: ReturnType<typeof readRollbackArgs>["values"],
+): Omit<RollbackReadinessArgs, "releaseRef" | "candidates"> | string {
+  const { "support-until": supportUntil, today, "no-data": noData, json, format } = values;
+  if (format !== undefined && format !== "text" && format !== "json" && format !== "sarif") {
+    return "Expected --format text, json or sarif.";
+  }
+  if (json && format !== undefined && format !== "json") return "--json requires JSON output.";
+  const withinDays = parseWindow(values["within-days"] ?? [], supportUntil);
   if (typeof withinDays === "string") return withinDays;
   return {
-    releaseRef,
-    candidates,
     withinDays,
     json,
+    ...(format === undefined ? {} : { format }),
     ...(supportUntil === undefined ? {} : { supportUntil }),
     ...(today === undefined ? {} : { today }),
     ...(noData === undefined ? {} : { noData }),
   };
 }
 
+export function parseRollbackReadinessArgs(args: readonly string[]): RollbackReadinessArgs | string {
+  let parsed;
+  try {
+    parsed = readRollbackArgs(args);
+  } catch (error) {
+    if (error instanceof TypeError) return error.message;
+    throw error;
+  }
+  const [releaseRef] = parsed.positionals;
+  if (!releaseRef || parsed.positionals.length !== 1) return "Provide exactly one <release-ref>.";
+  const candidates = parsed.values.candidate ?? [];
+  const error = candidateError(candidates);
+  if (error) return error;
+  const options = rollbackOptions(parsed.values);
+  return typeof options === "string" ? options : { releaseRef, candidates, ...options };
+}
+
 export const command: CliCommand = {
   name: "rollback-readiness",
-  flags: ["--candidate", "--within-days", "--support-until", "--today", "--no-data", "--json"],
+  flags: ["--candidate", "--within-days", "--support-until", "--today", "--no-data", "--json", "--format"],
   example: "offing rollback-readiness v2.0.0 --candidate v1.9.0",
   usage: [
-    "  offing rollback-readiness <release-ref> --candidate <tag> [--within-days <days> | --support-until <date>] [--today <date>] [--no-data fail|warn|ignore] [--json]",
+    "  offing rollback-readiness <release-ref> --candidate <tag> [--within-days <days> | --support-until <date>] [--today <date>] [--no-data fail|warn|ignore] [--json | --format text|json|sarif]",
     `    Repeat --candidate 1 to 3 times. --within-days defaults to ${defaultWithinDays}.`,
   ],
   async run(args, ctx) {
@@ -86,7 +101,7 @@ export const command: CliCommand = {
     const { gateReport, gateWindow } = await import("../release-gate/decision.js");
     const { evaluateRepository, verifyRef, verifyTag } = await import("../release-gate/inputs.js");
     const { renderGate } = await import("../release-gate/render.js");
-    const { releaseRef, candidates, withinDays, supportUntil, noData, today, json } = parsed;
+    const { releaseRef, candidates, withinDays, supportUntil, noData, today, json, format } = parsed;
     const window = gateWindow(today ?? new Date().toISOString().slice(0, 10), withinDays, supportUntil, noData);
     const root = process.cwd();
     const pinnedVersion = process.env.OFFING_DATA_VERSION;
@@ -98,7 +113,7 @@ export const command: CliCommand = {
       decisions.push(await evaluateRepository({ kind: "git-ref", target }, window, root, commit));
     }
     const report = gateReport(window, decisions, releaseRef);
-    process.stdout.write(`${renderGate(report, json ? "json" : "text")}\n`);
+    process.stdout.write(`${renderGate(report, format ?? (json ? "json" : "text"))}\n`);
     return decisions.some(({ verdict }) => verdict === "block") ? ctx.exitCodes.policy : 0;
   },
 };
