@@ -1,0 +1,1 @@
+- Queue campaign board Pages builds from reviewed state artifacts so pending runs can retain their own snapshots.
