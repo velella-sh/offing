@@ -196,8 +196,8 @@ export async function gitLoopback(
   token: string,
   actor: number,
   gitlab: boolean,
+  repo = gitlab ? "group/migration" : "example/upgrade",
 ) {
-  const repo = gitlab ? "group/migration" : "example/upgrade";
   const bare = join(root, "forge", repo + ".git");
   await mkdir(dirname(bare), { recursive: true });
   const git = async (...argv: string[]) => (await exec("git", ["-C", bare, ...argv])).stdout.trim();
@@ -242,5 +242,5 @@ export async function gitLoopback(
       response.writeHead(502).end("test response lost");
     }
   });
-  return { git, origin, repo, ...forge };
+  return { git, bare, origin, repo, ...forge };
 }

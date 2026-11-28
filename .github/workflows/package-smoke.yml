@@ -683,12 +683,24 @@ jobs:
           node "$GITHUB_WORKSPACE/.github/scripts/acc-campaigns.mjs" "$bin" "$package"
           OFFING_CAMPAIGN_DOCKER=1 OFFING_CAMPAIGN_CLI="$package/dist/src/cli.js" \
             node --test --test-name-pattern 'campaigns process|pinned local repository|campaign operations issue' "$GITHUB_WORKSPACE/dist/tests/campaign-run.test.js"
+          OFFING_CAMPAIGN_20=1 OFFING_CAMPAIGN_CLI="$package/dist/src/cli.js" \
+            OFFING_CAMPAIGN_20_OUTPUT="$RUNNER_TEMP/campaign-20" \
+            node --test "$GITHUB_WORKSPACE/dist/tests/campaign-20-fixture.test.js"
           {
             printf '### acc-campaigns\n\n'
             printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
             printf -- '- Offline planner, MCP, checker, installed Docker replay, isolated GitHub and GitLab writes, and operations tracking passed.\n'
+            printf -- '- Replayed 20 pinned repositories, verified 18 proof heads, and reproduced the final recorded Campaign Board.\n'
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the verified 20-repository campaign replay
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: offing-campaign-20
+          path: ${{ runner.temp }}/campaign-20/
+          if-no-files-found: error
+          retention-days: 30
 
       - name: acc-campaign-board
         run: |
@@ -700,12 +712,12 @@ jobs:
           out="$RUNNER_TEMP/package-smoke"
           package="$out/npm-install/node_modules/@velella/offing"
           cli="$package/dist/src/cli.js"
-          node .github/scripts/acc-campaign-board.mjs "$cli" "$package" "$tools/node_modules" tests/fixtures/campaign-board/synthetic-state.json
+          node .github/scripts/acc-campaign-board.mjs "$cli" "$package" "$tools/node_modules" tests/fixtures/campaign-board/synthetic-state.json tests/fixtures/campaign-20/state.json
           {
             printf '### acc-campaign-board\n\n'
             printf -- '- Tarball SHA-256 %s\n' "$(sha256sum "$out"/*.tgz | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$(node "$cli" --version)" "$GITHUB_SHA"
-            printf -- '- Released Mizzen and Lateen built a board from the synthetic state fixture.\n'
+            printf -- '- Released Mizzen and Lateen built boards from the compact and 20-repository campaign fixtures.\n'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: acc-guardrails

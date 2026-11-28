@@ -1,0 +1,1428 @@
+feature done
+blob
+mark :1
+data 178
+{
+  "autopilot": {
+    "driver": "replay",
+    "allowedPaths": [
+      "package.json"
+    ],
+    "tests": [
+      [
+        "node",
+        "tests/check.cjs"
+      ]
+    ]
+  }
+}
+
+blob
+mark :2
+data 19
+* @fixture/runtime
+
+blob
+mark :3
+data 141
+{
+  "name": "service-20",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+blob
+mark :4
+data 236
+const assert = require("node:assert/strict");
+const { engines } = require("../package.json");
+assert.ok(["18", ">=22"].includes(engines.node));
+assert.ok(!Object.keys(process.env).some(key => key.startsWith("OFFING_CAMPAIGN_TOKEN_")));
+
+reset refs/heads/pins/fixture/service-20
+commit refs/heads/pins/fixture/service-20
+mark :5
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-20
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :3 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :6
+data 141
+{
+  "name": "service-07",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/example/service-07
+commit refs/heads/pins/example/service-07
+mark :7
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-07
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :6 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :8
+data 141
+{
+  "name": "service-05",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/example/service-05
+commit refs/heads/pins/example/service-05
+mark :9
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-05
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :8 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :10
+data 141
+{
+  "name": "service-05",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-05
+mark :11
+author Offing <offing@example.invalid> 1795845931 +0000
+committer Offing <offing@example.invalid> 1795845931 +0000
+data 32
+chore: apply Autopilot codemods
+from :9
+M 100644 :10 package.json
+
+blob
+mark :12
+data 143
+{
+  "name": "service-05",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-05
+mark :13
+author Offing <offing@example.invalid> 1795845933 +0000
+committer Offing <offing@example.invalid> 1795845933 +0000
+data 31
+chore: replay Autopilot turn 1
+from :11
+M 100644 :12 package.json
+
+blob
+mark :14
+data 20
+* @fixture/platform
+
+blob
+mark :15
+data 141
+{
+  "name": "service-03",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/example/service-03
+commit refs/heads/pins/example/service-03
+mark :16
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-03
+M 100644 :1 .offing.json
+M 100644 :14 CODEOWNERS
+M 100644 :15 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :17
+data 141
+{
+  "name": "service-03",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-03
+mark :18
+author Offing <offing@example.invalid> 1795845931 +0000
+committer Offing <offing@example.invalid> 1795845931 +0000
+data 32
+chore: apply Autopilot codemods
+from :16
+M 100644 :17 package.json
+
+blob
+mark :19
+data 143
+{
+  "name": "service-03",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-03
+mark :20
+author Offing <offing@example.invalid> 1795845933 +0000
+committer Offing <offing@example.invalid> 1795845933 +0000
+data 31
+chore: replay Autopilot turn 1
+from :18
+M 100644 :19 package.json
+
+blob
+mark :21
+data 141
+{
+  "name": "service-01",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/example/service-01
+commit refs/heads/pins/example/service-01
+mark :22
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-01
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :21 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :23
+data 141
+{
+  "name": "service-01",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-01
+mark :24
+author Offing <offing@example.invalid> 1795845931 +0000
+committer Offing <offing@example.invalid> 1795845931 +0000
+data 32
+chore: apply Autopilot codemods
+from :22
+M 100644 :23 package.json
+
+blob
+mark :25
+data 143
+{
+  "name": "service-01",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-01
+mark :26
+author Offing <offing@example.invalid> 1795845933 +0000
+committer Offing <offing@example.invalid> 1795845933 +0000
+data 31
+chore: replay Autopilot turn 1
+from :24
+M 100644 :25 package.json
+
+blob
+mark :27
+data 141
+{
+  "name": "service-09",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/example/service-09
+commit refs/heads/pins/example/service-09
+mark :28
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-09
+M 100644 :1 .offing.json
+M 100644 :14 CODEOWNERS
+M 100644 :27 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :29
+data 141
+{
+  "name": "service-09",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-09
+mark :30
+author Offing <offing@example.invalid> 1795845935 +0000
+committer Offing <offing@example.invalid> 1795845935 +0000
+data 32
+chore: apply Autopilot codemods
+from :28
+M 100644 :29 package.json
+
+blob
+mark :31
+data 143
+{
+  "name": "service-09",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-09
+mark :32
+author Offing <offing@example.invalid> 1795845936 +0000
+committer Offing <offing@example.invalid> 1795845936 +0000
+data 31
+chore: replay Autopilot turn 1
+from :30
+M 100644 :31 package.json
+
+blob
+mark :33
+data 141
+{
+  "name": "service-17",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/host/example/service-17
+commit refs/heads/host/example/service-17
+mark :34
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-17
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :33 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :35
+data 141
+{
+  "name": "service-17",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/example/service-17
+mark :36
+author Offing <offing@example.invalid> 1795845938 +0000
+committer Offing <offing@example.invalid> 1795845938 +0000
+data 32
+chore: apply Autopilot codemods
+from :34
+M 100644 :35 package.json
+
+blob
+mark :37
+data 143
+{
+  "name": "service-17",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/example/service-17
+mark :38
+author Offing <offing@example.invalid> 1795845940 +0000
+committer Offing <offing@example.invalid> 1795845940 +0000
+data 31
+chore: replay Autopilot turn 1
+from :36
+M 100644 :37 package.json
+
+blob
+mark :39
+data 141
+{
+  "name": "service-15",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/example/service-15
+commit refs/heads/pins/example/service-15
+mark :40
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-15
+M 100644 :1 .offing.json
+M 100644 :14 CODEOWNERS
+M 100644 :39 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :41
+data 141
+{
+  "name": "service-15",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-15
+mark :42
+author Offing <offing@example.invalid> 1795845938 +0000
+committer Offing <offing@example.invalid> 1795845938 +0000
+data 32
+chore: apply Autopilot codemods
+from :40
+M 100644 :41 package.json
+
+blob
+mark :43
+data 143
+{
+  "name": "service-15",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-15
+mark :44
+author Offing <offing@example.invalid> 1795845940 +0000
+committer Offing <offing@example.invalid> 1795845940 +0000
+data 31
+chore: replay Autopilot turn 1
+from :42
+M 100644 :43 package.json
+
+blob
+mark :45
+data 141
+{
+  "name": "service-13",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/example/service-13
+commit refs/heads/pins/example/service-13
+mark :46
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-13
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :45 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :47
+data 141
+{
+  "name": "service-13",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-13
+mark :48
+author Offing <offing@example.invalid> 1795845938 +0000
+committer Offing <offing@example.invalid> 1795845938 +0000
+data 32
+chore: apply Autopilot codemods
+from :46
+M 100644 :47 package.json
+
+blob
+mark :49
+data 143
+{
+  "name": "service-13",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-13
+mark :50
+author Offing <offing@example.invalid> 1795845940 +0000
+committer Offing <offing@example.invalid> 1795845940 +0000
+data 31
+chore: replay Autopilot turn 1
+from :48
+M 100644 :49 package.json
+
+blob
+mark :51
+data 141
+{
+  "name": "service-11",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/example/service-11
+commit refs/heads/pins/example/service-11
+mark :52
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-11
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :51 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :53
+data 141
+{
+  "name": "service-11",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-11
+mark :54
+author Offing <offing@example.invalid> 1795845938 +0000
+committer Offing <offing@example.invalid> 1795845938 +0000
+data 32
+chore: apply Autopilot codemods
+from :52
+M 100644 :53 package.json
+
+blob
+mark :55
+data 143
+{
+  "name": "service-11",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/example/service-11
+mark :56
+author Offing <offing@example.invalid> 1795845940 +0000
+committer Offing <offing@example.invalid> 1795845940 +0000
+data 31
+chore: replay Autopilot turn 1
+from :54
+M 100644 :55 package.json
+
+blob
+mark :57
+data 141
+{
+  "name": "service-19",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/host/example/service-19
+commit refs/heads/host/example/service-19
+mark :58
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-19
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :57 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :59
+data 141
+{
+  "name": "service-19",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/example/service-19
+mark :60
+author Offing <offing@example.invalid> 1795845941 +0000
+committer Offing <offing@example.invalid> 1795845941 +0000
+data 32
+chore: apply Autopilot codemods
+from :58
+M 100644 :59 package.json
+
+blob
+mark :61
+data 143
+{
+  "name": "service-19",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/example/service-19
+mark :62
+author Offing <offing@example.invalid> 1795845943 +0000
+committer Offing <offing@example.invalid> 1795845943 +0000
+data 31
+chore: replay Autopilot turn 1
+from :60
+M 100644 :61 package.json
+
+blob
+mark :63
+data 141
+{
+  "name": "service-08",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/host/fixture/service-08
+commit refs/heads/host/fixture/service-08
+mark :64
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-08
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :63 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :65
+data 141
+{
+  "name": "service-08",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-08
+mark :66
+author Offing <offing@example.invalid> 1795845945 +0000
+committer Offing <offing@example.invalid> 1795845945 +0000
+data 32
+chore: apply Autopilot codemods
+from :64
+M 100644 :65 package.json
+
+blob
+mark :67
+data 143
+{
+  "name": "service-08",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-08
+mark :68
+author Offing <offing@example.invalid> 1795845947 +0000
+committer Offing <offing@example.invalid> 1795845947 +0000
+data 31
+chore: replay Autopilot turn 1
+from :66
+M 100644 :67 package.json
+
+blob
+mark :69
+data 141
+{
+  "name": "service-06",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/host/fixture/service-06
+commit refs/heads/host/fixture/service-06
+mark :70
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-06
+M 100644 :1 .offing.json
+M 100644 :14 CODEOWNERS
+M 100644 :69 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :71
+data 141
+{
+  "name": "service-06",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-06
+mark :72
+author Offing <offing@example.invalid> 1795845945 +0000
+committer Offing <offing@example.invalid> 1795845945 +0000
+data 32
+chore: apply Autopilot codemods
+from :70
+M 100644 :71 package.json
+
+blob
+mark :73
+data 143
+{
+  "name": "service-06",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-06
+mark :74
+author Offing <offing@example.invalid> 1795845947 +0000
+committer Offing <offing@example.invalid> 1795845947 +0000
+data 31
+chore: replay Autopilot turn 1
+from :72
+M 100644 :73 package.json
+
+blob
+mark :75
+data 141
+{
+  "name": "service-04",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/host/fixture/service-04
+commit refs/heads/host/fixture/service-04
+mark :76
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-04
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :75 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :77
+data 141
+{
+  "name": "service-04",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-04
+mark :78
+author Offing <offing@example.invalid> 1795845945 +0000
+committer Offing <offing@example.invalid> 1795845945 +0000
+data 32
+chore: apply Autopilot codemods
+from :76
+M 100644 :77 package.json
+
+blob
+mark :79
+data 143
+{
+  "name": "service-04",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-04
+mark :80
+author Offing <offing@example.invalid> 1795845947 +0000
+committer Offing <offing@example.invalid> 1795845947 +0000
+data 31
+chore: replay Autopilot turn 1
+from :78
+M 100644 :79 package.json
+
+blob
+mark :81
+data 141
+{
+  "name": "service-02",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/host/fixture/service-02
+commit refs/heads/host/fixture/service-02
+mark :82
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-02
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :81 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :83
+data 141
+{
+  "name": "service-02",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-02
+mark :84
+author Offing <offing@example.invalid> 1795845945 +0000
+committer Offing <offing@example.invalid> 1795845945 +0000
+data 32
+chore: apply Autopilot codemods
+from :82
+M 100644 :83 package.json
+
+blob
+mark :85
+data 143
+{
+  "name": "service-02",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-02
+mark :86
+author Offing <offing@example.invalid> 1795845947 +0000
+committer Offing <offing@example.invalid> 1795845947 +0000
+data 31
+chore: replay Autopilot turn 1
+from :84
+M 100644 :85 package.json
+
+blob
+mark :87
+data 141
+{
+  "name": "service-10",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/fixture/service-10
+commit refs/heads/pins/fixture/service-10
+mark :88
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-10
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :87 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :89
+data 141
+{
+  "name": "service-10",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/fixture/service-10
+mark :90
+author Offing <offing@example.invalid> 1795845948 +0000
+committer Offing <offing@example.invalid> 1795845948 +0000
+data 32
+chore: apply Autopilot codemods
+from :88
+M 100644 :89 package.json
+
+blob
+mark :91
+data 143
+{
+  "name": "service-10",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/host/fixture/service-10
+mark :92
+author Offing <offing@example.invalid> 1795845950 +0000
+committer Offing <offing@example.invalid> 1795845950 +0000
+data 31
+chore: replay Autopilot turn 1
+from :90
+M 100644 :91 package.json
+
+blob
+mark :93
+data 141
+{
+  "name": "service-18",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/fixture/service-18
+commit refs/heads/pins/fixture/service-18
+mark :94
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-18
+M 100644 :1 .offing.json
+M 100644 :14 CODEOWNERS
+M 100644 :93 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :95
+data 141
+{
+  "name": "service-18",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-18
+mark :96
+author Offing <offing@example.invalid> 1795845952 +0000
+committer Offing <offing@example.invalid> 1795845952 +0000
+data 32
+chore: apply Autopilot codemods
+from :94
+M 100644 :95 package.json
+
+blob
+mark :97
+data 143
+{
+  "name": "service-18",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-18
+mark :98
+author Offing <offing@example.invalid> 1795845954 +0000
+committer Offing <offing@example.invalid> 1795845954 +0000
+data 31
+chore: replay Autopilot turn 1
+from :96
+M 100644 :97 package.json
+
+blob
+mark :99
+data 141
+{
+  "name": "service-16",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/fixture/service-16
+commit refs/heads/pins/fixture/service-16
+mark :100
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-16
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :99 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :101
+data 141
+{
+  "name": "service-16",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-16
+mark :102
+author Offing <offing@example.invalid> 1795845952 +0000
+committer Offing <offing@example.invalid> 1795845952 +0000
+data 32
+chore: apply Autopilot codemods
+from :100
+M 100644 :101 package.json
+
+blob
+mark :103
+data 143
+{
+  "name": "service-16",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-16
+mark :104
+author Offing <offing@example.invalid> 1795845954 +0000
+committer Offing <offing@example.invalid> 1795845954 +0000
+data 31
+chore: replay Autopilot turn 1
+from :102
+M 100644 :103 package.json
+
+blob
+mark :105
+data 141
+{
+  "name": "service-14",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/fixture/service-14
+commit refs/heads/pins/fixture/service-14
+mark :106
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-14
+M 100644 :1 .offing.json
+M 100644 :2 CODEOWNERS
+M 100644 :105 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :107
+data 141
+{
+  "name": "service-14",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-14
+mark :108
+author Offing <offing@example.invalid> 1795845952 +0000
+committer Offing <offing@example.invalid> 1795845952 +0000
+data 32
+chore: apply Autopilot codemods
+from :106
+M 100644 :107 package.json
+
+blob
+mark :109
+data 143
+{
+  "name": "service-14",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-14
+mark :110
+author Offing <offing@example.invalid> 1795845954 +0000
+committer Offing <offing@example.invalid> 1795845954 +0000
+data 31
+chore: replay Autopilot turn 1
+from :108
+M 100644 :109 package.json
+
+blob
+mark :111
+data 141
+{
+  "name": "service-12",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+reset refs/heads/pins/fixture/service-12
+commit refs/heads/pins/fixture/service-12
+mark :112
+author Offing Fixture <fixture@example.invalid> 1795737600 +0000
+committer Offing Fixture <fixture@example.invalid> 1795737600 +0000
+data 20
+fixture: service-12
+M 100644 :1 .offing.json
+M 100644 :14 CODEOWNERS
+M 100644 :111 package.json
+M 100644 :4 tests/check.cjs
+
+blob
+mark :113
+data 141
+{
+  "name": "service-12",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-12
+mark :114
+author Offing <offing@example.invalid> 1795845952 +0000
+committer Offing <offing@example.invalid> 1795845952 +0000
+data 32
+chore: apply Autopilot codemods
+from :112
+M 100644 :113 package.json
+
+blob
+mark :115
+data 143
+{
+  "name": "service-12",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/check.cjs"
+  }
+}
+
+commit refs/heads/results/fixture/service-12
+mark :116
+author Offing <offing@example.invalid> 1795845954 +0000
+committer Offing <offing@example.invalid> 1795845954 +0000
+data 31
+chore: replay Autopilot turn 1
+from :114
+M 100644 :115 package.json
+
+reset refs/heads/results/fixture/service-10
+from :92
+
+reset refs/heads/results/example/service-15
+from :44
+
+reset refs/heads/results/example/service-13
+from :50
+
+reset refs/heads/results/example/service-11
+from :56
+
+reset refs/heads/results/example/service-09
+from :32
+
+reset refs/heads/results/example/service-05
+from :13
+
+reset refs/heads/results/example/service-03
+from :20
+
+reset refs/heads/results/example/service-01
+from :26
+
+reset refs/heads/pins/fixture/service-08
+from :64
+
+reset refs/heads/pins/fixture/service-06
+from :70
+
+reset refs/heads/pins/fixture/service-04
+from :76
+
+reset refs/heads/pins/fixture/service-02
+from :82
+
+reset refs/heads/pins/example/service-19
+from :58
+
+reset refs/heads/pins/example/service-17
+from :34
+
+done

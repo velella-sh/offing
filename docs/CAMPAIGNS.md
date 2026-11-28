@@ -196,3 +196,90 @@ repository's membership accordingly.
 ```sh
 offing campaign track state.json --operations operations.json
 ```
+
+## Replay the recorded Node.js 18 to 22 campaign
+
+The [20-repository fixture](../tests/fixtures/campaign-20/state.json) uses
+local Git repositories and isolated GitHub and GitLab test hosts. All
+checkouts start with `"engines": { "node": "18" }` in `package.json`. The
+fixture approves that path for replay, raises the declared minimum to
+`>=22`, and verifies the tracked change and tests in Offing's pinned
+container. It records synthetic
+review and merge activity for the demonstration.
+
+From the Offing checkout, run the fixture with Docker available. The
+hosted `acc-campaigns` job uses the same command with the installed
+candidate package. To use an installed candidate locally, set
+`OFFING_CAMPAIGN_CLI` to its `dist/src/cli.js` path.
+
+```sh
+npm ci
+npm run build
+campaign_replay=$(mktemp -d)
+OFFING_CAMPAIGN_20=1 OFFING_CAMPAIGN_20_OUTPUT="$campaign_replay" \
+  node --test dist/tests/campaign-20-fixture.test.js
+```
+
+The fixture captures the declared runtime and CODEOWNERS from each pinned
+commit. It uses the exact Node.js 18 end-of-life rule in `campaign plan`
+to write `plan.json` and selects four batches of five. The explicit pause keeps the first batch queued. After
+resume, two unavailable checkouts cause a second pause at the configured
+failure limit. The runner then supplies the newly available checkout,
+uses `campaign retry` for that repository and resumes. One unavailable
+checkout remains failed. A simulated clock exercises the wait before the
+next batch.
+
+The replay runs these controls against its working ledger and checkout
+map. It updates `local.json` before retrying `example/service-09`.
+
+```sh
+offing campaign pause state.json
+offing campaign resume state.json
+offing campaign run state.json --inputs local.json --one-batch
+offing campaign retry state.json example/service-09
+offing campaign resume state.json
+offing campaign run state.json --inputs local.json --one-batch
+```
+
+The fixture publishes the verified runs from the first three batches to
+its test hosts. The reviewers merge or close selected requests and leave
+three under review. The final merge moves `fixture/service-10` from review
+to merged and updates its Git ref to the exact verified commit. Campaign
+Board reads the resulting ledger with eight merged, three closed, three
+in review, four verified locally and two failed.
+
+Inspect the same recorded plan and final state with the CLI. The copies in
+the replay output carry the fresh run's receipts and matching Git objects.
+
+```sh
+fixture=tests/fixtures/campaign-20
+offing campaign plan "$fixture/campaign.json" --fleet "$fixture/fleet.json"
+offing campaign status "$fixture/state.json"
+offing campaign-board "$fixture/state.json" --out "$campaign_replay/recorded-board"
+```
+
+To inspect an individual proof, extract its recorded files and the Git
+objects they refer to. This example verifies `example/service-01` from
+the committed recording.
+
+```sh
+git init --bare "$campaign_replay/recorded.git"
+git -C "$campaign_replay/recorded.git" fast-import --quiet < "$fixture/commits.fi"
+node --input-type=module - "$fixture/evidence.json" "$campaign_replay" <<'JS'
+import { readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
+const [archive, directory] = process.argv.slice(2);
+const recording = JSON.parse(readFileSync(archive, "utf8"));
+const { bundle } = recording.proofs["example/service-01"];
+for (const [name, contents] of Object.entries(JSON.parse(bundle))) {
+  writeFileSync(join(directory, name), contents);
+}
+JS
+offing proof verify "$campaign_replay/offing-proof.json" --repo "$campaign_replay/recorded.git"
+```
+
+Replaying compares the initial pins, ordered transitions, verified Git
+trees and Board totals. The fresh recording has its own run IDs, commit
+timestamps and proof digests. Each receipt is verified against its own
+Git objects and logs.

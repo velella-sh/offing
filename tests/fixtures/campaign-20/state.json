@@ -1,0 +1,1095 @@
+{
+  "schemaVersion": "offing.campaign-state.v1",
+  "id": "node-18-to-22-demo",
+  "asOf": "2026-11-27",
+  "batching": {
+    "size": 5,
+    "concurrency": 4,
+    "minGapMinutes": 30,
+    "maxFailureRate": 0.25
+  },
+  "target": {
+    "runtime": "nodejs",
+    "version": "22"
+  },
+  "repositories": [
+    {
+      "host": "https://github.com",
+      "name": "example/service-01",
+      "commit": "9a6b23435e8784e9bc913c32d29d51dd1820aa72",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "merged",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T04:45:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "merged",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "Zgbpli",
+      "publication": {
+        "branch": "offing-campaign/30b4b5872dc8164e81f205b3a9613577",
+        "baseBranch": "main",
+        "head": "6f06d9186ddf06e05cb72c3364ce95e1284f0bbd",
+        "actorId": 86,
+        "bodySha256": "ccd7719f8f0c33656343ee7601ce11123f96196a83f816c02a5c1e09864687af",
+        "proofSha256": "ec1fab72943abc49b5388cbf86a7a40e5fae049050b499c5b2f56dc8d307cbfc",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-03",
+      "commit": "7d3c64af2e48e7f70281be83336b3b19845203c9",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "merged",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T04:45:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "merged",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "9C1yiz",
+      "publication": {
+        "branch": "offing-campaign/ab533bd2c7e1d3ab2732c1ec3858865f",
+        "baseBranch": "main",
+        "head": "6b21b79695f2d26cbb561b4a66cde9738f69aa45",
+        "actorId": 86,
+        "bodySha256": "50c491bf0158272f21981f5f0479e40359d872c386c9cae47b4c1040e508c45c",
+        "proofSha256": "839e61dd30a72b37e0e0a3fffa58a02c175dd3cb377d11a67ba96e2849420549",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-05",
+      "commit": "8dd9afe49c25d1b897fad256146611e16209936e",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "merged",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T04:45:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "merged",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "62zhWa",
+      "publication": {
+        "branch": "offing-campaign/05864a5b8b320dc7ed7dccd83a464649",
+        "baseBranch": "main",
+        "head": "6a7e8bf8c8362d22ba8d23c86bbe1ae7724bb785",
+        "actorId": 86,
+        "bodySha256": "9f08cf32f5d20a1df6cb338295b0c0287816bf2cf70dc2c1c9e6f750ac89f05a",
+        "proofSha256": "d49766cdd9e185e0e012b70fcfe96f270f6e7cb058d15e80172916232e526ff6",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-07",
+      "commit": "bb28476aeac1ea7764322f8b7e6855e3b385b35f",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "failed",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "failed",
+          "at": "2026-11-27T01:00:00.000Z"
+        }
+      ],
+      "reason": "missing-local-input"
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-09",
+      "commit": "58e8a2ffd0befed5fcd9c18b71590eed889660f0",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 1,
+      "status": "merged",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "failed",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "failed",
+          "to": "queued",
+          "at": "2026-11-27T01:00:00.000Z"
+        },
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T01:45:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T01:45:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T04:45:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "merged",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "CnAKDV",
+      "publication": {
+        "branch": "offing-campaign/2de439f33dead3ce300ec8043b0a4b20",
+        "baseBranch": "main",
+        "head": "02ea7731133b9104aadeab7586eb1b007fbbbbe8",
+        "actorId": 86,
+        "bodySha256": "05334e7bc7fc726796afb1687622bff88e2d11959532b16c982c0706f02ec2df",
+        "proofSha256": "83e209c67019e452cd0421caf63ce09de5d1a781a18557936c6c28dadc78b5da",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-11",
+      "commit": "87c319784e65aca396fd45d8ba7fe30f2e82b743",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "merged",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T05:30:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "merged",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "7qqefh",
+      "publication": {
+        "branch": "offing-campaign/83eb713102651c220d702504be648b79",
+        "baseBranch": "main",
+        "head": "e3832dfe5bba77912bf1f96e4050299c69e2d470",
+        "actorId": 86,
+        "bodySha256": "30ac38934a2df0c76eb90a6b1c5a569d35a5b6443e0bfbcdfe8215217e08abf6",
+        "proofSha256": "172d967bed2d9615e7844095931abaefad9db07dbe8fa398106a83a32063b40d",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-13",
+      "commit": "47b71ad2127cac29aead39cc712723954efaf870",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "merged",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T05:30:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "merged",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "egHSB4",
+      "publication": {
+        "branch": "offing-campaign/b56c29c887fd021c4df133262ad93094",
+        "baseBranch": "main",
+        "head": "d50713aee2778f8fdbe23be64b006e5e250a96f2",
+        "actorId": 86,
+        "bodySha256": "e74cf526b7029aac6aa8de050e310d1f7f699c43c36ecd173f90f3e917a8efa6",
+        "proofSha256": "d1df5315fe042b4f5e24dcd24d78283374e46552bbae032c5ca547094fb6fc8b",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-15",
+      "commit": "71bf8cbb9a6f52a6a554dade5dd294f685ff57c8",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "merged",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T05:30:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "merged",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "1TYpHW",
+      "publication": {
+        "branch": "offing-campaign/20d69f0b3d471c1649167cd9ca946458",
+        "baseBranch": "main",
+        "head": "e68abb87842b15070c8c39160e195982c44d9c85",
+        "actorId": 86,
+        "bodySha256": "5f9b048b85fee9478174f5bb98b4a9b5d55d20ab7f1bb6741378cb06941b64ef",
+        "proofSha256": "dc86f782759238d4c081f5c09f962e9506142a480229961623cddc1524563694",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-17",
+      "commit": "f922377d553b5d3755c8b884b60bdbf19d7df3e0",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "closed",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T05:30:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "closed",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "vbeNhD",
+      "publication": {
+        "branch": "offing-campaign/80426874a32bcb7961146c60a282d462",
+        "baseBranch": "main",
+        "head": "c23722ad77f31f0e13cd13c91107107eacfba9b0",
+        "actorId": 86,
+        "bodySha256": "853e24a40a565934744dd4b15080adceed79d7aad1c7b9a04684cb42a2f159d8",
+        "proofSha256": "e9865414a4be5f39c1cbaa0aedab50567ffcabe730bad156e07019780bf30b94",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://github.com",
+      "name": "example/service-19",
+      "commit": "266d7bfa1d404f6a14371945f2bf8aca99b42ebd",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 2,
+      "status": "closed",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T02:30:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T05:30:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "closed",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "fHwEsN",
+      "publication": {
+        "branch": "offing-campaign/3597a4bcf694412e6dcac7e0ef301e6d",
+        "baseBranch": "main",
+        "head": "ad3ff0a96abb84236716a0eac9cb22da86c67c87",
+        "actorId": 86,
+        "bodySha256": "269b8bc2d02f6baa0db304d502ba66b8cd18b2bbd30936729f25cfe45277ac39",
+        "proofSha256": "4ddef3ff11c97dcb1b209ea86e9071668acc1078883c1b375f236148f986a4a6",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-02",
+      "commit": "33ff46c2bdae43fee553d5fff23e10e2f0822c9b",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "closed",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T06:15:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "closed",
+          "at": "2026-11-27T07:00:00.000Z"
+        }
+      ],
+      "run": "ENv9aO",
+      "publication": {
+        "branch": "offing-campaign/e0cbd18e8de5f1ba289c679884090180",
+        "baseBranch": "main",
+        "head": "c2c65305cb3cd572b4b635d06827f2809c7c1887",
+        "actorId": 86,
+        "bodySha256": "05842c2a766b7ee4100b9fe6fd786a8f85f08361e463c947acc18b7989e4794e",
+        "proofSha256": "947a55f841e9a5d75975507b867a65cd5cbea115c024007c7293840f993456e8",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-04",
+      "commit": "000434213ec7705d41d9a73c657a5552a2cb7fa8",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "review",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T06:15:00.000Z"
+        }
+      ],
+      "run": "52Uuz0",
+      "publication": {
+        "branch": "offing-campaign/450704dce5d2337011c72ba28de1cc0c",
+        "baseBranch": "main",
+        "head": "578b831aa8acc9a297d0ee25a293c5e859b8b952",
+        "actorId": 86,
+        "bodySha256": "cf16840442f29da1ce805b57b6ef2b92aee9aa665ca66b5f4e14cfdc1d02fe48",
+        "proofSha256": "f0144ff94c88228bc03fc738be0a754f3f3a2f5468eccefa1878b0fe97b4bdd3",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-06",
+      "commit": "99acf1563d3f3564a0e2230ccab5ad05c7bc751e",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "review",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T06:15:00.000Z"
+        }
+      ],
+      "run": "BL45eX",
+      "publication": {
+        "branch": "offing-campaign/bd9a04951e01efcf9f7ba20e4a6d3f19",
+        "baseBranch": "main",
+        "head": "aabd90881bfdf9833a984f435df8a552f66d79e3",
+        "actorId": 86,
+        "bodySha256": "c0b8153efb1c85019873c1e3c28f8da8bf1ec7ca3e26830723e5fb285e22e19b",
+        "proofSha256": "a2616723094606da9bdafebb1adda4f69a0fc2271eff8c21b69978c0b85183b0",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-08",
+      "commit": "96e6b3cb9d9ee46ddc579f0bcb70059faa7ffec7",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "review",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T06:15:00.000Z"
+        }
+      ],
+      "run": "sRfPTJ",
+      "publication": {
+        "branch": "offing-campaign/15b2634d7ca63b54c4897832956f52ee",
+        "baseBranch": "main",
+        "head": "599d662275d1ef2c9349da26fc11955e88f9a6ce",
+        "actorId": 86,
+        "bodySha256": "9ed7082a091d2dfa206e3e7a9749dfb91bb1e114dd471a83d71e700d8020ebe1",
+        "proofSha256": "efb0bbf14197e522c44e5d48bc91864d24a1027ec3b508bcae9ed6a0788cf7b0",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-10",
+      "commit": "4a8352807c33bf39a0546ca7953a1bba0b15f37d",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 3,
+      "status": "merged",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T03:15:00.000Z"
+        },
+        {
+          "from": "verified",
+          "to": "review",
+          "at": "2026-11-27T06:15:00.000Z"
+        },
+        {
+          "from": "review",
+          "to": "merged",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      ],
+      "run": "Fqym2X",
+      "publication": {
+        "branch": "offing-campaign/45a59c0027ca168bb0805ff63588741a",
+        "baseBranch": "main",
+        "head": "4739540e1fe5a1331ff0a14ccebbf94acb1be9a5",
+        "actorId": 86,
+        "bodySha256": "ea7904281825ad38a13e321fc8b8144cb64f52bf40d7bdc3ff6405a649f2c4bd",
+        "proofSha256": "7b13ef6726e5b9ee6062e7eac9e79db0a4d2e8560174d05b95875b615d68a13f",
+        "number": 18,
+        "observed": {
+          "checks": "passed",
+          "review": "approved",
+          "at": "2026-11-27T07:45:00.000Z"
+        }
+      }
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-12",
+      "commit": "c32c59628965e3e99444144562236a612858cf97",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "verified",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T04:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T04:00:00.000Z"
+        }
+      ],
+      "run": "H4lcw3"
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-14",
+      "commit": "ed9fc20a78d5e646ab09a378d85a20b63449ec29",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "verified",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T04:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T04:00:00.000Z"
+        }
+      ],
+      "run": "nUtzdZ"
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-16",
+      "commit": "912c5d2f8fdb80a54ee8d664253f4e21dd5b220e",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "verified",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T04:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T04:00:00.000Z"
+        }
+      ],
+      "run": "9zJ7mK"
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-18",
+      "commit": "8b2339ff6ec9900d8b9f1b5281ed50d8cf35eca8",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/platform"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "verified",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T04:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "verified",
+          "at": "2026-11-27T04:00:00.000Z"
+        }
+      ],
+      "run": "pBZ0ww"
+    },
+    {
+      "host": "https://gitlab.example.invalid/forge",
+      "name": "fixture/service-20",
+      "commit": "de3eba904ea26e44496ed8597d140533cc927302",
+      "codemods": [
+        "runtime-pins"
+      ],
+      "checks": [
+        {
+          "kind": "test",
+          "command": [
+            "npm",
+            "run",
+            "test"
+          ]
+        }
+      ],
+      "owners": [
+        "@fixture/runtime"
+      ],
+      "deadline": "2025-04-30",
+      "batch": 4,
+      "status": "failed",
+      "transitions": [
+        {
+          "from": "queued",
+          "to": "running",
+          "at": "2026-11-27T04:00:00.000Z"
+        },
+        {
+          "from": "running",
+          "to": "failed",
+          "at": "2026-11-27T04:00:00.000Z"
+        }
+      ],
+      "reason": "missing-local-input"
+    }
+  ],
+  "omissions": [],
+  "checkedBatch": 4
+}
