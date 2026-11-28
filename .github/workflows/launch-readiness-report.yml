@@ -1,0 +1,77 @@
+name: Launch readiness report
+
+on:
+  workflow_call:
+    inputs:
+      verify_only:
+        description: Test the report on the calling revision
+        type: boolean
+        default: false
+      release_tag:
+        description: The exact published release tag, or empty to read the latest release
+        type: string
+        default: ''
+    outputs:
+      artifact:
+        description: URL for the Markdown and JSON artifact
+        value: ${{ jobs.report.outputs.artifact }}
+      published:
+        description: The report found a published release
+        value: ${{ jobs.report.outputs.published }}
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    outputs:
+      artifact: ${{ steps.archive.outputs.artifact-url }}
+      published: ${{ steps.generate.outputs.published }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ inputs.verify_only && github.sha || 'refs/heads/main' }}
+          persist-credentials: false
+      - uses: $/.github/actions/setup
+        with:
+          package-manager-cache: "false"
+      - name: Read public timing and Pages build evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/scripts/launch-readiness-evidence.sh "$RUNNER_TEMP/launch-readiness"
+      - name: acc-launch-readiness
+        id: generate
+        env:
+          MILESTONE: ${{ vars.OFFING_LAUNCH_READINESS_MILESTONE || '1' }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          VERIFY_ONLY: ${{ inputs.verify_only }}
+        run: |
+          set -euo pipefail
+          evidence="$RUNNER_TEMP/launch-readiness"
+          args=(--milestone "$MILESTONE" --timing-dir "$evidence/timing")
+          if [[ -n "$RELEASE_TAG" ]]; then
+            [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]
+            args+=(--version "${RELEASE_TAG#v}")
+          fi
+          if [[ -f "$evidence/site-run" ]]; then
+            args+=(--site-dir "$evidence/site" --site-run "$(cat "$evidence/site-run")")
+          fi
+          npm run launch-readiness -- "${args[@]}"
+          jq -e '.checks | length == 10' metrics/launch-readiness/*.json
+          if jq -e '.release.version' metrics/launch-readiness/*.json >/dev/null; then
+            echo 'published=true' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ "$VERIFY_ONLY" == true ]]; then
+            node --test dist/tests/launch-readiness.test.js dist/tests/launch-readiness-workflow.test.js
+          fi
+          cat metrics/launch-readiness/*.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        id: archive
+        with:
+          name: launch-readiness-${{ github.run_attempt }}
+          path: metrics/launch-readiness/
+          if-no-files-found: error
+          retention-days: 90
