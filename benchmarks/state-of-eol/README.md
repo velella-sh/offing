@@ -29,7 +29,7 @@ The [raw scan archive](2027-raw.json.gz) records intended and fetched commit ide
 
 The archive identifies the [exact acquisition source tree](https://github.com/velella-sh/offing/commit/4af23498645d6baa5ae719ef0981f9b172b6a5ee), dependency lock digest, bundled data version, Node version, and operating system. It keeps finding and graph observations with their paths. The `retries` array preserves each observed state for repeatedly attempted pins, including initial failures, and gives its zero-based scan index into `scans`. The report counts each exact pin once, preferring a successful observation where available. The report consumes the archived catalog and resolved lineage so later Ebb releases cannot change its figures.
 
-Run `npm ci` followed by `npm run state-of-eol -- --out /path/to/report-data` to reproduce the data collections offline. `npm run build:dashboard` also writes the same collections for the docs site. The [State of EOL workflow](https://github.com/velella-sh/offing/actions/workflows/state-of-eol.yml) compares two rebuilds and validates the rendered study and chart table.
+Run `npm ci` followed by `npm run state-of-eol -- --out /path/to/report-data` to reproduce the data collections offline. `npm run build:dashboard` also writes the same collections for the docs site. The [State of EOL workflow](https://github.com/velella-sh/offing/actions/workflows/state-of-eol.yml) compares two rebuilds and validates the rendered study and chart table. The [independent audit](2027-audit.md) records what the second calculation matched.
 
 The Fleet CLI can replay the same public GitHub pins directly. Pinned mode uses anonymous HTTPS and reads only declared scanner inputs. The namespace form still treats `--repos` entries as repository names within that namespace.
 
@@ -38,7 +38,7 @@ jq -r '.repositories[] | "github/\(.repository)@\(.commit)"' benchmarks/state-of
 node dist/src/cli.js fleet --repos /tmp/state-of-eol-pins.txt --jobs 4 --json
 ```
 
-Use the collector for the additional research evidence. A fresh run requires public HTTPS for the exact Git objects. Project and repository scripts are never run. The output directory must be new. The raw archive is frozen from that directory, without changing the existing study.
+Use the collector for the additional research evidence. Check out the acquisition commit above to repeat the original detector implementation. A fresh run requires public HTTPS for the exact Git objects. Project and repository scripts are never run. Run the collector into a new directory from the acquisition checkout, then freeze the new observations from the study checkout. Current detectors can produce different observations from the same public trees.
 
 ```sh
 node dist/tools/state-of-eol/scan.js --out /path/to/new-scan --jobs 4

@@ -23,6 +23,18 @@ const stringify = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
 const divide = (value: number, denominator: number) =>
   denominator === 0 ? "Unavailable" : `${value}/${denominator} (${((100 * value) / denominator).toFixed(1)}%)`;
 
+function galleryProjects(rows: StudyArchive["rows"]) {
+  const paths = /(?:^|\/)(?:package(?:-lock)?\.json|npm-shrinkwrap\.json|requirements\.txt|pyproject\.toml)$/u;
+  return rows
+    .filter(({ capture }) => capture?.coverage?.filesRead.some((path) => paths.test(path)))
+    .slice(0, 50)
+    .map(({ repository, commit }) => {
+      const url = new URL("https://velella.sh/offing/forecast-web/app/");
+      url.hash = `github/${repository}@${encodeURIComponent(commit)}`;
+      return { repository, commit, forecast: `[${repository}](${url.href})` };
+    });
+}
+
 export function evaluateStudy(archive: StudyArchive, cohort: number) {
   const plan = archive.scans[0]?.plan;
   if (!plan) throw new Error("The study has no scan metadata.");
@@ -42,6 +54,7 @@ export function evaluateStudy(archive: StudyArchive, cohort: number) {
       attempts: archive.retries.length - retried,
       recovered: archive.retries.filter(({ status }) => status === "scanned").length,
     },
+    gallery: galleryProjects(archive.rows),
     coverage: coverageCounts(archive, cohort),
     headlines: headlines(rows, cohort, plan.asOf),
     ecosystems: ecosystemBreakdown(rows, cohort),
@@ -155,6 +168,9 @@ function collectionSources(report: Report, rawDigest: string) {
   return {
     [`${reportId}.json`]: stringify({ ...report, rawDigest }),
     [`${reportId}-run.json`]: stringify(documentationRecord(report, rawDigest)),
+    [`${reportId}-gallery.json`]: stringify([
+      { id: reportId, forecasts: report.gallery.map(({ forecast }) => `- ${forecast}`).join("\n") },
+    ]),
     [`${reportId}-headlines.json`]: stringify(headlineRows(report)),
     [`${reportId}-ecosystems.json`]: stringify(ecosystems),
     [`${reportId}-actions.json`]: stringify(actions),

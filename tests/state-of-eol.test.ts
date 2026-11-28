@@ -7,9 +7,10 @@ import { test, type TestContext } from "node:test";
 import { promisify } from "node:util";
 import { configureActiveData, getActiveData } from "@velella/ebb/data-source";
 import { parse } from "yaml";
+import { parseGitHubForecastInput } from "../src/forecast-tool/remote/input.js";
 import { readLineageInputs } from "../src/lineage/inputs.js";
 import { freezeStudyArchive, loadStudyArchive, type StudyArchive } from "../tools/state-of-eol/archive.js";
-import type { Cohort } from "../tools/state-of-eol/cohort.js";
+import { readCohort, type Cohort } from "../tools/state-of-eol/cohort.js";
 import type { StudyCapture } from "../tools/state-of-eol/capture.js";
 import { imageBreakdown, resolveStudyLineage } from "../tools/state-of-eol/lineage.js";
 import {
@@ -21,6 +22,7 @@ import {
   type Measured,
 } from "../tools/state-of-eol/metrics.js";
 import { renderStudyCollections } from "../tools/state-of-eol/report.js";
+import { defaultCohort } from "../tools/state-of-eol/scan.js";
 
 const asOf = "2026-11-27";
 const commit = "a".repeat(40);
@@ -258,6 +260,7 @@ test("acc-state-of-eol builds the real report collection and accessible chart wi
   await mkdir(join(docs, "_data"), { recursive: true });
   await mkdir(join(docs, "_templates"));
   await copyFile("docs/_templates/state-of-eol-2027.md", join(docs, "_templates/state-of-eol-2027.md"));
+  await copyFile("docs/_templates/state-of-eol-2027-gallery.md", join(docs, "_templates/state-of-eol-2027-gallery.md"));
   await writeFile(join(docs, "mizzen.yml"), JSON.stringify({ title: "Offing", base: "/offing", collections }));
   const data = await renderStudyCollections(".", process.env.OFFING_STATE_OF_EOL_TEST_ARCHIVE);
   for (const [file, contents] of Object.entries(data)) await writeFile(join(docs, "_data", file), contents);
@@ -300,4 +303,18 @@ test("acc-state-of-eol builds the real report collection and accessible chart wi
   assert.match(html, /GitHub Actions runtime declarations/);
   assert.match(html, /2027-raw\.json\.gz/);
   assert.doesNotMatch(html, /:field\[/);
+  const gallery = await readFile(join(out, "gallery/state-of-eol-2027/index.html"), "utf8");
+  const selection = await readCohort(defaultCohort);
+  const pins = new Map(selection.repositories.map(({ repository, commit }) => [repository, commit]));
+  const links = [
+    ...gallery.matchAll(/href="https:\/\/velella\.sh\/offing\/forecast-web\/app\/#([^"]+)"[^>]*>([^<]+)<\/a>/g),
+  ];
+  assert.equal(links.length, 50);
+  assert.equal(new Set(links.map(([, , label]) => label)).size, 50);
+  for (const [, reference, label] of links) {
+    assert.ok(reference && label);
+    const { owner, repo, ref } = parseGitHubForecastInput(reference);
+    assert.equal(label, `${owner}/${repo}`);
+    assert.equal(ref, pins.get(label));
+  }
 });
