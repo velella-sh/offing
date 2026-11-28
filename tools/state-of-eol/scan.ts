@@ -72,6 +72,11 @@ async function collect(args: string[]): Promise<void> {
     sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
     offing: VERSION,
     data: { version: info.version, digest: info.contentDigest },
+    packageLockDigest: createHash("sha256")
+      .update(await readFile("package-lock.json"))
+      .digest("hex"),
+    node: process.version,
+    platform: process.platform,
     asOf,
     startedAt: new Date().toISOString(),
     start,
