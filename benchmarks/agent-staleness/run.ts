@@ -19,7 +19,8 @@ import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 
-import { initAgents, initClaudeHooks, initCodexHooks } from "../../src/init-agents.js";
+import { runRecordedCli } from "../agent-harness/cli.js";
+import { applyHooksArm, taskPrompt } from "../agent-harness/session.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -84,14 +85,6 @@ export interface RunOptions {
   }) => Promise<{ exitCode: number | null; timedOut: boolean; stdout: string; stderr: string }>;
 }
 
-function taskPrompt(task: StalenessTask): string {
-  return [
-    task.prompt,
-    "",
-    `Write the complete file to ${task.target}. Do not create other files. Do not mention specific version numbers unless the file format requires a version field.`,
-  ].join("\n");
-}
-
 async function detectAgentVersion(agent: AgentHost): Promise<string> {
   try {
     const { stdout } = await execFileAsync(agent.command, ["--version"], {
@@ -102,12 +95,6 @@ async function detectAgentVersion(agent: AgentHost): Promise<string> {
   } catch {
     return "unknown";
   }
-}
-
-async function applyHooksArm(root: string, agent: AgentHost): Promise<void> {
-  await initAgents({ root });
-  if (agent.hooksFor === "claude-code") await initClaudeHooks({ root });
-  else if (agent.hooksFor === "codex") await initCodexHooks({ root });
 }
 
 function invokeViaSpawn(input: {
@@ -179,7 +166,7 @@ export async function runStalenessTask(options: {
   let exitCode: number | null = 1;
   let timedOut = false;
   try {
-    if (options.arm === "hooks") await applyHooksArm(workDir, options.agent);
+    if (options.arm === "hooks") await applyHooksArm(workDir, options.agent.hooksFor);
     const result = await options.invokeAgent({
       prompt: taskPrompt(options.task),
       cwd: workDir,
@@ -279,6 +266,7 @@ function loadTasks(): { tasks: StalenessTask[] } {
 }
 
 async function main(argv: readonly string[]): Promise<number> {
+  if (argv.includes("--replay-plan") || argv.includes("--rescore")) return runRecordedCli(argv);
   const parsed = parseArgs(argv);
   const tasksFile = loadTasks();
   if (parsed.list) {

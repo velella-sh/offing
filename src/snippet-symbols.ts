@@ -46,11 +46,12 @@ function symbolFinding(rule: RegistryV2Rule, usage: SourceUsage, runtime: Runtim
   };
 }
 
-export async function snippetSymbolFindings(path: string, content: string): Promise<Finding[]> {
+export async function snippetSymbolFindings(path: string, content: string, event?: "removed"): Promise<Finding[]> {
   const language = languageFor(path);
   if (language !== "javascript" && language !== "typescript" && language !== "python") return [];
   const runtime = language === "python" ? "python" : "nodejs";
-  const rules = await usageRules(runtime);
+  const candidates = await usageRules(runtime);
+  const rules = event ? candidates.filter((rule) => rule.event === event) : candidates;
   const matches = await parsedUsages(
     { absolutePath: path, path, language },
     content,

@@ -12,18 +12,21 @@
  */
 
 import { readFileSync } from "node:fs";
-import { cp, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
+import type { Finding } from "../../src/domain.js";
 import { builtInDetectors } from "../../src/detectors/index.js";
 import { scanRepository } from "../../src/engine/index.js";
 import { restoreFixtureNames } from "../../src/fixture-names.js";
+import { snippetSymbolFindings } from "../../src/snippet-symbols.js";
+import { sourceFileEntries } from "../../src/source-files.js";
 
 export const SCHEMA_VERSION = "offing.agent-staleness.results.v1" as const;
 
-export type StalenessArm = "plain" | "hooks";
+export type StalenessArm = "plain" | "hooks" | "context";
 
 export interface StalenessTask {
   id: string;
@@ -37,6 +40,13 @@ export interface StalenessTasksFile {
   tasks: StalenessTask[];
 }
 
+interface ScoreFinding {
+  ruleId: string;
+  location: Finding["location"];
+  origin: "scan" | "snippet";
+  sources: Finding["sources"];
+}
+
 export interface TaskScanScore {
   taskId: string;
   category: string;
@@ -45,6 +55,7 @@ export interface TaskScanScore {
   findingCount: number;
   ruleIds: string[];
   hasFinding: boolean;
+  findings?: ScoreFinding[];
 }
 
 export interface AggregateScore {
@@ -103,16 +114,52 @@ function uniqueSorted(values: readonly string[]): string[] {
   return [...new Set(values)].sort(compareText);
 }
 
+function attributedFinding({ ruleId, location, sources }: Finding, origin: ScoreFinding["origin"]): ScoreFinding {
+  return { ruleId, location, origin, sources };
+}
+
+async function collectFindings(root: string, scannedAt?: string): Promise<ScoreFinding[]> {
+  const scan = await scanRepository(root, builtInDetectors, { noCache: true, ...(scannedAt ? { scannedAt } : {}) });
+  const findings = new Map<string, ScoreFinding>();
+  const add = (finding: ScoreFinding) => {
+    const { path, line } = finding.location;
+    const key = JSON.stringify([finding.ruleId, path, line]);
+    if (!findings.has(key)) findings.set(key, finding);
+  };
+  for (const finding of scan.findings) add(attributedFinding(finding, "scan"));
+
+  const include = (language: string) => language === "javascript" || language === "typescript" || language === "python";
+  for await (const file of sourceFileEntries(root, { include })) {
+    const contents = await readFile(file.absolutePath, "utf8");
+    for (const finding of await snippetSymbolFindings(file.path, contents, "removed")) {
+      add(attributedFinding(finding, "snippet"));
+    }
+  }
+
+  return [...findings.values()].sort(
+    (left, right) =>
+      compareText(left.location.path, right.location.path) ||
+      (left.location.line ?? 0) - (right.location.line ?? 0) ||
+      compareText(left.ruleId, right.ruleId),
+  );
+}
+
 /**
  * Copy a task output tree, restore scanner-neutral fixture names (decision 0027), then scan.
  * Seed outputs store `image.fixture` instead of `Dockerfile` so Scorecard does not alert on them.
  */
-async function scanRestoredTaskRoot(source: string) {
+async function scanRestoredTaskRoot(source: string, scannedAt?: string, target?: { path: string; bytes: Buffer }) {
   const root = await mkdtemp(join(tmpdir(), "offing-staleness-"));
   try {
-    await cp(source, root, { recursive: true });
+    if (target) {
+      const path = join(root, target.path);
+      await mkdir(dirname(path), { recursive: true });
+      await writeFile(path, target.bytes);
+    } else {
+      await cp(source, root, { recursive: true });
+    }
     await restoreFixtureNames(root);
-    return await scanRepository(root, builtInDetectors, { noCache: true });
+    return await collectFindings(root, scannedAt);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -125,17 +172,21 @@ export async function scoreTaskDirectory(input: {
   category: string;
   agent: string;
   arm: StalenessArm;
+  scannedAt?: string;
+  includeEvidence?: boolean;
+  target?: { path: string; bytes: Buffer };
 }): Promise<TaskScanScore> {
-  const scan = await scanRestoredTaskRoot(input.root);
-  const ruleIds = uniqueSorted(scan.findings.map((finding) => finding.ruleId));
+  const findings = await scanRestoredTaskRoot(input.root, input.scannedAt, input.target);
+  const ruleIds = uniqueSorted(findings.map((finding) => finding.ruleId));
   return {
     taskId: input.taskId,
     category: input.category,
     agent: input.agent,
     arm: input.arm,
-    findingCount: scan.findings.length,
+    findingCount: findings.length,
     ruleIds,
-    hasFinding: scan.findings.length > 0,
+    hasFinding: findings.length > 0,
+    ...(input.includeEvidence ? { findings } : {}),
   };
 }
 
