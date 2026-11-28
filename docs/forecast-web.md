@@ -17,7 +17,7 @@ dates that affect your file into a calendar, or **Copy summary** to share the te
 
 | File | What Offing reads |
 | --- | --- |
-| `package-lock.json` or `npm-shrinkwrap.json` | Resolved packages in lockfile versions 2 and 3, including transitive dependencies. |
+| `package-lock.json` or `npm-shrinkwrap.json` | Resolved packages in lockfile versions 1, 2 and 3, including transitive dependencies. |
 | `package.json` | Direct, development and optional dependencies with exact versions or simple written minimums, plus explicit Node.js versions. |
 | `requirements.txt` | Package names with exact pins or written minimum versions. |
 | `pyproject.toml` | Project dependencies, optional dependencies, Poetry version strings and the declared Python version or minimum. |
@@ -131,3 +131,30 @@ For a module host, pass `{ kind: "url", value }` with the selector and no
 leading `#`. Supply `context.publicRepositoryFetch` only after the user's
 approval. Without the capability, `run` returns a consent error before making
 a network request or reading data.
+
+## Compare with the terminal forecast
+
+The browser checks each supported file selected within the repository
+download limits. A root terminal forecast follows declared npm and Python
+workspaces. For a standalone project such as `examples/aliases/pyproject.toml`,
+run `offing forecast examples/aliases --json` in its repository checkout to
+compare findings for that project. The terminal also checks additional
+sources, including runtime pin files and source-level usage.
+
+Node.js manifest ranges use the same lifecycle line rules as the terminal.
+For a scheduled release line, a declaration must stay on that line for the
+date to appear. A concrete Python version in a GitHub Actions setup step
+uses the first applicable Python runtime rule. Requirements files are read
+as written, with template directives ignored.
+
+The pinned comparison runs `offing forecast --json` against the selected
+files at the repository root and at each selected manifest directory. It
+compares every rule ID, deadline and file path in both sets. The module reads
+the signed Ebb bundle, and the terminal reads the registry bundled with the
+tested CLI. From an Offing checkout, build the browser data and opt in to the
+20 public repository comparisons.
+
+```sh
+npm run build:forecast-web
+OFFING_FORECAST_PARITY=1 node --test dist/tests/forecast-link-parity.test.js
+```

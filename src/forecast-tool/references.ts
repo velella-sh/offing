@@ -6,6 +6,7 @@ export interface Reference {
   purl: string;
   version: string | undefined;
   location: SourceLocation;
+  runtime?: { kind: "node-manifest"; range: string } | { kind: "python-install" };
 }
 
 export function reference(identity: string, version: string | undefined, path: string, line?: number): Reference {

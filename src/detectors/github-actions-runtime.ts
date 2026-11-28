@@ -71,6 +71,11 @@ export function actionRuntimeFinding(
 
 const PYTHON_VERSION = /^\d+\.\d+(?:\.\d+)?$/;
 
+/** Return the first applicable runtime rule for one installed Python release. */
+export function installedPythonRule(rules: readonly RegistryV2Rule[], version: string): RegistryV2Rule | undefined {
+  return rules.find((rule) => versContains(rule.vers, version));
+}
+
 export function judgeSetupPython(
   contents: string,
   path: string,
@@ -90,7 +95,7 @@ export function judgeSetupPython(
         });
       continue;
     }
-    const rule = rules.find((item) => versContains(item.vers, entry.value));
+    const rule = installedPythonRule(rules, entry.value);
     if (!rule) continue;
     const finding = ruleFinding(
       rule,
