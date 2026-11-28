@@ -25,7 +25,7 @@ async function copyFixture(t: TestContext) {
   return join(directory, "results.json");
 }
 
-test("recalculates fixture rates and medians and reports each non-green failure link", async () => {
+test("acc-autopilot-evals recalculates fixture rates and medians and reports each non-green failure link", async () => {
   const { status, stdout, stderr } = run(join(fixture, "results.json"));
   assert.equal(status, 0, stderr);
   const outcomes = [

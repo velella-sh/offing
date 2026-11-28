@@ -1,0 +1,13 @@
+title: Offing Autopilot fixture scoreboard
+redirects:
+  /: /autopilot-evals/
+collections:
+  autopilot-evals-fixture:
+    source: _data/autopilot-evals-fixture.json
+    id: id
+    template: _templates/autopilot-evals-fixture.md
+    permalink: /autopilot-evals/
+    markdown: [failureLinks]
+  autopilot-evals-outcomes:
+    source: _data/autopilot-evals-outcomes.json
+    id: id
