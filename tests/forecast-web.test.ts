@@ -10,7 +10,7 @@ function read(path: string): Promise<string> {
   return readFile(path, "utf8");
 }
 
-test("reads resolved versions from npm lockfiles v2 and v3", async () => {
+test("reads resolved versions from npm lockfiles v1, v2 and v3", async () => {
   const [v2, v3] = await Promise.all([
     read("tests/fixtures/forecast-web/package-lock-v2.json"),
     read("extensions/vscode/package-lock.json"),
@@ -26,7 +26,23 @@ test("reads resolved versions from npm lockfiles v2 and v3", async () => {
   const v3References = parseNpm(v3);
   assert.ok(v3References.some(({ purl, version }) => purl === "pkg:npm/%40types/node" && version?.startsWith("22.")));
   assert.ok(!v3References.some(({ purl }) => purl === "pkg:npm/offing-vscode"));
-  assert.throws(() => parseNpm('{"lockfileVersion":1}', "package-lock.json"), /lockfileVersion 2 or 3/);
+  const v1 = parseNpm(
+    '{"lockfileVersion":1,"dependencies":{"a":{"version":"1.0.0","dependencies":{"b":{"version":"2.0.0"}}}}}',
+    "nested/npm-shrinkwrap.json",
+  );
+  assert.deepEqual(
+    v1.map(({ purl, version, location }) => [purl, version, location.path]),
+    [
+      ["pkg:npm/a", "1.0.0", "nested/npm-shrinkwrap.json"],
+      ["pkg:npm/b", "2.0.0", "nested/npm-shrinkwrap.json"],
+    ],
+  );
+  assert.deepEqual(parseNpm('{"lockfileVersion":1}', "package-lock.json"), []);
+  assert.throws(
+    () => parseNpm('{"lockfileVersion":1,"dependencies":[]}', "package-lock.json"),
+    /resolved dependencies/,
+  );
+  assert.throws(() => parseNpm('{"lockfileVersion":4}', "package-lock.json"), /lockfileVersion 1, 2 or 3/);
 });
 
 test("reads explicit npm manifest versions and leaves unsupported ranges unresolved", () => {

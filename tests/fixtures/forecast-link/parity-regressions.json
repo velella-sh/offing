@@ -1,0 +1,38 @@
+{
+  "engines": {
+    "repository": "sindresorhus/got",
+    "commit": "05b4476913da39a47dd8e20d29e250f28b0a6dca",
+    "path": "package.json",
+    "text": "{\"engines\":{\"node\":\">=22\"}}\n"
+  },
+  "workflow": {
+    "repository": "encode/httpx",
+    "commit": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+    "path": ".github/workflows/publish.yml",
+    "text": "jobs:\n  publish:\n    steps:\n      - uses: actions/setup-python@v6\n        with:\n          python-version: 3.9\n"
+  },
+  "plugin": {
+    "repository": "pydantic/pydantic",
+    "commit": "44d5e1e8fc8198ecd0083a00a05e099aba0423ab",
+    "path": "tests/plugin/pyproject.toml",
+    "text": "[project]\nname = 'pydantic-plugin-tests'\nrequires-python = '>=3.10'\n"
+  },
+  "example": {
+    "repository": "pallets/click",
+    "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
+    "path": "examples/aliases/pyproject.toml",
+    "text": "[project]\nname = 'aliases'\nrequires-python = \">=3.10\"\n"
+  },
+  "legacyLock": {
+    "repository": "edwardm/ECORE-JS-Page-Down-Progress",
+    "commit": "66b9c59bf6ea9775e960c365f96bb62cc523114b",
+    "path": "package-lock.json",
+    "text": "{\"lockfileVersion\": 1, \"dependencies\": {\"@types/q\": {\"version\": \"1.5.2\"}}}\n"
+  },
+  "template": {
+    "repository": "cookiecutter/cookiecutter",
+    "commit": "c88fbe921c97c58b65f1883ba90a0ab53cc91b34",
+    "path": "tests/test-templates/extends/{{cookiecutter.project_slug}}/requirements.txt",
+    "text": "{% extends \"base-requirements.jinja\" %}\n"
+  }
+}

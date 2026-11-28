@@ -2,6 +2,8 @@ import type { LifecycleFinding } from "@velella/ebb/domain";
 import type { RegistryV2Rule } from "@velella/ebb/registry";
 import { versContains } from "@velella/ebb/vers";
 
+import { installedPythonRule } from "../detectors/github-actions-runtime.js";
+import { matchingRuntimeRules, runtimeRuleContext } from "../detectors/npm/runtime-rules.js";
 import type { UnclassifiedReference } from "../domain.js";
 import { buildForecastReport } from "../forecast-core.js";
 import { parseNpm } from "./parse-lock.js";
@@ -13,6 +15,7 @@ import type { Reference } from "./references.js";
 function readReferences(contents: string, data: ForecastData, path?: string): Reference[] {
   const text = contents.replace(/^\uFEFF/, "");
   if (!text.trim()) throw new Error("Choose a file or paste its contents.");
+  if (/(?:^|\/)requirements\.txt$/i.test(path ?? "")) return parseRequirements(text, path);
   if (/\.json$/i.test(path ?? "") || /^\s*\{/.test(text)) return parseNpm(text, path);
   if (/\.toml$/i.test(path ?? "") || /^\s*\[(?:project|build-system|tool\.)/m.test(text)) {
     return parsePyproject(text, path);
@@ -22,7 +25,32 @@ function readReferences(contents: string, data: ForecastData, path?: string): Re
   throw new Error("Choose a supported npm, Python or GitHub Actions file.");
 }
 
-function matchingRules(rules: readonly RegistryV2Rule[], version: string): RegistryV2Rule[] {
+function matchingRules(
+  rules: readonly RegistryV2Rule[],
+  version: string,
+  runtime: Reference["runtime"],
+): RegistryV2Rule[] {
+  if (runtime?.kind === "node-manifest") {
+    const nodeRules = rules.flatMap((rule) => {
+      const hint = rule["x-nodejs"];
+      if (!hint) return [];
+      const { major, maximumMajor, scheduled } = hint;
+      return [
+        {
+          rule,
+          ...(typeof major === "number" ? { major } : {}),
+          ...(typeof maximumMajor === "number" ? { maximumMajor } : {}),
+          scheduled: scheduled === true,
+        },
+      ];
+    });
+    const matches = matchingRuntimeRules(runtime.range, nodeRules, runtimeRuleContext(nodeRules));
+    return [...new Set(matches.map(({ rule }) => rule.rule))];
+  }
+  if (runtime?.kind === "python-install") {
+    const rule = installedPythonRule(rules, version);
+    return rule ? [rule] : [];
+  }
   return rules.filter((rule) => versContains(rule.vers, version));
 }
 
@@ -44,7 +72,7 @@ function reportFromReferences(
   const findings: LifecycleFinding[] = [];
   const replacements: Array<{ id: string; replacement?: string }> = [];
   const noData: UnclassifiedReference[] = [];
-  for (const { purl, version, location } of references) {
+  for (const { purl, version, location, runtime } of references) {
     const rules = indexed.get(purl);
     if (!rules || !version) {
       noData.push({
@@ -56,7 +84,7 @@ function reportFromReferences(
       });
       continue;
     }
-    for (const rule of matchingRules(rules, version)) {
+    for (const rule of matchingRules(rules, version, runtime)) {
       if (findings.length === limit)
         throw new Error("The input contains too many lifecycle findings for the forecast.");
       const id = `${rule.id}:${findings.length}`;

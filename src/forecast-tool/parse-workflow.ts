@@ -35,7 +35,12 @@ function pythonRefs(step: YAMLMap, job: YAMLMap, path: string, lines: LineCounte
     if (!isScalar(item)) return [];
     const value = (item.source ?? String(item.value)).trim();
     const version = /^(\d+\.\d+)(?:\.x)?$/i.exec(value)?.[1] ?? (/^\d+\.\d+\.\d+$/.test(value) ? value : undefined);
-    return [reference("pkg:generic/python", version, path, lines.linePos(item.range?.[0] ?? 0).line)];
+    return [
+      {
+        ...reference("pkg:generic/python", version, path, lines.linePos(item.range?.[0] ?? 0).line),
+        runtime: { kind: "python-install" },
+      },
+    ];
   });
 }
 
