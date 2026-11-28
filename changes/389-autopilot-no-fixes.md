@@ -1,0 +1,1 @@
+- Explain when the first forecast has no offline Autopilot fixes and omit an empty preview command.

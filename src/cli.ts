@@ -30,6 +30,14 @@ if (nodeProblem) {
   // Answered before the command table loads: `cli-main` pulls in every detector, so `--version` would pay for a scan.
   const { VERSION } = await import("./version.js");
   process.stdout.write(`${VERSION}\n`);
+} else if (rawArgs.length === 0) {
+  try {
+    const { runFirstForecast } = await import("./onboarding/first-run.js");
+    process.exitCode = await runFirstForecast();
+  } catch (error) {
+    const { reportCliFailure } = await import("./cli-main.js");
+    process.exitCode = reportCliFailure(error, rawArgs);
+  }
 } else if (await runPromptFastPath(args)) {
   // `prompt` runs on every shell prompt, so it is answered before the command table and every detector load.
 } else if (isHookRequest(args)) {

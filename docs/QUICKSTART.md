@@ -20,9 +20,9 @@ npx --yes @velella/offing
 
 No subcommand is needed. Offing scans the current directory and prints the top findings and upcoming lifecycle deadlines. After installation, it reads repository files such as manifests, lockfiles, workflows, and source files, plus local Ebb lifecycle data. The first run never prompts, writes files, or uses the network. If Git history is unavailable, it still scans the files on disk. For the full report with finding IDs, replacements, and evidence, run `npx --yes @velella/offing scan .`. Use `npx --yes @velella/offing --json` for the structured forecast without the next-step hints.
 
-If the first Autopilot wave has confirmed offline codemods, the forecast ends with their count. Run `offing autopilot . --dry-run --wave 0` to see which findings have a deterministic edit available. The preview uses the current files without applying patches or running tests.
+If the first Autopilot wave has confirmed offline codemods, the forecast ends with their count. Run `npx --yes @velella/offing autopilot . --dry-run --wave 0` to see which findings have a deterministic edit available. The preview uses the current files without applying patches or running tests. If the wave has no offline fixes, the forecast says there is nothing for Autopilot to fix and omits the preview command.
 
-The bare invocation starts working with the release that includes this change. To try it before then, use a checkout of Offing as shown below.
+The bare invocation requires Offing 0.1.2 or later. Use a checkout of Offing to try it before release.
 
 ### Try the demo
 
