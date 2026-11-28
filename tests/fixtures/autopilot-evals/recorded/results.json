@@ -1,0 +1,647 @@
+{
+  "source": "synthetic-fixture",
+  "rows": [
+    {
+      "id": "completed-replay",
+      "outcome": "green",
+      "run": {
+        "schemaVersion": "offing.autopilot-run.v1",
+        "mode": "prepare",
+        "state": "done",
+        "transitions": [
+          "scan",
+          "plan",
+          "baseline-tests",
+          "codemods",
+          "tests",
+          "agent-turn",
+          "tests",
+          "verify",
+          "done"
+        ],
+        "checkout": {
+          "id": "yjJf5Y",
+          "branch": "offing/autopilot/yjJf5Y",
+          "baseCommit": "33f6442bd0e8a98cd5d7e189d07f8e9bc312bdc0"
+        },
+        "selection": {
+          "wave": 0,
+          "findingIds": [
+            "npm.package.request.deprecated:package.json:1",
+            "container.dockerfile.maintainer:Dockerfile:2"
+          ]
+        },
+        "replay": {
+          "head": "ff118675bcc97e9c045b1031faeb5fa4b9b943d0",
+          "context": "abb513b36f0a06a6b5bd507061f38ef4963ea1a2fb42456dabb7b26332acffbc",
+          "usage": {
+            "turns": 1,
+            "tokens": 0,
+            "costCents": 0
+          },
+          "elapsedMs": 3297,
+          "tests": "passed",
+          "turn": 1,
+          "resume": 0,
+          "remaining": 0,
+          "introduced": 0
+        }
+      },
+      "proof": {
+        "schemaVersion": "offing.proof.v1",
+        "outcome": "done",
+        "range": {
+          "base": "33f6442bd0e8a98cd5d7e189d07f8e9bc312bdc0",
+          "head": "ff118675bcc97e9c045b1031faeb5fa4b9b943d0"
+        },
+        "verify": {
+          "schemaVersion": "offing.verify-result.v1",
+          "before": {
+            "commit": "33f6442bd0e8a98cd5d7e189d07f8e9bc312bdc0",
+            "offingVersion": "0.1.1",
+            "ebbDataVersion": "0.2.0"
+          },
+          "after": {
+            "commit": "ff118675bcc97e9c045b1031faeb5fa4b9b943d0",
+            "offingVersion": "0.1.1",
+            "ebbDataVersion": "0.2.0"
+          },
+          "counts": {
+            "remaining": 0,
+            "introduced": 0,
+            "resolved": 2
+          },
+          "resolved": [
+            {
+              "id": "container.dockerfile.maintainer:Dockerfile:2",
+              "rule": "container.dockerfile.maintainer",
+              "title": "The Dockerfile MAINTAINER instruction is deprecated",
+              "severity": "low",
+              "path": "Dockerfile",
+              "line": 2
+            },
+            {
+              "id": "npm.package.request.deprecated:package.json:1",
+              "rule": "npm.package.request.deprecated",
+              "title": "request is deprecated",
+              "severity": "high",
+              "path": "package.json",
+              "line": 1
+            }
+          ],
+          "remaining": [],
+          "introduced": [],
+          "verdict": "passed",
+          "commands": [
+            {
+              "command": "[\"node\",\"tests/check.cjs\"]",
+              "purpose": "Approved Autopilot test",
+              "status": "passed",
+              "exitCode": 0,
+              "logSha256": "943539a7f234cfa39e0db7c9b72714e7a460400bc51612db16a0679f9114bab1"
+            }
+          ]
+        },
+        "testRuns": [
+          {
+            "schemaVersion": "offing.test-run.v1",
+            "command": [
+              "node",
+              "tests/check.cjs"
+            ],
+            "attempts": [
+              {
+                "exitCode": 0,
+                "durationMs": 455,
+                "status": "passed",
+                "totals": {
+                  "tests": 1,
+                  "passed": 1,
+                  "failed": 0,
+                  "skipped": 0
+                },
+                "failures": [],
+                "logs": {
+                  "stdout": {
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "tail": ""
+                  },
+                  "stderr": {
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "tail": ""
+                  }
+                }
+              }
+            ],
+            "flaky": []
+          }
+        ],
+        "agentRuns": [
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "completed",
+            "summary": "Recorded edits accepted.",
+            "filesTouched": [
+              "package.json",
+              "tests/state.txt"
+            ],
+            "turns": 1,
+            "usage": {
+              "inputTokens": 0,
+              "outputTokens": null,
+              "costUsd": 0
+            },
+            "driver": {
+              "name": "replay",
+              "version": "1"
+            }
+          }
+        ],
+        "diff": {
+          "added": 0,
+          "changed": 3,
+          "deleted": 0
+        },
+        "budget": {
+          "elapsedMs": 3297,
+          "costUsd": 0
+        },
+        "tools": {
+          "offing": "0.1.1",
+          "git": "git version 2.54.0 (Apple Git-157)"
+        }
+      }
+    },
+    {
+      "id": "turn-budget-replay",
+      "outcome": "stopped-by-budget",
+      "run": {
+        "schemaVersion": "offing.autopilot-run.v1",
+        "mode": "prepare",
+        "state": "stopped",
+        "transitions": [
+          "scan",
+          "plan",
+          "baseline-tests",
+          "codemods",
+          "tests",
+          "agent-turn",
+          "tests",
+          "agent-turn",
+          "tests",
+          "agent-turn",
+          "tests",
+          "agent-turn",
+          "tests",
+          "agent-turn",
+          "stopped"
+        ],
+        "checkout": {
+          "id": "1X2h26",
+          "branch": "offing/autopilot/1X2h26",
+          "baseCommit": "33f6442bd0e8a98cd5d7e189d07f8e9bc312bdc0"
+        },
+        "selection": {
+          "wave": 0,
+          "findingIds": [
+            "npm.package.request.deprecated:package.json:1",
+            "container.dockerfile.maintainer:Dockerfile:2"
+          ]
+        },
+        "replay": {
+          "head": "0519730a00987c756cb02425a341d2aceda85feb",
+          "context": "abb513b36f0a06a6b5bd507061f38ef4963ea1a2fb42456dabb7b26332acffbc",
+          "usage": {
+            "turns": 4,
+            "tokens": 0,
+            "costCents": 0
+          },
+          "elapsedMs": 8332,
+          "tests": "failed",
+          "turn": 4,
+          "resume": 0,
+          "remaining": 1,
+          "introduced": 0,
+          "previous": "bd76d180c01dc660116b9fca37e16b5c0cbe98edd110feb5a089379bca24489e"
+        },
+        "stopReason": "run.turns"
+      },
+      "proof": {
+        "schemaVersion": "offing.proof.v1",
+        "outcome": "stopped",
+        "range": {
+          "base": "33f6442bd0e8a98cd5d7e189d07f8e9bc312bdc0",
+          "head": "0519730a00987c756cb02425a341d2aceda85feb"
+        },
+        "verify": {
+          "schemaVersion": "offing.verify-result.v1",
+          "before": {
+            "commit": "33f6442bd0e8a98cd5d7e189d07f8e9bc312bdc0",
+            "offingVersion": "0.1.1",
+            "ebbDataVersion": "0.2.0"
+          },
+          "after": {
+            "commit": "0519730a00987c756cb02425a341d2aceda85feb",
+            "offingVersion": "0.1.1",
+            "ebbDataVersion": "0.2.0"
+          },
+          "counts": {
+            "remaining": 1,
+            "introduced": 0,
+            "resolved": 1
+          },
+          "resolved": [
+            {
+              "id": "container.dockerfile.maintainer:Dockerfile:2",
+              "rule": "container.dockerfile.maintainer",
+              "title": "The Dockerfile MAINTAINER instruction is deprecated",
+              "severity": "low",
+              "path": "Dockerfile",
+              "line": 2
+            }
+          ],
+          "remaining": [
+            {
+              "id": "npm.package.request.deprecated:package.json:1",
+              "rule": "npm.package.request.deprecated",
+              "title": "request is deprecated",
+              "severity": "high",
+              "path": "package.json",
+              "line": 1
+            }
+          ],
+          "introduced": [],
+          "verdict": "failed",
+          "commands": [
+            {
+              "command": "[\"node\",\"tests/check.cjs\"]",
+              "purpose": "Approved Autopilot test",
+              "status": "failed",
+              "exitCode": 1,
+              "logSha256": "943539a7f234cfa39e0db7c9b72714e7a460400bc51612db16a0679f9114bab1"
+            }
+          ]
+        },
+        "testRuns": [
+          {
+            "schemaVersion": "offing.test-run.v1",
+            "command": [
+              "node",
+              "tests/check.cjs"
+            ],
+            "attempts": [
+              {
+                "exitCode": 1,
+                "durationMs": 451,
+                "status": "failed",
+                "totals": {
+                  "tests": 1,
+                  "passed": 0,
+                  "failed": 1,
+                  "skipped": 0
+                },
+                "failures": [
+                  {
+                    "name": "current-red",
+                    "file": "tests/check.cjs",
+                    "message": "latest assertion noisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoise"
+                  }
+                ],
+                "logs": {
+                  "stdout": {
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "tail": ""
+                  },
+                  "stderr": {
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "tail": ""
+                  }
+                }
+              },
+              {
+                "exitCode": 1,
+                "durationMs": 465,
+                "status": "failed",
+                "totals": {
+                  "tests": 1,
+                  "passed": 0,
+                  "failed": 1,
+                  "skipped": 0
+                },
+                "failures": [
+                  {
+                    "name": "current-red",
+                    "file": "tests/check.cjs",
+                    "message": "latest assertion noisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoisenoise"
+                  }
+                ],
+                "logs": {
+                  "stdout": {
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "tail": ""
+                  },
+                  "stderr": {
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "tail": ""
+                  }
+                }
+              }
+            ],
+            "flaky": []
+          }
+        ],
+        "agentRuns": [
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "completed",
+            "summary": "Recorded edits accepted.",
+            "filesTouched": [
+              "tests/state.txt"
+            ],
+            "turns": 1,
+            "usage": {
+              "inputTokens": 0,
+              "outputTokens": null,
+              "costUsd": 0
+            },
+            "driver": {
+              "name": "replay",
+              "version": "1"
+            }
+          },
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "completed",
+            "summary": "Recorded edits accepted.",
+            "filesTouched": [
+              "tests/state.txt"
+            ],
+            "turns": 1,
+            "usage": {
+              "inputTokens": 0,
+              "outputTokens": null,
+              "costUsd": 0
+            },
+            "driver": {
+              "name": "replay",
+              "version": "1"
+            }
+          },
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "completed",
+            "summary": "Recorded edits accepted.",
+            "filesTouched": [
+              "tests/state.txt"
+            ],
+            "turns": 1,
+            "usage": {
+              "inputTokens": 0,
+              "outputTokens": null,
+              "costUsd": 0
+            },
+            "driver": {
+              "name": "replay",
+              "version": "1"
+            }
+          },
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "completed",
+            "summary": "Recorded edits accepted.",
+            "filesTouched": [
+              "tests/state.txt"
+            ],
+            "turns": 1,
+            "usage": {
+              "inputTokens": 0,
+              "outputTokens": null,
+              "costUsd": 0
+            },
+            "driver": {
+              "name": "replay",
+              "version": "1"
+            }
+          },
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "blocked",
+            "summary": "Agent did not complete the task.",
+            "filesTouched": [],
+            "turns": 0,
+            "usage": {
+              "inputTokens": null,
+              "outputTokens": null,
+              "costUsd": null
+            },
+            "driver": {
+              "name": "replay",
+              "version": "1"
+            }
+          }
+        ],
+        "diff": {
+          "added": 0,
+          "changed": 2,
+          "deleted": 0
+        },
+        "budget": {
+          "elapsedMs": 8332,
+          "costUsd": 0
+        },
+        "tools": {
+          "offing": "0.1.1",
+          "git": "git version 2.54.0 (Apple Git-157)"
+        }
+      },
+      "lastFailure": {
+        "file": "exhausted.txt",
+        "sha256": "3a808795aa534b7c9b04a3a2a19621d6d83286ef3b928f5103242a0c5f0db2ce"
+      }
+    },
+    {
+      "id": "unresolved-replay",
+      "outcome": "failed",
+      "run": {
+        "schemaVersion": "offing.autopilot-run.v1",
+        "mode": "prepare",
+        "state": "stopped",
+        "transitions": [
+          "scan",
+          "plan",
+          "baseline-tests",
+          "codemods",
+          "tests",
+          "agent-turn",
+          "tests",
+          "stopped"
+        ],
+        "checkout": {
+          "id": "bcTP8r",
+          "branch": "offing/autopilot/bcTP8r",
+          "baseCommit": "33f6442bd0e8a98cd5d7e189d07f8e9bc312bdc0"
+        },
+        "selection": {
+          "wave": 0,
+          "findingIds": [
+            "npm.package.request.deprecated:package.json:1",
+            "container.dockerfile.maintainer:Dockerfile:2"
+          ]
+        },
+        "replay": {
+          "head": "d38f9a177efa207c34c0b26fb7b96509bd2ea8f8",
+          "context": "abb513b36f0a06a6b5bd507061f38ef4963ea1a2fb42456dabb7b26332acffbc",
+          "usage": {
+            "turns": 1,
+            "tokens": 0,
+            "costCents": 0
+          },
+          "elapsedMs": 33160,
+          "tests": "passed",
+          "turn": 1,
+          "resume": 0,
+          "remaining": 1,
+          "introduced": 0,
+          "previous": "31b7fca142a8dd041f3f7d3eab65d75da3bb79948e8b6c035cc7b1abe3fe1379"
+        },
+        "stopReason": "recording-exhausted"
+      },
+      "proof": {
+        "schemaVersion": "offing.proof.v1",
+        "outcome": "stopped",
+        "range": {
+          "base": "33f6442bd0e8a98cd5d7e189d07f8e9bc312bdc0",
+          "head": "d38f9a177efa207c34c0b26fb7b96509bd2ea8f8"
+        },
+        "verify": {
+          "schemaVersion": "offing.verify-result.v1",
+          "before": {
+            "commit": "33f6442bd0e8a98cd5d7e189d07f8e9bc312bdc0",
+            "offingVersion": "0.1.1",
+            "ebbDataVersion": "0.2.0"
+          },
+          "after": {
+            "commit": "d38f9a177efa207c34c0b26fb7b96509bd2ea8f8",
+            "offingVersion": "0.1.1",
+            "ebbDataVersion": "0.2.0"
+          },
+          "counts": {
+            "remaining": 1,
+            "introduced": 0,
+            "resolved": 1
+          },
+          "resolved": [
+            {
+              "id": "container.dockerfile.maintainer:Dockerfile:2",
+              "rule": "container.dockerfile.maintainer",
+              "title": "The Dockerfile MAINTAINER instruction is deprecated",
+              "severity": "low",
+              "path": "Dockerfile",
+              "line": 2
+            }
+          ],
+          "remaining": [
+            {
+              "id": "npm.package.request.deprecated:package.json:1",
+              "rule": "npm.package.request.deprecated",
+              "title": "request is deprecated",
+              "severity": "high",
+              "path": "package.json",
+              "line": 1
+            }
+          ],
+          "introduced": [],
+          "verdict": "failed",
+          "commands": [
+            {
+              "command": "[\"node\",\"tests/check.cjs\"]",
+              "purpose": "Approved Autopilot test",
+              "status": "passed",
+              "exitCode": 0,
+              "logSha256": "943539a7f234cfa39e0db7c9b72714e7a460400bc51612db16a0679f9114bab1"
+            }
+          ]
+        },
+        "testRuns": [
+          {
+            "schemaVersion": "offing.test-run.v1",
+            "command": [
+              "node",
+              "tests/check.cjs"
+            ],
+            "attempts": [
+              {
+                "exitCode": 0,
+                "durationMs": 467,
+                "status": "passed",
+                "totals": {
+                  "tests": 1,
+                  "passed": 1,
+                  "failed": 0,
+                  "skipped": 0
+                },
+                "failures": [],
+                "logs": {
+                  "stdout": {
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "tail": ""
+                  },
+                  "stderr": {
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "tail": ""
+                  }
+                }
+              }
+            ],
+            "flaky": []
+          }
+        ],
+        "agentRuns": [
+          {
+            "schemaVersion": "offing.agent-run.v1",
+            "status": "completed",
+            "summary": "Recorded edits accepted.",
+            "filesTouched": [
+              "tests/state.txt"
+            ],
+            "turns": 1,
+            "usage": {
+              "inputTokens": 0,
+              "outputTokens": null,
+              "costUsd": 0
+            },
+            "driver": {
+              "name": "replay",
+              "version": "1"
+            }
+          }
+        ],
+        "diff": {
+          "added": 0,
+          "changed": 2,
+          "deleted": 0
+        },
+        "budget": {
+          "elapsedMs": 33160,
+          "costUsd": 0
+        },
+        "tools": {
+          "offing": "0.1.1",
+          "git": "git version 2.54.0 (Apple Git-157)"
+        }
+      },
+      "lastFailure": {
+        "file": "failed.txt",
+        "sha256": "d9466ed5d3625d0cec1296d8cbe205b89319d7962c5f969d0f136376737b8e3e"
+      }
+    },
+    {
+      "id": "missing-profile-replay",
+      "outcome": "excluded",
+      "lastFailure": {
+        "file": "excluded.txt",
+        "sha256": "3f3230778490e73ab81fbff29b1f5182554d3645ef2f186c38e85256718a9092"
+      }
+    }
+  ]
+}
