@@ -46,7 +46,7 @@ node dist/tools/demo-manifest.js --write 0.1.1
 node dist/tools/demo-manifest.js --check 0.1.1
 ```
 
-The Demos check validates the committed manifest and smoke-renders the tapes. The pinned guard-agent replay additionally compares the resulting video with the committed bytes.
+The Demos check validates the committed manifest and smoke-renders the tapes. The pinned guard-agent replay additionally compares the resulting video with the committed bytes. The pull request workflow also encodes a different caption from the same frames in a temporary directory. It checks that the old manifest rejects that MP4 and that a refreshed manifest accepts it.
 
 ## Rebuild
 

@@ -9,6 +9,7 @@ on:
       - "demos/**"
       - "docs/assets/demos/**"
       - "docs/demos/**"
+      - "tools/demo-manifest.ts"
       - ".github/workflows/demos.yml"
   push:
     branches: [main]
@@ -16,6 +17,7 @@ on:
       - "demos/**"
       - "docs/assets/demos/**"
       - "docs/demos/**"
+      - "tools/demo-manifest.ts"
       - ".github/workflows/demos.yml"
   workflow_dispatch:
     inputs:
@@ -71,6 +73,7 @@ jobs:
         env:
           OFFING_VERSION: ${{ inputs.version }}
           VHS_NO_SANDBOX: "true"
+          OFFING_DEMO_MANIFEST_REGRESSION: ${{ github.event_name == 'pull_request' && '1' || '0' }}
         run: |
           if [[ -n "$OFFING_VERSION" ]]; then
             bash demos/build.sh --check
