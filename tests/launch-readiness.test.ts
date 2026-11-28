@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { test, type TestContext } from "node:test";
 import { collectReadiness, renderReadiness } from "../tools/launch-readiness.js";
 import { countMilestoneIssues } from "../tools/launch-readiness/evidence.js";
@@ -309,4 +309,43 @@ test("reports exact release verification and a complete zero adoption snapshot",
       assert.equal(exact.checks.find((item) => item.name === name)?.status, status);
     }
   }
+});
+
+test("acc-launch-readiness verifies the published demos and links stale or missing media", async (context) => {
+  const demoRoot = await temporary(context);
+  const root = resolve(import.meta.dirname, "../..");
+  for (const path of ["docs/demos", "docs/assets/demos", "demos"]) {
+    await mkdir(join(demoRoot, path), { recursive: true });
+    await cp(join(root, path), join(demoRoot, path), { recursive: true });
+  }
+  const input = { commit, date: "2026-11-27", milestone: 2, version: "0.1.1", demoRoot };
+  const collect = () => collectReadiness(input, releaseFixture(7.8, true, "success"), demoRoot);
+  const check = (report: Awaited<ReturnType<typeof collect>>) =>
+    report.checks.find(({ name }) => name === "Release demos");
+  const manifest = join(demoRoot, "docs/demos/manifest.json");
+  const base = `https://github.com/velella-sh/offing/blob/${commit}/`;
+
+  const green = await collect();
+  assert.equal(check(green)?.status, "green");
+  assert.match(check(green)?.observed ?? "", /v0\.1\.1 · 3 released recordings and 9 output files verified/u);
+  assert.ok(check(green)?.evidence.includes(base + "docs/demos/manifest.json"));
+  assert.match(renderReadiness(green), /Release demos \| green \| v0\.1\.1/u);
+
+  const recorded = await readFile(manifest, "utf8");
+  await writeFile(manifest, recorded.replace('"offingVersion": "0.1.1"', '"offingVersion": "0.1.0"'));
+  const stale = await collect();
+  assert.equal(check(stale)?.status, "red");
+  assert.match(check(stale)?.observed ?? "", /recorded 0\.1\.0, expected 0\.1\.1/u);
+  assert.ok(check(stale)?.evidence.includes(base + "demos/forecast.tape"));
+
+  await writeFile(manifest, recorded);
+  await rm(join(demoRoot, "docs/assets/demos/forecast.gif"));
+  const missing = await collect();
+  assert.equal(check(missing)?.status, "red");
+  assert.match(check(missing)?.observed ?? "", /Missing demo media: docs\/assets\/demos\/forecast\.gif/u);
+  assert.ok(check(missing)?.evidence.includes(`https://github.com/velella-sh/offing/tree/${commit}/docs/assets/demos`));
+  assert.match(renderReadiness(missing), /Missing demo media/u);
+
+  await rm(manifest);
+  assert.equal(check(await collect())?.status, "amber");
 });
