@@ -10,6 +10,33 @@ network:
 include:
   - .well-known
 collections:
+  state-of-eol-2027-run:
+    source: _data/state-of-eol-2027-run.json
+    id: id
+    template: _templates/state-of-eol-2027.md
+    permalink: /reports/{id}/
+    markdown: [scanner]
+  state-of-eol-2027-gallery:
+    source: _data/state-of-eol-2027-gallery.json
+    id: id
+    template: _templates/state-of-eol-2027-gallery.md
+    permalink: /gallery/{id}/
+    markdown: [forecasts]
+  state-of-eol-2027-headlines:
+    source: _data/state-of-eol-2027-headlines.json
+    id: id
+  state-of-eol-2027-ecosystems:
+    source: _data/state-of-eol-2027-ecosystems.json
+    id: id
+  state-of-eol-2027-actions:
+    source: _data/state-of-eol-2027-actions.json
+    id: id
+  state-of-eol-2027-blockers:
+    source: _data/state-of-eol-2027-blockers.json
+    id: id
+  state-of-eol-2027-upgrade-coverage:
+    source: _data/state-of-eol-2027-upgrade-coverage.json
+    id: id
   fix-evals-run:
     source: _data/fix-evals-run.json
     id: id

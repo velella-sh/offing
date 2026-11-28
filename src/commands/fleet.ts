@@ -5,7 +5,8 @@ import { parseArgs } from "node:util";
 import { severityValues } from "../domain.js";
 import { scanFleet, type FleetOptions } from "../fleet/index.js";
 import { FleetHostError } from "../fleet/host.js";
-import { fleetHostFor, validRepositoryPath } from "../fleet/remote.js";
+import { parseFleetPins } from "../fleet/pins.js";
+import { fleetHostFor, githubFleetHost, validRepositoryPath } from "../fleet/remote.js";
 import { renderRollupHtml, renderRollupText } from "../rollup.js";
 import type { CliCommand, CommandContext } from "./types.js";
 
@@ -40,13 +41,10 @@ async function repositoryList(file: string): Promise<string[]> {
   const source = await readFile(file, "utf8").catch(() => {
     throw new FleetHostError("Could not read --repos file.");
   });
-  const list = source
+  return source
     .split(/\r?\n/u)
     .map((line) => line.trim())
     .filter((line) => line && !line.startsWith("#"));
-  if (!list.every(validRepositoryPath))
-    throw new FleetHostError("The --repos file must contain one repository name per line.");
-  return list;
 }
 
 const parseFleetArgs = (args: string[]) => parseArgs({ args, options, allowPositionals: true });
@@ -84,7 +82,20 @@ function evidenceScanOptions(values: Flags) {
   };
 }
 
-async function scanOptions(values: Flags): Promise<FleetOptions> {
+async function selectRepositories(
+  file: string | undefined,
+  pinned: boolean,
+): Promise<Pick<FleetOptions, "pins" | "repositories">> {
+  if (file === undefined) return {};
+  const lines = await repositoryList(file);
+  if (pinned) return { pins: parseFleetPins(lines) };
+  if (!lines.every(validRepositoryPath)) {
+    throw new FleetHostError("The --repos file must contain one repository name per line.");
+  }
+  return { repositories: lines };
+}
+
+async function scanOptions(values: Flags, pinned: boolean): Promise<FleetOptions> {
   return {
     jobs: Number(values.jobs ?? "4"),
     imageLineage: values["image-lineage"] ?? false,
@@ -95,7 +106,7 @@ async function scanOptions(values: Flags): Promise<FleetOptions> {
     includeForks: values["include-forks"] ?? false,
     includeArchived: values["include-archived"] ?? false,
     ...(values.policy ? { policy: values.policy } : {}),
-    ...(values.repos === undefined ? {} : { repositories: await repositoryList(values.repos) }),
+    ...(await selectRepositories(values.repos, pinned)),
     ...(values.progress ? { onProgress: ({ name, status }) => process.stderr.write(`${name}: ${status}\n`) } : {}),
     ...evidenceScanOptions(values),
   };
@@ -121,18 +132,28 @@ function validateEvidenceFlags(values: Flags, format: string): void {
   }
 }
 
+function fleetInvocation(positionals: string[], values: Flags) {
+  if (positionals.length === 0 && values.repos !== undefined && !values.gitlab && !values["gitlab-url"]) {
+    return { namespace: "", pinned: true };
+  }
+  const [namespace] = positionals;
+  if (positionals.length !== 1 || !namespace || !validRepositoryPath(namespace)) return undefined;
+  return { namespace, pinned: false };
+}
+
 async function run(args: string[], ctx: CommandContext): Promise<number> {
   try {
     const { values, positionals } = parseFleetArgs(args);
-    const [namespace] = positionals;
-    if (positionals.length !== 1 || !namespace || !validRepositoryPath(namespace)) {
+    const selected = fleetInvocation(positionals, values);
+    if (!selected) {
       return ctx.fail("usage", "Usage: offing fleet <organization|group> [--gitlab] [--json | --html]");
     }
     const format = renderFormat(values);
     const index = severityIndex(values["fail-on"] ?? "none");
     validateEvidenceFlags(values, format);
-    const host = await fleetHostFor(values.gitlab, values["gitlab-url"]);
-    const result = await scanFleet(host, namespace, await scanOptions(values));
+    const { namespace, pinned } = selected;
+    const host = pinned ? githubFleetHost() : await fleetHostFor(values.gitlab, values["gitlab-url"]);
+    const result = await scanFleet(host, namespace, await scanOptions(values, pinned));
     const output =
       format === "json"
         ? JSON.stringify(result, null, 2)
@@ -172,6 +193,7 @@ export const command: CliCommand = {
     "  offing fleet <organization|group> --policy <file|reference> [--json | --html]",
     "  offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs",
     "  offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>] [--image-lineage --json]",
+    "  offing fleet --repos <file> [--json | --html]   # read public github/owner/repository@SHA pins across owners",
     "  offing fleet <organization|group> --json --forecast-input [--as-of <YYYY-MM-DD>]   # save private forecast evidence",
     "  offing fleet <organization|group> --json --campaign-input [--as-of <YYYY-MM-DD>]   # save private planning evidence",
     "  offing fleet <organization|group> --json --what-if-target <runtime@version> [--as-of <YYYY-MM-DD>]",

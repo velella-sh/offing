@@ -98,6 +98,7 @@ Usage:
   offing fleet <organization|group> --policy <file|reference> [--json | --html]
   offing fleet <organization|group> [--gitlab] [--gitlab-url <url>] [--json | --html]   # scan pinned repository inputs
   offing fleet <organization|group> [--include <glob>] [--exclude <glob>] [--topic <topic>] [--repos <file>] [--image-lineage --json]
+  offing fleet --repos <file> [--json | --html]   # read public github/owner/repository@SHA pins across owners
   offing fleet <organization|group> --json --forecast-input [--as-of <YYYY-MM-DD>]   # save private forecast evidence
   offing fleet <organization|group> --json --campaign-input [--as-of <YYYY-MM-DD>]   # save private planning evidence
   offing fleet <organization|group> --json --what-if-target <runtime@version> [--as-of <YYYY-MM-DD>]

@@ -171,6 +171,7 @@
     "release:notes": "npm run build --silent && node dist/tools/changelog.js",
     "metrics:adoption": "npm run build --silent && node dist/tools/adoption-metrics.js",
     "launch-readiness": "npm run build --silent && node dist/tools/launch-readiness.js",
+    "state-of-eol": "npm run build --silent && node dist/tools/state-of-eol/report.js",
     "metrics:quality": "npm run build --silent && node dist/tools/quality-metrics.js",
     "report:monthly": "npm run build --silent && node dist/tools/monthly-report.js",
     "org:rollout": "npm run build --silent && node dist/tools/org-rollout.js",
