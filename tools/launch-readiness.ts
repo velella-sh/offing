@@ -5,6 +5,7 @@ import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { nodeFileSystem } from "../src/node-file-system.js";
 import { readReleaseDemos } from "./launch-readiness/demos.js";
+import { readLaunchDocs } from "./launch-readiness/docs.js";
 import {
   countMilestoneIssues,
   countP0Bugs,
@@ -30,7 +31,7 @@ const thresholds = {
   "Cold install":
     "Green when every supported OS and Node.js pair reaches first output in under 10 seconds. Amber when the matrix is incomplete. Red when a required pair fails or takes at least 10 seconds.",
   "Documentation and README":
-    "Green when all required checks pass. Amber when a result is unavailable. Red when a required check fails.",
+    "Green when complete launch documentation and README evidence passes. Amber when any evidence is missing, prior, or limited to scoped checks. Red when a current required step fails.",
   Adoption:
     "Green when all five measures have values. Amber when evidence is incomplete. There is no minimum adoption target.",
   Scorecard: "Green at 6.0 or higher. Amber when the result is unavailable. Red below 6.0.",
@@ -56,12 +57,8 @@ type ReadinessInput = {
   demoRoot?: string;
 };
 
-function check(name: CheckName, status: Status, observed: string, evidence: string[]) {
+function check(name: CheckName, status: Status, observed: string, evidence: readonly string[]) {
   return { name, status, observed, thresholds: thresholds[name], evidence };
-}
-
-function outstanding(name: CheckName, issue: number) {
-  return check(name, "amber", "Released-version evidence unavailable", [`${repository}/issues/${issue}`]);
 }
 
 async function siteCheck(input: SiteEvidence | undefined, fetcher: typeof fetch) {
@@ -127,12 +124,13 @@ async function releaseChecks(input: ReadinessInput, fetcher: typeof fetch) {
 }
 
 export async function collectReadiness(input: ReadinessInput, fetcher: typeof fetch, metricsDirectory: string) {
-  const [p0, milestone, adoption, site, release] = await Promise.all([
+  const [p0, milestone, adoption, site, release, documentation] = await Promise.all([
     countP0Bugs(fetcher).catch(() => undefined),
     countMilestoneIssues(input.milestone, fetcher).catch(() => undefined),
     readAdoption(metricsDirectory, input.date, input.commit).catch(() => undefined),
     siteCheck(input.site, fetcher),
     releaseChecks(input, fetcher),
+    readLaunchDocs(fetcher, input),
   ]);
   const demos = await readReleaseDemos(input.demoRoot ?? ".", input.commit, release.release);
   return {
@@ -144,7 +142,7 @@ export async function collectReadiness(input: ReadinessInput, fetcher: typeof fe
       site.result,
       check("Release demos", demos.status, demos.observed, demos.evidence),
       release.cold,
-      outstanding("Documentation and README", 1041),
+      check("Documentation and README", documentation.status, documentation.observed, documentation.evidence),
       check(
         "Adoption",
         adoption?.complete ? "green" : "amber",
@@ -170,7 +168,7 @@ type ReadinessReport = Awaited<ReturnType<typeof collectReadiness>>;
 export function renderReadiness(report: ReadinessReport): string {
   const rows = report.checks.map(({ name, status, observed, thresholds, evidence }) => {
     const links = evidence.map((url, index) => `[Source ${index + 1}](${url})`).join(", ");
-    return `| ${name} | ${status} | ${observed} | ${thresholds} | ${links} |`;
+    return `| ${name} | ${status} | ${observed.replaceAll("|", "\\|")} | ${thresholds} | ${links} |`;
   });
   return [
     `# Launch readiness · ${report.date}`,

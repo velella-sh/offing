@@ -65,7 +65,8 @@ jobs:
             echo 'published=true' >> "$GITHUB_OUTPUT"
           fi
           if [[ "$VERIFY_ONLY" == true ]]; then
-            node --test dist/tests/launch-readiness.test.js dist/tests/launch-readiness-workflow.test.js
+            OFFING_LAUNCH_READINESS_REPORT=metrics/launch-readiness \
+              node --test dist/tests/launch-readiness*.test.js
           fi
           cat metrics/launch-readiness/*.md >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
