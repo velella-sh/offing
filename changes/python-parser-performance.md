@@ -1,0 +1,1 @@
+- Keep Python requirement, classifier and version specifier parsing responsive on malformed input.

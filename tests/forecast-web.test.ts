@@ -76,6 +76,17 @@ test("reads pins and explicit minimums from real Python project files", async ()
   );
 });
 
+test("preserves requirement extras, markers and whitespace-delimited comments", () => {
+  const requirements = "Example_Name[extra] \t>= 1.4, < 2 ; python_version >= '3.10'  # note\n# full comment\nplain";
+  assert.deepEqual(
+    parseRequirements(requirements).map(({ purl, version, location }) => [purl, version, location.line]),
+    [
+      ["pkg:pypi/example-name", "1.4", 1],
+      ["pkg:pypi/plain", undefined, 3],
+    ],
+  );
+});
+
 test("reads uses and literal or matrix runtimes from three GitHub workflows", async () => {
   const [example, ci, pages] = await Promise.all([
     read("examples/workflows/forecast.yml"),

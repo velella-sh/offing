@@ -5,7 +5,6 @@ import type { Declaration, UnknownRecord } from "./types.js";
 import { asRecord } from "./shared.js";
 
 const CLASSIFIER = /^Programming Language :: Python :: (\d+\.\d+)$/;
-const ITEM = /"(?:[^"\\\r\n]|\\.)*"|'[^'\r\n]*'/y;
 
 export interface ClassifierEntry {
   text: string;
@@ -41,6 +40,22 @@ function newlines(contents: string, start: number, end: number): number {
   return count;
 }
 
+/** Locate the closing quote in a single pass so escaped quotes never restart a match. */
+function itemEnd(contents: string, start: number): number | undefined {
+  const quote = contents.charAt(start);
+  if (quote !== '"' && quote !== "'") return undefined;
+  for (let index = start + 1; index < contents.length; index += 1) {
+    const character = contents.charAt(index);
+    if (character === quote) return index + 1;
+    if (character === "\r" || character === "\n") return undefined;
+    if (quote === '"' && character === "\\") {
+      index += 1;
+      if (/[\r\n\u2028\u2029]/.test(contents.charAt(index))) return undefined;
+    }
+  }
+  return undefined;
+}
+
 function listAt(contents: string, offset: number, line: number): ClassifierList | undefined {
   const opening = /^[ \t]*classifiers[ \t]*=[ \t]*\[/.exec(contents.slice(offset));
   if (!opening) return undefined;
@@ -50,11 +65,10 @@ function listAt(contents: string, offset: number, line: number): ClassifierList 
   while (cursor < contents.length) {
     const start = skipTrivia(contents, cursor);
     if (contents.charAt(start) === "]") return { entries };
-    ITEM.lastIndex = start;
-    const token = ITEM.exec(contents);
-    const text = token ? stringValue(token[0]) : undefined;
+    const end = itemEnd(contents, start);
+    if (end === undefined) return undefined;
+    const text = stringValue(contents.slice(start, end));
     if (text === undefined) return undefined;
-    const end = ITEM.lastIndex;
     const separator = skipTrivia(contents, end);
     const marker = contents.charAt(separator);
     if (marker !== "," && marker !== "]") return undefined;
