@@ -12,6 +12,7 @@ const execute = promisify(execFile);
 
 function isolatedGit(directory: string) {
   // Git for Windows rejects Node's null-device path when opening a global config file.
+  const hooks = join(directory, "unused-hooks");
   const env = {
     ...childEnvironments(process.env, "replay", []).tests,
     GIT_CONFIG_NOSYSTEM: "1",
@@ -25,7 +26,7 @@ function isolatedGit(directory: string) {
       "git",
       [
         "-c",
-        `core.hooksPath=${join(directory, "unused-hooks")}`,
+        `core.hooksPath=${hooks}`,
         "-c",
         "credential.helper=",
         "-c",
