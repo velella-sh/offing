@@ -17,14 +17,15 @@ argument in its own string.
 {"autopilot":{"tests":[["npm","run","check:ci"]]}}
 ```
 
-Doctor labels these test steps `configured`. An omitted or empty list uses automatic detection. The previews redact
-known secrets and list candidates for review. Running a command requires a separate approval and an isolated backend.
+Validate the example with `offing config validate ./project/.offing.json`. Doctor labels these test steps
+`configured`. An omitted or empty list uses automatic detection. The previews redact known secrets and list
+candidates for review. Running a command requires a separate approval and an isolated backend.
 
 | Tool | Root marker | Planned commands |
 | --- | --- | --- |
 | npm | `package.json` scripts and optional `package-lock.json` or `npm-shrinkwrap.json` | `npm ci` with a lock, then `npm run build` and `npm run test` for scripts present |
-| pnpm | `package.json` scripts and `pnpm-lock.yaml` or a declared pnpm manager | `pnpm install --frozen-lockfile` with a lock, then available `pnpm run` scripts |
-| Yarn | `package.json` scripts and `yarn.lock` or a declared Yarn manager | With a lock, `yarn install --immutable` for declared Yarn 2+, otherwise `yarn install --frozen-lockfile`, then available `yarn run` scripts |
+| pnpm | `package.json` scripts and `pnpm-lock.yaml` or a declared pnpm manager | `pnpm install --frozen-lockfile` with a lock, then `pnpm run build` and `pnpm run test` for scripts present |
+| Yarn | `package.json` scripts and `yarn.lock` or a declared Yarn manager | With a lock, `yarn install --immutable` for declared Yarn 2+, otherwise `yarn install --frozen-lockfile`. It then plans `yarn run build` and `yarn run test` for scripts present |
 | pytest | `pytest.ini`, `.pytest.ini`, or a pytest section in `pyproject.toml` or `setup.cfg` | `python3 -m pytest` |
 | tox | `tox.ini` | `python3 -m tox` |
 | Go | `go.mod` | `go build -mod=readonly ./...` and `go test -mod=readonly ./...` |
