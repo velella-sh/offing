@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 
@@ -8,16 +9,8 @@ import { Ajv2020 } from "ajv/dist/2020.js";
 import { renderForecastIcs } from "../src/forecast-ics.js";
 import { forecastDataRelease, loadForecastData, verifyBundle } from "../src/forecast-tool/data.js";
 import type { ForecastData } from "../src/forecast-tool/data.js";
-import {
-  contractVersion,
-  inputs,
-  maxInputBytes,
-  name,
-  recordsSchema,
-  run,
-  runForecastTool,
-  toForecastRecords,
-} from "../src/forecast-tool/records.js";
+import { contractVersion, inputs, maxInputBytes, name, recordsSchema, run } from "../src/forecast-tool.js";
+import { runForecastTool, toForecastRecords } from "../src/forecast-tool/records.js";
 import { createReport } from "../src/forecast-tool/report.js";
 
 const readJson = async (path: string): Promise<unknown> => JSON.parse(await readFile(path, "utf8"));
@@ -211,7 +204,7 @@ test("acc-forecast-island file and paste use only host data and return matching 
       reads.push(file);
       return bytes;
     },
-    fetch: hostFetch,
+    publicRepositoryFetch: hostFetch,
   };
   const file = await runForecastTool(
     {
@@ -233,6 +226,8 @@ test("acc-forecast-island file and paste use only host data and return matching 
     assert.equal(calendar.name, "offing-forecast.ics");
     assert.equal(calendar.mediaType, "text/calendar;charset=utf-8");
     assert.match(calendar.content, /BEGIN:VCALENDAR[\s\S]*DTSTART;VALUE=DATE:20261021/);
+    const browserReport = createReport(privateText, data, today, result === file ? "package.json" : undefined);
+    assert.equal(calendar.content, renderForecastIcs(browserReport.forecast, browserReport.replacements));
   }
   assert.deepEqual(file.records[0], paste.records[0]);
   assert.deepEqual(
@@ -294,4 +289,117 @@ test("acc-forecast-island rejects invalid input before requesting data and prese
   );
   await assert.rejects(run({ kind: "paste", text: "{}" }, context), (error: unknown) => error === stop);
   assert.equal(reads, 1);
+});
+
+test("acc-forecast-island runs a public repository forecast only with the approved host fetch", async (t) => {
+  const { bytes, release } = await localRelease();
+  const text = '{\n  "dependencies": {\n    "next": "15.0.0"\n  }\n}';
+  const size = Buffer.byteLength(text);
+  const sha = createHash("sha1").update(`blob ${size}\0`).update(text).digest("hex");
+  const paths = ["package.json", "web/package.json"];
+  const treeUrl = "https://api.github.com/repos/example/project/git/trees/HEAD?recursive=1";
+  const rawUrl = "https://raw.githubusercontent.com/example/project/HEAD/";
+  const fetchMock = t.mock.fn(async (url: Parameters<typeof fetch>[0], init?: RequestInit) => {
+    assert.equal(init?.credentials, "omit");
+    assert.equal(init?.redirect, "error");
+    if (url === treeUrl) {
+      return Response.json({
+        truncated: false,
+        tree: paths.map((path) => ({ type: "blob", mode: "100644", path, size, sha })),
+      });
+    }
+    assert.ok(paths.some((path) => url === rawUrl + path));
+    return new Response(text);
+  });
+  const read = t.mock.fn(async (name: string) => {
+    assert.equal(name, release.file);
+    return bytes;
+  });
+  const input = { kind: "url", value: "github/example/project" } as const;
+  const context = { signal: new AbortController().signal, data: read, fetch: fetchMock };
+  const denied = await runForecastTool(input, context, release, today);
+  assert.deepEqual(denied, {
+    status: "error",
+    message: "Approve access to GitHub before running a repository forecast.",
+    records: [],
+  });
+  assert.equal(fetchMock.mock.callCount(), 0);
+  assert.equal(read.mock.callCount(), 0);
+
+  const approved = { ...context, publicRepositoryFetch: fetchMock };
+  const result = await runForecastTool(input, approved, release, today);
+  assert.equal(result.status, "ok", result.message);
+  assert.deepEqual(
+    fetchMock.mock.calls.map(({ arguments: [url] }) => url),
+    [treeUrl, ...paths.map((path) => rawUrl + path)],
+  );
+  assert.equal(read.mock.callCount(), 1);
+  assert.ok(matchesSchema({ schemaVersion: "offing.forecast-records.v1", records: result.records }));
+  assert.equal(result.records[0]?.checked, 2);
+  assert.deepEqual(
+    result.records.filter((entry) => entry.kind === "file-read"),
+    paths.map((path) => ({ kind: "file-read", input: "file", path })),
+  );
+  const finding = result.records.find((entry) => entry.kind === "finding");
+  assert.ok(finding?.kind === "finding");
+  assert.deepEqual(
+    finding.findings.map(({ path, line }) => ({ path, line })),
+    paths.map((path) => ({ path, line: 3 })),
+  );
+  assert.equal(result.records.filter((entry) => entry.kind === "downloadable-file").length, 1);
+
+  const empty = await runForecastTool(
+    input,
+    { ...context, publicRepositoryFetch: async () => Response.json({ truncated: false, tree: [] }) },
+    release,
+    today,
+  );
+  assert.deepEqual(empty, { status: "no-data", message: "No supported repository files found.", records: [] });
+  assert.equal(read.mock.callCount(), 1);
+  const oversized = await runForecastTool({ ...input, value: "x".repeat(8193) }, approved, release, today);
+  assert.match(oversized.message, /selector is too long/);
+  assert.equal(fetchMock.mock.callCount(), 3);
+});
+
+test("acc-forecast-island bounds the number of declarations before generating records", async () => {
+  const { bytes, release } = await localRelease();
+  const dependencies = Object.fromEntries(
+    Array.from({ length: 10_001 }, (_, index) => [`forecast-bound-${index}`, "1.0.0"]),
+  );
+  const result = await runForecastTool(
+    { kind: "paste", text: JSON.stringify({ dependencies }) },
+    { signal: new AbortController().signal, data: async () => bytes },
+    release,
+    today,
+  );
+  assert.deepEqual(result, {
+    status: "error",
+    message: "The input contains too many declarations for the forecast.",
+    records: [],
+  });
+});
+
+test("acc-forecast-island rejects oversized serialized records for valid input", async () => {
+  const { bytes, release } = await localRelease();
+  const dependencies = Object.fromEntries(
+    Array.from({ length: 7200 }, (_, index) => [`forecast-result-bound-${index}`, "1.0.0"]),
+  );
+  const file = new TextEncoder().encode(JSON.stringify({ dependencies }));
+  assert.ok(file.length < maxInputBytes);
+  for (const name of [
+    `${"nested-directory/".repeat(48)}package.json`,
+    ("日".repeat(60) + "/").repeat(5) + "package.json",
+  ]) {
+    const result = await runForecastTool(
+      { kind: "file", name, type: "application/json", bytes: file },
+      { signal: new AbortController().signal, data: async () => bytes },
+      release,
+      today,
+    );
+    assert.deepEqual(result, {
+      status: "error",
+      message: "The forecast records exceed the 5 MiB result limit.",
+      records: [],
+    });
+  }
 });

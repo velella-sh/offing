@@ -115,3 +115,4 @@ otherwise. Records are numbered in the order they were written; this page groups
 | [0076](0076-fleet-schema-package-export.md) | Export the fleet v1 schema from npm | Let consumers validate the installed CLI's output against the npm package's version of the schema. |
 | [0077](0077-recorded-autopilot-proof.md) | Build proof v1 from a recorded Autopilot run | Publish a local commit range and linked test outcomes with verified, redacted log digests. |
 | [0083](0083-resumable-replay.md) | Resume a recorded Autopilot migration | Continue a bounded replay from its recorded local checkout and verify the final wave. |
+| [0084](0084-forecast-tool-package.md) | Export the versioned forecast tool module | Provide typed offline input, consented public selectors and packaged forecast records validation. |

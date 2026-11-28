@@ -1,0 +1,1 @@
+- Export the typed forecast tool module and its records schema for offline consumers.

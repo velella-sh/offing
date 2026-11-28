@@ -26,8 +26,13 @@ function matchingRules(rules: readonly RegistryV2Rule[], version: string): Regis
   return rules.filter((rule) => versContains(rule.vers, version));
 }
 
-export function createReport(contents: string, data: ForecastData, today: string, path?: string) {
-  const references = readReferences(contents, data, path);
+function reportFromReferences(
+  references: Reference[],
+  data: ForecastData,
+  today: string,
+  root: string,
+  limit = Infinity,
+) {
   const indexed = new Map<string, RegistryV2Rule[]>();
   for (const rule of data.rules) {
     if (rule.usage?.length) continue;
@@ -52,11 +57,37 @@ export function createReport(contents: string, data: ForecastData, today: string
       continue;
     }
     for (const rule of matchingRules(rules, version)) {
+      if (findings.length === limit)
+        throw new Error("The input contains too many lifecycle findings for the forecast.");
       const id = `${rule.id}:${findings.length}`;
       findings.push({ ...rule, id, ruleId: rule.id, detector: rule.ecosystem, location });
       if (rule.replacement) replacements.push({ id, replacement: rule.replacement });
     }
   }
-  const forecast = buildForecastReport({ root: path ?? "", findings }, data.rules, today, 12, noData);
+  const forecast = buildForecastReport({ root, findings }, data.rules, today, 12, noData);
   return { forecast, replacements, checked: references.length };
+}
+
+export function createReport(contents: string, data: ForecastData, today: string, path?: string) {
+  return reportFromReferences(readReferences(contents, data, path), data, today, path ?? "");
+}
+
+export interface ForecastInputFile {
+  contents: string;
+  path?: string;
+}
+
+/** Build one forecast over every selected file, sharing the rule index and event timeline. */
+export function createToolReport(files: readonly ForecastInputFile[], data: ForecastData, today: string, root: string) {
+  const limit = 10_000;
+  const references: Reference[] = [];
+  for (const { contents, path } of files) {
+    if (!contents.trim()) continue;
+    const entries = readReferences(contents, data, path);
+    if (entries.length + references.length > limit) {
+      throw new Error("The input contains too many declarations for the forecast.");
+    }
+    references.push(...entries);
+  }
+  return reportFromReferences(references, data, today, root, limit);
 }

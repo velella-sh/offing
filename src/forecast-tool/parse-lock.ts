@@ -1,8 +1,9 @@
+import { visit } from "jsonc-parser";
 import semver from "semver";
 
 import { classifyNodeVersion } from "../detectors/github-actions-node.js";
 import { packageNameFromNodeModulesPath } from "../detectors/npm/lockfiles/package-lock.js";
-import { declarationLine, declaredDependencies, parsePackageManifest } from "../detectors/npm/manifest.js";
+import { declaredDependencies, parsePackageManifest } from "../detectors/npm/manifest.js";
 import { record, reference } from "./references.js";
 import type { Reference } from "./references.js";
 
@@ -24,15 +25,25 @@ function lockReferences(packages: Record<string, unknown>, path: string): Refere
 
 function manifestReferences(contents: string, path: string): Reference[] {
   const manifest = parsePackageManifest(contents);
+  const declared = declaredDependencies(manifest);
+  const lines = new Map<string, number>();
+  visit(contents, {
+    onObjectProperty(name, _offset, _length, line, _column, pathSupplier) {
+      const section = declared.get(name)?.section;
+      if (section === undefined) return;
+      const parent = pathSupplier();
+      if (parent.length === 1 && parent[0] === section) lines.set(name, line + 1);
+    },
+  });
   const references: Reference[] = [];
-  for (const [name, { range, section }] of declaredDependencies(manifest)) {
+  for (const [name, { range }] of declared) {
     if (typeof range !== "string") continue;
     const alias = /^npm:((?:@[^/]+\/)?[^@]+)@(.+)$/.exec(range);
     const component = alias?.[1] ?? name;
     if (!npmName.test(component)) continue;
     const specifier = (alias?.[2] ?? range).trim();
     const version = semver.valid(specifier.replace(/^(?:\^|~|>=\s*)/, "")) ?? undefined;
-    references.push(reference(`pkg:npm/${component}`, version, path, declarationLine(contents, section, name)));
+    references.push(reference(`pkg:npm/${component}`, version, path, lines.get(name) ?? 1));
   }
   const runtime = manifest.volta?.node ?? manifest.engines?.node;
   if (typeof runtime === "string") {
