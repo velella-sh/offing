@@ -246,13 +246,17 @@ test("counts only evidence-backed lineage when the consumer has no direct ended 
 });
 
 const outreach = "docs/launch/state-of-eol-2027";
+const publicOutreach = "https://velella.sh/offing/launch/state-of-eol-2027/";
 const publicReport = "https://velella.sh/offing/reports/state-of-eol-2027/";
 
 test("the State of EOL outreach drafts carry the dated report link and fit the short-post budgets", async () => {
   const outlets = ["show-hn.md", "reddit-devops.md", "reddit-node.md", "dev.md", "social.md"];
+  const index = await readFile(join(outreach, "README.md"), "utf8");
+  assert.ok((await readFile("docs/launch/README.md", "utf8")).includes(publicOutreach));
   for (const outlet of outlets) {
     const text = await readFile(join(outreach, outlet), "utf8");
     assert.ok(text.includes(publicReport), `${outlet} should link to the dated study`);
+    assert.ok(index.includes(`${publicOutreach}${outlet.slice(0, -3)}/`), `${outlet} should be indexed under /offing`);
   }
   const social = await readFile(join(outreach, "social.md"), "utf8");
   const drafts = [...social.matchAll(/^## (.+)\n\n```text\n([^`]+)```/gm)];
