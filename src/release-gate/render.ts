@@ -8,6 +8,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function timing(reason: GateReason): string {
+  if (reason.prediction) {
+    const { date, interval, confidence, method, modelVersion } = reason.prediction;
+    return `predicted end of life ${date} (${interval.earliest} to ${interval.latest}, confidence ${confidence}, ${method}, model ${modelVersion})`;
+  }
   if (reason.code === "no-data") return "no dated lifecycle evidence";
   return `${reason.ruleId ?? "Lifecycle deadline"} ends ${reason.deadline} (${reason.daysLeft} days left)`;
 }
@@ -29,15 +33,19 @@ export function renderDecision(decision: GateDecision): string {
 }
 
 function gateFinding(reason: GateReason, root: string, index: number): Finding {
-  const ruleId = reason.ruleId ?? "release-gate.no-data";
+  const ruleId = reason.ruleId ?? (reason.prediction ? "release-gate.predicted-eol" : "release-gate.no-data");
   const location = reason.location ?? { path: "." };
   return {
     id: `${ruleId}:${root}:${index}`,
     ruleId,
-    title: reason.code === "lifecycle" ? "Lifecycle deadline" : "Missing lifecycle evidence",
+    title: reason.prediction
+      ? "Predicted end of life"
+      : reason.code === "lifecycle"
+        ? "Lifecycle deadline"
+        : "Missing lifecycle evidence",
     summary: reasonText(reason),
     severity: reason.outcome === "block" ? "high" : "medium",
-    sources: (reason.sources ?? []).map((url) => ({ title: "Lifecycle evidence", url })),
+    sources: (reason.prediction?.sources ?? reason.sources ?? []).map((url) => ({ title: "Lifecycle evidence", url })),
     detector: "release-gate",
     confidence: "exact",
     location: { ...location, path: location.path.split("/").map(encodeURIComponent).join("/") },

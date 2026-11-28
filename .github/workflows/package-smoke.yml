@@ -231,42 +231,18 @@ jobs:
         run: |
           set -euo pipefail
           bin=npm-install/node_modules/.bin/offing
+          package=npm-install/node_modules/@velella/offing
           tarballs=(velella-offing-*.tgz)
           tarball="${tarballs[0]}"
           signer="$GITHUB_REPOSITORY/.github/workflows/package-smoke.yml"
           export GH_CONFIG_DIR="$RUNNER_TEMP/offing-gate-gh"
           export OFFING_DATA_VERSION=bundled
-          gate() {
-            "$bin" release-gate --attestation lifecycle.sigstore.json --subject "$1" \
-              --repo "$GITHUB_REPOSITORY" --signer-workflow "$signer" --trusted-root trusted_root.jsonl \
-              --today "$2" --within-days 0 --no-data ignore --json
-          }
-
-          gate "$tarball" 2026-03-31 |
-            jq -e '.asOf == "2026-03-31" and .decisions[0].input.kind == "attestation" and .decisions[0].verdict == "pass"'
-          status=0
-          gate "$tarball" 2026-04-01 > gate.json || status=$?
-          test "$status" -eq 1
-          jq -e '
-            .asOf == "2026-04-01" and .decisions[0].verdict == "block" and
-              any(.decisions[0].reasons[];
-                .component == "pkg:docker/library/alpine@3.18" and .code == "lifecycle" and
-                .deadline == "2026-04-01" and .daysLeft == 0 and .outcome == "block")
-          ' gate.json
-
-          status=0
-          gate "tampered/$tarball" 2026-04-01 > rejected.json 2> rejected.err || status=$?
-          test "$status" -eq 4
-          jq -e '
-            .schemaVersion == "offing.error.v1" and .error.reason == "invalid-input" and .error.exitCode == 4 and
-              (.error.message | startswith("Lifecycle attestation verification failed"))
-          ' rejected.json
-
           {
             printf '### acc-release-gate (signed lifecycle fixture)\n\n'
             printf -- '- Candidate tarball SHA-256 %s\n' "$(sha256sum "$tarball" | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
-            printf -- '- The verified predicate passed before the deadline, blocked on it, and refused modified bytes.\n'
+            node "$package/docs/spec/release-gate/conformance/check-cli.mjs" "$package/dist/src/cli.js" \
+              lifecycle.sigstore.json "$tarball" "tampered/$tarball" trusted_root.jsonl "$GITHUB_REPOSITORY" "$signer"
           } >> "$GITHUB_STEP_SUMMARY"
 
   smoke:
@@ -914,36 +890,16 @@ jobs:
           test "${#tarball[@]}" = 1
           test -f "$package/schemas/release-gate.v1.schema.json"
           test -f "$package/templates/workflows/offing-release-gate.yml"
-          "$bin" release-gate --sbom "$fixture" --today 2026-03-31 --support-until 2026-03-31 --json |
-            jq -e '.decisions[0].verdict == "pass"'
-          status=0
-          "$bin" release-gate --sbom "$fixture" --today 2026-03-31 --within-days 1 --format sarif > gate.sarif || status=$?
-          test "$status" -eq 1
-          jq -e '.runs[0].properties.offingReleaseGate.decisions[0].verdict == "block"' gate.sarif
           mkdir consumer-release
           git -C consumer-release init -q
-          printf '[tools]\nnode = "18"\n' > consumer-release/mise.toml
-          git -C consumer-release add mise.toml
-          git -C consumer-release -c user.name=fixture -c user.email=fixture@example.com commit -qm older
-          git -C consumer-release tag v1.0.0
           printf '[tools]\nnode = "24"\n' > consumer-release/mise.toml
-          git -C consumer-release add mise.toml
-          git -C consumer-release -c user.name=fixture -c user.email=fixture@example.com commit -qm current
-          git -C consumer-release tag v2.0.0
-          (
-            cd consumer-release
-            "$bin" release-gate HEAD --today 2025-04-01 --within-days 29
-            status=0
-            "$bin" rollback-readiness v2.0.0 --candidate v1.0.0 --today 2025-04-01 --within-days 29 --json > rollback.json || status=$?
-            test "$status" -eq 1
-            jq -e '.decisions[0].reasons[0].ruleId == "nodejs.runtime.eol-18"' rollback.json
-          )
           cp "$fixture" consumer-release/inventory.cdx.json
           {
             printf '### acc-release-gate\n\n'
             printf -- '- Candidate artifact SHA-256 %s\n' "$(sha256sum "${tarball[0]}" | cut -d ' ' -f 1)"
             printf -- '- Installed CLI %s at %s\n' "$("$bin" --version)" "$GITHUB_SHA"
             node "$package/docs/spec/release-gate/conformance/check.mjs"
+            node "$package/docs/spec/release-gate/conformance/check-cli.mjs" "$package/dist/src/cli.js"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: acc-release-gate (compliant checkout) # zizmor: ignore[self-repository] -- uses the locally built candidate

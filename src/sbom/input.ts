@@ -19,6 +19,12 @@ export interface SbomComponentCheck extends DependencyCheck {
 interface ScanInputOptions {
   check?: (input: CheckDependencyInput) => DependencyCheck | Promise<DependencyCheck>;
   onMissingPurl?: (component: string, pointer: string) => void;
+  onComponent?: (
+    check: SbomComponentCheck,
+    purl: string,
+    owner: Readonly<JsonObject>,
+    format: "cyclonedx" | "spdx",
+  ) => void;
 }
 
 function missingPurl(value: JsonObject, pointer: string, options: ScanInputOptions): void {
@@ -105,17 +111,17 @@ async function checkCycloneDxComponent(
   ) {
     throw new CycloneDxError(`CycloneDX ${location} purl, version and bom-ref must be strings.`);
   }
-  results.push(
-    await checkComponentPurl(
-      value.purl,
-      value.version,
-      location,
-      {
-        ...(typeof value["bom-ref"] === "string" ? { bomRef: value["bom-ref"] } : {}),
-      },
-      options,
-    ),
+  const check = await checkComponentPurl(
+    value.purl,
+    value.version,
+    location,
+    {
+      ...(typeof value["bom-ref"] === "string" ? { bomRef: value["bom-ref"] } : {}),
+    },
+    options,
   );
+  results.push(check);
+  options.onComponent?.(check, value.purl, value, "cyclonedx");
 }
 
 async function checkComponentPurl(
@@ -215,17 +221,17 @@ async function scanSpdxReference(
     throw new SpdxError(`SPDX ${location} referenceLocator must be a string.`);
   }
   if (options.onMissingPurl && reference.referenceLocator === "") return;
-  results.push(
-    await checkSpdxPurl(
-      reference.referenceLocator,
-      pkg,
-      location,
-      {
-        ...(typeof pkg["SPDXID"] === "string" ? { spdxId: pkg["SPDXID"] } : {}),
-      },
-      options,
-    ),
+  const check = await checkSpdxPurl(
+    reference.referenceLocator,
+    pkg,
+    location,
+    {
+      ...(typeof pkg["SPDXID"] === "string" ? { spdxId: pkg["SPDXID"] } : {}),
+    },
+    options,
   );
+  results.push(check);
+  options.onComponent?.(check, reference.referenceLocator, pkg, "spdx");
 }
 
 async function checkSpdxPurl(

@@ -13,7 +13,7 @@ From the library checkout, evaluate the exact Git revision you plan to tag.
 
 ```sh
 offing release-gate HEAD --within-days 90
-offing rollback-readiness v2.0.0 --candidate v1.9.0 --candidate v1.8.0 --within-days 90
+offing rollback-readiness v2.0.0 --candidate v1.9.0 --candidate v1.8.0 --within-days 90 --format sarif
 ```
 
 A blocked Node.js example shows the deadline, days left, rule, and location.
@@ -40,6 +40,8 @@ Export the built image's SBOM in CycloneDX, SPDX 2.3, or Syft JSON. Check it aga
 ```sh
 offing release-gate --sbom image.cdx.json --within-days 60 --no-data fail
 ```
+
+CycloneDX and SPDX 2.3 inventories can carry [explicit predicted end-of-life annotations](spec/predicted-eol/v1.md#sarif-cyclonedx-and-spdx). The gate warns about applicable estimates within the window. Confirmed dates and the chosen no-data policy still decide whether the gate blocks.
 
 If you have a GitHub-signed lifecycle attestation, verify it against the same artifact. Prepare `trusted_root.jsonl` out of band using a trusted copy of GitHub CLI's `gh attestation trusted-root` command. The gate uses only the local bundle, artifact, and root.
 
