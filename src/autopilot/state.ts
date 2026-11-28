@@ -1,6 +1,8 @@
 import type { BudgetUsage } from "./limits/budget.js";
 import type { UpgradeTarget } from "../upgrade/index.js";
 
+export const autopilotCommitter = { name: "Offing", email: "offing@example.invalid" };
+
 const transitions = {
   scan: ["plan", "stopped"],
   plan: ["baseline-tests", "agent-turn", "stopped"],

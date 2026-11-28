@@ -5,8 +5,9 @@ import { tmpdir } from "node:os";
 import { dirname, delimiter, join, resolve } from "node:path";
 import { test, type TestContext } from "node:test";
 import { promisify } from "node:util";
+import { parse } from "yaml";
 
-import { runActionAutopilot } from "../src/github-action/run.js";
+import { runActionAutopilot } from "../src/action-autopilot.js";
 import { runApprovedTest } from "../src/test-runners/run.js";
 
 const exec = promisify(execFile);
@@ -92,6 +93,7 @@ require("node:fs").writeFileSync("junit.xml", ${JSON.stringify(xml)});`,
     PATH: [bin, dirname(process.execPath), process.env.PATH].join(delimiter),
     OFFING_ACTION_AUTOPILOT: "true",
     OFFING_ACTION_AUTOPILOT_SECRET_NAME: "MIGRATION_FIXTURE_KEY",
+    INPUT_AGENT: "claude",
     OFFING_ACTION_AUTOPILOT_KEY: selectedKey,
     ANTHROPIC_API_KEY: "wrong-provider-value",
     OPENAI_API_KEY: otherKey,
@@ -101,6 +103,7 @@ require("node:fs").writeFileSync("junit.xml", ${JSON.stringify(xml)});`,
     GITHUB_WORKSPACE: root,
     GITHUB_EVENT_NAME: "workflow_dispatch",
     GITHUB_REF: "refs/heads/main",
+    GITHUB_SHA: await git(root, "rev-parse", "HEAD"),
     GITHUB_EVENT_PATH: event,
   };
   return { root, env };
@@ -210,4 +213,36 @@ test("regular Action runs drop an unused Autopilot key", async () => {
   const env = { OFFING_ACTION_AUTOPILOT_KEY: selectedKey };
   assert.equal(await runActionAutopilot(env), false);
   assert.equal(env.OFFING_ACTION_AUTOPILOT_KEY, undefined);
+});
+
+test("the Autopilot template, composite inputs, and v1 contract agree", async () => {
+  const metadata = parse(await readFile("action.yml", "utf8"));
+  const template = parse(await readFile("templates/workflows/offing-autopilot.yml", "utf8"));
+  const spec = await readFile("docs/spec/action/v1.md", "utf8");
+  const inputs = {
+    autopilot: "false",
+    agent: "claude",
+    "agent-key-secret": "",
+    "autopilot-wave": "0",
+    "autopilot-recording": "",
+    "autopilot-wall-time-ms": "",
+    "autopilot-turns": "",
+    "autopilot-tokens": "",
+    "autopilot-cost-cents": "",
+    "autopilot-open-red": "false",
+  };
+  const scan = metadata.runs.steps.find(({ id }: { id?: string }) => id === "scan");
+  for (const [name, fallback] of Object.entries(inputs)) {
+    assert.equal(metadata.inputs[name].default, fallback);
+    assert.equal(scan.env[`INPUT_${name.toUpperCase()}`], "${{ inputs." + name + " }}");
+    assert.ok(spec.includes(`| \`${name}\` | ${fallback ? `\`${fallback}\`` : "empty"} |`));
+  }
+  assert.equal(metadata.outputs["autopilot-pr-urls"].value, "${{ steps.scan.outputs.autopilot-pr-urls }}");
+  assert.ok(spec.includes("| `autopilot-pr-urls` |"));
+  assert.deepEqual(template.on, { workflow_dispatch: null });
+  assert.deepEqual(template.permissions, { contents: "read" });
+  assert.deepEqual(template.jobs.migrate.permissions, { contents: "write", "pull-requests": "write" });
+  const consumer = template.jobs.migrate.steps.at(-1);
+  assert.equal(consumer.with.autopilot, "true");
+  assert.equal(consumer.env.OFFING_ACTION_AUTOPILOT_KEY, "${{ secrets." + consumer.with["agent-key-secret"] + " }}");
 });

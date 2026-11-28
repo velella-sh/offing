@@ -43,6 +43,10 @@ type TestExecutor = (
 
 const tailLimit = 4096;
 const maxReports = 32;
+const streamLimit = 8 * 1024 * 1024;
+
+/** Receives one complete UTF-8 stream per attempt and returns the bytes admitted to evidence. */
+export type TestLogFilter = (text: string) => string;
 
 function captureLog() {
   const hash = createHash("sha256");
@@ -55,6 +59,24 @@ function captureLog() {
     },
     finish(): Log {
       return { sha256: hash.digest("hex"), tail: tail.toString("utf8") };
+    },
+  };
+}
+
+function filterLog(filter?: TestLogFilter): ReturnType<typeof captureLog> {
+  const log = captureLog();
+  if (!filter) return log;
+  const chunks: Buffer[] = [];
+  let bytes = 0;
+  return {
+    write(chunk) {
+      bytes += chunk.length;
+      if (bytes > streamLimit) throw new Error("Test stream exceeds the proof capture limit.");
+      chunks.push(Buffer.from(chunk));
+    },
+    finish() {
+      log.write(Buffer.from(filter(Buffer.concat(chunks).toString("utf8"))));
+      return log.finish();
     },
   };
 }
@@ -86,10 +108,11 @@ async function runAttempt(
   execute: TestExecutor,
   timeoutMs: number,
   candidates: ReadonlySet<string>,
+  filter?: TestLogFilter,
 ): Promise<{ attempt: Attempt; repaired: Set<string> }> {
   const signal = AbortSignal.timeout(timeoutMs);
-  const stdout = captureLog();
-  const stderr = captureLog();
+  const stdout = filterLog(filter);
+  const stderr = filterLog(filter);
   const start = performance.now();
   const execution = await execute(command, { signal, stdout: stdout.write, stderr: stderr.write }).catch(
     (error: unknown): Execution => {
@@ -119,12 +142,13 @@ export async function runApprovedTest(
   execute: TestExecutor,
   timeoutMs: number,
   deadline = Infinity,
+  filter?: TestLogFilter,
 ): Promise<TestRun> {
   if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 2_147_483_647) {
     throw new RangeError("Test timeout must be an integer between 1 and 2147483647 milliseconds.");
   }
   const remaining = () => Math.max(1, Math.min(timeoutMs, Math.ceil(deadline - performance.now())));
-  const { attempt: first } = await runAttempt(command, execute, remaining(), new Set());
+  const { attempt: first } = await runAttempt(command, execute, remaining(), new Set(), filter);
   const result: TestRun = { schemaVersion: "offing.test-run.v1", command, attempts: [first], flaky: [] };
   if (first.status !== "failed" || first.exitCode === null || performance.now() >= deadline) return result;
   const { attempt: retry, repaired } = await runAttempt(
@@ -132,6 +156,7 @@ export async function runApprovedTest(
     execute,
     remaining(),
     new Set(first.failures.map(testKey)),
+    filter,
   );
   result.attempts = [first, retry];
   result.flaky = first.failures.filter((failure) => repaired.has(testKey(failure)));

@@ -13,7 +13,7 @@ import { createPathScope } from "./limits/scope.js";
 import { loadConfig } from "../config.js";
 import { buildFindingPacket } from "../migrate/prompt.js";
 import { createBudget, type BudgetUsage } from "./limits/budget.js";
-import { parseAutopilotConfig, type AutopilotConfig } from "./limits/config.js";
+import { capAutopilotBudget, parseAutopilotConfig, type AutopilotConfig, type Limits } from "./limits/config.js";
 import { childEnvironments } from "./limits/secrets.js";
 import {
   acceptsBaseline,
@@ -73,11 +73,15 @@ interface LoopOptions {
   createReplay?: typeof createContainerReplayDriver;
   report?: (run: AutopilotRun) => void;
   claude?: { key: string; path: string | undefined };
+  runBudget?: Partial<Limits>;
+  capture?: Parameters<typeof prepareContainerTestRun>[1];
+  configure?: (config: AutopilotConfig) => void;
+  secretEnv?: readonly string[];
 }
 
 type TestPlan = Awaited<ReturnType<typeof prepareContainerTestRun>>;
 type PhaseTests = (name: string) => Promise<ContainerTestResult[]>;
-type RunTests = (tree: string, deadline: number) => Promise<ContainerTestResult[]>;
+type RunTests = (tree: string, deadline: number, capture?: LoopOptions["capture"]) => Promise<ContainerTestResult[]>;
 
 function stop(run: AutopilotRun, reason: string, report?: LoopOptions["report"]): false {
   advanceRun(run, { stop: reason });
@@ -85,16 +89,16 @@ function stop(run: AutopilotRun, reason: string, report?: LoopOptions["report"])
   return false;
 }
 
-async function baselinePlan(
-  tree: string,
-  run: AutopilotRun,
-  report: LoopOptions["report"],
-): Promise<TestPlan | undefined> {
+async function baselinePlan(tree: string, run: AutopilotRun, options: LoopOptions): Promise<TestPlan | undefined> {
   try {
     const { prepareContainerTestRun } = await import("../test-runners/consumer.js");
-    return await prepareContainerTestRun(tree);
+    const test = await prepareContainerTestRun(tree, options.capture);
+    if (options.runBudget) test.config.budget = capAutopilotBudget(test.config.budget, options.runBudget);
+    if (options.secretEnv) test.config.secretEnv = [...new Set([...test.config.secretEnv, ...options.secretEnv])];
+    options.configure?.(test.config);
+    return test;
   } catch {
-    stop(run, "container-tests-unavailable", report);
+    stop(run, "container-tests-unavailable", options.report);
     return undefined;
   }
 }
@@ -380,15 +384,32 @@ async function livePhase(session: ReplaySession, state: LoopState, claude: NonNu
     const number = progress.turn + 1;
     await recordLoopEvidence(checkout, `turn-${number}-prompt.json`, { prompt: evidence }, redact);
     const wallTimeMs = admission.limits.wallTimeMs - Math.ceil(performance.now() - turnStarted);
-    if (wallTimeMs < 1) return verifyTerminal(session, state, "turn.wallTimeMs");
-    const turn = await requestLiveTurn(state.scan.root, claude, admission, context, wallTimeMs);
-    if ("stop" in turn) return verifyTerminal(session, state, turn.stop);
+    const turn =
+      wallTimeMs < 1
+        ? { stop: "turn.wallTimeMs" }
+        : await requestLiveTurn(state.scan.root, claude, admission, context, wallTimeMs);
+    if ("stop" in turn) {
+      await recordLoopEvidence(checkout, `turn-${number}-agent.json`, blockedLiveTurn(turn.stop), redact);
+      return verifyTerminal(session, state, turn.stop);
+    }
     const { files: touched, usage, agentResult } = turn;
     if (await afterReplayTurn(session, state, number, touched, usage, agentResult)) {
       return session.run.state === "done";
     }
   }
   return verifyTerminal(session, state);
+}
+
+function blockedLiveTurn(summary: string): AgentResult {
+  return {
+    schemaVersion: "offing.agent-run.v1",
+    status: "blocked",
+    summary,
+    filesTouched: [],
+    turns: null,
+    usage: { inputTokens: null, outputTokens: null, costUsd: null },
+    driver: { name: "claude", version: null },
+  };
 }
 
 function selectFingerprints(before: ScanResult, selection: Selection) {
@@ -413,7 +434,7 @@ function createSession(
 ): ReplaySession {
   const { config } = test;
   const { redact } = loopSecrets(options, config);
-  const plan = runTests ? { config, run: (deadline: number) => runTests(tree, deadline) } : test;
+  const plan = runTests ? { config, run: (deadline: number) => runTests(tree, deadline, options.capture) } : test;
   const testPhase = recordTests(plan, checkout, options.started + config.budget.run.wallTimeMs, redact);
   return {
     checkout,
@@ -481,7 +502,7 @@ export async function runReplayLoop(
   runTests?: RunTests,
 ): Promise<boolean> {
   options.report?.(run);
-  const test = await baselinePlan(tree, run, options.report);
+  const test = await baselinePlan(tree, run, options);
   if (!test) return false;
   if (test.config.tests.length === 0) return stop(run, "test-approval-required", options.report);
   const { scan, selection } = await planAutopilot(tree, run, options.selection);

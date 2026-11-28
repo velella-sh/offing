@@ -12,7 +12,7 @@ import { OffingError } from "../offing-error.js";
 import { detectTestPlan, type TestPlan } from "./detect.js";
 import { connectDocker, pinnedDockerRunner } from "./docker.js";
 import { type Profile, profiles } from "./profiles.js";
-import { runApprovedTest } from "./run.js";
+import { runApprovedTest, type TestLogFilter } from "./run.js";
 
 type Command = Parameters<typeof runApprovedTest>[0];
 type Run = Awaited<ReturnType<typeof runApprovedTest>>;
@@ -98,6 +98,7 @@ async function executePlan(
   commands: readonly Command[],
   setup: readonly Command[],
   deadline: number,
+  filter?: TestLogFilter,
 ): Promise<Run[]> {
   const configuration = await mkdtemp(join(tmpdir(), "offing-test-docker-"));
   try {
@@ -118,6 +119,7 @@ async function executePlan(
           },
           timeout,
           deadline,
+          filter,
         ),
       );
     }
@@ -130,6 +132,7 @@ async function executePlan(
 /** Freeze the approved argv and profile before edits. Each invocation tests a fresh private snapshot. */
 export async function prepareContainerTestRun(
   tree: string,
+  filter?: TestLogFilter,
 ): Promise<{ config: ReturnType<typeof parseAutopilotConfig>; run(deadline: number): Promise<ContainerTestResult[]> }> {
   await checkTree(tree);
   const { report, value } = await inspectDiscoveredConfig(tree);
@@ -145,7 +148,7 @@ export async function prepareContainerTestRun(
     config,
     async run(deadline: number) {
       await checkTree(tree);
-      return executePlan(tree, profile, commands, setup, deadline);
+      return executePlan(tree, profile, commands, setup, deadline, filter);
     },
   };
 }

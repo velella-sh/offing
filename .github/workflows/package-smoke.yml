@@ -46,9 +46,10 @@ jobs:
           cache: npm
       - name: Build the Action bundle and its acceptance fixture
         run: npm run build --silent && npm run build:action --silent
-      - name: acc-autopilot-action (dispatch fixture)
+      - name: acc-autopilot-action (dispatch and replay fixtures)
         env:
           OFFING_AUTOPILOT_ACTION_BUNDLE: ${{ github.workspace }}/dist/action/index.js
+          OFFING_AUTOPILOT_FIXTURE_EVIDENCE: ${{ runner.temp }}/offing-autopilot-fixture
           OFFING_DATA_VERSION: bundled
         run: |
           set -euo pipefail
@@ -58,13 +59,22 @@ jobs:
           cp tests/fixtures/action-autopilot/driver/package-lock.json.fixture "$driver_dir/package-lock.json"
           npm ci --prefix "$driver_dir" --no-audit --no-fund
           "$RUNNER_TEMP/offing-action-driver/node_modules/.bin/claude" --version | grep -F '2.1.330'
-          node --test dist/tests/action-autopilot.test.js
+          node --test dist/tests/action-autopilot.test.js dist/tests/action-autopilot-replay.test.js
           {
             printf '### acc-autopilot-action\n\n'
             printf -- '- Action bundle SHA-256 %s\n' "$(sha256sum "$OFFING_AUTOPILOT_ACTION_BUNDLE" | cut -d ' ' -f 1)"
             printf -- '- Tested commit %s\n' "$GITHUB_SHA"
             printf -- '- Pinned driver setup, a synthetic-key turn, Docker tests, and missing-key refusal passed.\n'
+            printf -- '- Clean Action replay passed through the Docker runner, local Git remote and in-process GitHub API fixture with no provider key.\n'
+            printf -- '- Verified event refusals, turn-cap usage, green and draft retests, protected human commits, stale PR closure, and proof/log digests.\n'
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload the verified replay fixture evidence
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: offing-autopilot-fixture-evidence
+          path: ${{ runner.temp }}/offing-autopilot-fixture
+          if-no-files-found: error
+          retention-days: 14
 
   attest-proof:
     needs: smoke

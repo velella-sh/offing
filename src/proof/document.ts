@@ -60,6 +60,7 @@ async function validate<T>(stem: string, value: unknown): Promise<T> {
 export const checkedProof = (value: unknown): Promise<Proof> => validate("proof", value);
 export const checkedAutopilotRun = (value: unknown): Promise<AutopilotRun> => validate("autopilot-run", value);
 export const checkedVerifyResult = (value: unknown): Promise<VerifyResult> => validate("verify-result", value);
+export const checkedTestRun = (value: unknown): Promise<Proof["testRuns"][number]> => validate("test-run", value);
 
 export function checkSummary({ range, verify }: Proof): void {
   if (verify.before.commit !== range.base || verify.after.commit !== range.head) {

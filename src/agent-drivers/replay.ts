@@ -217,7 +217,10 @@ async function stageWorker(staging: string, turns: readonly PlannedTurn[], confi
   for (const module of replayWorkerModules) {
     const target = join(staging, module);
     await mkdir(dirname(target), { recursive: true });
-    await copyFile(new URL("../" + module, import.meta.url), target);
+    await copyFile(new URL("./replay-worker/" + module, import.meta.url), target).catch((error: unknown) => {
+      if (!(error instanceof Error && "code" in error && error.code === "ENOENT")) throw error;
+      return copyFile(new URL("../" + module, import.meta.url), target);
+    });
   }
   await writeFile(join(staging, "package.json"), '{"type":"module"}');
   await writeFile(
