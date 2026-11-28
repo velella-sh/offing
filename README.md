@@ -48,7 +48,7 @@ The dependency guard stops a dry-run install of deprecated `request@2.88.2` befo
 
 **Fix evaluation, November 28, 2026.** [50 of 60 pinned repositories were measured, and workflow validation stayed green in all 45 GitHub Actions fixer cases](https://github.com/velella-sh/offing/blob/main/benchmarks/fix-evals/results/2026-11-28/report.json). [See per-fixer and agent results](https://velella.sh/offing/fix-evals/).
 
-**State of EOL 2027.** The study analyzed 999 of 1,000 pinned public GitHub repositories and found at least one runtime past end of life in 383 of the 999 successful scans. [Read the report, methodology, and evidence gaps](https://velella.sh/offing/reports/state-of-eol-2027/).
+**State of EOL 2027.** The study analyzed 1,000 of 1,000 pinned public GitHub repositories and found at least one runtime past end of life in 383 of the 1,000 successful scans. [Read the report, methodology, and evidence gaps](https://velella.sh/offing/reports/state-of-eol-2027/).
 
 With Offing built from this checkout, run these commands from the repository you want to assess.
 

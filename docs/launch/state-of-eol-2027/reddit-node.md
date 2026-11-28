@@ -12,7 +12,7 @@ What npm and pnpm lockfiles tell us about Node.js 22 upgrade blockers
 
 **Body**
 
-I work on Offing. In a study of 1,000 pinned public GitHub repositories, 999 revisions were scanned and 241 had applicable lockfile analysis for the Node.js 22 target. We ranked blockers once per affected repository and kept the dependency paths where the graph could resolve them. The report shows missing inputs and unknowns alongside the ranking.
+I work on Offing. In a study of 1,000 pinned public GitHub repositories, all 1,000 revisions were scanned and 242 had applicable lockfile analysis for the Node.js 22 target. We ranked blockers once per affected repository and kept the dependency paths where the graph could resolve them. The report shows missing inputs and unknowns alongside the ranking.
 
 There was a separate lifecycle measure. The Node.js 22 end-of-life rule was the most frequent upcoming rule, seen in 207 of the 289 repositories with a dated event within a year of November 27, 2026 UTC. That denominator is the set with an upcoming dated event.
 

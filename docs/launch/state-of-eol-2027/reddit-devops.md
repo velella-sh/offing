@@ -8,7 +8,7 @@ Check the [r/devops rules](https://www.reddit.com/r/devops/about/rules/) and con
 
 **Title**
 
-What an end-of-life scan picked up in 999 pinned GitHub repositories
+What an end-of-life scan picked up in 1,000 pinned GitHub repositories
 
 **Body**
 

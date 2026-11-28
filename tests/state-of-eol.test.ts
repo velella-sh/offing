@@ -298,10 +298,12 @@ test("acc-state-of-eol builds the real report collection and accessible chart wi
   const report: { coverage: { scanned: number; cohort: number }; headlines: { ended: { count: number } } } =
     JSON.parse(reportData);
   const readme = await readFile("README.md", "utf8");
-  const { scanned, cohort } = report.coverage;
+  const scanned = report.coverage.scanned.toLocaleString("en");
+  const cohort = report.coverage.cohort.toLocaleString("en");
+  const ended = report.headlines.ended.count.toLocaleString("en");
   assert.ok(markdownDestinations(readme).has(publicReport));
-  assert.ok(readme.includes(`${scanned} of ${cohort.toLocaleString("en")} pinned public GitHub repositories`));
-  assert.ok(readme.includes(`${report.headlines.ended.count} of the ${scanned} successful scans`));
+  assert.ok(readme.includes(`${scanned} of ${cohort} pinned public GitHub repositories`));
+  assert.ok(readme.includes(`${ended} of the ${scanned} successful scans`));
   for (const [file, contents] of Object.entries(data)) await writeFile(join(docs, "_data", file), contents);
   const deny = join(directory, "deny-network.mjs");
   await writeFile(

@@ -41,6 +41,7 @@ jobs:
           set -euo pipefail
           node --test dist/tests/state-of-eol.test.js
           node dist/tools/coverage-matrix.js --site
+          node dist/tools/build-campaign-demo.js
           "$RUNNER_TEMP/site-tools/node_modules/.bin/mizzen" build docs \
             --theme "$RUNNER_TEMP/site-tools/node_modules/@velella/lateen" --out "$RUNNER_TEMP/state-of-eol-site" --workers 2
           grep -Fq '/reports/state-of-eol-2027/' "$RUNNER_TEMP/state-of-eol-site/state-of-eol/index.html"
