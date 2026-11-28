@@ -235,3 +235,27 @@ export function sandbox(
     }
   };
 }
+
+/** Reuse prepared images while taking a fresh snapshot for each approved checkout. */
+export function pinnedDockerRunner(docker: Docker, kubernetesRecipe?: () => Promise<string>) {
+  const images = new Map<string, string>();
+  return {
+    get images(): ReadonlyMap<string, string> {
+      return images;
+    },
+    async prepare(
+      profile: Profile,
+      root: string,
+      { image: pinnedImage, setup }: { image?: string; setup?: readonly Command[] } = {},
+    ): Promise<ContainerExecutor> {
+      const key = pinnedImage === undefined ? profile : `${profile}:${pinnedImage}`;
+      let image = images.get(key);
+      if (image === undefined) {
+        const recipe = profile === "kubernetes" ? await kubernetesRecipe?.() : undefined;
+        image = await prepareImage(docker, profile, recipe ?? "", pinnedImage);
+        images.set(key, image);
+      }
+      return sandbox(docker, image, await archiveTree(root), setup);
+    },
+  };
+}

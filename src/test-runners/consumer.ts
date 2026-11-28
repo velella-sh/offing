@@ -10,7 +10,7 @@ import { undoAutopilotWorktree, withAutopilotWorktree } from "../autopilot/workt
 import { inspectDiscoveredConfig } from "../config-validate.js";
 import { OffingError } from "../offing-error.js";
 import { detectTestPlan, type TestPlan } from "./detect.js";
-import { archiveTree, connectDocker, prepareImage, sandbox } from "./docker.js";
+import { connectDocker, pinnedDockerRunner } from "./docker.js";
 import { type Profile, profiles } from "./profiles.js";
 import { runApprovedTest } from "./run.js";
 
@@ -101,10 +101,8 @@ async function executePlan(
 ): Promise<Run[]> {
   const configuration = await mkdtemp(join(tmpdir(), "offing-test-docker-"));
   try {
-    const source = await archiveTree(tree);
-    const docker = await connectDocker(configuration);
-    const image = await prepareImage(docker, profile, "");
-    const execute = sandbox(docker, image, source, setup);
+    const runner = pinnedDockerRunner(await connectDocker(configuration));
+    const execute = await runner.prepare(profile, tree, { setup });
     const results: Run[] = [];
     for (const command of commands) {
       const timeout = Math.min(120_000, Math.floor(deadline - performance.now()));
